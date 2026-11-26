@@ -1,8 +1,8 @@
 {
  "name": "avatar",
  "binding": "Avatar",
- "import": "@aziontech/webkit/avatar",
- "treeShakeableImport": "@aziontech/webkit/avatar",
+ "import": "@aziontech/ui/avatar",
+ "treeShakeableImport": "@aziontech/ui/avatar",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

@@ -1,8 +1,8 @@
 {
  "name": "status-code",
  "binding": "StatusCode",
- "import": "@aziontech/webkit/status-code",
- "treeShakeableImport": "@aziontech/webkit/status-code",
+ "import": "@aziontech/ui/status-code",
+ "treeShakeableImport": "@aziontech/ui/status-code",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

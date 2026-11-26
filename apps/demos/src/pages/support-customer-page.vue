@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import { toast } from '@aziontech/webkit/toast'
+  import ConsoleLayout from '@aziontech/ui/console-layout'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 

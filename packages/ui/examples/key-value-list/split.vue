@@ -1,6 +1,6 @@
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import Card from '@aziontech/ui/card'
+  import KeyValueList from '@aziontech/ui/key-value-list'
 </script>
 
 <template>

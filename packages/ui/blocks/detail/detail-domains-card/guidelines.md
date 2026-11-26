@@ -28,7 +28,7 @@ A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-k
 
 ### C. Environment chip — `Tag` (optional)
 
-One chip per row, following `skills/webkit-tables`: Environment is a `Tag` with `severity="neutral"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
+One chip per row, following `skills/azion-ui-tables`: Environment is a `Tag` with `severity="neutral"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
 
 ### D. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
@@ -87,7 +87,7 @@ Then delete `sample.ts` and its import.
 - Leave a cell empty when the attribute does not apply to that record.
 - Hide the row menu on records the user cannot change, rather than showing disabled options.
 - Count the records in the footer with the right singular or plural noun.
-- Follow `skills/webkit-tables` for column kinds and the action column.
+- Follow `skills/azion-ui-tables` for column kinds and the action column.
 
 ## Don't
 
@@ -104,7 +104,7 @@ Then delete `sample.ts` and its import.
 - **Count:** a number and the noun, singular or plural, e.g. "1 domain", "3 domains".
 - **Row menu:** single verbs, e.g. "Edit", "Delete"; the trigger tooltip reads "Row actions".
 - **Attribute values:** the value as the product names it, e.g. "Production", "Managed".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -123,4 +123,4 @@ Then delete `sample.ts` and its import.
 - `edit/edit-resource` — the Settings tab whose Domains section renders this card.
 - `view/view-table` — the full list, with filters and pages, for longer related lists.
 - `edit/edit-delete-dialog` — the dialog behind the row menu's Delete.
-- `DataTable` — the table this card wraps; see `skills/webkit-tables`.
+- `DataTable` — the table this card wraps; see `skills/azion-ui-tables`.

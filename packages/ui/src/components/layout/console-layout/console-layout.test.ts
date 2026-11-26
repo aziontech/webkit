@@ -1238,7 +1238,7 @@ describe('ConsoleLayout', () => {
     const duplicateWarnings = (spy: ReturnType<typeof vi.spyOn>) =>
       spy.mock.calls
         .map((call: unknown[]) => String(call[0]))
-        .filter((message: string) => message.includes('webkit-navigation-levels'))
+        .filter((message: string) => message.includes('azion-ui-navigation-levels'))
 
     it('warns once per route when a page SidebarMenu repeats a navigation row', async () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})

@@ -125,7 +125,7 @@ Then delete `sample.ts` and its import.
 - **Drawer actions:** "View repository", "Deploy".
 - **No match:** "No matching templates", then "No template matches this search. Remove a filter to widen the results.", and "Clear filters".
 - **Failure:** "Couldn't load templates. Check your connection and retry." with "Retry"; the empty state "Templates are unavailable" with "Import from Git".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -152,4 +152,4 @@ Then delete `sample.ts` and its import.
 - `state/state-async-submit` — the toast and inline outcome every deploy follows.
 - `view/view-marketplace` — installable integrations into an existing resource; it lists no templates.
 - `create/create-hub` — the creation hub that links here for "Start from a template".
-- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/azion-ui-lists`.

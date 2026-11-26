@@ -2,7 +2,7 @@
 
 > A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ConsoleMockup` or a diagram and reads the selected tab from the slot scope. In `console` variant the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsoleShowcaseSection`.
 
-- Import: `import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'`
+- Import: `import ConsoleShowcaseSection from '@aziontech/ui/console-showcase-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [console-showcase-section.json](console-showcase-section.json)
 
@@ -95,8 +95,8 @@
 
 ```vue
 <script setup>
-  import ConsoleMockup from '@aziontech/webkit/console-mockup'
-  import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'
+  import ConsoleMockup from '@aziontech/ui/console-mockup'
+  import ConsoleShowcaseSection from '@aziontech/ui/console-showcase-section'
 
   const tabs = [
     { value: 'workloads-list', title: 'Workloads' },
@@ -124,8 +124,8 @@
 
 ```vue
 <script setup>
-  import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'
-  import Illustration from '@aziontech/webkit/illustration'
+  import ConsoleShowcaseSection from '@aziontech/ui/console-showcase-section'
+  import Illustration from '@aziontech/ui/illustration'
 </script>
 
 <template>

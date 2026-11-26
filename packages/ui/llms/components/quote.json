@@ -1,8 +1,8 @@
 {
  "name": "quote",
  "binding": "Quote",
- "import": "@aziontech/webkit/quote",
- "treeShakeableImport": "@aziontech/webkit/quote",
+ "import": "@aziontech/ui/quote",
+ "treeShakeableImport": "@aziontech/ui/quote",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

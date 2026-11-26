@@ -5,7 +5,7 @@ const CHROME = new Map([
   ['site-header-section', 'SiteHeaderSection']
 ])
 
-const WEBKIT_PREFIX = '@aziontech/webkit/'
+const AZION_UI_PREFIX = '@aziontech/ui/'
 
 const FRAMING = [/^border(?:-[xytbse])?$/, /^border-(?:[xytbse]-)?\d+$/, /^p[xytbse]?-/]
 
@@ -16,8 +16,8 @@ const kebab = (name) =>
     .toLowerCase()
 
 function chromeOf(source) {
-  if (typeof source !== 'string' || !source.startsWith(WEBKIT_PREFIX)) return null
-  return CHROME.get(source.slice(WEBKIT_PREFIX.length)) ?? null
+  if (typeof source !== 'string' || !source.startsWith(AZION_UI_PREFIX)) return null
+  return CHROME.get(source.slice(AZION_UI_PREFIX.length)) ?? null
 }
 
 function framingUtilities(classString) {

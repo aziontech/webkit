@@ -2,7 +2,7 @@
 
 > The typography contract every documentation page inherits. A markdown or MDX pipeline compiles text to plain semantic HTML — `h2`, `p`, `ul`, `table`, `a`, `code` — and this container is what gives that HTML the Azion type scale, the semantic colors and the vertical rhythm, so an author writes markdown and never a class. It styles **descendants** rather than itself, so it works the same over any renderer's output, a slot of hand-written markup, or raw HTML from a CMS.
 
-- Import: `import DocProse from '@aziontech/webkit/doc-prose'`
+- Import: `import DocProse from '@aziontech/ui/doc-prose'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-prose.json](doc-prose.json)
 
@@ -20,7 +20,7 @@
 ## Don’t
 
 - To cap the whole column — `DocProse` caps only running text (see the reading measure under Tokens). The consumer sets the column width with `.layout-column-content` (`--layout-measure-content`, 876px).
-- To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.
+- To style an Azion UI component's internals. Those are chrome and are excluded by design; restyle nothing from here.
 - For a single run of body copy in an application screen — use the `text-body-*` tokens directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -62,8 +62,8 @@
 
 ```vue
 <script setup>
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
 
   const source = [
     '## Deploy an application',
@@ -103,7 +103,7 @@
 
 ```vue
 <script setup>
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>

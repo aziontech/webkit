@@ -1,6 +1,6 @@
 <script setup>
-  import Combobox from '@aziontech/webkit/combobox'
-  import Field from '@aziontech/webkit/field'
+  import Combobox from '@aziontech/ui/combobox'
+  import Field from '@aziontech/ui/field'
   import { onBeforeUnmount, ref } from 'vue'
 
   const regions = [

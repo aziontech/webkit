@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { ref } from 'vue'
 
   import EnvironmentBreadcrumb from '../parts/environment-breadcrumb.vue'

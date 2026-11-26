@@ -1,0 +1,41 @@
+{
+  "packages": {
+    "@aziontech/webkit-mcp": "@aziontech/ui-mcp",
+    "@aziontech/webkit": "@aziontech/ui"
+  },
+  "bins": {
+    "webkit-mcp": "azion-ui-mcp",
+    "webkit": "azion-ui"
+  },
+  "mcpServer": {
+    "webkit": "azion-ui"
+  },
+  "lintPrefix": {
+    "webkit/": "azion-ui/"
+  },
+  "env": {
+    "WEBKIT_CATALOG_PATH": "AZION_UI_CATALOG_PATH"
+  },
+  "files": {
+    "src/webkit.css": "src/azion-ui.css",
+    "src/webkit.sources.css": "src/azion-ui.sources.css",
+    "webkit.blocks.json": "azion-ui.blocks.json"
+  },
+  "fileNames": {
+    "webkit.sources.css": "azion-ui.sources.css",
+    "webkit.blocks.json": "azion-ui.blocks.json",
+    "webkit.css": "azion-ui.css"
+  },
+  "aiBundle": {
+    "dirs": [".claude/skills", ".claude/rules", ".claude/agents"],
+    "prefixes": {
+      "webkit-ui-": "azion-ui-",
+      "webkit-": "azion-ui-"
+    },
+    "marker": {
+      "webkit-sync": "azion-ui-sync"
+    }
+  },
+  "docs": ["AGENTS.md", "CLAUDE.md"],
+  "mcpConfigs": [".mcp.json", ".cursor/mcp.json", ".vscode/mcp.json"]
+}

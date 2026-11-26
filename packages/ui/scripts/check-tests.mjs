@@ -7,7 +7,7 @@ import { componentRootName } from '../../../contributing/hooks/lib/spec.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(SCRIPT_DIR, '..', '..', '..')
-const COMPONENTS = join(ROOT, 'packages/webkit/src/components')
+const COMPONENTS = join(ROOT, 'packages/ui/src/components')
 const WIP = join(COMPONENTS, 'wip')
 
 let legacyNames = new Set()

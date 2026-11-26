@@ -1,7 +1,4 @@
-import {
-  useUnsavedChanges,
-  type UseUnsavedChangesReturn
-} from '@aziontech/webkit/use-unsaved-changes'
+import { useUnsavedChanges, type UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
 import { type ComputedRef, onScopeDispose, reactive, readonly, type Ref, ref, watch } from 'vue'
 
 export interface UseSettingsDraftOptions<T> {

@@ -1,5 +1,5 @@
 <script setup>
-  import HeroFormSection from '@aziontech/webkit/hero-form-section'
+  import HeroFormSection from '@aziontech/ui/hero-form-section'
 
   const items = [
     {

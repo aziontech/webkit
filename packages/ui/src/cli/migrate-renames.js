@@ -15,11 +15,11 @@ export function migrateTestIds(source, testids = {}) {
   return { source: out, changes: [...seen] }
 }
 
-const LINT_RULE = /(?<![\w@/.-])webkit\/[a-z][a-z0-9-]*(?![\w-])/g
+const LINT_RULE = /(?<![\w@/.-])azion-ui\/[a-z][a-z0-9-]*(?![\w-])/g
 
 export function migrateLintRules(source, lint = {}) {
   const changes = []
-  if (!source.includes('webkit/')) return { source, changes }
+  if (!source.includes('azion-ui/')) return { source, changes }
   const out = source.replace(LINT_RULE, (id) => {
     const next = lint[id]
     if (typeof next !== 'string') return id

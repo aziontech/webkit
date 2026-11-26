@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import branches from '@aziontech/webkit/assets/branches.svg'
-  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
-  import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
-  import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
+  import branches from '@aziontech/ui/assets/branches.svg'
+  import placeholderClip from '@aziontech/ui/assets/placeholder-clip.webm'
+  import usageChart from '@aziontech/ui/assets/usage-chart.svg'
+  import type { AiChatMessage } from '@aziontech/ui/utils/ai-chat'
 
   import AiChat from '../ai-chat.vue'
   import { sampleReportCsv } from '../sample'

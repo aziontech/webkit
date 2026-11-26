@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import JobPostingSection from '@aziontech/webkit/job-posting-section'
+  import Button from '@aziontech/ui/button'
+  import JobPostingSection from '@aziontech/ui/job-posting-section'
   import { nextTick, ref } from 'vue'
 
   const form = {

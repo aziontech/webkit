@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Slider from '@aziontech/webkit/slider'
+  import Field from '@aziontech/ui/field'
+  import Slider from '@aziontech/ui/slider'
   import { ref } from 'vue'
 
   const value = ref(40)

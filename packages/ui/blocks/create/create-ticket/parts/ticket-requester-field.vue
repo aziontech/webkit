@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Combobox from '@aziontech/webkit/combobox'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Button from '@aziontech/ui/button'
+  import Combobox from '@aziontech/ui/combobox'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import SettingsRow from '@aziontech/ui/settings-row'
   import { computed, nextTick, ref } from 'vue'
 
   import type { CreateTicketContact } from '../create-ticket.vue'

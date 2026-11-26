@@ -1,11 +1,11 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PopoverClose from '@aziontech/webkit/popover-close'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import PopoverHeader from '@aziontech/webkit/popover-header'
-  import PopoverRoot from '@aziontech/webkit/popover-root'
-  import PopoverTitle from '@aziontech/webkit/popover-title'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import Button from '@aziontech/ui/button'
+  import PopoverClose from '@aziontech/ui/popover-close'
+  import PopoverContent from '@aziontech/ui/popover-content'
+  import PopoverHeader from '@aziontech/ui/popover-header'
+  import PopoverRoot from '@aziontech/ui/popover-root'
+  import PopoverTitle from '@aziontech/ui/popover-title'
+  import PopoverTrigger from '@aziontech/ui/popover-trigger'
 </script>
 
 <template>

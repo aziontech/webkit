@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import type { HomeDashboardResource } from '../dashboard-home.vue'
 

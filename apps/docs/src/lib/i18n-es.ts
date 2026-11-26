@@ -38,7 +38,7 @@ export const es: Messages = {
   demoLanguage: 'Idioma de la demostración',
   demoDirection: 'Dirección de la demostración',
   demoLocaleNote:
-    'El bloque de inicio de sesión dentro de ConfigProvider: su texto y todo texto de WebKit siguen el idioma.',
+    'El bloque de inicio de sesión dentro de ConfigProvider: su texto y todo texto de Azion UI siguen el idioma.',
   demoDirectionNote:
     'El bloque de inicio de sesión dentro de ConfigProvider: cada lado, espacio y flecha se refleja con la dirección.',
   keyTableTitle: 'Teclas por plataforma',
@@ -60,16 +60,16 @@ export const es: Messages = {
   keyDelete: 'Eliminar la fila enfocada, después de preguntar',
   rightToLeft: 'Derecha a izquierda',
   leftToRight: 'Izquierda a derecha',
-  github: 'WebKit en GitHub',
+  github: 'Azion UI en GitHub',
   newTab: '(se abre en una pestaña nueva)',
   footer: 'Pie de página',
-  footerWebkit: 'WebKit',
+  footerAzionUi: 'Azion UI',
   footerAzion: 'Azion',
   footerGithub: 'GitHub',
   footerNpm: 'npm',
   footerAzionDocs: 'Documentación de Azion',
   footerConsole: 'Azion Console',
-  home: 'Inicio de WebKit',
+  home: 'Inicio de Azion UI',
   examples: 'Ejemplos',
   preview: 'Vista previa',
   code: 'Código',
@@ -223,7 +223,7 @@ export const es: Messages = {
   iconsEmpty: 'Ningún icono coincide con esa búsqueda',
   iconsEmptyLead: 'Prueba otro nombre o palabra clave.',
   iconsCopy: 'Copiar la clase',
-  assetsLead: 'Las versiones de la marca, ilustraciones de producto e iconos que trae WebKit.',
+  assetsLead: 'Las versiones de la marca, ilustraciones de producto e iconos que trae Azion UI.',
   brand: 'Marca',
   brandLead:
     'Las versiones de la marca Azion de Brand. Mantén la marca limpia y sin cambios, y elige la versión que cabe en el espacio.',
@@ -246,46 +246,46 @@ export const es: Messages = {
   openIcons: 'Abrir la galería de iconos',
   homeTitle: 'El design system de Azion, hecho para IA.',
   homeNote:
-    'El prompt instala WebKit y ejecuta init, así tu agente de código recibe el servidor MCP, la guía y el lint.',
+    'El prompt instala Azion UI y ejecuta init, así tu agente de código recibe el servidor MCP, la guía y el lint.',
   homeLead:
-    'Componentes, bloques, patrones y fundamentos para Azion Console, la documentación y el sitio. Tu agente de IA lee el mismo catálogo que recorres aquí, y agentes de IA construyen el propio WebKit.',
+    'Componentes, bloques, patrones y fundamentos para Azion Console, la documentación y el sitio. Tu agente de IA lee el mismo catálogo que recorres aquí, y agentes de IA construyen el propio Azion UI.',
   startWithAgents: 'Empezar con agentes',
   pathsTitle: 'Empieza por tu rol',
   pathsLead:
-    'Entrega el trabajo a tu agente de código, o elige tu camino: construye una app con WebKit, o mejora WebKit.',
+    'Entrega el trabajo a tu agente de código, o elige tu camino: construye una app con Azion UI, o mejora Azion UI.',
   pathBuildTitle: 'Empieza a construir',
   pathBuildBody:
-    'Instala los paquetes, ejecuta npx @aziontech/webkit init y arma tus pantallas con bloques y componentes. Tu agente de IA recibe el servidor MCP, las pautas y el lint en el mismo paso.',
+    'Instala los paquetes, ejecuta npx @aziontech/ui init y arma tus pantallas con bloques y componentes. Tu agente de IA recibe el servidor MCP, las pautas y el lint en el mismo paso.',
   pathBuildLink: 'Primeros pasos',
   pathContributeTitle: 'Empieza a contribuir',
   pathContributeBody:
-    'WebKit lo construyen agentes de IA. Abres una issue en GitHub; los agentes investigan, escriben la spec, un segundo agente la revisa, construyen, ejecutan cada verificación y la revisión de UI y abren el pull request. Sin archivo de diseño, sin componentes hechos a mano.',
-  pathContributeLink: 'Cómo se construye WebKit',
-  forAi: 'WebKit para IA',
+    'Azion UI lo construyen agentes de IA. Abres una issue en GitHub; los agentes investigan, escriben la spec, un segundo agente la revisa, construyen, ejecutan cada verificación y la revisión de UI y abren el pull request. Sin archivo de diseño, sin componentes hechos a mano.',
+  pathContributeLink: 'Cómo se construye Azion UI',
+  forAi: 'Azion UI para IA',
   aiNav: 'IA',
   aiPageSummary:
-    'El servidor MCP, el comando de configuración, las pautas que leen los agentes, las verificaciones que pasan y cómo los agentes construyen el propio WebKit.',
-  aiTitle: 'Tu agente de IA lee el mismo WebKit que tú',
+    'El servidor MCP, el comando de configuración, las pautas que leen los agentes, las verificaciones que pasan y cómo los agentes construyen el propio Azion UI.',
+  aiTitle: 'Tu agente de IA lee el mismo Azion UI que tú',
   aiLead:
     'Este sitio es la mitad. La otra mitad es para agentes de IA: un servidor que consultan, pautas que cargan y verificaciones que mantienen su código en el estándar.',
   aiMcpTitle: 'Servidor MCP',
   aiMcpBody:
-    '@aziontech/webkit-mcp responde search_blocks, get_component, list_tokens y validate_usage desde el catálogo de la versión instalada.',
+    '@aziontech/ui-mcp responde search_blocks, get_component, list_tokens y validate_usage desde el catálogo de la versión instalada.',
   aiInitTitle: 'Un comando de configuración',
   aiInitBody:
-    'npx @aziontech/webkit init configura el servidor MCP, el lint, el tema y las instrucciones del agente en AGENTS.md.',
+    'npx @aziontech/ui init configura el servidor MCP, el lint, el tema y las instrucciones del agente en AGENTS.md.',
   aiGuidanceTitle: 'Skills, reglas y patrones',
   aiGuidanceBody:
     'Las pautas de este sitio van en Markdown dentro del paquete, así el agente lee el patrón de la tarea antes de escribir una línea.',
   aiChecksTitle: 'Verificaciones que sostienen el estándar',
   aiChecksBody:
-    'Los presets de lint, webkit doctor y webkit check fallan el build ante un import erróneo, un color crudo o una etiqueta que falta.',
+    'Los presets de lint, azion-ui doctor y azion-ui check fallan el build ante un import erróneo, un color crudo o una etiqueta que falta.',
   aiAgentTitle: 'Configura tu agente con un prompt',
   aiAgentBody:
-    'Pégalo en Claude Code, Cursor, Codex o ChatGPT. Instala WebKit y ejecuta init, así el agente conoce los componentes desde la primera pantalla.',
+    'Pégalo en Claude Code, Cursor, Codex o ChatGPT. Instala Azion UI y ejecuta init, así el agente conoce los componentes desde la primera pantalla.',
   aiAgentAside: '¿Quieres ver los detalles antes?',
-  aiAgentAction: 'Leer WebKit para IA',
-  exploreTitle: 'Explora WebKit',
+  aiAgentAction: 'Leer Azion UI para IA',
+  exploreTitle: 'Explora Azion UI',
   exploreLead: 'Todo lo que tiene el sistema, para personas y para agentes.',
   exploreFoundations:
     'Tokens, color, tipografía, idiomas, derecha a izquierda, accesibilidad y teclado.',
@@ -294,7 +294,7 @@ export const es: Messages = {
   explorePatterns: 'Cómo construir formularios, tablas, errores, estados y navegación.',
   exploreBlocks: 'Pantallas enteras hechas con los componentes, en un marco redimensionable.',
   exploreAssets: 'Las versiones de la marca, ilustraciones de producto e iconos.',
-  exploreAi: 'El servidor MCP, el comando de configuración y cómo los agentes construyen WebKit.',
+  exploreAi: 'El servidor MCP, el comando de configuración y cómo los agentes construyen Azion UI.',
   whyTitle: 'Un kit impulsa todas las interfaces de Azion',
   whyLead:
     '{components} componentes, {examples} ejemplos en vivo y {blocks} bloques: las mismas piezas del Azion Console, moldeadas por los equipos que las usan cada día.',
@@ -311,7 +311,7 @@ export const es: Messages = {
   categoryLead: '{count} componentes',
   componentsLead: '{count} componentes, cada uno con sus ejemplos, API y pautas.',
   blocksLead:
-    '{count} pantallas y fragmentos, cada uno con sus estados, código y pautas. Copia uno con npx @aziontech/webkit add <id>.',
+    '{count} pantallas y fragmentos, cada uno con sus estados, código y pautas. Copia uno con npx @aziontech/ui add <id>.',
   copyPageTip: 'Copia esta página en Markdown, lista para pegar en un asistente.',
   copyBlockTip: 'Copia este bloque en Markdown, listo para pegar en un asistente.'
 }

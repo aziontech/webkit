@@ -1,7 +1,7 @@
 <script setup>
-  import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
-  import Button from '@aziontech/webkit/button'
-  import Table from '@aziontech/webkit/table'
+  import ArtifactCanvas from '@aziontech/ui/artifact-canvas'
+  import Button from '@aziontech/ui/button'
+  import Table from '@aziontech/ui/table'
   import { onBeforeUnmount, ref } from 'vue'
 
   const rows = [

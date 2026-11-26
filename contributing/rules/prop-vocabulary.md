@@ -23,7 +23,7 @@ Every banned name or value is in one of two stages:
   `DATA_ATTRIBUTES`) — the rest of the 6.0 standard, still being applied by the rename lanes.
   The naming check (`check:naming`, rules `prop-name`, `prop-value`, `event-name`,
   `slot-name`, `data-attribute`) reports them now and blocks them once the lead sets
-  `NAMING_STAGED_BLOCKS` to `true` in `packages/webkit/scripts/lib/naming-rules.mjs`.
+  `NAMING_STAGED_BLOCKS` to `true` in `packages/ui/scripts/lib/naming-rules.mjs`.
 
 In the tables below, staged entries are marked _(staged)_.
 
@@ -80,7 +80,7 @@ In the tables below, staged entries are marked _(staged)_.
 
 **Accessible name — the attribute the consumer writes.** The prop is `ariaLabel`, but
 templates pass `aria-label="…"`. vue-tsc does not camelize `aria-*` attributes onto props, so
-an `ariaLabel` prop is always optional with a `''` default; `webkit/require-accessible-name` enforces a
+an `ariaLabel` prop is always optional with a `''` default; `azion-ui/require-accessible-name` enforces a
 mandatory name.
 
 ## Booleans
@@ -136,7 +136,7 @@ axis is the prop name or its `*<Axis>` suffix (`titleVariant`, `tagSeverity`).
 
 - **A `variant` union made only of alignment words** (`start`, `center`, `end`, `split`) is
   the `align` axis, never a look: `module-header` is `align="start|center|split"`.
-- **An exported `*Severity` type derives from `Severity`** (`packages/webkit/src/utils/severity.ts`)
+- **An exported `*Severity` type derives from `Severity`** (`packages/ui/src/utils/severity.ts`)
   — `Severity`, `Exclude<Severity, …>` or `Extract<Severity, …>` — instead of re-listing the
   values. An exported `*Status` / `*Orientation` type stays inside its set too.
 - **A union a file declares for an axis prop is named `<Component><Axis>`**
@@ -246,11 +246,11 @@ sides of a bar are `start` / `end`.
 
 Per [`migration.md`](./migration.md), a name inherited from another system (`kind`,
 `sm/md/lg`, `onValueChange`, `prefix`) is rewritten to ours, never carried over. The full
-old → new map, with value renames, is `packages/webkit/src/cli/migrations/v6-props.json`
+old → new map, with value renames, is `packages/ui/src/cli/migrations/v6-props.json`
 (`{ "<subpath>": { "<old>": "<new>" } }`; a `#<slot>` key renames a slot, an
 `@<event>` key a listener, and a rule's `moves` sends a static value to another prop);
-`webkit migrate` applies it to apps and
-`webkit/no-deprecated-name` flags what is left.
+`azion-ui migrate` applies it to apps and
+`azion-ui/no-deprecated-name` flags what is left.
 
 ## What is enforced, and where
 
@@ -267,7 +267,7 @@ old → new map, with value renames, is `packages/webkit/src/cli/migrations/v6-p
 - **[`_schema.json`](../../.specs/_schema.json)** + the `spec-validate` skill reject aliases at
   spec-authoring time.
 - **`catalog.json` `vocabulary`** carries the full 6.0 dictionary to the MCP.
-- **`webkit/no-deprecated-name`** (consumer ESLint) flags a renamed prop on a WebKit tag from
+- **`azion-ui/no-deprecated-name`** (consumer ESLint) flags a renamed prop on an Azion UI tag from
   `v6-props.json`.
 
 ## Hard prohibitions

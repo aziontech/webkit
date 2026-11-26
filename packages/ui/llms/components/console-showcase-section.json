@@ -1,8 +1,8 @@
 {
  "name": "console-showcase-section",
  "binding": "ConsoleShowcaseSection",
- "import": "@aziontech/webkit/console-showcase-section",
- "treeShakeableImport": "@aziontech/webkit/console-showcase-section",
+ "import": "@aziontech/ui/console-showcase-section",
+ "treeShakeableImport": "@aziontech/ui/console-showcase-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

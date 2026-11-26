@@ -1,6 +1,6 @@
 import { pascalCase } from './migrate-syntax.js'
 
-export const BLOCK_MANIFEST = 'webkit.blocks.json'
+export const BLOCK_MANIFEST = 'azion-ui.blocks.json'
 
 const variantKey = (s) =>
   String(s || '')

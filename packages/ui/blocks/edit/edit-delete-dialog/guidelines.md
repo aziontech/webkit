@@ -28,7 +28,7 @@ A `severity="warning"` `Alert` first in the body states that the action cannot b
 
 ### C. Typed confirmation — `ConfirmDialog` `confirmation-phrase` (required)
 
-Pass the resource name as `confirmation-phrase`; never hand-write the field. `ConfirmDialog` renders the prompt "Type `resource-01` to confirm." with the name in code type and a full-width `Input` labelled by it, moves focus into the field on open, and keeps Delete disabled until the typed text matches the name exactly (case-sensitive, the ends trimmed). Enter in the field confirms only when it matches. The field empties each time the dialog opens, never as it closes, so the content stays put during the exit motion. Every typed confirmation in WebKit follows this one rule.
+Pass the resource name as `confirmation-phrase`; never hand-write the field. `ConfirmDialog` renders the prompt "Type `resource-01` to confirm." with the name in code type and a full-width `Input` labelled by it, moves focus into the field on open, and keeps Delete disabled until the typed text matches the name exactly (case-sensitive, the ends trimmed). Enter in the field confirms only when it matches. The field empties each time the dialog opens, never as it closes, so the content stays put during the exit motion. Every typed confirmation in Azion UI follows this one rule.
 
 ### D. Trigger — `Button` (required)
 
@@ -98,7 +98,7 @@ Then delete `sample.ts` and its import.
 - **Prompt:** "Type `name` to confirm.", written by `ConfirmDialog` from the locale catalog; never a position such as "in the box below".
 - **Confirm:** the title's verb and object, e.g. "Delete resource"; never "OK", "Confirm" or "Yes".
 - **Cancel:** exactly "Cancel".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -120,4 +120,4 @@ Then delete `sample.ts` and its import.
 - `detail/detail-dns-zone` — Delete on a record of a resource.
 - `settings/settings-form` — where the SettingsRow variant sits.
 - `state/state-async-submit` — a long-running request that reports back later.
-- `ConfirmDialog` — the dialog this block fills; see `skills/webkit-form` for the Dialog form type.
+- `ConfirmDialog` — the dialog this block fills; see `skills/azion-ui-form` for the Dialog form type.

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
   import { computed } from 'vue'
 
   import { sampleThreads } from '../sample'

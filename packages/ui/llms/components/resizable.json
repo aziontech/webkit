@@ -1,15 +1,15 @@
 {
  "name": "resizable",
  "binding": "Resizable",
- "import": "@aziontech/webkit/resizable",
- "treeShakeableImport": "@aziontech/webkit/resizable-root",
+ "import": "@aziontech/ui/resizable",
+ "treeShakeableImport": "@aziontech/ui/resizable-root",
  "category": "layout",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/resizable-handle",
-  "@aziontech/webkit/resizable-pane"
+  "@aziontech/ui/resizable-handle",
+  "@aziontech/ui/resizable-pane"
  ],
  "purpose": "A group of adjacent regions whose shared edges the reader can drag. It is the layout primitive behind a workspace — an editor with a terminal under it and a preview beside it — where every region is content the reader is working in and the split between them is theirs to set. It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's NAVIGATION rail: it collapses to icons, it hides, it is the thing you leave to go somewhere. A terminal, a preview and a code editor are not places you navigate to — they are the work — and dressing two of them as navigation rails made a screen with three \"sidebars\" and one document, on an axis `Sidebar` does not even have (it has no horizontal edge, so a terminal under an editor had to hand-roll its own splitter). This component owns the EDGE; `Sidebar` goes back to owning navigation.",
  "setup": null,

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Alert from '@aziontech/ui/alert'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import SettingsGroup from '@aziontech/ui/settings-group'
 
   import type { CheckedRow } from '../lib/csv-import'
 

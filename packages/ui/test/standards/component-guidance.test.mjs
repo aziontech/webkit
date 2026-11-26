@@ -36,15 +36,15 @@ test('every app component is named in a skill or rule, so agents are told when t
     .filter(
       (name) =>
         !new RegExp(`\\b${pascal(name)}\\b`).test(guidance) &&
-        !guidance.includes(`@aziontech/webkit/${name}`)
+        !guidance.includes(`@aziontech/ui/${name}`)
     )
   assert.deepEqual(
     missing,
     [],
     `No skill or rule names ${missing.map(pascal).join(', ')}. Add a row to the table of its family: ` +
-      'skills/webkit-usage ("Pick the component for the job"), skills/webkit-form ("Pick the control ' +
-      'from the kind of value"), skills/webkit-data-viz ("Pick the chart for the question") or ' +
-      'skills/webkit-ai-surfaces ("One component per moment"). A component no skill names is a ' +
+      'skills/azion-ui-usage ("Pick the component for the job"), skills/azion-ui-form ("Pick the control ' +
+      'from the kind of value"), skills/azion-ui-data-viz ("Pick the chart for the question") or ' +
+      'skills/azion-ui-ai-surfaces ("One component per moment"). A component no skill names is a ' +
       'component agents do not use.'
   )
 })

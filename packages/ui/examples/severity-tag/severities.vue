@@ -1,5 +1,5 @@
 <script setup>
-  import SeverityTag from '@aziontech/webkit/severity-tag'
+  import SeverityTag from '@aziontech/ui/severity-tag'
 </script>
 
 <template>

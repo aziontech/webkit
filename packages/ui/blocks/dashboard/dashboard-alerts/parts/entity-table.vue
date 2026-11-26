@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
-  import Tag from '@aziontech/webkit/tag'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import SeverityTag from '@aziontech/ui/severity-tag'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { AlertsDashboardEntity } from '../dashboard-alerts.vue'

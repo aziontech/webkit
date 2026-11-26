@@ -1,5 +1,5 @@
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
+  import Alert from '@aziontech/ui/alert'
 </script>
 
 <template>

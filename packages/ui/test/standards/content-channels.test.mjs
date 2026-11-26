@@ -51,7 +51,7 @@ test('every content component declares its channels', () => {
   assert.deepEqual(
     missing,
     [],
-    'Add each to CONTENT_CHANNELS in scripts/lib/content-channels.mjs (see rules/webkit-content-channels.md).'
+    'Add each to CONTENT_CHANNELS in scripts/lib/content-channels.mjs (see rules/azion-ui-content-channels.md).'
   )
 })
 

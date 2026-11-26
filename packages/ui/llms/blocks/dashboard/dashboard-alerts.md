@@ -3,10 +3,10 @@
 > An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `PageHeader`, `Select`, `SeverityTag`, `Skeleton`, `StatTile`, `DataTable`, `DataTable`, `Tag` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-alerts/dashboard-alerts.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-alerts/dashboard-alerts.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-alerts")`
 - Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Card](../../components/card.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), `use-locale`
-- Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-tables`, `azion-ui-states`
 
 ## Asked as
 
@@ -224,18 +224,18 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { BarListItem } from '@aziontech/webkit/bar-list'
-  import BarList from '@aziontech/webkit/bar-list'
-  import Button from '@aziontech/webkit/button'
-  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import type { SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import type { BarListItem } from '@aziontech/ui/bar-list'
+  import BarList from '@aziontech/ui/bar-list'
+  import Button from '@aziontech/ui/button'
+  import Chart, { type ChartSeries } from '@aziontech/ui/chart'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import type { SeverityTagSeverity } from '@aziontech/ui/severity-tag'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref } from 'vue'
 
   import AlertsCard from './parts/alerts-card.vue'
@@ -618,8 +618,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ## `sample.ts`
 
 ```ts
-import type { BarListItem } from '@aziontech/webkit/bar-list'
-import type { ChartSeries } from '@aziontech/webkit/chart'
+import type { BarListItem } from '@aziontech/ui/bar-list'
+import type { ChartSeries } from '@aziontech/ui/chart'
 
 import type {
   AlertsDashboardAlert,
@@ -947,8 +947,8 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 
 ```ts
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import Hint from '@aziontech/webkit/hint'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import Hint from '@aziontech/ui/hint'
 
   export interface AlertsCardProps {
     /** Columns of the 12-column grid the card spans. */
@@ -993,10 +993,10 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 
 ```ts
 <script setup lang="ts">
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
-  import Tag from '@aziontech/webkit/tag'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import SeverityTag from '@aziontech/ui/severity-tag'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { AlertsDashboardEntity } from '../dashboard-alerts.vue'
@@ -1103,12 +1103,12 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 
 ```ts
 <script setup lang="ts">
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import SeverityTag from '@aziontech/ui/severity-tag'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import type { TagSeverity } from '@aziontech/ui/tag'
 
   import type { AlertsDashboardAlert, AlertsDashboardAlertStatus } from '../dashboard-alerts.vue'
 
@@ -1208,10 +1208,10 @@ export const sampleAlerts: AlertsDashboardAlert[] = [
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import SeverityTag from '@aziontech/ui/severity-tag'
+  import Skeleton from '@aziontech/ui/skeleton'
   import { computed } from 'vue'
 
   import type { AlertsDashboardLevelCount } from '../dashboard-alerts.vue'

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Link from '@aziontech/webkit/link'
-  import OtpInput from '@aziontech/webkit/otp-input'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Link from '@aziontech/ui/link'
+  import OtpInput from '@aziontech/ui/otp-input'
+  import PageHeader from '@aziontech/ui/page-header'
   import { computed, nextTick, onMounted, ref } from 'vue'
 
   import { useCodeCheck } from '../composables/use-code-check'

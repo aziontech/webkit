@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import FeatureWidgetsSection from '@aziontech/webkit/feature-widgets-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import FeatureWidgetsSection from '@aziontech/ui/feature-widgets-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const primaryAction = {
     label: 'Start for free',

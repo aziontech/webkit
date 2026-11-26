@@ -1,5 +1,5 @@
 name: Change a component
-description: Ask for a change to an existing WebKit component (a new prop or state, a new look, a behavior fix). An agent updates the spec first, then the code.
+description: Ask for a change to an existing Azion UI component (a new prop or state, a new look, a behavior fix). An agent updates the spec first, then the code.
 title: 'change: <name>'
 labels: ['change-component', 'ai-flow']
 body:

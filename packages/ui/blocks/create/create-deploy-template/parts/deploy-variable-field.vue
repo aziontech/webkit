@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
-  import InputGroupInput from '@aziontech/webkit/input-group-input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import IconButton from '@aziontech/ui/icon-button'
+  import InputGroupAddon from '@aziontech/ui/input-group-addon'
+  import InputGroupInput from '@aziontech/ui/input-group-input'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { ref } from 'vue'
 
   import type { DeployFormVariable } from '../sample'

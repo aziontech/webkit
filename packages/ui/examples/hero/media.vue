@@ -1,5 +1,5 @@
 <script setup>
-  import Hero from '@aziontech/webkit/hero'
+  import Hero from '@aziontech/ui/hero'
 </script>
 
 <template>

@@ -1,8 +1,8 @@
 {
  "name": "doc-card",
  "binding": "DocCard",
- "import": "@aziontech/webkit/doc-card",
- "treeShakeableImport": "@aziontech/webkit/doc-card",
+ "import": "@aziontech/ui/doc-card",
+ "treeShakeableImport": "@aziontech/ui/doc-card",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

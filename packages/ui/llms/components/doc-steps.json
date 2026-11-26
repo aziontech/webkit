@@ -1,8 +1,8 @@
 {
  "name": "doc-steps",
  "binding": "DocSteps",
- "import": "@aziontech/webkit/doc-steps",
- "treeShakeableImport": "@aziontech/webkit/doc-steps-root",
+ "import": "@aziontech/ui/doc-steps",
+ "treeShakeableImport": "@aziontech/ui/doc-steps-root",
  "category": "docs",
  "surface": "docs",
  "structure": "composition",

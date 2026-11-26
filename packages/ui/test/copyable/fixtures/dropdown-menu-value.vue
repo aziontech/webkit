@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import { type DropdownMenuItemValue as TableActionValue } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import { type DropdownMenuItemValue as TableActionValue } from '@aziontech/ui/table'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
   import { ref } from 'vue'
 
   const chosen = ref<DropdownMenuItemValue>('')

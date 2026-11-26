@@ -1,15 +1,13 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Command from '@aziontech/webkit/command'
-  import ConsoleLayoutRoot, {
-    type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import HighlightButton from '@aziontech/webkit/highlight-button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Command from '@aziontech/ui/command'
+  import ConsoleLayoutRoot, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import HighlightButton from '@aziontech/ui/highlight-button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [

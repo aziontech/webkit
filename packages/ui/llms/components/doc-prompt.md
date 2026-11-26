@@ -2,7 +2,7 @@
 
 > DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is "say this to your agent". It is the one component in this layer whose payload is addressed to a machine, so it is the one that ships an affordance for handing it to one: a copy control wired to the exact string on screen. It is deliberately **not** a code block — a prompt is a sentence, so it carries no language, no gutter, and no syntax highlighting, and it is set in the mono face only to say "this is the literal text, copy it as it stands".
 
-- Import: `import DocPrompt from '@aziontech/webkit/doc-prompt'`
+- Import: `import DocPrompt from '@aziontech/ui/doc-prompt'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-prompt.json](doc-prompt.json)
 
@@ -72,7 +72,7 @@
 - ARIA: the full prompt text is in the DOM in every state, so the cap hides nothing from a screen reader — the disclosure is a visual convenience and the state it reports is the change in its own label (`Show more` / `Show less`). Every fade gradient is `aria-hidden="true"`; the title glyph is `aria-hidden="true"`. The copy control carries its own accessible name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — the prompt is `--text-default`, not the muted body ink, because the prompt IS the payload and everything around it is chrome
 - `motion-reduce:transition-none` on both animated states; the disclosure move is skipped rather than shortened
-- Touch target ≥40×40 px on both controls (both are `size="small"` webkit controls, which meet the floor)
+- Touch target ≥40×40 px on both controls (both are `size="small"` Azion UI controls, which meet the floor)
 
 ## Right-to-left
 
@@ -87,7 +87,7 @@
 
 ```vue
 <script setup>
-  import DocPrompt from '@aziontech/webkit/doc-prompt'
+  import DocPrompt from '@aziontech/ui/doc-prompt'
 </script>
 
 <template>
@@ -101,7 +101,7 @@
 
 ```vue
 <script setup>
-  import DocPrompt from '@aziontech/webkit/doc-prompt'
+  import DocPrompt from '@aziontech/ui/doc-prompt'
 </script>
 
 <template>
@@ -127,7 +127,7 @@
 
 ```vue
 <script setup>
-  import DocPrompt from '@aziontech/webkit/doc-prompt'
+  import DocPrompt from '@aziontech/ui/doc-prompt'
 </script>
 
 <template>

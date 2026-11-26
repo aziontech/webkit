@@ -1,8 +1,8 @@
 {
  "name": "data-grid",
  "binding": "DataGrid",
- "import": "@aziontech/webkit/data-grid",
- "treeShakeableImport": "@aziontech/webkit/data-grid",
+ "import": "@aziontech/ui/data-grid",
+ "treeShakeableImport": "@aziontech/ui/data-grid",
  "category": "data",
  "surface": "app",
  "structure": "monolithic",

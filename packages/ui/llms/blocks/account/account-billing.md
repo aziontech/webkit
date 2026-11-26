@@ -3,10 +3,10 @@
 > The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValueList` for plan start, next charge date and value as `CurrencyAmount`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `DataTable` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `TableCellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValueList` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `DataTable` of cards (holder with a Default `Tag`, brand and last four, expiry, `TableCellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
-- Source: `blocks/account/account-billing/account-billing.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-billing/account-billing.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-billing")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CurrencyAmount](../../components/currency-amount.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-states`, `azion-ui-navigation`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -70,7 +70,7 @@ A `Subheader` with Add payment method over a flush `Card` and a `DataTable` of c
 
 ### Outcomes — through `toast`
 
-Set as default and Remove end in a success toast that names the card. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root), so the page never renders a `Toaster`.
+Set as default and Remove end in a success toast that names the card. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -144,7 +144,7 @@ Then delete `sample.ts` and its import.
 - **Plan card:** `Subscription plan`, `Current plan`, `Change plan`; facts `Plan start date`, `Next charge date`, `Next charge value`, `Payment method`.
 - **Invoices:** `Filter invoices`; statuses `Paid`, `Refunded`, `Overdue`; empty `No invoices yet`, `Your first invoice appears here when the first billing cycle closes.`; no match `No matching invoices`, `Clear filters`.
 - **Payment methods:** `Set as default`, `Remove`; confirm `Remove payment method`; toasts `Mastercard •••• 1702 is now the default.`, `Visa •••• 4431 removed.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -187,18 +187,18 @@ Each variant is the same screen in another state: `get_block("account/account-bi
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
-  import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { type PropertyFilterQuery } from '@aziontech/webkit/use-collection'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import { toast } from '@aziontech/ui/toast'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { type PropertyFilterQuery } from '@aziontech/ui/use-collection'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import { methodLabel } from './billing-format'
@@ -590,7 +590,7 @@ export const sampleInvoices: BillingInvoice[] = usage.map((amount, index) => ({
 ## `billing-format.ts`
 
 ```ts
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 import type { BillingInvoiceStatus, BillingPaymentMethod } from './account-billing.vue'
 
@@ -607,26 +607,26 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import CurrencyAmount from '@aziontech/webkit/currency-amount'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Subheader from '@aziontech/webkit/subheader'
-  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import CurrencyAmount from '@aziontech/ui/currency-amount'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PaymentBrand from '@aziontech/ui/payment-brand'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import Subheader from '@aziontech/ui/subheader'
+  import { type TableColumn, type TableExposed } from '@aziontech/ui/table'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import Tooltip from '@aziontech/ui/tooltip'
   import {
     type FilteringProperty,
     type PropertyFilterQuery,
     useCollection
-  } from '@aziontech/webkit/use-collection'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  } from '@aziontech/ui/use-collection'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { ref, watch } from 'vue'
 
   import type { BillingInvoice } from '../account-billing.vue'
@@ -905,11 +905,11 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Subheader from '@aziontech/webkit/subheader'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import Subheader from '@aziontech/ui/subheader'
 
   import type { BillingPaymentInformation } from '../account-billing.vue'
 
@@ -980,15 +980,15 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import Subheader from '@aziontech/webkit/subheader'
-  import { type TableColumn } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DataTable from '@aziontech/ui/data-table'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import PaymentBrand from '@aziontech/ui/payment-brand'
+  import Subheader from '@aziontech/ui/subheader'
+  import { type TableColumn } from '@aziontech/ui/table'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import Tag from '@aziontech/ui/tag'
 
   import type { BillingPaymentMethod } from '../account-billing.vue'
   import { methodLabel } from '../billing-format'
@@ -1120,15 +1120,15 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CurrencyAmount from '@aziontech/webkit/currency-amount'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Link from '@aziontech/webkit/link'
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CurrencyAmount from '@aziontech/ui/currency-amount'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Link from '@aziontech/ui/link'
+  import PaymentBrand from '@aziontech/ui/payment-brand'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type { BillingPaymentMethod, BillingSubscription } from '../account-billing.vue'
   import { formatAmount, methodLabel } from '../billing-format'

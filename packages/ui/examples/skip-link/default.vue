@@ -1,6 +1,6 @@
 <script setup>
-  import Link from '@aziontech/webkit/link'
-  import SkipLink from '@aziontech/webkit/skip-link'
+  import Link from '@aziontech/ui/link'
+  import SkipLink from '@aziontech/ui/skip-link'
 </script>
 
 <template>

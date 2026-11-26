@@ -38,7 +38,7 @@ if (invoked) {
         `package.json#exports or typesVersions is not in the typed shape (${problems.length}):`
       )
       for (const p of problems.slice(0, 50)) console.error(`  - ${p}`)
-      console.error('Run: pnpm --filter @aziontech/webkit build:exports')
+      console.error('Run: pnpm --filter @aziontech/ui build:exports')
       process.exit(1)
     }
     console.log(`Exports OK: ${Object.keys(pkg.exports).length} entries, every source entry typed.`)

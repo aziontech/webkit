@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import LanguageSelect from '@aziontech/webkit/language-select'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, ref, useId } from 'vue'
   import { useRouter } from 'vue-router'
 

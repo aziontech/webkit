@@ -1,10 +1,10 @@
 <script setup>
-  import Avatar from '@aziontech/webkit/avatar'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Avatar from '@aziontech/ui/avatar'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenuRoot from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import IconButton from '@aziontech/ui/icon-button'
 </script>
 
 <template>

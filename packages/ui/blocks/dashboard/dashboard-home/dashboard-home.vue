@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
+  import Alert from '@aziontech/ui/alert'
   import { computed } from 'vue'
 
   import { homeMetricDefinitions } from './home-metrics'

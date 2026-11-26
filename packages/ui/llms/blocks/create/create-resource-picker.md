@@ -3,10 +3,10 @@
 > The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. The CreateAndDeploy variant of MultipageCreate binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingsRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on, its row description saying it is always on. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `FieldError`, `Item`, `Skeleton` and `Button`.
 
 - Surface: app
-- Source: `blocks/create/create-resource-picker/create-resource-picker.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-resource-picker/create-resource-picker.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-resource-picker")`
 - Components: [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [ToggleGroup](../../components/toggle-group.md), `utils/radio-list`
-- Skills: `webkit-form`, `webkit-ui-states`
+- Skills: `azion-ui-form`, `azion-ui-states`
 
 ## Asked as
 
@@ -110,7 +110,7 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 - Offer the other mode in the no-match line, so an empty search leads to creating one.
 - Keep the chosen value when the user switches to New and back.
 - Keep an optional binding off by default, and prefill the new resource's name from the resource being created.
-- Build the band once and pass the noun, icon and options; every flow that binds a resource reads the same (see `skills/webkit-create-surface`).
+- Build the band once and pass the noun, icon and options; every flow that binds a resource reads the same (see `skills/azion-ui-create-surface`).
 
 ## Don't
 
@@ -132,7 +132,7 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 - **Required:** what to do, as a sentence, e.g. "Select the project this service serves, or create a new one."
 - **Name guidance:** the allowed characters, e.g. "Lowercase letters, numbers, and hyphens."
 - **Opt-in row:** the action as the title, e.g. "Protect with a firewall", and what it does and that it is off by default as the description. A locked module's description ends with the fact, e.g. "Always on."
-- Follow `skills/webkit-microcopy`: "Select", never "Pick" or "Choose"; sentence case; no em dash.
+- Follow `skills/azion-ui-microcopy`: "Select", never "Pick" or "Choose"; sentence case; no em dash.
 
 ## Accessibility
 
@@ -158,8 +158,8 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 - `create/create-wizard` — its CreateAndDeploy variant binds its project with this band on the first step and reuses the list for the deployment.
 - `create/create-wizard` — the step wizard whose Where it runs chooser follows the same list rules.
 - `state/state-form-validation` — how required and invalid messages appear on submit.
-- `Item` — the selectable row the list is built from; see `skills/webkit-form`.
-- `ToggleGroup` — the Existing / New segment; see `skills/webkit-create-surface`.
+- `Item` — the selectable row the list is built from; see `skills/azion-ui-form`.
+- `ToggleGroup` — the Existing / New segment; see `skills/azion-ui-create-surface`.
 
 ## Variants
 
@@ -176,15 +176,15 @@ Each variant is the same screen in another state: `get_block("create/create-reso
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/ui/utils/radio-list'
   import { computed, reactive } from 'vue'
 
   import { usePagedList } from './composables/use-paged-list'

@@ -29,7 +29,7 @@
     "where to start",
     "começar um projeto"
   ],
-  "skills": ["webkit-create-surface", "webkit-ui-states", "webkit-microcopy"],
+  "skills": ["azion-ui-create-surface", "azion-ui-states", "azion-ui-microcopy"],
   "primary": {
     "name": "Default",
     "file": "create-hub.vue"

@@ -1,5 +1,5 @@
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
 
   const single = [{ label: 'Page Name', active: true }]
   const two = [

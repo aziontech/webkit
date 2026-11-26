@@ -1,8 +1,5 @@
-import {
-  useUnsavedChanges,
-  type UseUnsavedChangesReturn
-} from '@aziontech/webkit/use-unsaved-changes'
-import { leavingLink } from '@aziontech/webkit/utils/leave-link'
+import { useUnsavedChanges, type UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
+import { leavingLink } from '@aziontech/ui/utils/leave-link'
 import { type MaybeRefOrGetter, onScopeDispose, toValue } from 'vue'
 
 export function useTeamLeaveGuard<T>(

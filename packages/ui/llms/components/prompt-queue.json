@@ -1,8 +1,8 @@
 {
  "name": "prompt-queue",
  "binding": "PromptQueue",
- "import": "@aziontech/webkit/prompt-queue",
- "treeShakeableImport": "@aziontech/webkit/prompt-queue",
+ "import": "@aziontech/ui/prompt-queue",
+ "treeShakeableImport": "@aziontech/ui/prompt-queue",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

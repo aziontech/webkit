@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import ConversationHistory, {
     type ConversationHistoryItem
-  } from '@aziontech/webkit/conversation-history'
+  } from '@aziontech/ui/conversation-history'
 
   import { type AiChatProject, type AiChatThread, sampleHistoryNow } from '../sample'
   import AiChatHistoryActions from './ai-chat-history-actions.vue'

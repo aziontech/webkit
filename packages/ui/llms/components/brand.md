@@ -2,7 +2,7 @@
 
 > The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark over "technologies") for marketing-oriented layouts. It is the one public way to draw the Azion mark: the drawings live inside the package and are not exported on their own. The lockups that carry the "Move to the Edge" tagline were retired in 6.0.
 
-- Import: `import Brand from '@aziontech/webkit/brand'`
+- Import: `import Brand from '@aziontech/ui/brand'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [brand.json](brand.json)
 
@@ -69,7 +69,7 @@
 
 ```vue
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
+  import Brand from '@aziontech/ui/brand'
 </script>
 
 <template>
@@ -81,7 +81,7 @@
 
 ```vue
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
+  import Brand from '@aziontech/ui/brand'
 </script>
 
 <template>
@@ -115,7 +115,7 @@
 
 ```vue
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
+  import Brand from '@aziontech/ui/brand'
 </script>
 
 <template>

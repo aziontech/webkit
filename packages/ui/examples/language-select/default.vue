@@ -1,10 +1,10 @@
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Field from '@aziontech/webkit/field'
-  import LanguageSelect from '@aziontech/webkit/language-select'
-  import { es } from '@aziontech/webkit/locales/es'
-  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import Pagination from '@aziontech/webkit/pagination-root'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Field from '@aziontech/ui/field'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import { es } from '@aziontech/ui/locales/es'
+  import { ptBR } from '@aziontech/ui/locales/pt-BR'
+  import Pagination from '@aziontech/ui/pagination-root'
   import { ref } from 'vue'
 
   const locale = ref('en')

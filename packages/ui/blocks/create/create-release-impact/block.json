@@ -22,7 +22,7 @@
     "revisar e implantar",
     "impacto del despliegue"
   ],
-  "skills": ["webkit-create-surface", "webkit-form", "webkit-ui-states", "webkit-errors"],
+  "skills": ["azion-ui-create-surface", "azion-ui-form", "azion-ui-states", "azion-ui-errors"],
   "primary": {
     "name": "Ready",
     "file": "create-release-impact.vue"

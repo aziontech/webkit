@@ -1,5 +1,5 @@
-import type { AlertSeverity } from '@aziontech/webkit/alert'
-import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
+import type { AlertSeverity } from '@aziontech/ui/alert'
+import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/ui/password-requirements'
 
 import type { SignInFailure, SignInNoticeKind } from '../auth-sign-in.vue'
 import type { SignInCopy } from './sign-in-copy'

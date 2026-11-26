@@ -1,4 +1,4 @@
-import type { TraceSpan } from '@aziontech/webkit/trace'
+import type { TraceSpan } from '@aziontech/ui/trace'
 
 import type {
   EventsExplorerEvent,

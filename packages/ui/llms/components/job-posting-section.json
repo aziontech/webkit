@@ -1,8 +1,8 @@
 {
  "name": "job-posting-section",
  "binding": "JobPostingSection",
- "import": "@aziontech/webkit/job-posting-section",
- "treeShakeableImport": "@aziontech/webkit/job-posting-section",
+ "import": "@aziontech/ui/job-posting-section",
+ "treeShakeableImport": "@aziontech/ui/job-posting-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

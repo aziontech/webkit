@@ -1,6 +1,6 @@
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
 </script>
 
 <template>

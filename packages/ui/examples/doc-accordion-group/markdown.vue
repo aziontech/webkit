@@ -1,5 +1,5 @@
 <script setup>
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
 
   const source = [
     '<AccordionGroup>',

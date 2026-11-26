@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Input from '@aziontech/webkit/input'
-  import Link from '@aziontech/webkit/link'
-  import Popover from '@aziontech/webkit/popover'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Input from '@aziontech/ui/input'
+  import Link from '@aziontech/ui/link'
+  import Popover from '@aziontech/ui/popover'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { DeployDrawerDomainGroup } from '../types'
 

@@ -14,7 +14,7 @@
       name="color-scheme"
       content="dark light"
     />
-    <title>WebKit demos</title>
+    <title>Azion UI demos</title>
     <link
       rel="icon"
       href="data:,"
@@ -23,7 +23,7 @@
       ;(function () {
         try {
           var params = new URLSearchParams(location.search)
-          var stored = params.get('theme') || localStorage.getItem('webkit-demos:theme')
+          var stored = params.get('theme') || localStorage.getItem('azion-ui-demos:theme')
           if (stored !== 'light' && stored !== 'dark')
             stored = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
           var root = document.documentElement

@@ -1,5 +1,5 @@
 <script setup>
-  import TagEditor from '@aziontech/webkit/tag-editor'
+  import TagEditor from '@aziontech/ui/tag-editor'
   import { ref } from 'vue'
 
   const tags = ref([

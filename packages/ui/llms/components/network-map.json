@@ -1,8 +1,8 @@
 {
  "name": "network-map",
  "binding": "NetworkMap",
- "import": "@aziontech/webkit/network-map",
- "treeShakeableImport": "@aziontech/webkit/network-map",
+ "import": "@aziontech/ui/network-map",
+ "treeShakeableImport": "@aziontech/ui/network-map",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

@@ -10,7 +10,7 @@ import { importsOf, readBlocks } from './lib/blocks.mjs'
 import {
   buildWorkspace,
   installConsumerApp,
-  packWebkitMcp,
+  packAzionUiMcp,
   packWorkspace,
   runLogged,
   writeConsumerApp
@@ -133,7 +133,7 @@ function vueFiles(dir) {
   return out.sort()
 }
 
-export function collectWebkitImports(appDir) {
+export function collectAzionUiImports(appDir) {
   const files = vueFiles(join(appDir, 'src'))
   const imports = new Map()
   for (const file of files) {
@@ -156,7 +156,7 @@ export function evaluateUsage({ target, scan, doctorExitCode, minCoverage = 0.8,
   if (target.kind === 'component') {
     const where = scan.imports.get(target.id)
     checks.push({
-      name: `imports @aziontech/webkit/${target.id}`,
+      name: `imports @aziontech/ui/${target.id}`,
       pass: Boolean(where),
       detail: where ? where.join(', ') : 'not imported by any src/**/*.vue'
     })
@@ -173,13 +173,13 @@ export function evaluateUsage({ target, scan, doctorExitCode, minCoverage = 0.8,
   for (const subpath of also) {
     const where = scan.imports.get(subpath)
     checks.push({
-      name: `imports @aziontech/webkit/${subpath}`,
+      name: `imports @aziontech/ui/${subpath}`,
       pass: Boolean(where),
       detail: where ? where.join(', ') : 'not imported by any src/**/*.vue'
     })
   }
   checks.push({
-    name: 'webkit doctor',
+    name: 'azion-ui doctor',
     pass: doctorExitCode === 0,
     detail: doctorExitCode === 0 ? 'no failure' : `exit ${doctorExitCode}`
   })
@@ -194,8 +194,8 @@ export const USAGE_ALLOWED_TOOLS = [
   'Glob',
   'Grep',
   'LS',
-  'mcp__webkit',
-  'Bash(npx @aziontech/webkit:*)'
+  'mcp__azion-ui',
+  'Bash(npx @aziontech/ui:*)'
 ]
 
 export function claudeArgs(prompt, maxTurns) {
@@ -221,9 +221,9 @@ export function pinMcpToInstalledPackage(appDir) {
   const config = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : {}
   config.mcpServers = {
     ...config.mcpServers,
-    webkit: {
+    'azion-ui': {
       command: 'node',
-      args: [join(appDir, 'node_modules/@aziontech/webkit-mcp/src/server.js')]
+      args: [join(appDir, 'node_modules/@aziontech/ui-mcp/src/server.js')]
     }
   }
   writeFileSync(file, JSON.stringify(config, null, 2) + '\n')
@@ -309,15 +309,15 @@ function main() {
     return 2
   }
 
-  const work = mkdtempSync(join(tmpdir(), 'webkit-usage-'))
+  const work = mkdtempSync(join(tmpdir(), 'azion-ui-usage-'))
   try {
     if (!opts.skipBuild) buildWorkspace(ROOT)
     const tarballs = join(work, 'tarballs')
     const app = createUsageApp(work, {
       ...packWorkspace(ROOT, tarballs),
-      webkitMcpTgz: packWebkitMcp(ROOT, tarballs)
+      azionUiMcpTgz: packAzionUiMcp(ROOT, tarballs)
     })
-    const cli = join(app, 'node_modules/@aziontech/webkit/src/cli/cli.js')
+    const cli = join(app, 'node_modules/@aziontech/ui/src/cli/cli.js')
     installConsumerApp(app)
     runLogged('node', [cli, 'init', '--yes'], app)
     installConsumerApp(app)
@@ -337,7 +337,7 @@ function main() {
     process.stdout.write(doctor.stdout ?? '')
     const verdict = evaluateUsage({
       target,
-      scan: collectWebkitImports(app),
+      scan: collectAzionUiImports(app),
       doctorExitCode: doctor.status,
       minCoverage: opts.minCoverage,
       also: opts.also

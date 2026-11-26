@@ -5,11 +5,11 @@ structure: composition
 status: implemented
 spec_version: 15
 template: 2
-setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
+setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/ui/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `azion-ui doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: b8d39bc03650fbfd899ea2816936968846e910790690cc1fd60bd8c99717cb72
+checksum: b93d8c6e102a717772c2c0c13c52ca6baccc143355db9b2f2f26585d670150b2
 created: 2026-06-23
 last_updated: 2026-11-25
 ---
@@ -63,8 +63,8 @@ Two interchangeable usage styles drive the **same** singleton stack — use whic
 
 ```vue
 <script setup>
-  import { Toaster, toast } from '@aziontech/webkit/toast'
-  import Button from '@aziontech/webkit/button'
+  import { Toaster, toast } from '@aziontech/ui/toast'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
@@ -83,25 +83,25 @@ Two interchangeable usage styles drive the **same** singleton stack — use whic
 
 ```ts
 // main.js
-import { ToastPlugin } from '@aziontech/webkit/toast'
+import { ToastPlugin } from '@aziontech/ui/toast'
 app.use(ToastPlugin, { duration: 6000 })
 ```
 
 ```vue
 <script setup>
-  import { useToast } from '@aziontech/webkit/toast'
+  import { useToast } from '@aziontech/ui/toast'
   const toast = useToast()
 </script>
 ```
 
-The root is also reachable through the compound default export (`import Toast from '@aziontech/webkit/toast'` → `<Toast>`, `<Toast.Item>`, …) for the per-part composition shown at the end of this section.
+The root is also reachable through the compound default export (`import Toast from '@aziontech/ui/toast'` → `<Toast>`, `<Toast.Item>`, …) for the per-part composition shown at the end of this section.
 
 **Public API.** Raise toasts with `toast()` (and its shortcuts) from anywhere, or with `useToast()` inside `setup` (it returns the same `toast`); mount the region once with `ToastPlugin` or one `<Toaster>`. That is the whole consumer surface. `toastStore` / `useToastStore` are the internal store the `Toaster` renders from: they stay exported for compatibility, but they are not part of the documented API, and `toast(message, { id })` (update in place) plus `toast.dismiss(id?)` cover every change a consumer needs.
 
 The imperative surface — `toast(message, options?)` returns the toast `id` (a string); the shortcuts share the same signature and the store auto-dismisses each entry after `duration` (per-toast `duration` overrides the Toaster default; `duration: 0` keeps it until dismissed):
 
 ```ts
-import { toast } from '@aziontech/webkit/toast'
+import { toast } from '@aziontech/ui/toast'
 
 const id = toast('Saved') // neutral severity
 toast.success('Deployed', { description: 'edge-01 live' }) // typed shortcut
@@ -127,11 +127,11 @@ toast.dismiss(id) // dismiss one; toast.dismiss() clears all
 
 Each toast can override the Toaster's anchor with its own `position`; the Toaster groups toasts by corner and renders one fixed stack per corner in use.
 
-Each part is also a standalone import (`import ToastItem from '@aziontech/webkit/toast-item'`, …) — the tree-shaking path. Consumers rarely compose the item parts by hand; the `Toaster` renders them from the store. The sub-components are exposed for advanced cases that render a bespoke toast body via the `Toaster`'s `default` slot.
+Each part is also a standalone import (`import ToastItem from '@aziontech/ui/toast-item'`, …) — the tree-shaking path. Consumers rarely compose the item parts by hand; the `Toaster` renders them from the store. The sub-components are exposed for advanced cases that render a bespoke toast body via the `Toaster`'s `default` slot.
 
 ```vue
 <script setup>
-  import Toast from '@aziontech/webkit/toast'
+  import Toast from '@aziontech/ui/toast'
 </script>
 
 <template>
@@ -169,8 +169,8 @@ Each part is also a standalone import (`import ToastItem from '@aziontech/webkit
 - `toast-item/toast-item.vue` — a single notification card (outer flex row, `items-center` so the content and its `trailing` action/close share one centered line; the leading icon and the content column sit in an inner `items-start` group so the typed icon aligns to the title's line — its single line on a one-line toast, the first line on a multi-line one — instead of to the outer row, which the 28px action/close control would otherwise stretch; the `loading` `Spinner` keeps `self-center`. The `trailing` region carries a negative block margin (`-my-(--spacing-2xs)`) so that 28px control does not inflate a one-line card, and a negative inline-end margin (`-mr-(--spacing-xs)`) so the text action's label ends optically flush with the card's padding instead of inset by the button's own padding; height adapts to content). All typography and spacing come from tokens (`text-title-sm` / `text-body-xs`, `var(--spacing-*)`) — no raw sizes or line-heights. An optional leading severity icon — an Azion glyph by `severity` sized with the `text-label-md` token (14px, the title's size) (`az az-check` / `az az-circle-info` / `az az-triangle-alert` / `az az-circle-alert`); the `neutral` severity has **no** icon, and a `loading` toast renders a `Spinner` in its place. Followed by a content column (`Title` + optional `Description`) in the `default` slot, and a right-aligned `trailing` slot for the optional `Action` and the `Close` control. `role="status"` (or `role="alert"` for `danger`). Props `severity?: ToastSeverity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`, default `'neutral'`) and `loading?: boolean` (default `false`; a spinner replaces the leading icon, `aria-busy`). Slots: `default` (title/description) and `trailing` (action/close); the `Toaster` fills both, standalone it renders just the shell. Reflects `data-severity` and `data-loading`.
 - `toast-title/toast-title.vue` — the primary line of a toast (`text-body-xs` `var(--text-default)`). Renders its default slot as the title text; standalone markup + testId justify the part.
 - `toast-description/toast-description.vue` — the supporting line below the title (`text-body-xs` `var(--text-muted)`). Renders its default slot; standalone markup + testId justify the part.
-- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`variant="ghost"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
-- `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`az az-x`, `variant="ghost"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
+- `toast-action/toast-action.vue` — the inline action control, rendered as the Azion UI `Button` (`variant="ghost"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
+- `toast-close/toast-close.vue` — the dismiss control, rendered as the Azion UI `IconButton` (`az az-x`, `variant="ghost"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
 
@@ -178,7 +178,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/feedback/toast/
+  packages/ui/src/components/feedback/toast/
   ├── toast.vue            (root region — Teleport + TransitionGroup + polite and assertive live regions)
   ├── index.ts               (compound: Object.assign attaches sub-components + re-exports `toast`; vue-tsc emits index.d.ts)
   ├── injection-key.ts       (shared provide/inject key for the store)
@@ -247,7 +247,7 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 <!-- Enter/leave/reflow apply the foundation `duration`/`curve` tokens as utilities (the
      geometry — directional translate + scale + height — is computed inline so the slide reads correctly from
      any of the six anchor positions); every motion-bearing element pairs with `motion-reduce:transition-none`
-     on its class string, and no element sets an inline `transition`. A loading toast renders the webkit `Spinner` component (a continuous rotation with its
+     on its class string, and no element sets an inline `transition`. A loading toast renders the Azion UI `Spinner` component (a continuous rotation with its
      own reduced-motion fallback) inside the `toast-item` sub-component. -->
 
 ## Tokens
@@ -340,7 +340,7 @@ This component has no `variant`/`size` on its root, and it is driven imperativel
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

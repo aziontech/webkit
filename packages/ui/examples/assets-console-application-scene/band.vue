@@ -1,6 +1,6 @@
 <script setup>
-  import ConsoleApplicationScene from '@aziontech/webkit/assets/console-application-scene'
-  import MediaTabs from '@aziontech/webkit/media-tabs'
+  import ConsoleApplicationScene from '@aziontech/ui/assets/console-application-scene'
+  import MediaTabs from '@aziontech/ui/media-tabs'
 
   const tabs = [
     {

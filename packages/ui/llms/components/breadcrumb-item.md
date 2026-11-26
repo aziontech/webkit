@@ -1,8 +1,8 @@
 # Breadcrumb Item
 
-> Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Webkit navigation pattern (ghost overlay + focus ring).
+> Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Azion UI navigation pattern (ghost overlay + focus ring).
 
-- Import: `import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'`
+- Import: `import BreadcrumbItem from '@aziontech/ui/breadcrumb-item'`
 - Category: navigation · Surface: app · Structure: monolithic
 - API as JSON: [breadcrumb-item.json](breadcrumb-item.json)
 
@@ -77,7 +77,7 @@
 
 ```vue
 <script setup>
-  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
+  import BreadcrumbItem from '@aziontech/ui/breadcrumb-item'
 </script>
 
 <template>
@@ -92,7 +92,7 @@
 
 ```vue
 <script setup>
-  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
+  import BreadcrumbItem from '@aziontech/ui/breadcrumb-item'
 </script>
 
 <template>
@@ -107,7 +107,7 @@
 
 ```vue
 <script setup>
-  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
+  import BreadcrumbItem from '@aziontech/ui/breadcrumb-item'
 </script>
 
 <template>

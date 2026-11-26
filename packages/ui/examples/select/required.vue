@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Select from '@aziontech/webkit/select'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Select from '@aziontech/ui/select'
   import { computed, ref } from 'vue'
 
   const region = ref('')

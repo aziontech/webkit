@@ -49,12 +49,12 @@ test('MIGRATION_V6.md names every deprecated type and every retired illustration
   )
 })
 
-test('MIGRATION_V6.md numbers its sections once each and has one heading per subject', () => {
+test('MIGRATION_V6.md numbers its sections once each, from 0, and has one heading per subject', () => {
   const headings = [...guide.matchAll(/^(#{2,3}) (.+)$/gm)].map((match) => match[2])
   const numbers = headings.map((heading) => heading.match(/^(\d+)\./)?.[1]).filter(Boolean)
   assert.deepEqual(
     numbers,
-    numbers.map((_, index) => String(index + 1))
+    numbers.map((_, index) => String(index))
   )
   assert.deepEqual(
     headings.filter((heading, index) => headings.indexOf(heading) !== index),

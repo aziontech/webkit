@@ -1,33 +1,33 @@
 ---
-name: webkit-query-explorer
-description: Recipe for a query explorer over Azion's GraphQL Metrics and Events APIs built only from @aziontech/webkit pieces — dataset Select, measures and group-by, PropertyFilter tokens turned into GraphQL filters, a DateRangePicker resolved with useTimeRange, a Run button, the result as a Chart and a DataTable, and the generated query in a CodeBlock. Use when building an analytics, metrics or events explorer, a "query builder", or any screen that turns controls into a GraphQL query.
+name: azion-ui-query-explorer
+description: Recipe for a query explorer over Azion's GraphQL Metrics and Events APIs built only from @aziontech/ui pieces — dataset Select, measures and group-by, PropertyFilter tokens turned into GraphQL filters, a DateRangePicker resolved with useTimeRange, a Run button, the result as a Chart and a DataTable, and the generated query in a CodeBlock. Use when building an analytics, metrics or events explorer, a "query builder", or any screen that turns controls into a GraphQL query.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-component-states, webkit-prefer-over-custom, review]
+enforced_by: [azion-ui-component-states, azion-ui-prefer-over-custom, review]
 ---
 
-# Skill: webkit-query-explorer
+# Skill: azion-ui-query-explorer
 
 ## Purpose
 
-An explorer lets a person ask the Metrics or Events API a question without writing GraphQL: pick a dataset, what to measure, how to group, which rows to keep and the time range, then Run. Every control is a WebKit component; the only code you write is the state object and the function that turns it into a query. Calling the API from the browser (proxy, token, error states) is [Calling the Azion API](../webkit-azion-api/SKILL.md); read it first.
+An explorer lets a person ask the Metrics or Events API a question without writing GraphQL: pick a dataset, what to measure, how to group, which rows to keep and the time range, then Run. Every control is an Azion UI component; the only code you write is the state object and the function that turns it into a query. Calling the API from the browser (proxy, token, error states) is [Calling the Azion API](../azion-ui-azion-api/SKILL.md); read it first.
 
 ## The pieces
 
-| Part                 | Component                                                                             | Notes                                                                             |
-| -------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Page heading and Run | `PageHeader` with `Button` (`variant="primary"`, `label="Run query"`) in its actions  | Run is explicit; do not refetch on every keystroke.                               |
-| Time range           | `DateRangePicker` with `:relative-options="TIME_RANGE_PRESETS"`                       | `useTimeRange` (`@aziontech/webkit/use-time-range`) resolves it to `from` / `to`. |
-| Time zone            | Muted `Times in UTC` text, or a `Select` named Time zone bound to `v-model:time-zone` | Beside the picker and always visible; the picker panel does not show the zone.    |
-| Dataset              | `Select`                                                                              | Options from schema introspection, never a hard-coded list.                       |
-| Measures             | `Select` (function) beside `Select` (field)                                           | `count`, `sum`, `avg`, `max`, `min` and the fields each one accepts.              |
-| Group by             | `MultiSelect`                                                                         | Dimensions of the dataset; `ts` for a time series.                                |
-| Filters              | `PropertyFilter`                                                                      | One property per filterable field; `loadValues` for server values.                |
-| Limit                | `NumberInput`                                                                         | Clamp to the API maximum.                                                         |
-| Result over time     | `Chart` (inside `ChartCard`)                                                          | Pass `Date` labels; `loading`, `refetching` and `error` are props.                |
-| Result rows          | `DataTable` (`data` + `columns`)                                                      | Its empty slot holds `EmptyState`.                                                |
-| The query            | `CodeBlock` (`language="graphql"`, copyable)                                          | So the person can reuse it in their own client.                                   |
+| Part                 | Component                                                                             | Notes                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Page heading and Run | `PageHeader` with `Button` (`variant="primary"`, `label="Run query"`) in its actions  | Run is explicit; do not refetch on every keystroke.                            |
+| Time range           | `DateRangePicker` with `:relative-options="TIME_RANGE_PRESETS"`                       | `useTimeRange` (`@aziontech/ui/use-time-range`) resolves it to `from` / `to`.  |
+| Time zone            | Muted `Times in UTC` text, or a `Select` named Time zone bound to `v-model:time-zone` | Beside the picker and always visible; the picker panel does not show the zone. |
+| Dataset              | `Select`                                                                              | Options from schema introspection, never a hard-coded list.                    |
+| Measures             | `Select` (function) beside `Select` (field)                                           | `count`, `sum`, `avg`, `max`, `min` and the fields each one accepts.           |
+| Group by             | `MultiSelect`                                                                         | Dimensions of the dataset; `ts` for a time series.                             |
+| Filters              | `PropertyFilter`                                                                      | One property per filterable field; `loadValues` for server values.             |
+| Limit                | `NumberInput`                                                                         | Clamp to the API maximum.                                                      |
+| Result over time     | `Chart` (inside `ChartCard`)                                                          | Pass `Date` labels; `loading`, `refetching` and `error` are props.             |
+| Result rows          | `DataTable` (`data` + `columns`)                                                      | Its empty slot holds `EmptyState`.                                             |
+| The query            | `CodeBlock` (`language="graphql"`, copyable)                                          | So the person can reuse it in their own client.                                |
 
 Bound the time range to what the API retains: `min` is the retention limit (the picker's default is five years back), `max` stays the end of today, and `maxDuration` is the longest window one query may cover (`:max-duration="{ amount: 90, unit: 'day' }"`). The picker then hides the quick ranges that do not fit and refuses longer ranges before Run.
 
@@ -38,7 +38,7 @@ Dataset, field and filter names differ by API and change over time, so read them
 ## 2. Hold the explorer in one state object
 
 ```ts
-import { timeRangePreset, useTimeRange } from '@aziontech/webkit/use-time-range'
+import { timeRangePreset, useTimeRange } from '@aziontech/ui/use-time-range'
 import { ref } from 'vue'
 
 const range = ref(timeRangePreset('last-7-days'))
@@ -121,15 +121,15 @@ async function run() {
 - **Loading:** `Chart` `loading` on the first run and `refetching` on the next ones (the old result stays visible); the Run `Button` `loading`.
 - **Empty:** a `200` with no rows is the table's empty slot with `EmptyState` (`No data for this range and these filters`) and the chart's own empty state, not an error.
 - **Invalid query:** a `400` carries `{ detail }` (limits, unknown fields); show it in an `Alert` above the result with the query still visible in the `CodeBlock`.
-- **Signed out:** a `401` or `403` follows [Calling the Azion API](../webkit-azion-api/SKILL.md), never a toast.
+- **Signed out:** a `401` or `403` follows [Calling the Azion API](../azion-ui-azion-api/SKILL.md), never a toast.
 
 ## 5. Chart a time series
 
-Map rows to `labels` (one `Date` per bucket, from `ts`) and one series per measure (or per value of a second group-by field). Pass `Date` objects, not preformatted strings, so the axis picks day ticks over a week and hour ticks over a day, and set `format-label` only to change the wording. A series colour is a role (`primary`, `success`, `danger`), never a hex value ([Charts and figures](../webkit-data-viz/SKILL.md)).
+Map rows to `labels` (one `Date` per bucket, from `ts`) and one series per measure (or per value of a second group-by field). Pass `Date` objects, not preformatted strings, so the axis picks day ticks over a week and hour ticks over a day, and set `format-label` only to change the wording. A series colour is a role (`primary`, `success`, `danger`), never a hex value ([Charts and figures](../azion-ui-data-viz/SKILL.md)).
 
 ## Hard rules
 
-- Every control is a WebKit component; no hand-built selects, chips or filter bars.
+- Every control is an Azion UI component; no hand-built selects, chips or filter bars.
 - Option lists come from introspection; hard-code no dataset or field names.
 - Run is explicit and calls `refresh()` first; a relative range never drifts between runs.
 - Person-typed values reach the query only through `JSON.stringify` or as numbers.

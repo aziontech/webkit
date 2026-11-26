@@ -1,4 +1,4 @@
-import './webkit.css'
+import './azion-ui.css'
 import '../../../assets/fonts/proto-mono/proto-mono-woff2.css'
 import './styles/main.css'
 import '@aziontech/icons'

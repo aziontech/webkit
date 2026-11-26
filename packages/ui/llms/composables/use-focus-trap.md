@@ -1,10 +1,10 @@
 # useFocusTrap
 
-Composable `@aziontech/webkit/use-focus-trap`. The signatures and option tables below are read from its typed source, [`src/composables/use-focus-trap/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-focus-trap/index.ts).
+Composable `@aziontech/ui/use-focus-trap`. The signatures and option tables below are read from its typed source, [`src/composables/use-focus-trap/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-focus-trap/index.ts).
 
 ```ts
-import { useFocusTrap } from '@aziontech/webkit/use-focus-trap'
-import type { UseFocusTrapOptions } from '@aziontech/webkit/use-focus-trap'
+import { useFocusTrap } from '@aziontech/ui/use-focus-trap'
+import type { UseFocusTrapOptions } from '@aziontech/ui/use-focus-trap'
 ```
 
 ## `useFocusTrap`

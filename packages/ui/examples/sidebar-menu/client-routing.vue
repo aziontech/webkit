@@ -1,5 +1,5 @@
 <script setup>
-  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
+  import SidebarMenuRoot from '@aziontech/ui/sidebar-menu-root'
   import { computed, ref } from 'vue'
 
   const groups = [

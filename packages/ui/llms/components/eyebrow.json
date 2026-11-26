@@ -1,8 +1,8 @@
 {
  "name": "eyebrow",
  "binding": "Eyebrow",
- "import": "@aziontech/webkit/eyebrow",
- "treeShakeableImport": "@aziontech/webkit/eyebrow",
+ "import": "@aziontech/ui/eyebrow",
+ "treeShakeableImport": "@aziontech/ui/eyebrow",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

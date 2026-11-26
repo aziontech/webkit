@@ -1,5 +1,5 @@
 <script setup>
-  import AgentActivity from '@aziontech/webkit/agent-activity'
+  import AgentActivity from '@aziontech/ui/agent-activity'
 
   const steps = [
     { key: 'search', title: 'Searching the docs', status: 'success' },

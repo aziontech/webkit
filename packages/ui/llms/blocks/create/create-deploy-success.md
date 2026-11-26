@@ -3,10 +3,10 @@
 > The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as `IntegrationCard`s that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button (Manage resource when nothing serves it yet). Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `Card`, `IntegrationCard`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
 
 - Surface: app
-- Source: `blocks/create/create-deploy-success/create-deploy-success.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-deploy-success/create-deploy-success.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-deploy-success")`
 - Components: [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
-- Skills: `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -23,7 +23,7 @@ The screen a create flow ends on. The user has just watched a deploy finish and 
 ## When not to use
 
 - The run is still going or has failed: keep the create-flow card of `detail/detail-deployment-logs` (InCreateFlow) on screen.
-- A resource created from a form that does not deploy: end on the resource's page with a success toast that names it, as `skills/webkit-create-surface` describes; there is no outcome screen.
+- A resource created from a form that does not deploy: end on the resource's page with a success toast that names it, as `skills/azion-ui-create-surface` describes; there is no outcome screen.
 - An item added inside a resource from a drawer: use `create/create-drawer` and close it on save.
 - The onboarding steps for a CLI resource on its Overview tab: use `detail/detail-get-started`.
 
@@ -116,7 +116,7 @@ Then delete `sample.ts` and its import.
 - **Links:** verb first, e.g. "Visit site", "Add custom domain"; tooltips name the target, e.g. "Open acme/web-app in a new tab".
 - **Next steps:** title verb first in two or three words, e.g. "Customize domain", "View analytics"; description one sentence with a period.
 - **Exit:** "Manage service", or "Manage resource" when nothing serves it yet: the verb and its object.
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no ampersand, no "please".
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no ampersand, no "please".
 
 ## Accessibility
 
@@ -150,11 +150,11 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import IntegrationCard, { type IntegrationCardBadge } from '@aziontech/webkit/integration-card'
-  import Item from '@aziontech/webkit/item'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import IntegrationCard, { type IntegrationCardBadge } from '@aziontech/ui/integration-card'
+  import Item from '@aziontech/ui/item'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import ConnectPaths from './parts/connect-paths.vue'
@@ -561,10 +561,10 @@ jobs:
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import Link from '@aziontech/webkit/link'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Card from '@aziontech/ui/card'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import Link from '@aziontech/ui/link'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, ref } from 'vue'
 
   import { ACTIONS_STEPS, cliSteps, PATHS } from '../lib/connect-paths'
@@ -658,11 +658,11 @@ jobs:
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Link from '@aziontech/webkit/link'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Link from '@aziontech/ui/link'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed } from 'vue'
 
   import type { DeploySuccessDeployment } from '../types'

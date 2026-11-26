@@ -2,7 +2,7 @@
 
 > Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely. The content is parsed by a small Markdown parser into a tree and rendered with Vue elements — never `v-html` — so raw HTML in model output shows as text, `javascript:`, `data:` and protocol-relative links are dropped (only `http(s)`, `mailto`, `tel`, relative and `#` links survive, checked by the shared `safeHref`), and images render as their alt text. It covers what responses use: paragraphs, headings, bold, italic, inline code, links, lists (nested by indenting an item's lines under it, to any depth), block quotes, GFM tables, rules and fenced code (rendered with `CodeBlock`, copyable). Incomplete Markdown is tolerated while streaming: an unclosed `**` renders bold to the end, an unclosed code fence stays a plain `<pre>` until it closes (no highlighting churn), and a half-written link shows its text only. Text renders at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines, ChatGPT's answer size) with a full step (`--spacing-md`) between blocks, the plain answer column of a chat. Headings are bold, one step larger than the text, 24 px below the block above and 8 px above their first line: `#` at `.text-heading-md`, every deeper level at `.text-body-lg`. Lists indent 32 px from `sm` (24 px on a phone) with no extra gap between items. Inline code is `.text-label-code-md` (14 px) in medium weight. A fenced code block is a filled `CodeBlock` card with the language and copy in a sticky header, the same while the fence is still open. Numbered citations become `Citation` chips resolved against `sources`: `[1]` one chip with the site's mark and name, and a run of markers (`[1][2]`, `[1] [2]`, `[1, 2]`) one chip with `+1` whose card pages through both sources. A blinking caret marks the end while `streaming`; the region is `aria-busy` until the stream ends.
 
-- Import: `import StreamingResponse from '@aziontech/webkit/streaming-response'`
+- Import: `import StreamingResponse from '@aziontech/ui/streaming-response'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [streaming-response.json](streaming-response.json)
 
@@ -92,7 +92,7 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
 
 ````vue
 <script setup>
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
 
   const content = [
     '## Purge one URL',
@@ -131,8 +131,8 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
 
 ````vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import Button from '@aziontech/ui/button'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
   import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   const full = [
@@ -192,8 +192,8 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
 
 ```vue
 <script setup>
-  import Sources from '@aziontech/webkit/sources'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import Sources from '@aziontech/ui/sources'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
 
   const sources = [
     {

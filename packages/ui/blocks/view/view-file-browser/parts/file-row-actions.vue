@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/data-table'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/data-table'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
 
   import type { FileRow } from '../lib/file-rows'
 

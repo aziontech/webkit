@@ -1,6 +1,6 @@
 <script setup>
-  import DatePicker from '@aziontech/webkit/date-picker'
-  import Field from '@aziontech/webkit/field'
+  import DatePicker from '@aziontech/ui/date-picker'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const date = ref(new Date(2026, 9, 1))

@@ -1,5 +1,5 @@
-import type { PropertyFilterQuery, PropertyFilterSubmit } from '@aziontech/webkit/property-filter'
-import { matchesQuery } from '@aziontech/webkit/use-collection'
+import type { PropertyFilterQuery, PropertyFilterSubmit } from '@aziontech/ui/property-filter'
+import { matchesQuery } from '@aziontech/ui/use-collection'
 import { computed, type ComputedRef, type Ref, ref, type WritableComputedRef } from 'vue'
 
 import { eventSources } from '../lib/event-log'

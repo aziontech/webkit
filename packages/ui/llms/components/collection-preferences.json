@@ -1,8 +1,8 @@
 {
  "name": "collection-preferences",
  "binding": "CollectionPreferences",
- "import": "@aziontech/webkit/collection-preferences",
- "treeShakeableImport": "@aziontech/webkit/collection-preferences",
+ "import": "@aziontech/ui/collection-preferences",
+ "treeShakeableImport": "@aziontech/ui/collection-preferences",
  "category": "data",
  "surface": "app",
  "structure": "monolithic",

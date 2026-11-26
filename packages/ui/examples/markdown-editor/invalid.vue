@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
+  import Field from '@aziontech/ui/field'
+  import MarkdownEditor from '@aziontech/ui/markdown-editor'
   import { ref } from 'vue'
 
   const reply = ref('')

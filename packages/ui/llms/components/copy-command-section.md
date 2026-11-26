@@ -2,7 +2,7 @@
 
 > A command or agent prompt with a copy button, under hero or section copy ("npm create azion", "Ask your agent to …"). Both are a read-only block that wraps, so the reader sees every word they copy; with `shell` a decorative `$` prompt leads the command, which breaks anywhere (a command has no spaces to break at), and without it the agent prompt wraps between words. From the design sample's site `CopyCommandSection`.
 
-- Import: `import CopyCommandSection from '@aziontech/webkit/copy-command-section'`
+- Import: `import CopyCommandSection from '@aziontech/ui/copy-command-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [copy-command-section.json](copy-command-section.json)
 
@@ -73,7 +73,7 @@
 
 ```vue
 <script setup>
-  import CopyCommandSection from '@aziontech/webkit/copy-command-section'
+  import CopyCommandSection from '@aziontech/ui/copy-command-section'
 </script>
 
 <template>
@@ -85,7 +85,7 @@
 
 ```vue
 <script setup>
-  import CopyCommandSection from '@aziontech/webkit/copy-command-section'
+  import CopyCommandSection from '@aziontech/ui/copy-command-section'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import PageHeader from '@aziontech/webkit/page-header'
+  import PageHeader from '@aziontech/ui/page-header'
 
   import DeploymentProtectionCard, {
     type DeploymentProtectionCardProps,

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Textarea from '@aziontech/ui/textarea'
 
   import {
     sampleDataStreamScopes as scopeOptions,

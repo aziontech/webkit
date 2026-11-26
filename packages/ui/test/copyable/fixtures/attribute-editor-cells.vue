@@ -2,8 +2,8 @@
   import AttributeEditor, {
     type AttributeEditorCellScope,
     type AttributeEditorColumn
-  } from '@aziontech/webkit/attribute-editor'
-  import Input from '@aziontech/webkit/input'
+  } from '@aziontech/ui/attribute-editor'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   interface Variable {

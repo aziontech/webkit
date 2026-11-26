@@ -1,5 +1,5 @@
 import { formatSearch, formatView, runSearch, runView } from '../query.js'
-import { catalogFor, resolveWebkit } from '../source.js'
+import { catalogFor, resolveAzionUi } from '../source.js'
 import { err, json, out } from './output.js'
 
 function printView(result, parsed) {
@@ -19,10 +19,10 @@ function printView(result, parsed) {
 export function runQuery(projectDir, command, parsed) {
   const query = parsed.args.join(' ').trim()
   if (!query) {
-    err(`Usage: npx @aziontech/webkit ${command} <${command === 'view' ? 'id' : 'query'}>\n`)
+    err(`Usage: npx @aziontech/ui ${command} <${command === 'view' ? 'id' : 'query'}>\n`)
     return 1
   }
-  const catalog = catalogFor(resolveWebkit(projectDir))
+  const catalog = catalogFor(resolveAzionUi(projectDir))
   if (command === 'search') {
     const result = runSearch(catalog, query)
     if (parsed.json) json(result)

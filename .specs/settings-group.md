@@ -3,7 +3,7 @@ name: settings-group
 category: layout
 structure: monolithic
 status: implemented
-checksum: 59ed93755016395042c5295845229ce27374412780f9ac69d0ddab088a299d94
+checksum: b4adfb2c09981b6b1018c4964c6989364000191154b169cc3f63ad845483fafb
 spec_version: 10
 template: 2
 created: 2026-11-10
@@ -46,11 +46,11 @@ A band of a settings page: an h2 with a `Hint` glyph that opens the one-sentence
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Card from '@aziontech/ui/card'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { ref } from 'vue'
 
   const name = ref('web-app')
@@ -197,7 +197,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

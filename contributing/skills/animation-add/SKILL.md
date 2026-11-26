@@ -1,7 +1,7 @@
 ---
 name: animation-add
-description: Scaffold a new webkit animation into the animation catalog (theme primitives/animations/animate.js + keyframes.js) + record the Theme gap. Used when a component needs an animation the catalog lacks, instead of a component-local @keyframes or an off-catalog animate-[…].
-scope: webkit
+description: Scaffold a new Azion UI animation into the animation catalog (theme primitives/animations/animate.js + keyframes.js) + record the Theme gap. Used when a component needs an animation the catalog lacks, instead of a component-local @keyframes or an off-catalog animate-[…].
+scope: ui
 enforced_by: [styling, no-invention, accessibility]
 ---
 
@@ -20,13 +20,13 @@ that, and adding a keyframe for them produces an animation that is wrong on ever
 one it was authored against. Do not add a catalog entry for these; use the recipe instead
 (`transition-*` + `duration-*` / `ease-*` tokens, no new `animate-*`, no `@keyframes`):
 
-| Need | Why it cannot be a keyframe | Recipe |
-| --- | --- | --- |
-| A box that resizes because its content changed (form step swap, panel level change, disclosure between two real heights) | Both heights are runtime facts; `auto` is not interpolable and must be the resting value | Measure → mutate → measure while still `auto` → pin the old value → **two** `requestAnimationFrame`s → set the new one → release to `auto` on `transitionend` **and** a fallback timer. `lib/animate-height.js` in the sample app is the working form. |
-| A value that grows into place inside an element that keeps its size otherwise (a chip gaining its filter value) | The target width is the content's, unknown at author time | Single-column grid, `transition-[grid-template-columns]` from `grid-cols-[0fr]` to `grid-cols-[1fr]`; keep the clip bare and put padding on the row inside it |
-| A composition assembling on first paint, its parts staggered from opposite edges | Per-instance offsets, direction, and a lead/follow delay — a keyframe would fix all three | `translate`/`opacity` on `data-[entered]:` variants, timing inline from the `duration` / `curve` tokens, flipped after two `requestAnimationFrame`s. `lib/auth-entrance.js` in the sample app is the working form. |
+| Need                                                                                                                     | Why it cannot be a keyframe                                                               | Recipe                                                                                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A box that resizes because its content changed (form step swap, panel level change, disclosure between two real heights) | Both heights are runtime facts; `auto` is not interpolable and must be the resting value  | Measure → mutate → measure while still `auto` → pin the old value → **two** `requestAnimationFrame`s → set the new one → release to `auto` on `transitionend` **and** a fallback timer. `lib/animate-height.js` in the sample app is the working form. |
+| A value that grows into place inside an element that keeps its size otherwise (a chip gaining its filter value)          | The target width is the content's, unknown at author time                                 | Single-column grid, `transition-[grid-template-columns]` from `grid-cols-[0fr]` to `grid-cols-[1fr]`; keep the clip bare and put padding on the row inside it                                                                                          |
+| A composition assembling on first paint, its parts staggered from opposite edges                                         | Per-instance offsets, direction, and a lead/follow delay — a keyframe would fix all three | `translate`/`opacity` on `data-[entered]:` variants, timing inline from the `duration` / `curve` tokens, flipped after two `requestAnimationFrame`s. `lib/auth-entrance.js` in the sample app is the working form.                                     |
 
-`animate-slide-down` (0 → auto disclosure) is the one *catalogued* size animation and stays that
+`animate-slide-down` (0 → auto disclosure) is the one _catalogued_ size animation and stays that
 way — it does not generalise to the incremental resizes above.
 
 The third row is about a composition whose parts each need their **own** offset and direction — not
@@ -45,7 +45,7 @@ and animate **nothing**:
   the browser is already painting, so the start state is never committed and the move snaps.
 
 The consumer-facing form of all of this — including the full glitch catalog — is the shipped
-`webkit-motion-polish` skill. Keep the two in step: a recipe added here is added there.
+`azion-ui-motion-polish` skill. Keep the two in step: a recipe added here is added there.
 
 ## Inputs
 
@@ -116,8 +116,8 @@ Add a row to the component's `## Theme gaps` table in `.specs/<component>.md`:
 
 Build the theme first (`pnpm --filter @aziontech/theme build:tokens`) — the catalog reads the
 token source, but nothing renders until `dist/globals.css` carries the utility and its
-`@keyframes`. Then run `pnpm --filter @aziontech/webkit build:catalog` (or
-`node packages/webkit/scripts/build-catalog.mjs`).
+`@keyframes`. Then run `pnpm --filter @aziontech/ui build:catalog` (or
+`node packages/ui/scripts/build-catalog.mjs`).
 Confirm `<name>` now appears in `catalog.json → tokens.animations`. This is what makes
 `validate-spec-compliance` accept `animate-<name>` in the component.
 

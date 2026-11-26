@@ -1,5 +1,5 @@
 <script setup>
-  import SparkChart from '@aziontech/webkit/spark-chart'
+  import SparkChart from '@aziontech/ui/spark-chart'
 </script>
 
 <template>

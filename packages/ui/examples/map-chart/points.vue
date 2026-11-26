@@ -1,5 +1,5 @@
 <script setup>
-  import MapChart from '@aziontech/webkit/map-chart'
+  import MapChart from '@aziontech/ui/map-chart'
 
   const points = [
     { id: 'new-york', name: 'New York', lat: 40.71, lon: -74.01, value: 18400 },

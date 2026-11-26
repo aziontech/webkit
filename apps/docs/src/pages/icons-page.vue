@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
   import { useHead } from '@unhead/vue'
   import { computed, defineAsyncComponent } from 'vue'
 
@@ -10,7 +10,7 @@
   const t = messages
 
   useHead({
-    title: 'Icons — WebKit',
+    title: 'Icons — Azion UI',
     meta: [{ name: 'description', content: computed(() => t.value.iconsLead) }]
   })
 </script>

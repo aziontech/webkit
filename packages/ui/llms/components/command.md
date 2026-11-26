@@ -2,8 +2,8 @@
 
 > Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the ranked filter, nested pages, and roving active-item navigation. The filter is fuzzy and ranked: an item matches on its label (prefix, then word start, then anywhere, then an in-order abbreviation such as `dpl` for "Deploy"), its `value`, or its extra `keywords` (a keyword equal to the query, then one that starts with it, then one that contains it, all below any match in the label and above an abbreviation, since the reader cannot see why a keyword matched); better matches rise to the top of their group, groups rise by their best item, and while any label matches the query a group shows at most three matches that come only from its values or keywords (its best three), so a strong label match in a later group is not pushed under a run of hidden-keyword matches, and the matched characters of a plain-text label are emphasized. An item can open a `Page` — a nested list such as "Switch project" — with a back control in the search bar. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.
 
-- Import: `import CommandRoot from '@aziontech/webkit/command-root'`
-- Compound import (dot notation, not tree-shakeable): `import Command from '@aziontech/webkit/command'`
+- Import: `import CommandRoot from '@aziontech/ui/command-root'`
+- Compound import (dot notation, not tree-shakeable): `import Command from '@aziontech/ui/command'`
 - Category: overlay · Surface: app · Structure: composition
 - API as JSON: [command.json](command.json)
 
@@ -59,20 +59,20 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/command-input`
-- `@aziontech/webkit/command-list`
-- `@aziontech/webkit/command-group`
-- `@aziontech/webkit/command-item`
-- `@aziontech/webkit/command-empty`
-- `@aziontech/webkit/command-separator`
-- `@aziontech/webkit/command-page`
+- `@aziontech/ui/command-input`
+- `@aziontech/ui/command-list`
+- `@aziontech/ui/command-group`
+- `@aziontech/ui/command-item`
+- `@aziontech/ui/command-empty`
+- `@aziontech/ui/command-separator`
+- `@aziontech/ui/command-page`
 
 ## Sub-components
 
 The root ships a compound API via `index.ts` (`Object.assign` attaches every sub-component; vue-tsc emits `index.d.ts`). Root binding is PascalCase `Command`. Folder layout, one folder per part:
 
 ```
-packages/webkit/src/components/overlay/command/
+packages/ui/src/components/overlay/command/
 ├── command.vue          (root — wraps Dialog, provides context)
 ├── index.ts                  (compound Object.assign)
 ├── injection-key.ts          (CommandContext + useCommandMenuContext())
@@ -183,14 +183,14 @@ packages/webkit/src/components/overlay/command/
 
 ```vue
 <script setup>
-  import CommandEmpty from '@aziontech/webkit/command-empty'
-  import CommandGroup from '@aziontech/webkit/command-group'
-  import CommandInput from '@aziontech/webkit/command-input'
-  import CommandItem from '@aziontech/webkit/command-item'
-  import CommandList from '@aziontech/webkit/command-list'
-  import CommandRoot from '@aziontech/webkit/command-root'
-  import CommandSeparator from '@aziontech/webkit/command-separator'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import CommandEmpty from '@aziontech/ui/command-empty'
+  import CommandGroup from '@aziontech/ui/command-group'
+  import CommandInput from '@aziontech/ui/command-input'
+  import CommandItem from '@aziontech/ui/command-item'
+  import CommandList from '@aziontech/ui/command-list'
+  import CommandRoot from '@aziontech/ui/command-root'
+  import CommandSeparator from '@aziontech/ui/command-separator'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -238,14 +238,14 @@ packages/webkit/src/components/overlay/command/
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CommandEmpty from '@aziontech/webkit/command-empty'
-  import CommandGroup from '@aziontech/webkit/command-group'
-  import CommandInput from '@aziontech/webkit/command-input'
-  import CommandItem from '@aziontech/webkit/command-item'
-  import CommandList from '@aziontech/webkit/command-list'
-  import CommandRoot from '@aziontech/webkit/command-root'
-  import CommandSeparator from '@aziontech/webkit/command-separator'
+  import Button from '@aziontech/ui/button'
+  import CommandEmpty from '@aziontech/ui/command-empty'
+  import CommandGroup from '@aziontech/ui/command-group'
+  import CommandInput from '@aziontech/ui/command-input'
+  import CommandItem from '@aziontech/ui/command-item'
+  import CommandList from '@aziontech/ui/command-list'
+  import CommandRoot from '@aziontech/ui/command-root'
+  import CommandSeparator from '@aziontech/ui/command-separator'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -308,13 +308,13 @@ packages/webkit/src/components/overlay/command/
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CommandEmpty from '@aziontech/webkit/command-empty'
-  import CommandGroup from '@aziontech/webkit/command-group'
-  import CommandInput from '@aziontech/webkit/command-input'
-  import CommandItem from '@aziontech/webkit/command-item'
-  import CommandList from '@aziontech/webkit/command-list'
-  import CommandRoot from '@aziontech/webkit/command-root'
+  import Button from '@aziontech/ui/button'
+  import CommandEmpty from '@aziontech/ui/command-empty'
+  import CommandGroup from '@aziontech/ui/command-group'
+  import CommandInput from '@aziontech/ui/command-input'
+  import CommandItem from '@aziontech/ui/command-item'
+  import CommandList from '@aziontech/ui/command-list'
+  import CommandRoot from '@aziontech/ui/command-root'
   import { ref } from 'vue'
 
   const open = ref(false)

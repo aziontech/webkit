@@ -1,5 +1,5 @@
 <script setup>
-  import OverflowCount from '@aziontech/webkit/overflow-count'
+  import OverflowCount from '@aziontech/ui/overflow-count'
 
   const regions = ['north', 'south', 'east', 'west']
   const tiers = ['edge', 'core', 'cache', 'origin', 'shield', 'relay', 'gateway', 'store', 'queue']

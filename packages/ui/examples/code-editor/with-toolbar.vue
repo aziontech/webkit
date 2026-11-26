@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Button from '@aziontech/ui/button'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, ref } from 'vue'
 
   const documents = [

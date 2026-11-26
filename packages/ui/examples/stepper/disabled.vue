@@ -1,5 +1,5 @@
 <script setup>
-  import Stepper from '@aziontech/webkit/stepper'
+  import Stepper from '@aziontech/ui/stepper'
   import { ref } from 'vue'
 
   const step = ref('host')

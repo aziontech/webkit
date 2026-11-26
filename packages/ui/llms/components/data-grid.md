@@ -2,7 +2,7 @@
 
 > An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges, copy them and paste a block of cells from a spreadsheet, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role="grid"`, `gridcell`, one roving tab stop), not a read-only table. **Why a component of its own.** DataGrid is not an `editable` mode of `data-table` and is not composed from `table`'s parts, for three reasons. Table's parts render the **table** pattern (`role="table"`, `cell`, every link and button its own tab stop), while a grid needs `gridcell`s inside one roving tab stop with a cell cursor; switching the roles and the focus model inside the same parts would make every read-only table pay for it. In-cell editors must be borderless and fill the cell, so they are a bare `input` and `select` styled with the tokens, not the package's `Input` and `Select`, whose frames and overlays fight a 40 px cell. And DataGrid needs no sorting, filtering or paging engine: it loads no `@tanstack/vue-table` and no virtualization library, so an editing screen stays at about 9 KB. **The rows are the edited value.** Where `data-table` takes `data` and only emits `update:data` when rows are reordered, DataGrid's rows are what the person edits, so they are its `v-model`: every committed edit writes a new array with a copy of the edited row, and `change` reports the cell, the new value and the previous one. A paste is the same edit over many cells: one new array for the whole paste, one `change` per changed cell. Adding and deleting rows are hooks: the grid emits `row-add` and `row-remove` and the app changes the rows. Thousands of rows scroll natively inside `maxHeight`, each row is laid out lazily with CSS `content-visibility: auto`, and each row re-renders only when its cells, its cursor or its range change.
 
-- Import: `import DataGrid from '@aziontech/webkit/data-grid'`
+- Import: `import DataGrid from '@aziontech/ui/data-grid'`
 - Category: data · Surface: app · Structure: monolithic
 - API as JSON: [data-grid.json](data-grid.json)
 
@@ -137,7 +137,7 @@
 
 ```vue
 <script setup>
-  import DataGrid from '@aziontech/webkit/data-grid'
+  import DataGrid from '@aziontech/ui/data-grid'
   import { ref } from 'vue'
 
   const rows = ref([
@@ -180,9 +180,9 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DataGrid from '@aziontech/webkit/data-grid'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import DataGrid from '@aziontech/ui/data-grid'
   import { ref } from 'vue'
 
   const rows = ref([
@@ -262,7 +262,7 @@
 
 ```vue
 <script setup>
-  import DataGrid from '@aziontech/webkit/data-grid'
+  import DataGrid from '@aziontech/ui/data-grid'
   import { ref } from 'vue'
 
   const rows = ref([

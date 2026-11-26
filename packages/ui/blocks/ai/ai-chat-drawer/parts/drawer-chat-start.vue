@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/ui/suggestion-group'
 
   defineProps<{ hydrating: boolean; starters: SuggestionGroupItem[] }>()
 

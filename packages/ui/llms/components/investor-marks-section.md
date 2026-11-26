@@ -2,7 +2,7 @@
 
 > The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line. It is a page section — the site places it from a `{ _id: 'investor-marks-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `bento-grid`.
 
-- Import: `import InvestorMarksSection from '@aziontech/webkit/investor-marks-section'`
+- Import: `import InvestorMarksSection from '@aziontech/ui/investor-marks-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [investor-marks-section.json](investor-marks-section.json)
 
@@ -76,11 +76,11 @@
 
 ```vue
 <script setup>
-  import monasheesExtendedMono from '@aziontech/webkit/assets/monashees-extended-mono.svg'
-  import monasheesExtendedReversed from '@aziontech/webkit/assets/monashees-extended-reversed.svg'
-  import qualcommExtendedMono from '@aziontech/webkit/assets/qualcomm-extended-mono.svg'
-  import qualcommExtendedReversed from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'
-  import InvestorMarksSection from '@aziontech/webkit/investor-marks-section'
+  import monasheesExtendedMono from '@aziontech/ui/assets/monashees-extended-mono.svg'
+  import monasheesExtendedReversed from '@aziontech/ui/assets/monashees-extended-reversed.svg'
+  import qualcommExtendedMono from '@aziontech/ui/assets/qualcomm-extended-mono.svg'
+  import qualcommExtendedReversed from '@aziontech/ui/assets/qualcomm-extended-reversed.svg'
+  import InvestorMarksSection from '@aziontech/ui/investor-marks-section'
 </script>
 
 <template>

@@ -2,7 +2,7 @@
 
 > One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`depth`). The copy top-aligns with the control, and the description always wraps in full, never truncated. In a narrow row (below `@md` of the row, a phone) a `field` control stacks under the copy at full width; a `compact` switch or button stays at the end side beside the wrapped copy. `stackable` moves the stacking point up to `@lg` for a field that needs the full measure in a drawer-width box.
 
-- Import: `import SettingsRow from '@aziontech/webkit/settings-row'`
+- Import: `import SettingsRow from '@aziontech/ui/settings-row'`
 - Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [settings-row.json](settings-row.json)
 
@@ -78,11 +78,11 @@
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Card from '@aziontech/ui/card'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Textarea from '@aziontech/ui/textarea'
   import { reactive } from 'vue'
 
   const form = reactive({ companyName: '', taxId: '', billingEmails: '' })
@@ -136,11 +136,11 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { reactive } from 'vue'
 
   const form = reactive({ allowSocialLogin: true, enforceMfa: false })
@@ -192,11 +192,11 @@
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import SettingsRow from '@aziontech/ui/settings-row'
   import { reactive } from 'vue'
 
   const form = reactive({ name: '' })

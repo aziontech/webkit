@@ -1,5 +1,5 @@
 <script setup>
-  import ConsoleMockup from '@aziontech/webkit/console-mockup'
+  import ConsoleMockup from '@aziontech/ui/console-mockup'
 </script>
 
 <template>

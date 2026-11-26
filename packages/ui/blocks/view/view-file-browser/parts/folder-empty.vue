@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import SplitButton, { type SplitButtonItem } from '@aziontech/ui/split-button'
 
   import { addToFilesActions } from '../lib/file-rows'
 

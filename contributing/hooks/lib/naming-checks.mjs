@@ -1,1 +1,1 @@
-export * from '../../../packages/webkit/scripts/lib/naming-rules.mjs'
+export * from '../../../packages/ui/scripts/lib/naming-rules.mjs'

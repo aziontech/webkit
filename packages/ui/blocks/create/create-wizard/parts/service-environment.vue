@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import Hint from '@aziontech/webkit/hint'
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
-  import Select from '@aziontech/webkit/select'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import Hint from '@aziontech/ui/hint'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
+  import Select from '@aziontech/ui/select'
 
   import { labelFor, type ServiceWizardForm } from '../lib/service-wizard'
   import { certificates, environments } from '../sample'

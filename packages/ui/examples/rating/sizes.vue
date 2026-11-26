@@ -1,5 +1,5 @@
 <script setup>
-  import Rating from '@aziontech/webkit/rating'
+  import Rating from '@aziontech/ui/rating'
 </script>
 
 <template>

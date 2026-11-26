@@ -1,8 +1,8 @@
 {
  "name": "doc-frame",
  "binding": "DocFrame",
- "import": "@aziontech/webkit/doc-frame",
- "treeShakeableImport": "@aziontech/webkit/doc-frame",
+ "import": "@aziontech/ui/doc-frame",
+ "treeShakeableImport": "@aziontech/ui/doc-frame",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

@@ -249,7 +249,7 @@ export function coveredByCodemod(c, migrations) {
 export function mentionsComponent(lines, subpath) {
   const name = subpath.split('/').pop()
   const tokens = [
-    new RegExp(`@aziontech/webkit/${name}(?![\\w-])`),
+    new RegExp(`@aziontech/ui/${name}(?![\\w-])`),
     new RegExp(`\`${name}\``),
     new RegExp(`\\b${pascal(subpath)}\\b`)
   ]
@@ -272,7 +272,7 @@ export function evaluate(changes, ctx) {
   if (breaking.length && !isBreakingTitle(ctx.prTitle)) {
     failures.push(
       ctx.prTitle
-        ? `${breaking.length} breaking change(s), but the PR title "${ctx.prTitle}" has no "!" before the colon (e.g. "feat(webkit)!: …").`
+        ? `${breaking.length} breaking change(s), but the PR title "${ctx.prTitle}" has no "!" before the colon (e.g. "feat(ui)!: …").`
         : `${breaking.length} breaking change(s): the PR title must carry "!" before the colon (set PR_TITLE to check it locally).`
     )
   }
@@ -347,7 +347,7 @@ function migrationDocLines(base) {
   const lines = []
   for (const file of readdirSync(PKG).filter((f) => MIGRATION_DOC.test(f))) {
     const head = readFileSync(resolve(PKG, file), 'utf8')
-    lines.push(...addedLines(head, base ? showAtBase(base, `packages/webkit/${file}`) : ''))
+    lines.push(...addedLines(head, base ? showAtBase(base, `packages/ui/${file}`) : ''))
   }
   return lines
 }
@@ -362,10 +362,10 @@ function parentsOf(catalog) {
 
 export function run({ against = null, env = process.env } = {}) {
   const base = resolveBase({ against, env })
-  const baseRaw = base ? showAtBase(base, 'packages/webkit/catalog.json') : null
+  const baseRaw = base ? showAtBase(base, 'packages/ui/catalog.json') : null
   if (!baseRaw) {
     return {
-      skipped: 'no base ref with a committed packages/webkit/catalog.json',
+      skipped: 'no base ref with a committed packages/ui/catalog.json',
       changes: [],
       failures: []
     }

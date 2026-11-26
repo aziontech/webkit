@@ -1,6 +1,6 @@
 <script setup>
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
   import { ref } from 'vue'
 
   const activeTab = ref('overview')

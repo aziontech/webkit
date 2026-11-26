@@ -2,7 +2,7 @@
 
 > The sources a generative AI response drew on (ChatGPT's Sources, Cloudscape's sources section, AI Elements Sources): a small `Sources` pill with the overlapping marks of up to three cited sources that opens, in place, a `DropdownMenu` of link items, one per source. Sources the answer searched but did not cite (`cited: false`) are listed under More, after the Citations. The pill ends the message's action row (`ChatMessage.Actions` `#trailing`), on the same line as the actions. Each mark is the site's favicon (`image`), its icon, or its first letter on a colour of its own, so three sources never look alike.
 
-- Import: `import Sources from '@aziontech/webkit/sources'`
+- Import: `import Sources from '@aziontech/ui/sources'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [sources.json](sources.json)
 
@@ -106,7 +106,7 @@ Composed DS components: `dropdown-menu` (`Trigger`, `Group`, `Item`)._
 
 ```vue
 <script setup>
-  import Sources from '@aziontech/webkit/sources'
+  import Sources from '@aziontech/ui/sources'
 
   const items = [
     {
@@ -153,7 +153,7 @@ Composed DS components: `dropdown-menu` (`Trigger`, `Group`, `Item`)._
 
 ```vue
 <script setup>
-  import Sources from '@aziontech/webkit/sources'
+  import Sources from '@aziontech/ui/sources'
 
   const items = [
     {

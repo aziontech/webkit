@@ -1,6 +1,6 @@
 <script setup>
-  import ConsoleTraceScene from '@aziontech/webkit/assets/console-trace-scene'
-  import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'
+  import ConsoleTraceScene from '@aziontech/ui/assets/console-trace-scene'
+  import ConsoleShowcaseSection from '@aziontech/ui/console-showcase-section'
 
   const tabs = [
     { value: 'trace', title: 'Trace' },

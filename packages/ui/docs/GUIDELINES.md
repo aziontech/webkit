@@ -1,4 +1,4 @@
-# Guidelines — building and using `@aziontech/webkit`
+# Guidelines — building and using `@aziontech/ui`
 
 > This is the one-page digest. The **complete styleguide** — every code standard in full
 > detail, with the gate that blocks each one — is [`STYLEGUIDE.md`](./STYLEGUIDE.md). The
@@ -9,7 +9,7 @@ One page to **see every pattern** you need, whether you are:
 
 - **A — building a component by hand** (in the design system or in your own project) → follow
   the **general construction patterns** below; or
-- **B — using a webkit component in your project** → follow the **consumer rules** below.
+- **B — using an Azion UI component in your project** → follow the **consumer rules** below.
 
 Everything here is **enforced** — automatically (lint / CI) or by mandatory review — so the
 pattern is the path of least resistance, not a checklist you have to remember. The machine-
@@ -17,8 +17,8 @@ readable source of these standards (and their `scope`) is
 [`contributing/hooks/lib/standards.mjs`](../../../contributing/hooks/lib/standards.mjs); each rule
 lives in [`contributing/rules/`](../../../contributing/rules/).
 
-> **General vs. webkit.** The patterns in **Part A** are `scope: general` — they ship to your
-> project and apply to any Vue component. The rules that are `scope: webkit` (spec-first
+> **General vs. Azion UI.** The patterns in **Part A** are `scope: general` — they ship to your
+> project and apply to any Vue component. The rules that are `scope: ui` (spec-first
 > pipeline, the exports map, examples and visual baselines, releases) live only inside the design
 > system and are **not** on this page.
 
@@ -31,18 +31,18 @@ come back to.
 ## Principles
 
 Every principle is held by a rule and a gate, not by memory. The rules ship in
-`node_modules/@aziontech/webkit/rules/`.
+`node_modules/@aziontech/ui/rules/`.
 
-| Principle                                | Rule                                               | Gate                                                                               |
-| ---------------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| Every visual decision comes from a token | `webkit-tokens`, `webkit-styling`                  | `webkit/no-hardcoded-color`, `webkit/no-hardcoded-motion`, stylelint config, hooks |
-| Use the system before building           | `webkit-prefer-over-custom`, `webkit-sections`     | `webkit/prefer-webkit-component`, review                                           |
-| A component is used as shipped           | `webkit-style-override`                            | `webkit/no-style-override`                                                         |
-| The spec is the source of truth          | the spec pipeline (`.specs/`, in the repository)   | spec hooks, `spec-status` and `catalog` gates                                      |
-| Accessible by construction               | `webkit-accessibility`                             | `vuejs-accessibility` lint, axe in every component test                            |
-| Small by default                         | `webkit-imports`, `webkit-performance`             | `webkit/no-barrel-import`, the size budget gate                                    |
-| Enforced, not remembered                 | every rule names its gate                          | write-time hooks, `webkit check`, the CI ratchet                                   |
-| Assets come from the bank                | `webkit-site-pages` (SD-13, SD-14, SD-18 to SD-20) | `webkit/no-root-relative-asset`, review                                            |
+| Principle                                | Rule                                                 | Gate                                                                                   |
+| ---------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Every visual decision comes from a token | `azion-ui-tokens`, `azion-ui-styling`                | `azion-ui/no-hardcoded-color`, `azion-ui/no-hardcoded-motion`, stylelint config, hooks |
+| Use the system before building           | `azion-ui-prefer-over-custom`, `azion-ui-sections`   | `azion-ui/prefer-azion-ui-component`, review                                           |
+| A component is used as shipped           | `azion-ui-style-override`                            | `azion-ui/no-style-override`                                                           |
+| The spec is the source of truth          | the spec pipeline (`.specs/`, in the repository)     | spec hooks, `spec-status` and `catalog` gates                                          |
+| Accessible by construction               | `azion-ui-accessibility`                             | `vuejs-accessibility` lint, axe in every component test                                |
+| Small by default                         | `azion-ui-imports`, `azion-ui-performance`           | `azion-ui/no-barrel-import`, the size budget gate                                      |
+| Enforced, not remembered                 | every rule names its gate                            | write-time hooks, `azion-ui check`, the CI ratchet                                     |
+| Assets come from the bank                | `azion-ui-site-pages` (SD-13, SD-14, SD-18 to SD-20) | `azion-ui/no-root-relative-asset`, review                                              |
 
 The layers: **foundations** (the `@aziontech/theme` tokens and the asset bank), **components**
 (primitives, marketing and docs components, page sections), **blocks** (reviewed, copyable
@@ -51,21 +51,21 @@ screens under `blocks/`) and **assets** (brand marks, illustrations, diagrams, t
 
 ## Where to check
 
-Never answer a WebKit question from memory or from a copy in another document: read it at the
+Never answer an Azion UI question from memory or from a copy in another document: read it at the
 version the project has installed, and cite where it was read.
 
-| Question                                          | Read                                                                                |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Is WebKit installed and wired here?               | the project's `package.json` and `.mcp.json`, then `npx @aziontech/webkit doctor`   |
-| How do I install, update, or add the CI gates?    | the package `README.md` and [`toolkit/CLI.md`](./toolkit/CLI.md)                    |
-| Which component fits? Its API and import?         | the MCP: `suggest_component`, `list_components`, `get_component`; or `catalog.json` |
-| Which screen do I start from?                     | the MCP `search_blocks` / `get_block`, or `npx @aziontech/webkit search` / `view`   |
-| Is this import or class valid?                    | the MCP `get_import` / `validate_usage`, then the lint                              |
-| Which token or asset?                             | the MCP `list_tokens` / `list_assets`, or `llms/foundations/`                       |
-| Everything above without MCP                      | `llms/llms.txt` (one page per component, block and foundation); the docs site       |
-| Which rule blocked this, and how do I fix it?     | the lint message, then `rules/webkit-*.md`                                          |
-| A design rule for a product screen or a web page? | `/webkit-product-screens` (routing table) or rule `webkit-site-pages` (SD rules)    |
-| Something not yet published?                      | the WebKit repository; never in place of the installed version                      |
+| Question                                          | Read                                                                                 |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Is Azion UI installed and wired here?             | the project's `package.json` and `.mcp.json`, then `npx @aziontech/ui doctor`        |
+| How do I install, update, or add the CI gates?    | the package `README.md` and [`toolkit/CLI.md`](./toolkit/CLI.md)                     |
+| Which component fits? Its API and import?         | the MCP: `suggest_component`, `list_components`, `get_component`; or `catalog.json`  |
+| Which screen do I start from?                     | the MCP `search_blocks` / `get_block`, or `npx @aziontech/ui search` / `view`        |
+| Is this import or class valid?                    | the MCP `get_import` / `validate_usage`, then the lint                               |
+| Which token or asset?                             | the MCP `list_tokens` / `list_assets`, or `llms/foundations/`                        |
+| Everything above without MCP                      | `llms/llms.txt` (one page per component, block and foundation); the docs site        |
+| Which rule blocked this, and how do I fix it?     | the lint message, then `rules/azion-ui-*.md`                                         |
+| A design rule for a product screen or a web page? | `/azion-ui-product-screens` (routing table) or rule `azion-ui-site-pages` (SD rules) |
+| Something not yet published?                      | the Azion UI repository; never in place of the installed version                     |
 
 When two sources disagree, the installed package wins over the docs site, and the docs site over
 the repository's main branch: the package is what the project runs.
@@ -142,28 +142,28 @@ what they do, never in how their files are arranged:
 
 ---
 
-## Part B — using a webkit component in your project
+## Part B — using an Azion UI component in your project
 
 Install the ESLint plugin and enable the `recommended` preset — **every rule is `error`**, so
 off-pattern usage fails your lint.
 
 ```js
 // eslint.config.js
-import webkit from '@aziontech/webkit/eslint-plugin'
-export default [...webkit.configs.recommended]
+import azionUi from '@aziontech/ui/eslint-plugin'
+export default [...ui.configs.recommended]
 ```
 
 | Do this                   | ❌ Avoid                                                | ✅ Do                                                    |
 | ------------------------- | ------------------------------------------------------- | -------------------------------------------------------- |
-| **Import**                | `import { Button } from '@aziontech/webkit'`            | `import Button from '@aziontech/webkit/button'`          |
-| **No internal / typo**    | `@aziontech/webkit/src/…` · `…/buton`                   | `@aziontech/webkit/button`                               |
-| **Tree-shaking**          | `import Table` (compound) when you only render the root | `import TableRoot from '@aziontech/webkit/table-root'`   |
+| **Import**                | `import { Button } from '@aziontech/ui'`                | `import Button from '@aziontech/ui/button'`              |
+| **No internal / typo**    | `@aziontech/ui/src/…` · `…/buton`                       | `@aziontech/ui/button`                                   |
+| **Tree-shaking**          | `import Table` (compound) when you only render the root | `import TableRoot from '@aziontech/ui/table-root'`       |
 | **Don't override styles** | `<Button class="p-8" />`                                | compose inside its slots, or use a `styleSeam` component |
 | **No deprecated**         | importing a deprecated component                        | the suggested replacement                                |
 | **Tokens, not colors**    | `class="text-[#fff]"`                                   | `class="text-(--text-default)"`                          |
 | **Icons**                 | `import Icons from '@aziontech/icons'`                  | `import '@aziontech/icons'` (side-effect)                |
 
-**Discover the API before you write it:** the webkit MCP server (`npx -y @aziontech/webkit-mcp@^6`, wired
+**Discover the API before you write it:** the Azion UI MCP server (`npx -y @aziontech/ui-mcp@^6`, wired
 into `.mcp.json` by `init`) answers
 `list_components`, `get_component`, `list_tokens`, `suggest_component`, `get_best_practices`,
 and `validate_usage` — so an AI (or you) gets the right import / token / prop _before_ the lint
@@ -198,7 +198,7 @@ flowchart TD
 1. **Write-time** — as the component is written (by the AI pipeline or an editor with the
    hooks), a wrong pattern is blocked on save (`exit 2`): manual `v-model`, runtime
    `defineProps`, `<slot>` without `defineSlots`, off-token styling, phantom imports.
-2. **Your app's lint** — the `@aziontech/webkit` ESLint plugin (all rules `error`) blocks
+2. **Your app's lint** — the `@aziontech/ui` ESLint plugin (all rules `error`) blocks
    wrong _usage_: barrel imports, deep imports, style overrides, deprecated components.
 3. **CI** — the authoring **ratchet** re-runs the write-time checks over the changed source and
    fails the PR on any new violation; `lint` / `types` / `a11y` / `security` run alongside.

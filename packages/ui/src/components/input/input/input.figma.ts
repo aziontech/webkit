@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6774
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/input/input/input.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/input/input/input.vue
 // component=Input
 import figma from 'figma'
 
@@ -77,7 +77,7 @@ export default {
       : figma.code`<Input
   ${attrs}
 />`,
-  imports: ["import Input from '@aziontech/webkit/input'"],
+  imports: ["import Input from '@aziontech/ui/input'"],
   id: 'input',
   metadata: { nestable: true }
 }

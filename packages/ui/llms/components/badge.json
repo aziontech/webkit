@@ -1,8 +1,8 @@
 {
  "name": "badge",
  "binding": "Badge",
- "import": "@aziontech/webkit/badge",
- "treeShakeableImport": "@aziontech/webkit/badge",
+ "import": "@aziontech/ui/badge",
+ "treeShakeableImport": "@aziontech/ui/badge",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

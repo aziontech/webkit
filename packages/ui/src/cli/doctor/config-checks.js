@@ -2,12 +2,12 @@ import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { readJsonStrict } from '../apply.js'
-import { LEGACY_MCP_SERVER_ARGS, MCP_SERVER_NAME } from '../init/mcp.js'
+import { LEGACY_MCP_SERVER_ARGS, LEGACY_MCP_SERVER_NAME, MCP_SERVER_NAME } from '../init/mcp.js'
 import { readText, resolveCatalog } from './project.js'
 
 function catalogVersion(catalogPath) {
   try {
-    return JSON.parse(readFileSync(catalogPath, 'utf8')).webkitVersion || null
+    return JSON.parse(readFileSync(catalogPath, 'utf8')).azionUiVersion || null
   } catch {
     return null
   }
@@ -17,21 +17,21 @@ export function catalogCheck({ projectDir, add }) {
   const catalogPath = resolveCatalog(projectDir)
   if (!catalogPath) {
     add(
-      'webkit catalog',
+      'Azion UI catalog',
       'fail',
-      'not resolvable — lint rules are DISABLED. Install @aziontech/webkit, or set WEBKIT_CATALOG_PATH.'
+      'not resolvable — lint rules are DISABLED. Install @aziontech/ui, or set AZION_UI_CATALOG_PATH.'
     )
     return
   }
   const version = catalogVersion(catalogPath)
-  add('webkit catalog', 'ok', `resolved${version ? ` (webkit ${version})` : ''}`)
+  add('Azion UI catalog', 'ok', `resolved${version ? ` (ui ${version})` : ''}`)
 }
 
 export function eslintConfigCheck({ eslintCfg, add }) {
   add(
     'eslint config',
     eslintCfg ? 'ok' : 'fail',
-    eslintCfg || 'no eslint config found — run `npx @aziontech/webkit init`.'
+    eslintCfg || 'no eslint config found — run `npx @aziontech/ui init`.'
   )
 }
 
@@ -44,15 +44,19 @@ export function stylelintConfigCheck({ stylelintCfg, pkg, add }) {
     add('stylelint config', 'ok', 'package.json#stylelint')
     return
   }
-  add('stylelint config', 'fail', 'no stylelint config found — run `npx @aziontech/webkit init`.')
+  add('stylelint config', 'fail', 'no stylelint config found — run `npx @aziontech/ui init`.')
 }
 
 function mcpServerState(mcpPath) {
-  const server = readJsonStrict(mcpPath)?.mcpServers?.[MCP_SERVER_NAME]
-  if (JSON.stringify(server?.args) === JSON.stringify(LEGACY_MCP_SERVER_ARGS)) {
+  const servers = readJsonStrict(mcpPath)?.mcpServers
+  const legacy = servers?.[LEGACY_MCP_SERVER_NAME]
+  const server = servers?.[MCP_SERVER_NAME]
+  if (legacy || JSON.stringify(server?.args) === JSON.stringify(LEGACY_MCP_SERVER_ARGS)) {
+    const name = legacy ? LEGACY_MCP_SERVER_NAME : MCP_SERVER_NAME
     return [
       'fail',
-      `"${MCP_SERVER_NAME}" runs the webkit-mcp bin of @aziontech/webkit, removed in v6 — re-run \`npx @aziontech/webkit init\` to point it at @aziontech/webkit-mcp.`
+      `"${name}" runs ${LEGACY_MCP_SERVER_ARGS[2]}, renamed to @aziontech/ui in v6 — run ` +
+        '`npx @aziontech/ui migrate v6` or re-run `npx @aziontech/ui init` to point it at @aziontech/ui-mcp.'
     ]
   }
   if (server) return ['ok', `"${MCP_SERVER_NAME}" registered`]
@@ -62,7 +66,7 @@ function mcpServerState(mcpPath) {
 export function mcpCheck({ projectDir, add }) {
   const mcpPath = join(projectDir, '.mcp.json')
   if (!existsSync(mcpPath)) {
-    add('mcp server', 'fail', 'no .mcp.json — the webkit MCP is not registered.')
+    add('mcp server', 'fail', 'no .mcp.json — the Azion UI MCP is not registered.')
     return
   }
   try {
@@ -99,12 +103,12 @@ export function buildOutputCheck({ projectDir, eslintCfg, eslintText, stylelintC
 }
 
 export function lintPluginCheck({ eslintCfg, eslintText, add }) {
-  const plugged = /@aziontech\/webkit\/eslint-plugin/.test(eslintText)
+  const plugged = /@aziontech\/ui\/eslint-plugin/.test(eslintText)
   add(
     'lint plugin',
     plugged ? 'ok' : 'fail',
     plugged
-      ? `${eslintCfg} loads @aziontech/webkit/eslint-plugin`
-      : `${eslintCfg || 'the eslint config'} does not load @aziontech/webkit/eslint-plugin — the design-system rules do not run. Merge the preset \`npx @aziontech/webkit init --dry-run\` prints.`
+      ? `${eslintCfg} loads @aziontech/ui/eslint-plugin`
+      : `${eslintCfg || 'the eslint config'} does not load @aziontech/ui/eslint-plugin — the design-system rules do not run. Merge the preset \`npx @aziontech/ui init --dry-run\` prints.`
   )
 }

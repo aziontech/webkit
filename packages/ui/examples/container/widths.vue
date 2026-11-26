@@ -1,6 +1,6 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import Container from '@aziontech/ui/container'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>

@@ -1,10 +1,10 @@
 // Every ```vue and ```ts snippet in the shipped docs (READMEs, skills, rules, adapters, the
 // package docs and the migration guide) is type-checked with vue-tsc as a file in a create-vue
-// app that resolves @aziontech/webkit from this workspace, so a renamed prop, a removed export or a
+// app that resolves @aziontech/ui from this workspace, so a renamed prop, a removed export or a
 // wrong import in a snippet fails here instead of in the app that copied it.
 //
 // What a snippet may leave out: the Vue API imports (ref, computed, ...) and the import of a
-// WebKit component its template uses are added when missing. A template-only fragment has its
+// Azion UI component its template uses are added when missing. A template-only fragment has its
 // free names (rows, form, ...) declared as any, so only the component API is checked; a snippet
 // with a script is checked as written. Unused locals are allowed.
 //
@@ -46,13 +46,13 @@ function markdownFiles(path) {
 
 export const DOC_FILES = [
   'README.md',
-  'packages/webkit/README.md',
+  'packages/ui/README.md',
   'packages/theme/README.md',
   'packages/icons/README.md',
-  'packages/webkit/MIGRATION_V6.md',
-  'packages/webkit/docs/GUIDELINES.md',
-  'packages/webkit/docs/STYLEGUIDE.md',
-  'packages/webkit/docs/toolkit',
+  'packages/ui/MIGRATION_V6.md',
+  'packages/ui/docs/GUIDELINES.md',
+  'packages/ui/docs/STYLEGUIDE.md',
+  'packages/ui/docs/toolkit',
   'skills',
   'rules',
   'adapters'
@@ -136,7 +136,7 @@ const pascal = (subpath) =>
     .split('-')
     .map((part) => part[0].toUpperCase() + part.slice(1))
     .join('')
-const WEBKIT_TAGS = new Map(
+const AZION_UI_TAGS = new Map(
   Object.keys(catalog.imports).map((subpath) => [pascal(subpath), subpath])
 )
 
@@ -154,8 +154,8 @@ function missingImports(script, template) {
   if (types.length) lines.push(`import type { ${types.join(', ')} } from 'vue'`)
   const tags = new Set([...template.matchAll(/<([A-Z][A-Za-z]*)\b/g)].map((match) => match[1]))
   for (const tag of tags) {
-    if (WEBKIT_TAGS.has(tag) && !declares(script, tag)) {
-      lines.push(`import ${tag} from '@aziontech/webkit/${WEBKIT_TAGS.get(tag)}'`)
+    if (AZION_UI_TAGS.has(tag) && !declares(script, tag)) {
+      lines.push(`import ${tag} from '@aziontech/ui/${AZION_UI_TAGS.get(tag)}'`)
     }
   }
   return lines.join('\n')
@@ -216,13 +216,13 @@ const ICONS_TYPES = join(REPO_ROOT, 'packages', 'icons', 'dist', 'index.d.ts')
 const APP_ENV = []
 const JS_ENTRY_PATHS = {}
 
-// A JS entry (`@aziontech/webkit/vite-plugin`) gets its declarations at pack time, from its
+// A JS entry (`@aziontech/ui/vite-plugin`) gets its declarations at pack time, from its
 // JSDoc; emit them for the entries the snippets import so the checkout resolves them typed.
 function declareJsEntries(dir) {
   const exportsMap = JSON.parse(readFileSync(join(PKG_DIR, 'package.json'), 'utf8')).exports
   const used = new Set(
     all.flatMap(({ code }) =>
-      [...code.matchAll(/['"]@aziontech\/webkit\/([\w/-]+)['"]/g)].map((m) => m[1])
+      [...code.matchAll(/['"]@aziontech\/ui\/([\w/-]+)['"]/g)].map((m) => m[1])
     )
   )
   const entries = [...used]
@@ -237,7 +237,7 @@ function declareJsEntries(dir) {
     writeFileSync(dest, text)
   }
   for (const [sub, target] of entries) {
-    JS_ENTRY_PATHS[`@aziontech/webkit/${sub}`] = [
+    JS_ENTRY_PATHS[`@aziontech/ui/${sub}`] = [
       join(typesDir, relative('./src', target).replace(/\.js$/, '.d.ts'))
     ]
   }
@@ -376,7 +376,7 @@ test('every Vue and TypeScript snippet in the shipped docs type-checks in a cons
 
 const COUNTER_EXAMPLE_LINE = /❌|\b(never|wrong|flag|blocked|do not|don't|does not match)\b/i
 
-test('every @aziontech/webkit import in the shipped docs is a real export', () => {
+test('every @aziontech/ui import in the shipped docs is a real export', () => {
   const exportsMap = JSON.parse(readFileSync(join(PKG_DIR, 'package.json'), 'utf8')).exports
   const missing = []
   for (const file of DOC_FILES) {
@@ -386,7 +386,7 @@ test('every @aziontech/webkit import in the shipped docs is a real export', () =
       if (COUNTER_EXAMPLE_LINE.test(line)) return
       if (partial.some((snippet) => index + 1 > snippet.line && index + 1 < snippet.end)) return
       for (const [, subpath] of line.matchAll(
-        /(?:\bfrom\s*|\bimport\s*\(?\s*)['"]@aziontech\/webkit\/([\w./-]+)['"]/g
+        /(?:\bfrom\s*|\bimport\s*\(?\s*)['"]@aziontech\/ui\/([\w./-]+)['"]/g
       )) {
         if (!(`./${subpath}` in exportsMap)) {
           missing.push(`${relative(REPO_ROOT, file)}:${index + 1} ${subpath}`)
@@ -397,7 +397,7 @@ test('every @aziontech/webkit import in the shipped docs is a real export', () =
   assert.deepEqual(missing, [], 'imports of paths that are not in package.json#exports')
 })
 
-test('every default import of a webkit path in the shipped docs is bound to its PascalCase name', () => {
+test('every default import of an Azion UI path in the shipped docs is bound to its PascalCase name', () => {
   const wrong = []
   for (const file of DOC_FILES) {
     const text = readFileSync(file, 'utf8')
@@ -406,7 +406,7 @@ test('every default import of a webkit path in the shipped docs is bound to its 
       if (COUNTER_EXAMPLE_LINE.test(line)) return
       if (partial.some((snippet) => index + 1 > snippet.line && index + 1 < snippet.end)) return
       for (const [, binding, subpath] of line.matchAll(
-        /\bimport\s+([A-Z]\w*)\s*(?:,\s*\{[^}]*\}\s*)?from\s*['"]@aziontech\/webkit\/([\w-]+)['"]/g
+        /\bimport\s+([A-Z]\w*)\s*(?:,\s*\{[^}]*\}\s*)?from\s*['"]@aziontech\/ui\/([\w-]+)['"]/g
       )) {
         if (binding !== pascal(subpath)) {
           wrong.push(`${relative(REPO_ROOT, file)}:${index + 1} ${binding} from ${subpath}`)

@@ -1,8 +1,8 @@
 {
  "name": "contact-hub-section",
  "binding": "ContactHubSection",
- "import": "@aziontech/webkit/contact-hub-section",
- "treeShakeableImport": "@aziontech/webkit/contact-hub-section",
+ "import": "@aziontech/ui/contact-hub-section",
+ "treeShakeableImport": "@aziontech/ui/contact-hub-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

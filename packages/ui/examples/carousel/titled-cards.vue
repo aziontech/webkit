@@ -1,7 +1,7 @@
 <script setup>
-  import Carousel from '@aziontech/webkit/carousel'
-  import FeatureItem from '@aziontech/webkit/feature-item'
-  import ModuleHeader from '@aziontech/webkit/module-header'
+  import Carousel from '@aziontech/ui/carousel'
+  import FeatureItem from '@aziontech/ui/feature-item'
+  import ModuleHeader from '@aziontech/ui/module-header'
 </script>
 
 <template>

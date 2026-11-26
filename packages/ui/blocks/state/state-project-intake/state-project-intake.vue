@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import UploadProgress, { type UploadProgressItem } from '@aziontech/ui/upload-progress'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   /** One file of the upload, with its state and progress. */

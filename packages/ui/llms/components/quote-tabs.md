@@ -2,7 +2,7 @@
 
 > A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time. The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence. Left alone it moves through the clients on its own, the way `media-tabs` does: a hairline along the panel's bottom edge fills toward the next client, and the band holds still while the reader points at it or works it from the keyboard.
 
-- Import: `import QuoteTabs from '@aziontech/webkit/quote-tabs'`
+- Import: `import QuoteTabs from '@aziontech/ui/quote-tabs'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [quote-tabs.json](quote-tabs.json)
 
@@ -121,14 +121,14 @@
 
 ```vue
 <script setup>
-  import herosparkLogo from '@aziontech/webkit/assets/herospark-extended-color.svg'
-  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
-  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
-  import Button from '@aziontech/webkit/button'
-  import QuoteTabs from '@aziontech/webkit/quote-tabs'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import herosparkLogo from '@aziontech/ui/assets/herospark-extended-color.svg'
+  import ifoodLogo from '@aziontech/ui/assets/ifood-extended-color.svg'
+  import itauLogo from '@aziontech/ui/assets/itau-extended-color.svg'
+  import magaluLogo from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import stoneLogo from '@aziontech/ui/assets/stone-extended-color.svg'
+  import Button from '@aziontech/ui/button'
+  import QuoteTabs from '@aziontech/ui/quote-tabs'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>
@@ -201,9 +201,9 @@
 
 ```vue
 <script setup>
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import QuoteTabs from '@aziontech/webkit/quote-tabs'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import magaluLogo from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import QuoteTabs from '@aziontech/ui/quote-tabs'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>

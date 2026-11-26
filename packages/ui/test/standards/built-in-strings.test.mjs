@@ -10,9 +10,9 @@ const sfc = (script, template) =>
   `<script setup lang="ts">\n${script}\n</script>\n\n<template>\n${template}\n</template>\n`
 
 test('applies to component SFCs only', () => {
-  assert.equal(appliesToBuiltInStrings('packages/webkit/src/components/data/x/x.vue'), true)
-  assert.equal(appliesToBuiltInStrings('packages/webkit/blocks/a/b.vue'), false)
-  assert.equal(appliesToBuiltInStrings('packages/webkit/src/components/data/x/x.ts'), false)
+  assert.equal(appliesToBuiltInStrings('packages/ui/src/components/data/x/x.vue'), true)
+  assert.equal(appliesToBuiltInStrings('packages/ui/blocks/a/b.vue'), false)
+  assert.equal(appliesToBuiltInStrings('packages/ui/src/components/data/x/x.ts'), false)
 })
 
 test('flags literal UI attributes and English prop defaults', () => {

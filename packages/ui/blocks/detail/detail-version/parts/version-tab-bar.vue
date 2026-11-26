@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { VersionDetailTab, VersionDetailVersion } from '../detail-version.vue'

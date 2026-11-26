@@ -253,11 +253,11 @@ test('the signature rules ship as errors in recommended and strict', () => {
     const [config] = plugin.configs[preset]
     for (const id of Object.keys(SIGNATURE_RULES)) {
       assert.equal(plugin.rules[id], SIGNATURE_RULES[id], id)
-      assert.equal(config.rules[`webkit/${id}`], 'error', `${preset}: ${id}`)
+      assert.equal(config.rules[`azion-ui/${id}`], 'error', `${preset}: ${id}`)
     }
   }
   const [recommended] = plugin.configs.recommended
-  assert.equal(recommended.rules['webkit/prefer-define-model'], 'error')
+  assert.equal(recommended.rules['azion-ui/prefer-define-model'], 'error')
 })
 
 test('every signature rule is paired with its standard on the lint, write-time and ci surfaces', () => {

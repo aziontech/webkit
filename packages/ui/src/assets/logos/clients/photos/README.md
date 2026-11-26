@@ -9,7 +9,7 @@ gpa-photo.webp
 ```
 
 Registering one takes three lines: the file here, its flat `./assets/<client>-photo.webp`
-entry in `packages/webkit/package.json#exports`, and its key in `CLIENT_PHOTOS`
+entry in `packages/ui/package.json#exports`, and its key in `CLIENT_PHOTOS`
 (`registry.ts` one folder up). The key is the normalized client name
 (`normalizeClientName`: lowercase, accents folded, non-alphanumerics dropped — so `GPA` is
 `gpa` and `MadeiraMadeira` is `madeiramadeira`).

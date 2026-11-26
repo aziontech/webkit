@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
   import { computed } from 'vue'
 
   import { filterTypes, glyphOf, TYPES } from '../lib/column-types'

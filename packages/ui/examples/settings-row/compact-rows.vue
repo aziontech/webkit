@@ -1,9 +1,9 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { reactive } from 'vue'
 
   const form = reactive({ allowSocialLogin: true, enforceMfa: false })

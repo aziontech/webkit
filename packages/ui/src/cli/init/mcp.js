@@ -1,19 +1,34 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
+import { loadPackageMap } from '../migrate-package.js'
 import { read } from './project-files.js'
 
-export const MCP_SERVER_NAME = 'webkit'
+export const MCP_SERVER_NAME = 'azion-ui'
 const OWN_VERSION = JSON.parse(
   readFileSync(new URL('../../../package.json', import.meta.url), 'utf8')
 ).version
-export const MCP_PACKAGE = `@aziontech/webkit-mcp@^${OWN_VERSION.split('.')[0]}`
+export const MCP_PACKAGE = `@aziontech/ui-mcp@^${OWN_VERSION.split('.')[0]}`
 const MCP_SERVER_ENTRY = {
   command: 'npx',
   args: ['-y', MCP_PACKAGE]
 }
-export const LEGACY_MCP_SERVER_ARGS = ['-y', '-p', '@aziontech/webkit', 'webkit-mcp']
-const UNPINNED_MCP_SERVER_ARGS = ['-y', '@aziontech/webkit-mcp']
+const PACKAGE_MAP = loadPackageMap()
+const oldNameOf = (table, next) => Object.keys(table || {}).find((old) => table[old] === next)
+export const LEGACY_MCP_SERVER_NAME = oldNameOf(PACKAGE_MAP.mcpServer, MCP_SERVER_NAME)
+export const LEGACY_MCP_SERVER_ARGS = [
+  '-y',
+  '-p',
+  oldNameOf(PACKAGE_MAP.packages, '@aziontech/ui'),
+  oldNameOf(PACKAGE_MAP.bins, 'azion-ui-mcp')
+]
+const UNPINNED_MCP_SERVER_ARGS = ['-y', '@aziontech/ui-mcp']
+const OLD_UNPINNED_MCP_SERVER_ARGS = ['-y', oldNameOf(PACKAGE_MAP.packages, '@aziontech/ui-mcp')]
+const OUTDATED_ARGS = [
+  LEGACY_MCP_SERVER_ARGS,
+  UNPINNED_MCP_SERVER_ARGS,
+  OLD_UNPINNED_MCP_SERVER_ARGS
+]
 
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 
@@ -26,10 +41,13 @@ function upgradeLegacyMcp(projectDir) {
   } catch {
     return null
   }
-  const entry = config?.mcpServers?.[MCP_SERVER_NAME]
-  if (!same(entry?.args, LEGACY_MCP_SERVER_ARGS) && !same(entry?.args, UNPINNED_MCP_SERVER_ARGS))
-    return null
-  config.mcpServers[MCP_SERVER_NAME] = { ...entry, ...MCP_SERVER_ENTRY }
+  const servers = config?.mcpServers
+  const legacyEntry = servers?.[LEGACY_MCP_SERVER_NAME]
+  const entry = servers?.[MCP_SERVER_NAME] ?? legacyEntry
+  if (!entry) return null
+  if (!legacyEntry && !OUTDATED_ARGS.some((args) => same(entry.args, args))) return null
+  if (legacyEntry) delete servers[LEGACY_MCP_SERVER_NAME]
+  servers[MCP_SERVER_NAME] = { ...entry, ...MCP_SERVER_ENTRY }
   return `${JSON.stringify(config, null, 2)}\n`
 }
 

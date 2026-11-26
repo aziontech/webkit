@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import type { LogViewerStep } from '@aziontech/webkit/log-viewer'
-  import type { StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Alert, { type AlertSeverity } from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import type { LogViewerStep } from '@aziontech/ui/log-viewer'
+  import type { StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
 
   import DeploymentDetailsCard from './deployment-details-card.vue'
   import DeploymentLogsCard from './deployment-logs-card.vue'

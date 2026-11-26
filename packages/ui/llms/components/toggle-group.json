@@ -1,8 +1,8 @@
 {
  "name": "toggle-group",
  "binding": "ToggleGroup",
- "import": "@aziontech/webkit/toggle-group",
- "treeShakeableImport": "@aziontech/webkit/toggle-group",
+ "import": "@aziontech/ui/toggle-group",
+ "treeShakeableImport": "@aziontech/ui/toggle-group",
  "category": "action",
  "surface": "app",
  "structure": "monolithic",

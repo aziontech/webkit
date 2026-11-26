@@ -30,7 +30,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow root-relative URLs to media that only azion.com and the WebKit docs site serve; import the file from @aziontech/webkit/assets or pass your own.'
+        'Disallow root-relative URLs to media that only azion.com and the Azion UI docs site serve; import the file from @aziontech/ui/assets or pass your own.'
     },
     schema: [
       {
@@ -43,13 +43,13 @@ export default {
     ],
     messages: {
       known:
-        "'{{url}}' exists only on azion.com and the WebKit docs site, so a copy renders a broken image. Import the file instead: `import {{binding}} from '{{specifier}}'` and pass `{{binding}}`.",
+        "'{{url}}' exists only on azion.com and the Azion UI docs site, so a copy renders a broken image. Import the file instead: `import {{binding}} from '{{specifier}}'` and pass `{{binding}}`.",
       unknown:
-        "'{{url}}' exists only on azion.com and the WebKit docs site, so a copy renders a " +
-        'broken image. WebKit ships logos, badges and illustrations as ' +
-        '`@aziontech/webkit/assets/<file>` (catalog.json lists them as imports of kind "asset"): ' +
+        "'{{url}}' exists only on azion.com and the Azion UI docs site, so a copy renders a " +
+        'broken image. Azion UI ships logos, badges and illustrations as ' +
+        '`@aziontech/ui/assets/<file>` (catalog.json lists them as imports of kind "asset"): ' +
         'import that URL. For a photo, cover or clip, pass one your app serves, or ' +
-        '`@aziontech/webkit/assets/placeholder-image.svg` / `placeholder-clip.webm` until you ' +
+        '`@aziontech/ui/assets/placeholder-image.svg` / `placeholder-clip.webm` until you ' +
         'have it.'
     }
   },

@@ -1,8 +1,8 @@
 {
  "name": "marquee",
  "binding": "Marquee",
- "import": "@aziontech/webkit/marquee",
- "treeShakeableImport": "@aziontech/webkit/marquee",
+ "import": "@aziontech/ui/marquee",
+ "treeShakeableImport": "@aziontech/ui/marquee",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

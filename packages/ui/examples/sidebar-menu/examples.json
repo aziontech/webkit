@@ -29,7 +29,7 @@
     },
     {
       "name": "ClientRouting",
-      "summary": "Vue Router wiring: every node carries its route path in `href` (the only destination field SidebarMenu reads; `path`, `to` or `url` are not read and lint as `webkit/prefer-href-in-menu-node`), so each row stays a real link. `@navigate` calls `event.preventDefault()` and hands `node.href` to the router — here a stand-in for `router.push` — and `active-id` follows the current route. A modified click (Ctrl, ⌘, Shift, middle button) is left to the browser so open-in-new-tab keeps working.",
+      "summary": "Vue Router wiring: every node carries its route path in `href` (the only destination field SidebarMenu reads; `path`, `to` or `url` are not read and lint as `azion-ui/prefer-href-in-menu-node`), so each row stays a real link. `@navigate` calls `event.preventDefault()` and hands `node.href` to the router — here a stand-in for `router.push` — and `active-id` follows the current route. A modified click (Ctrl, ⌘, Shift, middle button) is left to the browser so open-in-new-tab keeps working.",
       "file": "client-routing.vue"
     }
   ]

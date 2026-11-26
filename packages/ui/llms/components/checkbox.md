@@ -2,7 +2,7 @@
 
 > Binary selection control. Supports a single boolean (no `value`), a scalar paired with `value`, and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets the native `indeterminate` property, which exposes the mixed state — used by parents that own a partial-selection summary (e.g. "select all" rows where some children are selected). Aligned with Figma frame `2027:7311`.
 
-- Import: `import Checkbox from '@aziontech/webkit/checkbox'`
+- Import: `import Checkbox from '@aziontech/ui/checkbox'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [checkbox.json](checkbox.json)
 
@@ -79,8 +79,8 @@
 
 ```vue
 <script setup>
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const checked = ref(false)
@@ -101,8 +101,8 @@
 
 ```vue
 <script setup>
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const checked = ref(false)
@@ -123,8 +123,8 @@
 
 ```vue
 <script setup>
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const backups = ref(true)

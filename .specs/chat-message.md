@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 7
 template: 2
-checksum: f747c1b499c363ec95c354b3bec501063a6e0f2cbd965cdd1806260f27de11fc
+checksum: f3686a3f9eafc7f76a9124305d10c359d3c6a167dbd099f5aa9f535acdda43d2
 created: 2026-11-11
 last_updated: 2026-11-25
 ---
@@ -62,9 +62,9 @@ hover over the user's bubble). Alignment comes from the enclosing `Conversation`
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import Sources from '@aziontech/webkit/sources'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import Sources from '@aziontech/ui/sources'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
 
   const feedback = ref(null)
   const sources = [{ title: 'Real-Time Purge', href: 'https://www.azion.com/en/documentation/' }]
@@ -128,7 +128,7 @@ components: `button`, `response-loading`, `textarea`, `icon-button`, `copy-butto
 `dropdown-menu`.
 
 ```
-packages/webkit/src/components/ai/chat-message/
+packages/ui/src/components/ai/chat-message/
 ├── chat-message.vue
 ├── chat-message.test.ts
 ├── index.ts
@@ -270,7 +270,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/chat-message/`: Default (user bubble and plain assistant text), Actions (the built-in row, versions in `#leading` and the Sources pill), Edit (a prompt's Copy and Edit, the editor and its versions), Pending and streaming, Error with retry, Grouped and system._
+_Examples in `packages/ui/examples/chat-message/`: Default (user bubble and plain assistant text), Actions (the built-in row, versions in `#leading` and the Sources pill), Edit (a prompt's Copy and Edit, the editor and its versions), Pending and streaming, Error with retry, Grouped and system._
 
 ## Constraints — DO NOT
 
@@ -279,7 +279,7 @@ _Examples in `packages/webkit/examples/chat-message/`: Default (user bubble and 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

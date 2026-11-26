@@ -1,6 +1,6 @@
 # Rule: compound API — composition first, props for data, names from anatomy
 
-Composition (`structure: composition`) components in the webkit layer expose a **compound API**: every structural sub-component is importable on its own **and** attached to the root for dot-notation (`<Table.Row>`, `<Pagination.Button>`). The root itself stays importable two ways — as the **compound** (`@aziontech/webkit/table`, every structural sub-component attached; companion parts are imported on their own, see below) and as a **standalone, tree-shakeable root** (`@aziontech/webkit/table-root`, nothing attached). This rule fixes how that API is shaped, named, and typed so every composition component reads the same way.
+Composition (`structure: composition`) components in the Azion UI layer expose a **compound API**: every structural sub-component is importable on its own **and** attached to the root for dot-notation (`<Table.Row>`, `<Pagination.Button>`). The root itself stays importable two ways — as the **compound** (`@aziontech/ui/table`, every structural sub-component attached; companion parts are imported on their own, see below) and as a **standalone, tree-shakeable root** (`@aziontech/ui/table-root`, nothing attached). This rule fixes how that API is shaped, named, and typed so every composition component reads the same way.
 
 It rests on three decisions, in priority order:
 
@@ -32,9 +32,9 @@ All forms stay available to the consumer:
 
 ```vue
 <script setup>
-  import Table from '@aziontech/webkit/table' // compound — leads the docs, dot-notation
-  import TableRoot from '@aziontech/webkit/table-root' // standalone root — tree-shaking (no sub-components attached)
-  import TableRow from '@aziontech/webkit/table-row' // standalone sub-component — tree-shaking
+  import Table from '@aziontech/ui/table' // compound — leads the docs, dot-notation
+  import TableRoot from '@aziontech/ui/table-root' // standalone root — tree-shaking (no sub-components attached)
+  import TableRow from '@aziontech/ui/table-row' // standalone sub-component — tree-shaking
 </script>
 
 <template>
@@ -50,8 +50,8 @@ The dot-notation **must** use a PascalCase root binding (`Table`). `table` (lowe
 
 ## Wiring rules (exports)
 
-- **No per-component `package.json`.** Components and sub-components do **not** ship a local `package.json`. The root `packages/webkit/package.json#exports` map points every public path directly at a source file, so a per-folder `package.json` (`main`/`module`/`types`/`browser`) would never be consulted for resolution. `sideEffects` is declared once at the root (`["**/*.vue", "**/*.css"]`).
-- **Root export** in `packages/webkit/package.json#exports` points the component's public path at `index.ts` (not the root `.vue`):
+- **No per-component `package.json`.** Components and sub-components do **not** ship a local `package.json`. The root `packages/ui/package.json#exports` map points every public path directly at a source file, so a per-folder `package.json` (`main`/`module`/`types`/`browser`) would never be consulted for resolution. `sideEffects` is declared once at the root (`["**/*.vue", "**/*.css"]`).
+- **Root export** in `packages/ui/package.json#exports` points the component's public path at `index.ts` (not the root `.vue`):
   ```json
   "./table": "./src/components/data/table/index.ts"
   ```
@@ -61,7 +61,7 @@ The dot-notation **must** use a PascalCase root binding (`Table`). `table` (lowe
   ```
   The compound path cannot be tree-shaken: `Object.assign(Table, { Row, Cell, ... })` in `index.ts` references every sub-component, so a bundler retains them all even when the consumer only renders `<Table>`. The `-root` key resolves straight to the root `.vue`, so a root-only import pulls in nothing else. Sub-components are already individually importable; this gives the **root** the same tree-shakeable path. The compound (`./table` → `index.ts`) still leads the docs — the `-root` key is the opt-in for consumers who want only the root.
 - **Sub-component exports stay flat and unchanged** — one entry per public sub-component pointing at its `.vue` (`"./table-row": ".../table-row/table-row.vue"`); keys are flat, the category stays in the source path only (see [`imports.md`](./imports.md)).
-- **The package ships source and is consumed as source** (the exports map points at `./src/...`, and `.vue` files already import `.ts` such as `injection-key.ts`). A `.ts` index is therefore safe — the consumer's build transpiles it the same way it transpiles every `.vue` and the shared `injection-key.ts`. `.d.ts` files are gitignored and generated at publish time by the publish workflow ([`publish-webkit.yml`](../../.github/workflows/publish-webkit.yml) runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`), not in dev or CI.
+- **The package ships source and is consumed as source** (the exports map points at `./src/...`, and `.vue` files already import `.ts` such as `injection-key.ts`). A `.ts` index is therefore safe — the consumer's build transpiles it the same way it transpiles every `.vue` and the shared `injection-key.ts`. `.d.ts` files are gitignored and generated at publish time by the publish workflow ([`publish-ui.yml`](../../.github/workflows/publish-ui.yml) runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`), not in dev or CI.
 
 ## Naming — anatomy, not generic convention
 
@@ -96,10 +96,10 @@ Repeated **data** is the one thing that earns props (`:data` + `:columns`) — h
 
 The compound cannot be tree-shaken: `Object.assign` keeps every attached part in the bundle even when the page renders only the root. So the compound attaches the **structural** parts only. A part that composes another overlay or input component (a `Tooltip`, `DropdownMenu`, `Popover`, `Input`, `CopyButton`) to deliver a feature is a **companion part**: it lives in the component's folder, reads the same injected context, has its own flat export, and is **not** attached. The consumer imports it on its own.
 
-| Kind                                                 | Attached                                                                  | Example                                                              |
-| ---------------------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Structural part (where things go)                    | yes, `<Table.Row>`                                                        | `Header`, `Body`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar` |
-| Companion part (a feature built on other components) | no, `import TableCellActions from '@aziontech/webkit/table-cell-actions'` | Table's cell presets and toolbar controls                            |
+| Kind                                                 | Attached                                                              | Example                                                              |
+| ---------------------------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Structural part (where things go)                    | yes, `<Table.Row>`                                                    | `Header`, `Body`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar` |
+| Companion part (a feature built on other components) | no, `import TableCellActions from '@aziontech/ui/table-cell-actions'` | Table's cell presets and toolbar controls                            |
 
 A companion part is still documented in its root's spec, under Sub-components, marked as a companion. The catalog records it (`attached: false`) so the MCP offers the standalone import, never a dot-notation it does not have.
 
@@ -120,7 +120,7 @@ Interactivity alone does not justify a sub-component. A clickable row is `@click
 
 ## Enforcement
 
-- `component-scaffolder` emits `index.ts` for every `structure: composition` component (the exports target plus the `Object.assign` compound), adds **both** the compound root entry (`./<name>` → `index.ts`) **and** the standalone `./<name>-root` entry (→ root `.vue`) to `packages/webkit/package.json#exports`, and writes no per-component `package.json` (see [`contributing/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md)).
+- `component-scaffolder` emits `index.ts` for every `structure: composition` component (the exports target plus the `Object.assign` compound), adds **both** the compound root entry (`./<name>` → `index.ts`) **and** the standalone `./<name>-root` entry (→ root `.vue`) to `packages/ui/package.json#exports`, and writes no per-component `package.json` (see [`contributing/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md)).
 - The spec's `## Usage` block (composition) **leads with the compound dot-notation** form; the standalone imports are documented as the tree-shaking alternative. See [`.specs/_template.md`](../../.specs/_template.md).
-- `validate-references.mjs` blocks any phantom `@aziontech/webkit/*` import; the standalone sub-component paths must exist in `packages/webkit/package.json#exports`.
+- `validate-references.mjs` blocks any phantom `@aziontech/ui/*` import; the standalone sub-component paths must exist in `packages/ui/package.json#exports`.
 - Sub-agent prompts inject this rule alongside [`no-invention.md`](./no-invention.md), [`styling.md`](./styling.md), [`dependencies.md`](./dependencies.md), and [`migration.md`](./migration.md). Any deviation surfaces as `BLOCKED:` and stops the run.

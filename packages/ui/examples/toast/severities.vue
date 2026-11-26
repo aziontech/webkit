@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import { toast, Toaster } from '@aziontech/ui/toast'
 
   const showNeutral = () =>
     toast('Settings saved', { description: 'Changes apply to new requests.' })

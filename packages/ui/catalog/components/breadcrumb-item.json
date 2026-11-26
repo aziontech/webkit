@@ -1,5 +1,5 @@
 {
- "purpose": "Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Webkit navigation pattern (ghost overlay + focus ring).",
+ "purpose": "Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Azion UI navigation pattern (ghost overlay + focus ring).",
  "useWhen": [
   "Use Breadcrumb.Item only as a part of Breadcrumb; for the page trail itself use Breadcrumb.",
   "Composing a breadcrumb trail by hand inside `Breadcrumb.List`, one segment per ancestor plus the current page.",

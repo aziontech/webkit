@@ -1,13 +1,13 @@
 ---
-name: webkit-lists
-description: The list page — the one shape every resource index takes on @aziontech/webkit, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/webkit/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `CardList`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or CardList), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
+name: azion-ui-lists
+description: The list page — the one shape every resource index takes on @aziontech/ui, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/ui/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `CardList`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or CardList), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /azion-ui-tables (which owns the Table and its cell recipes).
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-styling, ui-verify, review]
+enforced_by: [azion-ui-prefer-over-custom, azion-ui-component-states, azion-ui-styling, ui-verify, review]
 ---
 
-# Skill: webkit-lists
+# Skill: azion-ui-lists
 
 ## Purpose
 
@@ -19,22 +19,22 @@ size someone picked yesterday.
 
 They are all the same page, and they all hold the same state. This pattern fixes that page: **one
 skeleton**, **one collection model** (`useCollection`), and **one rule for which columns become filter
-properties**. [Tables](../webkit-tables/SKILL.md) owns what happens inside the `Table` — the column model and the cell
+properties**. [Tables](../azion-ui-tables/SKILL.md) owns what happens inside the `Table` — the column model and the cell
 recipes. This pattern owns everything around it: the page's structure, the controls row, and the state
 that connects them.
 
-Find the components named here through the `webkit` MCP (`suggest_component` / `get_component`) or
-`node_modules/@aziontech/webkit/catalog.json`.
+Find the components named here through the `azion-ui` MCP (`suggest_component` / `get_component`) or
+`node_modules/@aziontech/ui/catalog.json`.
 
 ## How to use
 
-- [List pages](../webkit-lists/SKILL.md) — build any index page in this conversation to the shape below.
-- `/webkit-lists <file>` — review that page against the patterns; per gap report the exact line/element
+- [List pages](../azion-ui-lists/SKILL.md) — build any index page in this conversation to the shape below.
+- `/azion-ui-lists <file>` — review that page against the patterns; per gap report the exact line/element
   (quoted), which pattern it breaks (one sentence), and the concrete fix.
 
-Related: [Tables](../webkit-tables/SKILL.md) (the Table, columns, cells) · [Navigation](../webkit-navigation/SKILL.md) (the app shell the page sits
-in) · [Loading, empty and error states](../webkit-ui-states/SKILL.md) (the empty and loading states a filtered list must render) ·
-[Interface text](../webkit-microcopy/SKILL.md) (field labels, the empty-state sentence).
+Related: [Tables](../azion-ui-tables/SKILL.md) (the Table, columns, cells) · [Navigation](../azion-ui-navigation/SKILL.md) (the app shell the page sits
+in) · [Loading, empty and error states](../azion-ui-states/SKILL.md) (the empty and loading states a filtered list must render) ·
+[Interface text](../azion-ui-microcopy/SKILL.md) (field labels, the empty-state sentence).
 
 ## When to invoke
 
@@ -53,13 +53,13 @@ the band is one `useCollection` call:
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import DataTable from '@aziontech/webkit/data-table'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import DataTable from '@aziontech/ui/data-table'
+  import { useCollection } from '@aziontech/ui/use-collection'
 
   const { tableProps, propertyFilterProps, preferencesProps, status, clearFilters } = useCollection(
     {
@@ -133,23 +133,23 @@ the band is one `useCollection` call:
 </template>
 ```
 
-**A first-level module index opens with a `PageHeader` (`@aziontech/webkit/page-header`), and the module's
+**A first-level module index opens with a `PageHeader` (`@aziontech/ui/page-header`), and the module's
 create action lives in it.** `ConsoleLayout` passes no breadcrumb on a first-level page; the trail
-starts at the **second** level ([Navigation](../webkit-navigation/SKILL.md)), so the heading is the only place the module's
+starts at the **second** level ([Navigation](../azion-ui-navigation/SKILL.md)), so the heading is the only place the module's
 name appears. Title, one line of what the module is, `size="medium"`, and the create button in
 `#actions`. The page is only a body in the layout's default slot: it sets its own `layout-boundary` and
-column, and renders no `<main>` ([Page layout](../webkit-layout/SKILL.md)).
+column, and renders no `<main>` ([Page layout](../azion-ui-layout/SKILL.md)).
 
 **One height in the heading, colour for emphasis.** Every action in the `PageHeader` actions slot is
 `size="medium"` (32px), the create action included: buttons side by side share one height
-(`/webkit-quick-cleanup`, control size rhythm). The create action stands out by colour, `variant="primary"`;
+(`/azion-ui-quick-cleanup`, control size rhythm). The create action stands out by colour, `variant="primary"`;
 Documentation and any other action stay `variant="outline"`. The controls row below is `medium` too.
 What the page is _for_ reads first because it is the one primary button, not because it is taller.
 
 **Where each action goes.** The page's create action is the heading's. An action on the **listing** — a
 bulk operation over the selected rows — sits in the controls row beside the preferences. Never move the
 create button onto the controls row. The label reads `Create <object>` for a list the sidebar routes to,
-`Add <Product Module>` for a list that is a tab inside a resource ([Interface text](../webkit-microcopy/SKILL.md)).
+`Add <Product Module>` for a list that is a tab inside a resource ([Interface text](../azion-ui-microcopy/SKILL.md)).
 
 **The controls and the table are ONE band**, joined by the group step (`--layout-group-gap`), not the
 section step. Pushing the filter a full section step away from the rows it narrows is the single most
@@ -242,7 +242,7 @@ const properties = [
 - **Reference column (another resource: the organization, the assignee) → a property whose values
   come from `loadValues`**, the `PropertyFilter` prop that fetches the values for the typed text. The
   suggestion and the token print the name, the query keeps the ID; nobody types an ID into a filter.
-  It is the filter form of the searchable picker in [Forms](../webkit-form/SKILL.md) (Pick the control from the kind of value).
+  It is the filter form of the searchable picker in [Forms](../azion-ui-form/SKILL.md) (Pick the control from the kind of value).
 - **Date column on a time-ordered list → a `DateRangePicker` next to the filter** when the period is
   the main question (logs, activity, invoices); a `type: 'date'` property when it is one filter among
   many. Never a text token holding an ISO date.
@@ -268,7 +268,7 @@ Bind `totalCount` (it comes in `propertyFilterProps`) so the count is announced 
   flush `Card` with a medium `EmptyState` and the create action instead of the table.
 - **`no-match`** — the filters hide everything: the table's `#empty` slot with an `EmptyState` that says
   so ("No applications match these filters") and a **Clear filters** button bound to `clearFilters`.
-- **`error`** — an `Alert` above the table with a retry bound to `refresh` ([Loading, empty and error states](../webkit-ui-states/SKILL.md)).
+- **`error`** — an `Alert` above the table with a retry bound to `refresh` ([Loading, empty and error states](../azion-ui-states/SKILL.md)).
 
 ---
 
@@ -278,7 +278,7 @@ Bind `totalCount` (it comes in `propertyFilterProps`) so the count is announced 
   the page (`page`) and the page size (`size`) in the query string through `history.replaceState`, and
   reads them back on load and on back/forward. Other query keys are left alone. Two lists on one page
   pass `url: { prefix: 'domains.' }`. With Vue Router, pass `url: { adapter: routerAdapter(useRouter()) }`
-  (`routerAdapter` from `@aziontech/webkit/use-collection`), which also works during server rendering.
+  (`routerAdapter` from `@aziontech/ui/use-collection`), which also works during server rendering.
 - **`preferences: { storageKey }`** saves the page size, the visible columns and their order, wrapped
   lines, striped rows, density and the widths of the columns someone resized in `localStorage` under
   that key, read after mount so server and
@@ -306,7 +306,7 @@ default), so it survives paging, sorting and filtering (a filter drops the keys 
 ## 7. CardList — the same collection, as cards
 
 When items are recognised by a few fields or a picture rather than compared column by column, render
-`CardList` (`@aziontech/webkit/card-list`) with `cardListProps` and a `Pagination` with `paginationProps`. The same
+`CardList` (`@aziontech/ui/card-list`) with `cardListProps` and a `Pagination` with `paginationProps`. The same
 `useCollection` call drives it; the preferences panel then offers `sections: ['page-size', 'columns']`,
 the "columns" being the fields each card shows. Name each card in the `header` slot with a link to the
 item. Four cards a row in a wide container, one in a narrow one — the grid uses container queries.
@@ -321,7 +321,7 @@ item. Four cards a row in a wide container, one in a narrow one — the grid use
 - The controls row and the table are **one band** at the group step — never a section step between the
   filter and the rows it narrows.
 - A first-level module index **opens with a `PageHeader`** (`size="medium"`) carrying the create action.
-- **Every heading action is `medium`; the create action is the one `primary`, the rest `outline`.** The whole controls row is `medium` too (`webkit/consistent-header-action-size`).
+- **Every heading action is `medium`; the create action is the one `primary`, the rest `outline`.** The whole controls row is `medium` too (`azion-ui/consistent-header-action-size`).
 - `Card :padded="false"` + `Table :bordered="false"` — never a padded card around a bordered table.
 - **One `PropertyFilter`** narrows the list — no row of Selects, no separate search field beside it, no
   badged funnel button.
@@ -358,12 +358,12 @@ Close with `List sound` or `N gaps — fix before polish`.
 
 ## References
 
-- [Showing API data](../webkit-api-data/SKILL.md) — server-owned lists, the default order, a new item on the first page, and
+- [Showing API data](../azion-ui-api-data/SKILL.md) — server-owned lists, the default order, a new item on the first page, and
   reference columns rendered by name.
-- [Tables](../webkit-tables/SKILL.md) — the `Table`, the column model and the cell recipes inside the card.
-- [Navigation](../webkit-navigation/SKILL.md) — the shell the page sits in and how its nav row is activated.
-- [Loading, empty and error states](../webkit-ui-states/SKILL.md) — the loading skeleton, the error alert, and the empty vs no-match states.
-- [Interface text](../webkit-microcopy/SKILL.md) — property labels, the empty-state sentences, the filter placeholder.
+- [Tables](../azion-ui-tables/SKILL.md) — the `Table`, the column model and the cell recipes inside the card.
+- [Navigation](../azion-ui-navigation/SKILL.md) — the shell the page sits in and how its nav row is activated.
+- [Loading, empty and error states](../azion-ui-states/SKILL.md) — the loading skeleton, the error alert, and the empty vs no-match states.
+- [Interface text](../azion-ui-microcopy/SKILL.md) — property labels, the empty-state sentences, the filter placeholder.
 - Blocks: `view/view-table` (rows) and `view/view-card` (cards).
 - Resolvable through the MCP or the catalog: `useCollection`, `PropertyFilter`, `CollectionPreferences`,
   `Table`, `CardList`, `Pagination`, `Card`, `EmptyState`, `Button`.
@@ -381,4 +381,4 @@ Close with `List sound` or `N gaps — fix before polish`.
 - `url: true` (or a router adapter) on any list someone will share or reload.
 - `preferences.storageKey` unique to the list; the naming column is locked.
 - Bulk actions count the selection; "Select all N items" uses `selectAllMatching`.
-- Verified in both themes with `/webkit-ui-verify`.
+- Verified in both themes with `/azion-ui-verify`.

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 05f9478a7fcc49088da1aa532cc091933c3ed31dcb9e50f8e7fb51dc25ff414f
+checksum: 881fb0aa03635b1e55be4fce23f9cc0faa886a710e2d1bf2e399418d0ae352d6
 created: 2026-06-26
 last_updated: 2026-11-25
 ---
@@ -55,8 +55,8 @@ Overlay menu that opens from a consumer-supplied trigger and renders a list of s
 
 ```vue
 <script setup>
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Button from '@aziontech/webkit/button'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import Button from '@aziontech/ui/button'
 
   const onSelect = (event, value) => {
     console.log(value)
@@ -106,13 +106,13 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ```vue
 <script setup>
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuSub from '@aziontech/webkit/dropdown-menu-sub'
-  import DropdownMenuSubTrigger from '@aziontech/webkit/dropdown-menu-sub-trigger'
-  import DropdownMenuSubContent from '@aziontech/webkit/dropdown-menu-sub-content'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenuSub from '@aziontech/ui/dropdown-menu-sub'
+  import DropdownMenuSubTrigger from '@aziontech/ui/dropdown-menu-sub-trigger'
+  import DropdownMenuSubContent from '@aziontech/ui/dropdown-menu-sub-content'
 </script>
 ```
 
@@ -161,7 +161,7 @@ Sub-menus and checkable options:
 
 ## Sub-components
 
-- `dropdown-menu-trigger/dropdown-menu-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `panelId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) that carries `data-testid`, `data-state` and `data-disabled` and listens for the bubbling `click` / `keydown`. It gives `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which also becomes the positioning anchor and the focus-return target. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. So an `IconButton`, a `Button`, or either wrapped in a `Tooltip` is the one tab stop and the one ARIA owner — no nested interactive control. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled); for these and for native elements this is in the server HTML too.
+- `dropdown-menu-trigger/dropdown-menu-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `panelId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) that carries `data-testid`, `data-state` and `data-disabled` and listens for the bubbling `click` / `keydown`. It gives `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which also becomes the positioning anchor and the focus-return target. When the first node in the slot is an Azion UI `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. So an `IconButton`, a `Button`, or either wrapped in a `Tooltip` is the one tab stop and the one ARIA owner — no nested interactive control. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled); for these and for native elements this is in the server HTML too.
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The trigger forwards aria + click; the consumer must not bind those props itself.
@@ -218,7 +218,7 @@ Sub-menus and checkable options:
 | -------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuItemValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type="checkbox"` / `type="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
 
-**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuItemValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuSide` and `DropdownMenuAlign` (the `side` and `align` props), so a `select` handler is typed without a local alias.
+**Types.** `@aziontech/ui/dropdown-menu` (and `-root`) export `DropdownMenuItemValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuSide` and `DropdownMenuAlign` (the `side` and `align` props), so a `select` handler is typed without a local alias.
 
 ## Slots
 
@@ -358,7 +358,7 @@ Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

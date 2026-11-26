@@ -3,4 +3,4 @@
 @import '@aziontech/icons/azionicons-color-utilities';
 @import '../../.build/css/docs.css';
 @source '../';
-@source '../../../../packages/webkit/catalog.json';
+@source '../../../../packages/ui/catalog.json';

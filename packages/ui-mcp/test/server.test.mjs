@@ -10,7 +10,7 @@ const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url),
 
 function startServer() {
   const env = { ...process.env }
-  delete env.WEBKIT_CATALOG_PATH
+  delete env.AZION_UI_CATALOG_PATH
   const child = spawn(process.execPath, [SERVER], {
     cwd: PKG_ROOT,
     env,
@@ -48,29 +48,29 @@ function startServer() {
   return { child, request, notify, stderr: () => stderr }
 }
 
-test('the bin points at the server and the package depends on @aziontech/webkit', () => {
-  assert.equal(pkg.bin['webkit-mcp'], './src/server.js')
-  assert.ok(pkg.dependencies['@aziontech/webkit'])
+test('the bin points at the server and the package depends on @aziontech/ui', () => {
+  assert.equal(pkg.bin['azion-ui-mcp'], './src/server.js')
+  assert.ok(pkg.dependencies['@aziontech/ui'])
   assert.ok(pkg.dependencies['@modelcontextprotocol/sdk'])
   assert.ok(pkg.dependencies.zod)
 })
 
-test('the server imports the query engine from the published @aziontech/webkit export', () => {
+test('the server imports the query engine from the published @aziontech/ui export', () => {
   const source = readFileSync(SERVER, 'utf8')
-  assert.match(source, /from '@aziontech\/webkit\/catalog-queries'/)
+  assert.match(source, /from '@aziontech\/ui\/catalog-queries'/)
   assert.doesNotMatch(source, /\.\.\/[^']*src\//)
 })
 
-test('the server answers over stdio from the installed @aziontech/webkit catalog', async (t) => {
+test('the server answers over stdio from the installed @aziontech/ui catalog', async (t) => {
   const server = startServer()
   t.after(() => server.child.kill())
 
   const init = await server.request('initialize', {
     protocolVersion: '2025-06-18',
     capabilities: {},
-    clientInfo: { name: 'webkit-mcp-test', version: '0.0.0' }
+    clientInfo: { name: 'azion-ui-mcp-test', version: '0.0.0' }
   })
-  assert.equal(init.result.serverInfo.name, '@aziontech/webkit-mcp')
+  assert.equal(init.result.serverInfo.name, '@aziontech/ui-mcp')
   assert.equal(init.result.serverInfo.version, pkg.version)
   server.notify('notifications/initialized')
 
@@ -104,7 +104,7 @@ test('the server answers over stdio from the installed @aziontech/webkit catalog
   assert.deepEqual(undocumented, [], 'document every tool and argument in README.md')
 
   const vocabulary = JSON.parse(
-    readFileSync(new URL('../../webkit/catalog.json', import.meta.url), 'utf8')
+    readFileSync(new URL('../../ui/catalog.json', import.meta.url), 'utf8')
   ).vocabulary.props
   const preferred = []
   for (const tool of list.result.tools) {
@@ -127,7 +127,7 @@ test('the server answers over stdio from the installed @aziontech/webkit catalog
     arguments: { name: 'button' }
   })
   const answer = JSON.parse(call.result.content[0].text)
-  assert.equal(answer.importPath, '@aziontech/webkit/button')
+  assert.equal(answer.importPath, '@aziontech/ui/button')
   const page = async (args) =>
     JSON.parse(
       (await server.request('tools/call', { name: 'list_components', arguments: args })).result
@@ -167,5 +167,5 @@ test('the server answers over stdio from the installed @aziontech/webkit catalog
   assert.ok(block.guidelines)
   assert.deepEqual(block.omitted, ['sfc'])
 
-  assert.match(server.stderr(), /webkit-mcp ready \(webkit \d+\.\d+\.\d+, \d+ exports\)/)
+  assert.match(server.stderr(), /@aziontech\/ui-mcp ready \(Azion UI \d+\.\d+\.\d+, \d+ exports\)/)
 })

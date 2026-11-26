@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Combobox from '@aziontech/webkit/combobox'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import Combobox from '@aziontech/ui/combobox'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
   import { computed, ref, watch } from 'vue'
 
   import type { CreateTicketAgent, CreateTicketGroup } from './create-ticket.vue'

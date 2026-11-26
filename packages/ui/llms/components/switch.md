@@ -2,7 +2,7 @@
 
 > Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `az-lock` / `az-lock-open` icon mirroring the toggled state; exactly one glyph renders, chosen by the toggled state with `v-if` / `v-else`, so the handle never shows both locks). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
 
-- Import: `import Switch from '@aziontech/webkit/switch'`
+- Import: `import Switch from '@aziontech/ui/switch'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [switch.json](switch.json)
 
@@ -80,7 +80,7 @@
 
 ```vue
 <script setup>
-  import Switch from '@aziontech/webkit/switch'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const modelValue = ref(false)
@@ -98,7 +98,7 @@
 
 ```vue
 <script setup>
-  import Switch from '@aziontech/webkit/switch'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const defaultOff = ref(false)
@@ -137,7 +137,7 @@
 
 ```vue
 <script setup>
-  import Switch from '@aziontech/webkit/switch'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const lockedOff = ref(false)

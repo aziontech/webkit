@@ -1,11 +1,8 @@
 <script setup lang="ts">
-  import FlowDiagramBind from '@aziontech/webkit/flow-diagram-bind'
-  import type {
-    FlowDiagramEdgeData,
-    FlowDiagramNodeData
-  } from '@aziontech/webkit/flow-diagram-root'
-  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
-  import Subheader from '@aziontech/webkit/subheader'
+  import FlowDiagramBind from '@aziontech/ui/flow-diagram-bind'
+  import type { FlowDiagramEdgeData, FlowDiagramNodeData } from '@aziontech/ui/flow-diagram-root'
+  import FlowDiagram from '@aziontech/ui/flow-diagram-root'
+  import Subheader from '@aziontech/ui/subheader'
   import { ref } from 'vue'
 
   export interface TopologyPanelProps {

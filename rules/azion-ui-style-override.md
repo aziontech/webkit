@@ -1,8 +1,8 @@
-# Rule: never restyle a webkit component with class/style
+# Rule: never restyle an Azion UI component with class/style
 
 The design system owns each component's appearance. Putting `class`, `:class`, `style`, or
-`:style` on a webkit component tag overrides its tokens, breaks light/dark theming, and
-makes upgrades unpredictable. The `webkit/no-style-override` ESLint rule blocks it as an
+`:style` on an Azion UI component tag overrides its tokens, breaks light/dark theming, and
+makes upgrades unpredictable. The `azion-ui/no-style-override` ESLint rule blocks it as an
 **error** — this rule is why, and what to do instead.
 
 ## The one exception: layout utilities
@@ -23,16 +23,16 @@ never change how it looks. The full list: `w-full`, `h-full`, `max-w-*`, `min-w-
 
 Each may carry a breakpoint prefix (`sm:`, `md:`, `lg:`, `xl:`, `2xl:`), because placement in a
 grid changes with the width: `<Field class="col-span-2 lg:col-span-1" />`. Margins are the logical
-ones only (`ms-*`/`me-*`, never `ml-*`/`mr-*`; see `webkit-direction.md`), and a negative margin
+ones only (`ms-*`/`me-*`, never `ml-*`/`mr-*`; see `azion-ui-direction.md`), and a negative margin
 is not placement. Any other class on the same tag still fails, and so does a bound `:class`, a state
 prefix (`hover:mt-2`, `dark:w-full`) or a non-layout utility behind a breakpoint (`lg:p-4`). The list
-is the `LAYOUT_CLASS_FAMILIES` export of `@aziontech/webkit/eslint-plugin`; the MCP's
+is the `LAYOUT_CLASS_FAMILIES` export of `@aziontech/ui/eslint-plugin`; the MCP's
 `get_component` (`allowedClasses`) and `validate_usage` (with `component`) read the same list.
 
 ## The second exception: the chart palette variables
 
 A dashboard may re-colour its charts by setting the **chart palette variables** on a container,
-including a webkit tag (`DashboardGrid`, `ChartCard`, a page component): the charts inside read them
+including an Azion UI tag (`DashboardGrid`, `ChartCard`, a page component): the charts inside read them
 by inheritance. This is how the console API offers palettes other than the default. Exactly these
 variables are allowed, nothing else on the same attribute:
 
@@ -48,8 +48,8 @@ Write them as a static `style` (`style="--chart-series-1: var(--palette-1)"`), a
 cannot be checked and stays blocked: spell the keys out, or set the variables on your own wrapper
 element (never checked). `--chart-series-other`, `--chart-status-*`, the severity, grid, axis, label,
 crosshair and tooltip variables are fixed: they mean a state or draw the chart's chrome. The list is
-the `CHART_PALETTE_VARIABLES` export of `@aziontech/webkit/eslint-plugin`; the full palette contract
-is in `webkit-tokens.md` § "Chart palettes".
+the `CHART_PALETTE_VARIABLES` export of `@aziontech/ui/eslint-plugin`; the full palette contract
+is in `azion-ui-tokens.md` § "Chart palettes".
 
 ## Do
 
@@ -70,11 +70,11 @@ is in `webkit-tokens.md` § "Chart palettes".
 - Never mix a layout utility with anything else (`<Button class="w-full p-4" />`): padding,
   gap, colour and type change the component itself; put them on a wrapper element.
 - Never `<Dialog style="width: 800px" />` — same.
-- Never set a `--chart-*` variable outside the palette list on a webkit tag (`--chart-status-danger`,
+- Never set a `--chart-*` variable outside the palette list on an Azion UI tag (`--chart-status-danger`,
   `--chart-axis`): status and chrome colours are fixed.
-- Never wrap a webkit component in a styled element just to force different spacing/colors
+- Never wrap an Azion UI component in a styled element just to force different spacing/colors
   through inheritance or CSS descendant selectors targeting its internals.
-- Never `!important` against a webkit class, and never target its `data-testid`/internal
+- Never `!important` against an Azion UI class, and never target its `data-testid`/internal
   markup from your stylesheets.
 
 ## Example

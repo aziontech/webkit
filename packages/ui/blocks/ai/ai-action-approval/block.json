@@ -24,7 +24,7 @@
     "approve an agent action",
     "tool approval in chat"
   ],
-  "skills": ["webkit-ai-surfaces", "webkit-ui-states", "webkit-errors"],
+  "skills": ["azion-ui-ai-surfaces", "azion-ui-states", "azion-ui-errors"],
   "primary": {
     "name": "Pending",
     "file": "ai-action-approval.vue"

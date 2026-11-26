@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url'
 
 import {
   claudeArgs,
-  collectWebkitImports,
+  collectAzionUiImports,
   createUsageApp,
   evaluateUsage,
   formatUsageReport,
@@ -35,7 +35,7 @@ const writeVue = (app, rel, imports) => {
   mkdirSync(dirname(file), { recursive: true })
   writeFileSync(
     file,
-    `<script setup lang="ts">\n${imports.map((s, i) => `import C${i} from '@aziontech/webkit/${s}'`).join('\n')}\n</script>\n<template><main /></template>\n`
+    `<script setup lang="ts">\n${imports.map((s, i) => `import C${i} from '@aziontech/ui/${s}'`).join('\n')}\n</script>\n<template><main /></template>\n`
   )
 }
 
@@ -73,33 +73,33 @@ test('resolveTarget finds a component export and a block by id, suffix or name',
 test('createUsageApp writes a clean Vite + Vue app on the packed tarballs', () => {
   withDir((work) => {
     const app = createUsageApp(work, {
-      webkitTgz: '/t/webkit.tgz',
+      azionUiTgz: '/t/ui.tgz',
       themeTgz: '/t/theme.tgz',
       iconsTgz: '/t/icons.tgz',
-      webkitMcpTgz: '/t/webkit-mcp.tgz'
+      azionUiMcpTgz: '/t/azion-ui-mcp.tgz'
     })
     const pkg = JSON.parse(readFileSync(join(app, 'package.json'), 'utf8'))
-    assert.equal(pkg.dependencies['@aziontech/webkit'], 'file:/t/webkit.tgz')
-    assert.equal(pkg.devDependencies['@aziontech/webkit-mcp'], 'file:/t/webkit-mcp.tgz')
+    assert.equal(pkg.dependencies['@aziontech/ui'], 'file:/t/ui.tgz')
+    assert.equal(pkg.devDependencies['@aziontech/ui-mcp'], 'file:/t/azion-ui-mcp.tgz')
     assert.ok(pkg.devDependencies.vite)
     for (const f of ['vite.config.mjs', 'index.html', 'src/main.ts', 'pnpm-workspace.yaml']) {
       assert.ok(existsSync(join(app, f)), f)
     }
-    assert.deepEqual(collectWebkitImports(app).imports.size, 0)
+    assert.deepEqual(collectAzionUiImports(app).imports.size, 0)
   })
 })
 
-test('pinMcpToInstalledPackage points the webkit server at the installed package', () => {
+test('pinMcpToInstalledPackage points the Azion UI server at the installed package', () => {
   withDir((app) => {
     writeFileSync(
       join(app, '.mcp.json'),
-      JSON.stringify({ mcpServers: { other: { command: 'x' }, webkit: { command: 'npx' } } })
+      JSON.stringify({ mcpServers: { other: { command: 'x' }, 'azion-ui': { command: 'npx' } } })
     )
     const config = pinMcpToInstalledPackage(app)
-    assert.equal(config.mcpServers.webkit.command, 'node')
+    assert.equal(config.mcpServers['azion-ui'].command, 'node')
     assert.match(
-      config.mcpServers.webkit.args[0],
-      /node_modules\/@aziontech\/webkit-mcp\/src\/server\.js$/
+      config.mcpServers['azion-ui'].args[0],
+      /node_modules\/@aziontech\/ui-mcp\/src\/server\.js$/
     )
     assert.deepEqual(config.mcpServers.other, { command: 'x' })
   })
@@ -109,12 +109,12 @@ test('evaluateUsage passes a component imported by a generated .vue and doctor e
   withDir((app) => {
     writeVue(app, 'src/components/Deploy.vue', ['button', 'card'])
     const target = resolveTarget('button')
-    const scan = collectWebkitImports(app)
+    const scan = collectAzionUiImports(app)
     assert.deepEqual(scan.files, ['src/components/Deploy.vue'])
     assert.equal(evaluateUsage({ target, scan, doctorExitCode: 0 }).pass, true)
     const doctorFail = evaluateUsage({ target, scan, doctorExitCode: 1 })
     assert.equal(doctorFail.pass, false)
-    assert.equal(doctorFail.checks.find((c) => c.name === 'webkit doctor').pass, false)
+    assert.equal(doctorFail.checks.find((c) => c.name === 'azion-ui doctor').pass, false)
   })
 })
 
@@ -123,7 +123,7 @@ test('evaluateUsage fails when the expected component is not imported', () => {
     writeVue(app, 'src/App.vue', ['card'])
     const verdict = evaluateUsage({
       target: resolveTarget('button'),
-      scan: collectWebkitImports(app),
+      scan: collectAzionUiImports(app),
       doctorExitCode: 0
     })
     assert.equal(verdict.pass, false)
@@ -138,7 +138,7 @@ test('evaluateUsage measures block use by the share of its imports', () => {
   const target = { kind: 'block', id: 'x/y', expected: ['a', 'b', 'c', 'd', 'e'] }
   withDir((app) => {
     writeVue(app, 'src/App.vue', ['a', 'b', 'c', 'd'])
-    const scan = collectWebkitImports(app)
+    const scan = collectAzionUiImports(app)
     assert.equal(evaluateUsage({ target, scan, doctorExitCode: 0 }).pass, true)
     assert.equal(evaluateUsage({ target, scan, doctorExitCode: 0, minCoverage: 1 }).pass, false)
   })
@@ -154,7 +154,7 @@ test('claudeArgs and parseClaudeResult match the documented session', () => {
   )
   assert.equal(args[args.indexOf('--permission-mode') + 1], 'acceptEdits')
   const allowed = args[args.indexOf('--allowedTools') + 1].split(',')
-  assert.ok(allowed.includes('mcp__webkit'))
+  assert.ok(allowed.includes('mcp__azion-ui'))
   assert.ok(
     allowed.every((tool) => !/^Bash$|^Bash\(\*|WebFetch|WebSearch/.test(tool)),
     allowed.join(',')
@@ -196,7 +196,7 @@ test('every fixed task names a real component and never tells the agent its name
     const prompt = task.prompt.toLowerCase()
     assert.ok(!prompt.includes(pascal.toLowerCase()), `${task.id}: the prompt names ${pascal}`)
     assert.ok(!prompt.includes(task.target), `${task.id}: the prompt names ${task.target}`)
-    assert.ok(!prompt.includes('webkit'), `${task.id}: the prompt names WebKit`)
+    assert.ok(!/azion[- ]ui/.test(prompt), `${task.id}: the prompt names Azion UI`)
   }
 })
 

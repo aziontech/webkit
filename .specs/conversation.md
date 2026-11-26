@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: e2a3ca8fd620cd5a3ed13afb9f30a5fdb6f96911bc3703241ef56dc057472327
+checksum: 7782e028fcb1c26ba907c6027526745c56bfec7b4da4ee30f2d9acb6e4fce29f
 created: 2026-11-11
 last_updated: 2026-11-23
 ---
@@ -64,9 +64,9 @@ to latest button floats just above it.
 
 ```vue
 <script setup>
-  import Conversation from '@aziontech/webkit/conversation'
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import Conversation from '@aziontech/ui/conversation'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
 </script>
 
 <template>
@@ -210,7 +210,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/conversation/`: Default (a short thread with the composer in `composer`), Drawer layout (`start`), Long thread (scroll to latest above the floating composer), Earlier messages (`more-messages` + `@load-more` prepending three turns after a simulated delay; justified: a distinct behavior with its own loading state)._
+_Examples in `packages/ui/examples/conversation/`: Default (a short thread with the composer in `composer`), Drawer layout (`start`), Long thread (scroll to latest above the floating composer), Earlier messages (`more-messages` + `@load-more` prepending three turns after a simulated delay; justified: a distinct behavior with its own loading state)._
 
 ## Constraints — DO NOT
 
@@ -219,7 +219,7 @@ _Examples in `packages/webkit/examples/conversation/`: Default (a short thread w
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

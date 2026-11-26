@@ -2,7 +2,7 @@ import typescriptParser from '@typescript-eslint/parser'
 import vuejsAccessibility from 'eslint-plugin-vuejs-accessibility'
 import vueParser from 'vue-eslint-parser'
 
-import webkit from './src/eslint-plugin/index.js'
+import azionUi from './src/eslint-plugin/index.js'
 
 const UNBREAKABLE_LINE = [
   '^\\s*(d|points)="',
@@ -87,10 +87,10 @@ export default [
       'blocks/**/*.{js,ts,vue}',
       'examples/**/*.{js,ts,vue}'
     ],
-    plugins: { webkit },
+    plugins: { 'azion-ui': azionUi },
     rules: {
-      'webkit/no-unowned-element': ['error', { owners: true }],
-      'webkit/prefer-hint': 'error'
+      'azion-ui/no-unowned-element': ['error', { owners: true }],
+      'azion-ui/prefer-hint': 'error'
     }
   }
 ]

@@ -1,8 +1,8 @@
 {
  "name": "tag-editor",
  "binding": "TagEditor",
- "import": "@aziontech/webkit/tag-editor",
- "treeShakeableImport": "@aziontech/webkit/tag-editor",
+ "import": "@aziontech/ui/tag-editor",
+ "treeShakeableImport": "@aziontech/ui/tag-editor",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

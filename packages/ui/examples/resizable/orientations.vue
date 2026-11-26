@@ -1,5 +1,5 @@
 <script setup>
-  import Resizable from '@aziontech/webkit/resizable'
+  import Resizable from '@aziontech/ui/resizable'
 </script>
 
 <template>

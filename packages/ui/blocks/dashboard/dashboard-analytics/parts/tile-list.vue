@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Hint from '@aziontech/webkit/hint'
-  import StatTile, { type StatTileVariant } from '@aziontech/webkit/stat-tile'
+  import Hint from '@aziontech/ui/hint'
+  import StatTile, { type StatTileVariant } from '@aziontech/ui/stat-tile'
 
   /** One tile of the list. */
   export interface TileListItem {

@@ -8,7 +8,7 @@ test('docs/migration-v6-maps.md is generated from the current migration maps', (
   assert.equal(
     readFileSync(OUT, 'utf8'),
     renderMaps(),
-    'run pnpm --filter @aziontech/webkit build:migration-maps'
+    'run pnpm --filter @aziontech/ui build:migration-maps'
   )
 })
 
@@ -18,7 +18,7 @@ test('the appendix lists a rename from each map', () => {
     '| components | `paginator` | `pagination` |',
     '| button | `kind` | `variant` |',
     '|  | `actions-button` | `button` |',
-    '|  | `webkit/accessible-name` | `webkit/require-accessible-name` |'
+    '|  | `azion-ui/accessible-name` | `azion-ui/require-accessible-name` |'
   ])
     assert.ok(text.includes(row), row)
 })

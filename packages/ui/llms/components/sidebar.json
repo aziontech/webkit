@@ -1,15 +1,15 @@
 {
  "name": "sidebar",
  "binding": "Sidebar",
- "import": "@aziontech/webkit/sidebar",
- "treeShakeableImport": "@aziontech/webkit/sidebar-root",
+ "import": "@aziontech/ui/sidebar",
+ "treeShakeableImport": "@aziontech/ui/sidebar-root",
  "category": "layout",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/sidebar-header",
-  "@aziontech/webkit/sidebar-footer"
+  "@aziontech/ui/sidebar-header",
+  "@aziontech/ui/sidebar-footer"
  ],
  "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. `collapsible=\"icon\"` collapses to an **icon rail** instead of leaving the layout, and `shortcut` adds the Ctrl+B / Cmd+B toggle. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected.",
  "setup": null,

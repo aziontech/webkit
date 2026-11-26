@@ -2,7 +2,7 @@
 
 > Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. With `reveal="hover"` each column is one card instead: the client's reversed logo on its brand face, which opens while hovered or focused to reveal the story line and a "Read story" cue, the whole card linking to the case; below the large breakpoint those cards stack and stay open. It is a page section — the site places it from a `{ _id: 'client-story-columns-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame` and `logo-wall`. The retired `'customer-spotlight'` `_id` resolves here with `reveal: 'hover'`.
 
-- Import: `import ClientStoryColumnsSection from '@aziontech/webkit/client-story-columns-section'`
+- Import: `import ClientStoryColumnsSection from '@aziontech/ui/client-story-columns-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [client-story-columns-section.json](client-story-columns-section.json)
 
@@ -14,7 +14,7 @@
 
 - Three cells for `reveal="always"` (the grid is three columns from the medium breakpoint); three or four for `reveal="hover"`, which shares the row between them.
 - With `reveal="hover"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).
-- Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
+- Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/ui/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
 - Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. Left out, the ink is chosen by measured contrast: a hex `base` on which white text would fall under 4.5:1 (WCAG AA) takes dark ink. A cell with neither paints a black face.
 
 ## Don’t
@@ -69,10 +69,10 @@
 
 ```vue
 <script setup>
-  import dafitiExtendedReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
-  import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
-  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import ClientStoryColumnsSection from '@aziontech/webkit/client-story-columns-section'
+  import dafitiExtendedReversed from '@aziontech/ui/assets/dafiti-extended-reversed.svg'
+  import madeiramadeiraExtendedReversed from '@aziontech/ui/assets/madeiramadeira-extended-reversed.svg'
+  import magaluExtendedColor from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import ClientStoryColumnsSection from '@aziontech/ui/client-story-columns-section'
 </script>
 
 <template>
@@ -113,10 +113,10 @@
 
 ```vue
 <script setup>
-  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
-  import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'
-  import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
-  import ClientStoryColumnsSection from '@aziontech/webkit/client-story-columns-section'
+  import agibankExtendedReversed from '@aziontech/ui/assets/agibank-extended-reversed.svg'
+  import americanasExtendedReversed from '@aziontech/ui/assets/americanas-extended-reversed.svg'
+  import arezzoExtendedReversed from '@aziontech/ui/assets/arezzo-extended-reversed.svg'
+  import ClientStoryColumnsSection from '@aziontech/ui/client-story-columns-section'
 
   const cells = [
     {

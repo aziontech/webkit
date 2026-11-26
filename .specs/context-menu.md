@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: 86a7115b027450c6618c19d8139f97336b64180ded8118bdcb01ee1750539234
+checksum: 2f9a8e816c837cdc1ff7ba341448ef1cbd879063ba9405fc02a4ef746125788f
 created: 2026-11-14
 last_updated: 2026-11-19
 ---
@@ -47,7 +47,7 @@ Menu of actions that opens at the pointer when the user right-clicks an area, pr
 
 ```vue
 <script setup>
-  import ContextMenu from '@aziontech/webkit/context-menu'
+  import ContextMenu from '@aziontech/ui/context-menu'
 
   const onSelect = (event, value) => {
     console.log(value)
@@ -100,10 +100,10 @@ Tree-shaking alternative — the root and trigger as standalone imports, with th
 
 ```vue
 <script setup>
-  import ContextMenu from '@aziontech/webkit/context-menu-root'
-  import ContextMenuTrigger from '@aziontech/webkit/context-menu-trigger'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
+  import ContextMenu from '@aziontech/ui/context-menu-root'
+  import ContextMenuTrigger from '@aziontech/ui/context-menu-trigger'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
 </script>
 ```
 
@@ -225,7 +225,7 @@ Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

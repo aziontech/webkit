@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Spinner from '@aziontech/webkit/spinner'
-  import Tag from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Spinner from '@aziontech/ui/spinner'
+  import Tag from '@aziontech/ui/tag'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   import { plural } from '../lib/release-impact'
   import type { ReleaseImpactProject, ReleaseImpactSettings } from '../types'

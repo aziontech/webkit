@@ -1,7 +1,7 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
-  import Tag from '@aziontech/webkit/tag'
+  import Field from '@aziontech/ui/field'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
+  import Tag from '@aziontech/ui/tag'
   import { ref, useId } from 'vue'
 
   const labelId = useId()

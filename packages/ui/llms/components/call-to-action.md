@@ -2,7 +2,7 @@
 
 > The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `module-header` opens a section, `call-to-action` closes one. Four registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line. `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight. `announcement` is the loud mid-page interruption: the announcement, its eyebrow and its actions in a wide leading column on the surface, and a short supporting note set large on a raised trailing column (a third of the band from `md` up, stacked under it below). The note is the `description`, or the default slot when it carries a link. `primary` is the loud close: one centred ask standing alone as a billboard, on the page canvas lit from above by the brand. The texture composed into the band — a pixelated layer whose two waves travel across it in the primary colour — is lit by its waves alone and carries the band's colour, so the ground stays the canvas and the copy keeps its ordinary ink. The texture is composed in through the `background` slot and the strip along the floor through `bottom`, so the band owns the light and the page owns what is drawn on it.
 
-- Import: `import CallToAction from '@aziontech/webkit/call-to-action'`
+- Import: `import CallToAction from '@aziontech/ui/call-to-action'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [call-to-action.json](call-to-action.json)
 
@@ -95,8 +95,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
+  import Button from '@aziontech/ui/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
 </script>
 
 <template>
@@ -119,8 +119,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
+  import Button from '@aziontech/ui/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
 </script>
 
 <template>
@@ -144,8 +144,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
+  import Button from '@aziontech/ui/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
 </script>
 
 <template>

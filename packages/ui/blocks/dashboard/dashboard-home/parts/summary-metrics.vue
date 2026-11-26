@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Hint from '@aziontech/webkit/hint'
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import Hint from '@aziontech/ui/hint'
+  import StatTile from '@aziontech/ui/stat-tile'
 
   import { homeMetricDefinitions } from '../home-metrics'
   import { sampleMetrics, sampleSummaryRange } from '../sample'

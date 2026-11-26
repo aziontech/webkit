@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6170
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/tabs/tabs-trigger.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/tabs/tabs-trigger.vue
 // component=TabsTrigger
 import figma from 'figma'
 
@@ -34,7 +34,7 @@ export default {
         }
 </Tabs.Trigger>`
       : figma.code`<Tabs.Trigger${attrs} />`,
-  imports: ["import Tabs from '@aziontech/webkit/tabs'"],
+  imports: ["import Tabs from '@aziontech/ui/tabs'"],
   id: 'tab-view-item',
   metadata: { nestable: true }
 }

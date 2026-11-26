@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import Hint from '@aziontech/webkit/hint'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import Hint from '@aziontech/ui/hint'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
 
   import type { SecurityAttentionEntry } from '../dashboard-security.vue'
 

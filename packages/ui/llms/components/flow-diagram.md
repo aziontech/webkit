@@ -2,8 +2,8 @@
 
 > The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old FlowDiagram parts and replaced TopologyDiagram in the 6.0 clean break. A naked root lays steps out and draws the connectors. **Data mode** (`nodes` + `edges`): edges set the columns and each node renders the richest card its data allows. **Composed mode**: hand-written parts in the default slot. `orientation="responsive"` lays the steps in a row only when the whole row fits its container, and stacks them into a rail otherwise.
 
-- Import: `import FlowDiagramRoot from '@aziontech/webkit/flow-diagram-root'`
-- Compound import (dot notation, not tree-shakeable): `import FlowDiagram from '@aziontech/webkit/flow-diagram'`
+- Import: `import FlowDiagramRoot from '@aziontech/ui/flow-diagram-root'`
+- Compound import (dot notation, not tree-shakeable): `import FlowDiagram from '@aziontech/ui/flow-diagram'`
 - Category: data · Surface: app · Structure: composition
 - API as JSON: [flow-diagram.json](flow-diagram.json)
 
@@ -56,15 +56,15 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/flow-diagram-node`
-- `@aziontech/webkit/flow-diagram-group`
-- `@aziontech/webkit/flow-diagram-anchor`
-- `@aziontech/webkit/flow-diagram-header`
-- `@aziontech/webkit/flow-diagram-title`
-- `@aziontech/webkit/flow-diagram-description`
-- `@aziontech/webkit/flow-diagram-footer`
-- `@aziontech/webkit/flow-diagram-item`
-- `@aziontech/webkit/flow-diagram-bind`
+- `@aziontech/ui/flow-diagram-node`
+- `@aziontech/ui/flow-diagram-group`
+- `@aziontech/ui/flow-diagram-anchor`
+- `@aziontech/ui/flow-diagram-header`
+- `@aziontech/ui/flow-diagram-title`
+- `@aziontech/ui/flow-diagram-description`
+- `@aziontech/ui/flow-diagram-footer`
+- `@aziontech/ui/flow-diagram-item`
+- `@aziontech/ui/flow-diagram-bind`
 
 ## Sub-components
 
@@ -131,7 +131,7 @@
 
 ```vue
 <script setup>
-  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
+  import FlowDiagram from '@aziontech/ui/flow-diagram-root'
   import { ref } from 'vue'
 
   const nodes = [
@@ -223,7 +223,7 @@
 
 ```vue
 <script setup>
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
+  import FlowDiagram from '@aziontech/ui/flow-diagram'
 </script>
 
 <template>
@@ -258,7 +258,7 @@
 
 ```vue
 <script setup>
-  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
+  import FlowDiagram from '@aziontech/ui/flow-diagram-root'
 
   const nodes = [
     {

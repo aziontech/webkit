@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import Button from '@aziontech/ui/button'
+  import PanelFooter from '@aziontech/ui/panel-footer'
 
   defineProps<{ submitLabel: string; submitting: boolean }>()
 

@@ -1,7 +1,7 @@
 {
-  "package": "@aziontech/webkit",
-  "webkitVersion": "9.9.9",
-  "deniedPrefixes": ["@aziontech/webkit/src/"],
+  "package": "@aziontech/ui",
+  "azionUiVersion": "9.9.9",
+  "deniedPrefixes": ["@aziontech/ui/src/"],
   "tokenRules": [
     {
       "id": "hex-color",
@@ -13,68 +13,68 @@
       "id": "tailwind-palette",
       "pattern": "\\b(?:bg|text|border)-(?:gray|red|blue|green)-\\d{2,3}\\b",
       "flags": "g",
-      "message": "Tailwind palette color. Use semantic webkit tokens."
+      "message": "Tailwind palette color. Use semantic Azion UI tokens."
     }
   ],
   "imports": {
     "button": {
-      "import": "@aziontech/webkit/button",
+      "import": "@aziontech/ui/button",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/button",
+      "treeShakeableImport": "@aziontech/ui/button",
       "structure": "monolithic",
       "props": [{ "name": "label" }, { "name": "kind" }],
       "slots": [{ "name": "prefix" }]
     },
     "card": {
-      "import": "@aziontech/webkit/card",
+      "import": "@aziontech/ui/card",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/card",
+      "treeShakeableImport": "@aziontech/ui/card",
       "styleSeam": true,
       "structure": "monolithic",
       "props": [{ "name": "title" }],
       "slots": [{ "name": "header" }, { "name": "content" }]
     },
     "chip": {
-      "import": "@aziontech/webkit/chip",
+      "import": "@aziontech/ui/chip",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/chip",
+      "treeShakeableImport": "@aziontech/ui/chip",
       "structure": "monolithic",
       "props": [{ "name": "removable" }]
     },
     "chips": {
-      "import": "@aziontech/webkit/chips",
+      "import": "@aziontech/ui/chips",
       "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/chips",
+      "treeShakeableImport": "@aziontech/ui/chips",
       "deprecated": true,
       "replacedBy": "chip"
     },
     "vite": {
-      "import": "@aziontech/webkit/vite",
+      "import": "@aziontech/ui/vite",
       "kind": "other",
-      "treeShakeableImport": "@aziontech/webkit/vite",
+      "treeShakeableImport": "@aziontech/ui/vite",
       "deprecated": true,
       "deprecation": "since 6.1 — nothing to pre-bundle. Removed in 7.0."
     },
     "table": {
-      "import": "@aziontech/webkit/table",
+      "import": "@aziontech/ui/table",
       "kind": "component",
       "compoundRoot": true,
-      "treeShakeableImport": "@aziontech/webkit/table-root",
-      "subcomponents": ["@aziontech/webkit/table-row"],
+      "treeShakeableImport": "@aziontech/ui/table-root",
+      "subcomponents": ["@aziontech/ui/table-row"],
       "structure": "composition",
       "slots": [{ "name": "default" }]
     },
     "table-root": {
-      "import": "@aziontech/webkit/table-root",
+      "import": "@aziontech/ui/table-root",
       "kind": "root",
       "rootOf": "table",
-      "treeShakeableImport": "@aziontech/webkit/table-root"
+      "treeShakeableImport": "@aziontech/ui/table-root"
     },
     "table-row": {
-      "import": "@aziontech/webkit/table-row",
+      "import": "@aziontech/ui/table-row",
       "kind": "subcomponent",
       "parent": "table",
-      "treeShakeableImport": "@aziontech/webkit/table-row"
+      "treeShakeableImport": "@aziontech/ui/table-row"
     }
   },
   "tokens": {

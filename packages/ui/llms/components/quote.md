@@ -2,7 +2,7 @@
 
 > A single customer testimonial: the quotation, who said it, and optionally the mark of the company they said it for. It is the smallest unit of social proof on a marketing page, and it is deliberately one quote — a wall of them is a layout built from several of these, not a prop on one. Three registers, one component. `inline` is the quiet unit that sits inside a cell of a larger band — the mark on a fixed band above the words, the quotation at the smallest heading size, and no quotation glyph, so a row of them reads as a row of claims. `signed` is the card-sized register a client sentence or an analyst report takes: the mark above, the quotation glyph, the quotation in body type, and the attribution stacked as the speaker (or the report) in the accent over their role (or its date). `highlight` is the featured register — the quotation set largest beside the company mark, which is given its own column at the quotation's first line; the speaker's likeness is drawn beside the attribution only when a `photo` is given. Every register attributes the same way: the name in the accent and the role in the muted ink, both in overline type, one over the other. The register changes the weight and the arrangement, never the anatomy: every register is one `figure` holding one `blockquote` and one `figcaption`, so the quotation and its attribution stay paired at the depth HTML requires.
 
-- Import: `import Quote from '@aziontech/webkit/quote'`
+- Import: `import Quote from '@aziontech/ui/quote'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [quote.json](quote.json)
 
@@ -87,8 +87,8 @@
 
 ```vue
 <script setup>
-  import Quote from '@aziontech/webkit/quote'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import Quote from '@aziontech/ui/quote'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 </script>
 
 <template>
@@ -111,9 +111,9 @@
 
 ```vue
 <script setup>
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import Quote from '@aziontech/webkit/quote'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import Quote from '@aziontech/ui/quote'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 </script>
 
 <template>
@@ -166,7 +166,7 @@
 
 ```vue
 <script setup>
-  import Quote from '@aziontech/webkit/quote'
+  import Quote from '@aziontech/ui/quote'
 </script>
 
 <template>

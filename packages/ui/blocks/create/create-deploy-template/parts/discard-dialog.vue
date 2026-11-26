@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import type { UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
 
   export interface DiscardDialogProps {
     /** The unsaved-changes guard whose leave dialog this renders. */

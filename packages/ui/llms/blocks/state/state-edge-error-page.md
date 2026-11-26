@@ -3,10 +3,10 @@
 > The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; one `orientation="responsive"` diagram, side by side when the row fits and stacked when it does not), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/state-error-page` instead.
 
 - Surface: edge
-- Source: `blocks/state/state-edge-error-page/state-edge-error-page.vue` in `@aziontech/webkit`
+- Source: `blocks/state/state-edge-error-page/state-edge-error-page.vue` in `@aziontech/ui`
 - MCP: `get_block("state/state-edge-error-page")`
 - Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CopyButton](../../components/copy-button.md), [FlowDiagram](../../components/flow-diagram.md), [KeyValueList](../../components/key-value-list.md), [StatusCode](../../components/status-code.md), [Timestamp](../../components/timestamp.md)
-- Skills: `webkit-errors`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-errors`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -148,18 +148,18 @@ Each variant is the same screen in another state: `get_block("state/state-edge-e
 
 ```vue
 <script setup lang="ts">
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
-  import CopyButton from '@aziontech/webkit/copy-button'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
+  import CopyButton from '@aziontech/ui/copy-button'
   import type {
     FlowDiagramEdgeData,
     FlowDiagramNodeData,
     FlowDiagramSeverity
-  } from '@aziontech/webkit/flow-diagram-root'
-  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import StatusCode from '@aziontech/webkit/status-code'
-  import Timestamp from '@aziontech/webkit/timestamp'
+  } from '@aziontech/ui/flow-diagram-root'
+  import FlowDiagram from '@aziontech/ui/flow-diagram-root'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import StatusCode from '@aziontech/ui/status-code'
+  import Timestamp from '@aziontech/ui/timestamp'
   import { computed, useId } from 'vue'
 
   /** The way back the primary button offers: reload the address, or open the site's home page. */

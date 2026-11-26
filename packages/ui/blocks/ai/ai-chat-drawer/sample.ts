@@ -1,7 +1,7 @@
-import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
-import type { SourcesItem } from '@aziontech/webkit/sources'
-import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
+import type { PromptInputMenuOption } from '@aziontech/ui/prompt-input'
+import type { SourcesItem } from '@aziontech/ui/sources'
+import type { SuggestionGroupItem } from '@aziontech/ui/suggestion-group'
+import type { AiChatMessage } from '@aziontech/ui/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 

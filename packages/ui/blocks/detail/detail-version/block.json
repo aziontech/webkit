@@ -37,7 +37,7 @@
     "grupos de dispositivos",
     "instâncias de função"
   ],
-  "skills": ["webkit-layout", "webkit-navigation", "webkit-ui-states"],
+  "skills": ["azion-ui-layout", "azion-ui-navigation", "azion-ui-states"],
   "primary": {
     "name": "Draft",
     "file": "detail-version.vue"

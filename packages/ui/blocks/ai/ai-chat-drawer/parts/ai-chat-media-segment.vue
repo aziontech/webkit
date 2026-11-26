@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import FilePreview from '@aziontech/webkit/file-preview'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
+  import Alert from '@aziontech/ui/alert'
+  import AudioPlayer from '@aziontech/ui/audio-player'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import FilePreview from '@aziontech/ui/file-preview'
+  import ImageGallery from '@aziontech/ui/image-gallery'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import SubagentCard from '@aziontech/ui/subagent-card'
   import {
     type AiChatSegment,
     documentNameOf,
@@ -14,8 +14,8 @@
     structuredOf,
     subagentStatusOf,
     subagentTextOf
-  } from '@aziontech/webkit/utils/ai-chat'
-  import VideoPlayer from '@aziontech/webkit/video-player'
+  } from '@aziontech/ui/utils/ai-chat'
+  import VideoPlayer from '@aziontech/ui/video-player'
 
   defineProps<{ segment: AiChatSegment }>()
 </script>

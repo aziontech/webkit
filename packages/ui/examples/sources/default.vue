@@ -1,5 +1,5 @@
 <script setup>
-  import Sources from '@aziontech/webkit/sources'
+  import Sources from '@aziontech/ui/sources'
 
   const items = [
     {

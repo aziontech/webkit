@@ -1,4 +1,4 @@
-import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+import { useFilePicker } from '@aziontech/ui/use-file-picker'
 import { computed, type ComputedRef, type DeepReadonly, readonly, type Ref, ref } from 'vue'
 
 import type { SchemaEditorCsvFile } from '../edit-schema.vue'

@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: 8227e12efc9263ddf84aa8e59b11666ac661f0b0964a2a12d07b675d4430207b
+checksum: dd4ca5d55396b0a3710c2b024be5c1d02f3414b557e54e635e5835ca0ebed527
 created: 2026-05-25
 last_updated: 2026-11-25
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-25
 
 ## Purpose
 
-Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).
+Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Azion UI tokens).
 
 ## When to use
 
@@ -49,7 +49,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/ui/breadcrumb'
 </script>
 
 <template>
@@ -86,7 +86,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 - `breadcrumb.vue` — Root `<nav>` with `aria-label` from `ariaLabel`, or the locale catalog (`Breadcrumb`) when empty; a consumer `aria-label` lands on the prop and wins.
 - `breadcrumb-list.vue` — Ordered list wrapper (`<ol>`) for segments.
-- `breadcrumb-item/breadcrumb-item.vue` — `Breadcrumb.Item`, the segment control; it lives in this component's folder and keeps its flat export `@aziontech/webkit/breadcrumb-item`.
+- `breadcrumb-item/breadcrumb-item.vue` — `Breadcrumb.Item`, the segment control; it lives in this component's folder and keeps its flat export `@aziontech/ui/breadcrumb-item`.
 - `breadcrumb-separator.vue` — Decorative chevron between segments (`aria-hidden`).
 
 ## Props
@@ -172,7 +172,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -3,7 +3,7 @@ name: spec-validate
 description: Validate a `.specs/<name>.md` against the schema, the body section rules, and the Constraints block. Writes the checksum and flips status from draft to approved when valid.
 status: active
 last_updated: 2026-11-23
-scope: webkit
+scope: ui
 enforced_by: [prop-vocabulary, props, styling, migration]
 ---
 
@@ -37,8 +37,8 @@ Decide whether a spec is good enough to drive code generation. The `spec-validat
 7. **Check Tokens.** Every "Token (TOKENS.md)" cell must match one of:
    - A generated class starting with `.text-` and present in TOKENS.md.
    - A `var(--*)` that exists in TOKENS.md.
-   No HEX, no RGB, no Tailwind palette, no external color utility.
-8. **Check the template version.** Run `templateSectionErrors(frontmatter, body)` from `contributing/hooks/lib/spec.mjs` (the same check as `pnpm --filter @aziontech/webkit run check:spec-template` and the `enforce-spec-exists` hook). A spec with `template: 2` must have `## Internationalization`, `## Right-to-left`, `## Responsive` and `## Performance`, each filled (not empty, not `TBD`, no line left from the template's placeholders). A spec created on or after 2026-11-12 must declare `template: 2`. Specs without `template` (template 1, the specs that predate it) are exempt. Fail with `FAIL: <error>` per finding.
+     No HEX, no RGB, no Tailwind palette, no external color utility.
+8. **Check the template version.** Run `templateSectionErrors(frontmatter, body)` from `contributing/hooks/lib/spec.mjs` (the same check as `pnpm --filter @aziontech/ui run check:spec-template` and the `enforce-spec-exists` hook). A spec with `template: 2` must have `## Internationalization`, `## Right-to-left`, `## Responsive` and `## Performance`, each filled (not empty, not `TBD`, no line left from the template's placeholders). A spec created on or after 2026-11-12 must declare `template: 2`. Specs without `template` (template 1, the specs that predate it) are exempt. Fail with `FAIL: <error>` per finding.
 9. **Check Constraints block.** The "## Constraints — DO NOT" section must be present and must contain at least the bullets from `.specs/_template.md` (verbatim text check on the canonical bullets).
 10. **Write checksum.** If all checks pass and the input had `status: draft`, compute `sha256(body)` (everything after the closing `---` of the frontmatter), write it to the `checksum` field, and flip `status: approved`. Refresh `last_updated`.
 11. **Emit verdict.** Print `OK` or a list of failures (one per line, with the failing line number).

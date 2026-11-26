@@ -72,7 +72,7 @@ after a failure.
 
 `Copy query` copies the card's GraphQL query (`securityMetrics`, the period as `tsRange`) and
 confirms with `Query copied.`; `Export CSV` saves the card's rows with `toCsv` and `downloadCsv`
-from `@aziontech/webkit/utils/csv` and confirms with `CSV exported.` and the file name. Export is
+from `@aziontech/ui/utils/csv` and confirms with `CSV exported.` and the file name. Export is
 disabled while loading and after a failure; the app mounts the toast region.
 
 ### J. Matched requests — `Chart` (required)

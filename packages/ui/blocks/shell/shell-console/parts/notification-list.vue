@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Item from '@aziontech/webkit/item'
-  import Tag from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Item from '@aziontech/ui/item'
+  import Tag from '@aziontech/ui/tag'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, ref } from 'vue'
 
   import type { ShellConsoleNotification, ShellConsoleNotificationKind } from '../sample'

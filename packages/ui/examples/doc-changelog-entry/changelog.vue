@@ -1,6 +1,6 @@
 <script setup>
-  import DocChangelogEntry from '@aziontech/webkit/doc-changelog-entry'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocChangelogEntry from '@aziontech/ui/doc-changelog-entry'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>

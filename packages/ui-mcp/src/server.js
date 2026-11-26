@@ -19,7 +19,7 @@ import {
   searchComponents,
   suggestComponent,
   validateUsage
-} from '@aziontech/webkit/catalog-queries'
+} from '@aziontech/ui/catalog-queries'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod'
@@ -43,10 +43,10 @@ async function main() {
   const catalog = loadCatalog(process.cwd())
 
   const server = new McpServer(
-    { name: '@aziontech/webkit-mcp', version: serverVersion() },
+    { name: '@aziontech/ui-mcp', version: serverVersion() },
     {
       instructions:
-        'Azion webkit design system. For a whole screen (login, signup, settings, list, create, ' +
+        'Azion UI design system. For a whole screen (login, signup, settings, list, create, ' +
         'detail), call search_blocks, then get_block, and start from that SFC — never build ' +
         'the screen from scratch. For a single piece, use suggest_component and get_component. ' +
         'For a marketing band, suggest_component returns the page section to import.'
@@ -64,9 +64,9 @@ async function main() {
   tool(
     'list_components',
     {
-      title: 'List webkit components',
+      title: 'List Azion UI components',
       description:
-        'List every renderable @aziontech/webkit component (compact cards: name, category, ' +
+        'List every renderable @aziontech/ui component (compact cards: name, category, ' +
         'surface, structure, import, tree-shakeable import, PascalCase binding). Optionally filter ' +
         'by category or by surface: "app" (console and apps), "site" (the azion.com site: ' +
         'sections, bands, brand assets) or "docs" (the documentation site). Returns ' +
@@ -101,9 +101,9 @@ async function main() {
   tool(
     'list_categories',
     {
-      title: 'List webkit categories',
+      title: 'List ui categories',
       description:
-        'List the distinct component categories present in the installed webkit catalog.',
+        'List the distinct component categories present in the installed Azion UI catalog.',
       inputSchema: {}
     },
     async () => json(listCategories(catalog))
@@ -112,7 +112,7 @@ async function main() {
   tool(
     'list_tokens',
     {
-      title: 'List webkit design tokens',
+      title: 'List ui design tokens',
       description:
         'The POSITIVE token inventory (what to USE instead of hardcoding): without a category, ' +
         'returns the token group index + typography classes + the canonical prop/event vocabulary ' +
@@ -136,7 +136,7 @@ async function main() {
   tool(
     'list_assets',
     {
-      title: 'List webkit named assets',
+      title: 'List ui named assets',
       description:
         'The names a component accepts for its artwork, which live in registries and nowhere else: ' +
         'illustration scenes (Illustration name, section illustration), Diagram names, ' +
@@ -160,7 +160,7 @@ async function main() {
   tool(
     'get_component',
     {
-      title: 'Get a webkit component API',
+      title: 'Get an Azion UI component API',
       description:
         'Full API for one component: purpose, when to use / when not to use, props, events, ' +
         'slots, sub-components, structure, compound-root info, runnable examples taken from its ' +
@@ -208,7 +208,7 @@ async function main() {
   tool(
     'search_components',
     {
-      title: 'Search webkit components',
+      title: 'Search Azion UI components',
       description:
         'Fuzzy / substring search across component names and categories. Ranked results so a phrase ' +
         'like "dropdown" or "paginated table" resolves to a real component.',
@@ -228,10 +228,10 @@ async function main() {
   tool(
     'suggest_component',
     {
-      title: 'Suggest a webkit component for a need',
+      title: 'Suggest an Azion UI component for a need',
       description:
         'Given a plain-language need, suggest the single best-fitting component (plus runners-up) so ' +
-        'the AI uses a real webkit component instead of reinventing one or reaching for another UI kit. ' +
+        'the AI uses a real Azion UI component instead of reinventing one or reaching for another UI kit. ' +
         'When the need is a whole screen it returns the block first (recommendation "block"); ' +
         'for a marketing band it returns the page section (recommendation "section").',
       inputSchema: {
@@ -250,10 +250,10 @@ async function main() {
   tool(
     'search_blocks',
     {
-      title: 'Search webkit blocks',
+      title: 'Search azion-ui blocks',
       description:
         'Find the reviewed block for an intent ("login", "sign up", "account settings", ' +
-        '"delete dialog", "tela de login"). Blocks are whole screens built from WebKit ' +
+        '"delete dialog", "tela de login"). Blocks are whole screens built from Azion UI ' +
         'components: start every screen from one. Returns ranked ids with a one-line summary, the ' +
         'first intents, components, skills, steps and `guidelinesSummary` (the job the screen ' +
         'serves); get_block has the detail. An empty query lists every block. A block with ' +
@@ -283,9 +283,9 @@ async function main() {
   tool(
     'get_block',
     {
-      title: 'Get a webkit block',
+      title: 'Get an Azion UI block',
       description:
-        'The whole block: a runnable SFC (script setup + template) with the webkit imports, the ' +
+        'The whole block: a runnable SFC (script setup + template) with the Azion UI imports, the ' +
         'components it uses, the skills to follow, its steps, the other variants (states) of ' +
         "the same screen and its `guidelines` (when to use, building blocks, do and don't, copy, " +
         'accessibility). Read the guidelines, copy the SFC and change only the content. Pass ' +
@@ -324,17 +324,17 @@ async function main() {
   tool(
     'validate_usage',
     {
-      title: 'Validate webkit usage',
+      title: 'Validate ui usage',
       description:
         'Validate an import path (real / denied / unknown + suggestions) and/or a class string ' +
         '(scanned against the catalog token rules: hex, rgb/hsl, tailwind palette, raw text size, ' +
         'legacy UI-kit color). With `component`, also checks the classes against the layout utilities ' +
-        'allowed on a webkit tag. Returns { ok, problems }.',
+        'allowed on an Azion UI tag. Returns { ok, problems }.',
       inputSchema: {
         import: z
           .string()
           .optional()
-          .describe('An import path to check, e.g. "@aziontech/webkit/button".'),
+          .describe('An import path to check, e.g. "@aziontech/ui/button".'),
         classes: z
           .string()
           .optional()
@@ -343,7 +343,7 @@ async function main() {
           .string()
           .optional()
           .describe(
-            `The webkit component the classes sit on (kebab-case). When set, any class outside the layout utilities (${LAYOUT_CLASS_FAMILIES.join(', ')}) is reported as a style override.`
+            `The Azion UI component the classes sit on (kebab-case). When set, any class outside the layout utilities (${LAYOUT_CLASS_FAMILIES.join(', ')}) is reported as a style override.`
           )
       }
     },
@@ -354,14 +354,14 @@ async function main() {
   const transport = new StdioServerTransport()
   await server.connect(transport)
   process.stderr.write(
-    `@aziontech/webkit-mcp ready` +
+    `@aziontech/ui-mcp ready` +
       (catalog.available
-        ? ` (webkit ${catalog.version}, ${catalog.subpaths.length} exports)\n`
-        : ` (webkit catalog NOT resolvable — tools will report unavailable)\n`)
+        ? ` (Azion UI ${catalog.version}, ${catalog.subpaths.length} exports)\n`
+        : ` (Azion UI catalog NOT resolvable — tools will report unavailable)\n`)
   )
 }
 
 main().catch((err) => {
-  process.stderr.write(`@aziontech/webkit-mcp failed to start: ${err?.stack || err}\n`)
+  process.stderr.write(`@aziontech/ui-mcp failed to start: ${err?.stack || err}\n`)
   process.exit(1)
 })

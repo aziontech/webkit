@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { toast } from '@aziontech/webkit/toast'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, onMounted, reactive, ref, watch } from 'vue'
 
   import {

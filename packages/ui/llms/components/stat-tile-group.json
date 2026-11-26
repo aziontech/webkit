@@ -1,8 +1,8 @@
 {
  "name": "stat-tile-group",
  "binding": "StatTileGroup",
- "import": "@aziontech/webkit/stat-tile-group",
- "treeShakeableImport": "@aziontech/webkit/stat-tile-group",
+ "import": "@aziontech/ui/stat-tile-group",
+ "treeShakeableImport": "@aziontech/ui/stat-tile-group",
  "category": "chart",
  "surface": "app",
  "structure": "monolithic",

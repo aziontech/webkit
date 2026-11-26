@@ -2,8 +2,8 @@
 
 > Modal surface above the page, built on the shared Panel shell. `Dialog.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay behind the panel, traps focus and scroll-locks the page, so the page behind cannot be clicked, scrolled or tabbed to while the dialog is open. The consumer composes a trigger and the panel regions (header, body, footer); the header gets the close (X) button on its own unless `closable` is false; the body is the only region that scrolls. Below `md` it renders as a full-width bottom sheet.
 
-- Import: `import DialogRoot from '@aziontech/webkit/dialog-root'`
-- Compound import (dot notation, not tree-shakeable): `import Dialog from '@aziontech/webkit/dialog'`
+- Import: `import DialogRoot from '@aziontech/ui/dialog-root'`
+- Compound import (dot notation, not tree-shakeable): `import Dialog from '@aziontech/ui/dialog'`
 - Category: overlay · Surface: app · Structure: composition
 - API as JSON: [dialog.json](dialog.json)
 
@@ -48,23 +48,23 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/dialog-close`
-- `@aziontech/webkit/dialog-content`
-- `@aziontech/webkit/dialog-description`
-- `@aziontech/webkit/dialog-title`
-- `@aziontech/webkit/dialog-trigger`
-- `@aziontech/webkit/dialog-header`
-- `@aziontech/webkit/dialog-body`
-- `@aziontech/webkit/dialog-footer`
+- `@aziontech/ui/dialog-close`
+- `@aziontech/ui/dialog-content`
+- `@aziontech/ui/dialog-description`
+- `@aziontech/ui/dialog-title`
+- `@aziontech/ui/dialog-trigger`
+- `@aziontech/ui/dialog-header`
+- `@aziontech/ui/dialog-body`
+- `@aziontech/ui/dialog-footer`
 
 ## Sub-components
 
-- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Dialog.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Dialog.Header`, `Dialog.Body` and `Dialog.Footer`, each importable on its own as `@aziontech/webkit/dialog-header`, `dialog-body` and `dialog-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/webkit/dialog`; the root alone is `@aziontech/webkit/dialog-root`. The parts stay in the root folder (flat).
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Dialog.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Dialog.Header`, `Dialog.Body` and `Dialog.Footer`, each importable on its own as `@aziontech/ui/dialog-header`, `dialog-body` and `dialog-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/ui/dialog`; the root alone is `@aziontech/ui/dialog-root`. The parts stay in the root folder (flat).
 - `dialog-close.vue` — Public sub-component `dialog-close`: the close (X) `IconButton`. `Dialog.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the dialog.
 - `dialog-content.vue` — Public sub-component `dialog-content`: the modal itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay (`aria-hidden`, `dialog-content__backdrop` test id; a click on it closes the dialog when `dismissible`) and the `role="dialog"` panel, traps focus, scroll-locks the page and restores focus on close.
 - `dialog-description.vue` — Public sub-component `dialog-description`.
 - `dialog-title.vue` — Public sub-component `dialog-title`.
-- `dialog-trigger.vue` — Public sub-component `dialog-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the dialog on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
+- `dialog-trigger.vue` — Public sub-component `dialog-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the dialog on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is an Azion UI `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
 
 - Test ids: each part falls back to its own name (`dialog-trigger`, `dialog-content`, `dialog-title`, `dialog-description`, `dialog-close`, and `panel-header`, `panel-body`, `panel-footer` for the shared regions), and a `data-testid` passed to the part wins; the root's `data-testid` does not rename the parts. The inner overlay and shell of `dialog-content` are `dialog-content__backdrop`, `__portal` and `__panel-shell`. The close button `Dialog.Content` adds while `closable` belongs to the root: `dialog__close`, or `<root test id>__close`.
 
@@ -107,10 +107,10 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Dialog from '@aziontech/webkit/dialog'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Button from '@aziontech/ui/button'
+  import Dialog from '@aziontech/ui/dialog'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -171,15 +171,15 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import DialogTrigger from '@aziontech/ui/dialog-trigger'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
   import { reactive, watch } from 'vue'
 
   const sizes = ['small', 'medium', 'large']
@@ -241,15 +241,15 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import DialogTrigger from '@aziontech/ui/dialog-trigger'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
   import { ref } from 'vue'
 
   const open = ref(false)

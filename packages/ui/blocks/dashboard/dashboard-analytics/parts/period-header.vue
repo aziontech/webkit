@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import Spinner from '@aziontech/webkit/spinner'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import Spinner from '@aziontech/ui/spinner'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** One entry of the Period Select. */
   export interface PeriodOption {

@@ -2,8 +2,8 @@
 
 > One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): the content and — once the response is complete — the action row a reader uses on it (copy, the a Feedback menu with good / bad response, read aloud, share, try again, branch in new chat, the sources), and on the reader's own prompt Copy and Edit. It owns the message lifecycle: `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and `error` (an error line with Try again). Assistant messages are plain text across the reading column at the prose reading size (`.text-body-prose-md`, 16 px on 26 px lines): no avatar, name, time or bubble. User messages are a filled bubble at the inline end, at most 70 % wide; system messages a muted centered line. A user message opens for editing (`v-model:editing`) and Send emits `edit` with the new text for the app's `setMessages` and `sendMessage`. Author and time live in the accessible name (the time also shows on hover over the user's bubble). Alignment comes from the enclosing `Conversation`.
 
-- Import: `import ChatMessageRoot from '@aziontech/webkit/chat-message-root'`
-- Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/webkit/chat-message'`
+- Import: `import ChatMessageRoot from '@aziontech/ui/chat-message-root'`
+- Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/ui/chat-message'`
 - Category: ai · Surface: app · Structure: composition
 - API as JSON: [chat-message.json](chat-message.json)
 
@@ -65,8 +65,8 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/chat-message-actions`
-- `@aziontech/webkit/chat-message-feedback`
+- `@aziontech/ui/chat-message-actions`
+- `@aziontech/ui/chat-message-feedback`
 
 ## Sub-components
 
@@ -94,7 +94,7 @@ components: `button`, `response-loading`, `textarea`, `icon-button`, `copy-butto
 `dropdown-menu`.
 
 ```
-packages/webkit/src/components/ai/chat-message/
+packages/ui/src/components/ai/chat-message/
 ├── chat-message.vue
 ├── chat-message.test.ts
 ├── index.ts
@@ -183,8 +183,8 @@ packages/webkit/src/components/ai/chat-message/
 
 ```vue
 <script setup>
-  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ChatMessageRoot from '@aziontech/ui/chat-message-root'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
 </script>
 
 <template>
@@ -209,10 +209,10 @@ packages/webkit/src/components/ai/chat-message/
 
 ```vue
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import ResponseBranches from '@aziontech/webkit/response-branches'
-  import Sources from '@aziontech/webkit/sources'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import ResponseBranches from '@aziontech/ui/response-branches'
+  import Sources from '@aziontech/ui/sources'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
   import { ref } from 'vue'
 
   const sources = [
@@ -273,8 +273,8 @@ packages/webkit/src/components/ai/chat-message/
 
 ```vue
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import ResponseBranches from '@aziontech/webkit/response-branches'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import ResponseBranches from '@aziontech/ui/response-branches'
   import { ref } from 'vue'
 
   const prompts = ref(['How do I purge the cache of one URL?'])

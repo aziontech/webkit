@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Card from '@aziontech/webkit/card'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Avatar from '@aziontech/ui/avatar'
+  import Card from '@aziontech/ui/card'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { computed } from 'vue'
 
   import type { FirstDeployService } from '../sample'

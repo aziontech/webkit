@@ -1,5 +1,5 @@
 <script setup>
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
+  import PaymentBrand from '@aziontech/ui/payment-brand'
 
   const brands = [
     'Visa',

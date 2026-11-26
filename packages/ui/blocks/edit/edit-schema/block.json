@@ -27,11 +27,11 @@
     "esquema do banco"
   ],
   "skills": [
-    "webkit-form",
-    "webkit-create-surface",
-    "webkit-tables",
-    "webkit-errors",
-    "webkit-ui-states"
+    "azion-ui-form",
+    "azion-ui-create-surface",
+    "azion-ui-tables",
+    "azion-ui-errors",
+    "azion-ui-states"
   ],
   "primary": {
     "name": "CreateTable",

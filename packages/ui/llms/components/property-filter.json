@@ -1,8 +1,8 @@
 {
  "name": "property-filter",
  "binding": "PropertyFilter",
- "import": "@aziontech/webkit/property-filter",
- "treeShakeableImport": "@aziontech/webkit/property-filter",
+ "import": "@aziontech/ui/property-filter",
+ "treeShakeableImport": "@aziontech/ui/property-filter",
  "category": "data",
  "surface": "app",
  "structure": "monolithic",

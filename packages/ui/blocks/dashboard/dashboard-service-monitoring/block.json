@@ -22,7 +22,7 @@
     "latency percentiles",
     "error rate per service"
   ],
-  "skills": ["webkit-data-viz", "webkit-ui-states"],
+  "skills": ["azion-ui-data-viz", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "dashboard-service-monitoring.vue"

@@ -1,5 +1,5 @@
 <script setup>
-  import FilterMenu from '@aziontech/webkit/filter-menu-root'
+  import FilterMenu from '@aziontech/ui/filter-menu-root'
   import { ref } from 'vue'
 
   const fields = [

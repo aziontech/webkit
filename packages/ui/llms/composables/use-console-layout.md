@@ -1,10 +1,10 @@
 # useConsoleLayout
 
-Composable `@aziontech/webkit/use-console-layout`. The signatures and option tables below are read from its typed source, [`src/components/layout/console-layout/composables/use-console-layout.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/layout/console-layout/composables/use-console-layout.ts).
+Composable `@aziontech/ui/use-console-layout`. The signatures and option tables below are read from its typed source, [`src/components/layout/console-layout/composables/use-console-layout.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/layout/console-layout/composables/use-console-layout.ts).
 
 ```ts
-import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
-import type { UseConsoleLayoutOptions, UseConsoleLayoutReturn } from '@aziontech/webkit/use-console-layout'
+import { useConsoleLayout } from '@aziontech/ui/use-console-layout'
+import type { UseConsoleLayoutOptions, UseConsoleLayoutReturn } from '@aziontech/ui/use-console-layout'
 ```
 
 ## `useConsoleLayout`

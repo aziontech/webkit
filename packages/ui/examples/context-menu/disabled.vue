@@ -1,5 +1,5 @@
 <script setup>
-  import ContextMenu from '@aziontech/webkit/context-menu'
+  import ContextMenu from '@aziontech/ui/context-menu'
 </script>
 
 <template>

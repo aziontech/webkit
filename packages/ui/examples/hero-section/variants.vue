@@ -1,6 +1,6 @@
 <script setup>
-  import CopyCommandSection from '@aziontech/webkit/copy-command-section'
-  import HeroSection from '@aziontech/webkit/hero-section'
+  import CopyCommandSection from '@aziontech/ui/copy-command-section'
+  import HeroSection from '@aziontech/ui/hero-section'
 </script>
 
 <template>

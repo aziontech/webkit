@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: fe73e316dfb8da0da3fdffc2afc602ef535ab94fb1565c7a44907f2876e5e007
+checksum: dd93d424aa8af7a3b105af280c7109c7002f263bd1f2db4cca9f4782925e698c
 style_seam: true
 created: 2026-05-22
 last_updated: 2026-11-15
@@ -39,7 +39,7 @@ A small rotating mark that says work is in progress, for a row, a log line or a 
 ## Best practices
 
 - Its one prop is `ariaLabel`: size it with a `size-*` class (`size-3`, `size-4`) and color it through the inherited text color (it strokes `currentColor`).
-- `class` on its tag is its sizing API, not a restyle: the spec is a `style_seam`, so `webkit/no-style-override` accepts `<Spinner class="size-4" />`. Keep the class to a `size-*` and, when it must differ from the surrounding text, a text color token.
+- `class` on its tag is its sizing API, not a restyle: the spec is a `style_seam`, so `azion-ui/no-style-override` accepts `<Spinner class="size-4" />`. Keep the class to a `size-*` and, when it must differ from the surrounding text, a text color token.
 - Without `ariaLabel` it is `aria-hidden`: announce the busy state on the surrounding element (`aria-busy`, a live region or visible text). A standalone Spinner that is the only sign of the wait sets `ariaLabel` (`aria-label="Loading"`); it then renders `role="status"` with that name, so the wait is announced. Do not set it inside a control that already announces its own busy state (a `loading` button).
 - The spin stops under reduced motion, so pair it with text when the wait matters.
 
@@ -47,7 +47,7 @@ A small rotating mark that says work is in progress, for a row, a log line or a 
 
 ```vue
 <script setup>
-  import Spinner from '@aziontech/webkit/spinner'
+  import Spinner from '@aziontech/ui/spinner'
 </script>
 
 <template>
@@ -121,7 +121,7 @@ A small rotating mark that says work is in progress, for a row, a log line or a 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

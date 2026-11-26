@@ -1,14 +1,14 @@
 {
  "name": "response-branches",
  "binding": "ResponseBranches",
- "import": "@aziontech/webkit/response-branches",
- "treeShakeableImport": "@aziontech/webkit/response-branches",
+ "import": "@aziontech/ui/response-branches",
+ "treeShakeableImport": "@aziontech/ui/response-branches",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a time with a `‹ 2/3 ›` pager under it, or alone in the message's action row when no slot is given. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.",
+ "purpose": "Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a time with a `‹ 2/3 ›` pager under it, or alone in the message's action row when no slot is given. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on Azion UI's `IconButton` and tokens.",
  "setup": null,
  "useWhen": [
   "Use ResponseBranches to page through alternative versions of one AI response; rows of a table or list use Pagination.",

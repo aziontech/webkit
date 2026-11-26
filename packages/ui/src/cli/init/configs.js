@@ -31,17 +31,17 @@ const LABEL_CONTROL_COMPONENTS = [
 
 export function eslintFlatConfig(severityConfig) {
   const ignores = BUILD_OUTPUT_DIRS.map((dir) => `'**/${dir}/'`).join(', ')
-  return `import webkitPlugin from '@aziontech/webkit/eslint-plugin'
+  return `import azionUiPlugin from '@aziontech/ui/eslint-plugin'
 import a11y from 'eslint-plugin-vuejs-accessibility'
 import vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
 
 export default [
   { ignores: [${ignores}] },
-  ...webkitPlugin.configs.${severityConfig},
+  ...azionUiPlugin.configs.${severityConfig},
   {
     files: ['${TOOL_CONFIG_FILES}'],
-    rules: { 'webkit/require-authoring-standards': 'off' }
+    rules: { 'azion-ui/require-authoring-standards': 'off' }
   },
   {
     files: ['**/*.vue'],
@@ -86,14 +86,14 @@ const POSTCSS_SNIPPET_HEADER =
   'A PostCSS config already exists — not overwriting it. Add the Tailwind v4 plugin manually:'
 
 const ESLINT_SNIPPET_HEADER =
-  'An ESLint config already exists — not overwriting it. Merge the webkit preset manually:'
+  'An ESLint config already exists — not overwriting it. Merge the Azion UI preset manually:'
 
 const STYLELINT_SNIPPET_HEADER =
-  'A Stylelint config already exists — not overwriting it. Merge the webkit config manually:'
+  'A Stylelint config already exists — not overwriting it. Merge the Azion UI config manually:'
 
 export const STYLELINT_CONTENT = `${JSON.stringify(
   {
-    extends: ['@aziontech/webkit/stylelint-config'],
+    extends: ['@aziontech/ui/stylelint-config'],
     overrides: [
       { files: ['**/*.vue'], customSyntax: 'postcss-html' },
       { files: ['**/*.scss'], customSyntax: 'postcss-scss' }
@@ -123,9 +123,9 @@ const PRETTIER_CONTENT = `${JSON.stringify(
 )}\n`
 
 const PRETTIER_SNIPPET_HEADER =
-  'A Prettier config already exists, so none is written. The copied WebKit blocks are ' +
+  'A Prettier config already exists, so none is written. The copied Azion UI blocks are ' +
   'formatted with these options; use them, or expect the first format run to restyle every ' +
-  'copied block (and `webkit diff` to report it):'
+  'copied block (and `azion-ui diff` to report it):'
 
 const writeOnce = (path, content) => ({ type: 'write', path, content, skipIfExists: true })
 const snippet = (header, content) => ({ type: 'advise', message: `${header}\n${content}` })

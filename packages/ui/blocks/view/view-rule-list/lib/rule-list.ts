@@ -1,4 +1,4 @@
-import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { TableColumn } from '@aziontech/ui/data-table'
 
 import type { RuleListEdit, RuleListPhase, RuleListRule } from '../view-rule-list.vue'
 

@@ -2,7 +2,7 @@
 
 > Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled. It is built on a native `<input type="range">`, so the keyboard model, the `slider` role and the value announcements come from the platform; the component only styles the track, fill and thumb with tokens and adds optional tick marks and labelled reference values under the track. It renders no label, value readout or helper text — a field composes it with `Field.Label` and `Field.Description`, the same way `switch` and `number-input` are composed.
 
-- Import: `import Slider from '@aziontech/webkit/slider'`
+- Import: `import Slider from '@aziontech/ui/slider'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [slider.json](slider.json)
 
@@ -73,7 +73,7 @@
 - `data-disabled` mirrors the `disabled` prop; the native input is also `disabled`, so it leaves the tab order and ignores pointer and keys.
 - `data-readonly` mirrors the `readonly` prop. A native range input ignores the HTML `readonly` attribute, so the component owns the behaviour: the input stays focusable, `aria-readonly="true"` is set, the navigation keys (arrows, `PageUp`/`PageDown`, `Home`/`End`) are prevented, pointer dragging is prevented, and any native `input` that still slips through writes the current model back to the element without emitting. Visual: fill and thumb border switch to the muted token and the cursor is `default`.
 - `data-invalid` mirrors the `invalid` prop: the fill and the thumb border switch to the danger tokens; `aria-invalid="true"` is set on the input.
-- Fill: the root sets the custom property `--slider-fill` (the clamped value as a percentage of `max - min`; `0%` when `max <= min`) through an inline `style` binding, the same way `tracker` and `chart` set their custom properties. The WebKit/Blink track paints the fill with a bracketed gradient (`[&::-webkit-slider-runnable-track]:bg-[linear-gradient(to_right,var(--accent)_var(--slider-fill),var(--bg-surface)_var(--slider-fill))]`); Firefox paints it natively with `[&::-moz-range-progress]:bg-(--accent)`. Expression values and custom-property declarations stay in brackets per `contributing/rules/styling.md`.
+- Fill: the root sets the custom property `--slider-fill` (the clamped value as a percentage of `max - min`; `0%` when `max <= min`) through an inline `style` binding, the same way `tracker` and `chart` set their custom properties. The Azion UI/Blink track paints the fill with a bracketed gradient (`[&::-webkit-slider-runnable-track]:bg-[linear-gradient(to_right,var(--accent)_var(--slider-fill),var(--bg-surface)_var(--slider-fill))]`); Firefox paints it natively with `[&::-moz-range-progress]:bg-(--accent)`. Expression values and custom-property declarations stay in brackets per `contributing/rules/styling.md`.
 - Track and thumb are styled only through arbitrary pseudo-element variants on the native input (`appearance-none`, `[&::-webkit-slider-runnable-track]:…`, `[&::-webkit-slider-thumb]:appearance-none …`, `[&::-moz-range-track]:…`, `[&::-moz-range-thumb]:…`) — no extra track/thumb elements, no `<style>` block.
 - Geometry: the native input is 40 px tall (`h-10`, the hit area) and full width; the track is 4 px tall and centred; the thumb is 16×16 px.
 - Ticks (`ticks`) and reference marks (`referenceValues`) render in an `aria-hidden` row under the track. Each mark is positioned at the thumb-centre position for its value — `thumb/2 + (100% - thumb) × fraction` — so marks line up with the thumb at both ends; the fraction is passed per mark through an inline custom property. Every reference value also draws a tick. Reference labels read `{value}{unit}`; the first label is start-aligned, the last end-aligned, the rest centred on their mark.
@@ -102,8 +102,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Slider from '@aziontech/webkit/slider'
+  import Field from '@aziontech/ui/field'
+  import Slider from '@aziontech/ui/slider'
   import { ref } from 'vue'
 
   const value = ref(40)
@@ -135,8 +135,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Slider from '@aziontech/webkit/slider'
+  import Field from '@aziontech/ui/field'
+  import Slider from '@aziontech/ui/slider'
   import { ref } from 'vue'
 
   const value = ref(40)
@@ -169,8 +169,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Slider from '@aziontech/webkit/slider'
+  import Field from '@aziontech/ui/field'
+  import Slider from '@aziontech/ui/slider'
   import { ref } from 'vue'
 
   const value = ref(40)

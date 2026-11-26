@@ -1,1 +1,1 @@
-_Examples in `packages/webkit/examples/action-confirmation/`: Command (pending), Irreversible (typed phrase), Resolved (approved, denied, expired)._
+_Examples in `packages/ui/examples/action-confirmation/`: Command (pending), Irreversible (typed phrase), Resolved (approved, denied, expired)._

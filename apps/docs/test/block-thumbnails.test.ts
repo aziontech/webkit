@@ -8,7 +8,7 @@ import { BLOCK_THUMBNAIL, blockThumbnailFile } from '../src/lib/block-thumbnails
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const PUBLIC = resolve(HERE, '../public')
-const CATALOG = resolve(HERE, '../../../packages/webkit/catalog.json')
+const CATALOG = resolve(HERE, '../../../packages/ui/catalog.json')
 const MAX_BYTES = 24 * 1024
 
 const ids = Object.keys(JSON.parse(readFileSync(CATALOG, 'utf8')).blocks)

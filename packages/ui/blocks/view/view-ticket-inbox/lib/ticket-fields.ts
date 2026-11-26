@@ -1,5 +1,5 @@
-import type { PriorityTagPriority } from '@aziontech/webkit/priority-tag'
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { PriorityTagPriority } from '@aziontech/ui/priority-tag'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 import type { TicketInboxStatus, TicketInboxTicket } from '../view-ticket-inbox.vue'
 

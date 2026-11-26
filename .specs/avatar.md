@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: ba4b177fbfef98c13be892ab385a672d5440889b3808dde1e49995e4d5659710
+checksum: d24ba8da7272b7605de2930b1e490c5633c4983bbb6bddf19d820112a847adb9
 created: 2026-05-22
 last_updated: 2026-11-25
 ---
@@ -52,7 +52,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 
 ```vue
 <script setup>
-  import Avatar from '@aziontech/webkit/avatar'
+  import Avatar from '@aziontech/ui/avatar'
 </script>
 
 <template>
@@ -173,7 +173,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 12.8 KB gzip for the initial chunk of `./avatar` (it carries the locale lookup) in `.size-limit.json`; the presence dot, its cut-out and its five strings added about 0.5 KB to every entry that renders an avatar (recorded in `packages/webkit/docs/reviews/size-budgets-v6.md`).
+- Bundle budget: 12.8 KB gzip for the initial chunk of `./avatar` (it carries the locale lookup) in `.size-limit.json`; the presence dot, its cut-out and its five strings added about 0.5 KB to every entry that renders an avatar (recorded in `packages/ui/docs/reviews/size-budgets-v6.md`).
 - Runtime budget: none: static; the pattern is a three-layer inline SVG computed once per `label` and `colors` change.
 - Heavy parts: the marble drawing loads in its own async chunk the first time an avatar sets `pattern`, so an avatar without a pattern pays nothing for it. Server rendering resolves the chunk before it writes the HTML, so hydration finds the same SVG; on a client-only render the avatar's surface shows until the chunk arrives.
 
@@ -194,7 +194,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -9,12 +9,12 @@ import { parse } from 'vue/compiler-sfc'
 const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const REPO_ROOT = resolve(PKG, '../..')
 const SRC = join(PKG, 'src/components')
-const PREFIX = '@aziontech/webkit/'
+const PREFIX = '@aziontech/ui/'
 
 export const SCANNED = [
-  'packages/webkit/blocks',
-  'packages/webkit/examples',
-  'packages/webkit/src',
+  'packages/ui/blocks',
+  'packages/ui/examples',
+  'packages/ui/src',
   'skills',
   'rules',
   'adapters'
@@ -26,9 +26,9 @@ export const VALUE_DEPRECATIONS = [
 ]
 
 export const DOCUMENTED_DEPRECATIONS = [
-  { file: 'packages/webkit/examples/select/multiple.vue', message: 'prop multiple' },
+  { file: 'packages/ui/examples/select/multiple.vue', message: 'prop multiple' },
   {
-    file: 'packages/webkit/src/components/content/console-mockup/widgets/edge-dns-dnssec-fragment.vue',
+    file: 'packages/ui/src/components/content/console-mockup/widgets/edge-dns-dnssec-fragment.vue',
     message: 'prop focused'
   }
 ]
@@ -410,7 +410,7 @@ const invoked = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(im
 if (invoked) {
   const findings = scanRepo()
   if (findings.length) {
-    console.error(`Deprecated WebKit names used inside the repository (${findings.length}):`)
+    console.error(`Deprecated Azion UI names used inside the repository (${findings.length}):`)
     for (const f of findings) console.error(`  ${f.file}:${f.line}  ${f.message}`)
     console.error(
       'Migrate each use to the replacement named in its @deprecated tag; blocks, examples and skills are what agents copy.'
@@ -418,6 +418,6 @@ if (invoked) {
     process.exit(1)
   }
   console.log(
-    'No deprecated WebKit names used in blocks, examples, src, skills, rules or adapters.'
+    'No deprecated Azion UI names used in blocks, examples, src, skills, rules or adapters.'
   )
 }

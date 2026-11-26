@@ -1,5 +1,5 @@
 <script setup>
-  import Spinner from '@aziontech/webkit/spinner'
+  import Spinner from '@aziontech/ui/spinner'
 </script>
 
 <template>

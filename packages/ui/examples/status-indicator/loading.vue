@@ -1,5 +1,5 @@
 <script setup>
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>

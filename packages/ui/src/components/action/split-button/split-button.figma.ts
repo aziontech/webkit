@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/action/split-button/split-button.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/action/split-button/split-button.vue
 // component=SplitButton
 import figma from 'figma'
 
@@ -39,7 +39,7 @@ export default {
   }
   :model="items"
 />`,
-  imports: ["import SplitButton from '@aziontech/webkit/split-button'"],
+  imports: ["import SplitButton from '@aziontech/ui/split-button'"],
   id: 'split-button',
   metadata: { nestable: true }
 }

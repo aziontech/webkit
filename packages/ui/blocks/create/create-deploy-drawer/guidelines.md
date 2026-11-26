@@ -157,7 +157,7 @@ Then delete `sample.ts` and its import. The page reports the run through the toa
 - **In progress:** the progressive verb with `…`, e.g. "Building…".
 - **Run toast:** "Deploying web-app…" with "<version> to <environments>. It keeps running if you leave."; the outcome "web-app is live in Production." or "web-app wasn't deployed." with what failed and that nothing changed; actions "Edit" and "Redeploy".
 - **Locks and reach:** "<settings> is Strict, so <service> stays bound to <environment>."; "Also deploys"; "<settings> is shared, so it deploys at one version."
-- Follow `skills/webkit-microcopy`: Deploy, never publish or activate; sentence case; no em dash.
+- Follow `skills/azion-ui-microcopy`: Deploy, never publish or activate; sentence case; no em dash.
 
 ## Accessibility
 
@@ -195,4 +195,4 @@ Then delete `sample.ts` and its import. The page reports the run through the toa
 - `detail/detail-deployment-logs` — the logs of a deploy after it ran.
 - `detail/detail-version` — what a version contains before it is deployed.
 - `create/create-resource-picker` — the Existing or New pattern the Project section follows.
-- `SettingsGroup` — the band each section uses; see `skills/webkit-create-surface` for the drawer commit model.
+- `SettingsGroup` — the band each section uses; see `skills/azion-ui-create-surface` for the drawer commit model.

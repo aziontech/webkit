@@ -1,11 +1,11 @@
 # Rule: naming — one standard for every name, old names never come back
 
-Every name in WebKit follows one written standard: components, parts, blocks, examples, props
+Every name in Azion UI follows one written standard: components, parts, blocks, examples, props
 and their values, events, slots, types, data attributes, test ids, i18n keys, internal code,
 tokens, icons, files, scripts, CLI and MCP names, lint rules, the AI bundle and CI. The owner
 approved it on 2026-11-15 as decisions N1–N18 of the 6.0 naming change. 6.0 is the one clean
-break: a renamed name is removed outright, `webkit migrate` rewrites apps from the
-`packages/webkit/src/cli/migrations/v6*.json` maps, and the naming check makes sure the old
+break: a renamed name is removed outright, `azion-ui migrate` rewrites apps from the
+`packages/ui/src/cli/migrations/v6*.json` maps, and the naming check makes sure the old
 name never comes back.
 
 The standard reuses the words people and AI assistants already type. When a word is open, we
@@ -23,14 +23,14 @@ take the one Supabase and shadcn use (`variant`, `outline`, `ghost`, the part wo
 
 The kebab name is the single source. Six surfaces must agree:
 
-| Surface                                     | Form                     | Example (`empty-state`)                                  |
-| ------------------------------------------- | ------------------------ | -------------------------------------------------------- |
-| spec file + `name:` frontmatter             | kebab                    | `.specs/empty-state.md`, `name: empty-state`             |
-| component folder + `.vue` file              | kebab                    | `content/empty-state/empty-state.vue`                    |
-| export subpath in `package.json#exports`    | kebab, flat              | `"./empty-state"`                                        |
-| `defineOptions({ name })`                   | PascalCase               | `name: 'EmptyState'`                                     |
-| `data-testid` fallback                      | the kebab name itself    | `'empty-state'`                                          |
-| import binding + tag in examples and blocks | PascalCase of the export | `import EmptyState from '@aziontech/webkit/empty-state'` |
+| Surface                                     | Form                     | Example (`empty-state`)                              |
+| ------------------------------------------- | ------------------------ | ---------------------------------------------------- |
+| spec file + `name:` frontmatter             | kebab                    | `.specs/empty-state.md`, `name: empty-state`         |
+| component folder + `.vue` file              | kebab                    | `content/empty-state/empty-state.vue`                |
+| export subpath in `package.json#exports`    | kebab, flat              | `"./empty-state"`                                    |
+| `defineOptions({ name })`                   | PascalCase               | `name: 'EmptyState'`                                 |
+| `data-testid` fallback                      | the kebab name itself    | `'empty-state'`                                      |
+| import binding + tag in examples and blocks | PascalCase of the export | `import EmptyState from '@aziontech/ui/empty-state'` |
 
 - **English, singular, whole words.** `chip`, not `chips`; `navigation`, not `nav`; `button`,
   not `btn`. A container of many is a different component (`chip-group`), never a plural.
@@ -64,7 +64,7 @@ abbreviations `btn`→`button`, `img`/`pic`→`image`, `nav`→`navigation`, `co
 `dlg`→`dialog`, `ctx`→`context`, `attr(s)`→`attribute(s)`, `sel`→`select`, `util`/`utils`→`lib`,
 `regen`, `genai`, `ds`; synonyms `modal`→`dialog`, `sheet`→`drawer`, `popup`→`popover`,
 `snackbar`/`notification`→`toast`, `loader`→`spinner`, `ticker`→`marquee`, `overline`→`eyebrow`,
-`helper`→`description`; and an export that is the plural of another export (`chips` next to
+`helper`→`description`, `webkit`→`azion-ui` (the old name of the library, also held by `check:old-name`); and an export that is the plural of another export (`chips` next to
 `chip`; `tabs`, `settings`, `stats` are the allowed plural roots). The whole-name market aliases
 (`modal`, `sheet`, `callout`, `kebab`…) are `MARKET_ALIASES` in `scripts/lib/naming.mjs`.
 
@@ -109,7 +109,7 @@ see [`compound-api.md`](./compound-api.md).
 ## 3. Blocks and block groups
 
 "Block" is the only word for a copyable screen — never "pattern" or "template": folder
-`packages/webkit/blocks/`, `catalog.json#blocks`, `blockAliases`, `catalog/blocks/`, MCP
+`packages/ui/blocks/`, `catalog.json#blocks`, `blockAliases`, `catalog/blocks/`, MCP
 `search_blocks` / `get_block`, titles `Blocks/<Group>/<Name>`.
 
 **Pattern** is the word for a written guidance page: the pattern skills listed in
@@ -127,7 +127,7 @@ retired, because old agents would expect a block from them).
   (`dashboard/dashboard-alerts`, `view/view-table`, `top-bar/top-bar-auth`). The `<what>` drops
   the group word and its forms (`edit/edit-function`, not `edit/edit-function-editor`;
   `detail/detail-dns-zone`, not `detail/detail-dns-zone-detail`). The name travels alone: the file
-  `webkit add` copies into an app (`dashboard-alerts.vue`), its route and its component name
+  `azion-ui add` copies into an app (`dashboard-alerts.vue`), its route and its component name
   (`DashboardAlerts`), so it keeps the group word, and the docs list shows it whole (§ 25).
 
 | ✅                                  | ❌                                                    |
@@ -205,7 +205,7 @@ The full dictionary (concept → canonical name, banned aliases, values) is
   pictures: `NetworkMapPosition` (where the map parks, paired with its fade), `TextureFade` (the
   texture `ConsoleMockupShell` fades), and the frame's corners `RegistrationFrameCorner` /
   `RegistrationFrameMarks`. A new type joins it only with an owner decision. The list is
-  `PHYSICAL_EDGE_TYPES` in [`naming-rules.mjs`](../../packages/webkit/scripts/lib/naming-rules.mjs).
+  `PHYSICAL_EDGE_TYPES` in [`naming-rules.mjs`](../../packages/ui/scripts/lib/naming-rules.mjs).
 - **Booleans are positive and unprefixed**: no `is`/`has`, no `hide*` (→ `show<Part>`), no
   `enable*` (→ the `-able` adjective: `sortable`), no `disable*` except `disabled`.
 - **camelCase** in `defineProps`; consumers write kebab attributes (`aria-label`, `icon-position`).
@@ -411,10 +411,10 @@ The class is `az az-<name>`; the colour set is `az-color az-<name>` (owner, 2026
 "artificial intelligence", so the base class is `az`). Names come from the icons package
 (`packages/icons/src/svg-raw/az`, colour set `az-color`, documented one by one in
 `packages/icons/src/icons.json`): interface glyphs are Lucide-style words, an Azion product icon
-is the product's name as WebKit spells it (`functions`, `sql-database`; `edge-` only for Edge DNS,
+is the product's name as Azion UI spells it (`functions`, `sql-database`; `edge-` only for Edge DNS,
 Edge Pulse and the Orchestrator features Edge Nodes, Edge Services and Edge Libraries), and brands
 are spelled out. Every official Azion product and Solution has an icon: the lists are
-`packages/webkit/test/catalog/azion-products.json` and `azion-solutions.json`, copied from
+`packages/ui/test/catalog/azion-products.json` and `azion-solutions.json`, copied from
 azioncorp's `product-naming.md` and `solutions.md`, and the `toolkit` CI job fails when one has no
 SVG, no `icons.json` entry or no glyph in the built font.
 
@@ -455,11 +455,11 @@ that runs every gate). A bare npm lifecycle name is fine (`prepare`,
 A script that runs `node scripts/<file>.mjs` with no arguments is named after the file
 (`check:naming` runs `check-naming.mjs`). `pnpm --filter` takes the full package name.
 
-| ✅                                     | ❌                                  |
-| -------------------------------------- | ----------------------------------- |
-| `build:catalog`, `check:catalog`       | `catalog:build`, `catalog:check`    |
-| `check:naming` → `check-naming.mjs`    | `naming:check` → `check-naming.mjs` |
-| `pnpm --filter @aziontech/webkit test` | `pnpm --filter webkit test`         |
+| ✅                                  | ❌                                  |
+| ----------------------------------- | ----------------------------------- |
+| `build:catalog`, `check:catalog`    | `catalog:build`, `catalog:check`    |
+| `check:naming` → `check-naming.mjs` | `naming:check` → `check-naming.mjs` |
+| `pnpm --filter @aziontech/ui test`  | `pnpm --filter Azion UI test`       |
 
 > Supabase and Material both write `build:catalog`-style verb-first scripts.
 
@@ -479,10 +479,10 @@ A script that runs `node scripts/<file>.mjs` with no arguments is named after th
 A rule name starts with a verb prefix: `no-`, `prefer-`, `require-`, `valid-` or
 `consistent-`.
 
-| ✅                               | ❌                       |
-| -------------------------------- | ------------------------ |
-| `webkit/require-accessible-name` | `webkit/accessible-name` |
-| `webkit/no-deprecated-name`      | `webkit/deprecated-name` |
+| ✅                                 | ❌                         |
+| ---------------------------------- | -------------------------- |
+| `azion-ui/require-accessible-name` | `azion-ui/accessible-name` |
+| `azion-ui/no-deprecated-name`      | `azion-ui/deprecated-name` |
 
 ## 22. Skills, agents, hooks
 
@@ -491,7 +491,7 @@ A rule name starts with a verb prefix: `no-`, `prefer-`, `require-`, `valid-` or
   from `SKILL_VERBS` in the engine (add, audit, create, decide, extract, fix, map, new, open,
   regenerate, report, review, scaffold, validate, verify, write…). Whole words only (no `ds`,
   `genai`, `regen`).
-- **Consumer skills:** `webkit-<kebab>`, whole words.
+- **Consumer skills:** `azion-ui-<kebab>`, whole words.
 - **Agents:** end in an agent noun (`-er` / `-or`), the skill they run plus the suffix:
   `figma-extract` → `figma-extractor`, `spec-create` → `spec-creator`.
 - **Hooks:** `validate-<x>.mjs` (checks content), `enforce-<x>.mjs` (requires a step) or
@@ -499,7 +499,7 @@ A rule name starts with a verb prefix: `no-`, `prefer-`, `require-`, `valid-` or
 
 | ✅                        | ❌                      |
 | ------------------------- | ----------------------- |
-| `webkit-adoption`         | `webkit-ds-adoption`    |
+| `azion-ui-adoption`       | `azion-ui-ds-adoption`  |
 | `baselines-regenerate`    | `regen-baselines`       |
 | `figma-extractor` (agent) | `figma-extract` (agent) |
 | `validate-naming.mjs`     | `naming-hook.mjs`       |
@@ -508,7 +508,7 @@ Frontmatter is governed by [`authoring-docs.md`](./authoring-docs.md).
 
 ## 23. CI workflows and jobs
 
-- Workflow files are lowercase kebab `.yml` and say what they do (`publish-webkit.yml`).
+- Workflow files are lowercase kebab `.yml` and say what they do (`publish-ui.yml`).
 - Workflow, job and step names are **sentence case**, with no milestone codes (`G1`, `2.7`,
   `M1.3`) and no Storybook or Chromatic words.
 - **Required status checks keep their display names:** "OSSF Scorecard" and "Governance Gate"
@@ -523,7 +523,7 @@ Frontmatter is governed by [`authoring-docs.md`](./authoring-docs.md).
 ## 24. Website components — docs, marketing and page sections
 
 The website-facing components sit in three folders, and the name shape says which one a component
-is in. The namespace is flat (`@aziontech/webkit/<name>`), and the plain names (`tabs`,
+is in. The namespace is flat (`@aziontech/ui/<name>`), and the plain names (`tabs`,
 `accordion`, `card`, `hero`, `pagination`) already belong to other components, so the surface or
 the level goes into the name only where it has to.
 
@@ -559,7 +559,7 @@ the level goes into the name only where it has to.
 > Docusaurus prefixes its doc-page parts with `Doc` because one theme serves the docs and the
 > blog; Fumadocs (`DocsPage`) and VitePress (`VPDoc`) do the same. Tailwind Plus splits Marketing
 > into Elements and Page Sections, the same split as `marketing/` and `section/`. The review is
-> `packages/webkit/docs/reviews/website-components-naming.md`.
+> `packages/ui/docs/reviews/website-components-naming.md`.
 
 ## 25. Group words — in the name once, the full name in every list
 
@@ -572,7 +572,7 @@ menu label, the page heading, the import and the id are one string. One rule, th
 | Docs pieces   | `doc-callout`                       | first (§ 24)              | **DocCallout** under _Docs_                       |
 | Page sections | `architecture-tabs-section`         | last (N12, § 1)           | **ArchitectureTabsSection** under _Page sections_ |
 
-- **The code name keeps the group word.** It travels without its list: into an app (`webkit add`
+- **The code name keeps the group word.** It travels without its list: into an app (`azion-ui add`
   copies `dashboard-alerts.vue`), into page JSON (`_id: 'hero-section'`), into an import
   (`DocCallout`). The bare word is often taken too (`hero`, `faq`, `callout`, `tabs`).
 - **The list shows the full name** (WN09, reversed 2026-11-18). The docs sidebar, the component
@@ -598,7 +598,7 @@ menu label, the page heading, the import and the id are one string. One rule, th
 > shadcn, Primer, MUI, Carbon, Supabase, Mantine and Chakra all list the exact component name in
 > their navigation, so the label a reader clicks is the name they import. shadcn names its blocks
 > group first (`dashboard-01`, `sidebar-07`, `login-03`) and files them under a group tab. The
-> analysis is in `packages/webkit/docs/reviews/website-components-naming.md` § Group-first naming.
+> analysis is in `packages/ui/docs/reviews/website-components-naming.md` § Group-first naming.
 
 ## How it is checked
 
@@ -684,9 +684,9 @@ These cannot be decided by a machine; the reviewer holds them.
 
 ## Enforcement
 
-- **One engine**, `packages/webkit/scripts/lib/naming-rules.mjs`: the rule registry (id,
+- **One engine**, `packages/ui/scripts/lib/naming-rules.mjs`: the rule registry (id,
   decision, stage) and every check above.
-- **CI:** `packages/webkit/scripts/check-naming.mjs` (`check:naming`, gate `naming` in
+- **CI:** `packages/ui/scripts/check-naming.mjs` (`check:naming`, gate `naming` in
   `scripts/gates.mjs`, the `toolkit` job). It fails on `enforced` rules and reports `staged`
   ones; `--strict` blocks staged rules too; `--rule <id> --all` lists one rule; `--json` prints
   every violation.
@@ -696,12 +696,12 @@ These cannot be decided by a machine; the reviewer holds them.
 - **Vocabulary:** prop, value, event, slot and data-attribute words live in
   `contributing/hooks/lib/prop-vocabulary.mjs`, shared with `validate-spec-compliance` (see
   [`prop-vocabulary.md`](./prop-vocabulary.md)).
-- **Consumers:** the ESLint rule `webkit/no-deprecated-name` reads
-  `src/cli/migrations/v6*.json` and flags retired component imports, renamed props on WebKit
-  tags and retired icon classes; `npx @aziontech/webkit migrate` rewrites them.
+- **Consumers:** the ESLint rule `azion-ui/no-deprecated-name` reads
+  `src/cli/migrations/v6*.json` and flags retired component imports, renamed props on Azion UI
+  tags and retired icon classes; `npx @aziontech/ui migrate` rewrites them.
 - **The switch:** `NAMING_STAGED_BLOCKS` in `naming-rules.mjs` is `false` while the rename
   lanes land; the lead sets it to `true` after they merge, and every staged rule blocks.
-- **Old → new pairs** come from the `v6*.json` maps, so the check and `webkit migrate` always
+- **Old → new pairs** come from the `v6*.json` maps, so the check and `azion-ui migrate` always
   agree on what a name became.
 
 ## Why this rule exists

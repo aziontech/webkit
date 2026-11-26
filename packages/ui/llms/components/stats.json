@@ -1,8 +1,8 @@
 {
  "name": "stats",
  "binding": "Stats",
- "import": "@aziontech/webkit/stats",
- "treeShakeableImport": "@aziontech/webkit/stats",
+ "import": "@aziontech/ui/stats",
+ "treeShakeableImport": "@aziontech/ui/stats",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

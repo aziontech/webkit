@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 30fb3e01ad8c86f890e61cfea2c8829d97006cb40bde8e331972171ae267fdb7
+checksum: 59ddd50ed09e28814bbbdd67e35536bcc5f951fda24151601f30d36bf3f17550
 created: 2026-06-25
 last_updated: 2026-11-24
 ---
@@ -53,7 +53,7 @@ DatePicker picks **one date**, optionally with a time, in a form field. A trigge
 <script setup>
   import { ref } from 'vue'
 
-  import DatePicker from '@aziontech/webkit/date-picker'
+  import DatePicker from '@aziontech/ui/date-picker'
 
   const due = ref(null)
 </script>
@@ -83,8 +83,8 @@ Tree-shaking alternative — the standalone root + the sub-component from its ow
 
 ```vue
 <script setup>
-  import DatePicker from '@aziontech/webkit/date-picker-root'
-  import DatePickerClear from '@aziontech/webkit/date-picker-clear'
+  import DatePicker from '@aziontech/ui/date-picker-root'
+  import DatePickerClear from '@aziontech/ui/date-picker-clear'
 </script>
 ```
 
@@ -264,7 +264,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

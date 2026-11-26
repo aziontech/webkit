@@ -3,10 +3,10 @@
 > The code editor page, a page body for ConsoleLayout (the layout's breadcrumb names the service): the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a `CodeEditor` filling its pane with zero-padded line numbers and the Monaco loader from the code-editor spec. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar: Save shows its loading state while Discard and the fields wait, a saved change raises a success toast, and a failed save keeps the bar with a danger `Alert`. Fields reorder with Move up and Move down buttons. Its page-level parts are `PageTabs`, `SettingsGroup`, `SettingsRow` and `SaveBar`.
 
 - Surface: app
-- Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/webkit`
+- Source: `blocks/edit/edit-function/edit-function.vue` in `@aziontech/ui`
 - MCP: `get_block("edit/edit-function")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-shortcuts`, `use-unsaved-changes`, `utils/leave-link`
-- Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
+- Skills: `azion-ui-layout`, `azion-ui-navigation`, `azion-ui-form`
 
 ## Asked as
 
@@ -41,7 +41,7 @@ A thin bar above the editor with a `ToggleGroup` labeled Editor document that sw
 
 ### C. Code document — `CodeEditor`, `FieldError` (required)
 
-A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded line numbers (01, 02…), Tab indents, and Escape then Tab leaves it. It passes `:loader="loadMonaco"`, the loader from the `code-editor` spec: it sets `MonacoEnvironment.getWorker` with the editor, JSON and TypeScript workers (`monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|typescript>/<name>.worker?worker`) and returns `import('monaco-editor')`, so Monaco is code-split, themed from the tokens and has its language services; the plain editor stays the server and no-JavaScript fallback. In TypeScript the loader returns `Promise<CodeEditorMonacoModule>` (exported by `@aziontech/webkit/code-editor`) and casts the imported module to it, because `CodeEditorMonacoModule` does not yet accept the module type of monaco-editor 0.57; the `?worker` imports type-check through the Vite client types that create-vue's `env.d.ts` references. The app installs `monaco-editor` (0.56 or later). An empty document on Save shows an invalid `FieldError` under the editor, cleared on the next keystroke.
+A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded line numbers (01, 02…), Tab indents, and Escape then Tab leaves it. It passes `:loader="loadMonaco"`, the loader from the `code-editor` spec: it sets `MonacoEnvironment.getWorker` with the editor, JSON and TypeScript workers (`monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|typescript>/<name>.worker?worker`) and returns `import('monaco-editor')`, so Monaco is code-split, themed from the tokens and has its language services; the plain editor stays the server and no-JavaScript fallback. In TypeScript the loader returns `Promise<CodeEditorMonacoModule>` (exported by `@aziontech/ui/code-editor`) and casts the imported module to it, because `CodeEditorMonacoModule` does not yet accept the module type of monaco-editor 0.57; the `?worker` imports type-check through the Vite client types that create-vue's `env.d.ts` references. The app installs `monaco-editor` (0.56 or later). An empty document on Save shows an invalid `FieldError` under the editor, cleared on the next keystroke.
 
 ### D. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle` (optional)
 
@@ -73,11 +73,11 @@ Inside an expanded field, `SettingsRow`s for Name, Type, Label, Description, Req
 
 ### I. Settings tab — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `RadioGroup`, `Switch`, `FieldError` (required)
 
-The form column with four `SettingsGroup`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `RadioGroup` choice cards (`variant="card"`)) and Status (Active as a `Switch`). See `skills/webkit-form`.
+The form column with four `SettingsGroup`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `RadioGroup` choice cards (`variant="card"`)) and Status (Active as a `Switch`). See `skills/azion-ui-form`.
 
 ### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
-A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. Save emits `submit` with the values and the page sets `loading`. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; when `loading` ends with no `error`, a success toast says "image-optimizer saved." and the bar leaves. A failed save (`error` set) keeps the bar and every change, and puts a small danger `Alert` with the message in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries, and Discard emits `discard` so the page clears the error. The dirty state comes from `useUnsavedChanges`, which also asks the browser to confirm a reload or a tab close while code, arguments or settings hold unsaved edits. With unsaved edits, a click on any link on the page that leaves it in the same tab (the breadcrumb, the sidebar, a back button; `leavingLink` from `@aziontech/webkit/utils/leave-link` skips new-tab, download and in-page links) first opens the guard's `Unsaved changes` `ConfirmDialog` (Keep editing or Discard changes), as `account/account-team-permissions` does in Edit Team; nothing typed is lost silently.
+A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. Save emits `submit` with the values and the page sets `loading`. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; when `loading` ends with no `error`, a success toast says "image-optimizer saved." and the bar leaves. A failed save (`error` set) keeps the bar and every change, and puts a small danger `Alert` with the message in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries, and Discard emits `discard` so the page clears the error. The dirty state comes from `useUnsavedChanges`, which also asks the browser to confirm a reload or a tab close while code, arguments or settings hold unsaved edits. With unsaved edits, a click on any link on the page that leaves it in the same tab (the breadcrumb, the sidebar, a back button; `leavingLink` from `@aziontech/ui/utils/leave-link` skips new-tab, download and in-page links) first opens the guard's `Unsaved changes` `ConfirmDialog` (Keep editing or Discard changes), as `account/account-team-permissions` does in Edit Team; nothing typed is lost silently.
 
 ### K. Shortcut keycap — `Kbd` (optional)
 
@@ -85,7 +85,7 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 ## Data
 
-The block takes the saved service and the request state through props and emits the save; it fetches nothing. `FunctionEditorService`, `FunctionEditorField`, `FunctionEditorValues` and `FunctionEditorProps` are exported from `edit-function.vue`, and `sample.ts` holds the sample service and fields the block renders when `service` or `fields` is left out. The editor keeps its own draft; Discard returns to the props. The page file is the wiring: `parts/` holds its regions (`function-arguments.vue` with `function-field-item.vue` and `function-field-settings.vue`, `function-settings-tab.vue`, `function-save-bar.vue`, and the TestRun pane `function-test-run-pane.vue`), `composables/use-function-fields.ts` the field list behavior (names, expand, add, duplicate, remove, move), `composables/use-function-test-run.ts` the TestRun run and save simulation, and `lib/function-editor.ts` the Monaco loader, the option lists and the field helpers. `webkit add` copies them all.
+The block takes the saved service and the request state through props and emits the save; it fetches nothing. `FunctionEditorService`, `FunctionEditorField`, `FunctionEditorValues` and `FunctionEditorProps` are exported from `edit-function.vue`, and `sample.ts` holds the sample service and fields the block renders when `service` or `fields` is left out. The editor keeps its own draft; Discard returns to the props. The page file is the wiring: `parts/` holds its regions (`function-arguments.vue` with `function-field-item.vue` and `function-field-settings.vue`, `function-settings-tab.vue`, `function-save-bar.vue`, and the TestRun pane `function-test-run-pane.vue`), `composables/use-function-fields.ts` the field list behavior (names, expand, add, duplicate, remove, move), `composables/use-function-test-run.ts` the TestRun run and save simulation, and `lib/function-editor.ts` the Monaco loader, the option lists and the field helpers. `azion-ui add` copies them all.
 
 | Prop               | Type                             | What it does                                                                                        |
 | ------------------ | -------------------------------- | --------------------------------------------------------------------------------------------------- |
@@ -165,7 +165,7 @@ Then delete `sample.ts` and its import.
 - **Errors:** short and specific, e.g. "This field is required.", "Another field already uses this name."
 - **Save bar:** "You have unsaved changes."
 - **Test run:** status as one word ("Completed", "Running", "Failed"); the outcome as the status code and what happened, e.g. "200, served from the transform and written to cache."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -197,7 +197,7 @@ Then delete `sample.ts` and its import.
 - `view/view-events-explorer` — the events explorer, where the logs of every run land.
 - `Trace` — the span waterfall of the test run.
 - `detail/detail-version` — reading a deployed version of the code.
-- `ResizableRoot` — the split between schema and fields; see `skills/webkit-layout`.
+- `ResizableRoot` — the split between schema and fields; see `skills/azion-ui-layout`.
 
 ## Variants
 
@@ -214,16 +214,16 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
 
 ```vue
 <script setup lang="ts">
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import FieldError from '@aziontech/webkit/field-error'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import ResizablePane from '@aziontech/webkit/resizable-pane'
-  import ResizableRoot from '@aziontech/webkit/resizable-root'
-  import Tabs from '@aziontech/webkit/tabs'
-  import { toast } from '@aziontech/webkit/toast'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { leavingLink } from '@aziontech/webkit/utils/leave-link'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import FieldError from '@aziontech/ui/field-error'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import ResizablePane from '@aziontech/ui/resizable-pane'
+  import ResizableRoot from '@aziontech/ui/resizable-root'
+  import Tabs from '@aziontech/ui/tabs'
+  import { toast } from '@aziontech/ui/toast'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
+  import { leavingLink } from '@aziontech/ui/utils/leave-link'
   import {
     computed,
     nextTick,
@@ -574,8 +574,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-function
 ## `sample.ts`
 
 ```ts
-import type { LogViewerLine } from '@aziontech/webkit/log-viewer-root'
-import type { TraceSpan } from '@aziontech/webkit/trace'
+import type { LogViewerLine } from '@aziontech/ui/log-viewer-root'
+import type { TraceSpan } from '@aziontech/ui/trace'
 
 import type { FunctionEditorField, FunctionEditorService } from './edit-function.vue'
 
@@ -781,7 +781,7 @@ export const sampleRunId = 'run_7f21c9'
 ## `lib/function-editor.ts`
 
 ```ts
-import type { CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
+import type { CodeEditorMonacoModule } from '@aziontech/ui/code-editor'
 
 import type { FunctionEditorField } from '../edit-function.vue'
 
@@ -987,7 +987,7 @@ export function useFunctionFields(
 ## `composables/use-function-test-run.ts`
 
 ```ts
-import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+import { useShortcuts } from '@aziontech/ui/use-shortcuts'
 import type { editor as MonacoEditor } from 'monaco-editor'
 import { computed, type ComputedRef, onScopeDispose, readonly, type Ref, ref } from 'vue'
 
@@ -1093,16 +1093,16 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import ResizableHandle from '@aziontech/webkit/resizable-handle'
-  import ResizablePane from '@aziontech/webkit/resizable-pane'
-  import ResizableRoot from '@aziontech/webkit/resizable-root'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import ResizableHandle from '@aziontech/ui/resizable-handle'
+  import ResizablePane from '@aziontech/ui/resizable-pane'
+  import ResizableRoot from '@aziontech/ui/resizable-root'
   import { computed, ref, watch } from 'vue'
 
   import type { UseFunctionFieldsReturn } from '../composables/use-function-fields'
@@ -1304,10 +1304,10 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
 
 ```ts
 <script setup lang="ts">
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { UseFunctionFieldsReturn } from '../composables/use-function-fields'
   import type { FunctionEditorField } from '../edit-function.vue'
@@ -1455,13 +1455,13 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
 
 ```ts
 <script setup lang="ts">
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import Textarea from '@aziontech/webkit/textarea'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Select from '@aziontech/ui/select'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import Textarea from '@aziontech/ui/textarea'
 
   import type { UseFunctionFieldsReturn } from '../composables/use-function-fields'
   import type { FunctionEditorField } from '../edit-function.vue'
@@ -1788,10 +1788,10 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import SaveBar from '@aziontech/webkit/save-bar'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import SaveBar from '@aziontech/ui/save-bar'
 
   export interface FunctionSaveBarProps {
     /** The bar shows: there are unsaved edits or a save is in flight. */
@@ -1869,14 +1869,14 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
 
   import type { FunctionEditorService } from '../edit-function.vue'
   import { runtimeLabel } from '../lib/function-editor'
@@ -2025,13 +2025,13 @@ export function useFunctionTestRun(): UseFunctionTestRunReturn {
 
 ```ts
 <script setup lang="ts">
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import LogViewerContent from '@aziontech/webkit/log-viewer-content'
-  import LogViewer from '@aziontech/webkit/log-viewer-root'
-  import ResizablePane from '@aziontech/webkit/resizable-pane'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Trace from '@aziontech/webkit/trace'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import LogViewerContent from '@aziontech/ui/log-viewer-content'
+  import LogViewer from '@aziontech/ui/log-viewer-root'
+  import ResizablePane from '@aziontech/ui/resizable-pane'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import Trace from '@aziontech/ui/trace'
 
   import {
     sampleRunDetails,

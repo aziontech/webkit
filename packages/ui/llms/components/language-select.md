@@ -1,8 +1,8 @@
 # Language Select
 
-> A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the language named in itself (`English`, `Português (Brasil)`, `Español`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant="outline"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant="ghost"`, round flag and the tag in capitals such as `EN` or `PT-BR`, no border until hover) for a header, a toolbar or a footer. It offers the languages WebKit ships catalogs for and takes the consumer's own list through `options`.
+> A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the language named in itself (`English`, `Português (Brasil)`, `Español`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant="outline"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant="ghost"`, round flag and the tag in capitals such as `EN` or `PT-BR`, no border until hover) for a header, a toolbar or a footer. It offers the languages Azion UI ships catalogs for and takes the consumer's own list through `options`.
 
-- Import: `import LanguageSelect from '@aziontech/webkit/language-select'`
+- Import: `import LanguageSelect from '@aziontech/ui/language-select'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [language-select.json](language-select.json)
 
@@ -25,7 +25,7 @@
 
 - Two or three languages that must stay visible side by side on a toolbar → use `toggle-group`.
 - Picking a country (for a phone number, an address) → use `phone-input` or `select`.
-- Setting the language of WebKit's own strings → that is `config-provider`'s `locale`; bind this picker's `v-model` to it.
+- Setting the language of Azion UI's own strings → that is `config-provider`'s `locale`; bind this picker's `v-model` to it.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -39,7 +39,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `options` | `LanguageSelectOption[]` | `(the languages WebKit ships — see Notes)` | false | Languages offered, in order: `{ value, label?, country? }` where `value` is a BCP 47 tag, `label` the language named in itself (derived from the tag when omitted), and `country` the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region, else its likely region, when omitted). |
+| `options` | `LanguageSelectOption[]` | `(the languages Azion UI ships — see Notes)` | false | Languages offered, in order: `{ value, label?, country? }` where `value` is a BCP 47 tag, `label` the language named in itself (derived from the tag when omitted), and `country` the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region, else its likely region, when omitted). |
 | `variant` | `'outline' \| 'ghost'` | `'outline'` | false | Trigger look: `outline` is the full field (round flag and name) for forms and settings; `ghost` is the compact switcher (round flag and the BCP 47 tag in capitals, such as EN or PT-BR, no border until hover) for a header, a toolbar or a footer. |
 | `placeholder` | `string` | `''` | false | Trigger text while no language is picked. Empty uses the locale catalog (`Language`). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token forwarded to the Select trigger. Heights: small=28px, medium=32px, large=40px. |
@@ -109,12 +109,12 @@
 
 ```vue
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Field from '@aziontech/webkit/field'
-  import LanguageSelect from '@aziontech/webkit/language-select'
-  import { es } from '@aziontech/webkit/locales/es'
-  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import Pagination from '@aziontech/webkit/pagination-root'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Field from '@aziontech/ui/field'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import { es } from '@aziontech/ui/locales/es'
+  import { ptBR } from '@aziontech/ui/locales/pt-BR'
+  import Pagination from '@aziontech/ui/pagination-root'
   import { ref } from 'vue'
 
   const locale = ref('en')
@@ -146,10 +146,10 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import LanguageSelect from '@aziontech/webkit/language-select'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import Field from '@aziontech/ui/field'
+  import IconButton from '@aziontech/ui/icon-button'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
   import { ref } from 'vue'
 
   const locale = ref('en')
@@ -187,7 +187,7 @@
 
 ```vue
 <script setup>
-  import LanguageSelect from '@aziontech/webkit/language-select'
+  import LanguageSelect from '@aziontech/ui/language-select'
   import { ref } from 'vue'
 
   const locale = ref('en')

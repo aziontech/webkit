@@ -1,7 +1,7 @@
 <script setup>
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import Quote from '@aziontech/webkit/quote'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import Quote from '@aziontech/ui/quote'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 </script>
 
 <template>

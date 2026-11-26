@@ -1,6 +1,6 @@
 // Canonical engine for the skill/agent doc standards (contributing/rules/authoring-docs.md).
 // Imported by BOTH the write-time hook (validate-authoring-docs.mjs) and the CI ratchet
-// (packages/webkit/scripts/check-authoring-docs.mjs) — one definition, two surfaces.
+// (packages/ui/scripts/check-authoring-docs.mjs) — one definition, two surfaces.
 // No external deps: reuses parseYamlFrontmatter from ./spec.mjs.
 
 import { parseYamlFrontmatter } from './spec.mjs'
@@ -18,9 +18,9 @@ const LOC = {
 export function docFileKind(rel) {
   let m
   if ((m = LOC.skillInternal.exec(rel)))
-    return { kind: 'skill', variant: 'internal', scope: 'webkit', unit: m[1] }
+    return { kind: 'skill', variant: 'internal', scope: 'ui', unit: m[1] }
   if ((m = LOC.agentInternal.exec(rel)))
-    return { kind: 'agent', variant: 'internal', scope: 'webkit', unit: m[1] }
+    return { kind: 'agent', variant: 'internal', scope: 'ui', unit: m[1] }
   if ((m = LOC.skillConsumer.exec(rel)))
     return { kind: 'skill', variant: 'consumer', scope: 'general', unit: m[1] }
   if ((m = LOC.agentConsumer.exec(rel)))
@@ -30,10 +30,10 @@ export function docFileKind(rel) {
 
 // --- file-as-example patterns (the four the task named) ---
 const FAE_COMPONENT_SRC_PATH =
-  /packages\/webkit\/src\/components\/[a-z][a-z0-9-]*\/[a-z][a-z0-9-]*\/[a-z][a-z0-9-]*\.(?:vue|ts)\b/g
+  /packages\/ui\/src\/components\/[a-z][a-z0-9-]*\/[a-z][a-z0-9-]*\/[a-z][a-z0-9-]*\.(?:vue|ts)\b/g
 const FAE_EXEMPLAR =
   /\b(?:canonicals?|exemplar|shape reference|for reference|Monolithic|Atomic|used in)\b[^\n]{0,60}?`?\b[a-z][a-z0-9-]+\.(?:vue|ts)`?/g
-const FAE_SRC_ESCAPE = /(?:\.\.\/){2,}(?:packages\/webkit\/)?src\/components\//g
+const FAE_SRC_ESCAPE = /(?:\.\.\/){2,}(?:packages\/ui\/)?src\/components\//g
 const FAE_EXPORTS_LOOKUP =
   /\b(?:look\s*up|find|locate|search(?:\s+for)?|read|consult|browse)\b[^\n]{0,50}?package\.json#exports/gi
 
@@ -42,17 +42,17 @@ export const MESSAGES = {
   'name-mismatch':
     'frontmatter `name` must equal the folder name (skills) / filename without .md (agents).',
   'description-empty': 'frontmatter `description` is missing or blank.',
-  'scope-missing': 'frontmatter is missing the required `scope:` field (general|webkit).',
-  'scope-invalid': 'frontmatter `scope` must be exactly "general" or "webkit".',
+  'scope-missing': 'frontmatter is missing the required `scope:` field (general|ui).',
+  'scope-invalid': 'frontmatter `scope` must be exactly "general" or "ui".',
   'scope-mismatch':
-    'frontmatter `scope` disagrees with the file location (skills/ and adapters/ ⇒ general; contributing/ ⇒ webkit).',
-  'consumer-skill-prefix': 'a consumer skill `name` must start with "webkit-".',
+    'frontmatter `scope` disagrees with the file location (skills/ and adapters/ ⇒ general; contributing/ ⇒ ui).',
+  'consumer-skill-prefix': 'a consumer skill `name` must start with "azion-ui-".',
   'consumer-skill-status': 'a consumer skill must declare `status:`.',
   'consumer-skill-last-updated': 'a consumer skill must declare `last_updated:`.',
   'enforced-by-missing':
     'a skill must declare a non-empty `enforced_by:` flow array — every skill maps to ≥1 enforcer (a rule id, `ui-verify`, or `review`) so nothing is merely advisory.',
   'component-src-path':
-    'file-as-example: hardcoded component source path — find components via the webkit MCP/catalog, not a src/ path.',
+    'file-as-example: hardcoded component source path — find components via the Azion UI MCP/catalog, not a src/ path.',
   'file-as-exemplar':
     'file-as-example: names a component .vue/.ts as an exemplar — reference the catalog (MCP get_component), not a movable filename.',
   'src-escape':
@@ -105,7 +105,7 @@ export function scanDoc(rel, content) {
     if (!str(fm.description)) push('description-empty')
     const scope = str(fm.scope)
     if (!scope) push('scope-missing')
-    else if (scope !== 'general' && scope !== 'webkit') push('scope-invalid')
+    else if (scope !== 'general' && scope !== 'ui') push('scope-invalid')
     else if (scope !== info.scope) push('scope-mismatch')
 
     // Every skill (internal + consumer) declares what enforces it — a rule id, `ui-verify`,
@@ -114,7 +114,7 @@ export function scanDoc(rel, content) {
     if (info.kind === 'skill' && parseEnforcedBy(fmText).length === 0) push('enforced-by-missing')
 
     if (info.kind === 'skill' && info.variant === 'consumer') {
-      if (!str(fm.name).startsWith('webkit-')) push('consumer-skill-prefix')
+      if (!str(fm.name).startsWith('azion-ui-')) push('consumer-skill-prefix')
       if (!str(fm.status)) push('consumer-skill-status')
       if (!str(fm.last_updated)) push('consumer-skill-last-updated')
     }

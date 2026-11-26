@@ -1,8 +1,8 @@
 {
  "name": "brand",
  "binding": "Brand",
- "import": "@aziontech/webkit/brand",
- "treeShakeableImport": "@aziontech/webkit/brand",
+ "import": "@aziontech/ui/brand",
+ "treeShakeableImport": "@aziontech/ui/brand",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

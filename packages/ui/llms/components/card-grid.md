@@ -2,8 +2,8 @@
 
 > The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `registration-frame` elements. The `frame` register is the one that composes: each `CardGrid.Cell` draws its own rules and corner marks and carries its own fill, so the grid needs no background trick and nests flush inside a column that already owns the outer edges.
 
-- Import: `import CardGridRoot from '@aziontech/webkit/card-grid-root'`
-- Compound import (dot notation, not tree-shakeable): `import CardGrid from '@aziontech/webkit/card-grid'`
+- Import: `import CardGridRoot from '@aziontech/ui/card-grid-root'`
+- Compound import (dot notation, not tree-shakeable): `import CardGrid from '@aziontech/ui/card-grid'`
 - Category: layout · Surface: site · Structure: composition
 - API as JSON: [card-grid.json](card-grid.json)
 
@@ -63,7 +63,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/card-grid-cell`
+- `@aziontech/ui/card-grid-cell`
 
 ## Sub-components
 
@@ -105,8 +105,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import CardGridCell from '@aziontech/webkit/card-grid-cell'
-  import CardGridRoot from '@aziontech/webkit/card-grid-root'
+  import CardGridCell from '@aziontech/ui/card-grid-cell'
+  import CardGridRoot from '@aziontech/ui/card-grid-root'
 </script>
 
 <template>
@@ -137,8 +137,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import CardGridCell from '@aziontech/webkit/card-grid-cell'
-  import CardGridRoot from '@aziontech/webkit/card-grid-root'
+  import CardGridCell from '@aziontech/ui/card-grid-cell'
+  import CardGridRoot from '@aziontech/ui/card-grid-root'
 </script>
 
 <template>
@@ -175,7 +175,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import CardGridRoot from '@aziontech/webkit/card-grid-root'
+  import CardGridRoot from '@aziontech/ui/card-grid-root'
 </script>
 
 <template>

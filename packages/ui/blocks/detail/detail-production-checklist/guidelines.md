@@ -99,7 +99,7 @@ Then delete `sample.ts` and its import.
 - **Gate actions (drawer):** `Add <Module>` or a verb and noun, three words or fewer, e.g. "Add Domain", "Attach Policy", "Add Error Page".
 - **Done note:** a muted sentence beside the Done tag naming what the gate now serves, ending with a period, e.g. "Serving shop.example.com."; the tag itself reads "Done".
 - **Drawer description:** one plain sentence on where the service stands, e.g. "This service is live on a generated hostname. These steps take it to production."
-- Follow `skills/webkit-microcopy`: no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -120,4 +120,4 @@ Then delete `sample.ts` and its import.
 - `detail/detail-resource` — the service Overview tab that renders this card under the summary.
 - `detail/detail-get-started` — onboarding before the first deployment, for a resource made from the CLI.
 - `detail/detail-domains-card` — where an attached policy or error page shows up once added.
-- `Item` — the row primitive for each gate; see `skills/webkit-ui-states` for the done and empty states.
+- `Item` — the row primitive for each gate; see `skills/azion-ui-states` for the done and empty states.

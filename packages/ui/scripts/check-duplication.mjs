@@ -22,7 +22,7 @@ export function classify(a, b) {
 }
 
 export function findClones(pkgDir = PKG) {
-  const out = mkdtempSync(join(tmpdir(), 'webkit-jscpd-'))
+  const out = mkdtempSync(join(tmpdir(), 'azion-ui-jscpd-'))
   const args = [
     ...SCANNED,
     '--min-lines',

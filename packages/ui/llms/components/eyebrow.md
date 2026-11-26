@@ -2,7 +2,7 @@
 
 > Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in `--text-default`, optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`module-header`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
-- Import: `import Eyebrow from '@aziontech/webkit/eyebrow'`
+- Import: `import Eyebrow from '@aziontech/ui/eyebrow'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [eyebrow.json](eyebrow.json)
 
@@ -78,7 +78,7 @@
 
 ```vue
 <script setup>
-  import Eyebrow from '@aziontech/webkit/eyebrow'
+  import Eyebrow from '@aziontech/ui/eyebrow'
 </script>
 
 <template>
@@ -90,7 +90,7 @@
 
 ```vue
 <script setup>
-  import Eyebrow from '@aziontech/webkit/eyebrow'
+  import Eyebrow from '@aziontech/ui/eyebrow'
 </script>
 
 <template>
@@ -106,7 +106,7 @@
 
 ```vue
 <script setup>
-  import Eyebrow from '@aziontech/webkit/eyebrow'
+  import Eyebrow from '@aziontech/ui/eyebrow'
 </script>
 
 <template>

@@ -1,9 +1,9 @@
 <script setup>
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Item from '@aziontech/webkit/item'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Item from '@aziontech/ui/item'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import PageHeader from '@aziontech/ui/page-header'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { computed, ref } from 'vue'
 
   const services = [

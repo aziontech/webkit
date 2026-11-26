@@ -1,5 +1,5 @@
 <script setup>
-  import Reasoning from '@aziontech/webkit/reasoning'
+  import Reasoning from '@aziontech/ui/reasoning'
 </script>
 
 <template>

@@ -1,10 +1,10 @@
 # useDirection
 
-Composable `@aziontech/webkit/use-direction`. The signatures and option tables below are read from its typed source, [`src/composables/use-direction/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-direction/index.ts).
+Composable `@aziontech/ui/use-direction`. The signatures and option tables below are read from its typed source, [`src/composables/use-direction/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-direction/index.ts).
 
 ```ts
-import { useDirection, resolveDirection, eventDirection, logicalArrowKey } from '@aziontech/webkit/use-direction'
-import type { Direction } from '@aziontech/webkit/use-direction'
+import { useDirection, resolveDirection, eventDirection, logicalArrowKey } from '@aziontech/ui/use-direction'
+import type { Direction } from '@aziontech/ui/use-direction'
 ```
 
 ## `useDirection`

@@ -24,7 +24,7 @@
      */
     locale?: string
     /**
-     * Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>`
+     * Extra catalogs keyed by locale tag, imported from `@aziontech/ui/locales/<tag>`
      * (`{ 'pt-BR': ptBR, es }`), added to those of the provider above; a locale with no catalog
      * falls back to English.
      */

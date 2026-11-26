@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import LogViewer from '@aziontech/webkit/log-viewer'
+  import Button from '@aziontech/ui/button'
+  import LogViewer from '@aziontech/ui/log-viewer'
 
   const lines = [
     { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started' },

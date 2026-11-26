@@ -2,7 +2,7 @@
 
 The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Save and add another, and Save.
 
-A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create Ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).
+A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create Ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/azion-ui-create-surface`).
 
 ## When to use
 
@@ -143,7 +143,7 @@ Then delete `sample.ts` and its import. A large contact list moves to server sea
 - **Failure:** title `The ticket wasn't created.`, the page's message, `Retry`.
 - **Success:** `Ticket #4840 was created.`, the subject, `Open ticket`.
 - **Commit:** `Cancel`, `Save and add another`, `Save`. The discard dialog uses the built-in `useUnsavedChanges` labels.
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 

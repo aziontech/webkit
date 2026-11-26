@@ -1,8 +1,8 @@
 {
  "name": "error-boundary",
  "binding": "ErrorBoundary",
- "import": "@aziontech/webkit/error-boundary",
- "treeShakeableImport": "@aziontech/webkit/error-boundary",
+ "import": "@aziontech/ui/error-boundary",
+ "treeShakeableImport": "@aziontech/ui/error-boundary",
  "category": "feedback",
  "surface": "app",
  "structure": "monolithic",
@@ -17,7 +17,7 @@
   "When the app reports render errors to a monitoring service: the `error` event carries the error and where it was thrown."
  ],
  "avoidWhen": [
-  "A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/state-form-validation` (SectionRejected) and `skills/webkit-ui-states` describe.",
+  "A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/state-form-validation` (SectionRejected) and `skills/azion-ui-states` describe.",
   "A whole page that cannot be shown (missing route, no access, server failure) → use the `state/state-error-page` block.",
   "A field that failed validation → use `field` with its error message.",
   "Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`."

@@ -1,5 +1,5 @@
 <script setup>
-  import JobPostingSection from '@aziontech/webkit/job-posting-section'
+  import JobPostingSection from '@aziontech/ui/job-posting-section'
   import { nextTick, ref } from 'vue'
 
   const facets = [

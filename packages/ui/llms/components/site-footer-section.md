@@ -2,7 +2,7 @@
 
 > The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer-section', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `language-select`. The bottom bar is one row, as azion.com draws it: the Azion mark (the footer's `brand` slot) and the small social icon buttons at the start, the status indicator (`status`) and the compact language switcher, a `LanguageSelect` with `variant="ghost"` (round flag and country code, `language`), at the end; below `md` it stacks, the mark and icons over the status and language. In the `site` placement the footer spans the page like `site-header-section`, opening on a full-width rule with a corner mark at each end, with no side rules. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are BCP 47 tags (`EN`, `PT-BR`, `ES`), each shown with its round flag and its name in its own language.
 
-- Import: `import SiteFooterSection from '@aziontech/webkit/site-footer-section'`
+- Import: `import SiteFooterSection from '@aziontech/ui/site-footer-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [site-footer-section.json](site-footer-section.json)
 
@@ -104,7 +104,7 @@
 
 ```vue
 <script setup>
-  import SiteFooterSection from '@aziontech/webkit/site-footer-section'
+  import SiteFooterSection from '@aziontech/ui/site-footer-section'
 
   const columns = [
     {
@@ -290,7 +290,7 @@
 
 ```vue
 <script setup>
-  import SiteFooterSection from '@aziontech/webkit/site-footer-section'
+  import SiteFooterSection from '@aziontech/ui/site-footer-section'
   import { ref } from 'vue'
 
   const columns = [

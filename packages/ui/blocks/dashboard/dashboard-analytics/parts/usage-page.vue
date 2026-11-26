@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import type { TableColumn } from '@aziontech/ui/data-table'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref } from 'vue'
 
   import {

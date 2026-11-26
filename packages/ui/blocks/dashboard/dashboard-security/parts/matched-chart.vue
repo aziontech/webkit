@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Chart from '@aziontech/webkit/chart'
+  import Chart from '@aziontech/ui/chart'
 
   import type { SecurityMatchedRequests } from '../dashboard-security.vue'
 

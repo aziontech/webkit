@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Rating from '@aziontech/webkit/rating'
+  import Field from '@aziontech/ui/field'
+  import Rating from '@aziontech/ui/rating'
   import { nextTick, ref } from 'vue'
 
   const score = ref(0)

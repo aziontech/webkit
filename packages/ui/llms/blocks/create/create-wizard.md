@@ -3,10 +3,10 @@
 > The page a first-level resource is created on one step at a time, built on the `Wizard` component: the creation header, a page heading, then the Wizard with its step rail on the start side (completed steps reachable, later ones locked), the current step's heading and fields, and its footer with Cancel, Previous and Next, Next turning into the create action on the last step. Next validates the step it leaves and stays put with the message under the field when it fails; a Review step shows the create's loading state and confirms it in a toast. Every create asks first where the resource runs: a chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings. CreateAndDeploy is the same frame for a resource that is bound to another and deployed in one act (a service that serves a project on a domain): Project, then Domain and deployment, ending on Create and deploy. Built from `Wizard`, `PageHeader`, `SettingsRow`, `AppHeader`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`variant="card"`), `Item`, `Textarea`, `FieldError` and `Button`.
 
 - Surface: app
-- Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-wizard")`
 - Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-escape-to-cancel`, `use-shortcuts`, `use-unsaved-changes`, `utils/radio-list`, [Wizard](../../components/wizard.md), [Wizard](../../components/wizard.md)
-- Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
+- Skills: `azion-ui-create-surface`, `azion-ui-form`, `azion-ui-errors`
 
 ## Asked as
 
@@ -104,7 +104,7 @@ To go live, render the block from a page that owns the policies and the request:
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import CreateWizard, { type CreateWizardSubmission } from './create-wizard.vue'
 
   const { data: policies } = usePolicies()
@@ -156,7 +156,7 @@ Then delete `sample.ts` and its import.
 - **Module alert:** the consequence in one sentence, e.g. "acme-staging has IP filtering off, so no rule reads this list until the module is on."
 - **Escape routes:** verb first, e.g. "Create a policy", "Continue without a policy".
 - **Required message:** "This field is required.", or what to do, e.g. "Select the project this service serves, or create a new one."
-- Follow `skills/webkit-microcopy`: "Select", never "Choose"; no em dash; no "simply".
+- Follow `skills/azion-ui-microcopy`: "Select", never "Choose"; no em dash; no "simply".
 
 ## Accessibility
 
@@ -187,7 +187,7 @@ Then delete `sample.ts` and its import.
 
 ## Related
 
-- `Wizard` — the component this block is built on; see `skills/webkit-form`.
+- `Wizard` — the component this block is built on; see `skills/azion-ui-form`.
 - `create/create-page` — the same job when the fields fit one screen.
 - `create/create-hub` and `create/create-deploy-template` — a new project from Git, a template or an upload.
 - `create/create-resource-picker` — the Existing or New band CreateAndDeploy binds its project with.
@@ -218,19 +218,19 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import Textarea from '@aziontech/webkit/textarea'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import Wizard from '@aziontech/webkit/wizard'
+  import Alert from '@aziontech/ui/alert'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import Textarea from '@aziontech/ui/textarea'
+  import { toast } from '@aziontech/ui/toast'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
+  import Wizard from '@aziontech/ui/wizard'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { listFields, types } from './lib/access-list'
@@ -1195,7 +1195,7 @@ export const consumers = [
 ## `lib/service-wizard.ts`
 
 ```ts
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 export interface ServiceWizardOption extends SelectOptionItem {
   description?: string
@@ -1325,9 +1325,9 @@ export function filterOptions(
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import type { UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
 
   export interface DiscardDialogProps {
     /** The unsaved-changes guard whose leave dialog this renders. */
@@ -1365,12 +1365,12 @@ export function filterOptions(
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Tag from '@aziontech/webkit/tag'
-  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
+  import Button from '@aziontech/ui/button'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Tag from '@aziontech/ui/tag'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/ui/utils/radio-list'
   import { computed, ref } from 'vue'
 
   import type { CreateWizardPolicy } from '../types'
@@ -1522,12 +1522,12 @@ export function filterOptions(
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import Subheader from '@aziontech/webkit/subheader'
-  import Tag from '@aziontech/webkit/tag'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import Subheader from '@aziontech/ui/subheader'
+  import Tag from '@aziontech/ui/tag'
 
   import { consumers, PREVIEW } from '../lib/access-list'
 
@@ -1715,16 +1715,16 @@ export function filterOptions(
 
 ```ts
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
-  import Wizard from '@aziontech/webkit/wizard-root'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppHeaderAccount from '@aziontech/ui/app-header-account'
+  import Brand from '@aziontech/ui/brand'
+  import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/ui/breadcrumb-root'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { useEscapeToCancel } from '@aziontech/ui/use-escape-to-cancel'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
+  import type { UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
+  import Wizard from '@aziontech/ui/wizard-root'
   import { type ComponentPublicInstance, onMounted, ref } from 'vue'
 
   import DiscardDialog from './discard-dialog.vue'

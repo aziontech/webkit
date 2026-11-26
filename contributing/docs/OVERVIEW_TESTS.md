@@ -1,16 +1,16 @@
 # Test Architecture — Overview
 
-> **@aziontech/webkit monorepo** · snapshot of July 2026, visual layer updated November 2026
+> **@aziontech/ui monorepo** · snapshot of July 2026, visual layer updated November 2026
 > Companion doc: [`OVERVIEW_LINT.md`](./OVERVIEW_LINT.md) (static-quality layers)
 
 ## TL;DR
 
-Webkit ships **two complementary test layers**, both running in **real Chromium** (never jsdom):
+Azion UI ships **two complementary test layers**, both running in **real Chromium** (never jsdom):
 
-| Layer                    | Tooling                                                                          | DOM                                          | Owns                                                                                   | CI workflow                                                                                    |
-| ------------------------ | -------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| **1. Functional / unit** | Vitest 4 browser mode + Playwright                                               | Unstyled by default; styled when a suite imports `src/test/reflow.css` | Behavior, structure, events, v-model, ARIA, structural a11y                            | `package-webkit-test.yml` (4 shards)                                                           |
-| **2. Visual regression** | Playwright `toHaveScreenshot` (`apps/visual`) over the built docs site and demos | Fully styled (theme + Tailwind)              | Pixels, layout, color, typography — light/dark at 1280 and 390 px (sampled matrix, §3) | `governance.yml` → `visual` (4 shards, Playwright image); baselines via `visual-baselines.yml` |
+| Layer                    | Tooling                                                                          | DOM                                                                    | Owns                                                                                   | CI workflow                                                                                    |
+| ------------------------ | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **1. Functional / unit** | Vitest 4 browser mode + Playwright                                               | Unstyled by default; styled when a suite imports `src/test/reflow.css` | Behavior, structure, events, v-model, ARIA, structural a11y                            | `package-azion-ui-test.yml` (4 shards)                                                         |
+| **2. Visual regression** | Playwright `toHaveScreenshot` (`apps/visual`) over the built docs site and demos | Fully styled (theme + Tailwind)                                        | Pixels, layout, color, typography — light/dark at 1280 and 390 px (sampled matrix, §3) | `governance.yml` → `visual` (4 shards, Playwright image); baselines via `visual-baselines.yml` |
 
 Current numbers: **67 component test suites · 1362 tests passing · 1 skipped · ~97% of in-scope component roots covered** — over a library of ~150 components (roots + sub-components).
 
@@ -23,8 +23,8 @@ The split is deliberate: **units prove it works, visual proves it looks right.**
 ```mermaid
 flowchart TB
     subgraph SRC["Source of truth"]
-        VUE["Component<br/>packages/webkit/src/components/&lt;category&gt;/&lt;name&gt;/&lt;name&gt;.vue"]
-        EX["Examples and blocks<br/>packages/webkit/examples/&lt;name&gt;/ · packages/webkit/blocks/"]
+        VUE["Component<br/>packages/ui/src/components/&lt;category&gt;/&lt;name&gt;/&lt;name&gt;.vue"]
+        EX["Examples and blocks<br/>packages/ui/examples/&lt;name&gt;/ · packages/ui/blocks/"]
     end
 
     subgraph L1["Layer 1 — Functional (Vitest browser mode)"]
@@ -54,7 +54,7 @@ flowchart TB
 
 Two ideas hold this together:
 
-1. **The example is the fixture.** Tests import a component's examples from `packages/webkit/examples/<name>/` where they fit, and the harnesses (`src/test/copyable-sfcs.test.ts`, hydration, server render, `a11y-blocks-*`) mount every example and block file. The docs site renders the same files, so docs and tests cannot drift apart.
+1. **The example is the fixture.** Tests import a component's examples from `packages/ui/examples/<name>/` where they fit, and the harnesses (`src/test/copyable-sfcs.test.ts`, hydration, server render, `a11y-blocks-*`) mount every example and block file. The docs site renders the same files, so docs and tests cannot drift apart.
 2. **One browser, two lenses.** Both layers run Chromium via Playwright. Layer 1 mounts components unstyled and asserts _what the DOM is and does_; Layer 2 renders the fully-styled docs site and demos and asserts _what the pixels look like_.
 
 ---
@@ -77,12 +77,12 @@ Consequence: **no mocks for layout, positioning, focus, or `<Teleport>` — ever
 
 ### 2.2 The stack
 
-| Piece         | File                                | What it does                                                                                                                                                                     |
-| ------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Runner config | `packages/webkit/vitest.config.ts`  | Vitest **4.1.9** browser mode: `provider: playwright()` (v4 factory), `headless: true`, single `chromium` instance, `retry: 2` in CI (0 local), includes `src/**/*.test.{ts,js}` |
-| Global setup  | `packages/webkit/src/test/setup.ts` | `cleanup()` after each test + **anchor-navigation guard** (prevents `<a href>` clicks from tearing down the test iframe, while `@click` handlers still fire)                     |
-| A11y helper   | `packages/webkit/src/test/axe.ts`   | `expectNoA11yViolations(container)` — runs **axe-core 4.10** and asserts zero violations                                                                                         |
-| Coverage      | `vitest.config.ts` → `coverage`     | V8 provider, `text` + `lcov`, **reporting-only** (no gate yet); measures `src/components/**`, excludes tests, `.figma.ts`, barrels, presets                                      |
+| Piece         | File                            | What it does                                                                                                                                                                     |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Runner config | `packages/ui/vitest.config.ts`  | Vitest **4.1.9** browser mode: `provider: playwright()` (v4 factory), `headless: true`, single `chromium` instance, `retry: 2` in CI (0 local), includes `src/**/*.test.{ts,js}` |
+| Global setup  | `packages/ui/src/test/setup.ts` | `cleanup()` after each test + **anchor-navigation guard** (prevents `<a href>` clicks from tearing down the test iframe, while `@click` handlers still fire)                     |
+| A11y helper   | `packages/ui/src/test/axe.ts`   | `expectNoA11yViolations(container)` — runs **axe-core 4.10** and asserts zero violations                                                                                         |
+| Coverage      | `vitest.config.ts` → `coverage` | V8 provider, `text` + `lcov`, **reporting-only** (no gate yet); measures `src/components/**`, excludes tests, `.figma.ts`, barrels, presets                                      |
 
 ### 2.3 Anatomy of a component test
 
@@ -183,12 +183,12 @@ and demo routes are picked up from the files; only their baseline is a manual st
 
 ## 4. CI pipelines
 
-### 4.1 Functional suite — `.github/workflows/package-webkit-test.yml`
+### 4.1 Functional suite — `.github/workflows/package-azion-ui-test.yml`
 
 ```mermaid
 flowchart LR
     T["PR / push → dev"] --> CH["changes job<br/>dorny/paths-filter"]
-    CH -- "packages/webkit/**" --> MX["matrix: shard 1–4<br/>fail-fast: false"]
+    CH -- "packages/ui/**" --> MX["matrix: shard 1–4<br/>fail-fast: false"]
     CH -- "nothing relevant" --> SKIP["skip (gate passes as skipped)"]
     MX --> S1["vitest run --shard=1/4"]
     MX --> S2["--shard=2/4"]
@@ -221,7 +221,7 @@ Static quality (ESLint, Stylelint, Prettier, `vue-tsc`, type-coverage, security 
 
 Two mechanisms, verified in CI (`governance.yml` → build job):
 
-1. `packages/webkit/package.json#files` negates test artifacts:
+1. `packages/ui/package.json#files` negates test artifacts:
    ```json
    "files": ["src", "!src/**/*.test.{ts,js}", "!src/test/**", "package.json"]
    ```
@@ -230,33 +230,33 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
    ! npm pack --dry-run 2>&1 | grep -E '\.test\.(ts|js)|src/test/'
    ```
 
-`packages/webkit/tsconfig.json` also excludes `*.test.ts` and `src/test/` from declaration emit — no `.d.ts` is generated for test code.
+`packages/ui/tsconfig.json` also excludes `*.test.ts` and `src/test/` from declaration emit — no `.d.ts` is generated for test code.
 
 ---
 
 ## 6. Enforcement & scaffolding — how the floor stays enforced
 
-| Mechanism                                         | Kind                         | What it does                                                                                                                 |
-| ------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Mechanism                                              | Kind                         | What it does                                                                                                                 |
+| ------------------------------------------------------ | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | [`contributing/rules/testing.md`](../rules/testing.md) | Rule (source of truth)       | Fixes the browser-mode requirement, the 10-surface floor, and the hard prohibitions                                          |
-| `enforce-test-exists.mjs`                         | Claude Code PostToolUse hook | Warns when a root `.vue` is written without a co-located `<name>.test.ts`                                                    |
-| `component-scaffold` skill                        | Generator                    | Every new component is born with a starter test (render + testid override + axe) that the author expands to the full surface |
-| `validate-references.mjs`                         | Claude Code PreToolUse hook  | Blocks test files whose imports don't resolve (e.g. a vite alias instead of a relative path)                                 |
-| `package-webkit-test.yml` gate                    | CI                           | No PR merges with a red shard                                                                                                |
+| `enforce-test-exists.mjs`                              | Claude Code PostToolUse hook | Warns when a root `.vue` is written without a co-located `<name>.test.ts`                                                    |
+| `component-scaffold` skill                             | Generator                    | Every new component is born with a starter test (render + testid override + axe) that the author expands to the full surface |
+| `validate-references.mjs`                              | Claude Code PreToolUse hook  | Blocks test files whose imports don't resolve (e.g. a vite alias instead of a relative path)                                 |
+| `package-azion-ui-test.yml` gate                       | CI                           | No PR merges with a red shard                                                                                                |
 
 ---
 
 ## 7. Command cheat sheet
 
-| Command (repo root)                          | What it runs                                                         |
-| -------------------------------------------- | -------------------------------------------------------------------- |
-| `pnpm test:browser-webkit`                   | full browser-mode suite, headless                                    |
-| `pnpm test:webkit:watch`                     | watch mode                                                           |
-| `pnpm test:webkit:ui`                        | Vitest UI with a **headed** browser (debugging)                      |
-| `pnpm test:webkit:coverage`                  | suite + V8 coverage report (`text` + `lcov`)                         |
-| `pnpm test:visual`                           | styled screenshots vs baselines (after `build:docs` + `build:demos`) |
+| Command (repo root)                      | What it runs                                                         |
+| ---------------------------------------- | -------------------------------------------------------------------- |
+| `pnpm test:browser-webkit`               | full browser-mode suite, headless                                    |
+| `pnpm test:ui:watch`                     | watch mode                                                           |
+| `pnpm test:ui:ui`                        | Vitest UI with a **headed** browser (debugging)                      |
+| `pnpm test:ui:coverage`                  | suite + V8 coverage report (`text` + `lcov`)                         |
+| `pnpm test:visual`                       | styled screenshots vs baselines (after `build:docs` + `build:demos`) |
 | `pnpm update:baselines`                  | dispatch the baseline workflow for this branch                       |
-| `pnpm --filter @aziontech/webkit check:pack` | assert no test file leaks into the npm tarball                       |
+| `pnpm --filter @aziontech/ui check:pack` | assert no test file leaks into the npm tarball                       |
 
 ---
 

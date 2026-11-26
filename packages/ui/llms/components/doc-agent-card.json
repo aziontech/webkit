@@ -1,8 +1,8 @@
 {
  "name": "doc-agent-card",
  "binding": "DocAgentCard",
- "import": "@aziontech/webkit/doc-agent-card",
- "treeShakeableImport": "@aziontech/webkit/doc-agent-card",
+ "import": "@aziontech/ui/doc-agent-card",
+ "treeShakeableImport": "@aziontech/ui/doc-agent-card",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

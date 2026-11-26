@@ -2,8 +2,8 @@
 
 > A vertical rail that names the steps of one task, says which step the reader is on, and carries the progress between them on the line that joins the dots. It is the left column of a multi-step surface — a create wizard, a guided setup — while the content of the current step fills the column beside it. It is **vertical only**, by design. The rail runs the full height of the surface so the connector between two dots is the thing that measures progress; a horizontal variant would be a different component with a different job (a compact progress ribbon), not a prop on this one.
 
-- Import: `import StepperRoot from '@aziontech/webkit/stepper-root'`
-- Compound import (dot notation, not tree-shakeable): `import Stepper from '@aziontech/webkit/stepper'`
+- Import: `import StepperRoot from '@aziontech/ui/stepper-root'`
+- Compound import (dot notation, not tree-shakeable): `import Stepper from '@aziontech/ui/stepper'`
 - Category: navigation · Surface: app · Structure: composition
 - API as JSON: [stepper.json](stepper.json)
 
@@ -52,7 +52,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/stepper-step`
+- `@aziontech/ui/stepper-step`
 
 ## Sub-components
 
@@ -62,10 +62,10 @@ The root ships a **compound API**: an `index.ts` (beside `stepper.vue`) attaches
   - Props: `value?: string` (default `''` — identity of this step; matches the root's `v-model` when it is the active one), `title?: string` (default `''` — what this step asks, in the reader's words), `description?: string` (default `''` — one line under the title saying what the step decides), `status?: 'pending' | 'running' | 'success' | 'error'` (default `'pending'` — what the owner knows about this step; the active step is derived from the root and is never set here), `disabled?: boolean` (default `false` — the step cannot be reached yet; not focusable and not clickable).
   - Slot: `default` — optional body under the description, inside the rail. It renders after the step's `button`, in the same `li` and aligned with the title column, so interactive content (a link, a Retry button) is never nested inside the button.
 
-Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports` resolves every path, and `.d.ts` is generated at publish time):
+Resulting layout (no per-component `package.json`; the root `packages/ui/package.json#exports` resolves every path, and `.d.ts` is generated at publish time):
 
 ```
-packages/webkit/src/components/navigation/stepper/
+packages/ui/src/components/navigation/stepper/
 ├── stepper.vue                   (root; owns the model, provides the registry)
 ├── stepper.test.ts
 ├── index.ts                      (compound: attaches Step to the root)
@@ -76,7 +76,7 @@ packages/webkit/src/components/navigation/stepper/
     └── stepper-step.vue
 ```
 
-Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the folder only):
+Exports to add to `packages/ui/package.json#exports` (flat public names; category lives in the folder only):
 
 ```jsonc
 "./stepper": "./src/components/navigation/stepper/index.ts",
@@ -136,7 +136,7 @@ even when the row carries nothing but its title.
 
 ```vue
 <script setup>
-  import Stepper from '@aziontech/webkit/stepper'
+  import Stepper from '@aziontech/ui/stepper'
   import { ref } from 'vue'
 
   const step = ref('configure')
@@ -176,7 +176,7 @@ even when the row carries nothing but its title.
 
 ```vue
 <script setup>
-  import Stepper from '@aziontech/webkit/stepper'
+  import Stepper from '@aziontech/ui/stepper'
   import { ref } from 'vue'
 
   const step = ref('configure')
@@ -223,7 +223,7 @@ even when the row carries nothing but its title.
 
 ```vue
 <script setup>
-  import Stepper from '@aziontech/webkit/stepper'
+  import Stepper from '@aziontech/ui/stepper'
   import { ref } from 'vue'
 
   const step = ref('host')

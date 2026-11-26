@@ -1,8 +1,8 @@
 # Feature Widgets Section
 
-> The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the webkit scene assets.
+> The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the Azion UI scene assets.
 
-- Import: `import FeatureWidgetsSection from '@aziontech/webkit/feature-widgets-section'`
+- Import: `import FeatureWidgetsSection from '@aziontech/ui/feature-widgets-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [feature-widgets-section.json](feature-widgets-section.json)
 
@@ -42,7 +42,7 @@
 | `titleAlign` | `ModuleHeaderAlign` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
 | `columns` | `FeatureWidgetsSectionColumns` | `2` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
 | `copiedLabel` | `string` | `''` | false | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. |
-| `items` | `FeatureWidgetsSectionItem[]` | `[]` | false | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as the `text` itself, shown in full in a code box, over a copy button that puts it on the clipboard; a cell may carry both. |
+| `items` | `FeatureWidgetsSectionItem[]` | `[]` | false | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming an Azion UI scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as the `text` itself, shown in full in a code box, over a copy button that puts it on the clipboard; a cell may carry both. |
 
 ## Assets
 
@@ -74,7 +74,7 @@
 
 ```vue
 <script setup>
-  import FeatureWidgetsSection from '@aziontech/webkit/feature-widgets-section'
+  import FeatureWidgetsSection from '@aziontech/ui/feature-widgets-section'
 </script>
 
 <template>
@@ -120,7 +120,7 @@
 
 ```vue
 <script setup>
-  import FeatureWidgetsSection from '@aziontech/webkit/feature-widgets-section'
+  import FeatureWidgetsSection from '@aziontech/ui/feature-widgets-section'
 
   const docs = 'https://www.azion.com/en/documentation/products/build/applications/'
 

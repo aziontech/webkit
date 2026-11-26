@@ -1,6 +1,6 @@
 <script setup>
-  import Faq from '@aziontech/webkit/faq'
-  import Link from '@aziontech/webkit/link'
+  import Faq from '@aziontech/ui/faq'
+  import Link from '@aziontech/ui/link'
 
   const items = [
     {

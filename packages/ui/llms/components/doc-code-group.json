@@ -1,8 +1,8 @@
 {
  "name": "doc-code-group",
  "binding": "DocCodeGroup",
- "import": "@aziontech/webkit/doc-code-group",
- "treeShakeableImport": "@aziontech/webkit/doc-code-group",
+ "import": "@aziontech/ui/doc-code-group",
+ "treeShakeableImport": "@aziontech/ui/doc-code-group",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
@@ -29,7 +29,7 @@
   "Do: keep `code` to what the reader runs or pastes; the copy control copies exactly that. A leading `$ ` prompt is drawn but never copied.",
   "Do: put what the command prints in the sample's `output` (`{ language: 'bash', code: 'curl -I https://<your-azion-domain>', output: 'HTTP/2 200' }`), or say it in prose.",
   "Do: show a standalone printout (a deploy log) with `type=\"output\"`.",
-  "Don't: write output into `code` — never `curl -I https://example.com\\n# HTTP/2 200`, never `$ azion version\\nAzion CLI 4.23.0`. The lint `webkit/no-output-in-command` warns on it.",
+  "Don't: write output into `code` — never `curl -I https://example.com\\n# HTTP/2 200`, never `$ azion version\\nAzion CLI 4.23.0`. The lint `azion-ui/no-output-in-command` warns on it.",
   "Don't: turn the label header off on a docs page."
  ],
  "props": [

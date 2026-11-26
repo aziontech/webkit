@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4330-21320
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/overlay/drawer/drawer.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/overlay/drawer/drawer.vue
 // component=Drawer
 import figma from 'figma'
 
@@ -53,14 +53,14 @@ export default {
   </DrawerContent>
 </Drawer>`,
   imports: [
-    "import Drawer from '@aziontech/webkit/drawer'",
-    "import DrawerTrigger from '@aziontech/webkit/drawer-trigger'",
-    "import DrawerContent from '@aziontech/webkit/drawer-content'",
-    "import DrawerTitle from '@aziontech/webkit/drawer-title'",
-    "import PanelHeader from '@aziontech/webkit/panel-header'",
-    "import PanelBody from '@aziontech/webkit/panel-body'",
-    "import PanelFooter from '@aziontech/webkit/panel-footer'",
-    "import Button from '@aziontech/webkit/button'"
+    "import Drawer from '@aziontech/ui/drawer'",
+    "import DrawerTrigger from '@aziontech/ui/drawer-trigger'",
+    "import DrawerContent from '@aziontech/ui/drawer-content'",
+    "import DrawerTitle from '@aziontech/ui/drawer-title'",
+    "import PanelHeader from '@aziontech/ui/panel-header'",
+    "import PanelBody from '@aziontech/ui/panel-body'",
+    "import PanelFooter from '@aziontech/ui/panel-footer'",
+    "import Button from '@aziontech/ui/button'"
   ],
   id: 'drawer',
   metadata: { nestable: false }

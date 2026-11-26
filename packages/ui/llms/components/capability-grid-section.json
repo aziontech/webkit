@@ -1,8 +1,8 @@
 {
  "name": "capability-grid-section",
  "binding": "CapabilityGridSection",
- "import": "@aziontech/webkit/capability-grid-section",
- "treeShakeableImport": "@aziontech/webkit/capability-grid-section",
+ "import": "@aziontech/ui/capability-grid-section",
+ "treeShakeableImport": "@aziontech/ui/capability-grid-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

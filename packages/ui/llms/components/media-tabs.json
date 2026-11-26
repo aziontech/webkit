@@ -1,8 +1,8 @@
 {
  "name": "media-tabs",
  "binding": "MediaTabs",
- "import": "@aziontech/webkit/media-tabs",
- "treeShakeableImport": "@aziontech/webkit/media-tabs",
+ "import": "@aziontech/ui/media-tabs",
+ "treeShakeableImport": "@aziontech/ui/media-tabs",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Subheader from '@aziontech/webkit/subheader'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import Subheader from '@aziontech/ui/subheader'
 
   import type { BillingPaymentInformation } from '../account-billing.vue'
 

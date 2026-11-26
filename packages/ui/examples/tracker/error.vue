@@ -1,6 +1,6 @@
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
-  import Tracker from '@aziontech/webkit/tracker'
+  import Alert from '@aziontech/ui/alert'
+  import Tracker from '@aziontech/ui/tracker'
   import { ref } from 'vue'
 
   const failed = ref(true)

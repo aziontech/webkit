@@ -112,7 +112,7 @@ Then delete `sample.ts` and its import. A queue too large for the browser moves 
 - **Statuses:** `New`, `Open`, `Pending`, `On hold`, `Solved`. **Unassigned:** `Unassigned`.
 - **Bulk:** `3 selected`, `Select all 12 tickets`, `Clear selection`, `Assign (3)`, `Change status (3)`, `Merge (3)`, `Close (3)`; Merge's reason `Select two or more tickets to merge them.`; the confirmations `Merge 3 tickets` (with Ticket to keep) and `Close 3 tickets`.
 - **Empty view:** `You're all caught up`, `No tickets in <view>.`, `Show all open tickets`. **No match:** `No matching tickets`, `No ticket in this view matches these filters.`, `Clear filters`.
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 

@@ -1,8 +1,8 @@
 {
  "name": "process-scroll-section",
  "binding": "ProcessScrollSection",
- "import": "@aziontech/webkit/process-scroll-section",
- "treeShakeableImport": "@aziontech/webkit/process-scroll-section",
+ "import": "@aziontech/ui/process-scroll-section",
+ "treeShakeableImport": "@aziontech/ui/process-scroll-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

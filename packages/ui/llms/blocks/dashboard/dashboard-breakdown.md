@@ -3,10 +3,10 @@
 > A composition dashboard: how a total breaks down into its parts and how that mix moved over time, here the organization’s monthly spend by category. Under a page heading with the period Select and an Export button sits a row of four StatTiles, the total first and then its three largest categories, each with the change against the previous month and a 12-month sparkline; a rise reads as bad, so every tile is `inverse`. Below, a 12-column grid of ChartCards: the stacked Chart of spend by category over 12 months (Area or Bar from a ToggleGroup, crosshair, one tooltip for every category, a legend with range totals) beside a DonutChart of the current month’s split with the total in its center, and a ranked contributors DataTable across the full width: rank, the resource name behind its category glyph, the category Tag, the amount, its share of the total as a Progress with the percentage, and the change against last month as a Tag. Built from `PageHeader`, `StatTile`, `Chart`, `DonutChart`, `ChartCard`, `DataTable`, `Tag`, `Progress`, `Hint`, `ToggleGroup`, `Select`, `DropdownMenu`, `IconButton`, `Button` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-breakdown/dashboard-breakdown.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-breakdown/dashboard-breakdown.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-breakdown")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), [DonutChart](../../components/donut-chart.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [Progress](../../components/progress.md), [Select](../../components/select.md), [StatTile](../../components/stat-tile.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`, `utils/csv`
-- Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-tables`, `azion-ui-states`
 
 ## Asked as
 
@@ -218,18 +218,18 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
-  import DonutChart from '@aziontech/webkit/donut-chart'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useLocale } from '@aziontech/webkit/use-locale'
-  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Chart, { type ChartSeries } from '@aziontech/ui/chart'
+  import DonutChart from '@aziontech/ui/donut-chart'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import { toast } from '@aziontech/ui/toast'
+  import { useLocale } from '@aziontech/ui/use-locale'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/ui/utils/csv'
   import { computed, ref, useId } from 'vue'
 
   import ContributorsTable from './parts/contributors-table.vue'
@@ -648,7 +648,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ## `sample.ts`
 
 ```ts
-import type { ChartSeries } from '@aziontech/webkit/chart'
+import type { ChartSeries } from '@aziontech/ui/chart'
 
 import type {
   BreakdownDashboardContributor,
@@ -857,11 +857,11 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
 
 ```ts
 <script setup lang="ts">
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Progress from '@aziontech/webkit/progress'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Progress from '@aziontech/ui/progress'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type { BreakdownDashboardContributor } from '../dashboard-breakdown.vue'
 
@@ -1014,11 +1014,11 @@ export const sampleContributors: BreakdownDashboardContributor[] = [
 
 ```ts
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
 
   export interface SpendCardProps {
     /** Columns of the 12-column grid the card spans. */

@@ -20,7 +20,7 @@ import { build } from 'vite'
 
 import { planSources } from '../src/cli/css-sources.js'
 import { _internals as initInternals } from '../src/cli/plan.js'
-import webkit from '../src/vite-plugin.js'
+import azionUi from '../src/vite-plugin.js'
 import { limitToBytes } from './check-size-ratchet.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
@@ -37,7 +37,7 @@ function link(target, path) {
 export function writeFixture(dir, imports, entries = [], markup = '') {
   const require = createRequire(join(PKG, 'package.json'))
   const nm = join(dir, 'node_modules')
-  link(PKG, join(nm, '@aziontech', 'webkit'))
+  link(PKG, join(nm, '@aziontech', 'ui'))
   link(
     realpathSync(join(PKG, 'node_modules', '@aziontech', 'theme')),
     join(nm, '@aziontech', 'theme')
@@ -49,16 +49,16 @@ export function writeFixture(dir, imports, entries = [], markup = '') {
   link(dirname(require.resolve('tailwindcss/package.json')), join(nm, 'tailwindcss'))
   mkdirSync(join(dir, 'src'), { recursive: true })
   writeFileSync(
-    join(dir, 'src', 'webkit.css'),
-    `${initInternals.styleEntryContent()}@source not '../node_modules/@aziontech/webkit/src/**/*.test.ts';\n`
+    join(dir, 'src', 'azion-ui.css'),
+    `${initInternals.styleEntryContent()}@source not '../node_modules/@aziontech/ui/src/**/*.test.ts';\n`
   )
   const bindings = imports.map((_, i) => `C${i}`)
   writeFileSync(
     join(dir, 'src', 'main.js'),
     [
-      "import './webkit.css'",
+      "import './azion-ui.css'",
       ...entries.map((entry) => `import '${entry}'`),
-      ...imports.map((sub, i) => `import ${bindings[i]} from '@aziontech/webkit/${sub}'`),
+      ...imports.map((sub, i) => `import ${bindings[i]} from '@aziontech/ui/${sub}'`),
       `export const markup = ${JSON.stringify(markup)}`,
       `export default [${bindings.join(', ')}]`,
       ''
@@ -81,7 +81,7 @@ async function buildFixture(dir) {
     root: dir,
     configFile: false,
     logLevel: 'error',
-    plugins: [webkit(), vuePlugin(), tailwind()],
+    plugins: [azionUi(), vuePlugin(), tailwind()],
     define: { 'process.env.NODE_ENV': JSON.stringify('production') },
     build: {
       write: false,
@@ -106,15 +106,15 @@ async function main(only) {
   const entries = only.length ? all.filter((e) => only.includes(e.name)) : all
   const failures = []
   for (const e of entries) {
-    const dir = mkdtempSync(join(tmpdir(), 'webkit-css-'))
+    const dir = mkdtempSync(join(tmpdir(), 'azion-ui-css-'))
     try {
       writeFixture(dir, e.imports, e.entries, e.markup)
       const { raw, gzip } = await measureFixture(dir)
       const sources = planSources(dir)
       const limit = limitToBytes(e.limit)
       const problems = []
-      if (sources.stale) problems.push('the plugin did not write src/webkit.sources.css')
-      if (!sources.files.length) problems.push('no WebKit file reached the scan')
+      if (sources.stale) problems.push('the plugin did not write src/azion-ui.sources.css')
+      if (!sources.files.length) problems.push('no Azion UI file reached the scan')
       if (gzip > limit) problems.push('OVER')
       if (problems.length) failures.push(e.name)
       console.log(
@@ -126,7 +126,7 @@ async function main(only) {
   }
   if (failures.length) {
     console.error(
-      `\n✖ CSS budget: ${failures.join(', ')}. An app's stylesheet holds the classes of the WebKit files it imports; shrink what those files emit, or justify a raise in the PR (Budget-raise:) — contributing/rules/bundle-budget.md.`
+      `\n✖ CSS budget: ${failures.join(', ')}. An app's stylesheet holds the classes of the Azion UI files it imports; shrink what those files emit, or justify a raise in the PR (Budget-raise:) — contributing/rules/bundle-budget.md.`
     )
     return 1
   }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
   import { useHead } from '@unhead/vue'
   import { computed } from 'vue'
   import { useRoute } from 'vue-router'
@@ -38,7 +38,7 @@
   )
 
   useHead({
-    title: computed(() => (page.value ? `${page.value.title} — WebKit` : 'WebKit')),
+    title: computed(() => (page.value ? `${page.value.title} — Azion UI` : 'Azion UI')),
     meta: [{ name: 'description', content: computed(() => page.value?.summary ?? '') }]
   })
 </script>

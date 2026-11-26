@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Hint from '@aziontech/webkit/hint'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Hint from '@aziontech/ui/hint'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref } from 'vue'
 
   import { sampleFractions, sampleTrends, sampleVitals } from '../sample'

@@ -12,7 +12,7 @@
   import ItemTitle from '../../content/item/item-title.vue'
 
   /**
-   * One row of the docs related-content list, on the webkit Item anatomy. The
+   * One row of the docs related-content list, on the Azion UI Item anatomy. The
    * anchor wraps only the title, and a full-bleed after-pseudo makes the row its
    * hit area: listitem is not a role an anchor may take (axe aria-allowed-role).
    */

@@ -1,7 +1,7 @@
 <script setup>
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import QuoteTabs from '@aziontech/webkit/quote-tabs'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import magaluLogo from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import QuoteTabs from '@aziontech/ui/quote-tabs'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>

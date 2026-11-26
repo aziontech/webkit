@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IntegrationCard from '@aziontech/ui/integration-card'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { toast } from '@aziontech/ui/toast'
+  import { useCollection } from '@aziontech/ui/use-collection'
   import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
   import IntegrationDrawer from './parts/integration-drawer.vue'

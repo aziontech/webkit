@@ -1,8 +1,8 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Input from '@aziontech/webkit/input'
-  import ShortcutsDialog from '@aziontech/webkit/shortcuts-dialog'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Button from '@aziontech/ui/button'
+  import Input from '@aziontech/ui/input'
+  import ShortcutsDialog from '@aziontech/ui/shortcuts-dialog'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { ref } from 'vue'
 
   const searchEl = ref(null)

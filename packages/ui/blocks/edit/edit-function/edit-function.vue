@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import FieldError from '@aziontech/webkit/field-error'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import ResizablePane from '@aziontech/webkit/resizable-pane'
-  import ResizableRoot from '@aziontech/webkit/resizable-root'
-  import Tabs from '@aziontech/webkit/tabs'
-  import { toast } from '@aziontech/webkit/toast'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { leavingLink } from '@aziontech/webkit/utils/leave-link'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import FieldError from '@aziontech/ui/field-error'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import ResizablePane from '@aziontech/ui/resizable-pane'
+  import ResizableRoot from '@aziontech/ui/resizable-root'
+  import Tabs from '@aziontech/ui/tabs'
+  import { toast } from '@aziontech/ui/toast'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
+  import { leavingLink } from '@aziontech/ui/utils/leave-link'
   import {
     computed,
     nextTick,

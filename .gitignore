@@ -47,29 +47,29 @@ yarn.lock
 *.tsbuildinfo
 *.d.ts
 *d.ts.map
-# Declarations for WebKit's runtime .js modules (node packages/webkit/scripts/build-js-dts.mjs)
-!packages/webkit/src/components/actions/icon-button/presets/icon-transition.d.ts
-!packages/webkit/src/components/content/item/merge-as-child.d.ts
-!packages/webkit/src/components/inputs/presets/interactive-states.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/create-change-event-details.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/get-css-dimensions.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/navigation-menu-css-vars.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/resolve-host-element.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-context.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-list-highlight-context.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-list-highlight.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner-context.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/use-navigation-menu-root.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/composables/use-transition-status.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/presets/animations.d.ts
-!packages/webkit/src/components/navigation/navigation-menu/presets/styles.d.ts
-!packages/webkit/src/components/overlay/drawer/presets/sizes.d.ts
-!packages/webkit/src/components/overlay/panel/presets/sizes.d.ts
-!packages/webkit/src/components/overlay/presets/bottom-sheet-transitions.d.ts
-!packages/webkit/src/components/overlay/presets/mobile-position.d.ts
-!packages/webkit/src/components/overlay/tooltip/presets/popup-scale-transition.d.ts
-!packages/webkit/src/composables/use-focus-trap/index.d.ts
+# Declarations for Azion UI's runtime .js modules (node packages/ui/scripts/build-js-dts.mjs)
+!packages/ui/src/components/actions/icon-button/presets/icon-transition.d.ts
+!packages/ui/src/components/content/item/merge-as-child.d.ts
+!packages/ui/src/components/inputs/presets/interactive-states.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/create-change-event-details.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/get-css-dimensions.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/navigation-menu-css-vars.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/resolve-host-element.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-context.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-list-highlight-context.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-list-highlight.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner-context.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-root.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-transition-status.d.ts
+!packages/ui/src/components/navigation/navigation-menu/presets/animations.d.ts
+!packages/ui/src/components/navigation/navigation-menu/presets/styles.d.ts
+!packages/ui/src/components/overlay/drawer/presets/sizes.d.ts
+!packages/ui/src/components/overlay/panel/presets/sizes.d.ts
+!packages/ui/src/components/overlay/presets/bottom-sheet-transitions.d.ts
+!packages/ui/src/components/overlay/presets/mobile-position.d.ts
+!packages/ui/src/components/overlay/tooltip/presets/popup-scale-transition.d.ts
+!packages/ui/src/composables/use-focus-trap/index.d.ts
 !apps/docs/src/env.d.ts
 !apps/docs/src/lib/virtual/*.d.ts
 
@@ -108,7 +108,7 @@ tmp
 # Vitest browser-mode failure screenshots (regenerated on demand)
 **/__screenshots__/
 # Vitest browser-mode attachments (failure artifacts, same nature as __screenshots__)
-packages/webkit/.vitest-attachments/
+packages/ui/.vitest-attachments/
 
 # Visual regression (Playwright, apps/visual) — the baselines in apps/visual/baselines
 # are the CI contract and ARE committed; results and reports are local-only.
@@ -116,11 +116,11 @@ apps/visual/test-results/
 apps/visual/playwright-report/
 apps/visual/baseline-review/
 
-# AI bundle copies made by packages/webkit's prepack (sources live in skills/, rules/, adapters/)
-packages/webkit/skills/
-packages/webkit/rules/
-packages/webkit/adapters/
-packages/webkit/test/docs/.snippets-*/
+# AI bundle copies made by packages/ui's prepack (sources live in skills/, rules/, adapters/)
+packages/ui/skills/
+packages/ui/rules/
+packages/ui/adapters/
+packages/ui/test/docs/.snippets-*/
 
 # Release supply-chain files written by .github/workflows/release-package.yml
 sbom-*.json

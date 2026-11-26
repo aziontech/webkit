@@ -2,7 +2,7 @@
 
 > The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `bento-grid`, `logo` and `link`.
 
-- Import: `import ClientMosaicSection from '@aziontech/webkit/client-mosaic-section'`
+- Import: `import ClientMosaicSection from '@aziontech/ui/client-mosaic-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [client-mosaic-section.json](client-mosaic-section.json)
 
@@ -86,17 +86,17 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 
 ```vue
 <script setup>
-  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
-  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
-  import exameExtendedMono from '@aziontech/webkit/assets/exame-extended-mono.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import gpaPhoto from '@aziontech/webkit/assets/gpa-photo.webp'
-  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.webp'
-  import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
-  import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'
-  import ClientMosaicSection from '@aziontech/webkit/client-mosaic-section'
+  import agibankExtendedReversed from '@aziontech/ui/assets/agibank-extended-reversed.svg'
+  import dafitiExtendedMono from '@aziontech/ui/assets/dafiti-extended-mono.svg'
+  import exameExtendedMono from '@aziontech/ui/assets/exame-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import gpaPhoto from '@aziontech/ui/assets/gpa-photo.webp'
+  import netshoesExtendedColor from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import netshoesPhoto from '@aziontech/ui/assets/netshoes-photo.webp'
+  import nznExtendedReversed from '@aziontech/ui/assets/nzn-extended-reversed.svg'
+  import rennerExtendedReversed from '@aziontech/ui/assets/renner-extended-reversed.svg'
+  import ClientMosaicSection from '@aziontech/ui/client-mosaic-section'
 </script>
 
 <template>
@@ -175,17 +175,17 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 
 ```vue
 <script setup>
-  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
-  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
-  import exameExtendedMono from '@aziontech/webkit/assets/exame-extended-mono.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import gpaPhoto from '@aziontech/webkit/assets/gpa-photo.webp'
-  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.webp'
-  import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
-  import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'
-  import ClientMosaicSection from '@aziontech/webkit/client-mosaic-section'
+  import agibankExtendedReversed from '@aziontech/ui/assets/agibank-extended-reversed.svg'
+  import dafitiExtendedMono from '@aziontech/ui/assets/dafiti-extended-mono.svg'
+  import exameExtendedMono from '@aziontech/ui/assets/exame-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import gpaPhoto from '@aziontech/ui/assets/gpa-photo.webp'
+  import netshoesExtendedColor from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import netshoesPhoto from '@aziontech/ui/assets/netshoes-photo.webp'
+  import nznExtendedReversed from '@aziontech/ui/assets/nzn-extended-reversed.svg'
+  import rennerExtendedReversed from '@aziontech/ui/assets/renner-extended-reversed.svg'
+  import ClientMosaicSection from '@aziontech/ui/client-mosaic-section'
 
   const cells = [
     {

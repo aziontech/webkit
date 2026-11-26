@@ -2,7 +2,7 @@
 
 > Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<FlowDiagram>`, the chart and content tags, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `Tabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocTableOfContents`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
 
-- Import: `import DocMarkdown from '@aziontech/webkit/doc-markdown'`
+- Import: `import DocMarkdown from '@aziontech/ui/doc-markdown'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-markdown.json](doc-markdown.json)
 
@@ -66,7 +66,7 @@
 
 ## Accessibility
 
-- Semantics: headings are real `h1`–`h4` (`DocHeading`) in source order with unique ids; lists are `ul` / `ol`; a pipe table renders as the WebKit `Table` (decision RV-K2-1: `role="table"`, `columnheader` and `cell` roles, bordered, lines wrapping, its own focusable horizontal scroll region), so a docs table looks like an app table; a rule is `hr`; a quote is `blockquote`.
+- Semantics: headings are real `h1`–`h4` (`DocHeading`) in source order with unique ids; lists are `ul` / `ol`; a pipe table renders as the Azion UI `Table` (decision RV-K2-1: `role="table"`, `columnheader` and `cell` roles, bordered, lines wrapping, its own focusable horizontal scroll region), so a docs table looks like an app table; a rule is `hr`; a quote is `blockquote`.
 - Keyboard map: no keyboard handling of its own; links, heading anchors, tabs, accordions and code copy buttons are the mounted components' and follow their maps.
 - Links: an external link announces `(opens in a new tab)` through a visually hidden suffix; link text is the author's.
 - Visible focus: owned by `DocProse` (links) and the mounted components.
@@ -102,8 +102,8 @@
 
 ````vue
 <script setup lang="ts">
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
 
   const source = [
     '---',
@@ -163,10 +163,10 @@
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import DocMarkdown, { parseDocMarkdown } from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
+  import Alert from '@aziontech/ui/alert'
+  import DocMarkdown, { parseDocMarkdown } from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import DocTableOfContents from '@aziontech/ui/doc-table-of-contents'
 
   const components = { Alert }
 
@@ -204,8 +204,8 @@
 
 ```vue
 <script setup lang="ts">
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
 
   const source = [
     'Every response leaves the',

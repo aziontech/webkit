@@ -1,8 +1,8 @@
 {
  "name": "save-bar",
  "binding": "SaveBar",
- "import": "@aziontech/webkit/save-bar",
- "treeShakeableImport": "@aziontech/webkit/save-bar",
+ "import": "@aziontech/ui/save-bar",
+ "treeShakeableImport": "@aziontech/ui/save-bar",
  "category": "layout",
  "surface": "app",
  "structure": "monolithic",
@@ -32,7 +32,7 @@
   "Disable Discard and set `loading` on Save while saving.",
   "Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant=\"centered\"`.",
   "`floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.",
-  "Listen to `save` to give the page `⌘ S` (`Ctrl S` off Apple): run the same save as the Save button, and do nothing when the form has no unsaved changes. Show the shortcut on Save with `Kbd` and `aria-keyshortcuts=\"Meta+S Control+S\"` (the console keyboard standard, `rules/webkit-keyboard.md`)."
+  "Listen to `save` to give the page `⌘ S` (`Ctrl S` off Apple): run the same save as the Save button, and do nothing when the form has no unsaved changes. Show the shortcut on Save with `Kbd` and `aria-keyshortcuts=\"Meta+S Control+S\"` (the console keyboard standard, `rules/azion-ui-keyboard.md`)."
  ],
  "props": [
   {

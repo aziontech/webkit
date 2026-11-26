@@ -1,17 +1,17 @@
 <script setup lang="ts">
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Card from '@aziontech/webkit/card'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Card from '@aziontech/ui/card'
   import DataTable, {
     type DropdownMenuItemValue,
     type TableExposed
-  } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import { toast } from '@aziontech/webkit/toast'
-  import type { UploadProgressItem } from '@aziontech/webkit/upload-progress'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import SplitButton, { type SplitButtonItem } from '@aziontech/ui/split-button'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import { toast } from '@aziontech/ui/toast'
+  import type { UploadProgressItem } from '@aziontech/ui/upload-progress'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import {

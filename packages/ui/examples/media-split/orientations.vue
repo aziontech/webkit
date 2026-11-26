@@ -1,6 +1,6 @@
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaSplit from '@aziontech/ui/media-split'
 </script>
 
 <template>

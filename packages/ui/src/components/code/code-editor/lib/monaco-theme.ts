@@ -1,6 +1,6 @@
 import type { CodeEditorMonacoTheme } from '../monaco'
 
-export const CODE_EDITOR_THEME = 'webkit'
+export const CODE_EDITOR_THEME = 'ui'
 
 const RULES: { scopes: string[]; token: string; fontStyle?: string }[] = [
   { scopes: [''], token: '--code-syntax-identifier' },

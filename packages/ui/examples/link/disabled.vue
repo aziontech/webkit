@@ -1,5 +1,5 @@
 <script setup>
-  import Link from '@aziontech/webkit/link'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

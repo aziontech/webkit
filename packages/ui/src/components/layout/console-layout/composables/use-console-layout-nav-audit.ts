@@ -80,11 +80,11 @@ export function useConsoleLayoutNavAudit(
     if (!pairs.length) return
     warnedRoutes.add(route)
     console.warn(
-      `[webkit] <ConsoleLayout>: on route "${route}" a SidebarMenu in the page body repeats the layout navigation: ` +
+      `[azion-ui] <ConsoleLayout>: on route "${route}" a SidebarMenu in the page body repeats the layout navigation: ` +
         `${[...new Set(pairs)].join('; ')}. ` +
         'A destination appears once per screen, and a page has only its PageTabs: ' +
         "drop the in-page menu and keep these pages in the rail or in the resource's tabs " +
-        '(rule webkit-navigation-levels).'
+        '(rule azion-ui-navigation-levels).'
     )
   }
 

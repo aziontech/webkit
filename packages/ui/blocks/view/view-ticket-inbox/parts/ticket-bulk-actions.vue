@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/data-table'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/data-table'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenuRoot from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import RadioGroup from '@aziontech/ui/radio-group'
   import { ref, watch } from 'vue'
 
   import type {

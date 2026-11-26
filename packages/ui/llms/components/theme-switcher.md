@@ -2,7 +2,7 @@
 
 > A compact segmented control drawn like `toggle-group` (same radius, surface and 28 / 32 / 40 heights, with the header outline `--border-default`, so it sits in a row of header controls beside an `IconButton`, `Select` or `SearchTrigger` of the same size) that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
 
-- Import: `import ThemeSwitcher from '@aziontech/webkit/theme-switcher'`
+- Import: `import ThemeSwitcher from '@aziontech/ui/theme-switcher'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [theme-switcher.json](theme-switcher.json)
 
@@ -58,7 +58,7 @@
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the focused segment, drawn inside the group as on `toggle-group`.
 - Keyboard map: `Tab` moves focus into the group (roving tabindex lands on the selected segment); `ArrowLeft`/`ArrowRight` (and `ArrowUp`/`ArrowDown`) move selection between segments; `Space`/`Enter` selects the focused segment.
 - ARIA: root is `role="radiogroup"` with `aria-label` from `ariaLabel`; each segment is `role="radio"` with `aria-checked` and its own `aria-label` (`System` / `Dark` / `Light`); the glyph is `aria-hidden`. `aria-disabled` mirrors `disabled`.
-- Each segment is wrapped in `@aziontech/webkit/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
+- Each segment is wrapped in `@aziontech/ui/tooltip` (`side="bottom"`) surfacing its mode label (`System` / `Dark` / `Light`) on hover and keyboard focus; the tooltip owns its own `aria-describedby` wiring.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target: segments are drawn 24 / 28 / 36 px wide by `size` on a fine pointer; on a coarse pointer each segment is drawn at least 44 px wide (`pointer-coarse:min-w-11`) and carries an invisible `aria-hidden` child (`data-slot="touch-target"`) that extends its hit area to 44 px tall only, so a segment's hit area never covers its neighbour.
@@ -77,7 +77,7 @@
 
 ```vue
 <script setup>
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher from '@aziontech/ui/theme-switcher'
   import { ref } from 'vue'
 
   const theme = ref('system')
@@ -92,8 +92,8 @@
 
 ```vue
 <script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import IconButton from '@aziontech/ui/icon-button'
+  import ThemeSwitcher from '@aziontech/ui/theme-switcher'
   import { ref } from 'vue'
 
   const theme = ref('system')
@@ -125,7 +125,7 @@
 
 ```vue
 <script setup>
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher from '@aziontech/ui/theme-switcher'
   import { ref } from 'vue'
 
   const theme = ref('system')

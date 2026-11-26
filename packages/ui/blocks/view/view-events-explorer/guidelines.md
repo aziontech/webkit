@@ -187,7 +187,7 @@ Then delete `sample.ts` and its import, and give `fields` its own list. A log th
 - **Saved queries:** "Name the current query", Save, "Delete <name>"; empty "No saved queries yet. Name the current query to keep it."
 - **Tabs:** "New investigation", "Actions for <name>", Rename, Duplicate, "Close investigation"; limit "Up to 5 investigations stay open. Close one to start another."
 - **Document tools:** "Search in this event", "Filter by <field> <value>", "Exclude <field> <value>", "Copy the fields shown as JSON"; no match "No field matches “<text>”."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -219,4 +219,4 @@ Then delete `sample.ts` and its import, and give `fields` its own list. A log th
 - `detail/detail-deployment-logs` — logs of one deployment run.
 - `dashboard/dashboard-analytics` — the metrics view for the same traffic.
 - `shell/shell-console` — the layout this explorer renders in.
-- `DataTable` — the log table; see `skills/webkit-tables`, `skills/webkit-data-viz` and `skills/webkit-ui-states`.
+- `DataTable` — the log table; see `skills/azion-ui-tables`, `skills/azion-ui-data-viz` and `skills/azion-ui-states`.

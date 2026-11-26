@@ -27,7 +27,7 @@
     "requisição bloqueada pelo firewall",
     "página de error del edge"
   ],
-  "skills": ["webkit-errors", "webkit-ui-states", "webkit-microcopy"],
+  "skills": ["azion-ui-errors", "azion-ui-states", "azion-ui-microcopy"],
   "primary": {
     "name": "Default",
     "file": "state-edge-error-page.vue"

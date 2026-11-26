@@ -1,5 +1,5 @@
 <script setup>
-  import Chip from '@aziontech/webkit/chip'
+  import Chip from '@aziontech/ui/chip'
   import { ref } from 'vue'
 
   const production = ref(true)

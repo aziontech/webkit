@@ -1,5 +1,5 @@
 <script setup>
-  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import ScrollArea from '@aziontech/ui/scroll-area'
 
   const lines = [
     { time: '14:02:11', text: 'Build started for acme-store (commit 4f2a9c1)' },

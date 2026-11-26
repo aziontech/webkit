@@ -1,4 +1,4 @@
-import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
+import type { AiChatMessage } from '@aziontech/ui/utils/ai-chat'
 
 export const failureText = (error: unknown): string => {
   if (!error) return ''

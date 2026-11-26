@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
   import { computed, ref } from 'vue'
 
   const slug = ref('My Project')

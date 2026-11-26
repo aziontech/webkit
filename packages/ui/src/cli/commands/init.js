@@ -59,7 +59,7 @@ function addDepLine(action) {
   const { dev } = action
   const devLabel = dev ? '(dev) ' : ''
   if (action.keep) {
-    return `PLAN   keep ${devLabel}${action.dep}@${action.keep} (WebKit needs ${action.version})\n`
+    return `PLAN   keep ${devLabel}${action.dep}@${action.keep} (Azion UI needs ${action.version})\n`
   }
   const replaces = action.replace ? ` (replaces ${action.replace})` : ''
   return `PLAN   add-dep ${devLabel}${action.dep}@${action.version}${replaces}\n`
@@ -92,7 +92,7 @@ export async function runInit(projectDir, parsed) {
   const plan = planInit(projectDir, await resolveInitOptions(parsed))
 
   out(
-    `\n@aziontech/webkit init — ${recommended ? 'recommended' : 'strict'} preset${dryRun ? ' (dry run)' : ''}\n`
+    `\n@aziontech/ui init — ${recommended ? 'recommended' : 'strict'} preset${dryRun ? ' (dry run)' : ''}\n`
   )
   out(`project: ${projectDir}\n\n`)
 

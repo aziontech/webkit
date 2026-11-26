@@ -31,11 +31,11 @@
     "papel do usuário"
   ],
   "skills": [
-    "webkit-lists",
-    "webkit-tables",
-    "webkit-form",
-    "webkit-ui-states",
-    "webkit-microcopy"
+    "azion-ui-lists",
+    "azion-ui-tables",
+    "azion-ui-form",
+    "azion-ui-states",
+    "azion-ui-microcopy"
   ],
   "primary": {
     "name": "Default",

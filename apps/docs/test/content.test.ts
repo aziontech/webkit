@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { fileURLToPath } from 'node:url'
 
-import { scanMarkdown } from '../../../packages/webkit/scripts/lib/docs-markdown.mjs'
+import { scanMarkdown } from '../../../packages/ui/scripts/lib/docs-markdown.mjs'
 import {
   buildComponent,
   buildTokens,
@@ -152,7 +152,7 @@ test('no page source the docs render repeats a heading or a paragraph', () => {
   const files = [
     ...[...pages.matchAll(/markdown:\s*'([^']+)'/g)].map(([, path]) => path as string),
     ...patternSources(),
-    ...readBlocks().map((block) => `packages/webkit/blocks/${block.dir}/guidelines.md`)
+    ...readBlocks().map((block) => `packages/ui/blocks/${block.dir}/guidelines.md`)
   ].filter((path) => existsSync(new URL(path, REPO_URL)))
   const findings = files.flatMap((path) =>
     repeats(readFileSync(new URL(path, REPO_URL), 'utf8')).map((finding) => `${path}: ${finding}`)
@@ -163,9 +163,7 @@ test('no page source the docs render repeats a heading or a paragraph', () => {
 test('a block page header carries the guidelines lead, and the body goes on after it', async () => {
   const findings: string[] = []
   for (const block of readBlocks()) {
-    const file = fileURLToPath(
-      new URL(`packages/webkit/blocks/${block.dir}/guidelines.md`, REPO_URL)
-    )
+    const file = fileURLToPath(new URL(`packages/ui/blocks/${block.dir}/guidelines.md`, REPO_URL))
     if (!existsSync(file)) continue
     const doc = await renderGuidelinesFile(file)
     if (!doc.lead) findings.push(`${block.dir}: no lead sentence`)
@@ -196,9 +194,9 @@ test('a component page shows the purpose after the header sentence, never both',
 
 test('no example on a component page is named like an API heading of that page', () => {
   const API = new Set(['props', 'events', 'slots', 'subcomponents', 'api', 'examples'])
-  const examples = readdirSync(new URL('packages/webkit/examples/', REPO_URL))
+  const examples = readdirSync(new URL('packages/ui/examples/', REPO_URL))
   const findings = examples.flatMap((dir) => {
-    const file = new URL(`packages/webkit/examples/${dir}/examples.json`, REPO_URL)
+    const file = new URL(`packages/ui/examples/${dir}/examples.json`, REPO_URL)
     if (!existsSync(file)) return []
     const data = JSON.parse(readFileSync(file, 'utf8')) as { examples: { name: string }[] }
     return data.examples

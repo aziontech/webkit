@@ -1,5 +1,5 @@
 <script setup>
-  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
+  import PlanFeatureList from '@aziontech/ui/plan-feature-list'
 
   const features = [
     { label: 'Unlimited applications' },

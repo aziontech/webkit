@@ -1,8 +1,8 @@
 {
  "name": "conversation",
  "binding": "Conversation",
- "import": "@aziontech/webkit/conversation",
- "treeShakeableImport": "@aziontech/webkit/conversation",
+ "import": "@aziontech/ui/conversation",
+ "treeShakeableImport": "@aziontech/ui/conversation",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

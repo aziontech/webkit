@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3782-17404
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/navigation-menu/navigation-menu-item.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/navigation-menu/navigation-menu-item.vue
 // component=NavigationMenuItem
 import figma from 'figma'
 
@@ -21,7 +21,7 @@ export default {
   }
   ${title}
 </NavigationMenu.Item>`,
-  imports: ["import NavigationMenu from '@aziontech/webkit/navigation-menu'"],
+  imports: ["import NavigationMenu from '@aziontech/ui/navigation-menu'"],
   id: 'navigation-menu-item',
   metadata: { nestable: true }
 }

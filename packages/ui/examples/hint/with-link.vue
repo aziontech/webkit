@@ -1,7 +1,7 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Hint from '@aziontech/webkit/hint'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Hint from '@aziontech/ui/hint'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   const ttl = ref('3600')

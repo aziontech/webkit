@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import Tooltip from '@aziontech/ui/tooltip'
   import type {
     CollectionPreferencesProps,
     CollectionPropertyFilterProps
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
 
   withDefaults(
     defineProps<{

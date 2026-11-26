@@ -2,7 +2,7 @@
 
 > The first focusable element of a page: a link that is visually hidden until it receives keyboard focus, then appears at the top-start corner and jumps to the page's main content, so a keyboard or screen-reader user bypasses the repeated header and navigation (WCAG 2.4.1 Bypass Blocks). On activation it also moves focus into the target, so the next `Tab` continues from the main content in every browser. It differs from `link` in that it is invisible at rest and owns its placement and focus hand-off.
 
-- Import: `import SkipLink from '@aziontech/webkit/skip-link'`
+- Import: `import SkipLink from '@aziontech/ui/skip-link'`
 - Category: navigation · Surface: app · Structure: monolithic
 - API as JSON: [skip-link.json](skip-link.json)
 
@@ -88,8 +88,8 @@
 
 ```vue
 <script setup>
-  import Link from '@aziontech/webkit/link'
-  import SkipLink from '@aziontech/webkit/skip-link'
+  import Link from '@aziontech/ui/link'
+  import SkipLink from '@aziontech/ui/skip-link'
 </script>
 
 <template>

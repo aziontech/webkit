@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20500
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/action/highlight-button/highlight-button.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/action/highlight-button/highlight-button.vue
 // component=HighlightButton
 import figma from 'figma'
 
@@ -33,7 +33,7 @@ export default {
       : ''
   }
 />`,
-  imports: ["import HighlightButton from '@aziontech/webkit/highlight-button'"],
+  imports: ["import HighlightButton from '@aziontech/ui/highlight-button'"],
   id: 'highlight-button',
   metadata: { nestable: true }
 }

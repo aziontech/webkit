@@ -1,6 +1,6 @@
 <script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tree from '@aziontech/webkit/tree'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tree from '@aziontech/ui/tree'
   import { ref } from 'vue'
 
   const items = ref([

@@ -1,8 +1,8 @@
 # Third Party Logo
 
-> A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `ThirdPartyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
+> A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/ui/assets/client-registry`, `@aziontech/ui/assets/competitor-registry` and the `@aziontech/ui/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `ThirdPartyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
 
-- Import: `import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'`
+- Import: `import ThirdPartyLogo from '@aziontech/ui/third-party-logo'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [third-party-logo.json](third-party-logo.json)
 
@@ -95,8 +95,8 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 
 ```vue
 <script setup>
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import { CLIENTS } from '@aziontech/ui/assets/client-registry'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 
   const client = CLIENTS.find((entry) => entry.name === 'Agibank')
 </script>
@@ -117,8 +117,8 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 
 ```vue
 <script setup>
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import { CLIENTS } from '@aziontech/ui/assets/client-registry'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 
   const client = CLIENTS.find((entry) => entry.name === 'Agibank')
   const sizes = ['small', 'medium', 'large']
@@ -153,11 +153,11 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 
 ```vue
 <script setup>
-  import claudeSymbol from '@aziontech/webkit/assets/claude-symbol-color.svg'
-  import itauExtendedReversed from '@aziontech/webkit/assets/itau-extended-reversed.webp'
-  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import claudeSymbol from '@aziontech/ui/assets/claude-symbol-color.svg'
+  import itauExtendedReversed from '@aziontech/ui/assets/itau-extended-reversed.webp'
+  import netshoesExtendedColor from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import netshoesExtendedReversed from '@aziontech/ui/assets/netshoes-extended-reversed.svg'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 
   const variants = [
     { variant: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },

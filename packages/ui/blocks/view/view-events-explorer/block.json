@@ -40,7 +40,7 @@
     "buscas salvas",
     "intervalo de datas"
   ],
-  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "skills": ["azion-ui-data-viz", "azion-ui-tables", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "view-events-explorer.vue"

@@ -16,9 +16,13 @@ import {
 } from '../../src/cli/plan.js'
 import { applyPlan } from '../../src/cli/apply.js'
 import { FRAGMENT_START } from '../../src/cli/bundle.js'
-import { MCP_PACKAGE } from '../../src/cli/init/mcp.js'
+import {
+  LEGACY_MCP_SERVER_ARGS,
+  LEGACY_MCP_SERVER_NAME,
+  MCP_PACKAGE
+} from '../../src/cli/init/mcp.js'
 
-const PINNED_MCP = `@aziontech/webkit-mcp@^${JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')).version.split('.')[0]}`
+const PINNED_MCP = `@aziontech/ui-mcp@^${JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')).version.split('.')[0]}`
 
 const MAIN_TS =
   "import { createApp } from 'vue'\nimport App from './App.vue'\ncreateApp(App).mount('#app')\n"
@@ -26,7 +30,7 @@ const MAIN_TS =
 const hasGit = !spawnSync('git', ['--version']).error
 
 function makeProject({ git = false } = {}) {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-cli-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-cli-'))
   writeFileSync(
     join(dir, 'package.json'),
     JSON.stringify({ name: 'demo', version: '1.0.0' }, null, 2)
@@ -48,26 +52,26 @@ test(
     try {
       const plan = planInit(dir, {})
       const deps = findAddDeps(plan)
-      for (const d of ['@aziontech/webkit', '@aziontech/theme', '@aziontech/icons']) {
+      for (const d of ['@aziontech/ui', '@aziontech/theme', '@aziontech/icons']) {
         assert.ok(deps.includes(d), `missing runtime dep ${d}`)
       }
-      // The eslint plugin + stylelint config ship inside @aziontech/webkit now, so they
+      // The eslint plugin + stylelint config ship inside @aziontech/ui now, so they
       // are NOT separate deps; only the tooling peers are added.
       for (const d of ['eslint', 'stylelint', 'vue-eslint-parser', 'husky']) {
         assert.ok(deps.includes(d), `missing dev dep ${d}`)
       }
       assert.ok(
-        !deps.includes('@aziontech/eslint-plugin-webkit'),
+        !deps.includes('@aziontech/eslint-plugin-azion-ui'),
         'must not add a separate eslint-plugin package'
       )
       assert.ok(
-        !deps.includes('@aziontech/stylelint-config-webkit'),
+        !deps.includes('@aziontech/stylelint-config-azion-ui'),
         'must not add a separate stylelint-config package'
       )
       // Dev flag is set correctly.
       const dev = plan.find((a) => a.type === 'add-dep' && a.dep === 'eslint')
       assert.equal(dev.dev, true)
-      const runtime = plan.find((a) => a.type === 'add-dep' && a.dep === '@aziontech/webkit')
+      const runtime = plan.find((a) => a.type === 'add-dep' && a.dep === '@aziontech/ui')
       assert.equal(runtime.dev, false)
     } finally {
       rmSync(dir, { recursive: true, force: true })
@@ -126,7 +130,7 @@ test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () =
     const deps = findAddDeps(plan)
     const eslint = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.mjs')
     assert.ok(eslint, 'expected eslint.config.mjs write action')
-    assert.match(eslint.content, /@aziontech\/webkit\/eslint-plugin/)
+    assert.match(eslint.content, /@aziontech\/ui\/eslint-plugin/)
     assert.match(eslint.content, /configs\.strict/)
     assert.match(eslint.content, /vue-eslint-parser/)
     // Static a11y floor is wired (the lint half of the accessibility skill).
@@ -136,7 +140,7 @@ test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () =
 
     const stylelint = plan.find((a) => a.type === 'write' && a.path === '.stylelintrc.json')
     assert.ok(stylelint, 'expected .stylelintrc.json write action')
-    assert.match(stylelint.content, /@aziontech\/webkit\/stylelint-config/)
+    assert.match(stylelint.content, /@aziontech\/ui\/stylelint-config/)
     // stylelint config wires the .vue / .scss custom syntaxes
     assert.match(stylelint.content, /postcss-html/)
     assert.match(stylelint.content, /postcss-scss/)
@@ -175,14 +179,14 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
     assert.ok(pcCfg, 'expected postcss.config.mjs write action')
     assert.match(pcCfg.content, /@tailwindcss\/postcss/)
 
-    const cssEntry = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
-    assert.ok(cssEntry, 'expected src/webkit.css write action')
+    const cssEntry = plan.find((a) => a.type === 'write' && a.path === 'src/azion-ui.css')
+    assert.ok(cssEntry, 'expected src/azion-ui.css write action')
     assert.match(cssEntry.content, /@import '@aziontech\/theme'/)
     // The font faces are their own entry, so an app that hosts its fonts can drop the line.
     assert.match(cssEntry.content, /@import '@aziontech\/theme\/fonts\.css'/)
-    // Critically, it must register webkit's source so component classes compile — via the
-    // package-name import (the @source ships inside webkit), never a ../node_modules path.
-    assert.match(cssEntry.content, /@import '@aziontech\/webkit\/styles'/)
+    // Critically, it must register Azion UI's source so component classes compile — via the
+    // package-name import (the @source ships inside ui), never a ../node_modules path.
+    assert.match(cssEntry.content, /@import '@aziontech\/ui\/styles'/)
     // Font smoothing ships in the consumer's own file, inside `@layer base`, so it stays
     // overridable by their unlayered rules and is visible where they can edit it.
     assert.match(cssEntry.content, /@layer base \{[\s\S]*-webkit-font-smoothing: antialiased;/)
@@ -197,42 +201,42 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
   }
 })
 
-const V5_WEBKIT_CSS =
-  "/* @aziontech/webkit design-system styles. Import this once from your app entry. */\n@import '@aziontech/theme';\n\n/* The Azion fonts (Rubik, Roboto Mono, \u2026) from fonts.azion.com. Delete this line if your app\n   hosts its own font files. */\n@import '@aziontech/theme/fonts.css';\n\n/* webkit is consumed as source \u2014 this registers it with Tailwind so its component classes compile. */\n@import '@aziontech/webkit/styles';\n\n/* Text rendering. The type ladder is drawn at these settings, so they are the design\n   system's default \u2014 and they live here, in your file, so you can change them. */\n@layer base {\n  html {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n  }\n}\n"
+const V5_AZION_UI_CSS =
+  "/* @aziontech/ui design-system styles. Import this once from your app entry. */\n@import '@aziontech/theme';\n\n/* The Azion fonts (Rubik, Roboto Mono, \u2026) from fonts.azion.com. Delete this line if your app\n   hosts its own font files. */\n@import '@aziontech/theme/fonts.css';\n\n/* ui is consumed as source \u2014 this registers it with Tailwind so its component classes compile. */\n@import '@aziontech/ui/styles';\n\n/* Text rendering. The type ladder is drawn at these settings, so they are the design\n   system's default \u2014 and they live here, in your file, so you can change them. */\n@layer base {\n  html {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n  }\n}\n"
 
-test('init replaces the untouched 5.x src/webkit.css with the 6.0 template', () => {
+test('init replaces the untouched 5.x src/azion-ui.css with the 6.0 template', () => {
   const dir = makeProject()
   try {
-    writeFileSync(join(dir, 'src/webkit.css'), V5_WEBKIT_CSS)
+    writeFileSync(join(dir, 'src/azion-ui.css'), V5_AZION_UI_CSS)
     const plan = planInit(dir, {})
-    const action = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
+    const action = plan.find((a) => a.type === 'write' && a.path === 'src/azion-ui.css')
     assert.equal(action.skipIfExists, undefined)
     applyPlan(dir, [action])
-    const css = readFileSync(join(dir, 'src/webkit.css'), 'utf8')
-    assert.match(css, /@import '\.\/webkit\.sources\.css';/)
+    const css = readFileSync(join(dir, 'src/azion-ui.css'), 'utf8')
+    assert.match(css, /@import '\.\/azion-ui\.sources\.css';/)
     assert.match(css, /@source not '\.\.\/\.claude';/)
-    assert.equal(planInit(dir, {}).find((a) => a.path === 'src/webkit.css').skipIfExists, true)
+    assert.equal(planInit(dir, {}).find((a) => a.path === 'src/azion-ui.css').skipIfExists, true)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
 
-test('init patches an edited src/webkit.css with only the 6.0 lines it lacks', () => {
+test('init patches an edited src/azion-ui.css with only the 6.0 lines it lacks', () => {
   const dir = makeProject()
   try {
-    const edited = `${V5_WEBKIT_CSS}\n.brand { color: var(--primary); }\n`
-    writeFileSync(join(dir, 'src/webkit.css'), edited)
+    const edited = `${V5_AZION_UI_CSS}\n.brand { color: var(--primary); }\n`
+    writeFileSync(join(dir, 'src/azion-ui.css'), edited)
     const plan = planInit(dir, {})
-    const action = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
+    const action = plan.find((a) => a.type === 'write' && a.path === 'src/azion-ui.css')
     const [result] = applyPlan(dir, [action])
     assert.match(result.detail, /edited by hand/)
-    const css = readFileSync(join(dir, 'src/webkit.css'), 'utf8')
+    const css = readFileSync(join(dir, 'src/azion-ui.css'), 'utf8')
     assert.match(css, /\.brand \{ color: var\(--primary\); \}/)
     assert.match(
       css,
-      /@import '@aziontech\/webkit\/styles';\n@import '\.\/webkit\.sources\.css';\n@source not '\.\.\/\.claude';\n@source not '\.\.\/CLAUDE\.md';\n@source not '\.\.\/AGENTS\.md';/
+      /@import '@aziontech\/ui\/styles';\n@import '\.\/azion-ui\.sources\.css';\n@source not '\.\.\/\.claude';\n@source not '\.\.\/CLAUDE\.md';\n@source not '\.\.\/AGENTS\.md';/
     )
-    assert.equal(planInit(dir, {}).find((a) => a.path === 'src/webkit.css').skipIfExists, true)
+    assert.equal(planInit(dir, {}).find((a) => a.path === 'src/azion-ui.css').skipIfExists, true)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -279,7 +283,7 @@ test('planInit patches the app entry with the style imports by default', () => {
     const patch = plan.find((a) => a.type === 'patch-entry')
     assert.ok(patch, 'expected a patch-entry action for src/main.ts')
     assert.equal(patch.path, 'src/main.ts')
-    assert.deepEqual(patch.imports, ["import './webkit.css'", "import '@aziontech/icons'"])
+    assert.deepEqual(patch.imports, ["import './azion-ui.css'", "import '@aziontech/icons'"])
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -296,7 +300,7 @@ test('wireEntry: false falls back to entry advice, never edits the file', () => 
       'must not plan an entry patch with wireEntry: false'
     )
     const advise = plan.find(
-      (a) => a.type === 'advise' && /import '\.\/webkit\.css'/.test(a.message)
+      (a) => a.type === 'advise' && /import '\.\/azion-ui\.css'/.test(a.message)
     )
     assert.ok(advise, 'expected the entry-imports advice')
   } finally {
@@ -311,7 +315,7 @@ test('icons: false drops @aziontech/icons from deps and entry imports', () => {
     const plan = planInit(dir, { icons: false })
     assert.ok(!findAddDeps(plan).includes('@aziontech/icons'), 'icons dep must be omitted')
     const patch = plan.find((a) => a.type === 'patch-entry')
-    assert.deepEqual(patch.imports, ["import './webkit.css'"])
+    assert.deepEqual(patch.imports, ["import './azion-ui.css'"])
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -344,7 +348,7 @@ test('applyPlan wires the entry imports once and is idempotent', () => {
     applyPlan(dir, planInit(dir, {}))
 
     const wired = readFileSync(join(dir, 'src/main.ts'), 'utf8')
-    assert.ok(wired.startsWith("import './webkit.css'\nimport '@aziontech/icons'\n"))
+    assert.ok(wired.startsWith("import './azion-ui.css'\nimport '@aziontech/icons'\n"))
     assert.ok(wired.includes(MAIN_TS), 'original entry content must be preserved')
 
     // Second run — no duplication.
@@ -353,10 +357,10 @@ test('applyPlan wires the entry imports once and is idempotent', () => {
     assert.equal(again, wired, 'entry file changed on the second run')
 
     // A partially wired entry (double quotes, moved line) is completed, not duplicated.
-    writeFileSync(join(dir, 'src/main.ts'), `import "./webkit.css"\n${MAIN_TS}`)
+    writeFileSync(join(dir, 'src/main.ts'), `import "./azion-ui.css"\n${MAIN_TS}`)
     applyPlan(dir, planInit(dir, {}))
     const completed = readFileSync(join(dir, 'src/main.ts'), 'utf8')
-    assert.equal(completed.split('webkit.css').length - 1, 1, 'webkit.css import duplicated')
+    assert.equal(completed.split('azion-ui.css').length - 1, 1, 'azion-ui.css import duplicated')
     assert.equal(
       completed.split('@aziontech/icons').length - 1,
       1,
@@ -435,13 +439,13 @@ test(
   }
 )
 
-test('planInit merges the webkit MCP server into .mcp.json', () => {
+test('planInit merges the Azion UI MCP server into .mcp.json', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
     const mcp = plan.find((a) => a.type === 'merge-json' && a.path === '.mcp.json')
     assert.ok(mcp, 'expected .mcp.json merge action')
-    assert.ok(mcp.merge.mcpServers[MCP_SERVER_NAME], 'expected webkit server in the merge')
+    assert.ok(mcp.merge.mcpServers[MCP_SERVER_NAME], 'expected ui server in the merge')
     assert.equal(mcp.merge.mcpServers[MCP_SERVER_NAME].command, 'npx')
     assert.deepEqual(mcp.merge.mcpServers[MCP_SERVER_NAME].args, ['-y', PINNED_MCP])
   } finally {
@@ -449,7 +453,7 @@ test('planInit merges the webkit MCP server into .mcp.json', () => {
   }
 })
 
-test('planInit points a v5 webkit MCP entry at @aziontech/webkit-mcp and keeps other servers', () => {
+test('planInit points a v5 Azion UI MCP entry at @aziontech/ui-mcp and keeps other servers', () => {
   const dir = makeProject()
   try {
     writeFileSync(
@@ -457,10 +461,7 @@ test('planInit points a v5 webkit MCP entry at @aziontech/webkit-mcp and keeps o
       JSON.stringify({
         mcpServers: {
           other: { command: 'node', args: ['x.js'] },
-          [MCP_SERVER_NAME]: {
-            command: 'npx',
-            args: ['-y', '-p', '@aziontech/webkit', 'webkit-mcp']
-          }
+          [LEGACY_MCP_SERVER_NAME]: { command: 'npx', args: LEGACY_MCP_SERVER_ARGS }
         }
       })
     )
@@ -470,109 +471,110 @@ test('planInit points a v5 webkit MCP entry at @aziontech/webkit-mcp and keeps o
       command: 'npx',
       args: ['-y', PINNED_MCP]
     })
+    assert.equal(mcp.mcpServers[LEGACY_MCP_SERVER_NAME], undefined)
     assert.deepEqual(mcp.mcpServers.other, { command: 'node', args: ['x.js'] })
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
 
-test('planInit pins an unpinned webkit-mcp entry to the major of the installed WebKit', () => {
+test('planInit pins an unpinned azion-ui-mcp entry to the major of the installed Azion UI', () => {
   const dir = makeProject()
   try {
     writeFileSync(
       join(dir, '.mcp.json'),
       JSON.stringify({
-        mcpServers: { [MCP_SERVER_NAME]: { command: 'npx', args: ['-y', '@aziontech/webkit-mcp'] } }
+        mcpServers: { [MCP_SERVER_NAME]: { command: 'npx', args: ['-y', '@aziontech/ui-mcp'] } }
       })
     )
     applyPlan(dir, planInit(dir, {}))
     const mcp = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
     assert.deepEqual(mcp.mcpServers[MCP_SERVER_NAME].args, ['-y', PINNED_MCP])
     assert.equal(MCP_PACKAGE, PINNED_MCP)
-    assert.match(PINNED_MCP, /^@aziontech\/webkit-mcp@\^\d+$/)
+    assert.match(PINNED_MCP, /^@aziontech\/ui-mcp@\^\d+$/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
 
-test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
+test('planInit copies the .claude/rules/azion-ui-*.md bundle', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
     const copies = plan.filter((a) => a.type === 'copy-stamped').map((a) => a.to)
     for (const rel of [
-      '.claude/rules/webkit-imports.md',
-      '.claude/rules/webkit-tokens.md',
-      '.claude/rules/webkit-performance.md',
-      '.claude/rules/webkit-prefer-over-custom.md',
-      '.claude/rules/webkit-style-override.md',
-      '.claude/rules/webkit-comments.md',
-      '.claude/rules/webkit-construction-standards.md',
-      '.claude/rules/webkit-prop-vocabulary.md',
-      '.claude/rules/webkit-styling.md',
-      '.claude/rules/webkit-direction.md',
-      '.claude/rules/webkit-strings.md',
-      '.claude/rules/webkit-example-data.md',
-      '.claude/rules/webkit-component-structure.md',
-      '.claude/rules/webkit-props.md',
-      '.claude/rules/webkit-v-model.md',
-      '.claude/rules/webkit-emits.md',
-      '.claude/rules/webkit-slots.md',
-      '.claude/rules/webkit-composables.md',
-      '.claude/rules/webkit-root-element.md',
-      '.claude/rules/webkit-component-states.md',
-      '.claude/rules/webkit-accessibility.md',
-      '.claude/rules/webkit-motion.md',
-      '.claude/rules/webkit-testid.md',
-      '.claude/rules/webkit-deprecation.md',
-      '.claude/rules/webkit-api-data.md',
-      '.claude/skills/webkit-usage/SKILL.md',
-      // UI-craft pack (18 skills: the redundancy/false-positive pass + webkit-tables +
-      // webkit-lists (the index page around the table and its filter system) +
-      // webkit-create-surface (page vs drawer, and the anatomy both share) +
-      // webkit-errors (where a failure goes) + webkit-layout (the container system every
-      // page is built on) + webkit-microcopy (Azion product copy rules, unlike the
+      '.claude/rules/azion-ui-imports.md',
+      '.claude/rules/azion-ui-tokens.md',
+      '.claude/rules/azion-ui-performance.md',
+      '.claude/rules/azion-ui-prefer-over-custom.md',
+      '.claude/rules/azion-ui-style-override.md',
+      '.claude/rules/azion-ui-comments.md',
+      '.claude/rules/azion-ui-construction-standards.md',
+      '.claude/rules/azion-ui-prop-vocabulary.md',
+      '.claude/rules/azion-ui-styling.md',
+      '.claude/rules/azion-ui-direction.md',
+      '.claude/rules/azion-ui-strings.md',
+      '.claude/rules/azion-ui-example-data.md',
+      '.claude/rules/azion-ui-component-structure.md',
+      '.claude/rules/azion-ui-props.md',
+      '.claude/rules/azion-ui-v-model.md',
+      '.claude/rules/azion-ui-emits.md',
+      '.claude/rules/azion-ui-slots.md',
+      '.claude/rules/azion-ui-composables.md',
+      '.claude/rules/azion-ui-root-element.md',
+      '.claude/rules/azion-ui-component-states.md',
+      '.claude/rules/azion-ui-accessibility.md',
+      '.claude/rules/azion-ui-motion.md',
+      '.claude/rules/azion-ui-testid.md',
+      '.claude/rules/azion-ui-deprecation.md',
+      '.claude/rules/azion-ui-api-data.md',
+      '.claude/skills/azion-ui-usage/SKILL.md',
+      // UI-craft pack (18 skills: the redundancy/false-positive pass + azion-ui-tables +
+      // azion-ui-lists (the index page around the table and its filter system) +
+      // azion-ui-create-surface (page vs drawer, and the anatomy both share) +
+      // azion-ui-errors (where a failure goes) + azion-ui-layout (the container system every
+      // page is built on) + azion-ui-microcopy (Azion product copy rules, unlike the
       // generic content-microcopy dropped below)).
-      '.claude/skills/webkit-ux-heuristics/SKILL.md',
-      '.claude/skills/webkit-ui-states/SKILL.md',
-      '.claude/skills/webkit-form/SKILL.md',
-      '.claude/skills/webkit-create-surface/SKILL.md',
-      '.claude/skills/webkit-errors/SKILL.md',
-      '.claude/skills/webkit-microcopy/SKILL.md',
-      '.claude/skills/webkit-tables/SKILL.md',
-      '.claude/skills/webkit-lists/SKILL.md',
-      '.claude/skills/webkit-navigation/SKILL.md',
-      '.claude/skills/webkit-layout/SKILL.md',
-      '.claude/skills/webkit-quick-cleanup/SKILL.md',
-      '.claude/skills/webkit-theming-dark-mode/SKILL.md',
-      '.claude/skills/webkit-data-viz/SKILL.md',
-      '.claude/skills/webkit-motion-polish/SKILL.md',
-      '.claude/skills/webkit-final-polish/SKILL.md',
-      '.claude/skills/webkit-ui-verify/SKILL.md',
-      '.claude/skills/webkit-adoption/SKILL.md',
-      '.claude/skills/webkit-azion-api/SKILL.md',
-      '.claude/skills/webkit-query-explorer/SKILL.md',
-      '.claude/skills/webkit-in-product-help/SKILL.md',
-      '.claude/skills/webkit-api-data/SKILL.md',
-      '.claude/skills/webkit-site-pages/SKILL.md',
-      '.claude/skills/webkit-product-screens/SKILL.md',
-      '.claude/agents/webkit-advisor.md',
-      '.claude/agents/webkit-adopter.md',
-      '.claude/agents/webkit-reviewer.md',
-      '.claude/agents/webkit-ui-verifier.md',
-      '.claude/agents/webkit-adoption-auditor.md'
+      '.claude/skills/azion-ui-ux-heuristics/SKILL.md',
+      '.claude/skills/azion-ui-states/SKILL.md',
+      '.claude/skills/azion-ui-form/SKILL.md',
+      '.claude/skills/azion-ui-create-surface/SKILL.md',
+      '.claude/skills/azion-ui-errors/SKILL.md',
+      '.claude/skills/azion-ui-microcopy/SKILL.md',
+      '.claude/skills/azion-ui-tables/SKILL.md',
+      '.claude/skills/azion-ui-lists/SKILL.md',
+      '.claude/skills/azion-ui-navigation/SKILL.md',
+      '.claude/skills/azion-ui-layout/SKILL.md',
+      '.claude/skills/azion-ui-quick-cleanup/SKILL.md',
+      '.claude/skills/azion-ui-theming-dark-mode/SKILL.md',
+      '.claude/skills/azion-ui-data-viz/SKILL.md',
+      '.claude/skills/azion-ui-motion-polish/SKILL.md',
+      '.claude/skills/azion-ui-final-polish/SKILL.md',
+      '.claude/skills/azion-ui-verify/SKILL.md',
+      '.claude/skills/azion-ui-adoption/SKILL.md',
+      '.claude/skills/azion-ui-azion-api/SKILL.md',
+      '.claude/skills/azion-ui-query-explorer/SKILL.md',
+      '.claude/skills/azion-ui-in-product-help/SKILL.md',
+      '.claude/skills/azion-ui-api-data/SKILL.md',
+      '.claude/skills/azion-ui-site-pages/SKILL.md',
+      '.claude/skills/azion-ui-product-screens/SKILL.md',
+      '.claude/agents/azion-ui-advisor.md',
+      '.claude/agents/azion-ui-adopter.md',
+      '.claude/agents/azion-ui-reviewer.md',
+      '.claude/agents/azion-ui-verifier.md',
+      '.claude/agents/azion-ui-adoption-auditor.md'
     ]) {
       assert.ok(copies.includes(rel), `missing bundle copy ${rel}`)
     }
     // Dropped (false positives) and merged skills must NOT ship — locks the redundancy pass.
     for (const gone of [
-      '.claude/skills/webkit-performance-ux/SKILL.md',
-      '.claude/skills/webkit-content-microcopy/SKILL.md',
-      '.claude/skills/webkit-i18n-readiness/SKILL.md',
-      '.claude/skills/webkit-responsive-layout/SKILL.md',
-      '.claude/skills/webkit-usability/SKILL.md',
-      '.claude/skills/webkit-delight/SKILL.md',
-      '.claude/skills/webkit-accessibility-implementation/SKILL.md'
+      '.claude/skills/azion-ui-performance-ux/SKILL.md',
+      '.claude/skills/azion-ui-content-microcopy/SKILL.md',
+      '.claude/skills/azion-ui-i18n-readiness/SKILL.md',
+      '.claude/skills/azion-ui-responsive-layout/SKILL.md',
+      '.claude/skills/azion-ui-usability/SKILL.md',
+      '.claude/skills/azion-ui-delight/SKILL.md',
+      '.claude/skills/azion-ui-accessibility-implementation/SKILL.md'
     ]) {
       assert.ok(!copies.includes(gone), `dropped/merged skill must not ship: ${gone}`)
     }
@@ -620,15 +622,15 @@ test(
       assert.ok(existsSync(join(dir, '.stylelintrc.json')))
       assert.ok(existsSync(join(dir, '.mcp.json')))
       assert.ok(existsSync(join(dir, '.husky/pre-commit')))
-      assert.ok(existsSync(join(dir, '.claude/rules/webkit-imports.md')))
+      assert.ok(existsSync(join(dir, '.claude/rules/azion-ui-imports.md')))
       assert.ok(existsSync(join(dir, 'CLAUDE.md')))
 
       // package.json got the deps.
       const pkg1 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
-      assert.ok(pkg1.dependencies['@aziontech/webkit'])
+      assert.ok(pkg1.dependencies['@aziontech/ui'])
       assert.ok(pkg1.devDependencies['eslint'])
 
-      // .mcp.json has exactly one webkit server.
+      // .mcp.json has exactly one ui server.
       const mcp1 = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
       assert.equal(Object.keys(mcp1.mcpServers).length, 1)
       assert.ok(mcp1.mcpServers[MCP_SERVER_NAME])
@@ -640,7 +642,7 @@ test(
       // Second run — must not clobber or duplicate.
       applyPlan(dir, planInit(dir, {}))
 
-      // .mcp.json still has exactly one webkit server.
+      // .mcp.json still has exactly one ui server.
       const mcp2 = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
       assert.equal(Object.keys(mcp2.mcpServers).length, 1)
       assert.deepEqual(mcp2, mcp1, '.mcp.json changed on the second run')
@@ -716,7 +718,7 @@ test('applyPlan repairs a CLAUDE.md with the legacy fragment duplicated at two p
   const dir = makeProject()
   try {
     // Mirrors the real docs-repo case: the legacy marker + fragment appended twice.
-    const legacyFragment = `${CLAUDE_FRAGMENT_MARKER}\n## @aziontech/webkit design system\nOld body.\n`
+    const legacyFragment = `${CLAUDE_FRAGMENT_MARKER}\n## @aziontech/ui design system\nOld body.\n`
     writeFileSync(
       join(dir, 'CLAUDE.md'),
       `# Proj\n\n${legacyFragment}\n${legacyFragment}\n## Other\nkeep me\n`
@@ -795,29 +797,32 @@ test('applyPlan keeps a dependency at a compatible or newer version and never do
     assert.equal(after.devDependencies.tailwindcss, undefined, 'no duplicate entry')
     const kept = results.find((r) => r.action.dep === 'eslint')
     assert.equal(kept.result, 'skipped')
-    assert.match(kept.detail, /eslint@\^10\.0\.0 kept \(WebKit needs \^9/)
+    assert.match(kept.detail, /eslint@\^10\.0\.0 kept \(Azion UI needs \^9/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
 
-test('applyPlan raises a dependency older than WebKit needs and says so', () => {
+test('applyPlan raises a dependency older than Azion UI needs and says so', () => {
   const dir = makeProject()
   try {
     const pkgPath = join(dir, 'package.json')
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
-    pkg.dependencies = { '@aziontech/webkit': '^1.2.3' }
+    pkg.dependencies = { '@aziontech/ui': '^1.2.3' }
     pkg.devDependencies = { tailwindcss: '^3.4.0' }
     writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
 
     const results = applyPlan(dir, planInit(dir, {}))
 
     const after = JSON.parse(readFileSync(pkgPath, 'utf8'))
-    const wanted = _internals.DEP_VERSION('@aziontech/webkit')
-    assert.equal(after.dependencies['@aziontech/webkit'], wanted)
+    const wanted = _internals.DEP_VERSION('@aziontech/ui')
+    assert.equal(after.dependencies['@aziontech/ui'], wanted)
     assert.equal(after.devDependencies.tailwindcss, '^4.1.0')
     const raised = results.find((r) => r.action.dep === 'tailwindcss')
-    assert.match(raised.detail, /tailwindcss@\^4\.1\.0 \(was \^3\.4\.0, older than WebKit needs\)/)
+    assert.match(
+      raised.detail,
+      /tailwindcss@\^4\.1\.0 \(was \^3\.4\.0, older than Azion UI needs\)/
+    )
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -832,7 +837,7 @@ test('planInit skips the git hooks outside a git repository and says how to add 
     assert.ok(!plan.some((a) => a.path === '.husky/pre-commit'))
     const notes = plan.filter((a) => a.type === 'advise' && /git init/.test(a.message))
     assert.equal(notes.length, 1)
-    assert.match(notes[0].message, /npx @aziontech\/webkit init/)
+    assert.match(notes[0].message, /npx @aziontech\/ui init/)
 
     applyPlan(dir, plan)
     const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
@@ -856,7 +861,7 @@ test('applyPlan merges into an existing .mcp.json without dropping other servers
 
     const mcp = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
     assert.ok(mcp.mcpServers.other, 'existing server was dropped')
-    assert.ok(mcp.mcpServers[MCP_SERVER_NAME], 'webkit server not added')
+    assert.ok(mcp.mcpServers[MCP_SERVER_NAME], 'ui server not added')
     assert.equal(Object.keys(mcp.mcpServers).length, 2)
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -886,7 +891,7 @@ test('planInit pins every dependency it adds to caret ranges, never "latest"', (
   }
 })
 
-test('the ranges init writes for webkit, theme and icons are satisfied by the workspace packages', () => {
+test('the ranges init writes for Azion UI, theme and icons are satisfied by the workspace packages', () => {
   const read = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url), 'utf8'))
   const own = read('../../package.json')
   const theme = read('../../../theme/package.json')
@@ -895,7 +900,7 @@ test('the ranges init writes for webkit, theme and icons are satisfied by the wo
   try {
     const plan = planInit(dir, {})
     const v = (dep) => plan.find((a) => a.type === 'add-dep' && a.dep === dep).version
-    assert.equal(v('@aziontech/webkit'), `^${own.version}`)
+    assert.equal(v('@aziontech/ui'), `^${own.version}`)
     assert.equal(v('@aziontech/theme'), own.peerDependencies['@aziontech/theme'])
     assert.ok(
       caretSatisfies(own.peerDependencies['@aziontech/theme'], theme.version),
@@ -937,12 +942,14 @@ test('planInit leaves PostCSS out when the app runs Tailwind through @tailwindcs
 })
 
 async function lintWithInitConfig(code) {
-  process.env.WEBKIT_CATALOG_PATH ||= fileURLToPath(new URL('../../catalog.json', import.meta.url))
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-init-lint-'))
+  process.env.AZION_UI_CATALOG_PATH ||= fileURLToPath(
+    new URL('../../catalog.json', import.meta.url)
+  )
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-init-lint-'))
   try {
     let source = _internals.eslintFlatConfig('strict')
     for (const spec of [
-      '@aziontech/webkit/eslint-plugin',
+      '@aziontech/ui/eslint-plugin',
       'eslint-plugin-vuejs-accessibility',
       'vue-eslint-parser',
       '@typescript-eslint/parser'
@@ -961,7 +968,7 @@ async function lintWithInitConfig(code) {
 
 test('the init ESLint config accepts a label that points at its control with for, or wraps it', async () => {
   const script =
-    "<script setup>\nimport Input from '@aziontech/webkit/input'\nimport FieldLabel from '@aziontech/webkit/field-label'\n</script>\n"
+    "<script setup>\nimport Input from '@aziontech/ui/input'\nimport FieldLabel from '@aziontech/ui/field-label'\n</script>\n"
   assert.deepEqual(
     await lintWithInitConfig(
       `${script}<template><FieldLabel for="name">Name</FieldLabel><Input id="name" /></template>\n`
@@ -983,10 +990,10 @@ test('the init ESLint config accepts a label that points at its control with for
   )
   assert.deepEqual(
     await lintWithInitConfig(
-      "<script setup>\nimport Checkbox from '@aziontech/webkit/checkbox'\n</script>\n<template><label>Accept <Checkbox /></label></template>\n"
+      "<script setup>\nimport Checkbox from '@aziontech/ui/checkbox'\n</script>\n<template><label>Accept <Checkbox /></label></template>\n"
     ),
     [],
-    'a label wrapping a WebKit control must pass'
+    'a label wrapping an Azion UI control must pass'
   )
   assert.equal(
     (await lintWithInitConfig(`${script}<template><label>Name</label><Input /></template>\n`))

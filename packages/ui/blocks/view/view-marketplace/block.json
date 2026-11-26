@@ -25,7 +25,7 @@
     "instalar integração",
     "loja de extensões"
   ],
-  "skills": ["webkit-lists", "webkit-form", "webkit-errors", "webkit-ui-states"],
+  "skills": ["azion-ui-lists", "azion-ui-form", "azion-ui-errors", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "view-marketplace.vue"

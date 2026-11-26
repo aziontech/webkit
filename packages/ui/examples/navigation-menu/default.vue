@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import Button from '@aziontech/ui/button'
+  import NavigationMenu from '@aziontech/ui/navigation-menu'
 </script>
 
 <template>

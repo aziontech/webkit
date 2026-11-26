@@ -1,10 +1,10 @@
 <script setup>
-  import ArticleCardsSection from '@aziontech/webkit/article-cards-section'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ArticleCardsSection from '@aziontech/ui/article-cards-section'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import netshoesExtendedReversed from '@aziontech/ui/assets/netshoes-extended-reversed.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const items = [
     {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { ref, watch } from 'vue'
 
   import DeployDrawerFrame from '../parts/deploy-drawer-frame.vue'

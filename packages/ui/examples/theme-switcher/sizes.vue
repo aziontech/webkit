@@ -1,6 +1,6 @@
 <script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import IconButton from '@aziontech/ui/icon-button'
+  import ThemeSwitcher from '@aziontech/ui/theme-switcher'
   import { ref } from 'vue'
 
   const theme = ref('system')

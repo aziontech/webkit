@@ -1,8 +1,8 @@
 {
  "name": "textarea",
  "binding": "Textarea",
- "import": "@aziontech/webkit/textarea",
- "treeShakeableImport": "@aziontech/webkit/textarea",
+ "import": "@aziontech/ui/textarea",
+ "treeShakeableImport": "@aziontech/ui/textarea",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

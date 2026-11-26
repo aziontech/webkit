@@ -4,7 +4,7 @@ A titled preview of a longer listing: a few linked rows in columns, and one outl
 
 Each row is one link, named by its first column. The whole row is clickable with the pointer, and the title link is the keyboard and screen-reader path. Below `sm` the columns cannot fit, so the same rows become a list of items whose titles wrap, with the second column as the description and the button going full width. Careers uses it for its latest roles.
 
-The band is the `ListingTableSection` component from `@aziontech/webkit/listing-table-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `Table` and, on phones, `Item`.
+The band is the `ListingTableSection` component from `@aziontech/ui/listing-table-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `Table` and, on phones, `Item`.
 
 ## Examples
 

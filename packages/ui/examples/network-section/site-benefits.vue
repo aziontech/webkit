@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import NetworkSection from '@aziontech/webkit/network-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import NetworkSection from '@aziontech/ui/network-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const claims = [
     '100+ data centers',

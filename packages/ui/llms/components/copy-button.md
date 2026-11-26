@@ -2,7 +2,7 @@
 
 > Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens, and `Tooltip` for its name: an icon-only button is silent to a pointer user until hovered, so the glyph is always labelled on hover/focus. The tooltip text is the same string as the accessible name — `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — so the confirmation is seen as well as announced. It is suppressed with `disabled`.
 
-- Import: `import CopyButton from '@aziontech/webkit/copy-button'`
+- Import: `import CopyButton from '@aziontech/ui/copy-button'`
 - Category: action · Surface: app · Structure: monolithic
 - API as JSON: [copy-button.json](copy-button.json)
 
@@ -98,7 +98,7 @@
 
 ```vue
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
+  import CopyButton from '@aziontech/ui/copy-button'
 </script>
 
 <template>
@@ -113,7 +113,7 @@
 
 ```vue
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
+  import CopyButton from '@aziontech/ui/copy-button'
 </script>
 
 <template>

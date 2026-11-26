@@ -2,7 +2,7 @@
 
 > The documentation chrome, composed once in the app: a sticky header (at the inline start the compact menu button, the Azion Docs mark and the section links; an empty `AppHeader.Center` spacer; at the inline end `SearchTrigger` and then the app's actions, the way most docs sites end their header with the search), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocTableOfContents`) on the inline end with its own slot below it — filled from the page itself: every `DocHeading` of level 2 or 3 that carries an `anchor`, and every `DocChangelogEntry`, rendered anywhere in the default slot registers with the layout, and the rail lists them in document order, so a page composed once in the app needs no wiring to feed its outline — and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article (page bodies with no header, rail or footer of their own), rendered through the default slot.
 
-- Import: `import DocLayout from '@aziontech/webkit/doc-layout'`
+- Import: `import DocLayout from '@aziontech/ui/doc-layout'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-layout.json](doc-layout.json)
 
@@ -32,7 +32,7 @@
 - `DocTableOfContents` — the outline rail; the registered headings and `outlineGroups` are bound onto it.
 - `DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header; an anchored level 2 or 3 heading registers itself as an outline entry.
 - `DocChangelogEntry` — each entry registers itself as a level 2 outline entry.
-- `useHeadingOutline` (`@aziontech/webkit/use-heading-navigation`) — the registration a custom heading calls to join the outline.
+- `useHeadingOutline` (`@aziontech/ui/use-heading-navigation`) — the registration a custom heading calls to join the outline.
 - `DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
 - `Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
 - `SearchTrigger`, `Command` — the header search and the palette it opens.
@@ -135,13 +135,13 @@
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
-  import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import Button from '@aziontech/ui/button'
+  import DocCallToAction from '@aziontech/ui/doc-call-to-action'
+  import DocHeading from '@aziontech/ui/doc-heading'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/ui/doc-layout'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/ui/theme-switcher'
   import { ref } from 'vue'
 
   const navigation: DocLayoutNavGroup[] = [
@@ -238,10 +238,10 @@
 
 ```vue
 <script setup lang="ts">
-  import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocHeading from '@aziontech/ui/doc-heading'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/ui/doc-layout'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import DocProse from '@aziontech/ui/doc-prose'
   import { onMounted, ref, watch } from 'vue'
 
   const STORAGE_KEY = 'acme-docs-rail'

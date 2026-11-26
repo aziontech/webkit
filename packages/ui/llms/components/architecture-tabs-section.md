@@ -2,7 +2,7 @@
 
 > The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
-- Import: `import ArchitectureTabsSection from '@aziontech/webkit/architecture-tabs-section'`
+- Import: `import ArchitectureTabsSection from '@aziontech/ui/architecture-tabs-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [architecture-tabs-section.json](architecture-tabs-section.json)
 
@@ -67,7 +67,7 @@
 
 ```vue
 <script setup>
-  import ArchitectureTabsSection from '@aziontech/webkit/architecture-tabs-section'
+  import ArchitectureTabsSection from '@aziontech/ui/architecture-tabs-section'
 
   const tabs = [
     {

@@ -1,5 +1,5 @@
 <script setup>
-  import QrCode from '@aziontech/webkit/qr-code'
+  import QrCode from '@aziontech/ui/qr-code'
 </script>
 
 <template>

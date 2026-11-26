@@ -5,13 +5,12 @@ export default {
   meta: {
     type: 'problem',
     docs: {
-      description:
-        'Disallow importing a @aziontech/webkit component marked deprecated in the catalog.'
+      description: 'Disallow importing a @aziontech/ui component marked deprecated in the catalog.'
     },
     hasSuggestions: true,
     schema: [],
     messages: {
-      deprecated: "'{{source}}' is deprecated in @aziontech/webkit.{{hint}}",
+      deprecated: "'{{source}}' is deprecated in @aziontech/ui.{{hint}}",
       replace: "Import '{{replacement}}' instead"
     }
   },

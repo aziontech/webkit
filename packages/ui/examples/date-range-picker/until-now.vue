@@ -1,5 +1,5 @@
 <script setup>
-  import DateRangePicker from '@aziontech/webkit/date-range-picker'
+  import DateRangePicker from '@aziontech/ui/date-range-picker'
   import { ref } from 'vue'
 
   const range = ref({ type: 'since', start: '2026-11-10T09:30:00.000Z' })

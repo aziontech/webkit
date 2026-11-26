@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
-  import Link from '@aziontech/webkit/link'
+  import Button from '@aziontech/ui/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

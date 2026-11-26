@@ -1,6 +1,6 @@
 <script setup>
-  import CardGridCell from '@aziontech/webkit/card-grid-cell'
-  import CardGridRoot from '@aziontech/webkit/card-grid-root'
+  import CardGridCell from '@aziontech/ui/card-grid-cell'
+  import CardGridRoot from '@aziontech/ui/card-grid-root'
 </script>
 
 <template>

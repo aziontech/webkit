@@ -1,5 +1,5 @@
 <script setup>
-  import Progress from '@aziontech/webkit/progress'
+  import Progress from '@aziontech/ui/progress'
 </script>
 
 <template>

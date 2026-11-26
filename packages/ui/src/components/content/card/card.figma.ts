@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5466-52854
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/card/card.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/card/card.vue
 // component=Card
 import figma from 'figma'
 
@@ -35,7 +35,7 @@ export default {
       : ''
   }
 </Card>`,
-  imports: ["import Card from '@aziontech/webkit/card'"],
+  imports: ["import Card from '@aziontech/ui/card'"],
   id: 'card',
   metadata: { nestable: true }
 }

@@ -1,5 +1,5 @@
 <script setup>
-  import DocCodeGroup from '@aziontech/webkit/doc-code-group'
+  import DocCodeGroup from '@aziontech/ui/doc-code-group'
 </script>
 
 <template>

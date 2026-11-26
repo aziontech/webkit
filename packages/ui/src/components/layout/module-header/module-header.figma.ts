@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17180
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/layout/module-header/module-header.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/layout/module-header/module-header.vue
 // component=ModuleHeader
 import figma from 'figma'
 
@@ -53,7 +53,7 @@ export default {
       : ''
   }
 </ModuleHeader>`,
-  imports: ["import ModuleHeader from '@aziontech/webkit/module-header'"],
+  imports: ["import ModuleHeader from '@aziontech/ui/module-header'"],
   id: 'module-header',
   metadata: { nestable: false }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import CopyText from '@aziontech/webkit/copy-text'
-  import Select from '@aziontech/webkit/select'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import CopyText from '@aziontech/ui/copy-text'
+  import Select from '@aziontech/ui/select'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import tokens from 'virtual:docs-tokens'
   import { computed, ref, watch } from 'vue'
 

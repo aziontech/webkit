@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Spinner from '@aziontech/webkit/spinner'
-  import SplitButton from '@aziontech/webkit/split-button'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Spinner from '@aziontech/ui/spinner'
+  import SplitButton from '@aziontech/ui/split-button'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref } from 'vue'
 
   import type { VersionDetailRevertDiff, VersionDetailVersion } from '../detail-version.vue'

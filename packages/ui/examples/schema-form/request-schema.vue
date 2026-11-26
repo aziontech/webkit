@@ -1,5 +1,5 @@
 <script setup>
-  import SchemaForm from '@aziontech/webkit/schema-form'
+  import SchemaForm from '@aziontech/ui/schema-form'
   import { ref } from 'vue'
 
   const schema = {

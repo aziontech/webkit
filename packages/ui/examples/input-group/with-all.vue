@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import InputGroup from '@aziontech/webkit/input-group'
+  import Button from '@aziontech/ui/button'
+  import InputGroup from '@aziontech/ui/input-group'
 </script>
 
 <template>

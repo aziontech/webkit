@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3606-4358
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/currency-amount/currency-amount.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/currency-amount/currency-amount.vue
 // component=Currency
 import figma from 'figma'
 
@@ -38,7 +38,7 @@ export default {
   size="${size}"`
   }
 />`,
-  imports: ["import CurrencyAmount from '@aziontech/webkit/currency-amount'"],
+  imports: ["import CurrencyAmount from '@aziontech/ui/currency-amount'"],
   id: 'currency',
   metadata: { nestable: true }
 }

@@ -1,10 +1,10 @@
 # useTimeRange
 
-Composable `@aziontech/webkit/use-time-range`. The signatures and option tables below are read from its typed source, [`src/composables/use-time-range/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-time-range/index.ts).
+Composable `@aziontech/ui/use-time-range`. The signatures and option tables below are read from its typed source, [`src/composables/use-time-range/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-time-range/index.ts).
 
 ```ts
-import { useTimeRange, timeRangePreset, TIME_RANGE_PRESETS } from '@aziontech/webkit/use-time-range'
-import type { UseTimeRangeOptions, UseTimeRangeReturn, TimeRangePresetKey } from '@aziontech/webkit/use-time-range'
+import { useTimeRange, timeRangePreset, TIME_RANGE_PRESETS } from '@aziontech/ui/use-time-range'
+import type { UseTimeRangeOptions, UseTimeRangeReturn, TimeRangePresetKey } from '@aziontech/ui/use-time-range'
 ```
 
 ## `useTimeRange`

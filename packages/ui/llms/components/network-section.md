@@ -2,7 +2,7 @@
 
 > The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `network-map`, `module-header`, `card-grid`, `quote`, `feature-item` and `stats`. `variant` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `stats` row. The band above is the same.
 
-- Import: `import NetworkSection from '@aziontech/webkit/network-section'`
+- Import: `import NetworkSection from '@aziontech/ui/network-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [network-section.json](network-section.json)
 
@@ -89,11 +89,11 @@
 
 ```vue
 <script setup>
-  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
-  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-  import NetworkSection from '@aziontech/webkit/network-section'
+  import dafitiExtendedMono from '@aziontech/ui/assets/dafiti-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import madeiramadeiraExtendedReversed from '@aziontech/ui/assets/madeiramadeira-extended-reversed.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
+  import NetworkSection from '@aziontech/ui/network-section'
 </script>
 
 <template>
@@ -146,11 +146,11 @@
 
 ```vue
 <script setup>
-  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
-  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-  import NetworkSection from '@aziontech/webkit/network-section'
+  import dafitiExtendedMono from '@aziontech/ui/assets/dafiti-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import madeiramadeiraExtendedReversed from '@aziontech/ui/assets/madeiramadeira-extended-reversed.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
+  import NetworkSection from '@aziontech/ui/network-section'
 </script>
 
 <template>
@@ -258,11 +258,11 @@
 
 ```vue
 <script setup>
-  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
-  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-  import NetworkSection from '@aziontech/webkit/network-section'
+  import dafitiExtendedMono from '@aziontech/ui/assets/dafiti-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import madeiramadeiraExtendedReversed from '@aziontech/ui/assets/madeiramadeira-extended-reversed.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
+  import NetworkSection from '@aziontech/ui/network-section'
 
   const claims = [
     '100+ data centers',

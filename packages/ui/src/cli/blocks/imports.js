@@ -5,7 +5,7 @@ import { PACKAGE_NAME } from '../source.js'
 import { read } from './manifest.js'
 import { extraFile, longExtraFile, variantFile } from './targets.js'
 
-const WEBKIT_SUBPATH = /['"`]@aziontech\/webkit\/([^'"`\s]+)['"`]/g
+const AZION_UI_SUBPATH = /['"`]@aziontech\/ui\/([^'"`\s]+)['"`]/g
 
 const BARE_IMPORT = /(?:\bfrom\s+|\bimport\s*\(\s*|^\s*import\s+)['"]([^./'"][^'"]*)['"]/gm
 
@@ -29,18 +29,18 @@ function packageInstalled(projectDir, spec) {
   }
 }
 
-export function checkImports(projectDir, webkit, sources) {
-  const webkitSubpaths = new Set()
+export function checkImports(projectDir, ui, sources) {
+  const azionUiSubpaths = new Set()
   const foreign = new Set()
   for (const src of sources) {
-    for (const m of src.matchAll(WEBKIT_SUBPATH)) webkitSubpaths.add(m[1])
+    for (const m of src.matchAll(AZION_UI_SUBPATH)) azionUiSubpaths.add(m[1])
     for (const m of src.matchAll(BARE_IMPORT)) {
       if (m[1] !== PACKAGE_NAME && !m[1].startsWith(`${PACKAGE_NAME}/`)) foreign.add(m[1])
     }
   }
-  const webkitImports = [...webkitSubpaths].sort().map((sub) => ({
+  const azionUiImports = [...azionUiSubpaths].sort().map((sub) => ({
     spec: `${PACKAGE_NAME}/${sub}`,
-    ok: webkit.exports.has(sub)
+    ok: ui.exports.has(sub)
   }))
   const packages = new Map()
   for (const spec of foreign) {
@@ -48,8 +48,8 @@ export function checkImports(projectDir, webkit, sources) {
     if (!packages.has(hit.name)) packages.set(hit.name, hit)
   }
   return {
-    webkit: webkitImports,
-    missing: webkitImports.filter((i) => !i.ok).map((i) => i.spec),
+    ui: azionUiImports,
+    missing: azionUiImports.filter((i) => !i.ok).map((i) => i.spec),
     packages: [...packages.values()].sort((a, b) => a.name.localeCompare(b.name))
   }
 }

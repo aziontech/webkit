@@ -1,12 +1,10 @@
 <script setup lang="ts">
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuRoot, {
-    type DropdownMenuItemValue
-  } from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenuRoot, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import CreateDrawer from '../create-drawer.vue'
 

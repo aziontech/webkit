@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import Subheader from '@aziontech/webkit/subheader'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import Card from '@aziontech/ui/card'
+  import type { TableColumn } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+  import Subheader from '@aziontech/ui/subheader'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
 
   /** One deployment row of the Deployments tab. */
   export interface ApplicationDeploymentRow {

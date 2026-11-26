@@ -1,5 +1,5 @@
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
+  import Illustration from '@aziontech/ui/illustration'
 </script>
 
 <template>

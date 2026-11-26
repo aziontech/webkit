@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Card from '@aziontech/webkit/card'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Card from '@aziontech/ui/card'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { computed, reactive } from 'vue'
 
   import type { RuleBehavior } from '../lib/rule-behavior-data'

@@ -2,7 +2,7 @@
 
 > A question the agent asks the reader in the middle of a run, before it can go on (a human-in-the-loop interrupt, Cloudscape follow-up input, the "ask the user" step of coding agents): pick one of a few options, type a short answer, or say yes or no. The card states the question, says why the agent asks, shows the answer control the question needs (`type`: options as radios, a one-line text field, or Yes and No buttons), and offers Submit and, when the run can go on without an answer, Skip. While the answer is sent the controls are inert and Submit shows its loading state; once answered, the controls give way to the answer in text (`Answered: Staging`) so the exchange stays in the thread; a failed send keeps the controls and shows the error line under them. It differs from `tool-approval`, which approves or denies a tool call with consequences: this card collects information the agent needs, and nothing runs on the reader's behalf. It also says "answer in flight" with `status="running"` instead of tool-approval's `loading` boolean, on purpose: the pause it renders already has a lifecycle (TanStack AI's `pending`, `validating` / `submitting`, `error`), and one `status` maps onto it without a second flag that could disagree with it. A block maps the interrupt like this: `pending` → `pending`; `validating`, `staged` and `submitting` → `running`; `error` → `error`, with the first of `errors[]` as `error`; a resolved interrupt → `success`; `cancel()` after Skip → `skipped`; an interrupt the run dropped → `canceled`. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
 
-- Import: `import AgentQuestion from '@aziontech/webkit/agent-question'`
+- Import: `import AgentQuestion from '@aziontech/ui/agent-question'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [agent-question.json](agent-question.json)
 
@@ -132,7 +132,7 @@ the title and description render through the shared `ai/lib/markdown-inline` ren
 
 ```vue
 <script setup>
-  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import AgentQuestion from '@aziontech/ui/agent-question'
   import { ref } from 'vue'
 
   const answer = ref('')
@@ -163,7 +163,7 @@ the title and description render through the shared `ai/lib/markdown-inline` ren
 
 ```vue
 <script setup>
-  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import AgentQuestion from '@aziontech/ui/agent-question'
 </script>
 
 <template>
@@ -199,7 +199,7 @@ the title and description render through the shared `ai/lib/markdown-inline` ren
 
 ```vue
 <script setup>
-  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import AgentQuestion from '@aziontech/ui/agent-question'
 </script>
 
 <template>

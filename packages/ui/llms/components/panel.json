@@ -1,16 +1,16 @@
 {
  "name": "panel",
  "binding": "Panel",
- "import": "@aziontech/webkit/panel",
- "treeShakeableImport": "@aziontech/webkit/panel-root",
+ "import": "@aziontech/ui/panel",
+ "treeShakeableImport": "@aziontech/ui/panel-root",
  "category": "overlay",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/panel-body",
-  "@aziontech/webkit/panel-footer",
-  "@aziontech/webkit/panel-header"
+  "@aziontech/ui/panel-body",
+  "@aziontech/ui/panel-footer",
+  "@aziontech/ui/panel-header"
  ],
  "purpose": "The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions. `DialogContent` and `DrawerContent` lay their regions out with it, and a page can render it on its own as a static preview of an overlay.",
  "setup": null,

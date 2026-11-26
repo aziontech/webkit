@@ -1,8 +1,8 @@
 {
  "name": "app-layout",
  "binding": "AppLayout",
- "import": "@aziontech/webkit/app-layout",
- "treeShakeableImport": "@aziontech/webkit/app-layout",
+ "import": "@aziontech/ui/app-layout",
+ "treeShakeableImport": "@aziontech/ui/app-layout",
  "category": "layout",
  "surface": "app",
  "structure": "monolithic",

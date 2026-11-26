@@ -2,7 +2,7 @@
 
 > The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content. Every side and every corner is addressable on its own, so frames stack and abut without doubling a rule or a mark. It is the container every framed page section is built from — a section title, the gap between two sections, a cell of a divider grid — so a page's rules and corner marks come from one component instead of from per-screen borders.
 
-- Import: `import RegistrationFrame from '@aziontech/webkit/registration-frame'`
+- Import: `import RegistrationFrame from '@aziontech/ui/registration-frame'`
 - Category: layout · Surface: site · Structure: monolithic
 - API as JSON: [registration-frame.json](registration-frame.json)
 
@@ -73,7 +73,7 @@
 
 ```vue
 <script setup>
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>
@@ -87,7 +87,7 @@
 
 ```vue
 <script setup>
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>
@@ -128,7 +128,7 @@
 
 ```vue
 <script setup>
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>

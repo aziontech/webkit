@@ -1,5 +1,5 @@
 <script setup>
-  import Stats from '@aziontech/webkit/stats'
+  import Stats from '@aziontech/ui/stats'
 </script>
 
 <template>

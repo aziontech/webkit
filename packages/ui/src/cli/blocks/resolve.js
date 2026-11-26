@@ -24,8 +24,8 @@ function movedVariant(catalog, key, hit, variant) {
   return variant
 }
 
-function locateBlock(webkit, catalog, key, variant) {
-  if (existsSync(join(webkit.root, 'blocks', key, 'block.json'))) {
+function locateBlock(ui, catalog, key, variant) {
+  if (existsSync(join(ui.root, 'blocks', key, 'block.json'))) {
     return { id: key, variant, note: null }
   }
   const hit = getBlock(catalog, key)
@@ -33,7 +33,7 @@ function locateBlock(webkit, catalog, key, variant) {
     return {
       error: {
         ok: false,
-        message: `No block "${key}" in ${PACKAGE_NAME}@${webkit.version}.`,
+        message: `No block "${key}" in ${PACKAGE_NAME}@${ui.version}.`,
         suggestions: hit.suggestions || []
       }
     }
@@ -42,16 +42,16 @@ function locateBlock(webkit, catalog, key, variant) {
   return { id: hit.id, variant: movedVariant(catalog, key, hit, variant), note: hit.note }
 }
 
-export function resolveBlock(webkit, catalog, id, { variant } = {}) {
-  const located = locateBlock(webkit, catalog, String(id || '').trim(), variant)
+export function resolveBlock(ui, catalog, id, { variant } = {}) {
+  const located = locateBlock(ui, catalog, String(id || '').trim(), variant)
   if (located.error) return located.error
   const { id: resolvedId, variant: wantedVariant, note } = located
-  const dir = join(webkit.root, 'blocks', resolvedId)
+  const dir = join(ui.root, 'blocks', resolvedId)
   const metaPath = join(dir, 'block.json')
   if (!existsSync(metaPath)) {
     return {
       ok: false,
-      message: `Block "${resolvedId}" is in the catalog but ${PACKAGE_NAME}@${webkit.version} ships no ${toPosix(relative(webkit.root, metaPath))}.`,
+      message: `Block "${resolvedId}" is in the catalog but ${PACKAGE_NAME}@${ui.version} ships no ${toPosix(relative(ui.root, metaPath))}.`,
       suggestions: []
     }
   }

@@ -1,10 +1,10 @@
 # useAiChatVersions
 
-Composable `@aziontech/webkit/use-ai-chat-versions`. The signatures and option tables below are read from its typed source, [`src/composables/use-ai-chat-versions/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-ai-chat-versions/index.ts).
+Composable `@aziontech/ui/use-ai-chat-versions`. The signatures and option tables below are read from its typed source, [`src/composables/use-ai-chat-versions/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-ai-chat-versions/index.ts).
 
 ```ts
-import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
-import type { UseAiChatVersionsReturn, AiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
+import { useAiChatVersions } from '@aziontech/ui/use-ai-chat-versions'
+import type { UseAiChatVersionsReturn, AiChatVersions } from '@aziontech/ui/use-ai-chat-versions'
 ```
 
 ## `useAiChatVersions`

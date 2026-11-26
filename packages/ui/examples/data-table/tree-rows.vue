@@ -1,5 +1,5 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/ui/data-table'
   import { ref } from 'vue'
 
   const accounts = [

@@ -1,8 +1,8 @@
 {
  "name": "stats-section",
  "binding": "StatsSection",
- "import": "@aziontech/webkit/stats-section",
- "treeShakeableImport": "@aziontech/webkit/stats-section",
+ "import": "@aziontech/ui/stats-section",
+ "treeShakeableImport": "@aziontech/ui/stats-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

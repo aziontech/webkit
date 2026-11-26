@@ -1,5 +1,5 @@
 <script setup>
-  import Table from '@aziontech/webkit/table'
+  import Table from '@aziontech/ui/table'
 
   const items = [
     { id: '1001', name: 'Workload Alpha', status: 'Active', editor: 'user1@example.com' },

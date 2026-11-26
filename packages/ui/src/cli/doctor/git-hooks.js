@@ -78,7 +78,7 @@ function preCommitCheck(hooks, found) {
       'warn',
       `${prefix}.husky/pre-commit lints the whole tree, build output included (\`npx ` +
         `stylelint "**/*…"\`), so the first commit after a build fails on compiled CSS — re-run ` +
-        `\`npx @aziontech/webkit init\` to lint \`src/\` only.`
+        `\`npx @aziontech/ui init\` to lint \`src/\` only.`
     ]
   }
   return ['ok', `${prefix}.husky/pre-commit lints on commit`]
@@ -120,6 +120,6 @@ export function gitHooksCheck({ projectDir, pkg, add }) {
   add(
     'git hooks',
     'ok',
-    'not a git repository, so init added no pre-commit hook. After `git init`, run `npx @aziontech/webkit init` again to add it.'
+    'not a git repository, so init added no pre-commit hook. After `git init`, run `npx @aziontech/ui init` again to add it.'
   )
 }

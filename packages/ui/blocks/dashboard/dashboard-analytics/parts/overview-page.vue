@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import {

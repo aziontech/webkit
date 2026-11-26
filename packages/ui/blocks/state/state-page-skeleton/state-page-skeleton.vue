@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   export interface PageSkeletonProps {
     /** What is loading, read by screen readers from the status region. */

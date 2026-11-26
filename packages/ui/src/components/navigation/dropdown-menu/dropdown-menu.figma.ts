@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/dropdown-menu/dropdown-menu.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/dropdown-menu/dropdown-menu.vue
 // component=DropdownMenu
 import figma from 'figma'
 
@@ -38,8 +38,8 @@ export default {
   }
 </DropdownMenu>`,
   imports: [
-    "import DropdownMenu from '@aziontech/webkit/dropdown-menu'",
-    "import IconButton from '@aziontech/webkit/icon-button'"
+    "import DropdownMenu from '@aziontech/ui/dropdown-menu'",
+    "import IconButton from '@aziontech/ui/icon-button'"
   ],
   id: 'dropdown',
   metadata: { nestable: true }

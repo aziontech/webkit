@@ -10,7 +10,7 @@ import { planInit } from '../../src/cli/plan.js'
 import { rangeAdmits, VUE_TSC_KNOWN_GOOD } from '../../src/cli/toolchain.js'
 
 function makeProject(pkg, files = {}) {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-vue-tsc-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-vue-tsc-'))
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'app', ...pkg }, null, 2))
   for (const [rel, content] of Object.entries(files)) {
     mkdirSync(dirname(join(dir, rel)), { recursive: true })

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Alert from '@aziontech/ui/alert'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
 
   import type { SchemaEditorTable } from '../edit-schema.vue'
 

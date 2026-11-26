@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
-  import Input from '@aziontech/webkit/input'
-  import Sidebar from '@aziontech/webkit/sidebar-root'
-  import Tag from '@aziontech/webkit/tag'
+  import Accordion from '@aziontech/ui/accordion'
+  import type { FilterMenuValue } from '@aziontech/ui/filter-menu'
+  import Input from '@aziontech/ui/input'
+  import Sidebar from '@aziontech/ui/sidebar-root'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref, watch } from 'vue'
 
   import { canFilterField, countFieldValues, type EventRow } from '../lib/event-log'

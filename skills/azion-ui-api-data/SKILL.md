@@ -1,13 +1,13 @@
 ---
-name: webkit-api-data
-description: Showing API data correctly on @aziontech/webkit screens — references rendered by name (never a bare ID) with one resolution order and a visible unresolved state, remote pickers on Select / MultiSelect (server search, loading, selected values that are not in the loaded page), data freshness (revalidate on open, on focus and after a save; no session-long cache), records typed from the API contract with one formatter per shape, codes turned into text, and server-owned lists (useCollection server mode, a default order that shows what the person is looking for). Use when a screen lists, edits or summarizes resources that come from an API, especially resources that point at other resources.
+name: azion-ui-api-data
+description: Showing API data correctly on @aziontech/ui screens — references rendered by name (never a bare ID) with one resolution order and a visible unresolved state, remote pickers on Select / MultiSelect (server search, loading, selected values that are not in the loaded page), data freshness (revalidate on open, on focus and after a save; no session-long cache), records typed from the API contract with one formatter per shape, codes turned into text, and server-owned lists (useCollection server mode, a default order that shows what the person is looking for). Use when a screen lists, edits or summarizes resources that come from an API, especially resources that point at other resources.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-api-data, webkit-component-states, ui-verify, review]
+enforced_by: [azion-ui-api-data, azion-ui-component-states, ui-verify, review]
 ---
 
-# Skill: webkit-api-data
+# Skill: azion-ui-api-data
 
 ## Purpose
 
@@ -18,9 +18,9 @@ hides on page 3, a state code reaches the reader as `pending_approval`. Each of 
 small bug and each comes back on the next screen, because the screen rebuilt something the API (or one
 shared module) should own.
 
-The contract is rule [[Showing API data](../webkit-api-data/SKILL.md)](../../rules/webkit-api-data.md). This page is how to meet it
-with WebKit pieces. How the request reaches the API (proxy, token, status codes) is
-[[Calling the Azion API](../webkit-azion-api/SKILL.md)](../webkit-azion-api/SKILL.md).
+The contract is rule [[Showing API data](../azion-ui-api-data/SKILL.md)](../../rules/azion-ui-api-data.md). This page is how to meet it
+with Azion UI pieces. How the request reaches the API (proxy, token, status codes) is
+[[Calling the Azion API](../azion-ui-azion-api/SKILL.md)](../azion-ui-azion-api/SKILL.md).
 
 ## When to use
 
@@ -31,7 +31,7 @@ with WebKit pieces. How the request reaches the API (proxy, token, status codes)
 
 ## When not to use
 
-- A field holds free text or a value the person types (a name, a description): [Forms](../webkit-form/SKILL.md) covers it.
+- A field holds free text or a value the person types (a name, a description): [Forms](../azion-ui-form/SKILL.md) covers it.
 - The screen shows only static content with no API behind it.
 
 ## 1. One data layer between the API and the screen
@@ -97,7 +97,7 @@ show:
 
 ```vue
 <script setup lang="ts">
-  import MultiSelect from '@aziontech/webkit/multi-select'
+  import MultiSelect from '@aziontech/ui/multi-select'
   import { computed } from 'vue'
 
   const model = defineModel<number[]>({ default: () => [] })
@@ -204,5 +204,5 @@ options for the whole session, and never clear them only on sign-out.
 3. Search a list with spaces where the name has underscores, and create an item: both are found on the
    first page.
 4. Run the type check: no record from the API is `any`.
-5. Run `/webkit-ui-verify`: loading, empty and error states of the picker and the list render through
-   webkit's state components in both themes.
+5. Run `/azion-ui-verify`: loading, empty and error states of the picker and the list render through
+   Azion UI's state components in both themes.

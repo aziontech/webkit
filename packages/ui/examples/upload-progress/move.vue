@@ -1,5 +1,5 @@
 <script setup>
-  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import UploadProgress from '@aziontech/ui/upload-progress'
   import { ref } from 'vue'
 
   const open = ref(false)

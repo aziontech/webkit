@@ -1,8 +1,8 @@
 {
  "name": "reasoning",
  "binding": "Reasoning",
- "import": "@aziontech/webkit/reasoning",
- "treeShakeableImport": "@aziontech/webkit/reasoning",
+ "import": "@aziontech/ui/reasoning",
+ "treeShakeableImport": "@aziontech/ui/reasoning",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

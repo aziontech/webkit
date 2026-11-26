@@ -3,10 +3,10 @@
 > The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsGroup`, `Drawer`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant="card"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
 
 - Surface: app
-- Source: `blocks/create/create-deploy-drawer/create-deploy-drawer.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-deploy-drawer/create-deploy-drawer.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-deploy-drawer")`
 - Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [RadioGroup](../../components/radio-group.md), [Separator](../../components/separator.md), [SettingsGroup](../../components/settings-group.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-shortcuts`
-- Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-ui-states`
+- Skills: `azion-ui-create-surface`, `azion-ui-navigation`, `azion-ui-form`, `azion-ui-states`
 
 ## Asked as
 
@@ -169,7 +169,7 @@ Then delete `sample.ts` and its import. The page reports the run through the toa
 - **In progress:** the progressive verb with `…`, e.g. "Building…".
 - **Run toast:** "Deploying web-app…" with "<version> to <environments>. It keeps running if you leave."; the outcome "web-app is live in Production." or "web-app wasn't deployed." with what failed and that nothing changed; actions "Edit" and "Redeploy".
 - **Locks and reach:** "<settings> is Strict, so <service> stays bound to <environment>."; "Also deploys"; "<settings> is shared, so it deploys at one version."
-- Follow `skills/webkit-microcopy`: Deploy, never publish or activate; sentence case; no em dash.
+- Follow `skills/azion-ui-microcopy`: Deploy, never publish or activate; sentence case; no em dash.
 
 ## Accessibility
 
@@ -207,7 +207,7 @@ Then delete `sample.ts` and its import. The page reports the run through the toa
 - `detail/detail-deployment-logs` — the logs of a deploy after it ran.
 - `detail/detail-version` — what a version contains before it is deployed.
 - `create/create-resource-picker` — the Existing or New pattern the Project section follows.
-- `SettingsGroup` — the band each section uses; see `skills/webkit-create-surface` for the drawer commit model.
+- `SettingsGroup` — the band each section uses; see `skills/azion-ui-create-surface` for the drawer commit model.
 
 ## Variants
 
@@ -227,9 +227,9 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { computed, ref, useId, watch } from 'vue'
 
   import BuildItem from './parts/build-item.vue'
@@ -1405,9 +1405,9 @@ export function listFormat(names: string[]): string {
 
 ```ts
 <script setup lang="ts">
-  import Item from '@aziontech/webkit/item'
-  import Spinner from '@aziontech/webkit/spinner'
-  import Tag from '@aziontech/webkit/tag'
+  import Item from '@aziontech/ui/item'
+  import Spinner from '@aziontech/ui/spinner'
+  import Tag from '@aziontech/ui/tag'
 
   import type { DeployDrawerBuild } from '../types'
 
@@ -1468,8 +1468,8 @@ export function listFormat(names: string[]): string {
 
 ```ts
 <script setup lang="ts">
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Skeleton from '@aziontech/ui/skeleton'
 </script>
 
 <template>
@@ -1516,14 +1516,14 @@ export function listFormat(names: string[]): string {
 
 ```ts
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import Alert from '@aziontech/webkit/alert'
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import Separator from '@aziontech/webkit/separator'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Accordion from '@aziontech/ui/accordion'
+  import Alert from '@aziontech/ui/alert'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import Separator from '@aziontech/ui/separator'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { reactive } from 'vue'
 
   import { listFormat } from '../lib/list-format'
@@ -1774,12 +1774,12 @@ export function listFormat(names: string[]): string {
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Input from '@aziontech/webkit/input'
-  import Link from '@aziontech/webkit/link'
-  import Popover from '@aziontech/webkit/popover'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Input from '@aziontech/ui/input'
+  import Link from '@aziontech/ui/link'
+  import Popover from '@aziontech/ui/popover'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { DeployDrawerDomainGroup } from '../types'
 
@@ -1906,8 +1906,8 @@ export function listFormat(names: string[]): string {
 
 ```ts
 <script setup lang="ts">
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import Tag from '@aziontech/webkit/tag'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import Tag from '@aziontech/ui/tag'
 
   import type { DeployDrawerEnvironment } from '../types'
 
@@ -1958,9 +1958,9 @@ export function listFormat(names: string[]): string {
 
 ```ts
 <script setup lang="ts">
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { DeployDrawerImpact } from '../types'
@@ -2075,12 +2075,12 @@ export function listFormat(names: string[]): string {
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Item from '@aziontech/webkit/item'
-  import Tag from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import Item from '@aziontech/ui/item'
+  import Tag from '@aziontech/ui/tag'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   import type {
     DeployDrawerProject,
@@ -2205,12 +2205,12 @@ export function listFormat(names: string[]): string {
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Input from '@aziontech/webkit/input'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import Input from '@aziontech/ui/input'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type { DeployDrawerDependency } from '../types'
 
@@ -2328,7 +2328,7 @@ export function listFormat(names: string[]): string {
 ## `types.ts`
 
 ```ts
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 /** One Ready version of a resource. */
 export interface DeployDrawerVersion {

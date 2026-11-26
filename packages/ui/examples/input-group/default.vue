@@ -1,6 +1,6 @@
 <script setup>
-  import InputGroupInput from '@aziontech/webkit/input-group-input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
+  import InputGroupInput from '@aziontech/ui/input-group-input'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
 </script>
 
 <template>

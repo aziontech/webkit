@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import Select from '@aziontech/webkit/select'
-  import Tag from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Button from '@aziontech/ui/button'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import Select from '@aziontech/ui/select'
+  import Tag from '@aziontech/ui/tag'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { useHead } from '@unhead/vue'
   import { computed, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
@@ -108,12 +108,12 @@
       label: 'CLI',
       value: 'cli',
       language: 'bash',
-      code: `npx @aziontech/webkit add ${block.value?.id ?? ''}`
+      code: `npx @aziontech/ui add ${block.value?.id ?? ''}`
     }
   ])
 
   useHead({
-    title: computed(() => (block.value ? `${block.value.title} — WebKit blocks` : 'WebKit')),
+    title: computed(() => (block.value ? `${block.value.title} — Azion UI blocks` : 'Azion UI')),
     meta: [{ name: 'description', content: computed(() => block.value?.summary ?? '') }]
   })
 

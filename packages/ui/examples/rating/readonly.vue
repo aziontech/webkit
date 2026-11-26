@@ -1,5 +1,5 @@
 <script setup>
-  import Rating from '@aziontech/webkit/rating'
+  import Rating from '@aziontech/ui/rating'
 
   const products = [
     { name: 'Acme Storage', average: 4.5, reviews: 128 },

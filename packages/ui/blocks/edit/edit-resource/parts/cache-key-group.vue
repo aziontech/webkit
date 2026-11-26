@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
 
   import {
     sampleCacheMethods as methods,

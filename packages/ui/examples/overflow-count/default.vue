@@ -1,6 +1,6 @@
 <script setup>
-  import Link from '@aziontech/webkit/link'
-  import OverflowCount from '@aziontech/webkit/overflow-count'
+  import Link from '@aziontech/ui/link'
+  import OverflowCount from '@aziontech/ui/overflow-count'
 
   const domains = ['shop.example.com', 'api.example.com', 'img.example.com', 'docs.example.com']
 </script>

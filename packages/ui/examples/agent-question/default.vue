@@ -1,5 +1,5 @@
 <script setup>
-  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import AgentQuestion from '@aziontech/ui/agent-question'
   import { ref } from 'vue'
 
   const answer = ref('')

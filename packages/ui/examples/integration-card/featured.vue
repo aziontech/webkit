@@ -1,5 +1,5 @@
 <script setup>
-  import IntegrationCard from '@aziontech/webkit/integration-card'
+  import IntegrationCard from '@aziontech/ui/integration-card'
   import { ref } from 'vue'
 
   const opened = ref('')

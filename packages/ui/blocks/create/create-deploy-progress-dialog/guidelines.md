@@ -43,7 +43,7 @@ Retry failed appears only when the run settled with failures, as a secondary but
 
 ### Outcome toast — through `toast`
 
-One toast id for the run, raised only while the dialog is hidden, so it never covers the dialog's own footer: `toast.loading` with "It keeps running if you leave." while the run goes on, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy** when it settles. Opening the dialog dismisses the toast; a run that settled while the dialog was open already showed its outcome there, so closing it raises no toast. Edit reopens the dialog on the failed rows; Redeploy emits `redeploy` so the page runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+One toast id for the run, raised only while the dialog is hidden, so it never covers the dialog's own footer: `toast.loading` with "It keeps running if you leave." while the run goes on, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy** when it settles. Opening the dialog dismisses the toast; a run that settled while the dialog was open already showed its outcome there, so closing it raises no toast. Edit reopens the dialog on the failed rows; Redeploy emits `redeploy` so the page runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -106,7 +106,7 @@ Then delete `sample.ts` and its import.
 - **Title:** "Deploying… 2 of 5 done", "Deployed 5 Deployment Settings", "Deployed 4 of 5 Deployment Settings".
 - **Tally:** "4 succeeded, 1 failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live."
 - **Tags:** Queued, Deploying, Done, Failed. **Actions:** Retry failed, Hide (while running), Close.
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, the progressive verb with `…`.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, the progressive verb with `…`.
 
 ## Accessibility
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import ResourceSummaryCard from '../parts/resource-summary-card.vue'
   import { webAppResource } from '../sample'

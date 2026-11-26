@@ -3,10 +3,10 @@
 > The account hierarchy: organizations, groups and workspaces in one `DataTable` with tree rows (`get-sub-rows`, `v-model:open-keys`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Create Workspace, a search `Input` over name, ID, type and labels that keeps the ancestors of each match (a small `EmptyState` with Clear search when nothing matches), the paginated tree, an action row with Create Group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource as `KeyValueList`) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
-- Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-hierarchy")`
 - Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, `TableFooter`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -66,7 +66,7 @@ No resource: a flush `EmptyState` with Create Workspace replaces the table. Load
 
 ### Outcomes — through `toast`
 
-Every action ends in a success toast. Move and Delete carry Undo. Hierarchy changes are not deploys, so no toast offers Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Every action ends in a success toast. Move and Delete carry Undo. Hierarchy changes are not deploys, so no toast offers Edit or Redeploy. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -141,7 +141,7 @@ Then delete `sample.ts` and its import.
 - **Bulk:** `Move`, `Labels`, `Delete`; row menu `View details`, `Move`, `Edit labels`, `Delete`.
 - **Panel:** `No resource selected`, `1 resource selected`; empty states `Select a resource`, `Several resources selected`, `No labels`; `Select a resource to see its role bindings and labels.`; `Select a single resource to see its role bindings.`; `This resource has no labels.`
 - **Toasts:** `2 resources moved to Digital services.`; `3 resources scheduled for deletion.` with `They stay in Resources pending deletion for 30 days.`; `Labels updated on 1 resource.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -181,11 +181,11 @@ Each variant is the same screen in another state: `get_block("account/account-hi
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { toast } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, ref, useId, watch } from 'vue'
 
   import {
@@ -650,7 +650,7 @@ export const sampleRoleBindings: AccountHierarchyRoleBinding[] = [
 ## `hierarchy-model.ts`
 
 ```ts
-import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+import type { TagSeverity, TagVariant } from '@aziontech/ui/tag'
 
 import type {
   AccountHierarchyResource,
@@ -748,12 +748,12 @@ export const descendantsIn = (
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
 
   import type {
     AccountHierarchyResource,
@@ -919,16 +919,16 @@ export const descendantsIn = (
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import Field from '@aziontech/webkit/field'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import Field from '@aziontech/ui/field'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
 
   import type { AccountHierarchyResource } from '../account-hierarchy.vue'
   import { plural } from '../hierarchy-model'
@@ -1042,16 +1042,16 @@ export const descendantsIn = (
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import Field from '@aziontech/webkit/field'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Select from '@aziontech/webkit/select'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import Field from '@aziontech/ui/field'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Select from '@aziontech/ui/select'
 
   import type {
     AccountHierarchyResource,
@@ -1154,21 +1154,21 @@ export const descendantsIn = (
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Card from '@aziontech/webkit/card'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Hint from '@aziontech/webkit/hint'
-  import { type TableColumn } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellId from '@aziontech/webkit/table-cell-id'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTags from '@aziontech/webkit/table-cell-tags'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import TableFooter from '@aziontech/webkit/table-footer'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Avatar from '@aziontech/ui/avatar'
+  import Card from '@aziontech/ui/card'
+  import DataTable from '@aziontech/ui/data-table'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import Hint from '@aziontech/ui/hint'
+  import { type TableColumn } from '@aziontech/ui/table'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellId from '@aziontech/ui/table-cell-id'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTags from '@aziontech/ui/table-cell-tags'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import TableFooter from '@aziontech/ui/table-footer'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed } from 'vue'
 
   import type { AccountHierarchyResource } from '../account-hierarchy.vue'
@@ -1361,13 +1361,13 @@ export const descendantsIn = (
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import Link from '@aziontech/webkit/link'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import Link from '@aziontech/ui/link'
 
   import type { AccountHierarchyResource } from '../account-hierarchy.vue'
   import type { ResourceNode } from '../hierarchy-model'
@@ -1539,9 +1539,9 @@ export const descendantsIn = (
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   export interface HierarchyToolbarProps {
     /** The prefix of the ids the toolbar points at. */

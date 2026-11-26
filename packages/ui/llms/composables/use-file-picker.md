@@ -1,10 +1,10 @@
 # useFilePicker
 
-Composable `@aziontech/webkit/use-file-picker`. The signatures and option tables below are read from its typed source, [`src/composables/use-file-picker/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-file-picker/index.ts).
+Composable `@aziontech/ui/use-file-picker`. The signatures and option tables below are read from its typed source, [`src/composables/use-file-picker/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-file-picker/index.ts).
 
 ```ts
-import { useFilePicker } from '@aziontech/webkit/use-file-picker'
-import type { UseFilePickerOptions, UseFilePickerReturn } from '@aziontech/webkit/use-file-picker'
+import { useFilePicker } from '@aziontech/ui/use-file-picker'
+import type { UseFilePickerOptions, UseFilePickerReturn } from '@aziontech/ui/use-file-picker'
 ```
 
 ## `useFilePicker`

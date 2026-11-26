@@ -1,8 +1,8 @@
 {
  "name": "doc-markdown",
  "binding": "DocMarkdown",
- "import": "@aziontech/webkit/doc-markdown",
- "treeShakeableImport": "@aziontech/webkit/doc-markdown",
+ "import": "@aziontech/ui/doc-markdown",
+ "treeShakeableImport": "@aziontech/ui/doc-markdown",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

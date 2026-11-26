@@ -1,5 +1,5 @@
 <script setup>
-  import MessageThread from '@aziontech/webkit/message-thread-root'
+  import MessageThread from '@aziontech/ui/message-thread-root'
 </script>
 
 <template>

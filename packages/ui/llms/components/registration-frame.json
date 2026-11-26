@@ -1,8 +1,8 @@
 {
  "name": "registration-frame",
  "binding": "RegistrationFrame",
- "import": "@aziontech/webkit/registration-frame",
- "treeShakeableImport": "@aziontech/webkit/registration-frame",
+ "import": "@aziontech/ui/registration-frame",
+ "treeShakeableImport": "@aziontech/ui/registration-frame",
  "category": "layout",
  "surface": "site",
  "structure": "monolithic",

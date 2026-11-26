@@ -77,12 +77,12 @@ export default {
     messages: {
       missing:
         'This app header has navigation but no search. Add <SearchTrigger collapsible ' +
-        '@open="open = true" /> (import SearchTrigger from \'@aziontech/webkit/search-trigger\') ' +
+        '@open="open = true" /> (import SearchTrigger from \'@aziontech/ui/search-trigger\') ' +
         'first in AppHeader.End, wire it to a <Command v-model:open="open">, and wrap the header ' +
         'in an @container. Focused task headers (sign-in, create flows) have no navigation and ' +
         'are not checked.',
       handRolled:
-        'Hand-rolled ⌘K search field. Use <SearchTrigger> (@aziontech/webkit/search-trigger): it draws the field, the OS-aware keycap, aria-keyshortcuts, the narrow fold, and binds ⌘K / Ctrl K.',
+        'Hand-rolled ⌘K search field. Use <SearchTrigger> (@aziontech/ui/search-trigger): it draws the field, the OS-aware keycap, aria-keyshortcuts, the narrow fold, and binds ⌘K / Ctrl K.',
       bareIcon:
         'A magnifier button in a header is the folded SearchTrigger. Use <SearchTrigger collapsible> so the field, its ⌘K / Ctrl K keycap and the shortcut come with it.'
     }

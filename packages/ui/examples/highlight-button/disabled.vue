@@ -1,5 +1,5 @@
 <script setup>
-  import HighlightButton from '@aziontech/webkit/highlight-button'
+  import HighlightButton from '@aziontech/ui/highlight-button'
 </script>
 
 <template>

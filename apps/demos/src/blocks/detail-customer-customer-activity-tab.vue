@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Timeline, { type TimelineItemSeverity } from '@aziontech/webkit/timeline'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Timeline, { type TimelineItemSeverity } from '@aziontech/ui/timeline'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, onMounted, ref } from 'vue'
 
   import type { DetailCustomerEvent, DetailCustomerEventType } from './detail-customer.vue'

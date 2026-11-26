@@ -3,10 +3,10 @@
 > The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeaderSection data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooterSection data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `Container max-width="site"` separated by hatched `Spacer`s, ending on a closing frame that draws no rule of its own, so the SiteFooterSection's full-width top rule, with its corner marks, closes the page frame. The hero and the sections resolve to the site measure, which is the only reason the side rules running down the page are continuous; the footer spans the page like the bar. Built from `SiteLayout`, `Hero`, `Button`, `Container`, `Spacer`, `Module`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeaderSection.
 
 - Surface: site
-- Source: `blocks/shell/shell-site/shell-site.vue` in `@aziontech/webkit`
+- Source: `blocks/shell/shell-site/shell-site.vue` in `@aziontech/ui`
 - MCP: `get_block("shell/shell-site")`
 - Components: [Button](../../components/button.md), [Container](../../components/container.md), [Hero](../../components/hero.md), [Module](../../components/module.md), [RegistrationFrame](../../components/registration-frame.md), [SiteLayout](../../components/site-layout.md), [Spacer](../../components/spacer.md), [Stats](../../components/stats.md), [Texture](../../components/texture.md)
-- Skills: `webkit-layout`
+- Skills: `azion-ui-layout`
 
 ## Asked as
 
@@ -51,7 +51,7 @@ One per section; here unpadded and undivided around a framed figure row.
 
 ### G. Framed area — `RegistrationFrame` (required)
 
-Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToActionSection`, `NewsletterSection`, or `TemplateGallerySection` with `closing`), drop both the trailing `Spacer` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
+Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToActionSection`, `NewsletterSection`, or `TemplateGallerySection` with `closing`), drop both the trailing `Spacer` and this closing frame: the section draws its own, and a second one doubles the close (`azion-ui/no-gap-after-closing-section`).
 
 ### H. Figures — `Stats` (optional)
 
@@ -112,18 +112,18 @@ Each variant is the same screen in another state: `get_block("shell/shell-site",
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Container from '@aziontech/webkit/container'
-  import Hero from '@aziontech/webkit/hero'
-  import Module from '@aziontech/webkit/module'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import Button from '@aziontech/ui/button'
+  import Container from '@aziontech/ui/container'
+  import Hero from '@aziontech/ui/hero'
+  import Module from '@aziontech/ui/module'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
-  } from '@aziontech/webkit/site-layout'
-  import Spacer from '@aziontech/webkit/spacer'
-  import Stats from '@aziontech/webkit/stats'
-  import Texture from '@aziontech/webkit/texture'
+  } from '@aziontech/ui/site-layout'
+  import Spacer from '@aziontech/ui/spacer'
+  import Stats from '@aziontech/ui/stats'
+  import Texture from '@aziontech/ui/texture'
 
   import { sampleFigures, sampleFooter, sampleNavigation } from './sample'
 
@@ -216,7 +216,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-site",
 ## `sample.ts`
 
 ```ts
-import type { SiteLayoutFooter, SiteLayoutNavigation } from '@aziontech/webkit/site-layout'
+import type { SiteLayoutFooter, SiteLayoutNavigation } from '@aziontech/ui/site-layout'
 
 export const sampleNavigation: SiteLayoutNavigation = {
   home: '/en/',

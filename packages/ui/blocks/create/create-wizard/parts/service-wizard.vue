@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import Wizard from '@aziontech/webkit/wizard'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
+  import Wizard from '@aziontech/ui/wizard'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   import {

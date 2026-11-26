@@ -46,7 +46,7 @@
     "service details",
     "policy details"
   ],
-  "skills": ["webkit-layout", "webkit-navigation", "webkit-ui-states"],
+  "skills": ["azion-ui-layout", "azion-ui-navigation", "azion-ui-states"],
   "primary": {
     "name": "ResourceOverview",
     "file": "detail-resource.vue"

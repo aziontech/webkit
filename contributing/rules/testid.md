@@ -32,7 +32,7 @@ Every component root carries a **`data-testid`** that is the component's own keb
 - **Inner parts**: an element inside one component that a test must click (a remove `×`, a loading slot, a close button) is `` `${testId}__<part>` `` — two underscores, never one hyphen — so a consumer override of the root carries to its inner parts.
 - **Part words**: one word per concept — `close` (not `dismiss`), `remove` (not `remove-icon`), `loading` (not `skeleton` or `spinner`), `previous` / `next` (not `back`), `chevron` (not `arrow`); a part is named for its job, with no `-button` suffix (`__refresh`, `__sort`, `__expand`).
 - **Override**: the consumer passes `data-testid="…"`; because the root reads `attrs['data-testid']` for its fallback and also spreads `v-bind="$attrs"`, the passed value wins. Read it from `attrs` for the computed fallback so it is not applied twice with different values.
-- **Drawings**: an exported SFC under `src/assets/` or `src/svg/` that takes no props is a static drawing and carries no `data-testid`; one that takes props (a scene, the globe) follows this rule and [`props.md`](./props.md) (`export interface <Name>Props`), checked by `packages/webkit/test/standards/asset-sfcs.test.mjs`.
+- **Drawings**: an exported SFC under `src/assets/` or `src/svg/` that takes no props is a static drawing and carries no `data-testid`; one that takes props (a scene, the globe) follows this rule and [`props.md`](./props.md) (`export interface <Name>Props`), checked by `packages/ui/test/standards/asset-sfcs.test.mjs`.
 - **PascalCase name** in `defineOptions` and **kebab** in the testid come from the same canonical name (see [`naming.md`](./naming.md)).
 
 ## Hard prohibitions
@@ -47,7 +47,7 @@ Every component root carries a **`data-testid`** that is the component's own keb
 ## Enforcement
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** blocks a root `.vue` whose `data-testid` fallback ≠ its own name — the same hook that ties the six naming surfaces together (see [`naming.md`](./naming.md)).
-- **`check:naming`** (`testid` rule in [`naming-rules.mjs`](../../packages/webkit/scripts/lib/naming-rules.mjs)) checks every `.vue` under `src/components`, sub-components included: the fallback must equal the file's name, and an inner id must join with `__`.
+- **`check:naming`** (`testid` rule in [`naming-rules.mjs`](../../packages/ui/scripts/lib/naming-rules.mjs)) checks every `.vue` under `src/components`, sub-components included: the fallback must equal the file's name, and an inner id must join with `__`.
 
 ## Why this rule exists
 

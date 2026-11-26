@@ -1,5 +1,5 @@
 <script setup>
-  import CodeEditor from '@aziontech/webkit/code-editor'
+  import CodeEditor from '@aziontech/ui/code-editor'
   import { ref } from 'vue'
 
   const code = ref(`export default async function handler(request) {

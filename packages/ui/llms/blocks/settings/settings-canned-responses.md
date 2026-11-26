@@ -3,11 +3,11 @@
 > The admin page for the saved replies support agents insert into a ticket (macros, canned responses, saved replies): a `PageHeader` with New response, a `PropertyFilter` that searches title and body and filters by folder and visibility, and a `DataTable` of responses (title with the first line of the reply, folder `Tag`, visibility Personal / Team / Everyone, last used with `TableCellTime`, usage count) with Edit, Duplicate and Delete in `TableCellActions`. A row opens a `Drawer` to edit: title, folder `Combobox` that takes a new folder, visibility `RadioGroup`, the reply in a `MarkdownEditor` with an Insert placeholder `DropdownMenu` that writes `{{ticket.requester.first_name}}` at the caret, and an optional ticket status `Select` applied when the reply is sent. Delete asks in a `ConfirmDialog`. The page owns loading, first-use empty, no match, a load error with Retry, saving and a save error that keeps the values. A page body for ConsoleLayout.
 
 - Surface: app
-- Source: `blocks/settings/settings-canned-responses/settings-canned-responses.vue` in `@aziontech/webkit`
+- Source: `blocks/settings/settings-canned-responses/settings-canned-responses.vue` in `@aziontech/ui`
 - MCP: `get_block("settings/settings-canned-responses")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [MarkdownEditor](../../components/markdown-editor.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-form`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -106,7 +106,7 @@ A folder typed in the Combobox that is not in the list arrives as `values.folder
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import { ref } from 'vue'
   import SettingsCannedResponses, {
     type CannedResponsesResponse,
@@ -206,7 +206,7 @@ Delete removes the row at once; when the request fails, the page says so in a to
 - **Delete:** title `Delete response`; description `Agents can no longer insert “<title>”. Replies already sent keep their text. You cannot undo this.`; button `Delete response`.
 - **Toasts (sent by the page):** `Response “<title>” saved.` after a create or an update, `Copy of “<title>” created.` after Duplicate, `Response “<title>” deleted.` after Delete, and `“<title>” wasn't deleted. It is back in the list.` when a delete fails.
 - **Placeholders:** the label says what is filled in (`Requester first name`); the token is code (`{{ticket.requester.first_name}}`) and is never translated.
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -254,22 +254,22 @@ Each variant is the same screen in another state: `get_block("settings/settings-
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { type TableColumn } from '@aziontech/webkit/table'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { type TableColumn } from '@aziontech/ui/table'
+  import Tooltip from '@aziontech/ui/tooltip'
   import {
     type FilteringProperty,
     type PropertyFilterQuery,
     useCollection
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
   import { computed, ref, watch } from 'vue'
 
   import ResponseDrawer from './parts/response-drawer.vue'
@@ -708,23 +708,23 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Combobox from '@aziontech/webkit/combobox'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
-  import Select from '@aziontech/webkit/select'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Combobox from '@aziontech/ui/combobox'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import MarkdownEditor from '@aziontech/ui/markdown-editor'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
+  import Select from '@aziontech/ui/select'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
   import type {
@@ -1079,21 +1079,21 @@ export const samplePlaceholders: CannedResponsesPlaceholder[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import { type TableColumn } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import { type TableColumn } from '@aziontech/ui/table'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tag from '@aziontech/ui/tag'
   import type {
     CollectionPaginationProps,
     CollectionTableProps
-  } from '@aziontech/webkit/use-collection'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  } from '@aziontech/ui/use-collection'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type {
     CannedResponsesResponse,

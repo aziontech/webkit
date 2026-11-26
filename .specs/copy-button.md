@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 62d03d0fcb6d19142999a3eda1073c5a7ef991cf4a32a34269046b371aaf1949
+checksum: 0480d6541736873f0228ed889cb42b238897636f5afb1e5453b0437a11fbccb5
 created: 2026-06-02
 last_updated: 2026-11-25
 ---
@@ -112,7 +112,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ```vue
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
+  import CopyButton from '@aziontech/ui/copy-button'
 </script>
 
 <template>
@@ -158,7 +158,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

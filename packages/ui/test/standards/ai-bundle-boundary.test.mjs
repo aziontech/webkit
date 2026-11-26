@@ -21,13 +21,13 @@ test('every consumer skill at the repo root is scope: general', () => {
   assert.deepEqual(
     wrong,
     [],
-    'skills/ ships to projects; WebKit-development skills go in contributing/skills/'
+    'skills/ ships to projects; Azion UI-development skills go in contributing/skills/'
   )
 })
 
-test('every contributor skill in contributing/skills is scope: webkit', () => {
+test('every contributor skill in contributing/skills is scope: ui', () => {
   const wrong = skillFiles(join(REPO, 'contributing/skills')).filter(
-    (f) => scopeOf(f) !== null && scopeOf(f) !== 'webkit'
+    (f) => scopeOf(f) !== null && scopeOf(f) !== 'ui'
   )
   assert.deepEqual(
     wrong,
@@ -36,13 +36,13 @@ test('every contributor skill in contributing/skills is scope: webkit', () => {
   )
 })
 
-test('the WebKit-development review gate stays out of the consumer bundle', () => {
-  assert.equal(existsSync(join(REPO, 'skills/webkit-ui-craft')), false)
+test('the Azion UI-development review gate stays out of the consumer bundle', () => {
+  assert.equal(existsSync(join(REPO, 'skills/azion-ui-craft')), false)
   assert.equal(existsSync(join(REPO, 'contributing/skills/ui-craft/SKILL.md')), true)
 })
 
 test('development docs never ship in the npm package', () => {
-  const shipped = readdirSync(join(REPO, 'packages/webkit/docs'))
+  const shipped = readdirSync(join(REPO, 'packages/ui/docs'))
   for (const dev of [
     'DOC_LINTS.md',
     'PROCESS.md',
@@ -57,19 +57,19 @@ test('development docs never ship in the npm package', () => {
   }
 })
 
-test('the MCP server ships in @aziontech/webkit-mcp, never inside @aziontech/webkit', () => {
-  const webkit = JSON.parse(readFileSync(join(REPO, 'packages/webkit/package.json'), 'utf8'))
-  const mcp = JSON.parse(readFileSync(join(REPO, 'packages/webkit-mcp/package.json'), 'utf8'))
-  assert.deepEqual(Object.keys(webkit.bin), ['webkit'])
+test('the MCP server ships in @aziontech/ui-mcp, never inside @aziontech/ui', () => {
+  const ui = JSON.parse(readFileSync(join(REPO, 'packages/ui/package.json'), 'utf8'))
+  const mcp = JSON.parse(readFileSync(join(REPO, 'packages/ui-mcp/package.json'), 'utf8'))
+  assert.deepEqual(Object.keys(ui.bin), ['azion-ui'])
   for (const dep of ['@modelcontextprotocol/sdk', 'zod']) {
-    assert.equal(webkit.dependencies?.[dep], undefined, `${dep} belongs to @aziontech/webkit-mcp`)
-    assert.ok(mcp.dependencies[dep], `@aziontech/webkit-mcp must depend on ${dep}`)
+    assert.equal(ui.dependencies?.[dep], undefined, `${dep} belongs to @aziontech/ui-mcp`)
+    assert.ok(mcp.dependencies[dep], `@aziontech/ui-mcp must depend on ${dep}`)
   }
-  assert.equal(existsSync(join(REPO, 'packages/webkit/src/mcp')), false)
-  assert.equal(mcp.name, '@aziontech/webkit-mcp')
-  assert.equal(mcp.bin['webkit-mcp'], './src/server.js')
-  assert.ok(mcp.dependencies['@aziontech/webkit'])
-  assert.equal(webkit.exports['./catalog-queries'].default, './src/catalog/index.js')
+  assert.equal(existsSync(join(REPO, 'packages/ui/src/mcp')), false)
+  assert.equal(mcp.name, '@aziontech/ui-mcp')
+  assert.equal(mcp.bin['azion-ui-mcp'], './src/server.js')
+  assert.ok(mcp.dependencies['@aziontech/ui'])
+  assert.equal(ui.exports['./catalog-queries'].default, './src/catalog/index.js')
 })
 
 test('.claude/ is only the Claude Code adapter: settings.json and links into contributing/', () => {

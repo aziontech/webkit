@@ -2,8 +2,8 @@
 
 > Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `dropdown-menu`, which renders a menu of selectable options rather than free-form content.
 
-- Import: `import PopoverRoot from '@aziontech/webkit/popover-root'`
-- Compound import (dot notation, not tree-shakeable): `import Popover from '@aziontech/webkit/popover'`
+- Import: `import PopoverRoot from '@aziontech/ui/popover-root'`
+- Compound import (dot notation, not tree-shakeable): `import Popover from '@aziontech/ui/popover'`
 - Category: overlay · Surface: app · Structure: composition
 - API as JSON: [popover.json](popover.json)
 
@@ -16,7 +16,7 @@
 ## Do
 
 - Place `Popover.Trigger` first and `Popover.Content` after it. The trigger wires `aria-expanded`, `aria-controls` and the click toggle onto your element, so don't bind them yourself.
-- Let `Popover.Trigger` show the pointer: its wrapper sets `cursor-pointer` (`cursor-not-allowed` when disabled), so a `Tag`, `Avatar` or icon slotted in reads as clickable. Don't put `cursor-pointer` on the slotted WebKit component — `webkit/no-style-override` blocks it.
+- Let `Popover.Trigger` show the pointer: its wrapper sets `cursor-pointer` (`cursor-not-allowed` when disabled), so a `Tag`, `Avatar` or icon slotted in reads as clickable. Don't put `cursor-pointer` on the slotted Azion UI component — `azion-ui/no-style-override` blocks it.
 - Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
 - Set `size` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
 - Use `side="auto"` for triggers that can sit near a viewport edge.
@@ -61,19 +61,19 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/popover-trigger`
-- `@aziontech/webkit/popover-content`
-- `@aziontech/webkit/popover-header`
-- `@aziontech/webkit/popover-title`
-- `@aziontech/webkit/popover-description`
-- `@aziontech/webkit/popover-close`
-- `@aziontech/webkit/popover-footer`
+- `@aziontech/ui/popover-trigger`
+- `@aziontech/ui/popover-content`
+- `@aziontech/ui/popover-header`
+- `@aziontech/ui/popover-title`
+- `@aziontech/ui/popover-description`
+- `@aziontech/ui/popover-close`
+- `@aziontech/ui/popover-footer`
 
 ## Sub-components
 
 The root `Popover` owns open/closed state, anchoring/placement (exposing the computed `panelStyle`), outside-click + `Esc` dismissal, focus entry on open, Tab hand-off and focus return. Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `side` and `align`, `size`, `panelStyle`, and the `panelEl` that `Popover.Content` assigns), so every sub-component is context-aware and the consumer wires nothing. **`Popover.Content` renders the single teleported, animated floating panel with its content inline** (the Select / Tooltip pattern — one `<Teleport>` + `<Transition>`, so the scale animation carries the whole panel on enter/leave); the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin` (via `panelStyle`), and `data-state` / `data-side` / `data-align`, and assigns itself to the root's `panelEl` so the root's placement/focus logic operates on it. Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
 
-- `popover-trigger/popover-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) with the pointer cursor (`not-allowed` when disabled) that carries `data-testid`, `data-state` and `data-disabled` and toggles the panel on the bubbling `click`. It gives `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which is the one tab stop, the anchor the popover positions against and the focus-return target. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled), opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
+- `popover-trigger/popover-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) with the pointer cursor (`not-allowed` when disabled) that carries `data-testid`, `data-state` and `data-disabled` and toggles the panel on the bubbling `click`. It gives `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which is the one tab stop, the anchor the popover positions against and the focus-return target. When the first node in the slot is an Azion UI `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled), opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The trigger forwards aria + click; the consumer must not bind those itself.
@@ -142,13 +142,13 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PopoverClose from '@aziontech/webkit/popover-close'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import PopoverHeader from '@aziontech/webkit/popover-header'
-  import PopoverRoot from '@aziontech/webkit/popover-root'
-  import PopoverTitle from '@aziontech/webkit/popover-title'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import Button from '@aziontech/ui/button'
+  import PopoverClose from '@aziontech/ui/popover-close'
+  import PopoverContent from '@aziontech/ui/popover-content'
+  import PopoverHeader from '@aziontech/ui/popover-header'
+  import PopoverRoot from '@aziontech/ui/popover-root'
+  import PopoverTitle from '@aziontech/ui/popover-title'
+  import PopoverTrigger from '@aziontech/ui/popover-trigger'
 </script>
 
 <template>
@@ -178,13 +178,13 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PopoverClose from '@aziontech/webkit/popover-close'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import PopoverHeader from '@aziontech/webkit/popover-header'
-  import PopoverRoot from '@aziontech/webkit/popover-root'
-  import PopoverTitle from '@aziontech/webkit/popover-title'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import Button from '@aziontech/ui/button'
+  import PopoverClose from '@aziontech/ui/popover-close'
+  import PopoverContent from '@aziontech/ui/popover-content'
+  import PopoverHeader from '@aziontech/ui/popover-header'
+  import PopoverRoot from '@aziontech/ui/popover-root'
+  import PopoverTitle from '@aziontech/ui/popover-title'
+  import PopoverTrigger from '@aziontech/ui/popover-trigger'
 </script>
 
 <template>
@@ -312,13 +312,13 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PopoverClose from '@aziontech/webkit/popover-close'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import PopoverHeader from '@aziontech/webkit/popover-header'
-  import PopoverRoot from '@aziontech/webkit/popover-root'
-  import PopoverTitle from '@aziontech/webkit/popover-title'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import Button from '@aziontech/ui/button'
+  import PopoverClose from '@aziontech/ui/popover-close'
+  import PopoverContent from '@aziontech/ui/popover-content'
+  import PopoverHeader from '@aziontech/ui/popover-header'
+  import PopoverRoot from '@aziontech/ui/popover-root'
+  import PopoverTitle from '@aziontech/ui/popover-title'
+  import PopoverTrigger from '@aziontech/ui/popover-trigger'
 </script>
 
 <template>

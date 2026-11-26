@@ -1,6 +1,6 @@
 <script setup>
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import Avatar from '@aziontech/webkit/avatar'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import Avatar from '@aziontech/ui/avatar'
 
   const people = [
     { name: 'Jane Doe', presence: 'online' },

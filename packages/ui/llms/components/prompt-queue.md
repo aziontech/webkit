@@ -2,7 +2,7 @@
 
 > Messages sent while a response is generating, waiting above the prompt input (TanStack AI `useChat` `queue`): each shows its text in send order with a button that removes it before it is sent; changes are announced politely.
 
-- Import: `import PromptQueue from '@aziontech/webkit/prompt-queue'`
+- Import: `import PromptQueue from '@aziontech/ui/prompt-queue'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [prompt-queue.json](prompt-queue.json)
 
@@ -95,8 +95,8 @@ _None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCo
 
 ```vue
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import PromptQueue from '@aziontech/webkit/prompt-queue'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
+  import PromptQueue from '@aziontech/ui/prompt-queue'
   import { ref } from 'vue'
 
   const prompt = ref('')
@@ -124,7 +124,7 @@ _None. Data-driven. `PromptQueueItem`: `{ id: string; text: string; attachmentCo
 
 ```vue
 <script setup>
-  import PromptQueue from '@aziontech/webkit/prompt-queue'
+  import PromptQueue from '@aziontech/ui/prompt-queue'
   import { ref } from 'vue'
 
   const queue = ref([

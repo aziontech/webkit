@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Progress from '@aziontech/webkit/progress'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Progress from '@aziontech/ui/progress'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
 
   import type {
     ExecutiveSummaryDashboardFormat,

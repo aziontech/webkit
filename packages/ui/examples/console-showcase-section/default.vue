@@ -1,6 +1,6 @@
 <script setup>
-  import ConsoleMockup from '@aziontech/webkit/console-mockup'
-  import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'
+  import ConsoleMockup from '@aziontech/ui/console-mockup'
+  import ConsoleShowcaseSection from '@aziontech/ui/console-showcase-section'
 
   const tabs = [
     { value: 'workloads-list', title: 'Workloads' },

@@ -1,15 +1,15 @@
 {
  "name": "link-directory",
  "binding": "LinkDirectory",
- "import": "@aziontech/webkit/link-directory",
- "treeShakeableImport": "@aziontech/webkit/link-directory-root",
+ "import": "@aziontech/ui/link-directory",
+ "treeShakeableImport": "@aziontech/ui/link-directory-root",
  "category": "marketing",
  "surface": "site",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/link-directory-column",
-  "@aziontech/webkit/link-directory-item"
+  "@aziontech/ui/link-directory-column",
+  "@aziontech/ui/link-directory-item"
  ],
  "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
  "setup": null,

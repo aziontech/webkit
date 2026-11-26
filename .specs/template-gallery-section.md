@@ -7,7 +7,7 @@ status: implemented
 spec_version: 10
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 62880a81179af541e1ce4e312d5edfffeb175067747879e56ceb60a3ec2907ad
+checksum: ee486ae89ef272445f0efaf76ff2d3e3f7dc207235181192b7fb0e12abbf6401
 ---
 
 # TemplateGallerySection — Component Spec
@@ -46,7 +46,7 @@ The templates band of a solution page: a framed media split whose copy side invi
 
 ```vue
 <script setup>
-  import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
+  import TemplateGallerySection from '@aziontech/ui/template-gallery-section'
 </script>
 
 <template>
@@ -113,7 +113,7 @@ The templates band of a solution page: a framed media split whose copy side invi
 - A card without an `href` is not interactive: no hand pointer, no hover light
 - Empty: when no template carries a title the band renders nothing — not the split, not the marquee, not the closing frame
 - `closing`: the tall hatched closing frame (`data-hatch="true"`, decorative) follows the band; `hatch` off drops it
-- A template `icon` that is a colour logo (`az-color az-<name>`) paints only when the app's stylesheet compiles that logo: the site lists every logo its page JSON may name with `@source inline("az-<name>")` in its `webkit.css`, since page JSON is not scanned source
+- A template `icon` that is a colour logo (`az-color az-<name>`) paints only when the app's stylesheet compiles that logo: the site lists every logo its page JSON may name with `@source inline("az-<name>")` in its `azion-ui.css`, since page JSON is not scanned source
 
 ## Motion & Animations
 
@@ -187,7 +187,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

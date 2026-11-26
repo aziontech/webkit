@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import TableSearch from '@aziontech/webkit/table-search'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import TableSearch from '@aziontech/ui/table-search'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   withDefaults(defineProps<{ loading: boolean; exportable: boolean; disabled?: boolean }>(), {
     disabled: false

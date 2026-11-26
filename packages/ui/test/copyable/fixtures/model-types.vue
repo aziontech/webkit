@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
 
   type Range = 'day' | 'week'

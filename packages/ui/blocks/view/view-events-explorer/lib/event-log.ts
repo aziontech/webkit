@@ -1,6 +1,6 @@
-import type { ChartColor } from '@aziontech/webkit/chart'
-import type { FilterMenuRange, FilterMenuValue } from '@aziontech/webkit/filter-menu'
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { ChartColor } from '@aziontech/ui/chart'
+import type { FilterMenuRange, FilterMenuValue } from '@aziontech/ui/filter-menu'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 import type {
   EventsExplorerBucket,

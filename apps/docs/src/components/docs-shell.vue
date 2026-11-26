@@ -1,21 +1,21 @@
 <script setup lang="ts">
   import '../styles/docs-utilities.css'
 
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import LanguageSelect from '@aziontech/webkit/language-select'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import SkipLink from '@aziontech/webkit/skip-link'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import { Toaster } from '@aziontech/webkit/toast'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Footer from '@aziontech/ui/footer'
+  import IconButton from '@aziontech/ui/icon-button'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
+  import SkipLink from '@aziontech/ui/skip-link'
+  import ThemeSwitcher from '@aziontech/ui/theme-switcher'
+  import { Toaster } from '@aziontech/ui/toast'
   import {
     computed,
     defineAsyncComponent,
@@ -126,7 +126,7 @@
             <AppHeader.Brand
               href="/"
               :aria-label="t.home"
-              label="WebKit"
+              label="Azion UI"
             >
               <Brand
                 variant="default"
@@ -193,11 +193,11 @@
           variant="console"
           :aria-label="t.footer"
         >
-          <Footer.Column :title="t.footerWebkit">
+          <Footer.Column :title="t.footerAzionUi">
             <Footer.Link href="https://github.com/aziontech/webkit">{{
               t.footerGithub
             }}</Footer.Link>
-            <Footer.Link href="https://www.npmjs.com/package/@aziontech/webkit">{{
+            <Footer.Link href="https://www.npmjs.com/package/@aziontech/ui">{{
               t.footerNpm
             }}</Footer.Link>
           </Footer.Column>
@@ -211,7 +211,7 @@
             <AppHeader.Brand
               href="/"
               :aria-label="t.home"
-              label="WebKit"
+              label="Azion UI"
             >
               <Brand
                 variant="default"

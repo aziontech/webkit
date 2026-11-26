@@ -3,10 +3,10 @@
 > A scan results dashboard: items sent for analysis, the verdict each one received and what is still waiting. A page heading with a Refresh IconButton sits over a row of six StatTiles (submitted, in analysis, last 24 hours, flagged, held for a verdict and open alerts), each with a Hint that defines it. Below, three cards share a row: a DonutChart of the verdicts (Clean, Suspicious, Flagged and Pending, in their status hues) with the item count in its center, a BarList of the sources the items came from, and a Card that sums up the deliveries held for a verdict and the items delivered before they were flagged, each with a Link to its list. A Submissions card across the full width holds the filter row (an Input search and Selects for status, verdict and source) over a paginated DataTable: name, the verdict Tag, category, score, type, size, source, first submitter and last seen. Built from `PageHeader`, `StatTile`, `DonutChart`, `BarList`, `ChartCard`, `Card`, `DataTable`, `TableCellStatus`, `Link`, `Input`, `Select`, `Hint`, `IconButton`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-scan-results/dashboard-scan-results.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-scan-results/dashboard-scan-results.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-scan-results")`
 - Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DonutChart](../../components/donut-chart.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, `use-collection`, `use-locale`
-- Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-tables`, `azion-ui-states`
 
 ## Asked as
 
@@ -207,17 +207,17 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import type { ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DonutChart from '@aziontech/webkit/donut-chart'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import BarList, { type BarListItem } from '@aziontech/ui/bar-list'
+  import type { ChartSeries } from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DonutChart from '@aziontech/ui/donut-chart'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed } from 'vue'
 
   import HeldFlaggedCard from './parts/held-flagged-card.vue'
@@ -474,8 +474,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ## `sample.ts`
 
 ```ts
-import type { BarListItem } from '@aziontech/webkit/bar-list'
-import type { ChartSeries } from '@aziontech/webkit/chart'
+import type { BarListItem } from '@aziontech/ui/bar-list'
+import type { ChartSeries } from '@aziontech/ui/chart'
 
 import type { ScanResultsSubmission, ScanResultsSummary } from './dashboard-scan-results.vue'
 
@@ -703,7 +703,7 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
 
 ```ts
 <script setup lang="ts">
-  import Select from '@aziontech/webkit/select'
+  import Select from '@aziontech/ui/select'
 
   import type { ScanFilterOption } from '../scan-results-config'
 
@@ -748,9 +748,9 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Link from '@aziontech/webkit/link'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Link from '@aziontech/ui/link'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import type { ScanResultsSummary } from '../dashboard-scan-results.vue'
 
@@ -827,13 +827,13 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
 
 ```ts
 <script setup lang="ts">
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import { matchesText } from '@aziontech/webkit/use-collection'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import { matchesText } from '@aziontech/ui/use-collection'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref } from 'vue'
 
   import type { ScanResultsSubmission } from '../dashboard-scan-results.vue'
@@ -982,9 +982,9 @@ export const sampleSubmissions: ScanResultsSubmission[] = [
 ## `scan-results-config.ts`
 
 ```ts
-import type { ChartColor } from '@aziontech/webkit/chart'
-import type { TableColumn } from '@aziontech/webkit/data-table'
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { ChartColor } from '@aziontech/ui/chart'
+import type { TableColumn } from '@aziontech/ui/data-table'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 import type {
   ScanResultsSource,

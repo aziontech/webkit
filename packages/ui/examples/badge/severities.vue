@@ -1,5 +1,5 @@
 <script setup>
-  import Badge from '@aziontech/webkit/badge'
+  import Badge from '@aziontech/ui/badge'
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import { toast } from '@aziontech/webkit/toast'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
   import { createdDescription } from './lib/draft-table'

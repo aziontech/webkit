@@ -1,5 +1,5 @@
 <script setup>
-  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
+  import DocTableOfContents from '@aziontech/ui/doc-table-of-contents'
 </script>
 
 <template>

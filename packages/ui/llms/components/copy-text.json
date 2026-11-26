@@ -1,8 +1,8 @@
 {
  "name": "copy-text",
  "binding": "CopyText",
- "import": "@aziontech/webkit/copy-text",
- "treeShakeableImport": "@aziontech/webkit/copy-text",
+ "import": "@aziontech/ui/copy-text",
+ "treeShakeableImport": "@aziontech/ui/copy-text",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

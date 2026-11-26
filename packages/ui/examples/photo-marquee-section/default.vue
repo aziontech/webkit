@@ -1,6 +1,6 @@
 <script setup>
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import PhotoMarqueeSection from '@aziontech/webkit/photo-marquee-section'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import PhotoMarqueeSection from '@aziontech/ui/photo-marquee-section'
 
   const DESCRIPTION =
     'The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across ' +

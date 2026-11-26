@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/ui/utils/csv'
 
   interface Domain {
     id: string

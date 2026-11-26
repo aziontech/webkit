@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3750-15346
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue
 // component=DropdownMenuItem
 import figma from 'figma'
 
@@ -58,7 +58,7 @@ if (type === 'separator') example = figma.code``
 
 export default {
   example,
-  imports: ["import DropdownMenu from '@aziontech/webkit/dropdown-menu'"],
+  imports: ["import DropdownMenu from '@aziontech/ui/dropdown-menu'"],
   id: 'dropdown-menu-item',
   metadata: { nestable: true }
 }

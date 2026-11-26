@@ -1,6 +1,6 @@
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import ToolCall from '@aziontech/ui/tool-call'
 
   const input = JSON.stringify({ workload: 'storefront' }, null, 2)
   const output = JSON.stringify({ cache_by_query_string: 'all', ttl: 3600 }, null, 2)

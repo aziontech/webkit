@@ -1,8 +1,8 @@
 {
  "name": "file-preview",
  "binding": "FilePreview",
- "import": "@aziontech/webkit/file-preview",
- "treeShakeableImport": "@aziontech/webkit/file-preview",
+ "import": "@aziontech/ui/file-preview",
+ "treeShakeableImport": "@aziontech/ui/file-preview",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

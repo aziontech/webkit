@@ -78,14 +78,14 @@ The public path is the file's name and nothing else; the folder lives only in th
 so a mark can move between folders without breaking an import.
 
 ```js
-import caixa from '@aziontech/webkit/assets/caixa-extended-color.svg'
-import { CLIENTS, clientBrand, clientSymbolFor } from '@aziontech/webkit/assets/client-registry'
+import caixa from '@aziontech/ui/assets/caixa-extended-color.svg'
+import { CLIENTS, clientBrand, clientSymbolFor } from '@aziontech/ui/assets/client-registry'
 ```
 
 ## Adding a mark
 
 Name the file by the rule above and add a flat `"./assets/<file>"` key to
-`packages/webkit/package.json#exports`, pointing at the file; then add its entry to the registry.
+`packages/ui/package.json#exports`, pointing at the file; then add its entry to the registry.
 
 ## Source
 

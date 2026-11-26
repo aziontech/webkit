@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import NavigationMenu from '@aziontech/ui/navigation-menu'
 
   defineProps<{ label: string; sections: { to: string; label: string }[]; active: string }>()
 </script>

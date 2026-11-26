@@ -3,10 +3,10 @@
 > The destructive confirmation a resource list uses for Delete: a warning `Alert`, a sentence naming what goes with the resource and a Help Center link, then the typed confirmation `ConfirmDialog` draws from `confirmation-phrase`: the resource name in code type and an input the user must match exactly (case-sensitive) before Delete enables. Every resource list, a folder of files and a table of records open it from the row Delete action; the title reads Delete plus the resource kind, and a container that holds other items passes its own consequence sentence. Delete shows its loading state while the request runs (Cancel and the input are locked, the dialog cannot be dismissed), then closes with a success toast; a refused delete keeps the dialog and the typed name and swaps the warning for a danger `Alert` saying why (Error). The typed confirmation resets each time the dialog opens, so the content stays put while it closes. Built from `ConfirmDialog` (the body in its default slot, `confirmation-phrase` for the typed name, its own Cancel and Delete buttons with `loading`), `Alert` and `Button`; closed by default behind a visible danger trigger. The SettingsRow variant is the settings-page delete: an outlined `Item` row opens the same `ConfirmDialog` with the same typed name.
 
 - Surface: app
-- Source: `blocks/edit/edit-delete-dialog/edit-delete-dialog.vue` in `@aziontech/webkit`
+- Source: `blocks/edit/edit-delete-dialog/edit-delete-dialog.vue` in `@aziontech/ui`
 - MCP: `get_block("edit/edit-delete-dialog")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [ConfirmDialog](../../components/confirm-dialog.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Toast](../../components/toast.md)
-- Skills: `webkit-ux-heuristics`, `webkit-microcopy`, `webkit-form`, `webkit-errors`
+- Skills: `azion-ui-ux-heuristics`, `azion-ui-microcopy`, `azion-ui-form`, `azion-ui-errors`
 
 ## Asked as
 
@@ -40,7 +40,7 @@ A `severity="warning"` `Alert` first in the body states that the action cannot b
 
 ### C. Typed confirmation — `ConfirmDialog` `confirmation-phrase` (required)
 
-Pass the resource name as `confirmation-phrase`; never hand-write the field. `ConfirmDialog` renders the prompt "Type `resource-01` to confirm." with the name in code type and a full-width `Input` labelled by it, moves focus into the field on open, and keeps Delete disabled until the typed text matches the name exactly (case-sensitive, the ends trimmed). Enter in the field confirms only when it matches. The field empties each time the dialog opens, never as it closes, so the content stays put during the exit motion. Every typed confirmation in WebKit follows this one rule.
+Pass the resource name as `confirmation-phrase`; never hand-write the field. `ConfirmDialog` renders the prompt "Type `resource-01` to confirm." with the name in code type and a full-width `Input` labelled by it, moves focus into the field on open, and keeps Delete disabled until the typed text matches the name exactly (case-sensitive, the ends trimmed). Enter in the field confirms only when it matches. The field empties each time the dialog opens, never as it closes, so the content stays put during the exit motion. Every typed confirmation in Azion UI follows this one rule.
 
 ### D. Trigger — `Button` (required)
 
@@ -110,7 +110,7 @@ Then delete `sample.ts` and its import.
 - **Prompt:** "Type `name` to confirm.", written by `ConfirmDialog` from the locale catalog; never a position such as "in the box below".
 - **Confirm:** the title's verb and object, e.g. "Delete resource"; never "OK", "Confirm" or "Yes".
 - **Cancel:** exactly "Cancel".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -132,7 +132,7 @@ Then delete `sample.ts` and its import.
 - `detail/detail-dns-zone` — Delete on a record of a resource.
 - `settings/settings-form` — where the SettingsRow variant sits.
 - `state/state-async-submit` — a long-running request that reports back later.
-- `ConfirmDialog` — the dialog this block fills; see `skills/webkit-form` for the Dialog form type.
+- `ConfirmDialog` — the dialog this block fills; see `skills/azion-ui-form` for the Dialog form type.
 
 ## Variants
 
@@ -146,11 +146,11 @@ Each variant is the same screen in another state: `get_block("edit/edit-delete-d
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Link from '@aziontech/webkit/link'
-  import { toast } from '@aziontech/webkit/toast'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Link from '@aziontech/ui/link'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, watch } from 'vue'
 
   import { sampleResourceName } from './sample'

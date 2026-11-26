@@ -30,7 +30,7 @@ import {
 } from '../../../../contributing/hooks/lib/prop-vocabulary.mjs'
 
 const ROOT = fileURLToPath(new URL('../../../../', import.meta.url))
-const C = 'packages/webkit/src/components'
+const C = 'packages/ui/src/components'
 
 const ctx = {
   exports: new Set(['button', 'button-group', 'dialog', 'dialog-header', 'chip', 'chips', 'tabs']),
@@ -60,23 +60,23 @@ const pkg = (body) => JSON.stringify(body, null, 2)
 
 const FIXTURES = {
   'export-kebab': [
-    'packages/webkit/package.json',
+    'packages/ui/package.json',
     pkg({ exports: { './Button': './x.vue' } }),
     pkg({ exports: { './button': './x.vue' } })
   ],
   'block-id': null,
   'export-synonym': [
-    'packages/webkit/package.json',
+    'packages/ui/package.json',
     pkg({ exports: { './modal': './m.vue', './dialog': './d.vue' } }),
     pkg({ exports: { './dialog': './d.vue' } })
   ],
   'export-retired': [
-    'packages/webkit/package.json',
+    'packages/ui/package.json',
     pkg({ exports: { './paginator': './p.vue' } }),
     pkg({ exports: { './pagination': './p.vue' } })
   ],
   'near-duplicate': [
-    'packages/webkit/package.json',
+    'packages/ui/package.json',
     pkg({ exports: { './site-nav': './a.vue', './chips': './c.vue', './chip': './c.vue' } }),
     pkg({
       exports: {
@@ -87,34 +87,34 @@ const FIXTURES = {
     })
   ],
   'export-category': [
-    'packages/webkit/package.json',
+    'packages/ui/package.json',
     pkg({ exports: { './feedback/skeleton': './s.vue' } }),
     pkg({ exports: { './skeleton': './s.vue', './utils/cn': './cn.ts' } })
   ],
   'category-folder': [[`${C}/inputs/chip/chip.vue`, `${C}/input/chip/chip.vue`], sfc(''), sfc('')],
   'block-path': [
     [
-      'packages/webkit/blocks/platform/create/create-hub/block.json',
-      'packages/webkit/blocks/create/create-hub/block.json'
+      'packages/ui/blocks/platform/create/create-hub/block.json',
+      'packages/ui/blocks/create/create-hub/block.json'
     ],
     pkg({ id: 'x', surface: 'product' }),
     pkg({ id: 'x', surface: 'product' })
   ],
   'block-word': [
-    'packages/webkit/blocks/create/create-hub/block.json',
+    'packages/ui/blocks/create/create-hub/block.json',
     pkg({ surface: 'product', title: 'Templates/Platform/Create/CreateHub' }),
     pkg({ surface: 'product', title: 'Blocks/Create/CreateHub' })
   ],
   'block-group-first': [
     [
-      'packages/webkit/blocks/dashboard/alerts-dashboard/block.json',
-      'packages/webkit/blocks/dashboard/dashboard-alerts/block.json'
+      'packages/ui/blocks/dashboard/alerts-dashboard/block.json',
+      'packages/ui/blocks/dashboard/dashboard-alerts/block.json'
     ],
     pkg({ surface: 'product' }),
     pkg({ surface: 'product' })
   ],
   'block-state': [
-    'packages/webkit/blocks/create/create-hub/block.json',
+    'packages/ui/blocks/create/create-hub/block.json',
     pkg({
       surface: 'product',
       variants: [{ file: 'variants/failed.vue' }, { file: 'variants/loading-repositories.vue' }]
@@ -148,7 +148,7 @@ const FIXTURES = {
     sfc('')
   ],
   'example-file': [
-    'packages/webkit/examples/button/examples.json',
+    'packages/ui/examples/button/examples.json',
     pkg({ examples: [{ file: 'basic.vue' }, { file: 'types.vue' }, { file: 'read-only.vue' }] }),
     pkg({
       examples: [
@@ -223,7 +223,7 @@ const FIXTURES = {
     )
   ],
   'i18n-key': [
-    'packages/webkit/src/locales/en.ts',
+    'packages/ui/src/locales/en.ts',
     "export const kbd = {\n  'arrow-up': 'Up'\n} as const\nexport const Feedback = {\n  Close: 'x'\n} as const\n",
     "export const kbd = {\n  arrowUp: 'Up'\n} as const\nexport const commandGroup = {\n  label: 'x'\n} as const\n"
   ],
@@ -292,7 +292,7 @@ const FIXTURES = {
     sfc('')
   ],
   'script-name': [
-    'packages/webkit/package.json',
+    'packages/ui/package.json',
     pkg({
       scripts: {
         'catalog:build': 'node scripts/build-catalog.mjs',
@@ -321,8 +321,8 @@ const FIXTURES = {
   ],
   'eslint-rule-name': [
     [
-      'packages/webkit/src/eslint-plugin/rules/accessible-name.js',
-      'packages/webkit/src/eslint-plugin/rules/require-accessible-name.js'
+      'packages/ui/src/eslint-plugin/rules/accessible-name.js',
+      'packages/ui/src/eslint-plugin/rules/require-accessible-name.js'
     ],
     'export default {}\n',
     'export default {}\n'
@@ -336,7 +336,7 @@ const FIXTURES = {
     '---\nname: x\n---\n'
   ],
   'cli-name': [
-    'packages/webkit-mcp/src/server.js',
+    'packages/ui-mcp/src/server.js',
     "tool('searchComponents', {})\ntool('patterns_get', {})\n",
     "tool('search_components', {})\ntool('get_block', {})\n"
   ]
@@ -367,7 +367,7 @@ for (const [rule, fixture] of Object.entries(FIXTURES)) {
 test('false positives the checker skips: test artifacts, element ids, kept tokens, migration tooling', () => {
   assert.deepEqual(
     checkFile(
-      'packages/webkit/src/components/action/button/__screenshots__/Button Default 1.png',
+      'packages/ui/src/components/action/button/__screenshots__/Button Default 1.png',
       '',
       ctx
     ),
@@ -397,12 +397,12 @@ test('false positives the checker skips: test artifacts, element ids, kept token
   const legacy =
     "const help = 'pi pi-times becomes az az-x; ai-cor ai-next becomes az-color az-nextjs'\n"
   for (const rel of [
-    'packages/webkit/src/cli/cli.js',
-    'packages/webkit/src/cli/migrate.js',
-    'packages/webkit/src/cli/migrations/v6-icons.js'
+    'packages/ui/src/cli/cli.js',
+    'packages/ui/src/cli/migrate.js',
+    'packages/ui/src/cli/migrations/v6-icons.js'
   ])
     assert.deepEqual(hits(rel, legacy, 'icon-name'), [], rel)
-  assert.ok(hits('packages/webkit/src/cli/add.js', legacy, 'icon-name').length > 0)
+  assert.ok(hits('packages/ui/src/cli/add.js', legacy, 'icon-name').length > 0)
 })
 
 test('handler-name: sample code inside a template literal is not a handler', () => {
@@ -580,7 +580,7 @@ test('validate-naming hook: blocks an added violation of any rule', () => {
   const add = {
     tool_name: 'Edit',
     tool_input: {
-      file_path: 'packages/webkit/package.json',
+      file_path: 'packages/ui/package.json',
       old_string: '"./button":',
       new_string: '"./Button": "./x.vue",\n    "./button":'
     }
@@ -609,12 +609,12 @@ test('validate-naming hook: an edit that keeps existing debt is not blocked, and
   const keep = {
     tool_name: 'Edit',
     tool_input: {
-      file_path: 'packages/webkit/package.json',
+      file_path: 'packages/ui/package.json',
       old_string: '"./button":',
       new_string: '"./button":'
     }
   }
-  assert.equal(hook(keep, { WEBKIT_NAMING_STRICT: '1' }).status, 0)
+  assert.equal(hook(keep, { AZION_UI_NAMING_STRICT: '1' }).status, 0)
   const broken = spawnSync('node', ['contributing/hooks/validate-naming.mjs'], {
     cwd: ROOT,
     input: 'not json',
@@ -824,7 +824,7 @@ test('model-shape: one concept binds one name and one type', () => {
 
 test('model-shape: templates never bind v-model:value or a banned model name', () => {
   const tpl = (body) => sfc('', body)
-  const rel = 'packages/webkit/examples/tree/default.vue'
+  const rel = 'packages/ui/examples/tree/default.vue'
   assert.equal(checkTemplateModels(rel, tpl('<Tabs v-model:value="tab" />')).length, 1)
   assert.equal(checkTemplateModels(rel, tpl('<DataTable v-model:row-selection="s" />')).length, 1)
   assert.equal(checkTemplateModels(rel, tpl('<DataTable v-model:expanded="s" />')).length, 1)
@@ -854,8 +854,8 @@ test('testid: a public part that builds its test id from the parent context is f
 })
 
 test('block-word flags a retired Templates path in a block summary or an examples.json field', () => {
-  const block = 'packages/webkit/blocks/detail/detail-resource/block.json'
-  const examples = 'packages/webkit/examples/hero-section/examples.json'
+  const block = 'packages/ui/blocks/detail/detail-resource/block.json'
+  const examples = 'packages/ui/examples/hero-section/examples.json'
   assert.equal(
     hits(
       block,

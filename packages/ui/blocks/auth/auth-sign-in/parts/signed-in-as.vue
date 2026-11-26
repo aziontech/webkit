@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Item from '@aziontech/webkit/item'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Item from '@aziontech/ui/item'
 
   export interface SignedInAsProps {
     /** The account that is signed in. */

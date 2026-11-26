@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   import type { ServiceWizardForm, ServiceWizardNames } from '../lib/service-wizard'
   import { domainTypes, platformDomainSuffix } from '../sample'

@@ -2,7 +2,7 @@
 
 > Use IntegrationCard for one tile of a catalog of integrations, extensions or plugins; for a bordered box of related content use Card, and for a collection of resource records shown as cards use CardList. A catalog tile laid out from props: a logo mark, the item name, its vendor, a short description, badges, the installed state and one action. The name is the tile's single target: a link when `href` is set, otherwise a button that emits `select`, stretched over the whole tile. `featured` gives the centred, raised layout used for a short row of picks above the full catalog. It was the `integration` variant of `Card` until 6.0, split out because a tile shares neither the header nor the footer of a content card.
 
-- Import: `import IntegrationCard from '@aziontech/webkit/integration-card'`
+- Import: `import IntegrationCard from '@aziontech/ui/integration-card'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [integration-card.json](integration-card.json)
 
@@ -107,8 +107,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
+  import Button from '@aziontech/ui/button'
+  import IntegrationCard from '@aziontech/ui/integration-card'
   import { ref } from 'vue'
 
   const opened = ref('')
@@ -146,8 +146,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
+  import Button from '@aziontech/ui/button'
+  import IntegrationCard from '@aziontech/ui/integration-card'
 </script>
 
 <template>
@@ -177,7 +177,7 @@
 
 ```vue
 <script setup>
-  import IntegrationCard from '@aziontech/webkit/integration-card'
+  import IntegrationCard from '@aziontech/ui/integration-card'
   import { ref } from 'vue'
 
   const opened = ref('')

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Card from '@aziontech/ui/card'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
   import { ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [

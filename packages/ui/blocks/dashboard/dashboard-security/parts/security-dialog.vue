@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import BarList, { type BarListItem } from '@aziontech/ui/bar-list'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
 
   import type {
     SecurityCardId,

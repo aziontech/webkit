@@ -2,7 +2,7 @@
 
 > The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the header from the section body. `variant` picks the layout — `center` for a symmetric opener, `start` for a reading-order one, and `split` for a wide row that sets the headline against its description.
 
-- Import: `import ModuleHeader from '@aziontech/webkit/module-header'`
+- Import: `import ModuleHeader from '@aziontech/ui/module-header'`
 - Category: layout · Surface: site · Structure: monolithic
 - API as JSON: [module-header.json](module-header.json)
 
@@ -84,7 +84,7 @@
 
 ```vue
 <script setup>
-  import ModuleHeader from '@aziontech/webkit/module-header'
+  import ModuleHeader from '@aziontech/ui/module-header'
 </script>
 
 <template>
@@ -100,7 +100,7 @@
 
 ```vue
 <script setup>
-  import ModuleHeader from '@aziontech/webkit/module-header'
+  import ModuleHeader from '@aziontech/ui/module-header'
 </script>
 
 <template>
@@ -131,7 +131,7 @@
 
 ```vue
 <script setup>
-  import ModuleHeader from '@aziontech/webkit/module-header'
+  import ModuleHeader from '@aziontech/ui/module-header'
 </script>
 
 <template>

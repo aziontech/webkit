@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
+  import Button from '@aziontech/ui/button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
   import { computed } from 'vue'
 
   import type { SettingsLeaveDialogProps } from './settings-leave-dialog.vue'

@@ -3,10 +3,10 @@
 > The documentation shell is `DocLayout`, composed once around the app's router view: this block's primary is the app's `App.vue` and every variant is a page body (an `<article>` only, with no header, rail, outline or footer of its own) that renders inside it. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`, the current row following the route) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the page in the layout's single main landmark, the sticky On this page rail from `xl` filled by the page itself (every `DocHeading` with an `anchor` at level 2 or 3 registers with the layout, in document order, and is tracked as the reader scrolls), the GitHub and Community `outline-groups` and a `DocCallToAction` in its `aside` slot (both shown only on pages with an outline), and the `Footer` (`variant="content"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, then one bottom bar with the brand and the social links at the start and the status and language at the end, stacked below `md`, in CSS. No page wraps its article in a scroll area, a full-height frame or a layout of its own. The primary's stand-in page, in its default slot, is a short guide (`DocPageHeader`, then `DocProse` with anchored `DocHeading` sections); replace it with `<RouterView />`. Five variants are page bodies built from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `RegistrationFrame`, and `DocPreviousNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home, whose headings carry no anchor so no outline rail shows: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `Tabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.
 
 - Surface: docs
-- Source: `blocks/shell/shell-docs/shell-docs.vue` in `@aziontech/webkit`
+- Source: `blocks/shell/shell-docs/shell-docs.vue` in `@aziontech/ui`
 - MCP: `get_block("shell/shell-docs")`
 - Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [CopyPromptButton](../../components/copy-prompt-button.md), [DataTable](../../components/data-table.md), [Diagram](../../components/diagram.md), [DocAccordion](../../components/doc-accordion.md), [DocAccordionGroup](../../components/doc-accordion-group.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallToAction](../../components/doc-call-to-action.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCodeGroup](../../components/doc-code-group.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocLayout](../../components/doc-layout.md), [DocMarkdown](../../components/doc-markdown.md), [DocPageHeader](../../components/doc-page-header.md), [DocPreviousNext](../../components/doc-previous-next.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [IconButton](../../components/icon-button.md), `ItemList`, [Item](../../components/item.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [RegistrationFrame](../../components/registration-frame.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [ThirdPartyLogo](../../components/third-party-logo.md), `use-color-mode`
-- Skills: `webkit-layout`, `webkit-navigation`
+- Skills: `azion-ui-layout`, `azion-ui-navigation`
 
 ## Asked as
 
@@ -79,7 +79,7 @@ The shell's data comes in through props (`ShellDocsProps`, `ShellDocsFooterColum
 ## Do
 
 - Compose `DocLayout` once in the app's root around `RouterView` (the primary); each route renders only its `<article>`.
-- For a real page, start from a variant (Article, Reference, Landing, AgentSetup, AgentGuide): each is a page body built from the `Doc*` parts only, with no layout of its own. `webkit add shell/shell-docs --variant Article` copies the shell and the page side by side; keep the shell as `App.vue` and route to the page.
+- For a real page, start from a variant (Article, Reference, Landing, AgentSetup, AgentGuide): each is a page body built from the `Doc*` parts only, with no layout of its own. `azion-ui add shell/shell-docs --variant Article` copies the shell and the page side by side; keep the shell as `App.vue` and route to the page.
 - Give every section `DocHeading` an `anchor`; the layout lists those headings as the outline.
 - Put everything under `DocPageHeader` in one `DocProse`.
 - Give every navigation row an `id` and an `href` (an in-app path is followed with the router); keep the rail scoped to the current product; the header section links switch products.
@@ -144,23 +144,23 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
 
 ```vue
 <script setup lang="ts">
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
-  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
-  import DocHeading from '@aziontech/webkit/doc-heading'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
+  import DocCallToAction from '@aziontech/ui/doc-call-to-action'
+  import DocHeading from '@aziontech/ui/doc-heading'
   import DocLayout, {
     type DocLayoutNavGroup,
     type DocLayoutSection
-  } from '@aziontech/webkit/doc-layout'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import type { DocTableOfContentsGroup } from '@aziontech/webkit/doc-table-of-contents'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import LanguageSelect from '@aziontech/webkit/language-select'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import { useColorMode } from '@aziontech/webkit/use-color-mode'
+  } from '@aziontech/ui/doc-layout'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import type { DocTableOfContentsGroup } from '@aziontech/ui/doc-table-of-contents'
+  import Footer from '@aziontech/ui/footer'
+  import IconButton from '@aziontech/ui/icon-button'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import ThemeSwitcher from '@aziontech/ui/theme-switcher'
+  import { useColorMode } from '@aziontech/ui/use-color-mode'
   import { provide, ref } from 'vue'
 
   import { ShellDocsInjectionKey } from './injection-key'
@@ -381,8 +381,8 @@ Each variant is the same screen in another state: `get_block("shell/shell-docs",
 ## `sample.ts`
 
 ```ts
-import type { DocLayoutNavGroup, DocLayoutSection } from '@aziontech/webkit/doc-layout'
-import type { DocTableOfContentsGroup } from '@aziontech/webkit/doc-table-of-contents'
+import type { DocLayoutNavGroup, DocLayoutSection } from '@aziontech/ui/doc-layout'
+import type { DocTableOfContentsGroup } from '@aziontech/ui/doc-table-of-contents'
 
 import type { ShellDocsFooterColumn, ShellDocsSocial } from './shell-docs.vue'
 

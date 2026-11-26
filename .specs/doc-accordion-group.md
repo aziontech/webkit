@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: cf9771c829da2eb4e02c8e2037de26cb9816590cf4683d60e04928d3a7f636c3
+checksum: 46a09e8cd26eb49f8132ad89ae7d14470f3a9e526bf7dc568bf604e2be38a143
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -44,8 +44,8 @@ The FAQ and "expand for detail" block of a documentation page. It reads the `tit
 
 ```vue
 <script setup>
-  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
-  import DocAccordion from '@aziontech/webkit/doc-accordion'
+  import DocAccordionGroup from '@aziontech/ui/doc-accordion-group'
+  import DocAccordion from '@aziontech/ui/doc-accordion'
 </script>
 
 <template>
@@ -139,7 +139,7 @@ The panel height transition comes from `Accordion` and is off under reduced moti
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

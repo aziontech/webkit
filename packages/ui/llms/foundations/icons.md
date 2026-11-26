@@ -2,7 +2,7 @@
 
 > Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, l…
 
-yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry (the font); the colour logos come with the WebKit stylesheet, compiled only for the classes written whole in your sources. An `icon` prop takes the class string.
+yout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry (the font); the colour logos come with the Azion UI stylesheet, compiled only for the classes written whole in your sources. An `icon` prop takes the class string.
 
 560 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
@@ -13,7 +13,7 @@ Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifa
 ```vue
 <script setup>
   import '@aziontech/icons'
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>

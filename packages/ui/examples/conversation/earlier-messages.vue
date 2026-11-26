@@ -1,6 +1,6 @@
 <script setup>
-  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
-  import Conversation from '@aziontech/webkit/conversation'
+  import ChatMessageRoot from '@aziontech/ui/chat-message-root'
+  import Conversation from '@aziontech/ui/conversation'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
   const history = [

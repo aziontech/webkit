@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs, { type TabsValue } from '@aziontech/webkit/tabs'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs, { type TabsValue } from '@aziontech/ui/tabs'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import {

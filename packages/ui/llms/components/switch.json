@@ -1,8 +1,8 @@
 {
  "name": "switch",
  "binding": "Switch",
- "import": "@aziontech/webkit/switch",
- "treeShakeableImport": "@aziontech/webkit/switch",
+ "import": "@aziontech/ui/switch",
+ "treeShakeableImport": "@aziontech/ui/switch",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

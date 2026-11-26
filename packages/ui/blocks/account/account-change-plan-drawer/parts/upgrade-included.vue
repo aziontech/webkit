@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Link from '@aziontech/webkit/link'
-  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
-  import Separator from '@aziontech/webkit/separator'
+  import Link from '@aziontech/ui/link'
+  import PlanFeatureList from '@aziontech/ui/plan-feature-list'
+  import Separator from '@aziontech/ui/separator'
 
   import type { ChangePlanDrawerFeature } from '../account-change-plan-drawer.vue'
 

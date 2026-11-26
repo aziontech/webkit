@@ -1,8 +1,8 @@
 {
  "name": "spacer",
  "binding": "Spacer",
- "import": "@aziontech/webkit/spacer",
- "treeShakeableImport": "@aziontech/webkit/spacer",
+ "import": "@aziontech/ui/spacer",
+ "treeShakeableImport": "@aziontech/ui/spacer",
  "category": "layout",
  "surface": "site",
  "structure": "monolithic",

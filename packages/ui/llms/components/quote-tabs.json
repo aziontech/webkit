@@ -1,8 +1,8 @@
 {
  "name": "quote-tabs",
  "binding": "QuoteTabs",
- "import": "@aziontech/webkit/quote-tabs",
- "treeShakeableImport": "@aziontech/webkit/quote-tabs",
+ "import": "@aziontech/ui/quote-tabs",
+ "treeShakeableImport": "@aziontech/ui/quote-tabs",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

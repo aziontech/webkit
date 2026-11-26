@@ -30,7 +30,7 @@
     "project templates",
     "pick a template"
   ],
-  "skills": ["webkit-lists", "webkit-create-surface", "webkit-ui-states"],
+  "skills": ["azion-ui-lists", "azion-ui-create-surface", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "view-template-browser.vue"

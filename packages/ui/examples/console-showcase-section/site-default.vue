@@ -1,8 +1,8 @@
 <script setup>
-  import ConsoleApplicationScene from '@aziontech/webkit/assets/console-application-scene'
-  import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ConsoleApplicationScene from '@aziontech/ui/assets/console-application-scene'
+  import ConsoleShowcaseSection from '@aziontech/ui/console-showcase-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const tabs = [
     {

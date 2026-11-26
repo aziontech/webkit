@@ -1,5 +1,5 @@
 <script setup>
-  import DocHero from '@aziontech/webkit/doc-hero'
+  import DocHero from '@aziontech/ui/doc-hero'
 </script>
 
 <template>

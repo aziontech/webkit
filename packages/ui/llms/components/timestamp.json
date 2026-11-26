@@ -1,8 +1,8 @@
 {
  "name": "timestamp",
  "binding": "Timestamp",
- "import": "@aziontech/webkit/timestamp",
- "treeShakeableImport": "@aziontech/webkit/timestamp",
+ "import": "@aziontech/ui/timestamp",
+ "treeShakeableImport": "@aziontech/ui/timestamp",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

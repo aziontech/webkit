@@ -1,8 +1,8 @@
 {
  "name": "currency-amount",
  "binding": "CurrencyAmount",
- "import": "@aziontech/webkit/currency-amount",
- "treeShakeableImport": "@aziontech/webkit/currency-amount",
+ "import": "@aziontech/ui/currency-amount",
+ "treeShakeableImport": "@aziontech/ui/currency-amount",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

@@ -88,9 +88,9 @@ export function docsSources(repo) {
   const rendered = new Set([
     ...renderedPages(repo),
     ...markdownIn(join(repo, 'rules'), (name) => name.endsWith('.md')),
-    ...markdownIn(join(repo, 'packages/webkit/blocks'), (name) => name === 'guidelines.md'),
+    ...markdownIn(join(repo, 'packages/ui/blocks'), (name) => name === 'guidelines.md'),
     ...markdownIn(join(repo, '.specs'), (name) => name.endsWith('.md') && !name.startsWith('_')),
-    join(repo, 'packages/webkit/docs/AI.md')
+    join(repo, 'packages/ui/docs/AI.md')
   ])
   const all = new Set([
     ...rendered,

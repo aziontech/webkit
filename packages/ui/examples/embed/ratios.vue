@@ -1,5 +1,5 @@
 <script setup>
-  import Embed from '@aziontech/webkit/embed'
+  import Embed from '@aziontech/ui/embed'
 </script>
 
 <template>

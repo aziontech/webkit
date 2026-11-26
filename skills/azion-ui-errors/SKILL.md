@@ -1,13 +1,13 @@
 ---
-name: webkit-errors
-description: Where an error goes in a @aziontech/webkit app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as an Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts (a credential the user retypes goes on its field, everything else in one card Alert), and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/webkit/message, /toast, /field.
+name: azion-ui-errors
+description: Where an error goes in a @aziontech/ui app, and what it carries when it gets there. One decision table covering all five cases — client-side validation on the field, a server rejection scoped to one field as an Alert in that section (plus the field's invalid state and a scroll anchor on a long form), an unscoped request failure as a toast with Retry, the signed-out screens where auth NEVER toasts (a credential the user retypes goes on its field, everything else in one card Alert), and the async failure that outlives its screen as a permanent closable toast. Use when building or reviewing any submit, any auth screen, or any long-running action. Built on @aziontech/ui/message, /toast, /field.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-component-states, webkit-accessibility, ui-verify]
+enforced_by: [azion-ui-component-states, azion-ui-accessibility, ui-verify]
 ---
 
-# Skill: webkit-errors
+# Skill: azion-ui-errors
 
 ## Purpose
 
@@ -18,14 +18,14 @@ wrong for a field the user must fix (it dismisses itself and points nowhere), wr
 exactly one case most apps never handle: the failure that arrives after the user has walked away.
 
 This pattern fixes **where an error goes**, **what it carries when it gets there**, and **what it
-says**. It is the error half of [Loading, empty and error states](../webkit-ui-states/SKILL.md) (which owns the full loading / empty / partial
-state surface) and the failure half of [Forms](../webkit-form/SKILL.md) (which owns the field and submit mechanics).
+says**. It is the error half of [Loading, empty and error states](../azion-ui-states/SKILL.md) (which owns the full loading / empty / partial
+state surface) and the failure half of [Forms](../azion-ui-form/SKILL.md) (which owns the field and submit mechanics).
 
 ## How to use
 
-- `/webkit-errors`
+- `/azion-ui-errors`
   Apply the placement table below to every failure path in this conversation.
-- `/webkit-errors <file>`
+- `/azion-ui-errors <file>`
   Review the file and output, per gap:
   - the exact line / handler (quoted),
   - which row of the table it breaks (1 short sentence),
@@ -43,9 +43,9 @@ state surface) and the failure half of [Forms](../webkit-form/SKILL.md) (which o
 
 Never guess an import path — files move. Resolve every primitive the same way:
 
-- Ask the **webkit MCP** — `suggest_component` in plain words ("inline message", "toast", "password
+- Ask the **Azion UI MCP** — `suggest_component` in plain words ("inline message", "toast", "password
   field").
-- Or read **`node_modules/@aziontech/webkit/catalog.json`** — every key under `imports` is a real
+- Or read **`node_modules/@aziontech/ui/catalog.json`** — every key under `imports` is a real
   published subpath. If a subpath is not a key there, it does not exist.
 
 The surfaces this pattern uses — `message`, `toast`, `field` (with its `Field.Description` / `Field.Error`), `field-error` — all resolve
@@ -85,7 +85,7 @@ belongs on the control that holds it. Validate **on submit**, not on every keyst
   malformed one, with a `FieldError` that says what to enter.
 
 Mechanics (the `Field` triad, `aria-describedby`, submit-time validation, the locked scope) live in
-**[Forms](../webkit-form/SKILL.md)**. In a settings row (`SettingsRow`, `@aziontech/webkit/settings-row`) the message is a
+**[Forms](../azion-ui-form/SKILL.md)**. In a settings row (`SettingsRow`, `@aziontech/ui/settings-row`) the message is a
 `FieldDescription` placed in the row's default slot right after the control, so it sits under the control
 inside the row's control column. The only rule this pattern adds: **client-side validation is the one thing that does
 not go in a `Alert`.** The `Alert` is for what the **server** said.
@@ -177,7 +177,7 @@ attach it to, and blocking the whole form with a banner over-weights something a
 - Say what failed and what to do next — see the words section below.
 
 The mechanics of the in-flight lock (one flag, trigger `:loading`, every field `:disabled`, released
-in `finally`) belong to **[Loading, empty and error states](../webkit-ui-states/SKILL.md)**.
+in `finally`) belong to **[Loading, empty and error states](../azion-ui-states/SKILL.md)**.
 
 ## 4. Signed-out screens → auth never toasts
 
@@ -279,7 +279,7 @@ application. Check your connection and try again."` — not `"Error 500"`.
 - **The status code goes last**, if at all. It is for the support ticket, not the lede.
 - **Say what was _not_ lost.** On a rejected submit, `"Nothing else was lost"` is the sentence that
   stops a user from re-entering a six-section form.
-- **`Retry`**, never "Try again". Sentence case, no em dash. Full copy rules: **[Interface text](../webkit-microcopy/SKILL.md)**.
+- **`Retry`**, never "Try again". Sentence case, no em dash. Full copy rules: **[Interface text](../azion-ui-microcopy/SKILL.md)**.
 
 ## Hard rules
 
@@ -306,7 +306,7 @@ application. Check your connection and try again."` — not `"Error 500"`.
 
 ## Review output
 
-For `/webkit-errors <file>`, list gaps. Each:
+For `/azion-ui-errors <file>`, list gaps. Each:
 
 ```
 ✗ CreateApplication.vue:118  toast.error for a rejection that names `connectorId`
@@ -331,17 +331,17 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
 ## References
 
 - **Surfaces** (resolve each via the MCP / catalog — see "How to find the components"):
-  `@aziontech/webkit/alert` (inline notice: `severity`, `size`, `#actions` slot, default slot for
-  copy with links), `@aziontech/webkit/toast` (`toast.error` / `.success` / `.loading`, `duration`,
-  `closable`, `action`), the `@aziontech/webkit/field` compound + `/field-error` (the field's own
+  `@aziontech/ui/alert` (inline notice: `severity`, `size`, `#actions` slot, default slot for
+  copy with links), `@aziontech/ui/toast` (`toast.error` / `.success` / `.loading`, `duration`,
+  `closable`, `action`), the `@aziontech/ui/field` compound + `/field-error` (the field's own
   invalid state and its message).
 - **Blocks:** `state/state-form-validation` (rows 1 and 3 on a short form; row 2, the section `Alert` with
   its recovery action, in SectionRejected), `auth/auth-sign-in` (row 4),
   `state/state-async-submit` (row 5, Edit and Redeploy).
-- **Companion skills:** [Forms](../webkit-form/SKILL.md) (the field triad, submit-time validation, the locked scope),
-  [Loading, empty and error states](../webkit-ui-states/SKILL.md) (the full loading / empty / partial / error surface and async behaviour),
-  [Interface text](../webkit-microcopy/SKILL.md) (what the words are), [Navigation](../webkit-navigation/SKILL.md) (which shell the failing page sits
-  in), `/webkit-ux-heuristics` (the right component per moment).
+- **Companion skills:** [Forms](../azion-ui-form/SKILL.md) (the field triad, submit-time validation, the locked scope),
+  [Loading, empty and error states](../azion-ui-states/SKILL.md) (the full loading / empty / partial / error surface and async behaviour),
+  [Interface text](../azion-ui-microcopy/SKILL.md) (what the words are), [Navigation](../azion-ui-navigation/SKILL.md) (which shell the failing page sits
+  in), `/azion-ui-ux-heuristics` (the right component per moment).
 
 ## How to check it works
 

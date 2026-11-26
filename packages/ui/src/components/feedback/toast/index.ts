@@ -44,10 +44,10 @@ export const ToastPlugin: Plugin = {
   install(app: App, options?: ToasterProps) {
     app.component('Toaster', Toaster)
     app.config.globalProperties['$toast'] = toast
-    app.provide('webkit-toast', toast)
+    app.provide('azion-ui-toast', toast)
     if (typeof document === 'undefined') return
     const host = document.createElement('div')
-    host.setAttribute('data-webkit-toaster', '')
+    host.setAttribute('data-azion-toaster', '')
     ;(document.body ?? document.documentElement).appendChild(host)
     const vnode = createVNode(Toaster, options as Record<string, unknown> | undefined)
     vnode.appContext = app._context

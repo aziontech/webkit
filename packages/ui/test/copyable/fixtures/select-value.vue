@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
   import { ref } from 'vue'
 
   const environment = ref<string>('production')

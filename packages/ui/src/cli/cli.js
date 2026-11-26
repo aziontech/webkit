@@ -31,30 +31,30 @@ const COMMANDS = new Set([
   'migrate'
 ])
 
-const HELP = `@aziontech/webkit — adopt the design system in one command
+const HELP = `@aziontech/ui — adopt the design system in one command
 
 Usage:
-  npx @aziontech/webkit init [options]
-  npx @aziontech/webkit add <block-id> [--variant <name>] [--dest <dir|file.vue>] [options]
-  npx @aziontech/webkit remove <block-id|path> [--dry-run] [--json]
-  npx @aziontech/webkit diff <block-id|path> [--json]
-  npx @aziontech/webkit search <query> [--json]
-  npx @aziontech/webkit view <id> [--variant <name>] [--example <name>] [--json]
-  npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint] [--url <url,...>]
-  npx @aziontech/webkit doctor
-  npx @aziontech/webkit css [--check]
-  npx @aziontech/webkit report [options] [patterns...]
-  npx @aziontech/webkit canary
-  npx @aziontech/webkit sync [options]
-  npx @aziontech/webkit migrate v6 [--dry-run] [--from <major>]
+  npx @aziontech/ui init [options]
+  npx @aziontech/ui add <block-id> [--variant <name>] [--dest <dir|file.vue>] [options]
+  npx @aziontech/ui remove <block-id|path> [--dry-run] [--json]
+  npx @aziontech/ui diff <block-id|path> [--json]
+  npx @aziontech/ui search <query> [--json]
+  npx @aziontech/ui view <id> [--variant <name>] [--example <name>] [--json]
+  npx @aziontech/ui check [--json] [--max-warnings <n>] [--no-lint] [--url <url,...>]
+  npx @aziontech/ui doctor
+  npx @aziontech/ui css [--check]
+  npx @aziontech/ui report [options] [patterns...]
+  npx @aziontech/ui canary
+  npx @aziontech/ui sync [options]
+  npx @aziontech/ui migrate v6 [--dry-run] [--from <major>]
 
 Commands:
-  init            Wire @aziontech/webkit into the current project.
+  init            Wire @aziontech/ui into the current project.
   add             Start a screen: copy a block (the reviewed SFC) into the project, check
-                   its imports against the installed webkit, record it in webkit.blocks.json
+                   its imports against the installed ui, record it in azion-ui.blocks.json
                    and print the route entry to add.
   remove          Delete a copied block: its files (the primary, variants, data files and
-                   guidelines; a path removes that one file) and its webkit.blocks.json
+                   guidelines; a path removes that one file) and its azion-ui.blocks.json
                    entry. Lists the app files that still import it and the route to drop.
                    --dry-run prints what would be deleted.
   diff            Compare a copied block with the canonical one of the installed version.
@@ -63,14 +63,14 @@ Commands:
   check           CI gate: doctor + v5 names + unknown imports + ESLint + Stylelint
                    + block drift.
   doctor          Check the wiring is healthy; report resolved dependency versions.
-  css             Rewrite src/webkit.sources.css, the WebKit files Tailwind compiles,
-                   from this app's @aziontech/webkit imports (the Vite plugin,
-                   @aziontech/webkit/vite-plugin, does it on every dev and build). --check writes nothing and
+  css             Rewrite src/azion-ui.sources.css, the Azion UI files Tailwind compiles,
+                   from this app's @aziontech/ui imports (the Vite plugin,
+                   @aziontech/ui/vite-plugin, does it on every dev and build). --check writes nothing and
                    exits 1 when the file is stale.
-  report          Measure webkit adoption via this project's own ESLint.
+  report          Measure ui adoption via this project's own ESLint.
   canary          Prove the design-system lint rules still reach this project.
   sync            Reconcile the copied .claude/ bundle + CLAUDE.md fragment against
-                   this webkit version's templates. In a monorepo app with no agent
+                   this Azion UI version's templates. In a monorepo app with no agent
                    files of its own, works on the repository root that has them.
   migrate v6      Rewrite this project for the v6 major: renamed imports and components,
                    renamed props and values, icon classes (pi pi-times → az az-x,
@@ -104,7 +104,7 @@ Options (diff, search, view, check):
                     scans only).
   --url <url,...>   check: also open these running routes in Chromium (the project's
                     Playwright) and fail on navigation levels that repeat a route or
-                    disagree on the current page (rule webkit-navigation-levels).
+                    disagree on the current page (rule azion-ui-navigation-levels).
   diff exits 0 when the copy matches the canonical block, 1 when it differs.
 
 Options (report):

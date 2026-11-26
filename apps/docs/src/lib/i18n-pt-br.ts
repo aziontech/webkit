@@ -38,7 +38,7 @@ export const ptBR: Messages = {
   demoLanguage: 'Idioma da demonstração',
   demoDirection: 'Direção da demonstração',
   demoLocaleNote:
-    'O bloco de login dentro do ConfigProvider: o texto dele e todo texto do WebKit seguem o idioma.',
+    'O bloco de login dentro do ConfigProvider: o texto dele e todo texto do Azion UI seguem o idioma.',
   demoDirectionNote:
     'O bloco de login dentro do ConfigProvider: cada lado, espaço e seta espelha com a direção.',
   keyTableTitle: 'Teclas por plataforma',
@@ -60,16 +60,16 @@ export const ptBR: Messages = {
   keyDelete: 'Excluir a linha em foco, depois de perguntar',
   rightToLeft: 'Direita para a esquerda',
   leftToRight: 'Esquerda para a direita',
-  github: 'WebKit no GitHub',
+  github: 'Azion UI no GitHub',
   newTab: '(abre em uma nova aba)',
   footer: 'Rodapé',
-  footerWebkit: 'WebKit',
+  footerAzionUi: 'Azion UI',
   footerAzion: 'Azion',
   footerGithub: 'GitHub',
   footerNpm: 'npm',
   footerAzionDocs: 'Documentação da Azion',
   footerConsole: 'Azion Console',
-  home: 'Início do WebKit',
+  home: 'Início do Azion UI',
   examples: 'Exemplos',
   preview: 'Prévia',
   code: 'Código',
@@ -222,7 +222,7 @@ export const ptBR: Messages = {
   iconsEmpty: 'Nenhum ícone corresponde a essa busca',
   iconsEmptyLead: 'Tente outro nome ou palavra-chave.',
   iconsCopy: 'Copiar a classe',
-  assetsLead: 'As marcas, ilustrações de produto e ícones que o WebKit entrega.',
+  assetsLead: 'As marcas, ilustrações de produto e ícones que o Azion UI entrega.',
   brand: 'Marca',
   brandLead:
     'As versões da marca Azion do Brand. Mantenha a marca limpa e sem alterações e escolha a versão que cabe no espaço.',
@@ -245,46 +245,46 @@ export const ptBR: Messages = {
   openIcons: 'Abrir a galeria de ícones',
   homeTitle: 'O design system da Azion, feito para IA.',
   homeNote:
-    'O prompt instala o WebKit e roda o init, então seu agente de código recebe o servidor MCP, as orientações e o lint.',
+    'O prompt instala o Azion UI e roda o init, então seu agente de código recebe o servidor MCP, as orientações e o lint.',
   homeLead:
-    'Componentes, blocos, padrões e fundamentos para o Azion Console, a documentação e o site. Seu agente de IA lê o mesmo catálogo que você navega aqui, e agentes de IA constroem o próprio WebKit.',
+    'Componentes, blocos, padrões e fundamentos para o Azion Console, a documentação e o site. Seu agente de IA lê o mesmo catálogo que você navega aqui, e agentes de IA constroem o próprio Azion UI.',
   startWithAgents: 'Começar com agentes',
   pathsTitle: 'Comece pelo seu papel',
   pathsLead:
-    'Entregue o trabalho ao seu agente de código, ou escolha o seu caminho: construa um app com o WebKit, ou melhore o WebKit.',
+    'Entregue o trabalho ao seu agente de código, ou escolha o seu caminho: construa um app com o Azion UI, ou melhore o Azion UI.',
   pathBuildTitle: 'Comece a construir',
   pathBuildBody:
-    'Instale os pacotes, rode npx @aziontech/webkit init e monte suas telas com blocos e componentes. Seu agente de IA ganha o servidor MCP, as orientações e o lint no mesmo passo.',
+    'Instale os pacotes, rode npx @aziontech/ui init e monte suas telas com blocos e componentes. Seu agente de IA ganha o servidor MCP, as orientações e o lint no mesmo passo.',
   pathBuildLink: 'Primeiros passos',
   pathContributeTitle: 'Comece a contribuir',
   pathContributeBody:
-    'O WebKit é construído por agentes de IA. Você abre uma issue no GitHub; agentes pesquisam, escrevem a spec, um segundo agente a revisa, constroem, rodam todas as verificações e a revisão de UI e abrem o pull request. Sem arquivo de design, sem componente feito à mão.',
-  pathContributeLink: 'Como o WebKit é construído',
-  forAi: 'WebKit para IA',
+    'O Azion UI é construído por agentes de IA. Você abre uma issue no GitHub; agentes pesquisam, escrevem a spec, um segundo agente a revisa, constroem, rodam todas as verificações e a revisão de UI e abrem o pull request. Sem arquivo de design, sem componente feito à mão.',
+  pathContributeLink: 'Como o Azion UI é construído',
+  forAi: 'Azion UI para IA',
   aiNav: 'IA',
   aiPageSummary:
-    'O servidor MCP, o comando de configuração, as orientações que os agentes leem, as verificações que passam e como agentes constroem o próprio WebKit.',
-  aiTitle: 'Seu agente de IA lê o mesmo WebKit que você',
+    'O servidor MCP, o comando de configuração, as orientações que os agentes leem, as verificações que passam e como agentes constroem o próprio Azion UI.',
+  aiTitle: 'Seu agente de IA lê o mesmo Azion UI que você',
   aiLead:
     'Este site é metade. A outra metade é para agentes de IA: um servidor que eles consultam, orientações que carregam e verificações que mantêm o código deles no padrão.',
   aiMcpTitle: 'Servidor MCP',
   aiMcpBody:
-    '@aziontech/webkit-mcp responde search_blocks, get_component, list_tokens e validate_usage a partir do catálogo da versão instalada.',
+    '@aziontech/ui-mcp responde search_blocks, get_component, list_tokens e validate_usage a partir do catálogo da versão instalada.',
   aiInitTitle: 'Um comando de configuração',
   aiInitBody:
-    'npx @aziontech/webkit init configura o servidor MCP, o lint, o tema e as instruções do agente no AGENTS.md.',
+    'npx @aziontech/ui init configura o servidor MCP, o lint, o tema e as instruções do agente no AGENTS.md.',
   aiGuidanceTitle: 'Skills, regras e padrões',
   aiGuidanceBody:
     'As orientações deste site vão em Markdown dentro do pacote, então o agente lê o padrão da tarefa antes de escrever uma linha.',
   aiChecksTitle: 'Verificações que seguram o padrão',
   aiChecksBody:
-    'Os presets de lint, webkit doctor e webkit check falham o build com um import errado, uma cor crua ou um rótulo faltando.',
+    'Os presets de lint, azion-ui doctor e azion-ui check falham o build com um import errado, uma cor crua ou um rótulo faltando.',
   aiAgentTitle: 'Configure seu agente com um prompt',
   aiAgentBody:
-    'Cole no Claude Code, Cursor, Codex ou ChatGPT. Ele instala o WebKit e roda o init, então o agente conhece os componentes desde a primeira tela.',
+    'Cole no Claude Code, Cursor, Codex ou ChatGPT. Ele instala o Azion UI e roda o init, então o agente conhece os componentes desde a primeira tela.',
   aiAgentAside: 'Quer ver os detalhes antes?',
-  aiAgentAction: 'Ler WebKit para IA',
-  exploreTitle: 'Explore o WebKit',
+  aiAgentAction: 'Ler Azion UI para IA',
+  exploreTitle: 'Explore o Azion UI',
   exploreLead: 'Tudo o que o sistema tem, para pessoas e para agentes.',
   exploreFoundations:
     'Tokens, cor, tipografia, idiomas, direita para a esquerda, acessibilidade e teclado.',
@@ -293,7 +293,7 @@ export const ptBR: Messages = {
   explorePatterns: 'Como construir formulários, tabelas, erros, estados e navegação.',
   exploreBlocks: 'Telas inteiras feitas com os componentes, num quadro redimensionável.',
   exploreAssets: 'As versões da marca, ilustrações de produto e ícones.',
-  exploreAi: 'O servidor MCP, o comando de configuração e como agentes constroem o WebKit.',
+  exploreAi: 'O servidor MCP, o comando de configuração e como agentes constroem o Azion UI.',
   whyTitle: 'Um kit move todas as interfaces da Azion',
   whyLead:
     '{components} componentes, {examples} exemplos ao vivo e {blocks} blocos: as mesmas peças do Azion Console, moldadas pelas equipes que as usam todo dia.',
@@ -310,7 +310,7 @@ export const ptBR: Messages = {
   categoryLead: '{count} componentes',
   componentsLead: '{count} componentes, cada um com seus exemplos, API e diretrizes.',
   blocksLead:
-    '{count} telas e fragmentos, cada um com seus estados, código e diretrizes. Copie um com npx @aziontech/webkit add <id>.',
+    '{count} telas e fragmentos, cada um com seus estados, código e diretrizes. Copie um com npx @aziontech/ui add <id>.',
   copyPageTip: 'Copie esta página em Markdown, pronta para colar em um assistente.',
   copyBlockTip: 'Copie este bloco em Markdown, pronto para colar em um assistente.'
 }

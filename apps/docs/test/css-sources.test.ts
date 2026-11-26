@@ -11,7 +11,7 @@ import {
   writeDocsSources,
   writeFrameStyles
 } from '../plugins/css-sources.ts'
-import { WEBKIT } from '../plugins/paths.ts'
+import { AZION_UI } from '../plugins/paths.ts'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 
@@ -27,7 +27,7 @@ test('the app stylesheet holds no utilities: each page loads one utility sheet, 
   assert.doesNotMatch(styles('main.css'), /tailwindcss\/utilities|@source/)
   const docs = styles('docs-utilities.css')
   const full = styles('full-utilities.css')
-  assert.doesNotMatch(docs, /@aziontech\/webkit\/styles\/all|packages\/webkit\/(examples|blocks)/)
+  assert.doesNotMatch(docs, /@aziontech\/ui\/styles\/all|packages\/ui\/(examples|blocks)/)
   for (const line of docs.split('\n').filter((entry) => /^@(source|import '\.\.)/.test(entry)))
     assert.ok(
       full.includes(line),
@@ -40,17 +40,17 @@ test('the app stylesheet holds no utilities: each page loads one utility sheet, 
     assert.doesNotMatch(vue(file), /utilities\.css/, `${file} must load only its frame sheet`)
 })
 
-test('the docs utility sheet scans only the docs app and the WebKit files it imports', () => {
+test('the docs utility sheet scans only the docs app and the Azion UI files it imports', () => {
   writeDocsSources()
   const files = sources(DOCS_SOURCES)
   assert.ok(files.some((file) => file.endsWith('/components/action/button/button.vue')))
-  assert.ok(files.every((file) => !file.includes('/packages/webkit/examples/')))
+  assert.ok(files.every((file) => !file.includes('/packages/ui/examples/')))
 })
 
 test('a frame compiles only its own example folder, the frame page and what they import', () => {
   const files = sources(writeFrameStyles('examples', 'button').replace(/\.vue$/, '.css'))
-  assert.equal(files[0], join(WEBKIT, 'examples/button'))
-  assert.ok(files.includes(join(WEBKIT, 'src/components/action/button/button.vue')))
+  assert.equal(files[0], join(AZION_UI, 'examples/button'))
+  assert.ok(files.includes(join(AZION_UI, 'src/components/action/button/button.vue')))
   assert.ok(
     files.every((path) => !path.includes('/data-table/')),
     'button pulls in unrelated parts'
@@ -62,7 +62,7 @@ test('a frame compiles only its own example folder, the frame page and what they
 })
 
 test('the source closure follows relative and package imports', () => {
-  const closure = sourceClosure([join(WEBKIT, 'examples/button/default.vue')])
-  assert.ok(closure.includes(join(WEBKIT, 'src/components/action/button/button.vue')))
+  const closure = sourceClosure([join(AZION_UI, 'examples/button/default.vue')])
+  assert.ok(closure.includes(join(AZION_UI, 'src/components/action/button/button.vue')))
   assert.ok(closure.every((path) => !/\.(test|spec)\.[jt]s$/.test(path)))
 })

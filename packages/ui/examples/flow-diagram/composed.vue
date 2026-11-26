@@ -1,5 +1,5 @@
 <script setup>
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
+  import FlowDiagram from '@aziontech/ui/flow-diagram'
 </script>
 
 <template>

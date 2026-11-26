@@ -1,8 +1,8 @@
 <script setup>
-  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import StoryIndexSection from '@aziontech/webkit/story-index-section'
+  import axurExtendedReversed from '@aziontech/ui/assets/axur-extended-reversed.svg'
+  import exameExtendedReversed from '@aziontech/ui/assets/exame-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import StoryIndexSection from '@aziontech/ui/story-index-section'
 </script>
 
 <template>

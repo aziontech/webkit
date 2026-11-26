@@ -1,5 +1,5 @@
 <script setup>
-  import CurrencyAmount from '@aziontech/webkit/currency-amount'
+  import CurrencyAmount from '@aziontech/ui/currency-amount'
 </script>
 
 <template>

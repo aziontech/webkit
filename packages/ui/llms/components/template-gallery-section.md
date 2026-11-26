@@ -2,7 +2,7 @@
 
 > The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a two-column wall, scrolling once the band splits, of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
 
-- Import: `import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'`
+- Import: `import TemplateGallerySection from '@aziontech/ui/template-gallery-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [template-gallery-section.json](template-gallery-section.json)
 
@@ -63,7 +63,7 @@
 - A card without an `href` is not interactive: no hand pointer, no hover light
 - Empty: when no template carries a title the band renders nothing — not the split, not the marquee, not the closing frame
 - `closing`: the tall hatched closing frame (`data-hatch="true"`, decorative) follows the band; `hatch` off drops it
-- A template `icon` that is a colour logo (`az-color az-<name>`) paints only when the app's stylesheet compiles that logo: the site lists every logo its page JSON may name with `@source inline("az-<name>")` in its `webkit.css`, since page JSON is not scanned source
+- A template `icon` that is a colour logo (`az-color az-<name>`) paints only when the app's stylesheet compiles that logo: the site lists every logo its page JSON may name with `@source inline("az-<name>")` in its `azion-ui.css`, since page JSON is not scanned source
 
 ## Accessibility
 
@@ -98,7 +98,7 @@
 
 ```vue
 <script setup>
-  import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
+  import TemplateGallerySection from '@aziontech/ui/template-gallery-section'
 </script>
 
 <template>
@@ -148,10 +148,10 @@
 
 ```vue
 <script setup>
-  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
-  import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
+  import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
+  import TemplateGallerySection from '@aziontech/ui/template-gallery-section'
 
   const primaryAction = {
     label: 'Start for free',

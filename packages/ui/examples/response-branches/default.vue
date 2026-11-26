@@ -1,9 +1,9 @@
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ResponseBranches from '@aziontech/webkit/response-branches'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import ResponseBranches from '@aziontech/ui/response-branches'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
   import { ref } from 'vue'
 
   const versions = ref([

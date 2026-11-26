@@ -1,5 +1,5 @@
 <script setup>
-  import Trace from '@aziontech/webkit/trace'
+  import Trace from '@aziontech/ui/trace'
 </script>
 
 <template>

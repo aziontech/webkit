@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
-  import Item from '@aziontech/webkit/item-root'
-  import Popover from '@aziontech/webkit/popover'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import type { FilterMenuValue } from '@aziontech/ui/filter-menu'
+  import Item from '@aziontech/ui/item-root'
+  import Popover from '@aziontech/ui/popover'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import {
     countFieldValues,

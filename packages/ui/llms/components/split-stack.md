@@ -2,7 +2,7 @@
 
 > A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next. With `sticky` on, each band pins under the site header a step lower than the band before it, so the run piles up as the reader scrolls and every band already read stays visible as a ledge above the one being read. The component owns the band rules, the shared hairlines and the pin offsets, and by default every band is split into two frames: a `media-split` composed into the stack frames its copy cell and its media cell as two `registration-frame`es, left and right, each with its four marks. The bands themselves are whatever the consumer composes into the default slot — each direct child becomes one band. It carries no copy, heading or media of its own.
 
-- Import: `import SplitStack from '@aziontech/webkit/split-stack'`
+- Import: `import SplitStack from '@aziontech/ui/split-stack'`
 - Category: layout · Surface: site · Structure: monolithic
 - API as JSON: [split-stack.json](split-stack.json)
 
@@ -74,9 +74,9 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
-  import SplitStack from '@aziontech/webkit/split-stack'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaSplit from '@aziontech/ui/media-split'
+  import SplitStack from '@aziontech/ui/split-stack'
 </script>
 
 <template>
@@ -122,9 +122,9 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
-  import SplitStack from '@aziontech/webkit/split-stack'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaSplit from '@aziontech/ui/media-split'
+  import SplitStack from '@aziontech/ui/split-stack'
 </script>
 
 <template>

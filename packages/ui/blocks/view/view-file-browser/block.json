@@ -30,7 +30,7 @@
     "object preview",
     "visualizar arquivo"
   ],
-  "skills": ["webkit-tables", "webkit-lists", "webkit-ui-states"],
+  "skills": ["azion-ui-tables", "azion-ui-lists", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "view-file-browser.vue"

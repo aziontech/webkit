@@ -1,8 +1,8 @@
 {
  "name": "rating",
  "binding": "Rating",
- "import": "@aziontech/webkit/rating",
- "treeShakeableImport": "@aziontech/webkit/rating",
+ "import": "@aziontech/ui/rating",
+ "treeShakeableImport": "@aziontech/ui/rating",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

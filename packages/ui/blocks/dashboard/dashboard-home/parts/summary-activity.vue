@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import Link from '@aziontech/webkit/link'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Card from '@aziontech/ui/card'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import Link from '@aziontech/ui/link'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
 
   import { sampleSummaryActivity, type SummaryOperation } from '../sample'
 

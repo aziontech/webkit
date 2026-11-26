@@ -2,7 +2,7 @@
 
 > A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height. It shows the shape of a recent history next to a number — in a stat tile, a table row or a marquee card — where a full `chart` would be too much.
 
-- Import: `import SparkChart from '@aziontech/webkit/spark-chart'`
+- Import: `import SparkChart from '@aziontech/ui/spark-chart'`
 - Category: chart · Surface: app · Structure: monolithic
 - API as JSON: [spark-chart.json](spark-chart.json)
 
@@ -64,7 +64,7 @@
 
 ```vue
 <script setup>
-  import SparkChart from '@aziontech/webkit/spark-chart'
+  import SparkChart from '@aziontech/ui/spark-chart'
 </script>
 
 <template>
@@ -78,7 +78,7 @@
 
 ```vue
 <script setup>
-  import SparkChart from '@aziontech/webkit/spark-chart'
+  import SparkChart from '@aziontech/ui/spark-chart'
 </script>
 
 <template>
@@ -109,7 +109,7 @@
 
 ```vue
 <script setup>
-  import SparkChart from '@aziontech/webkit/spark-chart'
+  import SparkChart from '@aziontech/ui/spark-chart'
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import TableExportButton from '@aziontech/webkit/table-export-button'
+  import DataTable from '@aziontech/ui/data-table'
+  import TableExportButton from '@aziontech/ui/table-export-button'
 
   const rows = [
     { id: '1001', name: 'Workload Alpha', status: 'Active', modified: 'Jan 1, 2026, 09:00 AM' },

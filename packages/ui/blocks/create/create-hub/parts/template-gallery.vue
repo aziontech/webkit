@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
-  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import IntegrationCard from '@aziontech/ui/integration-card'
+  import ScrollArea from '@aziontech/ui/scroll-area'
   import { computed, ref } from 'vue'
 
   import type { CreateHubTemplate, CreateHubTemplateSection } from '../types'

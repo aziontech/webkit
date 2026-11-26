@@ -1,8 +1,8 @@
 {
  "name": "button",
  "binding": "Button",
- "import": "@aziontech/webkit/button",
- "treeShakeableImport": "@aziontech/webkit/button",
+ "import": "@aziontech/ui/button",
+ "treeShakeableImport": "@aziontech/ui/button",
  "category": "action",
  "surface": "app",
  "structure": "monolithic",

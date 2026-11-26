@@ -3,7 +3,7 @@
 Slots are a component's anatomy surface — where the consumer puts content — the
 counterpart to props (data + scalar config). Every slot must be declared and typed with
 `defineSlots`, so the editor knows the slot exists and what a scoped slot yields. An
-untyped slot is invisible to tooling. The `webkit/require-authoring-standards` ESLint rule blocks
+untyped slot is invisible to tooling. The `azion-ui/require-authoring-standards` ESLint rule blocks
 a `<slot>` in the template with no `defineSlots` declaration; the naming and payload
 conventions below are enforced by review.
 

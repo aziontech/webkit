@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
   import LogViewer, {
     type LogViewerStepStatus,
     type LogViewerStepsView
-  } from '@aziontech/webkit/log-viewer'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  } from '@aziontech/ui/log-viewer'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
 
   import { sampleCreateFlowFailedSteps } from '../sample'

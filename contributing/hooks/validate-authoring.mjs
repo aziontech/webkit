@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// PreToolUse hook: blocks Write/Edit/MultiEdit on packages/webkit/src/** (excluding the
+// PreToolUse hook: blocks Write/Edit/MultiEdit on packages/ui/src/** (excluding the
 // wip/ legacy zone) that INTRODUCE a wrong construction pattern the contributing/rules define:
 //   - hand-rolled modelValue prop + update:modelValue emit   → use defineModel (v-model.md)
 //   - runtime object defineProps({...})                      → typed defineProps<Props>() (props.md)
@@ -9,7 +9,7 @@
 //   - a new composable authored as .js                       → composables are .ts (composables.md)
 //   - @deprecated with no replacement/version                → name it (deprecation.md)
 //   - a prose comment anywhere under packages/               → API docs only (comments.md)
-//   - a literal UI string in a component template / prop default → locale catalog (webkit-strings.md)
+//   - a literal UI string in a component template / prop default → locale catalog (azion-ui-strings.md)
 //   - a composable returning reactive()/a raw ref()/no return type, or leaking a listener,
 //     timer, frame or observer with no onScopeDispose                 (composables.md)
 //   - defineProps declaring `as` / `asChild`                          (root-element.md)
@@ -37,8 +37,8 @@ import {
 } from './lib/texture-backdrop.mjs'
 
 const ROOT = process.cwd()
-const TARGET_PREFIX = 'packages/webkit/src/'
-const WIP_PREFIX = 'packages/webkit/src/components/wip/'
+const TARGET_PREFIX = 'packages/ui/src/'
+const WIP_PREFIX = 'packages/ui/src/components/wip/'
 const PACKAGES_PREFIX = 'packages/'
 const PACKAGE_WIDE_CHECKS = new Set(['prose-comment'])
 
@@ -99,7 +99,7 @@ async function main() {
 
   const relPath = relative(ROOT, resolve(filePath))
   if (!relPath.startsWith(PACKAGES_PREFIX) || relPath.startsWith(WIP_PREFIX)) process.exit(0)
-  const inWebkitSrc = relPath.startsWith(TARGET_PREFIX)
+  const inAzionUiSrc = relPath.startsWith(TARGET_PREFIX)
 
   const baseline = tool === 'Write' ? '' : readExistingFile(filePath)
   const result = resultingContent(tool, ti, baseline)
@@ -107,12 +107,12 @@ async function main() {
   const violations = []
 
   // Path-based: a NEW composable must be .ts, not .js (only on Write of a fresh file).
-  if (inWebkitSrc && tool === 'Write' && /(^|\/)use-[^/]*\.js$/.test(relPath) && !baseline) {
+  if (inAzionUiSrc && tool === 'Write' && /(^|\/)use-[^/]*\.js$/.test(relPath) && !baseline) {
     violations.push({ id: 'composable-js', message: MESSAGES['composable-js'] })
   }
 
   for (const c of CONTENT_CHECKS) {
-    if (!inWebkitSrc && !PACKAGE_WIDE_CHECKS.has(c.id)) continue
+    if (!inAzionUiSrc && !PACKAGE_WIDE_CHECKS.has(c.id)) continue
     if (!c.applies(relPath)) continue
     const added = occurrences(c, result, relPath) - occurrences(c, baseline, relPath)
     if (added > 0) violations.push({ id: c.id, message: c.message, added })
@@ -145,7 +145,7 @@ async function main() {
     }
   }
 
-  if (inWebkitSrc) {
+  if (inAzionUiSrc) {
     const before = scanSignatures(filePath, baseline)
     const after = scanSignatures(filePath, result)
     for (const id of Object.keys(SIGNATURE_MESSAGES)) {
@@ -167,7 +167,7 @@ async function main() {
 
   if (violations.length === 0) process.exit(0)
 
-  const lines = [`Webkit authoring validation blocked ${tool} on ${relPath}.`, '']
+  const lines = [`Azion UI authoring validation blocked ${tool} on ${relPath}.`, '']
   for (const v of violations) {
     lines.push(`  [${v.id}]${v.added > 1 ? ` ×${v.added}` : ''} ${v.message}`)
   }

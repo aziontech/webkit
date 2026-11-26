@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
-  import DocAgentCard from '@aziontech/webkit/doc-agent-card'
-  import DocCard from '@aziontech/webkit/doc-card'
-  import DocCardGroup from '@aziontech/webkit/doc-card-group'
-  import DocHero from '@aziontech/webkit/doc-hero'
+  import Button from '@aziontech/ui/button'
+  import CopyPromptButton from '@aziontech/ui/copy-prompt-button'
+  import DocAgentCard from '@aziontech/ui/doc-agent-card'
+  import DocCard from '@aziontech/ui/doc-card'
+  import DocCardGroup from '@aziontech/ui/doc-card-group'
+  import DocHero from '@aziontech/ui/doc-hero'
   import { useHead } from '@unhead/vue'
   import index from 'virtual:docs-nav'
   import { computed } from 'vue'
@@ -13,7 +13,7 @@
 
   const t = messages
   useHead({
-    title: 'WebKit — Azion design system',
+    title: 'Azion UI — Azion design system',
     meta: [{ name: 'description', content: computed(() => t.value.homeLead) }]
   })
 
@@ -99,10 +99,10 @@
   ])
 
   const sections = computed(() => [
-    { id: 'webkit-for-ai', title: t.value.aiTitle, lead: t.value.aiLead },
-    { id: 'explore-webkit', title: t.value.exploreTitle, lead: t.value.exploreLead },
+    { id: 'azion-ui-for-ai', title: t.value.aiTitle, lead: t.value.aiLead },
+    { id: 'explore-azion-ui', title: t.value.exploreTitle, lead: t.value.exploreLead },
     {
-      id: 'why-webkit',
+      id: 'why-azion-ui',
       title: t.value.whyTitle,
       lead: format(t.value.whyLead, {
         components: index.components.length,

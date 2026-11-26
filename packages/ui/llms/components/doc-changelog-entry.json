@@ -1,8 +1,8 @@
 {
  "name": "doc-changelog-entry",
  "binding": "DocChangelogEntry",
- "import": "@aziontech/webkit/doc-changelog-entry",
- "treeShakeableImport": "@aziontech/webkit/doc-changelog-entry",
+ "import": "@aziontech/ui/doc-changelog-entry",
+ "treeShakeableImport": "@aziontech/ui/doc-changelog-entry",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

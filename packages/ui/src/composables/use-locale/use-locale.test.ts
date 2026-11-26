@@ -205,13 +205,13 @@ describe('useLocale', () => {
         expect(l.t('dialog.close')).toBe('Close')
         probe(() => provideLocale({ locale: 'es-AR', catalogs: BUILT_IN_CATALOGS }))
         expect(warn).toHaveBeenCalledTimes(1)
-        expect(String(warn.mock.calls[0]?.[0])).toContain('@aziontech/webkit/locales/es')
+        expect(String(warn.mock.calls[0]?.[0])).toContain('@aziontech/ui/locales/es')
       } finally {
         warn.mockRestore()
       }
     })
 
-    it('does not warn for a locale WebKit ships no catalog for', () => {
+    it('does not warn for a locale Azion UI ships no catalog for', () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
       try {
         const l = probe(() => provideLocale({ locale: 'ja', catalogs: BUILT_IN_CATALOGS }))

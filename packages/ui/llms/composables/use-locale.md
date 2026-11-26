@@ -1,10 +1,10 @@
 # useLocale
 
-Composable `@aziontech/webkit/use-locale`. The signatures and option tables below are read from its typed source, [`src/composables/use-locale/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-locale/index.ts).
+Composable `@aziontech/ui/use-locale`. The signatures and option tables below are read from its typed source, [`src/composables/use-locale/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-locale/index.ts).
 
 ```ts
-import { useLocale, usePortalLocale, createTranslator, directionOf, mergeMessages, pickCatalog, provideLocale, BUILT_IN_CATALOGS } from '@aziontech/webkit/use-locale'
-import type { UseLocaleReturn, Direction, MessageKey, MessageParams, Messages, PartialMessages, PluralMessage, PortalLocaleAttrs, DirectionSetting, FileSizeUnit, PluralForms, ProvidedLocale, ProvideLocaleOptions } from '@aziontech/webkit/use-locale'
+import { useLocale, usePortalLocale, createTranslator, directionOf, mergeMessages, pickCatalog, provideLocale, BUILT_IN_CATALOGS } from '@aziontech/ui/use-locale'
+import type { UseLocaleReturn, Direction, MessageKey, MessageParams, Messages, PartialMessages, PluralMessage, PortalLocaleAttrs, DirectionSetting, FileSizeUnit, PluralForms, ProvidedLocale, ProvideLocaleOptions } from '@aziontech/ui/use-locale'
 ```
 
 ## `useLocale`

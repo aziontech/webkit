@@ -3,11 +3,11 @@
 > The page a support agent creates a ticket on, on behalf of a customer: the creation header with Back, the brand, Tickets › Create Ticket and the account, then a centred form column with a small `PageHeader` and three `SettingsGroup` bands of `SettingsRow`s in flush `Card`s. Requester: a `Combobox` that searches contacts by name or email, each row an `Avatar` with the name and email, with Add new contact swapping it for Contact name and Contact email inputs, and CC as `MultiSelect` chips of email addresses. Request: Subject (`Input`), Description (`MarkdownEditor` with @mentions of agents and an attachments footer: Attach files and a `FileTokenGroup`), Channel, Type and Priority (`Select`, each priority a `PriorityTag`). Assignment: Group and Assignee (`Combobox`, the agents with `Avatar` presence and only those in the chosen group) and Tags (`MultiSelect` chips). Every field starts empty; Requester, Subject and Description carry the required mark. A raised `SaveBar` holds Cancel, Save and add another and Save (⌘ Enter). Fields turn invalid only after a create press, with a `FieldError` under each and focus on the first; there is no summary. A failed request opens a danger `Alert` with Retry under the page title, scrolled into view, and keeps every value; a created ticket raises a success `toast` with Open ticket and clears the form for the next one. Escape cancels, and a changed form asks before it is discarded (`ConfirmDialog`). The block fetches nothing: it emits `create` with the typed ticket and whether to add another, and the page passes back `submitting`, `error` or `created`.
 
 - Surface: app
-- Source: `blocks/create/create-ticket/create-ticket.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-ticket/create-ticket.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-ticket")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldError`, [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MarkdownEditor](../../components/markdown-editor.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), [PriorityTag](../../components/priority-tag.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Toast](../../components/toast.md), `use-escape-to-cancel`, `use-file-picker`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
-- Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
+- Skills: `azion-ui-create-surface`, `azion-ui-form`, `azion-ui-errors`, `azion-ui-layout`
 
 ## Asked as
 
@@ -15,7 +15,7 @@ create ticket; new ticket; new support ticket; log a ticket for a customer; agen
 
 The page a support agent opens a ticket on, on behalf of a customer who called, chatted or wrote in. The agent's job is to say who asked, what they need and who owns it, then create the ticket and either go to it or log the next one. It follows the Zendesk and Freshdesk new-ticket forms on the house create page (`create/create-page`): its own creation header with no sidebar, a centred form column, three bands of rows, and a raised commit card at the bottom with Cancel, Save and add another, and Save.
 
-A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create Ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/webkit-create-surface`).
+A ticket creates on a page, not in a drawer: it is a first-level resource the inbox routes to (`/tickets/new`, the Create Ticket button of `view/view-ticket-inbox`), one ticket is one deliberate act rather than a small tuple created in bulk, and the description needs the full measure (`skills/azion-ui-create-surface`).
 
 ## When to use
 
@@ -156,7 +156,7 @@ Then delete `sample.ts` and its import. A large contact list moves to server sea
 - **Failure:** title `The ticket wasn't created.`, the page's message, `Retry`.
 - **Success:** `Ticket #4840 was created.`, the subject, `Open ticket`.
 - **Commit:** `Cancel`, `Save and add another`, `Save`. The discard dialog uses the built-in `useUnsavedChanges` labels.
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -200,16 +200,16 @@ Each variant is the same screen in another state: `get_block("create/create-tick
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { AvatarPresence } from '@aziontech/webkit/avatar'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import type { PriorityTagPriority } from '@aziontech/webkit/priority-tag'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
+  import Alert from '@aziontech/ui/alert'
+  import type { AvatarPresence } from '@aziontech/ui/avatar'
+  import PageHeader from '@aziontech/ui/page-header'
+  import type { PriorityTagPriority } from '@aziontech/ui/priority-tag'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import { toast } from '@aziontech/ui/toast'
+  import { useEscapeToCancel } from '@aziontech/ui/use-escape-to-cancel'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
+  import { focusFirstInvalid } from '@aziontech/ui/utils/focus-invalid'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import {
@@ -741,11 +741,11 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppHeaderAccount from '@aziontech/ui/app-header-account'
+  import Brand from '@aziontech/ui/brand'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import IconButton from '@aziontech/ui/icon-button'
 
   const emit = defineEmits<{
     back: [event: MouseEvent]
@@ -790,12 +790,12 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
   import { computed, ref } from 'vue'
 
   import type { CreateTicketContact } from '../create-ticket.vue'
@@ -907,11 +907,11 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Combobox from '@aziontech/webkit/combobox'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Button from '@aziontech/ui/button'
+  import Combobox from '@aziontech/ui/combobox'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import SettingsRow from '@aziontech/ui/settings-row'
   import { computed, nextTick, ref } from 'vue'
 
   import type { CreateTicketContact } from '../create-ticket.vue'
@@ -1106,7 +1106,7 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import Avatar, { type AvatarPresence } from '@aziontech/webkit/avatar'
+  import Avatar, { type AvatarPresence } from '@aziontech/ui/avatar'
 
   export interface TicketPersonOptionProps {
     /** The person's or the team's name. */
@@ -1156,16 +1156,16 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import type { MarkdownEditorMention } from '@aziontech/webkit/markdown-editor'
-  import PriorityTag from '@aziontech/webkit/priority-tag'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import type { MarkdownEditorMention } from '@aziontech/ui/markdown-editor'
+  import PriorityTag from '@aziontech/ui/priority-tag'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type {
     CreateTicketChannel,
@@ -1320,12 +1320,12 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import FieldError from '@aziontech/webkit/field-error'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import MarkdownEditor, { type MarkdownEditorMention } from '@aziontech/webkit/markdown-editor'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import FieldError from '@aziontech/ui/field-error'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import IconButton from '@aziontech/ui/icon-button'
+  import MarkdownEditor, { type MarkdownEditorMention } from '@aziontech/ui/markdown-editor'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { computed } from 'vue'
 
   export interface TicketDescriptionFieldProps {
@@ -1414,12 +1414,12 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Combobox from '@aziontech/webkit/combobox'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import Combobox from '@aziontech/ui/combobox'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
   import { computed, ref, watch } from 'vue'
 
   import type { CreateTicketAgent, CreateTicketGroup } from '../create-ticket.vue'
@@ -1569,8 +1569,8 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
 </script>
 
 <template>
@@ -1605,9 +1605,9 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import { toAriaKeyshortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import { toAriaKeyshortcuts } from '@aziontech/ui/use-shortcuts'
 
   export interface TicketSaveActionsProps {
     /** The pickers' data is still arriving; neither create button works yet. */
@@ -1681,9 +1681,9 @@ export function ticketErrors(
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import type { UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
   import { computed } from 'vue'
 
   export interface TicketDiscardDialogProps {

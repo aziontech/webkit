@@ -1,5 +1,5 @@
 <script setup>
-  import FeatureScrollSection from '@aziontech/webkit/feature-scroll-section'
+  import FeatureScrollSection from '@aziontech/ui/feature-scroll-section'
 
   const items = [
     {

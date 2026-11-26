@@ -58,7 +58,7 @@
      * and the band no scene, and `illustrationLabel` its accessible name.
      */
     tabs?: FeatureTabsSectionTab[]
-    /** Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. */
+    /** Live scene drawn as the media of every tab without code, `{ component, props? }` naming a scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. */
     scene?: FeatureTabsSectionScene
     /** Opens the next tab on a timer, with the composed tabs' visible pause control. */
     autoplay?: boolean

@@ -2,7 +2,7 @@
 
 > A two-column band pairing a block of copy with a piece of media — a screenshot, diagram or short video — each holding half the frame. It is the workhorse section of a product page: one claim, one picture of the claim, repeated down the page with the sides alternating. It is a **sub-section**, not a section header, and its typography says so: the headline is `heading-md` against `module-header`'s `heading-xl`, because these bands sit _inside_ a section that a `module-header` has already opened. A band that needs the larger weight is opening a section, and wants `module-header`. Typographic weight and heading level are separate choices. The band sets its headline at `heading-md`, or `heading-xl` when `size` is `large`; `headingLevel` decides whether that headline is an `h2` or an `h3`, so a band nested under a section that already has its own `h2` does not open a second one at the same level. The seam between the two cells is the grid's own one-pixel gap over a rule fill, so neither cell draws a border and the hairline lands in the same place whichever side the media is on — horizontal while the band is stacked, vertical once it splits. `divided` drops it for a band whose two halves should read as one plate. Whether the band ever splits is `orientation`'s call. `horizontal` is the band proper: it splits on its own width, not the screen's — stacked while the band is narrower than 60rem, two equal cells once it is 60rem wide — so a band in a narrow column (a docs preview, a sidebar layout) stacks while a full-width one splits. `vertical` holds the stacked form at every width, and `variant` then picks whether the media sits above the copy or below it rather than left or right — the shape a band takes in a column too narrow to carry two halves.
 
-- Import: `import MediaSplit from '@aziontech/webkit/media-split'`
+- Import: `import MediaSplit from '@aziontech/ui/media-split'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [media-split.json](media-split.json)
 
@@ -124,8 +124,8 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaSplit from '@aziontech/ui/media-split'
 </script>
 
 <template>
@@ -145,8 +145,8 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaSplit from '@aziontech/ui/media-split'
 </script>
 
 <template>
@@ -179,8 +179,8 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaSplit from '@aziontech/ui/media-split'
 </script>
 
 <template>

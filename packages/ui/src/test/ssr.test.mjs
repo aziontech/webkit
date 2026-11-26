@@ -16,11 +16,11 @@ const PKG = join(dirname(fileURLToPath(import.meta.url)), '../..')
 const EXPORTS = JSON.parse(readFileSync(join(PKG, 'package.json'), 'utf8')).exports
 
 const selfExports = {
-  name: 'webkit-self-exports',
+  name: 'azion-ui-self-exports',
   enforce: 'pre',
   resolveId(id) {
-    if (!id.startsWith('@aziontech/webkit/')) return null
-    const entry = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    if (!id.startsWith('@aziontech/ui/')) return null
+    const entry = EXPORTS[`./${id.slice('@aziontech/ui/'.length)}`]
     const target = typeof entry === 'string' ? entry : entry?.default
     return target ? join(PKG, target) : null
   }

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-09-26
 last_updated: 2026-11-18
-checksum: a25647788c1a487cfaac0cdd06bda621f7d78f7a421799c970ba972c4ebd582c
+checksum: 14096de72750bc17c7505cc235604a7d1b6a07c95b76800487fbce8904d5bfa1
 ---
 
 # Band Stack — Component Spec
@@ -51,8 +51,8 @@ The component owns the band rules, the shared hairlines and the pin offsets, and
 
 ```vue
 <script setup>
-  import SplitStack from '@aziontech/webkit/split-stack'
-  import MediaSplit from '@aziontech/webkit/media-split'
+  import SplitStack from '@aziontech/ui/split-stack'
+  import MediaSplit from '@aziontech/ui/media-split'
 </script>
 
 <template>
@@ -145,7 +145,7 @@ _none_ — pinning follows the scroll position; the component declares no transi
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

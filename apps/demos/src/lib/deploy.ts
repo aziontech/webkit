@@ -1,4 +1,4 @@
-import { toast } from '@aziontech/webkit/toast'
+import { toast } from '@aziontech/ui/toast'
 import { reactive } from 'vue'
 
 import { router } from '../router'

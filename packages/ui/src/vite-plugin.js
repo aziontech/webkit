@@ -3,15 +3,15 @@ import { resolve } from 'node:path'
 
 import {
   appSourceFiles,
+  azionUiSubpaths,
   isAppSource,
   planSources,
   SOURCES_FILE,
-  webkitSubpaths,
   writeSources
 } from './cli/css-sources.js'
 
 /**
- * @typedef {object} WebkitPluginOptions
+ * @typedef {object} AzionUiPluginOptions
  * @property {string} [file]
  * @property {number} [settle]
  */
@@ -43,7 +43,7 @@ const index = (state) => {
   for (const f of files) {
     const text = read(f)
     if (text === null) continue
-    const next = webkitSubpaths(text)
+    const next = azionUiSubpaths(text)
     if (text.trim() === '' && state.byFile.get(f)?.length) continue
     state.byFile.set(f, next)
   }
@@ -68,7 +68,7 @@ const settleFile = (state, abs, confirm = null) => {
     if (confirm === 'missing' && state.byFile.delete(abs)) sync(state)
     return
   }
-  const next = webkitSubpaths(text)
+  const next = azionUiSubpaths(text)
   const shrinks = drops(prev, next)
   if (shrinks && text !== confirm) return schedule(state, abs, () => settleFile(state, abs, text))
   state.byFile.set(abs, next)
@@ -89,10 +89,10 @@ const watchers = (state) => ({
 })
 
 /**
- * @param {WebkitPluginOptions} [options]
+ * @param {AzionUiPluginOptions} [options]
  * @returns {import('vite').Plugin}
  */
-export default function webkit(options = {}) {
+export default function azionUi(options = {}) {
   const state = {
     file: options.file ?? SOURCES_FILE,
     settle: options.settle ?? 80,
@@ -104,7 +104,7 @@ export default function webkit(options = {}) {
   const { onChange, onUnlink } = watchers(state)
 
   return {
-    name: '@aziontech/webkit',
+    name: '@aziontech/ui',
     enforce: 'pre',
     configResolved(config) {
       state.root = config.root

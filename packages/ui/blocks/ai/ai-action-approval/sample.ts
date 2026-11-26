@@ -3,7 +3,7 @@ import type {
   AiChatPart,
   AiChatTool,
   AiChatToolCallPart
-} from '@aziontech/webkit/utils/ai-chat'
+} from '@aziontech/ui/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 

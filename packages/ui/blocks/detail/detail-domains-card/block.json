@@ -23,7 +23,7 @@
     "related resources table",
     "recursos vinculados"
   ],
-  "skills": ["webkit-tables"],
+  "skills": ["azion-ui-tables"],
   "primary": {
     "name": "Default",
     "file": "detail-domains-card.vue"

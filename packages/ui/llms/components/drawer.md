@@ -2,8 +2,8 @@
 
 > A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row. Nothing inside a drawer navigates: no tabs, breadcrumb or links to other pages. `Drawer.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay, traps focus and scroll-locks the page, so the page behind cannot be clicked or tabbed to while it is open. The header gets the close (X) button on its own unless `closable` is false. It closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger. `:modal="false"` is the one opt-out: no overlay, no focus trap, no scroll lock, for a side panel that works next to the page it talks about (as Radix `modal={false}`).
 
-- Import: `import DrawerRoot from '@aziontech/webkit/drawer-root'`
-- Compound import (dot notation, not tree-shakeable): `import Drawer from '@aziontech/webkit/drawer'`
+- Import: `import DrawerRoot from '@aziontech/ui/drawer-root'`
+- Compound import (dot notation, not tree-shakeable): `import Drawer from '@aziontech/ui/drawer'`
 - Category: overlay · Surface: app · Structure: composition
 - API as JSON: [drawer.json](drawer.json)
 
@@ -56,23 +56,23 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/drawer-close`
-- `@aziontech/webkit/drawer-content`
-- `@aziontech/webkit/drawer-description`
-- `@aziontech/webkit/drawer-title`
-- `@aziontech/webkit/drawer-trigger`
-- `@aziontech/webkit/drawer-header`
-- `@aziontech/webkit/drawer-body`
-- `@aziontech/webkit/drawer-footer`
+- `@aziontech/ui/drawer-close`
+- `@aziontech/ui/drawer-content`
+- `@aziontech/ui/drawer-description`
+- `@aziontech/ui/drawer-title`
+- `@aziontech/ui/drawer-trigger`
+- `@aziontech/ui/drawer-header`
+- `@aziontech/ui/drawer-body`
+- `@aziontech/ui/drawer-footer`
 
 ## Sub-components
 
-- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header`, `Drawer.Body` and `Drawer.Footer`, each importable on its own as `@aziontech/webkit/drawer-header`, `drawer-body` and `drawer-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat).
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header`, `Drawer.Body` and `Drawer.Footer`, each importable on its own as `@aziontech/ui/drawer-header`, `drawer-body` and `drawer-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/ui/drawer`; the root alone is `@aziontech/ui/drawer-root`. The parts stay in the root folder (flat).
 - `drawer-close.vue` — Public sub-component `drawer-close`: the close (X) `IconButton`. `Drawer.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the drawer.
 - `drawer-content.vue` — Public sub-component `drawer-content`: the drawer itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay while `modal` (`aria-hidden`, `drawer-content__backdrop` test id; a click on it closes the drawer when `dismissible`) and the `role="dialog"` panel, traps focus and scroll-locks the page while `modal`, and restores focus on close.
 - `drawer-description.vue` — Public sub-component `drawer-description`.
 - `drawer-title.vue` — Public sub-component `drawer-title`.
-- `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
+- `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is an Azion UI `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
 
 - Test ids: each part falls back to its own name (`drawer-trigger`, `drawer-content`, `drawer-title`, `drawer-description`, `drawer-close`, and `panel-header`, `panel-body`, `panel-footer` for the shared regions), and a `data-testid` passed to the part wins; the root's `data-testid` does not rename the parts. The inner overlay and shell of `drawer-content` are `drawer-content__backdrop`, `__portal` and `__panel-shell`. The close button `Drawer.Content` adds while `closable` belongs to the root: `drawer__close`, or `<root test id>__close`.
 
@@ -109,8 +109,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Drawer from '@aziontech/webkit/drawer'
+  import Button from '@aziontech/ui/button'
+  import Drawer from '@aziontech/ui/drawer'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -161,15 +161,15 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import DrawerDescription from '@aziontech/ui/drawer-description'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import DrawerTrigger from '@aziontech/ui/drawer-trigger'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
   import { reactive, watch } from 'vue'
 
   const sizes = ['small', 'medium', 'large']
@@ -241,15 +241,15 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import DrawerDescription from '@aziontech/ui/drawer-description'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import DrawerTrigger from '@aziontech/ui/drawer-trigger'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
   import { ref } from 'vue'
 
   const open = ref(false)

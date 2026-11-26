@@ -2,7 +2,7 @@
 
 > The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community). The rail is a single path that bends inward as the outline nests, and the active marker is a dash cut from that same path, so moving between headings slides the marker **along** the line, through the bends, rather than jumping a separate bar between two positions.
 
-- Import: `import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'`
+- Import: `import DocTableOfContents from '@aziontech/ui/doc-table-of-contents'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-table-of-contents.json](doc-table-of-contents.json)
 
@@ -67,7 +67,7 @@
 
 ```vue
 <script setup>
-  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
+  import DocTableOfContents from '@aziontech/ui/doc-table-of-contents'
 </script>
 
 <template>
@@ -96,7 +96,7 @@
 
 ```vue
 <script setup>
-  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
+  import DocTableOfContents from '@aziontech/ui/doc-table-of-contents'
 </script>
 
 <template>

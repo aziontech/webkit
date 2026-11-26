@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import Button from '@aziontech/ui/button'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
   import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   const full = [

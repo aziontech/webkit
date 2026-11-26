@@ -123,7 +123,7 @@ Then delete `sample.ts` and its import.
 - **Link tooltips:** say where the link goes, e.g. "Open analytics-app-z1x2c3.example.com in a new tab".
 - **State band:** one sentence on the next step, e.g. "To deploy to Production, drop your project anywhere on this page, connect Git, or run platform deploy via the CLI."
 - **Failure banner:** what failed and what still serves, without an em dash, e.g. "A rule with the same behavior is already bound to this service, so the manifest was refused."
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -174,4 +174,4 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 - `state/state-project-intake` — the drop target an application page raises while files hover over it.
 - `detail/detail-invocations` — the page an invocation summary opens, with its request path, trace and logs; it owns the invocation summary card.
 - `edit/edit-resource` — the service Settings tab.
-- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-navigation` and `skills/webkit-layout`.
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/azion-ui-navigation` and `skills/azion-ui-layout`.

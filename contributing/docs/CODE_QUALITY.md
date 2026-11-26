@@ -17,8 +17,8 @@ Three goals, in this order:
 3. **Extension.** An app can restyle, recompose or add to a component without forking it, and a
    new feature can be added to a component without growing its root.
 
-In scope: every `.vue` and `.ts` under `packages/webkit/src/components`, `src/composables` and
-`packages/webkit/blocks`. Out of scope: visual design, tokens, naming (already standard), new
+In scope: every `.vue` and `.ts` under `packages/ui/src/components`, `src/composables` and
+`packages/ui/blocks`. Out of scope: visual design, tokens, naming (already standard), new
 components, and the docs site.
 
 Starting point, measured on 2026-11-20 (`feat/webkit-ai-ready`):
@@ -151,7 +151,7 @@ component is a companion part or a composable, not a new root prop.
 
 ### 3.5 Extension points every component has
 
-shadcn is extended by editing the copied file; Cloudscape hardly at all. WebKit ships as a
+shadcn is extended by editing the copied file; Cloudscape hardly at all. Azion UI ships as a
 package, so the extension points are part of the contract:
 
 1. The consumer `class` merges onto the root, and wins.
@@ -235,7 +235,7 @@ count only goes down.
 Blocks are what an agent copies, so the same goals apply to them:
 
 - **A block is a folder, not one file:** the page file (wiring and layout), `parts/` for its
-  regions, `use-<block>.ts` for its logic, `sample.ts` for its data. `webkit add` copies the
+  regions, `use-<block>.ts` for its logic, `sample.ts` for its data. `azion-ui add` copies the
   folder. shadcn's blocks have the same shape.
 - **A variant is a state, not a copy.** A variant file imports the block and passes props and
   sample data. It never repeats the block's template. Today the largest variants are 1,800-line
@@ -246,7 +246,7 @@ Blocks are what an agent copies, so the same goals apply to them:
 
 ## 4. Gates added
 
-Each is one script in `packages/webkit/scripts`, a gate in `run-gates.mjs` and a step of the
+Each is one script in `packages/ui/scripts`, a gate in `run-gates.mjs` and a step of the
 `toolkit` job, with no baseline (decision CQ-E: until 6.0 merges into `main` everything counts as
 new, so a check starts from an empty list and the code is fixed).
 

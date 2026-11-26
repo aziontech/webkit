@@ -11,7 +11,7 @@ DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`she
 
 ## When not to use
 
-- Choosing a single file as a form value: use a file upload field inside the form (`skills/webkit-form`).
+- Choosing a single file as a form value: use a file upload field inside the form (`skills/azion-ui-form`).
 - Browsing or managing stored files: use `view/view-file-browser`.
 - The build and deploy that follow the upload: use `state/state-async-submit` and `detail/detail-deployment-logs`.
 - Importing from a repository: use the From GitHub method in `state/state-first-use` or `create/create-deploy-template` (ImportFromGit).

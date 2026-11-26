@@ -1,6 +1,6 @@
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import ResponseBranches from '@aziontech/webkit/response-branches'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import ResponseBranches from '@aziontech/ui/response-branches'
   import { ref } from 'vue'
 
   const prompts = ref(['How do I purge the cache of one URL?'])

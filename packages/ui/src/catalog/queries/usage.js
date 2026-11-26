@@ -97,7 +97,7 @@ export function getUsageExample(catalog, name, { fromStory = true } = {}) {
     : generatedExample(catalog, comp)
 }
 
-function webkitImportProblem(catalog, raw) {
+function azionUiImportProblem(catalog, raw) {
   const prefix = catalog.prefix
   const sub = raw === catalog.bare ? '' : raw.slice(prefix.length)
   const denied = catalog.deniedPrefixes.find((p) => raw.startsWith(p))
@@ -116,7 +116,7 @@ function webkitImportProblem(catalog, raw) {
     kind: 'import',
     severity: 'error',
     import: raw,
-    message: `Unknown webkit export "${raw}".`,
+    message: `Unknown Azion UI export "${raw}".`,
     nearestPublishedPrefix: nearest ? `${prefix}${nearest}` : null,
     suggestions: catalog.suggestSubpaths(sub)
   }
@@ -131,11 +131,11 @@ function importProblems(catalog, importPath) {
         kind: 'import',
         severity: 'info',
         import: raw,
-        message: `Not a @aziontech/webkit import — nothing to validate against the catalog.`
+        message: `Not a @aziontech/ui import — nothing to validate against the catalog.`
       }
     ]
   }
-  const problem = webkitImportProblem(catalog, raw)
+  const problem = azionUiImportProblem(catalog, raw)
   return problem ? [problem] : []
 }
 
@@ -156,7 +156,7 @@ function styleProblems(catalog, component, classes) {
       classes: rejected,
       allowed: [...LAYOUT_CLASS_FAMILIES],
       message:
-        `Classes ${rejected.join(' ')} override the webkit component "${key}". Only layout utilities ` +
+        `Classes ${rejected.join(' ')} override the Azion UI component "${key}". Only layout utilities ` +
         `(${LAYOUT_CLASS_FAMILIES.join(', ')}) may go on its tag; move the rest to a wrapper element.`
     }
   ]

@@ -2,13 +2,13 @@
 
 ## Supported versions
 
-| Package                                                                                                                              | Supported |
-| ------------------------------------------------------------------------------------------------------------------------------------ | --------- |
-| `@aziontech/webkit` 6.x, with the `@aziontech/theme`, `@aziontech/icons` and `@aziontech/webkit-mcp` releases published alongside it | Yes       |
-| Anything older than 6.0                                                                                                              | No        |
+| Package                                                                                                                      | Supported |
+| ---------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `@aziontech/ui` 6.x, with the `@aziontech/theme`, `@aziontech/icons` and `@aziontech/ui-mcp` releases published alongside it | Yes       |
+| Anything older than 6.0                                                                                                      | No        |
 
 Fixes land on `main` and ship in the next 6.x release. Older majors receive no security fixes;
-upgrade with `npx @aziontech/webkit migrate v6`.
+upgrade with `npx @aziontech/ui migrate v6`.
 
 ## Reporting a vulnerability
 
@@ -17,7 +17,7 @@ a public issue, pull request or discussion, and do not post details anywhere pub
 
 Put this in the email:
 
-1. The affected package and version (for example `@aziontech/webkit` 6.0.0).
+1. The affected package and version (for example `@aziontech/ui` 6.0.0).
 2. How to reproduce it. A minimal reproduction helps most.
 3. What an attacker could do with it.
 
@@ -40,8 +40,8 @@ and the OSSF Scorecard. Each release carries a CycloneDX SBOM and npm provenance
 
 ## Scope
 
-In scope: the published npm packages (`@aziontech/webkit`, `@aziontech/theme`,
-`@aziontech/icons`, `@aziontech/webkit-mcp`) and the workflows in `.github/workflows/` that build
+In scope: the published npm packages (`@aziontech/ui`, `@aziontech/theme`,
+`@aziontech/icons`, `@aziontech/ui-mcp`) and the workflows in `.github/workflows/` that build
 and publish them. The docs site and demos are in scope when the problem comes from code in this
 repository.
 

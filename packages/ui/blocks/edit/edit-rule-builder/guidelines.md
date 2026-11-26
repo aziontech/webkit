@@ -19,7 +19,7 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 ### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
+A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/azion-ui-create-surface`.
 
 ### B. General — `SettingsGroup`, `Field`, `Input` (required)
 
@@ -90,7 +90,7 @@ With no `loading` set during the `submit` handler the block treats the save as d
 - Make every argument field follow what was picked before it, so the user never types a value the operator or behavior cannot take.
 - Offer both drag and buttons to reorder behaviors and criteria; the buttons are the keyboard path.
 - Filter variables and behaviors by phase, and lock the phase on an existing rule.
-- Follow `skills/webkit-form` for fields and `skills/webkit-errors` for error timing.
+- Follow `skills/azion-ui-form` for fields and `skills/azion-ui-errors` for error timing.
 
 ## Don't
 
@@ -109,7 +109,7 @@ With no `loading` set during the `submit` handler the block treats the save as d
 - **Add buttons:** verb first, e.g. "Add condition", "Add OR group", "Add behavior".
 - **Errors:** "Name is required.", "Enter the variable to compare."
 - **Reorder controls:** the editor names them with the row number ("Move item 2 up", "Remove behavior 2", "Reorder group 1").
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -132,4 +132,4 @@ With no `loading` set during the `submit` handler the block treats the save as d
 - `view/view-rule-list` — the list of rules by phase this drawer opens from.
 - `state/state-form-validation` — when errors appear after Save.
 - `edit/edit-resource` — the resource settings that sit beside the Rules tab.
-- `Drawer` — the side panel; see `skills/webkit-create-surface`.
+- `Drawer` — the side panel; see `skills/azion-ui-create-surface`.

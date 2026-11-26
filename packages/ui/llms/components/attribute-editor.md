@@ -2,7 +2,7 @@
 
 > An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`. It owns the row anatomy every hand-built editor repeats: a label per cell, one control per cell, a per-cell error under the field, Add and Remove, an item limit, the empty text, focus after add and remove, and a polite announcement of each change. A grouped mode lays rows out as AND groups joined by OR, the shape of rule criteria. With `reorderable`, rows (and groups) carry a grip and Move up / Move down buttons, so the order itself is part of the value, as in rule criteria evaluated top to bottom. It edits an array and validates nothing itself: the consumer passes `errors`.
 
-- Import: `import AttributeEditor from '@aziontech/webkit/attribute-editor'`
+- Import: `import AttributeEditor from '@aziontech/ui/attribute-editor'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [attribute-editor.json](attribute-editor.json)
 
@@ -153,7 +153,7 @@
 
 ```vue
 <script setup>
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
   import { computed, ref } from 'vue'
 
   const definition = [
@@ -194,8 +194,8 @@
 
 ```vue
 <script setup>
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Select from '@aziontech/webkit/select'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Select from '@aziontech/ui/select'
   import { ref } from 'vue'
 
   const definition = [
@@ -259,9 +259,9 @@
 
 ```vue
 <script setup>
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Select from '@aziontech/ui/select'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const definition = [

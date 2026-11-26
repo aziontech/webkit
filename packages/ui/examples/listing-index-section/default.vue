@@ -1,5 +1,5 @@
 <script setup>
-  import ListingIndexSection from '@aziontech/webkit/listing-index-section'
+  import ListingIndexSection from '@aziontech/ui/listing-index-section'
 </script>
 
 <template>

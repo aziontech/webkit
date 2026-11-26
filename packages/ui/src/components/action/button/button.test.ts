@@ -470,10 +470,10 @@ describe('Button', () => {
   })
 
   describe('loading announcement', () => {
-    const spoken = () => document.querySelector('[data-webkit-announcer]')?.textContent ?? ''
+    const spoken = () => document.querySelector('[data-azion-announcer]')?.textContent ?? ''
 
     afterEach(() => {
-      document.querySelector('[data-webkit-announcer]')?.remove()
+      document.querySelector('[data-azion-announcer]')?.remove()
     })
 
     it('announces nothing without a loadingLabel', async () => {

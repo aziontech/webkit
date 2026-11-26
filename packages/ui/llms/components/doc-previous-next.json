@@ -1,8 +1,8 @@
 {
  "name": "doc-previous-next",
  "binding": "DocPreviousNext",
- "import": "@aziontech/webkit/doc-previous-next",
- "treeShakeableImport": "@aziontech/webkit/doc-previous-next",
+ "import": "@aziontech/ui/doc-previous-next",
+ "treeShakeableImport": "@aziontech/ui/doc-previous-next",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

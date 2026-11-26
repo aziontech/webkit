@@ -33,8 +33,8 @@ test('every example, block and component imports its media; none points at a sit
         parser: vueParser,
         parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
       },
-      plugins: { webkit: { rules: { 'no-root-relative-asset': noRootRelativeAsset } } },
-      rules: { 'webkit/no-root-relative-asset': 'error' }
+      plugins: { 'azion-ui': { rules: { 'no-root-relative-asset': noRootRelativeAsset } } },
+      rules: { 'azion-ui/no-root-relative-asset': 'error' }
     }
   ]
   const hits = []

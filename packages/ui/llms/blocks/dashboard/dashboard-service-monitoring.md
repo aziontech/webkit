@@ -3,10 +3,10 @@
 > The service monitoring dashboard pattern: a PageHeader with the one window ToggleGroup, status tiles with sparklines, multi-series charts and an alert rail. One StatTile per service carries its p95 latency, the change against the previous period and a sparkline, with a StatusIndicator naming its state in words. Below, Latency (p50, p95, p99) and Error rate (Status 4xx, Status 5xx) sit in ChartCards as multi-series line Charts read over that window, while an Open alerts rail holds the right edge: a fixed-width column that scrolls on its own, independent of the tiles and charts, listing each alert as a whole-row Item link to the alert in an Item.Group with a severity Tag. Under the xl breakpoint the rail folds below the charts and the page scrolls as one. Built from `PageHeader`, `StatTile`, `StatusIndicator`, `ChartCard`, `Chart`, `ToggleGroup`, `Hint`, `Item`, `Tag`, `Skeleton`, `EmptyState` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill and scrolls itself: from xl the charts and the alerts rail scroll on their own; below xl the page scrolls as one.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-service-monitoring/dashboard-service-monitoring.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-service-monitoring/dashboard-service-monitoring.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-service-monitoring")`
 - Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
-- Skills: `webkit-data-viz`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-states`
 
 ## Asked as
 
@@ -204,20 +204,20 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import Chart, { type ChartSeries } from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed } from 'vue'
 
   import { sampleAlerts, sampleErrorRate, sampleLatency, sampleServices } from './sample'

@@ -23,7 +23,7 @@
   "Keep the default agents unless the product supports a different set; pass `:agents=\"[]\"` to draw the label alone.",
   "Pass the exact prompt in `value`; the button copies it as it stands.",
   "Do not recolour the marks: they are single-colour by design and follow the chip's ink.",
-  "To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `ThirdPartyLogo` flattens it to the chip's ink.",
+  "To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/ui/assets/claude-symbol-color.svg`); `ThirdPartyLogo` flattens it to the chip's ink.",
   "Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Bind `v-model:open` to remember or restore the choice (`close` still fires with the click)."
  ]
 }

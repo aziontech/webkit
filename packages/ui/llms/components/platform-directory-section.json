@@ -1,8 +1,8 @@
 {
  "name": "platform-directory-section",
  "binding": "PlatformDirectorySection",
- "import": "@aziontech/webkit/platform-directory-section",
- "treeShakeableImport": "@aziontech/webkit/platform-directory-section",
+ "import": "@aziontech/ui/platform-directory-section",
+ "treeShakeableImport": "@aziontech/ui/platform-directory-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

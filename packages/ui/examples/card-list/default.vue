@@ -1,6 +1,6 @@
 <script setup>
-  import CardList from '@aziontech/webkit/card-list'
-  import Tag from '@aziontech/webkit/tag'
+  import CardList from '@aziontech/ui/card-list'
+  import Tag from '@aziontech/ui/tag'
 
   const applications = [
     {

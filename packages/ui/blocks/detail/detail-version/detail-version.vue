@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Resizable from '@aziontech/webkit/resizable'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import ConsoleLayout from '@aziontech/ui/console-layout'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Resizable from '@aziontech/ui/resizable'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { usePhoneWidth } from './composables/use-phone-width'

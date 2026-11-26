@@ -1,7 +1,7 @@
-import type { TableColumn } from '@aziontech/webkit/data-table'
-import type { StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-import type { TagSeverity } from '@aziontech/webkit/tag'
-import type { FilteringProperty } from '@aziontech/webkit/use-collection'
+import type { TableColumn } from '@aziontech/ui/data-table'
+import type { StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+import type { TagSeverity } from '@aziontech/ui/tag'
+import type { FilteringProperty } from '@aziontech/ui/use-collection'
 
 /** Where a deployment run stands. */
 export type DeploymentStatus = 'Ready' | 'Building' | 'Failed' | 'Queued' | 'Canceled'

@@ -2,7 +2,7 @@
 
 > The empty registration frame that divides two page sections. On a page with no margins between sections, this frame _is_ the gap: it holds the vertical air, and its own two rules are what separate the sections it sits between — which is why it is a frame and not an empty `div`. `size` picks how much air, on a three-step scale built from the theme's own spacing tokens.
 
-- Import: `import Spacer from '@aziontech/webkit/spacer'`
+- Import: `import Spacer from '@aziontech/ui/spacer'`
 - Category: layout · Surface: site · Structure: monolithic
 - API as JSON: [spacer.json](spacer.json)
 
@@ -67,8 +67,8 @@
 
 ```vue
 <script setup>
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import Spacer from '@aziontech/webkit/spacer'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import Spacer from '@aziontech/ui/spacer'
 </script>
 
 <template>
@@ -92,8 +92,8 @@
 
 ```vue
 <script setup>
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import Spacer from '@aziontech/webkit/spacer'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import Spacer from '@aziontech/ui/spacer'
 </script>
 
 <template>
@@ -120,8 +120,8 @@
 
 ```vue
 <script setup>
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import Spacer from '@aziontech/webkit/spacer'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import Spacer from '@aziontech/ui/spacer'
 </script>
 
 <template>

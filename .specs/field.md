@@ -4,7 +4,7 @@ category: input
 structure: composition
 status: implemented
 spec_version: 10
-checksum: cbcbaa7a7b0fa9506cd02b5b05f6f606c194a154615ba8ff56364100cdd2b631
+checksum: 022cc351eb059a3d509e7fd5044d8631eafeb4a2ff1a6149c32b1f85fa388c06
 created: 2026-11-10
 last_updated: 2026-11-25
 ---
@@ -48,9 +48,9 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Checkbox from '@aziontech/webkit/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Checkbox from '@aziontech/ui/checkbox'
 
   const name = ref('')
   const terms = ref(false)
@@ -92,16 +92,16 @@ Tree-shaking alternative — the standalone root + each part from its own entry 
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field-root'
-  import FieldLabel from '@aziontech/webkit/field-label'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import FieldError from '@aziontech/webkit/field-error'
-  import FieldGroup from '@aziontech/webkit/field-group'
-  import FieldSet from '@aziontech/webkit/field-set'
-  import FieldLegend from '@aziontech/webkit/field-legend'
-  import FieldContent from '@aziontech/webkit/field-content'
-  import FieldTitle from '@aziontech/webkit/field-title'
-  import FieldSeparator from '@aziontech/webkit/field-separator'
+  import Field from '@aziontech/ui/field-root'
+  import FieldLabel from '@aziontech/ui/field-label'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import FieldError from '@aziontech/ui/field-error'
+  import FieldGroup from '@aziontech/ui/field-group'
+  import FieldSet from '@aziontech/ui/field-set'
+  import FieldLegend from '@aziontech/ui/field-legend'
+  import FieldContent from '@aziontech/ui/field-content'
+  import FieldTitle from '@aziontech/ui/field-title'
+  import FieldSeparator from '@aziontech/ui/field-separator'
 </script>
 ```
 
@@ -133,7 +133,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/input/field/
+  packages/ui/src/components/input/field/
   ├── field.vue
   ├── index.ts
   ├── injection-key.ts
@@ -225,7 +225,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 ## Examples
 
-The field's examples live in `packages/webkit/examples/field/` and render on the docs site (`/components/<name>`):
+The field's examples live in `packages/ui/examples/field/` and render on the docs site (`/components/<name>`):
 
 - Default — label, input, description.
 - DescriptionAndError — a required, invalid field with both a description and an error.
@@ -242,7 +242,7 @@ The field's examples live in `packages/webkit/examples/field/` and render on the
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

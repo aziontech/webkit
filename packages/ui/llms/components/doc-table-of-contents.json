@@ -1,8 +1,8 @@
 {
  "name": "doc-table-of-contents",
  "binding": "DocTableOfContents",
- "import": "@aziontech/webkit/doc-table-of-contents",
- "treeShakeableImport": "@aziontech/webkit/doc-table-of-contents",
+ "import": "@aziontech/ui/doc-table-of-contents",
+ "treeShakeableImport": "@aziontech/ui/doc-table-of-contents",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

@@ -1,12 +1,12 @@
 # Rule: one prop name, one type, one value set per concept
 
 The same concept ships under the **same prop name, type, value set and default** on every
-component — in webkit and in the components you author in this project. When one component
+component — in Azion UI and in the components you author in this project. When one component
 calls it `variant` and another `kind`, or one says `state` and another `status`, everyone
-relearns the API per component and AI-generated code guesses wrong. On WebKit tags the
-ESLint rule **`webkit/no-deprecated-name`** flags a prop or value renamed in 6.0 and names
+relearns the API per component and AI-generated code guesses wrong. On Azion UI tags the
+ESLint rule **`azion-ui/no-deprecated-name`** flags a prop or value renamed in 6.0 and names
 its replacement; in your own components the vocabulary is held in review. The adjacent
-authoring shape _is_ enforced: `webkit/require-authoring-standards` blocks a manual `modelValue` prop
+authoring shape _is_ enforced: `azion-ui/require-authoring-standards` blocks a manual `modelValue` prop
 
 - `update:modelValue` emit — use `defineModel` / `v-model` instead.
 
@@ -71,7 +71,7 @@ authoring shape _is_ enforced: `webkit/require-authoring-standards` blocks a man
 The look, colour meaning, job status, orientation (`horizontal · vertical`) and size are
 **closed sets**: a union holds only these values plus the few extras a component documents
 (an avatar's `circle · square`, a field's `responsive` orientation). A `variant` made only of
-`start · center · split` is `align`. A severity type derives from WebKit's `Severity`.
+`start · center · split` is `align`. A severity type derives from Azion UI's `Severity`.
 
 Code ported from shadcn maps `destructive` → `danger`; from Material, `outlined` → `outline`
 and `text` → `ghost`.
@@ -89,8 +89,8 @@ and `text` → `ghost`.
 ## Renamed in 6.0
 
 Every prop that drifted from this table was renamed in 6.0. The full old → new map, with value
-renames, is `src/cli/migrations/v6-props.json` in the package; `npx @aziontech/webkit migrate`
-applies it to your code and `webkit/no-deprecated-name` flags what is left.
+renames, is `src/cli/migrations/v6-props.json` in the package; `npx @aziontech/ui migrate`
+applies it to your code and `azion-ui/no-deprecated-name` flags what is left.
 
 **Not banned — legitimate uses:** `type` for native pass-throughs (`<input type>`) and for
 the sort of part; `value` for identity, the `v-model` payload or display text; `error` as a
@@ -105,7 +105,7 @@ message string; `level` on a heading component; `label` on a group part.
   is fine, a reorder is not. Default `size` to `large` on actions/links, `medium` elsewhere.
 - Name booleans positively and unprefixed: `showHeader`, `active`, `open` — not `hideHeader`,
   `isActive`, `collapsed` (`disabled`/`readonly` are the accepted exceptions).
-- Use `defineModel` for two-way values; the ESLint rule `webkit/require-authoring-standards` blocks
+- Use `defineModel` for two-way values; the ESLint rule `azion-ui/require-authoring-standards` blocks
   the manual `modelValue` + `update:modelValue` pair.
 - When migrating code from another design system, rewrite its names to this vocabulary
   (`kind` → `variant`, `sm/md/lg` → `small/medium/large`, `prefix` → `leading`) — never carry

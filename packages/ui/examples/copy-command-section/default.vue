@@ -1,5 +1,5 @@
 <script setup>
-  import CopyCommandSection from '@aziontech/webkit/copy-command-section'
+  import CopyCommandSection from '@aziontech/ui/copy-command-section'
 </script>
 
 <template>

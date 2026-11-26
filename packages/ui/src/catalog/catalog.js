@@ -2,15 +2,15 @@ import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, posix } from 'node:path'
 
-const CANDIDATE_PKGS = ['@aziontech/webkit']
+const CANDIDATE_PKGS = ['@aziontech/ui']
 const DEFAULT_PKG = CANDIDATE_PKGS[0]
 
 let cache = null
 let warned = false
 
 function resolveCatalogPath(cwd) {
-  if (process.env.WEBKIT_CATALOG_PATH) return process.env.WEBKIT_CATALOG_PATH
-  const require = createRequire(join(cwd || process.cwd(), '__webkit_resolve__.js'))
+  if (process.env.AZION_UI_CATALOG_PATH) return process.env.AZION_UI_CATALOG_PATH
+  const require = createRequire(join(cwd || process.cwd(), '__azion_ui_resolve__.js'))
   for (const pkg of CANDIDATE_PKGS) {
     try {
       return require.resolve(`${pkg}/catalog.json`)
@@ -25,7 +25,7 @@ function resolveCatalogPath(cwd) {
 function warnOnce(message) {
   if (warned) return
   warned = true
-  process.stderr.write(`[webkit-mcp] ${message}\n`)
+  process.stderr.write(`[azion-ui-mcp] ${message}\n`)
 }
 
 function levenshtein(a, b) {
@@ -52,7 +52,7 @@ function readPart(baseDir, file) {
   try {
     return JSON.parse(readFileSync(join(baseDir, file), 'utf-8'))
   } catch (err) {
-    warnOnce(`failed to read ${file} next to the webkit catalog (${err.message}).`)
+    warnOnce(`failed to read ${file} next to the Azion UI catalog (${err.message}).`)
     return null
   }
 }
@@ -62,7 +62,7 @@ function readSource(baseDir, file) {
   try {
     return readFileSync(join(baseDir, file), 'utf-8').replace(/\n$/, '')
   } catch (err) {
-    warnOnce(`failed to read ${file} next to the webkit catalog (${err.message}).`)
+    warnOnce(`failed to read ${file} next to the Azion UI catalog (${err.message}).`)
     return ''
   }
 }
@@ -95,7 +95,7 @@ function catalogFields(json) {
     package: pkg,
     prefix: `${pkg}/`,
     bare: pkg,
-    version: json.webkitVersion || null,
+    version: json.azionUiVersion || null,
     deniedPrefixes: json.deniedPrefixes || [],
     tokenRules: (json.tokenRules || []).map((r) => ({
       id: r.id,
@@ -239,8 +239,8 @@ export function loadCatalog(cwd) {
   if (!path) {
     value = empty()
     warnOnce(
-      'could not resolve a webkit catalog.json — answers will degrade to "not available". ' +
-        'Install @aziontech/webkit, or set WEBKIT_CATALOG_PATH.'
+      'could not resolve an Azion UI catalog.json — answers will degrade to "not available". ' +
+        'Install @aziontech/ui, or set AZION_UI_CATALOG_PATH.'
     )
   } else {
     try {
@@ -248,7 +248,7 @@ export function loadCatalog(cwd) {
     } catch (err) {
       value = empty()
       warnOnce(
-        `failed to read the webkit catalog at ${path} (${err.message}) — answers will degrade to "not available".`
+        `failed to read the Azion UI catalog at ${path} (${err.message}) — answers will degrade to "not available".`
       )
     }
   }

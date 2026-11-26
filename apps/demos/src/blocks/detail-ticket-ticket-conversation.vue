@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import MessageThread from '@aziontech/webkit/message-thread'
-  import Subheader from '@aziontech/webkit/subheader'
+  import MessageThread from '@aziontech/ui/message-thread'
+  import Subheader from '@aziontech/ui/subheader'
   import { computed } from 'vue'
 
   import type { DetailTicketMessage } from './detail-ticket.vue'

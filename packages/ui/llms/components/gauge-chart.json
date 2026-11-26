@@ -1,8 +1,8 @@
 {
  "name": "gauge-chart",
  "binding": "GaugeChart",
- "import": "@aziontech/webkit/gauge-chart",
- "treeShakeableImport": "@aziontech/webkit/gauge-chart",
+ "import": "@aziontech/ui/gauge-chart",
+ "treeShakeableImport": "@aziontech/ui/gauge-chart",
  "category": "chart",
  "surface": "app",
  "structure": "monolithic",

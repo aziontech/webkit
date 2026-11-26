@@ -154,7 +154,7 @@ Then delete `sample.ts`, its import, and `parts/customer-clock.vue` if the app n
 - **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755 with 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
 - **Notes:** "Add a note", "Only agents can read notes.", "Add note"; error "Write the note first."
 - **Error:** title "Couldn't load this customer", message "Check your connection and retry.", action "Retry".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash in copy, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash in copy, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -180,4 +180,4 @@ Then delete `sample.ts`, its import, and `parts/customer-clock.vue` if the app n
 - `view/view-table` — the list a customer is opened from.
 - `detail/detail-resource` — the same page shape for a resource.
 - `settings/settings-form` — the edit page Edit leads to.
-- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-layout`.
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/azion-ui-layout`.

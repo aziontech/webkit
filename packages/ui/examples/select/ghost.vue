@@ -1,6 +1,6 @@
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import Select from '@aziontech/webkit/select'
+  import Breadcrumb from '@aziontech/ui/breadcrumb'
+  import Select from '@aziontech/ui/select'
   import { ref } from 'vue'
 
   const environment = ref('Production')

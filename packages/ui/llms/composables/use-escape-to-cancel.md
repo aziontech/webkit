@@ -1,10 +1,10 @@
 # useEscapeToCancel
 
-Composable `@aziontech/webkit/use-escape-to-cancel`. The signatures and option tables below are read from its typed source, [`src/composables/use-escape-to-cancel/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-escape-to-cancel/index.ts).
+Composable `@aziontech/ui/use-escape-to-cancel`. The signatures and option tables below are read from its typed source, [`src/composables/use-escape-to-cancel/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-escape-to-cancel/index.ts).
 
 ```ts
-import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-import type { UseEscapeToCancelOptions } from '@aziontech/webkit/use-escape-to-cancel'
+import { useEscapeToCancel } from '@aziontech/ui/use-escape-to-cancel'
+import type { UseEscapeToCancelOptions } from '@aziontech/ui/use-escape-to-cancel'
 ```
 
 ## `useEscapeToCancel`

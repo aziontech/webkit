@@ -6,6 +6,7 @@ import { applyRenames, collectRenames, renameMembers } from './migrate-bindings.
 import { BLOCK_MANIFEST, migrateBlockManifest } from './migrate-blocks.js'
 import { attachToCompound } from './migrate-compound.js'
 import { migrateIcons } from './migrate-icons.js'
+import { loadPackageMap, migratePackageText, planPackageMigration } from './migrate-package.js'
 import { migrateLintRules, migrateTestIds, TEST_FILE } from './migrate-renames.js'
 import { legacyFor, legacyMarkers, referencedSubpaths, resolveSubpath } from './migrate-subpaths.js'
 import { PREFIX, readJson, SUBPATH_LITERAL } from './migrate-syntax.js'
@@ -122,7 +123,7 @@ function legacyMarkerIn(files, migration) {
 
 function oldMajorNote(from, declared, version) {
   return note(
-    `the project is on @aziontech/webkit v${from}${declared ? ` (${declared.range})` : ''}; ` +
+    `the project is on @aziontech/ui v${from}${declared ? ` (${declared.range})` : ''}; ` +
       `migrate v${version} rewrites v${version - 1} code, so every v${from} component whose API ` +
       `changed is listed as MANUAL`
   )
@@ -137,7 +138,7 @@ function detectFrom(projectDir, migration, files, { version, fromMajor }) {
   if (from == null && !declared && range != null) {
     notes.push(
       note(
-        `cannot tell which @aziontech/webkit version "${range}" is, and no installed copy was found: pass --from <major> (for example --from 5)`
+        `cannot tell which @aziontech/ui version "${range}" is, and no installed copy was found: pass --from <major> (for example --from 5)`
       )
     )
   }
@@ -154,13 +155,14 @@ function detectFrom(projectDir, migration, files, { version, fromMajor }) {
   return { from, declared, notes }
 }
 
-function migrateFile(projectDir, { file, before }, migration, { from, declared, dryRun }) {
+function migrateFile(projectDir, { file, original, before, packageChanges }, migration, options) {
+  const { from, declared, dryRun } = options
   const migrated = migrateSource(before, migration, {
     fromMajor: from,
     declaredMajor: declared ? declared.major : null
   })
   let { source } = migrated
-  const changes = [...migrated.changes]
+  const changes = [...packageChanges, ...migrated.changes]
   const { warnings } = migrated
   if (TEST_FILE.test(relative(projectDir, file).split('\\').join('/'))) {
     const ids = migrateTestIds(source, migration.testids)
@@ -168,12 +170,21 @@ function migrateFile(projectDir, { file, before }, migration, { from, declared, 
     changes.push(...ids.changes)
   }
   if (!changes.length && !warnings.length) return null
-  if (source !== before && !dryRun) writeFileSync(file, source)
+  if (source !== original && !dryRun) writeFileSync(file, source)
   return { file: relative(projectDir, file), changes, warnings }
 }
 
-function migrateManifestFile(projectDir, migration, dryRun) {
-  const manifestFile = join(projectDir, BLOCK_MANIFEST)
+function manifestPath(projectDir, packageMap) {
+  const current = join(projectDir, BLOCK_MANIFEST)
+  if (existsSync(current)) return current
+  const old = Object.keys(packageMap.files || {}).find(
+    (f) => packageMap.files[f] === BLOCK_MANIFEST
+  )
+  return old && existsSync(join(projectDir, old)) ? join(projectDir, old) : current
+}
+
+function migrateManifestFile(projectDir, migration, dryRun, packageMap) {
+  const manifestFile = manifestPath(projectDir, packageMap)
   if (!existsSync(manifestFile)) return null
   const before = readFileSync(manifestFile, 'utf8')
   const { manifest, changes, warnings } = migrateBlockManifest(JSON.parse(before), migration.blocks)
@@ -191,19 +202,25 @@ export function planMigrate(projectDir, { version = 6, dryRun = false, fromMajor
     )
   }
   const migration = loadMigration(version)
-  const files = sourceFiles(projectDir).map((file) => ({
-    file,
-    before: readFileSync(file, 'utf8')
-  }))
+  const packageMap = loadPackageMap()
+  const files = sourceFiles(projectDir).map((file) => {
+    const original = readFileSync(file, 'utf8')
+    const pass = migratePackageText(original, packageMap)
+    return { file, original, before: pass.source, packageChanges: pass.changes }
+  })
   const { from, declared, notes } = detectFrom(projectDir, migration, files, {
     version,
     fromMajor
   })
   const options = { from, declared, dryRun }
   const fileResults = files.map((entry) => migrateFile(projectDir, entry, migration, options))
-  return [...notes, ...fileResults, migrateManifestFile(projectDir, migration, dryRun)].filter(
-    Boolean
-  )
+  const packageResults = planPackageMigration(projectDir, { dryRun, map: packageMap })
+  return [
+    ...notes,
+    ...fileResults,
+    ...packageResults,
+    migrateManifestFile(projectDir, migration, dryRun, packageMap)
+  ].filter(Boolean)
 }
 
 export { migrateBlockManifest } from './migrate-blocks.js'

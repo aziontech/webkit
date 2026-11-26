@@ -1,7 +1,7 @@
 <script setup>
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>

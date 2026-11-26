@@ -1,8 +1,8 @@
 {
  "name": "network-section",
  "binding": "NetworkSection",
- "import": "@aziontech/webkit/network-section",
- "treeShakeableImport": "@aziontech/webkit/network-section",
+ "import": "@aziontech/ui/network-section",
+ "treeShakeableImport": "@aziontech/ui/network-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

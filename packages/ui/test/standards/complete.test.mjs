@@ -61,7 +61,7 @@ const spec = (name, status, examples) =>
 
 function fixtureRepo() {
   const root = mkdtempSync(join(tmpdir(), 'complete-'))
-  const pkg = 'packages/webkit'
+  const pkg = 'packages/ui'
   write(root, `${pkg}/catalog.json`, {
     imports: {
       button: { kind: 'component' },

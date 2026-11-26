@@ -1,8 +1,8 @@
 {
  "name": "subheader",
  "binding": "Subheader",
- "import": "@aziontech/webkit/subheader",
- "treeShakeableImport": "@aziontech/webkit/subheader",
+ "import": "@aziontech/ui/subheader",
+ "treeShakeableImport": "@aziontech/ui/subheader",
  "category": "layout",
  "surface": "app",
  "structure": "monolithic",

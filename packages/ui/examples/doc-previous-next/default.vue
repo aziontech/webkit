@@ -1,5 +1,5 @@
 <script setup>
-  import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
+  import DocPreviousNext from '@aziontech/ui/doc-previous-next'
 </script>
 
 <template>

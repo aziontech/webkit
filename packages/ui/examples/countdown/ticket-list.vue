@@ -1,7 +1,7 @@
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Countdown from '@aziontech/webkit/countdown'
-  import Table from '@aziontech/webkit/table'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Countdown from '@aziontech/ui/countdown'
+  import Table from '@aziontech/ui/table'
 
   const NOW = Date.UTC(2026, 10, 24, 14, 45)
 

@@ -173,7 +173,7 @@
     )
     if (!ignored.length) return
     console.warn(
-      `[webkit] <ConsoleMockup name="${name}">: ${ignored.join(', ')} ` +
+      `[azion-ui] <ConsoleMockup name="${name}">: ${ignored.join(', ')} ` +
         `${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. ` +
         'Fragments keep their own width and fade and take only variant, and chrome while framed; ' +
         'the workload screens take variant, chrome, width and fade (see the console-mockup spec).'
@@ -188,7 +188,7 @@
       const load = resolveConsoleMockup(name)
       if (!load) {
         if (dev)
-          console.warn(`[webkit] <ConsoleMockup>: no widget registered under name "${name}".`)
+          console.warn(`[azion-ui] <ConsoleMockup>: no widget registered under name "${name}".`)
         return
       }
       Promise.all([load(), import('./plates').then(({ default: module }) => module)])
@@ -200,7 +200,7 @@
           warnIgnored(name, declared.value)
         })
         .catch((error: unknown) => {
-          if (dev) console.warn(`[webkit] <ConsoleMockup>: could not load "${name}".`, error)
+          if (dev) console.warn(`[azion-ui] <ConsoleMockup>: could not load "${name}".`, error)
         })
     },
     { immediate: true }

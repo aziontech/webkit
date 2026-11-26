@@ -170,7 +170,7 @@ Then delete `sample.ts` and its import.
 - **Empty states:** title states the fact and the description says what to do, e.g. "No tables yet" with "Create your first table to store your data."; "Ready to execute" with "Execute a query to see the results here."
 - **Import:** `Import data from CSV` opens `Import data into <table>`; the submit is `Insert <n> rows`; per-line errors read `Line <n>: <column> “<value>” is not <expected> (<type>).` or `<column> is empty and cannot be.`
 - **Row menus:** verb and object, e.g. "Delete table", "Run query", "Delete query".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -206,4 +206,4 @@ Then delete `sample.ts` and its import.
 - `edit/edit-schema` — the Create Table, Add column, Add row, Alter column and Truncate table drawers and dialogs behind this page's buttons.
 - `state/state-form-validation` (SectionRejected) — the rule the Create Database name conflict follows.
 - `detail/detail-dns-zone` — records of a resource without SQL.
-- `DataTable` — the definition and results tables; see `skills/webkit-tables` and `skills/webkit-layout`.
+- `DataTable` — the definition and results tables; see `skills/azion-ui-tables` and `skills/azion-ui-layout`.

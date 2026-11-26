@@ -1,6 +1,6 @@
 <script setup>
-  import Select from '@aziontech/webkit/select'
-  import Tag from '@aziontech/webkit/tag'
+  import Select from '@aziontech/ui/select'
+  import Tag from '@aziontech/ui/tag'
   import { ref } from 'vue'
 
   const value = ref('')

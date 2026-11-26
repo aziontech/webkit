@@ -1,8 +1,8 @@
 {
  "name": "client-story-columns-section",
  "binding": "ClientStoryColumnsSection",
- "import": "@aziontech/webkit/client-story-columns-section",
- "treeShakeableImport": "@aziontech/webkit/client-story-columns-section",
+ "import": "@aziontech/ui/client-story-columns-section",
+ "treeShakeableImport": "@aziontech/ui/client-story-columns-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",
@@ -24,7 +24,7 @@
  "bestPractices": [
   "Three cells for `reveal=\"always\"` (the grid is three columns from the medium breakpoint); three or four for `reveal=\"hover\"`, which shares the row between them.",
   "With `reveal=\"hover\"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).",
-  "Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.",
+  "Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/ui/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.",
   "Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. Left out, the ink is chosen by measured contrast: a hex `base` on which white text would fall under 4.5:1 (WCAG AA) takes dark ink. A cell with neither paints a black face."
  ],
  "props": [

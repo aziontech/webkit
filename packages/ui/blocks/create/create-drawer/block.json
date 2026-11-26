@@ -78,7 +78,7 @@
     "criar ambiente",
     "instância de função"
   ],
-  "skills": ["webkit-create-surface", "webkit-navigation", "webkit-form", "webkit-errors"],
+  "skills": ["azion-ui-create-surface", "azion-ui-navigation", "azion-ui-form", "azion-ui-errors"],
   "primary": {
     "name": "Default",
     "file": "create-drawer.vue"

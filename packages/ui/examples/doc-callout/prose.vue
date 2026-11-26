@@ -1,5 +1,5 @@
 <script setup>
-  import DocCallout from '@aziontech/webkit/doc-callout'
+  import DocCallout from '@aziontech/ui/doc-callout'
 </script>
 
 <template>

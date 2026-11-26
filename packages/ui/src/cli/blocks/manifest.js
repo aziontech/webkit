@@ -4,7 +4,7 @@ import { join, relative, resolve, sep } from 'node:path'
 
 import { PACKAGE_NAME } from '../source.js'
 
-export const MANIFEST = 'webkit.blocks.json'
+export const MANIFEST = 'azion-ui.blocks.json'
 
 export const toPosix = (p) => p.split(sep).join('/')
 

@@ -1,13 +1,13 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import DrawerDescription from '@aziontech/ui/drawer-description'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import DrawerTrigger from '@aziontech/ui/drawer-trigger'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
   import { ref } from 'vue'
 
   const open = ref(false)

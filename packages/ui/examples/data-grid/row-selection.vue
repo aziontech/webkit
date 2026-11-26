@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DataGrid from '@aziontech/webkit/data-grid'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import DataGrid from '@aziontech/ui/data-grid'
   import { ref } from 'vue'
 
   const rows = ref([

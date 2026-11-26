@@ -1,5 +1,5 @@
 <script setup>
-  import PromptQueue from '@aziontech/webkit/prompt-queue'
+  import PromptQueue from '@aziontech/ui/prompt-queue'
   import { ref } from 'vue'
 
   const queue = ref([

@@ -2,7 +2,7 @@
 
 > A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `tabsSide` decides where the tabs sit: `start` or `end` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.
 
-- Import: `import MediaTabs from '@aziontech/webkit/media-tabs'`
+- Import: `import MediaTabs from '@aziontech/ui/media-tabs'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [media-tabs.json](media-tabs.json)
 
@@ -109,8 +109,8 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaTabs from '@aziontech/webkit/media-tabs'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaTabs from '@aziontech/ui/media-tabs'
 
   const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']
 
@@ -146,8 +146,8 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaTabs from '@aziontech/webkit/media-tabs'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaTabs from '@aziontech/ui/media-tabs'
 
   const scenes = [
     'ai-applications',
@@ -227,8 +227,8 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaTabs from '@aziontech/webkit/media-tabs'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaTabs from '@aziontech/ui/media-tabs'
 
   const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']
 

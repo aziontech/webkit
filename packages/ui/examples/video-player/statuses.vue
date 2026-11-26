@@ -1,5 +1,5 @@
 <script setup>
-  import VideoPlayer from '@aziontech/webkit/video-player'
+  import VideoPlayer from '@aziontech/ui/video-player'
   import { ref } from 'vue'
 
   const failedStatus = ref('error')

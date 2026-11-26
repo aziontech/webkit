@@ -1,5 +1,5 @@
 <script setup>
-  import DocCard from '@aziontech/webkit/doc-card'
+  import DocCard from '@aziontech/ui/doc-card'
 </script>
 
 <template>

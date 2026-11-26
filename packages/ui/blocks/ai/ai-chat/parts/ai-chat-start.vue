@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/ui/suggestion-group'
 
   defineProps<{ starters: SuggestionGroupItem[] }>()
 

@@ -1,8 +1,8 @@
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import DateRangePicker from '@aziontech/webkit/date-range-picker'
-  import { es } from '@aziontech/webkit/locales/es'
-  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import DateRangePicker from '@aziontech/ui/date-range-picker'
+  import { es } from '@aziontech/ui/locales/es'
+  import { ptBR } from '@aziontech/ui/locales/pt-BR'
   import { ref } from 'vue'
 
   const range = ref({

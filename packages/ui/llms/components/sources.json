@@ -1,8 +1,8 @@
 {
  "name": "sources",
  "binding": "Sources",
- "import": "@aziontech/webkit/sources",
- "treeShakeableImport": "@aziontech/webkit/sources",
+ "import": "@aziontech/ui/sources",
+ "treeShakeableImport": "@aziontech/ui/sources",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

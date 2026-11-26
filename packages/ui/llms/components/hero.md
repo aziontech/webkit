@@ -2,8 +2,8 @@
 
 > The opening band of a page: a full-bleed section spanning the whole viewport width whose copy is centered in a capped column, optionally filling one screen and optionally carrying a decorative backdrop behind it. It is the top layer of the page language and the owner of the page's first rule — the bottom hairline every column below it hangs from. `Hero.Title` is the copy block it centers.
 
-- Import: `import HeroRoot from '@aziontech/webkit/hero-root'`
-- Compound import (dot notation, not tree-shakeable): `import Hero from '@aziontech/webkit/hero'`
+- Import: `import HeroRoot from '@aziontech/ui/hero-root'`
+- Compound import (dot notation, not tree-shakeable): `import Hero from '@aziontech/ui/hero'`
 - Category: marketing · Surface: site · Structure: composition
 - API as JSON: [hero.json](hero.json)
 
@@ -85,7 +85,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/hero-title`
+- `@aziontech/ui/hero-title`
 
 ## Sub-components
 
@@ -132,8 +132,8 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Hero from '@aziontech/webkit/hero'
+  import Button from '@aziontech/ui/button'
+  import Hero from '@aziontech/ui/hero'
 </script>
 
 <template>
@@ -165,7 +165,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
-  import HeroRoot from '@aziontech/webkit/hero-root'
+  import HeroRoot from '@aziontech/ui/hero-root'
 </script>
 
 <template>
@@ -199,7 +199,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
-  import Hero from '@aziontech/webkit/hero'
+  import Hero from '@aziontech/ui/hero'
 </script>
 
 <template>

@@ -31,8 +31,8 @@ function driftLines(sync, at) {
 function bundleState(sync, where) {
   const at = (path) => (where ? `${where}/${path}` : path)
   const syncHint = where
-    ? `run \`npx @aziontech/webkit sync\` in ${where} (the repository root that owns the agent files)`
-    : 'run `npx @aziontech/webkit sync`'
+    ? `run \`npx @aziontech/ui sync\` in ${where} (the repository root that owns the agent files)`
+    : 'run `npx @aziontech/ui sync`'
   if (sync.drift) {
     return ['fail', `out of date — ${syncHint}.\n${driftLines(sync, at).join('\n')}`]
   }

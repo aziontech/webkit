@@ -95,7 +95,7 @@ function keptStarterAdvice(starter, entry) {
     message:
       `${starter.files.join(' and ')} (the ${starter.from} starter stylesheet, imported in ` +
       `${entry}) was left in place because ${keptReason(starter)}. Its global rules (body margin and colours, ` +
-      `#app width) fight the WebKit theme: delete ${starter.files.length === 1 ? 'it' : 'them'} ` +
+      `#app width) fight the Azion UI theme: delete ${starter.files.length === 1 ? 'it' : 'them'} ` +
       `and the \`${starter.line.trim()}\` line when you no longer need them.`
   }
 }
@@ -106,7 +106,7 @@ function rawColourAdvice(rawStylesheets, gitHooks) {
     type: 'advise',
     message:
       `${rawStylesheets.join(', ')} ${one ? 'uses' : 'use'} raw colours ` +
-      `(hex, rgb or hsl — a starter template's stylesheet usually does), so the webkit ` +
+      `(hex, rgb or hsl — a starter template's stylesheet usually does), so the Azion UI ` +
       `stylelint${gitHooks ? ' in the pre-commit hook' : ''} rejects ` +
       `${one ? 'it' : 'them'}. Replace the values with theme tokens ` +
       `(var(--bg-canvas), var(--text-default)…), or delete the starter stylesheet and its import.`
@@ -123,7 +123,7 @@ export function starterActions(projectDir, entry, { wireEntry, gitHooks }) {
       path: entry,
       line: starter.line,
       files: starter.files,
-      replacement: "import './webkit.css'"
+      replacement: "import './azion-ui.css'"
     })
   } else if (starter) {
     actions.push(keptStarterAdvice(starter, entry))

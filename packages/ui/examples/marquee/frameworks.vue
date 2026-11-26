@@ -1,5 +1,5 @@
 <script setup>
-  import Marquee from '@aziontech/webkit/marquee'
+  import Marquee from '@aziontech/ui/marquee'
 </script>
 
 <template>

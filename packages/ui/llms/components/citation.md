@@ -2,7 +2,7 @@
 
 > An inline reference in generated text: a small rounded chip with the mark of the source's site (its favicon, its icon, or its first letter on a colour of its own) and the site's name (`Azion`, else the host of `href` without `www.`), and `+N` when one marker cites several sources (`[1][2]`, `[1, 2]`). Hovering, focusing or pressing the chip opens one card that stacks every cited source. `StreamingResponse` renders it for every run of `[n]` markers.
 
-- Import: `import Citation from '@aziontech/webkit/citation'`
+- Import: `import Citation from '@aziontech/ui/citation'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [citation.json](citation.json)
 
@@ -91,7 +91,7 @@ source block, shared with the `Sources` panel)._
 
 ```vue
 <script setup>
-  import Citation from '@aziontech/webkit/citation'
+  import Citation from '@aziontech/ui/citation'
 
   const sources = [
     {

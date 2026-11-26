@@ -76,7 +76,7 @@ for (const entry of manifest.icons) {
   if (!Array.isArray(entry.legacy))
     fail(
       id,
-      '"legacy" lists the old classes webkit migrate rewrites to this icon ([] for a new icon)'
+      '"legacy" lists the old classes azion-ui migrate rewrites to this icon ([] for a new icon)'
     )
   for (const old of entry.legacy ?? []) {
     if (legacySeen[entry.set].has(old)) fail(id, `legacy name "${old}" is claimed twice`)

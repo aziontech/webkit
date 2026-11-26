@@ -1,8 +1,8 @@
 {
  "name": "copy-button",
  "binding": "CopyButton",
- "import": "@aziontech/webkit/copy-button",
- "treeShakeableImport": "@aziontech/webkit/copy-button",
+ "import": "@aziontech/ui/copy-button",
+ "treeShakeableImport": "@aziontech/ui/copy-button",
  "category": "action",
  "surface": "app",
  "structure": "monolithic",

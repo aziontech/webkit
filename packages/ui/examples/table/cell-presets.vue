@@ -1,13 +1,13 @@
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellId from '@aziontech/webkit/table-cell-id'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTags from '@aziontech/webkit/table-cell-tags'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import DataTable from '@aziontech/ui/data-table'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellId from '@aziontech/ui/table-cell-id'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTags from '@aziontech/ui/table-cell-tags'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
 
   const HOUR = 3_600_000
   const NOW = Date.UTC(2026, 10, 10, 12)

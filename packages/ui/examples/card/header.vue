@@ -1,6 +1,6 @@
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Card from '@aziontech/ui/card'
+  import IconButton from '@aziontech/ui/icon-button'
 </script>
 
 <template>

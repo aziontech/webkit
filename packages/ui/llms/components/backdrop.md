@@ -1,8 +1,8 @@
 # Backdrop
 
-> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its data centers lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `backdrop`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
+> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its data centers lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with Azion UI's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `backdrop`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
 
-- Import: `import Backdrop from '@aziontech/webkit/backdrop'`
+- Import: `import Backdrop from '@aziontech/ui/backdrop'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [backdrop.json](backdrop.json)
 
@@ -65,9 +65,9 @@
 
 ```vue
 <script setup>
-  import Backdrop from '@aziontech/webkit/backdrop'
-  import Hero from '@aziontech/webkit/hero-root'
-  import HeroTitle from '@aziontech/webkit/hero-title'
+  import Backdrop from '@aziontech/ui/backdrop'
+  import Hero from '@aziontech/ui/hero-root'
+  import HeroTitle from '@aziontech/ui/hero-title'
 </script>
 
 <template>
@@ -94,7 +94,7 @@
 
 ```vue
 <script setup>
-  import Backdrop from '@aziontech/webkit/backdrop'
+  import Backdrop from '@aziontech/ui/backdrop'
 
   const arts = [
     { variant: 'globe', label: 'Globe' },

@@ -1,6 +1,6 @@
 <script setup>
-  import DashboardGrid from '@aziontech/webkit/dashboard-grid'
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import DashboardGrid from '@aziontech/ui/dashboard-grid'
+  import StatTile from '@aziontech/ui/stat-tile'
   import { ref } from 'vue'
 
   const tiles = {

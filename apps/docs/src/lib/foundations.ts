@@ -11,15 +11,15 @@ export const FOUNDATIONS: FoundationPage[] = [
   {
     slug: 'getting-started',
     title: 'Getting started',
-    summary: 'Install WebKit, add the theme and render the first component.',
-    markdown: 'packages/webkit/README.md'
+    summary: 'Install Azion UI, add the theme and render the first component.',
+    markdown: 'packages/ui/README.md'
   },
   {
     slug: 'color',
     title: 'Color',
     summary: 'Semantic color tokens for light and dark, and the primitive palette behind them.',
     tokens: 'color',
-    markdown: 'rules/webkit-tokens.md'
+    markdown: 'rules/azion-ui-tokens.md'
   },
   {
     slug: 'typography',
@@ -50,7 +50,7 @@ export const FOUNDATIONS: FoundationPage[] = [
     title: 'Motion',
     summary: 'Easing curves, durations and the catalogued animations.',
     tokens: 'motion',
-    markdown: 'rules/webkit-motion.md'
+    markdown: 'rules/azion-ui-motion.md'
   },
   {
     slug: 'z-index',
@@ -62,35 +62,35 @@ export const FOUNDATIONS: FoundationPage[] = [
     slug: 'internationalization',
     title: 'Languages',
     summary: 'Built-in strings in English, Portuguese and Spanish through ConfigProvider.',
-    markdown: 'rules/webkit-strings.md',
+    markdown: 'rules/azion-ui-strings.md',
     demo: 'locale'
   },
   {
     slug: 'right-to-left',
     title: 'Right-to-left',
     summary: 'Logical sides only, so every screen mirrors under dir="rtl".',
-    markdown: 'rules/webkit-direction.md',
+    markdown: 'rules/azion-ui-direction.md',
     demo: 'direction'
   },
   {
     slug: 'devices',
     title: 'Layout and devices',
     summary: 'Container types, rhythm, breakpoints and how screens adapt.',
-    markdown: 'rules/webkit-page-layout.md',
+    markdown: 'rules/azion-ui-page-layout.md',
     demo: 'devices'
   },
   {
     slug: 'accessibility',
     title: 'Accessibility',
     summary: 'Role, keyboard, focus and motion are built in.',
-    markdown: 'rules/webkit-accessibility.md'
+    markdown: 'rules/azion-ui-accessibility.md'
   },
   {
     slug: 'keyboard',
     title: 'Keyboard',
     summary:
       'One set of keys on every console screen: focus on open, Esc, save, search and the ? list.',
-    markdown: 'rules/webkit-keyboard.md',
+    markdown: 'rules/azion-ui-keyboard.md',
     demo: 'keyboard'
   },
   {
@@ -98,7 +98,7 @@ export const FOUNDATIONS: FoundationPage[] = [
     title: 'Site pages',
     summary:
       'What an Azion web page may put on its column: sections, hero, frame, assets and copy.',
-    markdown: 'rules/webkit-site-pages.md'
+    markdown: 'rules/azion-ui-site-pages.md'
   }
 ]
 

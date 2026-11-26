@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import LogViewer, { type LogViewerStep } from '@aziontech/webkit/log-viewer'
+  import LogViewer, { type LogViewerStep } from '@aziontech/ui/log-viewer'
 
   const steps: LogViewerStep[] = [
     {

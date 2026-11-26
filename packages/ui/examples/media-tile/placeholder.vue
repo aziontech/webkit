@@ -1,6 +1,6 @@
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaTile from '@aziontech/webkit/media-tile'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaTile from '@aziontech/ui/media-tile'
 </script>
 
 <template>

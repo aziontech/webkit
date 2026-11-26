@@ -45,7 +45,7 @@ Containment has one cost: a box with `@container` has no intrinsic width. Put it
 width comes from its parent (block, grid track, `flex-1`), never on `inline-flex`, `w-fit` or a
 popover.
 
-Touch: every target is at least 24 × 24 px, 44 × 44 px on a coarse pointer. The webkit controls do
+Touch: every target is at least 24 × 24 px, 44 × 44 px on a coarse pointer. The Azion UI controls do
 it without changing their drawn size (an invisible hit area under `pointer-coarse:`); in your own
 markup prefer a larger hit area over a larger control. Anything shown on hover is also shown on
 focus and under `[@media(hover:none)]:`.

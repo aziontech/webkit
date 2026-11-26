@@ -24,7 +24,7 @@ and the ariaLabel prop of IconButton and ButtonGroup is optional in their types,
 form type-checks in a fresh create-vue app.
 
 Without --write it lists what it would change and exits 1 when anything would.
-Default dirs (in packages/webkit): ${DEFAULT_DIRS.join(', ')}`
+Default dirs (in packages/ui): ${DEFAULT_DIRS.join(', ')}`
 
 function* vueFiles(dir) {
   for (const entry of readdirSync(dir, { recursive: true, withFileTypes: true })) {

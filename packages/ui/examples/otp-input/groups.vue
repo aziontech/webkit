@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import OtpInput from '@aziontech/webkit/otp-input'
+  import Field from '@aziontech/ui/field'
+  import OtpInput from '@aziontech/ui/otp-input'
   import { ref } from 'vue'
 
   const code = ref('')

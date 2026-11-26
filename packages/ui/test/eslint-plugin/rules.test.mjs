@@ -6,7 +6,9 @@ import * as vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
 
 // Point every rule's catalog loader at the fixture (version-locked, deterministic).
-process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('./fixtures/catalog.json', import.meta.url))
+process.env.AZION_UI_CATALOG_PATH = fileURLToPath(
+  new URL('./fixtures/catalog.json', import.meta.url)
+)
 
 const noUnknownImport = (await import('../../src/eslint-plugin/rules/no-unknown-import.js')).default
 const noDeepInternalImport = (
@@ -30,8 +32,8 @@ const preferTreeShakeableRoot = (
 const noDeprecatedComponent = (
   await import('../../src/eslint-plugin/rules/no-deprecated-component.js')
 ).default
-const preferWebkitComponent = (
-  await import('../../src/eslint-plugin/rules/prefer-webkit-component.js')
+const preferAzionUiComponent = (
+  await import('../../src/eslint-plugin/rules/prefer-azion-ui-component.js')
 ).default
 const noStyleOverride = (await import('../../src/eslint-plugin/rules/no-style-override.js')).default
 const { LAYOUT_CLASS_FAMILIES: ALLOWED_LAYOUT } =
@@ -84,23 +86,23 @@ const vueTs = new RuleTester({
 test('no-unknown-import', () => {
   js.run('no-unknown-import', noUnknownImport, {
     valid: [
-      "import Button from '@aziontech/webkit/button'",
-      "import Table from '@aziontech/webkit/table'",
+      "import Button from '@aziontech/ui/button'",
+      "import Table from '@aziontech/ui/table'",
       "import X from 'some-other-lib'",
       // deep / src are deferred to no-deep-internal-import:
-      "import X from '@aziontech/webkit/table/internal'",
-      "import X from '@aziontech/webkit/src/components/x'"
+      "import X from '@aziontech/ui/table/internal'",
+      "import X from '@aziontech/ui/src/components/x'"
     ],
     invalid: [
       // exactly one close subpath → autofix rewrites it (fixer emits double quotes)
       {
-        code: "import X from '@aziontech/webkit/buton'",
-        output: 'import X from "@aziontech/webkit/button"',
+        code: "import X from '@aziontech/ui/buton'",
+        output: 'import X from "@aziontech/ui/button"',
         errors: [{ messageId: 'unknown', suggestions: 1 }]
       },
       // two candidates (chip, chips) → ambiguous → suggestions only, NO autofix
       {
-        code: "import X from '@aziontech/webkit/chp'",
+        code: "import X from '@aziontech/ui/chp'",
         output: null,
         errors: [{ messageId: 'unknown', suggestions: 2 }]
       }
@@ -111,21 +113,21 @@ test('no-unknown-import', () => {
 test('no-deep-internal-import', () => {
   js.run('no-deep-internal-import', noDeepInternalImport, {
     valid: [
-      "import Button from '@aziontech/webkit/button'",
+      "import Button from '@aziontech/ui/button'",
       // unknown-but-not-deep is no-unknown-import's job:
-      "import X from '@aziontech/webkit/buton'"
+      "import X from '@aziontech/ui/buton'"
     ],
     invalid: [
       // /src/ deep import: reported, no published ancestor → no autofix
       {
-        code: "import X from '@aziontech/webkit/src/components/x'",
+        code: "import X from '@aziontech/ui/src/components/x'",
         output: null,
         errors: [{ messageId: 'deep' }]
       },
       // deeper-than-published: nearest published ancestor is a single value → autofix
       {
-        code: "import X from '@aziontech/webkit/table/internal'",
-        output: 'import X from "@aziontech/webkit/table"',
+        code: "import X from '@aziontech/ui/table/internal'",
+        output: 'import X from "@aziontech/ui/table"',
         errors: [{ messageId: 'deep', suggestions: 1 }]
       }
     ]
@@ -134,30 +136,27 @@ test('no-deep-internal-import', () => {
 
 test('no-barrel-import', () => {
   js.run('no-barrel-import', noBarrelImport, {
-    valid: [
-      "import Button from '@aziontech/webkit/button'",
-      "import Table from '@aziontech/webkit/table'"
-    ],
+    valid: ["import Button from '@aziontech/ui/button'", "import Table from '@aziontech/ui/table'"],
     invalid: [
       {
-        code: "import { Button } from '@aziontech/webkit'",
+        code: "import { Button } from '@aziontech/ui'",
         errors: [{ messageId: 'barrel', suggestions: 1 }]
       },
       {
-        code: "import { Button, Chip } from '@aziontech/webkit'",
+        code: "import { Button, Chip } from '@aziontech/ui'",
         errors: [{ messageId: 'barrel', suggestions: 1 }]
       },
       // the guessed subpath (nonexistent) is not a published export → barrel still
       // reported, but NO split suggestion is offered (would emit an invalid import)
       {
-        code: "import { Nonexistent } from '@aziontech/webkit'",
+        code: "import { Nonexistent } from '@aziontech/ui'",
         errors: [{ messageId: 'barrel', suggestions: 0 }]
       },
-      { code: "import * as WK from '@aziontech/webkit'", errors: [{ messageId: 'namespace' }] },
+      { code: "import * as WK from '@aziontech/ui'", errors: [{ messageId: 'namespace' }] },
       // export-from re-exports, and dynamic import(), are barrels as well
-      { code: "export { Button } from '@aziontech/webkit'", errors: [{ messageId: 'barrel' }] },
-      { code: "export * from '@aziontech/webkit'", errors: [{ messageId: 'namespace' }] },
-      { code: "const p = import('@aziontech/webkit')", errors: [{ messageId: 'namespace' }] }
+      { code: "export { Button } from '@aziontech/ui'", errors: [{ messageId: 'barrel' }] },
+      { code: "export * from '@aziontech/ui'", errors: [{ messageId: 'namespace' }] },
+      { code: "const p = import('@aziontech/ui')", errors: [{ messageId: 'namespace' }] }
     ]
   })
 })
@@ -419,8 +418,8 @@ test('no-physical-direction (template + script + fix)', () => {
         errors: [{ messageId: 'physical' }]
       },
       {
-        code: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-l-md', { 'mr-1': true })</script><template><i :class="c" /></template>`,
-        output: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-s-md', { 'me-1': true })</script><template><i :class="c" /></template>`,
+        code: `<script setup>import { cn } from '@aziontech/ui/utils/cn'\nconst c = cn('rounded-l-md', { 'mr-1': true })</script><template><i :class="c" /></template>`,
+        output: `<script setup>import { cn } from '@aziontech/ui/utils/cn'\nconst c = cn('rounded-s-md', { 'me-1': true })</script><template><i :class="c" /></template>`,
         filename: 'g.vue',
         errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
       }
@@ -430,13 +429,13 @@ test('no-physical-direction (template + script + fix)', () => {
 
 test('no-gap-after-closing-section', () => {
   const imports = `<script setup>
-import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
-import NewsletterSection from '@aziontech/webkit/newsletter-section'
-import Spacer from '@aziontech/webkit/spacer'
-import RegistrationFrame from '@aziontech/webkit/registration-frame'
-import Texture from '@aziontech/webkit/texture'
-import FaqSection from '@aziontech/webkit/faq-section'
-import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
+import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
+import NewsletterSection from '@aziontech/ui/newsletter-section'
+import Spacer from '@aziontech/ui/spacer'
+import RegistrationFrame from '@aziontech/ui/registration-frame'
+import Texture from '@aziontech/ui/texture'
+import FaqSection from '@aziontech/ui/faq-section'
+import TemplateGallerySection from '@aziontech/ui/template-gallery-section'
 </script>`
   const sfc = (template) => `${imports}<template>${template}</template>`
   vue.run('no-gap-after-closing-section', noGapAfterClosingSection, {
@@ -516,11 +515,8 @@ import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
 })
 
 test('no-wrapped-page-chrome', () => {
-  const sfc = (
-    template,
-    from = '@aziontech/webkit/site-footer-section',
-    name = 'SiteFooterSection'
-  ) => `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
+  const sfc = (template, from = '@aziontech/ui/site-footer-section', name = 'SiteFooterSection') =>
+    `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
   vue.run('no-wrapped-page-chrome', noWrappedPageChrome, {
     valid: [
       {
@@ -530,7 +526,7 @@ test('no-wrapped-page-chrome', () => {
       {
         code: sfc(
           '<div class="sticky top-0 z-40"><SiteHeaderSection /></div>',
-          '@aziontech/webkit/site-header-section',
+          '@aziontech/ui/site-header-section',
           'SiteHeaderSection'
         ),
         filename: 'b.vue'
@@ -557,7 +553,7 @@ test('no-wrapped-page-chrome', () => {
       {
         code: sfc(
           '<header class="border-b"><SiteHeaderSection /></header>',
-          '@aziontech/webkit/site-header-section',
+          '@aziontech/ui/site-header-section',
           'SiteHeaderSection'
         ),
         filename: 'g.vue',
@@ -568,7 +564,7 @@ test('no-wrapped-page-chrome', () => {
 })
 
 test('require-container-width', () => {
-  const sfc = (template, from = '@aziontech/webkit/card', name = 'Card') =>
+  const sfc = (template, from = '@aziontech/ui/card', name = 'Card') =>
     `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
   vue.run('require-container-width', requireContainerWidth, {
     valid: [
@@ -591,7 +587,7 @@ test('require-container-width', () => {
       {
         code: sfc(
           '<div class="flex"><StatTile class="grow" /></div>',
-          '@aziontech/webkit/stat-tile',
+          '@aziontech/ui/stat-tile',
           'StatTile'
         ),
         filename: 'h.vue'
@@ -611,7 +607,7 @@ test('require-container-width', () => {
       {
         code: sfc(
           '<div class="inline-flex"><stat-tile /></div>',
-          '@aziontech/webkit/stat-tile',
+          '@aziontech/ui/stat-tile',
           'StatTile'
         ),
         filename: 'k.vue',
@@ -688,23 +684,23 @@ test('prefer-tree-shakeable-root', () => {
     valid: [
       // dot-notation → compound genuinely needed
       {
-        code: "<script setup>import Table from '@aziontech/webkit/table'</script><template><Table><Table.Row/></Table></template>",
+        code: "<script setup>import Table from '@aziontech/ui/table'</script><template><Table><Table.Row/></Table></template>",
         filename: 'a.vue'
       },
       // already tree-shakeable root
       {
-        code: "<script setup>import TableRoot from '@aziontech/webkit/table-root'</script><template><TableRoot/></template>",
+        code: "<script setup>import TableRoot from '@aziontech/ui/table-root'</script><template><TableRoot/></template>",
         filename: 'b.vue'
       },
       // non-compound component
       {
-        code: "<script setup>import Button from '@aziontech/webkit/button'</script><template><Button/></template>",
+        code: "<script setup>import Button from '@aziontech/ui/button'</script><template><Button/></template>",
         filename: 'c.vue'
       }
     ],
     invalid: [
       {
-        code: "<script setup>import Table from '@aziontech/webkit/table'</script><template><Table/></template>",
+        code: "<script setup>import Table from '@aziontech/ui/table'</script><template><Table/></template>",
         filename: 'd.vue',
         errors: [
           {
@@ -713,7 +709,7 @@ test('prefer-tree-shakeable-root', () => {
               {
                 messageId: 'useRoot',
                 output:
-                  '<script setup>import Table from "@aziontech/webkit/table-root"</script><template><Table/></template>'
+                  '<script setup>import Table from "@aziontech/ui/table-root"</script><template><Table/></template>'
               }
             ]
           }
@@ -721,7 +717,7 @@ test('prefer-tree-shakeable-root', () => {
       },
       // named sub-component imports move to their own entries: the -root entry has no named exports
       {
-        code: "<script setup>\nimport Table, { TableRow as Row } from '@aziontech/webkit/table';\n</script><template><Table><Row/></Table></template>",
+        code: "<script setup>\nimport Table, { TableRow as Row } from '@aziontech/ui/table';\n</script><template><Table><Row/></Table></template>",
         filename: 'e.vue',
         errors: [
           {
@@ -730,7 +726,7 @@ test('prefer-tree-shakeable-root', () => {
               {
                 messageId: 'useRoot',
                 output:
-                  '<script setup>\nimport Table from "@aziontech/webkit/table-root";\nimport Row from "@aziontech/webkit/table-row";\n</script><template><Table><Row/></Table></template>'
+                  '<script setup>\nimport Table from "@aziontech/ui/table-root";\nimport Row from "@aziontech/ui/table-row";\n</script><template><Table><Row/></Table></template>'
               }
             ]
           }
@@ -738,7 +734,7 @@ test('prefer-tree-shakeable-root', () => {
       },
       // a named binding the catalog cannot place: reported, but no suggestion that would break the import
       {
-        code: "<script setup>import Table, { useTableHelper } from '@aziontech/webkit/table'</script><template><Table/></template>",
+        code: "<script setup>import Table, { useTableHelper } from '@aziontech/ui/table'</script><template><Table/></template>",
         filename: 'f.vue',
         errors: [{ messageId: 'preferRootNamed', suggestions: [] }]
       }
@@ -748,7 +744,7 @@ test('prefer-tree-shakeable-root', () => {
     valid: [],
     invalid: [
       {
-        code: '<script setup lang="ts">import Table, { type TableColumn } from \'@aziontech/webkit/table\'\nconst columns: TableColumn[] = []</script><template><Table :columns="columns"/></template>',
+        code: '<script setup lang="ts">import Table, { type TableColumn } from \'@aziontech/ui/table\'\nconst columns: TableColumn[] = []</script><template><Table :columns="columns"/></template>',
         filename: 'g.vue',
         errors: [{ messageId: 'preferRootNamed', suggestions: [] }]
       }
@@ -757,7 +753,7 @@ test('prefer-tree-shakeable-root', () => {
 })
 
 test('no-dropped-children', () => {
-  const imp = (n, s) => `<script setup>import ${n} from '@aziontech/webkit/${s}'</script>`
+  const imp = (n, s) => `<script setup>import ${n} from '@aziontech/ui/${s}'</script>`
   vue.run('no-dropped-children', noDroppedChildren, {
     valid: [
       // the text goes through the label prop
@@ -790,7 +786,7 @@ test('no-dropped-children', () => {
         code: `${imp('TableRow', 'table-row')}<template><TableRow>cell</TableRow></template>`,
         filename: 'f.vue'
       },
-      // a native element and a non-webkit component are not judged
+      // a native element and a non-azion-ui component are not judged
       {
         code: `<script setup>import Foo from './foo.vue'</script><template><button>Go</button><Foo>Go</Foo></template>`,
         filename: 'g.vue'
@@ -869,23 +865,23 @@ test('no-dropped-children', () => {
 test('no-deprecated-component', () => {
   js.run('no-deprecated-component', noDeprecatedComponent, {
     valid: [
-      "import Chip from '@aziontech/webkit/chip'",
-      "import Button from '@aziontech/webkit/button'",
+      "import Chip from '@aziontech/ui/chip'",
+      "import Button from '@aziontech/ui/button'",
       "import x from 'some-other-lib'"
     ],
     invalid: [
       // `chips` is marked deprecated (replacedBy: chip) in the fixture catalog
       {
-        code: "import X from '@aziontech/webkit/chips'",
+        code: "import X from '@aziontech/ui/chips'",
         errors: [{ messageId: 'deprecated', suggestions: 1 }]
       },
       // a non-component entry deprecated by its source JSDoc carries the note, no replacement
       {
-        code: "import { webkitViteConfig } from '@aziontech/webkit/vite'",
+        code: "import { azionUiViteConfig } from '@aziontech/ui/vite'",
         errors: [
           {
             message:
-              "'@aziontech/webkit/vite' is deprecated in @aziontech/webkit. Since 6.1 — nothing to pre-bundle. Removed in 7.0.",
+              "'@aziontech/ui/vite' is deprecated in @aziontech/ui. Since 6.1 — nothing to pre-bundle. Removed in 7.0.",
             suggestions: []
           }
         ]
@@ -894,9 +890,9 @@ test('no-deprecated-component', () => {
   })
 })
 
-test('prefer-webkit-component', () => {
-  js.run('prefer-webkit-component', preferWebkitComponent, {
-    valid: ["import Button from '@aziontech/webkit/button'", "import _ from 'lodash'"],
+test('prefer-azion-ui-component', () => {
+  js.run('prefer-azion-ui-component', preferAzionUiComponent, {
+    valid: ["import Button from '@aziontech/ui/button'", "import _ from 'lodash'"],
     invalid: [
       { code: "import { Button } from 'primevue/button'", errors: [{ messageId: 'prefer' }] },
       { code: "import PrimeVue from 'primevue'", errors: [{ messageId: 'prefer' }] }
@@ -905,15 +901,15 @@ test('prefer-webkit-component', () => {
 })
 
 test('no-style-override', () => {
-  const imp = (n, s) => `<script setup>import ${n} from '@aziontech/webkit/${s}'</script>`
+  const imp = (n, s) => `<script setup>import ${n} from '@aziontech/ui/${s}'</script>`
   vue.run('no-style-override', noStyleOverride, {
     valid: [
-      // no class/style on the webkit tag
+      // no class/style on the Azion UI tag
       {
         code: `${imp('Button', 'button')}<template><Button kind="primary">Save</Button></template>`,
         filename: 'a.vue'
       },
-      // class on a NON-webkit element is fine (consumer's own markup)
+      // class on a NON-ui element is fine (consumer's own markup)
       {
         code: `${imp('Button', 'button')}<template><div class="p-4"><Button /></div></template>`,
         filename: 'b.vue'
@@ -953,7 +949,7 @@ test('no-style-override', () => {
         filename: 'l4.vue'
       },
       {
-        code: `<script setup>import DataTable from '@aziontech/webkit/data-table'\nimport TableSearch from '@aziontech/webkit/table-search'</script><template><DataTable max-height="100%" class="h-full min-h-0"><TableSearch class="flex-1" /></DataTable></template>`,
+        code: `<script setup>import DataTable from '@aziontech/ui/data-table'\nimport TableSearch from '@aziontech/ui/table-search'</script><template><DataTable max-height="100%" class="h-full min-h-0"><TableSearch class="flex-1" /></DataTable></template>`,
         filename: 'l5.vue'
       },
       {
@@ -1200,7 +1196,7 @@ test('require-authoring-standards (shared engine: hook + ratchet + consumer lint
           "import Eyebrow from './eyebrow.vue'; const PREFIX = '//' as const",
           '<div><a href="https://www.azion.com">x</a><Eyebrow :prefix="PREFIX">Run</Eyebrow></div>'
         ),
-        filename: '/repo/packages/webkit/src/components/content/x/x.vue'
+        filename: '/repo/packages/ui/src/components/content/x/x.vue'
       },
       {
         code: sfc(
@@ -1216,7 +1212,7 @@ test('require-authoring-standards (shared engine: hook + ratchet + consumer lint
           "import Eyebrow from './eyebrow.vue'; import Link from './link.vue'",
           '<ul><li v-for="item in [1]" :key="item"><Eyebrow v-if="item" prefix="//">Run</Eyebrow><link-item href="https://www.azion.com/">Docs</link-item></li></ul>'
         ),
-        filename: '/repo/packages/webkit/src/components/content/x/x.vue',
+        filename: '/repo/packages/ui/src/components/content/x/x.vue',
         errors: [
           { messageId: 'component-attr-double-slash' },
           { messageId: 'component-attr-double-slash' }
@@ -1493,7 +1489,7 @@ test('no-output-in-command', () => {
 test('no-root-relative-asset', () => {
   js.run('no-root-relative-asset', noRootRelativeAsset, {
     valid: [
-      "import logo from '@aziontech/webkit/assets/magalu-extended-color.svg'",
+      "import logo from '@aziontech/ui/assets/magalu-extended-color.svg'",
       "const item = { logo, href: '/customers/magalu' }",
       "const doc = '/docs/edge-application'",
       "const remote = 'https://www.azion.com/media/careers/office-desks.jpg'",
@@ -1512,7 +1508,7 @@ test('no-root-relative-asset', () => {
             messageId: 'known',
             data: {
               url: '/marketing-components/logos/magalu-extended-color.svg',
-              specifier: '@aziontech/webkit/assets/magalu-extended-color.svg',
+              specifier: '@aziontech/ui/assets/magalu-extended-color.svg',
               binding: 'magaluExtendedColor'
             }
           }
@@ -1525,7 +1521,7 @@ test('no-root-relative-asset', () => {
             messageId: 'known',
             data: {
               url: '/marketing-components/badges/soc.svg',
-              specifier: '@aziontech/webkit/assets/soc-symbol-color.svg',
+              specifier: '@aziontech/ui/assets/soc-symbol-color.svg',
               binding: 'socSymbolColor'
             }
           }
@@ -1551,7 +1547,7 @@ test('no-root-relative-asset', () => {
     valid: [
       {
         code: `<script setup>
-  import banner from '@aziontech/webkit/assets/placeholder-image.svg'
+  import banner from '@aziontech/ui/assets/placeholder-image.svg'
 </script>
 <template><ArticleBodySection :banner="banner" href="/media" /></template>`,
         filename: 'a.vue'

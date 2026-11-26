@@ -2,7 +2,7 @@
 
 > The chat list of an assistant, in a side panel or a `Drawer` on phones: rows grouped by last activity (Today, Yesterday, Previous 7 days, Previous 30 days, Older) or by status (Working, Settled), the open one current, pinned chats on top, an optional Projects section of folders that expand in place, and on top a New chat row, a search field or a toolbar whose Search button opens the app's palette. A row is a title or a rich row (tag, description, age, status); per-row actions (pin, rename, share, lock, move, archive, delete) sit on hover and in a `DropdownMenu`. Choosing a row sets `v-model` to its id.
 
-- Import: `import ConversationHistory from '@aziontech/webkit/conversation-history'`
+- Import: `import ConversationHistory from '@aziontech/ui/conversation-history'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [conversation-history.json](conversation-history.json)
 
@@ -190,10 +190,10 @@
 
 ```vue
 <script setup>
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import ConversationHistory from '@aziontech/webkit/conversation-history'
-  import Drawer from '@aziontech/webkit/drawer'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import ConversationHistory from '@aziontech/ui/conversation-history'
+  import Drawer from '@aziontech/ui/drawer'
+  import IconButton from '@aziontech/ui/icon-button'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   const now = '2026-11-11T15:00:00Z'
@@ -327,7 +327,7 @@
 
 ```vue
 <script setup>
-  import ConversationHistory from '@aziontech/webkit/conversation-history'
+  import ConversationHistory from '@aziontech/ui/conversation-history'
 </script>
 
 <template>
@@ -348,7 +348,7 @@
 
 ```vue
 <script setup>
-  import ConversationHistory from '@aziontech/webkit/conversation-history'
+  import ConversationHistory from '@aziontech/ui/conversation-history'
   import { ref } from 'vue'
 
   const now = '2026-11-11T15:00:00Z'

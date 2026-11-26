@@ -1,4 +1,4 @@
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 type ArgumentInput = { field: string; placeholder: string; label: string }
 export type BehaviorArgument =

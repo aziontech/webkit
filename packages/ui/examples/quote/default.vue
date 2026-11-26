@@ -1,6 +1,6 @@
 <script setup>
-  import Quote from '@aziontech/webkit/quote'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import Quote from '@aziontech/ui/quote'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 </script>
 
 <template>

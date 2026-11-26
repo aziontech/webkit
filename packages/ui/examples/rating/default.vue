@@ -1,5 +1,5 @@
 <script setup>
-  import Rating from '@aziontech/webkit/rating'
+  import Rating from '@aziontech/ui/rating'
   import { ref } from 'vue'
 
   const score = ref(0)

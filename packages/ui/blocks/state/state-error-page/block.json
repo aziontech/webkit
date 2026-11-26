@@ -30,7 +30,7 @@
     "erro 404",
     "erro 500"
   ],
-  "skills": ["webkit-ui-states", "webkit-errors", "webkit-microcopy"],
+  "skills": ["azion-ui-states", "azion-ui-errors", "azion-ui-microcopy"],
   "primary": {
     "name": "Default",
     "file": "state-error-page.vue"

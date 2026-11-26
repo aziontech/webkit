@@ -1,5 +1,5 @@
 <script setup>
-  import PageHeader from '@aziontech/webkit/page-header'
+  import PageHeader from '@aziontech/ui/page-header'
 </script>
 
 <template>

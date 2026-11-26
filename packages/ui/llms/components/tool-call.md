@@ -2,7 +2,7 @@
 
 > One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Preparing…`, `Running…`, `Completed`, `Failed`, `Canceled`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ToolApproval`.
 
-- Import: `import ToolCall from '@aziontech/webkit/tool-call'`
+- Import: `import ToolCall from '@aziontech/ui/tool-call'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [tool-call.json](tool-call.json)
 
@@ -106,7 +106,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 
 ```vue
 <script setup>
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import ToolCall from '@aziontech/ui/tool-call'
 </script>
 
 <template>
@@ -154,8 +154,8 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 
 ```vue
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import ToolCall from '@aziontech/ui/tool-call'
 
   const input = JSON.stringify({ workload: 'storefront' }, null, 2)
   const output = JSON.stringify({ cache_by_query_string: 'all', ttl: 3600 }, null, 2)

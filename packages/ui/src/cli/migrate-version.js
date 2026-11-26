@@ -1,11 +1,21 @@
 import { existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 
-import { readJson } from './migrate-syntax.js'
+import { loadPackageMap } from './migrate-package.js'
+import { escapeRe, readJson } from './migrate-syntax.js'
+
+const NAME = '@aziontech/ui'
+const OLD_NAMES = Object.entries(loadPackageMap().packages || {})
+  .filter(([, next]) => next === NAME)
+  .map(([old]) => old)
+const NAMES = [NAME, ...OLD_NAMES]
+const tarballStem = (name) => name.replace(/^@/, '').replace('/', '-')
 
 const SEMVER_RANGE = /^(?:[\^~]|[<>]=?|=|v|\s)*(\d+)(?:\.(?:\d+|[x*]))*(?:-[\w.]+)?/
 
-const TARBALL = /(?:^|[/\\])aziontech-webkit-(\d+)\.\d+\.\d+(?:-[\w.]+)?\.tgz$/
+const TARBALL = new RegExp(
+  `(?:^|[/\\\\])(?:${NAMES.map((n) => escapeRe(tarballStem(n))).join('|')})-(\\d+)\\.\\d+\\.\\d+(?:-[\\w.]+)?\\.tgz$`
+)
 
 function rangeMajor(range) {
   const majors = range.split('||').map((part) => part.trim().match(SEMVER_RANGE))
@@ -16,8 +26,9 @@ function rangeMajor(range) {
 function installedVersion(projectDir) {
   let dir = projectDir
   for (;;) {
-    const file = join(dir, 'node_modules', '@aziontech', 'webkit', 'package.json')
-    if (existsSync(file)) {
+    for (const name of NAMES) {
+      const file = join(dir, 'node_modules', ...name.split('/'), 'package.json')
+      if (!existsSync(file)) continue
       const { version } = readJson(file)
       if (typeof version === 'string') return version
     }
@@ -30,7 +41,7 @@ function installedVersion(projectDir) {
 export function declaredMajor(projectDir) {
   const range = declaredRange(projectDir)
   if (range == null) return null
-  const spec = range.trim().replace(/^npm:@aziontech\/webkit@/, '')
+  const spec = range.trim().replace(new RegExp(`^npm:(?:${NAMES.map(escapeRe).join('|')})@`), '')
   const tarball = spec.match(TARBALL)
   if (tarball) return { range, major: Number(tarball[1]), source: 'tarball' }
   if (!/^(file|link|workspace|portal|git|github|https?):|[/\\]/.test(spec) && spec) {
@@ -47,10 +58,7 @@ export function declaredMajor(projectDir) {
 
 export function declaredRange(projectDir) {
   const pkg = readJson(join(projectDir, 'package.json'))
-  const range = {
-    ...pkg.peerDependencies,
-    ...pkg.devDependencies,
-    ...pkg.dependencies
-  }['@aziontech/webkit']
-  return typeof range === 'string' ? range : null
+  const deps = { ...pkg.peerDependencies, ...pkg.devDependencies, ...pkg.dependencies }
+  const range = NAMES.map((name) => deps[name]).find((value) => typeof value === 'string')
+  return range ?? null
 }

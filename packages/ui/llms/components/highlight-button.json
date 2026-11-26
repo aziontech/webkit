@@ -1,8 +1,8 @@
 {
  "name": "highlight-button",
  "binding": "HighlightButton",
- "import": "@aziontech/webkit/highlight-button",
- "treeShakeableImport": "@aziontech/webkit/highlight-button",
+ "import": "@aziontech/ui/highlight-button",
+ "treeShakeableImport": "@aziontech/ui/highlight-button",
  "category": "action",
  "surface": "app",
  "structure": "monolithic",

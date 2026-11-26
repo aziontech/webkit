@@ -1,5 +1,5 @@
 <script setup>
-  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import ScrollArea from '@aziontech/ui/scroll-area'
 </script>
 
 <template>

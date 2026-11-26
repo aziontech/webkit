@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import SeverityTag from '@aziontech/ui/severity-tag'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
 
   import type { ActorActivityRow, ActorOutcome } from '../sample'
 

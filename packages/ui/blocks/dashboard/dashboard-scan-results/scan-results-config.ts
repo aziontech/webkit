@@ -1,6 +1,6 @@
-import type { ChartColor } from '@aziontech/webkit/chart'
-import type { TableColumn } from '@aziontech/webkit/data-table'
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { ChartColor } from '@aziontech/ui/chart'
+import type { TableColumn } from '@aziontech/ui/data-table'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 import type {
   ScanResultsSource,

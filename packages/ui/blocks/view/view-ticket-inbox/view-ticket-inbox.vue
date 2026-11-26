@@ -1,22 +1,22 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { AvatarPresence } from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Countdown from '@aziontech/webkit/countdown'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PriorityTag, { type PriorityTagPriority } from '@aziontech/webkit/priority-tag'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import Alert from '@aziontech/ui/alert'
+  import type { AvatarPresence } from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Countdown from '@aziontech/ui/countdown'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PriorityTag, { type PriorityTagPriority } from '@aziontech/ui/priority-tag'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
   import {
     type FilteringProperty,
     type PropertyFilterQuery,
     useCollection
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
   import { computed, watch } from 'vue'
 
   import {

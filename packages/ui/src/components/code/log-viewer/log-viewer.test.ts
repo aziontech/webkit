@@ -126,7 +126,7 @@ describe('LogViewer', () => {
 
     describe('composition wiring — the public sub-components are real components sharing one context', () => {
       it('resolves each sub-component as a Vue component with its own defineOptions name', () => {
-        // These are the exact modules published as @aziontech/webkit/log-viewer-*.
+        // These are the exact modules published as @aziontech/ui/log-viewer-*.
         expect(LogViewer.name).toBe('LogViewer')
         expect(LogViewerHeader.name).toBe('LogViewerHeader')
         expect(LogViewerContent.name).toBe('LogViewerContent')

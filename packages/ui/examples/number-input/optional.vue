@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import NumberInput from '@aziontech/webkit/number-input'
+  import Field from '@aziontech/ui/field'
+  import NumberInput from '@aziontech/ui/number-input'
   import { ref } from 'vue'
 
   const port = ref(null)

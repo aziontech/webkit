@@ -53,7 +53,7 @@ When the page sets `v-model:secret` to what the create request returned, the dra
 
 ### J. Confirmations and outcomes — `ConfirmDialog` (required)
 
-Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone, then marks the row revoked and emits `revoke`. Delete asks the same way, removes the row and emits `delete`. The page that runs the request ends both in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy. The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone, then marks the row revoked and emits `revoke`. Delete asks the same way, removes the row and emits `delete`. The page that runs the request ends both in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy. The page calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -136,7 +136,7 @@ Then delete `sample.ts` and its import.
 - **Status:** `Active`, `Expires in 3 days`, `Expired`, `Revoked`. **Last used:** relative time, or `Never used`.
 - **Reveal:** title `Copy your new token`; warning `Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost.`
 - **Revoke:** title `Revoke token`; description `Scripts and tools that use “<name>” stop working right away. You cannot undo this.`; button `Revoke token`; toast `Token “<name>” revoked. Requests that use it are now refused.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 

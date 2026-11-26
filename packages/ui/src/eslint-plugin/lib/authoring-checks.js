@@ -45,7 +45,7 @@ const slotPresenceSites = (text) =>
     .filter(({ body }) => SLOT_PRESENCE.test(body))
     .map(({ start }) => start)
 
-const isShippedComponent = (rel) => /(^|\/)packages\/webkit\/src\/components\/.+\.vue$/.test(rel)
+const isShippedComponent = (rel) => /(^|\/)packages\/ui\/src\/components\/.+\.vue$/.test(rel)
 
 const COMPONENT_TAG = /<([A-Z][\w.]*|[a-z][a-z0-9]*-[\w-]*)(?=[\s/>])/g
 

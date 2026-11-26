@@ -3,10 +3,10 @@
 > The /signup/onboarding screen, frame included: the signed-out `AppHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `variant="card"` in a `fieldset` under a `Field.Legend` with a `FieldError`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.
 
 - Surface: app
-- Source: `blocks/account/account-onboarding-form/account-onboarding-form.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-onboarding-form/account-onboarding-form.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-onboarding-form")`
 - Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [PlanFeatureList](../../components/plan-feature-list.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), `utils/focus-invalid`, [Wizard](../../components/wizard.md)
-- Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
+- Skills: `azion-ui-form`, `azion-ui-errors`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -197,17 +197,17 @@ Each variant is the same screen in another state: `get_block("account/account-on
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import { type PlanFeatureListItem } from '@aziontech/webkit/plan-feature-list'
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
-  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
-  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
-  import Wizard from '@aziontech/webkit/wizard'
+  import Alert from '@aziontech/ui/alert'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import { type PlanFeatureListItem } from '@aziontech/ui/plan-feature-list'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/ui/tag'
+  import { focusFirstInvalid } from '@aziontech/ui/utils/focus-invalid'
+  import Wizard from '@aziontech/ui/wizard'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { accents, blankAddress, blankCard } from './onboarding-form-data'
@@ -648,7 +648,7 @@ Each variant is the same screen in another state: `get_block("account/account-on
 ## `sample.ts`
 
 ```ts
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 import type { OnboardingFormAccount, OnboardingFormPlan } from './account-onboarding-form.vue'
 
@@ -903,7 +903,7 @@ export const roleOptions = [
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
+  import Avatar from '@aziontech/ui/avatar'
 
   import { accountInitials } from '../onboarding-form-data'
 
@@ -1112,11 +1112,11 @@ export const roleOptions = [
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import Input from '@aziontech/webkit/input'
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
+  import Avatar from '@aziontech/ui/avatar'
+  import Field from '@aziontech/ui/field'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import Input from '@aziontech/ui/input'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
 
   import { accents } from '../onboarding-form-data'
 
@@ -1212,10 +1212,10 @@ export const roleOptions = [
 
 ```ts
 <script setup lang="ts">
-  import Field from '@aziontech/webkit/field'
-  import FieldError from '@aziontech/webkit/field-error'
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
-  import Switch from '@aziontech/webkit/switch'
+  import Field from '@aziontech/ui/field'
+  import FieldError from '@aziontech/ui/field-error'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
+  import Switch from '@aziontech/ui/switch'
 
   import { roleOptions, usageOptions } from '../onboarding-form-data'
 
@@ -1287,11 +1287,11 @@ export const roleOptions = [
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import Card from '@aziontech/ui/card'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
 
   import type { OnboardingFormAddress } from '../account-onboarding-form.vue'
   import { cityOptions, countryOptions, stateOptions } from '../sample'
@@ -1429,8 +1429,8 @@ export const roleOptions = [
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Card from '@aziontech/ui/card'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   import type {
     OnboardingFormBillingPeriod,
@@ -1498,16 +1498,16 @@ export const roleOptions = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Link from '@aziontech/webkit/link'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
-  import Separator from '@aziontech/webkit/separator'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Link from '@aziontech/ui/link'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import PlanFeatureList from '@aziontech/ui/plan-feature-list'
+  import Separator from '@aziontech/ui/separator'
   import { computed } from 'vue'
 
   import type {
@@ -1645,12 +1645,12 @@ export const roleOptions = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import Select from '@aziontech/webkit/select'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PaymentBrand from '@aziontech/ui/payment-brand'
+  import Select from '@aziontech/ui/select'
 
   import { blankCard } from '../onboarding-form-data'
   import { countryOptions } from '../sample'

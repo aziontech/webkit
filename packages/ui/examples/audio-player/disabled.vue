@@ -1,6 +1,6 @@
 <script setup>
-  import speech from '@aziontech/webkit/assets/placeholder-clip.webm'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
+  import speech from '@aziontech/ui/assets/placeholder-clip.webm'
+  import AudioPlayer from '@aziontech/ui/audio-player'
 </script>
 
 <template>

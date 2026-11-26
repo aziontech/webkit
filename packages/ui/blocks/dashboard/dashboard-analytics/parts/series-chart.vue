@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/webkit/chart'
+  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/ui/chart'
 
   /** How the series draw while the chart is not in its bar form. */
   export type SeriesChartShape = 'area' | 'line'

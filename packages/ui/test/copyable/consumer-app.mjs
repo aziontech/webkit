@@ -71,7 +71,7 @@ export function ensureThemeTypes() {
   }
   const scratch = join(THEME_DIR, 'node_modules')
   mkdirSync(scratch, { recursive: true })
-  const out = mkdtempSync(join(scratch, '.webkit-dts-'))
+  const out = mkdtempSync(join(scratch, '.azion-ui-dts-'))
   try {
     const vueTsc = join(dirname(require.resolve('vue-tsc/package.json')), 'bin/vue-tsc.js')
     const run = spawnSync(
@@ -105,7 +105,7 @@ export function ensureThemeTypes() {
 // as create-vue writes none) and returns the `error TS` lines, paths relative to the package.
 export function consumerTypeErrors(files, overrides = {}) {
   ensureThemeTypes()
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-consumer-ts-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-consumer-ts-'))
   try {
     const tsconfig = join(dir, 'tsconfig.json')
     writeFileSync(

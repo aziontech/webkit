@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Tag from '@aziontech/webkit/tag'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { VersionDetailEnvironment } from '../detail-version.vue'

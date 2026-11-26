@@ -1,8 +1,8 @@
 {
  "name": "artifact-canvas",
  "binding": "ArtifactCanvas",
- "import": "@aziontech/webkit/artifact-canvas",
- "treeShakeableImport": "@aziontech/webkit/artifact-canvas",
+ "import": "@aziontech/ui/artifact-canvas",
+ "treeShakeableImport": "@aziontech/ui/artifact-canvas",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

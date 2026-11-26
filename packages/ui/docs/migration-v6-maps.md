@@ -1,6 +1,37 @@
 # Migration maps, 6.0
 
-Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`; do not edit by hand. Every row is a rename `npx @aziontech/webkit migrate v6` applies, or a removal it reports. The guide that explains them is [`MIGRATION_V6.md`](../MIGRATION_V6.md).
+Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`; do not edit by hand. Every row is a rename `npx @aziontech/ui migrate v6` applies, or a removal it reports. The guide that explains them is [`MIGRATION_V6.md`](../MIGRATION_V6.md).
+
+## v6-package.json
+
+`v6-package.json`, 24 entries.
+
+| Where | Old | New |
+| --- | --- | --- |
+| packages | `@aziontech/webkit-mcp` | `@aziontech/ui-mcp` |
+| packages | `@aziontech/webkit` | `@aziontech/ui` |
+| bins | `webkit-mcp` | `azion-ui-mcp` |
+| bins | `webkit` | `azion-ui` |
+| mcpServer | `webkit` | `azion-ui` |
+| lintPrefix | `webkit/` | `azion-ui/` |
+| env | `WEBKIT_CATALOG_PATH` | `AZION_UI_CATALOG_PATH` |
+| files | `src/webkit.css` | `src/azion-ui.css` |
+| files | `src/webkit.sources.css` | `src/azion-ui.sources.css` |
+| files | `webkit.blocks.json` | `azion-ui.blocks.json` |
+| fileNames | `webkit.sources.css` | `azion-ui.sources.css` |
+| fileNames | `webkit.blocks.json` | `azion-ui.blocks.json` |
+| fileNames | `webkit.css` | `azion-ui.css` |
+| aiBundle › dirs | `0` | `.claude/skills` |
+| aiBundle › dirs | `1` | `.claude/rules` |
+| aiBundle › dirs | `2` | `.claude/agents` |
+| aiBundle › prefixes | `webkit-ui-` | `azion-ui-` |
+| aiBundle › prefixes | `webkit-` | `azion-ui-` |
+| aiBundle › marker | `webkit-sync` | `azion-ui-sync` |
+| docs | `0` | `AGENTS.md` |
+| docs | `1` | `CLAUDE.md` |
+| mcpConfigs | `0` | `.mcp.json` |
+| mcpConfigs | `1` | `.cursor/mcp.json` |
+| mcpConfigs | `2` | `.vscode/mcp.json` |
 
 ## Components, types and parts
 
@@ -197,7 +228,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | removed | `field-radio-block` | RadioGroup variant="card" v-model with a RadioGroup.Item per option (description on the item) |
 | removed | `field-switch-block` | FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription) |
 | removed | `sidebar-group` | SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item) |
-| removed | `doc-tabs` | Tabs from @aziontech/webkit/tabs: <Tabs default-value="<first value>"><Tabs.List><Tabs.Trigger value label /></Tabs.List><Tabs.Content value>…</Tabs.Content></Tabs> (DocMarkdown renders the MDX <Tabs><Tab title> tags as one) |
+| removed | `doc-tabs` | Tabs from @aziontech/ui/tabs: <Tabs default-value="<first value>"><Tabs.List><Tabs.Trigger value label /></Tabs.List><Tabs.Content value>…</Tabs.Content></Tabs> (DocMarkdown renders the MDX <Tabs><Tab title> tags as one) |
 | removed | `doc-tab` | a Tabs.Trigger (value, label = the old title) plus a Tabs.Content with the same value, inside one Tabs |
 | removed | `doc-tooltip` | HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one) |
 | removed | `mini-button` | Link (label, href, icon) for a text link that navigates; Button variant="link" for a text action without href |
@@ -209,34 +240,34 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | removed | `calendar-preset` | DatePicker picks one date and has no presets; for preset ranges use DateRangePicker with relative-options |
 | removed | `radio-button` | a radio is a RadioGroup.Item inside one RadioGroup that holds the v-model: <RadioGroup v-model><RadioGroup.Item value>Label</RadioGroup.Item></RadioGroup>; a Field.Label choice card becomes variant="card" with description on the item |
 | removed | `radio-cards` | RadioGroup variant="card" orientation="horizontal" with :options (the items move to options as is); the #default="{ item }" slot becomes #option="{ option }" and #tag="{ item }" becomes #tag="{ option }" |
-| removed | `hero-copy-on-top-art` | HeroSection from @aziontech/webkit/hero-section with variant="copy-on-top-art" and the same levels |
-| removed | `hero-with-opening` | HeroSection from @aziontech/webkit/hero-section with size="large" and the same items (titleLength="long" for a long headline) |
-| removed | `banner` | CallToAction from @aziontech/webkit/call-to-action with variant="announcement"; the aside slot becomes the default slot |
-| removed | `closing-call-to-action-agents` | ClosingCallToActionSection from @aziontech/webkit/closing-call-to-action-section with variant="primary" and the same audiences, typedLead, typedWords and description |
-| removed | `closing-call-to-action-templates` | TemplateGallerySection from @aziontech/webkit/template-gallery-section with closing; the same title, actions, templates and deployLabel |
-| removed | `customer-spotlight` | ClientStoryColumnsSection from @aziontech/webkit/client-story-columns-section with reveal="hover"; items become cells and each card's description becomes story |
-| removed | `sticky-carousel` | ProcessScrollSection from @aziontech/webkit/process-scroll-section with pinned and title-variant="centered"; items become steps |
-| removed | `quote-carousel` | ClientQuotesSection from @aziontech/webkit/client-quotes-section, or Quote cards in a CardCarouselSection |
-| removed | `compare-support-tiers` | PlanComparisonSection from @aziontech/webkit/plan-comparison-section; pass the tiers as plans |
-| removed | `article-index-blog` | ArticleIndexSection from @aziontech/webkit/article-index-section (filters defaults to category-search) |
-| removed | `article-index-resource-hub` | ArticleIndexSection from @aziontech/webkit/article-index-section with filters="facets" |
-| removed | `use-case-links` | CapabilityGridSection from @aziontech/webkit/capability-grid-section with title-variant="left"; items keep icon, title, description and href |
-| removed | `resource-grid` | CapabilityGridSection from @aziontech/webkit/capability-grid-section with title-variant="horizontal"; items keep title, description and href |
-| removed | `content-columns` | CapabilityGridSection from @aziontech/webkit/capability-grid-section; items keep title and description, columns is 3 or 4 |
-| removed | `code-split` | MediaSplitSection from @aziontech/webkit/media-split-section with the same codeTabs, defaultFile and actions |
-| removed | `sticky-scroll-code` | FeatureScrollSection from @aziontech/webkit/feature-scroll-section; items keep title, description, code and action |
-| removed | `shell-mockup` | ConsoleMockup from @aziontech/webkit/console-mockup with the registry name of the console screen; the frame is internal |
-| removed | `shell-mockup-root` | ConsoleMockup from @aziontech/webkit/console-mockup with the registry name of the console screen; the frame is internal |
-| removed | `shell-mockup-part` | ConsoleMockup from @aziontech/webkit/console-mockup; the frame and its parts are internal |
-| removed | `vite` | delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config |
-| removed | `doc-cta` | use DocCallToAction from '@aziontech/webkit/doc-call-to-action': primary-label and primary-href become :primary-action="{ label, href }", secondary-label and secondary-href become :secondary-action="{ label, href }" |
+| removed | `hero-copy-on-top-art` | HeroSection from @aziontech/ui/hero-section with variant="copy-on-top-art" and the same levels |
+| removed | `hero-with-opening` | HeroSection from @aziontech/ui/hero-section with size="large" and the same items (titleLength="long" for a long headline) |
+| removed | `banner` | CallToAction from @aziontech/ui/call-to-action with variant="announcement"; the aside slot becomes the default slot |
+| removed | `closing-call-to-action-agents` | ClosingCallToActionSection from @aziontech/ui/closing-call-to-action-section with variant="primary" and the same audiences, typedLead, typedWords and description |
+| removed | `closing-call-to-action-templates` | TemplateGallerySection from @aziontech/ui/template-gallery-section with closing; the same title, actions, templates and deployLabel |
+| removed | `customer-spotlight` | ClientStoryColumnsSection from @aziontech/ui/client-story-columns-section with reveal="hover"; items become cells and each card's description becomes story |
+| removed | `sticky-carousel` | ProcessScrollSection from @aziontech/ui/process-scroll-section with pinned and title-variant="centered"; items become steps |
+| removed | `quote-carousel` | ClientQuotesSection from @aziontech/ui/client-quotes-section, or Quote cards in a CardCarouselSection |
+| removed | `compare-support-tiers` | PlanComparisonSection from @aziontech/ui/plan-comparison-section; pass the tiers as plans |
+| removed | `article-index-blog` | ArticleIndexSection from @aziontech/ui/article-index-section (filters defaults to category-search) |
+| removed | `article-index-resource-hub` | ArticleIndexSection from @aziontech/ui/article-index-section with filters="facets" |
+| removed | `use-case-links` | CapabilityGridSection from @aziontech/ui/capability-grid-section with title-variant="left"; items keep icon, title, description and href |
+| removed | `resource-grid` | CapabilityGridSection from @aziontech/ui/capability-grid-section with title-variant="horizontal"; items keep title, description and href |
+| removed | `content-columns` | CapabilityGridSection from @aziontech/ui/capability-grid-section; items keep title and description, columns is 3 or 4 |
+| removed | `code-split` | MediaSplitSection from @aziontech/ui/media-split-section with the same codeTabs, defaultFile and actions |
+| removed | `sticky-scroll-code` | FeatureScrollSection from @aziontech/ui/feature-scroll-section; items keep title, description, code and action |
+| removed | `shell-mockup` | ConsoleMockup from @aziontech/ui/console-mockup with the registry name of the console screen; the frame is internal |
+| removed | `shell-mockup-root` | ConsoleMockup from @aziontech/ui/console-mockup with the registry name of the console screen; the frame is internal |
+| removed | `shell-mockup-part` | ConsoleMockup from @aziontech/ui/console-mockup; the frame and its parts are internal |
+| removed | `vite` | delete the azionUiViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config |
+| removed | `doc-cta` | use DocCallToAction from '@aziontech/ui/doc-call-to-action': primary-label and primary-href become :primary-action="{ label, href }", secondary-label and secondary-href become :secondary-action="{ label, href }" |
 | removed | `helper-text` | use FieldDescription for guidance or FieldError for a validation message (Field.Description / Field.Error); both work outside a Field |
-| removed | `doc-step` | import DocSteps from @aziontech/webkit/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound |
-| removed | `line-figure` | remove it; no replacement: WebKit no longer ships line figures |
-| removed | `svg/azion/min` | the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand and variant="reduced" |
-| removed | `svg/azion/technologies` | the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand and variant="extended" |
-| removed | `svg/azion/full` | the "Move to the Edge" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand (variant="extended" for AZION technologies) |
-| removed | `svg/azion/move-to-the-edge` | the "Move to the Edge" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/webkit/brand (variant="extended" for AZION technologies) |
+| removed | `doc-step` | import DocSteps from @aziontech/ui/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound |
+| removed | `line-figure` | remove it; no replacement: Azion UI no longer ships line figures |
+| removed | `svg/azion/min` | the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/ui/brand and variant="reduced" |
+| removed | `svg/azion/technologies` | the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/ui/brand and variant="extended" |
+| removed | `svg/azion/full` | the "Move to the Edge" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/ui/brand (variant="extended" for AZION technologies) |
+| removed | `svg/azion/move-to-the-edge` | the "Move to the Edge" lockups are retired with no replacement; the loose Azion SVGs are gone; draw the mark with Brand from @aziontech/ui/brand (variant="extended" for AZION technologies) |
 | types | `BoxGridSelectionItem` | `RadioGroupOption` |
 | types | `CommandMenuContext` | `CommandContext` |
 | types | `CommandMenuItemValue` | `CommandItemValue` |
@@ -880,11 +911,11 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | legacy › manual | `testimonials-carousel` | work-in-progress section; use the QuoteTabs component or a marketing block |
 | legacy › manual | `textarea` | PrimeVue Textarea; use Textarea |
 | legacy › manual | `timeline` | PrimeVue Timeline; use Timeline with Timeline.Item and Timeline.Group (different API) |
-| legacy › manual | `toast` | PrimeVue Toast; mount Toaster from @aziontech/webkit/toast once |
+| legacy › manual | `toast` | PrimeVue Toast; mount Toaster from @aziontech/ui/toast once |
 | legacy › manual | `toolbar` | PrimeVue Toolbar; use PageHeader actions or a flex row |
 | legacy › manual | `tooltip` | v-tooltip directive; use the Tooltip component |
 | legacy › manual | `use-dialog` | PrimeVue DialogService; render a Dialog from your own state |
-| legacy › manual | `use-toast` | PrimeVue ToastService; use toast() / useToast from @aziontech/webkit/toast |
+| legacy › manual | `use-toast` | PrimeVue ToastService; use toast() / useToast from @aziontech/ui/toast |
 | named | `DropdownMenuOption` | `DropdownMenuItem` |
 | named | `SelectOption` | `SelectItem` |
 | named | `MultiSelectOption` | `MultiSelectItem` |
@@ -2921,11 +2952,11 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 
 | Where | Old | New |
 | --- | --- | --- |
-|  | `webkit/authoring-standards` | `webkit/require-authoring-standards` |
-|  | `webkit/composable-readonly-return` | `webkit/require-readonly-composable-return` |
-|  | `webkit/composable-scope-cleanup` | `webkit/require-composable-scope-cleanup` |
-|  | `webkit/accessible-name` | `webkit/require-accessible-name` |
-|  | `webkit/container-needs-width` | `webkit/require-container-width` |
-|  | `webkit/header-search-trigger` | `webkit/require-header-search` |
-|  | `webkit/menu-node-href` | `webkit/prefer-href-in-menu-node` |
-|  | `webkit/valid-import-path` | `webkit/no-unknown-import` |
+|  | `azion-ui/authoring-standards` | `azion-ui/require-authoring-standards` |
+|  | `azion-ui/composable-readonly-return` | `azion-ui/require-readonly-composable-return` |
+|  | `azion-ui/composable-scope-cleanup` | `azion-ui/require-composable-scope-cleanup` |
+|  | `azion-ui/accessible-name` | `azion-ui/require-accessible-name` |
+|  | `azion-ui/container-needs-width` | `azion-ui/require-container-width` |
+|  | `azion-ui/header-search-trigger` | `azion-ui/require-header-search` |
+|  | `azion-ui/menu-node-href` | `azion-ui/prefer-href-in-menu-node` |
+|  | `azion-ui/valid-import-path` | `azion-ui/no-unknown-import` |

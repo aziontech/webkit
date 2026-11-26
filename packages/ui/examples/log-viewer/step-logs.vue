@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import LogViewer, { type LogViewerStep } from '@aziontech/webkit/log-viewer'
-  import Tag from '@aziontech/webkit/tag'
+  import LogViewer, { type LogViewerStep } from '@aziontech/ui/log-viewer'
+  import Tag from '@aziontech/ui/tag'
 
   const steps: LogViewerStep[] = [
     {

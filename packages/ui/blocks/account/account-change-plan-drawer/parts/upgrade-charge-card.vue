@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Separator from '@aziontech/webkit/separator'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Card from '@aziontech/ui/card'
+  import Separator from '@aziontech/ui/separator'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   import type {
     ChangePlanDrawerCharges,

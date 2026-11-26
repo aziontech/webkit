@@ -1,8 +1,8 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Button from '@aziontech/ui/button'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { ref } from 'vue'
 
   const LIMIT = 300 * 1024 * 1024

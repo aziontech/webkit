@@ -2,7 +2,7 @@
 
 > Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `popover` instead.
 
-- Import: `import Tooltip from '@aziontech/webkit/tooltip'`
+- Import: `import Tooltip from '@aziontech/ui/tooltip'`
 - Category: overlay · Surface: app · Structure: monolithic
 - API as JSON: [tooltip.json](tooltip.json)
 
@@ -79,7 +79,7 @@
 - Touch: a long-press (500 ms `pointerdown` with `pointerType` `touch`) opens the tooltip; it hides 1.5 s after the finger lifts. A mouse press never opens it.
 - Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. `Escape` is taken only while the tooltip is open: closing removes the trigger's `aria-describedby` at once, and a page that reads open overlays (`useEscapeToCancel`) counts a tooltip only while a control still points to it, so the next `Escape` reaches the page even while the leave animation runs. A tooltip closed by `Escape` stays closed while the pointer rests on the trigger (a browser fires `mouseenter` when the panel disappears under a still pointer); it opens on hover again only after the pointer leaves the trigger and comes back, and on the next focus as usual. Tests: `tooltip.test.ts` › keyboard map (spec).
 - Nested overlays: while open, the tooltip joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (it never takes focus, so it does not pause a dialog's focus trap). Inside a `Dialog`, `Drawer` or `Popover`, the first `Escape` closes only the tooltip; the next one reaches the host. Tests: `tooltip.test.ts` › inside an open Dialog, Escape closes only the tooltip.
-- ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into a WebKit `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
+- ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into an Azion UI `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
 - `motion-reduce:animate-none` on the panel; reduced-motion users get instant show/hide.
 - Touch target ≥40×40 px on the trigger (the consumer's responsibility — flag in docs).
@@ -91,8 +91,8 @@
 
 ```vue
 <script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
 </script>
 
 <template>
@@ -114,8 +114,8 @@
 
 ```vue
 <script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
 </script>
 
 <template>
@@ -172,8 +172,8 @@
 
 ```vue
 <script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
 </script>
 
 <template>

@@ -7,7 +7,7 @@
   },
   {
    "name": "Monaco",
-   "summary": "The real Monaco, loaded lazily: `loadMonaco` wires the editor, JSON and TypeScript workers with Vite's `?worker` imports on the monaco-editor 0.56+ paths (`monaco-editor/editor/editor.worker`, `monaco-editor/languages/features/<language>/<language>.worker`; the old `monaco-editor/esm/vs/...` paths no longer resolve), sets `MonacoEnvironment`, then returns `import('monaco-editor')`. `monaco-editor` is the app's dependency (an optional peer of WebKit), so it never enters WebKit's bundle. The editor and the diff take the theme tokens and the markers; the function editor zero-pads its line numbers with `padLineNumbers` and colours function calls; the plain editor is live until Monaco mounts.",
+   "summary": "The real Monaco, loaded lazily: `loadMonaco` wires the editor, JSON and TypeScript workers with Vite's `?worker` imports on the monaco-editor 0.56+ paths (`monaco-editor/editor/editor.worker`, `monaco-editor/languages/features/<language>/<language>.worker`; the old `monaco-editor/esm/vs/...` paths no longer resolve), sets `MonacoEnvironment`, then returns `import('monaco-editor')`. `monaco-editor` is the app's dependency (an optional peer of Azion UI), so it never enters Azion UI's bundle. The editor and the diff take the theme tokens and the markers; the function editor zero-pads its line numbers with `padLineNumbers` and colours function calls; the plain editor is live until Monaco mounts.",
    "file": "examples/code-editor/monaco.vue"
   },
   {

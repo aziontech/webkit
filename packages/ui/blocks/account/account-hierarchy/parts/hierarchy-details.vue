@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
 
   import type {
     AccountHierarchyResource,

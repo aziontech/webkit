@@ -105,7 +105,7 @@ test('every component has a page and a JSON API, and every block and foundation 
     assert.ok(files[`components/${n}.md`], n)
     const api = JSON.parse(files[`components/${n}.json`])
     assert.equal(api.name, n)
-    assert.ok(api.import.startsWith('@aziontech/webkit/'))
+    assert.ok(api.import.startsWith('@aziontech/ui/'))
     assert.ok(Array.isArray(api.props) && Array.isArray(api.examples))
     assert.match(files['llms.txt'], new RegExp(`\\(components/${n}\\.md\\)`))
   }
@@ -132,7 +132,7 @@ test('a component page carries the API, guidance, accessibility and code', () =>
   for (const heading of ['## When to use', '## Do', '## Don’t', '## Props', '## Accessibility']) {
     assert.ok(page.includes(`\n${heading}\n`), heading)
   }
-  assert.match(page, /import Button from '@aziontech\/webkit\/button'/)
+  assert.match(page, /import Button from '@aziontech\/ui\/button'/)
   assert.match(page, /```vue\n/)
 })
 
@@ -260,7 +260,7 @@ test('every composable export has an llms page built from its typed options', ()
   }
   const page = files['composables/use-collection.md']
   assert.match(page, /^# useCollection\n/)
-  assert.match(page, /import \{ useCollection[^}]*\} from '@aziontech\/webkit\/use-collection'/)
+  assert.match(page, /import \{ useCollection[^}]*\} from '@aziontech\/ui\/use-collection'/)
   assert.match(page, /```ts\nfunction useCollection<[^\n]*\(options: UseCollectionOptions<T, C>\)/)
   assert.match(
     page,
@@ -285,7 +285,8 @@ test('a preview component and block are marked on their pages, their JSON and in
   for (const block of Object.values(copy.blocks)) delete block.stability
   copy.imports.button.stability = 'preview'
   copy.blocks['view/view-table'].stability = 'preview'
-  const read = (file) => JSON.parse(readFileSync(new URL(`../../${file}`, import.meta.url), 'utf-8'))
+  const read = (file) =>
+    JSON.parse(readFileSync(new URL(`../../${file}`, import.meta.url), 'utf-8'))
   const out = buildLlms(catalogView(copy, read))
   assert.match(out['components/button.md'], /^- Stability: preview\./m)
   assert.equal(JSON.parse(out['components/button.json']).stability, 'preview')

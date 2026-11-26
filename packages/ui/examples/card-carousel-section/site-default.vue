@@ -1,7 +1,7 @@
 <script setup>
-  import CardCarouselSection from '@aziontech/webkit/card-carousel-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import CardCarouselSection from '@aziontech/ui/card-carousel-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const items = [
     {

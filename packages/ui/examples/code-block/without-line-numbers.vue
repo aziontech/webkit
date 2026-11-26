@@ -1,5 +1,5 @@
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import CodeBlock from '@aziontech/ui/code-block'
 
   const tabs = [
     {

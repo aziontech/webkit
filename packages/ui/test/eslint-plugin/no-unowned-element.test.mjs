@@ -56,7 +56,7 @@ test('no-unowned-element: consumer files (no owners)', () => {
   })
 })
 
-test('no-unowned-element: WebKit files with owners', () => {
+test('no-unowned-element: Azion UI files with owners', () => {
   vue.run('no-unowned-element', rule, {
     valid: [
       owned('<button type="button" />', 'src/components/action/button/button.vue'),

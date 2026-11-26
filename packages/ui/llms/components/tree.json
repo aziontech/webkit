@@ -1,8 +1,8 @@
 {
  "name": "tree",
  "binding": "Tree",
- "import": "@aziontech/webkit/tree",
- "treeShakeableImport": "@aziontech/webkit/tree",
+ "import": "@aziontech/ui/tree",
+ "treeShakeableImport": "@aziontech/ui/tree",
  "category": "data",
  "surface": "app",
  "structure": "monolithic",

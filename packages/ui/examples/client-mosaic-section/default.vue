@@ -1,15 +1,15 @@
 <script setup>
-  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
-  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
-  import exameExtendedMono from '@aziontech/webkit/assets/exame-extended-mono.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import gpaPhoto from '@aziontech/webkit/assets/gpa-photo.webp'
-  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.webp'
-  import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
-  import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'
-  import ClientMosaicSection from '@aziontech/webkit/client-mosaic-section'
+  import agibankExtendedReversed from '@aziontech/ui/assets/agibank-extended-reversed.svg'
+  import dafitiExtendedMono from '@aziontech/ui/assets/dafiti-extended-mono.svg'
+  import exameExtendedMono from '@aziontech/ui/assets/exame-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import gpaPhoto from '@aziontech/ui/assets/gpa-photo.webp'
+  import netshoesExtendedColor from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import netshoesPhoto from '@aziontech/ui/assets/netshoes-photo.webp'
+  import nznExtendedReversed from '@aziontech/ui/assets/nzn-extended-reversed.svg'
+  import rennerExtendedReversed from '@aziontech/ui/assets/renner-extended-reversed.svg'
+  import ClientMosaicSection from '@aziontech/ui/client-mosaic-section'
 </script>
 
 <template>

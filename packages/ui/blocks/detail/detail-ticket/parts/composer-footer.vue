@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenuRoot from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import IconButton from '@aziontech/ui/icon-button'
+  import SplitButton, { type SplitButtonItem } from '@aziontech/ui/split-button'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed } from 'vue'
 
   import type {

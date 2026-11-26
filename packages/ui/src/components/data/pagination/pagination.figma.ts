@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4438-11665
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/data/pagination/pagination.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/data/pagination/pagination.vue
 // component=Pagination
 import figma from 'figma'
 
@@ -57,7 +57,7 @@ export default {
       : ''
   }
 </Pagination>`,
-  imports: ["import Pagination from '@aziontech/webkit/pagination'"],
+  imports: ["import Pagination from '@aziontech/ui/pagination'"],
   id: 'pagination',
   metadata: { nestable: true }
 }

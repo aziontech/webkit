@@ -1,8 +1,8 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import IconButton from '@aziontech/ui/icon-button'
+  import MarkdownEditor from '@aziontech/ui/markdown-editor'
   import { ref } from 'vue'
 
   const reply = ref('')

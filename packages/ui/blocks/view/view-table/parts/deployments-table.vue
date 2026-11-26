@@ -1,24 +1,24 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
   import DataTable, {
     type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
-  } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellId from '@aziontech/webkit/table-cell-id'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag from '@aziontech/webkit/tag'
+  } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellId from '@aziontech/ui/table-cell-id'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tag from '@aziontech/ui/tag'
   import type {
     CollectionPaginationProps,
     CollectionTableProps
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
   import { ref } from 'vue'
 
   import { type Deployment, DEPLOYMENT_STATUS, environmentSeverity } from '../lib/deployments'

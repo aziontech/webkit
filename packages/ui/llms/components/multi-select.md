@@ -1,9 +1,9 @@
 # Multi Select
 
-> Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<MultiSelectContent>`. Since spec v4 the trigger can also show the selection as removable chips (`variant="chips"`, capped by `chipLimit` with a `+N more` chip), take typed text to filter the options in place (`searchable`), offer an `Add "…"` row for a typed value that matches no option (`allowCustom`, emits `create`), and render its own loading, error and empty list states (`loading`, `error`, `emptyTitle`) — the same vocabulary as `combobox`. MultiSelect is the one multi-pick field (`Select` picks exactly one): `modelValue` is always an array and the indicator is always a checkbox. Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `Input`/`Select` trigger visuals.
+> Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` Azion UI component), optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<MultiSelectContent>`. Since spec v4 the trigger can also show the selection as removable chips (`variant="chips"`, capped by `chipLimit` with a `+N more` chip), take typed text to filter the options in place (`searchable`), offer an `Add "…"` row for a typed value that matches no option (`allowCustom`, emits `create`), and render its own loading, error and empty list states (`loading`, `error`, `emptyTitle`) — the same vocabulary as `combobox`. MultiSelect is the one multi-pick field (`Select` picks exactly one): `modelValue` is always an array and the indicator is always a checkbox. Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `Input`/`Select` trigger visuals.
 
-- Import: `import MultiSelectRoot from '@aziontech/webkit/multi-select-root'`
-- Compound import (dot notation, not tree-shakeable): `import MultiSelect from '@aziontech/webkit/multi-select'`
+- Import: `import MultiSelectRoot from '@aziontech/ui/multi-select-root'`
+- Compound import (dot notation, not tree-shakeable): `import MultiSelect from '@aziontech/ui/multi-select'`
 - Category: input · Surface: app · Structure: composition
 - API as JSON: [multi-select.json](multi-select.json)
 
@@ -83,17 +83,17 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/multi-select-trigger`
-- `@aziontech/webkit/multi-select-content`
-- `@aziontech/webkit/multi-select-group`
-- `@aziontech/webkit/multi-select-item`
+- `@aziontech/ui/multi-select-trigger`
+- `@aziontech/ui/multi-select-content`
+- `@aziontech/ui/multi-select-group`
+- `@aziontech/ui/multi-select-item`
 
 ## Sub-components
 
 - `multi-select-trigger/multi-select-trigger.vue` — With the default `variant="summary"` and no `searchable`, a bordered trigger button; otherwise a bordered field (`min-h` of the size, wrapping) that holds the chips (`variant="chips"`: one removable `Chip` of size `small` per selected value, the first `chipLimit` of them followed by a non-removable `+N more` chip when `chipLimit` > 0), then the combobox control — an `input` when `searchable` (its placeholder is the selection summary when `variant="summary"`), else a button — then the chevron. A click anywhere on the field but a chip's remove button opens the panel and focuses the control. The `id`, `aria-label`, `aria-labelledby` and `aria-describedby` passed to the trigger land on that control only; the field around it is a plain container that carries none of them. The default trigger: bordered trigger field with an optional `#leading` slot (typed with `defineSlots`), selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders only the selected options (and any group without a `value`) once inside a `hidden` container so their labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
 - `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`. It owns the list states: `loading` replaces the options with a spinner row (`Loading options`), a non-empty `error` replaces them with the message, and when no option is visible it shows `emptyTitle` (or `No matches`). With `allowCustom` and typed text that equals no option label, it appends an `Add "…"` option row after the options. A visually hidden polite status region next to the panel announces the loading, error, empty and match-count states.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; hidden while the typed filter hides every one of its options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
-- `multi-select-item/multi-select-item.vue` — Selectable option row; hidden (`v-show`) while `searchable` + `filter` and its label text does not contain the typed text (case and accent insensitive, in the active locale); with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (an Azion icon class), an optional leading `#leading` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#leading` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
+- `multi-select-item/multi-select-item.vue` — Selectable option row; hidden (`v-show`) while `searchable` + `filter` and its label text does not contain the typed text (case and accent insensitive, in the active locale); with a checkbox indicator (the `Checkbox` Azion UI component), an optional `icon` (an Azion icon class), an optional leading `#leading` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#leading` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
 
 ## v-model
 
@@ -169,10 +169,10 @@
 
 ```vue
 <script setup>
-  import MultiSelectContent from '@aziontech/webkit/multi-select-content'
-  import MultiSelectItem from '@aziontech/webkit/multi-select-item'
-  import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
-  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
+  import MultiSelectContent from '@aziontech/ui/multi-select-content'
+  import MultiSelectItem from '@aziontech/ui/multi-select-item'
+  import MultiSelectRoot from '@aziontech/ui/multi-select-root'
+  import MultiSelectTrigger from '@aziontech/ui/multi-select-trigger'
   import { ref } from 'vue'
 
   const value = ref(['opt-1'])
@@ -209,10 +209,10 @@
 
 ```vue
 <script setup>
-  import MultiSelectContent from '@aziontech/webkit/multi-select-content'
-  import MultiSelectItem from '@aziontech/webkit/multi-select-item'
-  import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
-  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
+  import MultiSelectContent from '@aziontech/ui/multi-select-content'
+  import MultiSelectItem from '@aziontech/ui/multi-select-item'
+  import MultiSelectRoot from '@aziontech/ui/multi-select-root'
+  import MultiSelectTrigger from '@aziontech/ui/multi-select-trigger'
   import { ref } from 'vue'
 
   const value = ref([])
@@ -251,11 +251,11 @@
 
 ```vue
 <script setup>
-  import MultiSelectContent from '@aziontech/webkit/multi-select-content'
-  import MultiSelectGroup from '@aziontech/webkit/multi-select-group'
-  import MultiSelectItem from '@aziontech/webkit/multi-select-item'
-  import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
-  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
+  import MultiSelectContent from '@aziontech/ui/multi-select-content'
+  import MultiSelectGroup from '@aziontech/ui/multi-select-group'
+  import MultiSelectItem from '@aziontech/ui/multi-select-item'
+  import MultiSelectRoot from '@aziontech/ui/multi-select-root'
+  import MultiSelectTrigger from '@aziontech/ui/multi-select-trigger'
   import { ref } from 'vue'
 
   const value = ref([])

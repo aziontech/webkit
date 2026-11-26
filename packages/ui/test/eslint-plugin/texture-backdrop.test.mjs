@@ -11,12 +11,12 @@ import {
   textureBackdropApplies
 } from '../../src/eslint-plugin/lib/texture-backdrop.js'
 
-const WEBKIT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+const AZION_UI = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 
 const sfc = (template) => `<template>\n${template}\n</template>\n`
-const vue = (template) => scanTextureBackdrop(sfc(template), 'packages/webkit/examples/x/x.vue')
+const vue = (template) => scanTextureBackdrop(sfc(template), 'packages/ui/examples/x/x.vue')
 const json = (data) =>
-  scanTextureBackdrop(JSON.stringify(data), 'packages/webkit/examples/x/page-entry.json')
+  scanTextureBackdrop(JSON.stringify(data), 'packages/ui/examples/x/page-entry.json')
 
 const chartScene = {
   component: 'Chart',
@@ -135,7 +135,7 @@ test('fires on page JSON that puts any content scene on a textured band', () => 
 })
 
 test('the backdrop scenes match the scene registry', () => {
-  const registry = readFileSync(join(WEBKIT, 'src/assets/scene-registry.ts'), 'utf8')
+  const registry = readFileSync(join(AZION_UI, 'src/assets/scene-registry.ts'), 'utf8')
   const list = /backdropScenes[^=]*=\s*\[([^\]]*)\]/.exec(registry)?.[1] ?? ''
   assert.deepEqual(
     [...list.matchAll(/'(\w+)'/g)].map((match) => match[1]),
@@ -165,18 +165,15 @@ test('stays silent on page JSON with a plain ground or no graphic', () => {
 })
 
 test('applies to sources and page JSON of components, blocks and examples only', () => {
-  assert.equal(textureBackdropApplies('packages/webkit/examples/chart/page-entry.json'), true)
-  assert.equal(textureBackdropApplies('packages/webkit/examples/chart/default.vue'), true)
+  assert.equal(textureBackdropApplies('packages/ui/examples/chart/page-entry.json'), true)
+  assert.equal(textureBackdropApplies('packages/ui/examples/chart/default.vue'), true)
+  assert.equal(textureBackdropApplies('packages/ui/blocks/view/view-table/view-table.vue'), true)
   assert.equal(
-    textureBackdropApplies('packages/webkit/blocks/view/view-table/view-table.vue'),
+    textureBackdropApplies('packages/ui/src/components/content/texture/texture.vue'),
     true
   )
-  assert.equal(
-    textureBackdropApplies('packages/webkit/src/components/content/texture/texture.vue'),
-    true
-  )
-  assert.equal(textureBackdropApplies('packages/webkit/examples/chart/examples.json'), false)
-  assert.equal(textureBackdropApplies('packages/webkit/src/test/texture-backdrop.test.ts'), false)
+  assert.equal(textureBackdropApplies('packages/ui/examples/chart/examples.json'), false)
+  assert.equal(textureBackdropApplies('packages/ui/src/test/texture-backdrop.test.ts'), false)
   assert.equal(textureBackdropApplies('apps/docs/src/pages/index.vue'), false)
 })
 
@@ -189,7 +186,7 @@ test('every graphic component marks its root with data-plain-ground', () => {
       else if (entry.name.endsWith('.vue')) sources.push(path)
     }
   }
-  walk(join(WEBKIT, 'src/components'))
+  walk(join(AZION_UI, 'src/components'))
   for (const name of GRAPHIC_COMPONENTS.filter((name) => name !== 'StatTileGroup')) {
     const kebab = name.replace(/[A-Z]/g, (c, i) => `${i ? '-' : ''}${c.toLowerCase()}`)
     const file = sources.find((path) => path.endsWith(`/${kebab}/${kebab}.vue`))
@@ -199,7 +196,7 @@ test('every graphic component marks its root with data-plain-ground', () => {
     assert.match(
       root,
       /\sdata-plain-ground\s/,
-      `${relative(WEBKIT, file)} root carries no data-plain-ground`
+      `${relative(AZION_UI, file)} root carries no data-plain-ground`
     )
   }
 })

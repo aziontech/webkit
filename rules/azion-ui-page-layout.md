@@ -63,15 +63,15 @@ follows the nearest container.
   sticky action bar (`variant="plain"` is the form-column footer).
 - Give every action in a `PageHeader` the same `size="medium"`, so the row keeps one height. The
   create action stands out by colour, `variant="primary"`; Documentation and every other action are
-  `variant="outline"`. `webkit/consistent-header-action-size` flags any other size.
+  `variant="outline"`. `azion-ui/consistent-header-action-size` flags any other size.
 - Let a tab panel start one group step (`--layout-group-gap`) below its tab strip. `Tabs.Content`
   already carries that top padding (and so does a Markdown `<Tabs>` in `DocMarkdown`), so put no `mt-*`, `pt-*` or `gap` of
   your own between `Tabs.List` and the panels; any other strip that switches what shows below it
   follows the same step.
 - Size cards, dialogs and side columns with the container scale: `max-w-(--container-sm)` …
   `max-w-(--container-7xl)`.
-- Start a screen from its block (`npx @aziontech/webkit search <words>` → `npx @aziontech/webkit add
-<block-id>`, or `search_blocks` → `get_block` in the webkit MCP): the block already carries
+- Start a screen from its block (`npx @aziontech/ui search <words>` → `npx @aziontech/ui add
+<block-id>`, or `search_blocks` → `get_block` in the Azion UI MCP): the block already carries
   the right container and rhythm.
 
 ## Don't

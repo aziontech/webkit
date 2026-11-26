@@ -1,5 +1,5 @@
 <script setup>
-  import AvatarGroup from '@aziontech/webkit/avatar-group'
+  import AvatarGroup from '@aziontech/ui/avatar-group'
 
   const first = ['Jane', 'John', 'Alex', 'Sam', 'Priya', 'Maria', 'Chen', 'Omar']
   const last = ['Doe', 'Smith', 'Morgan', 'Lee', 'Patel']

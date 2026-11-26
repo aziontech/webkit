@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5546-79300
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/item/item.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/item/item.vue
 // component=Item
 import figma from 'figma'
 
@@ -55,7 +55,7 @@ export default {
       : ''
   }
 </Item>`,
-  imports: ["import Item from '@aziontech/webkit/item'"],
+  imports: ["import Item from '@aziontech/ui/item'"],
   id: 'item',
   metadata: { nestable: true }
 }

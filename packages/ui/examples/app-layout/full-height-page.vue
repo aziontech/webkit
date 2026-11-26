@@ -1,10 +1,10 @@
 <script setup>
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PageHeader from '@aziontech/ui/page-header'
 
   const crumbs = [{ label: 'Workloads', href: '#' }, { label: 'Domains' }]
 </script>

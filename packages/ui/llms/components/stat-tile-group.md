@@ -2,7 +2,7 @@
 
 > Use StatTileGroup for the strip of related metrics at the top of a product overview; one metric on its own is a StatTile. One card split into cells, one `StatTile` per cell: the KPI strip at the top of an overview (data transferred, requests per second, bandwidth saving, data offload). The group draws the card (surface, border, radius) and the grid; each tile inside it drops its own card and draws its end and bottom edges as the dividers, with its delta aligned to the end of the figure row. The cells sit one per row in a narrow box, two per row from the group's `@md`, and all in one row from its `@3xl`.
 
-- Import: `import StatTileGroup from '@aziontech/webkit/stat-tile-group'`
+- Import: `import StatTileGroup from '@aziontech/ui/stat-tile-group'`
 - Category: chart · Surface: app · Structure: monolithic
 - API as JSON: [stat-tile-group.json](stat-tile-group.json)
 
@@ -86,8 +86,8 @@
 
 ```vue
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
 </script>
 
 <template>
@@ -124,9 +124,9 @@
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import Card from '@aziontech/ui/card'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
 </script>
 
 <template>
@@ -181,8 +181,8 @@
 
 ```vue
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
 </script>
 
 <template>

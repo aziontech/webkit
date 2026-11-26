@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Button from '@aziontech/ui/button'
+  import type { TableColumn } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { computed } from 'vue'
 
   import type { SchemaEditorCsvFile } from '../edit-schema.vue'

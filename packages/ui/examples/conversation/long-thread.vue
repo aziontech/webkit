@@ -1,7 +1,7 @@
 <script setup>
-  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
-  import Conversation from '@aziontech/webkit/conversation'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import ChatMessageRoot from '@aziontech/ui/chat-message-root'
+  import Conversation from '@aziontech/ui/conversation'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
   import { ref } from 'vue'
 
   const questions = [

@@ -1,8 +1,8 @@
 {
  "name": "streaming-response",
  "binding": "StreamingResponse",
- "import": "@aziontech/webkit/streaming-response",
- "treeShakeableImport": "@aziontech/webkit/streaming-response",
+ "import": "@aziontech/ui/streaming-response",
+ "treeShakeableImport": "@aziontech/ui/streaming-response",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

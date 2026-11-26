@@ -1,9 +1,9 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Input from '@aziontech/webkit/input'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import TutorialPanel from '@aziontech/webkit/tutorial-panel'
-  import TutorialPanelHotspot from '@aziontech/webkit/tutorial-panel-hotspot'
+  import Button from '@aziontech/ui/button'
+  import Input from '@aziontech/ui/input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import TutorialPanel from '@aziontech/ui/tutorial-panel'
+  import TutorialPanelHotspot from '@aziontech/ui/tutorial-panel-hotspot'
   import { ref } from 'vue'
 
   const tutorials = [

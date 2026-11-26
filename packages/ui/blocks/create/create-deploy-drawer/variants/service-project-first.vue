@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { computed, ref, watch } from 'vue'
 
   import { type DeployDrawerProject } from '../create-deploy-drawer.vue'

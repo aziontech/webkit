@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Item from '@aziontech/webkit/item'
-  import Spinner from '@aziontech/webkit/spinner'
-  import Tag from '@aziontech/webkit/tag'
+  import Item from '@aziontech/ui/item'
+  import Spinner from '@aziontech/ui/spinner'
+  import Tag from '@aziontech/ui/tag'
 
   import type { DeployDrawerBuild } from '../types'
 

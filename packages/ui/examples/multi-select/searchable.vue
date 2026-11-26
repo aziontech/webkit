@@ -1,5 +1,5 @@
 <script setup>
-  import MultiSelect from '@aziontech/webkit/multi-select'
+  import MultiSelect from '@aziontech/ui/multi-select'
   import { ref } from 'vue'
 
   const labels = ref(['production', 'staging', 'docs-site', 'site-assets', 'acme-store'])

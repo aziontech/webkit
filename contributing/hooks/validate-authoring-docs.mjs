@@ -17,10 +17,7 @@ const ROOT = process.cwd()
 function baselinedKeys() {
   try {
     const entries = JSON.parse(
-      readFileSync(
-        resolve(ROOT, 'packages/webkit/scripts/authoring-docs-baseline.json'),
-        'utf-8'
-      )
+      readFileSync(resolve(ROOT, 'packages/ui/scripts/authoring-docs-baseline.json'), 'utf-8')
     )
     return new Set(Array.isArray(entries) ? entries : [])
   } catch {
@@ -64,12 +61,12 @@ async function main() {
   const violations = scanDoc(rel, content).filter((v) => !baseline.has(`${rel}::doc:${v.id}`))
   if (violations.length === 0) process.exit(0)
 
-  const lines = [`Webkit authoring-docs validation blocked ${input.tool_name} on ${rel}.`, '']
+  const lines = [`Azion UI authoring-docs validation blocked ${input.tool_name} on ${rel}.`, '']
   for (const v of violations) lines.push(`  [${v.id}] ${v.message}`)
   lines.push('')
   lines.push(
     'These are the doc standards in contributing/rules/authoring-docs.md. Fix the frontmatter ' +
-      '(name==folder/filename, non-empty description, correct scope; consumer skills webkit-* + ' +
+      '(name==folder/filename, non-empty description, correct scope; consumer skills azion-ui-* + ' +
       'status + last_updated) or remove the file-as-example reference (find components via the ' +
       'MCP/catalog). Do not work around the hook.'
   )

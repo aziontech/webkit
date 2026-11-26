@@ -95,7 +95,7 @@ const css = `/* azionicons-color — every colored brand icon as background-imag
  * These are multicolor logos that cannot live in the woff2 font; use them like a
  * font icon, with the az-color base class instead of az: <i class="az-color az-google"></i>. Sizes with font-size (1em).
  * This file paints all ${files.length} logos. A Tailwind v4 app imports azionicons-color-utilities.css
- * instead (WebKit's styles do), so its stylesheet holds only the logos its sources name.
+ * instead (Azion UI's styles do), so its stylesheet holds only the logos its sources name.
  * An icon whose SVG uses currentColor for its ink parts is emitted twice — light ink
  * in the base rule, dark ink under the theme's dark selectors — because a
  * background-image cannot inherit color from the element painting it.

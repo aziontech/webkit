@@ -2,7 +2,7 @@
 
 > Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`. It adds what tags need on top of the rows: key and value suggestions while typing, a tag limit (50 by default) that ignores tags marked for removal, the built-in key checks (required when the row has a value, unique, length, allowed characters, no key starting with a `reservedPrefix` the product reserves), and a removal that only marks a saved tag, with Undo, until the form is saved.
 
-- Import: `import TagEditor from '@aziontech/webkit/tag-editor'`
+- Import: `import TagEditor from '@aziontech/ui/tag-editor'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [tag-editor.json](tag-editor.json)
 
@@ -114,7 +114,7 @@
 
 ```vue
 <script setup>
-  import TagEditor from '@aziontech/webkit/tag-editor'
+  import TagEditor from '@aziontech/ui/tag-editor'
   import { ref } from 'vue'
 
   const tags = ref([
@@ -141,8 +141,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import TagEditor from '@aziontech/webkit/tag-editor'
+  import Button from '@aziontech/ui/button'
+  import TagEditor from '@aziontech/ui/tag-editor'
   import { ref } from 'vue'
 
   const tags = ref([

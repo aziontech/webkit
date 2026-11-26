@@ -3,10 +3,10 @@
 > One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumb`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the `edit/edit-rule-builder` block. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
 
 - Surface: app
-- Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-version/detail-version.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-version")`
 - Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), `TableCellLink`, `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
-- Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
+- Skills: `azion-ui-layout`, `azion-ui-navigation`, `azion-ui-states`
 
 ## Asked as
 
@@ -155,7 +155,7 @@ Then delete `sample.ts` and its import.
 - **Version picker:** search placeholder "Search versions", no-match line `No versions match "<query>".`, footer "Add Version".
 - **Setting rows:** a noun title and one sentence with a period, e.g. "Active" with "When disabled, the resource stops serving traffic."
 - **History:** "Current version", an empty changes line, e.g. "No changes yet. Each change you save shows up here.", description placeholder "What changed in this version?".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -191,7 +191,7 @@ Then delete `sample.ts` and its import.
 - `state/state-page-skeleton` — the skeleton wires Creating draws.
 - `create/create-deploy-drawer` — deploying a version outside this page.
 - `state/state-async-submit` — how the version bar locks while Save and deploy runs.
-- `SettingsRow` — the row primitive of every settings section; see `skills/webkit-form` and `skills/webkit-layout`.
+- `SettingsRow` — the row primitive of every settings section; see `skills/azion-ui-form` and `skills/azion-ui-layout`.
 
 ## Variants
 
@@ -213,13 +213,13 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Resizable from '@aziontech/webkit/resizable'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import ConsoleLayout from '@aziontech/ui/console-layout'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Resizable from '@aziontech/ui/resizable'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { usePhoneWidth } from './composables/use-phone-width'
@@ -643,7 +643,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-vers
 ## `sample.ts`
 
 ```ts
-import type { SchemaFormSchema } from '@aziontech/webkit/schema-form'
+import type { SchemaFormSchema } from '@aziontech/ui/schema-form'
 
 import type {
   VersionDetailEnvironment,
@@ -1071,7 +1071,7 @@ export const blankSetting = (): CacheSettingForm => ({
 ## `detail-version-states.ts`
 
 ```ts
-import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+import type { TagSeverity, TagVariant } from '@aziontech/ui/tag'
 
 import type {
   VersionDetailState,
@@ -1123,9 +1123,9 @@ export const ADD_ENVIRONMENT = '__create-environment__'
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import ScrollArea from '@aziontech/webkit/scroll-area'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import ScrollArea from '@aziontech/ui/scroll-area'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   export interface CreatingWireProps {
     /** Name of the version being copied. */
@@ -1221,9 +1221,9 @@ export const ADD_ENVIRONMENT = '__create-environment__'
 
 ```ts
 <script setup lang="ts">
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Tag from '@aziontech/webkit/tag'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { VersionDetailEnvironment } from '../detail-version.vue'
@@ -1386,16 +1386,16 @@ export const ADD_ENVIRONMENT = '__create-environment__'
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import ScrollArea from '@aziontech/webkit/scroll-area'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Card from '@aziontech/ui/card'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import ScrollArea from '@aziontech/ui/scroll-area'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { VersionDetailSettings } from '../detail-version.vue'
 
@@ -1584,11 +1584,11 @@ export const ADD_ENVIRONMENT = '__create-environment__'
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Spinner from '@aziontech/webkit/spinner'
-  import SplitButton from '@aziontech/webkit/split-button'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Spinner from '@aziontech/ui/spinner'
+  import SplitButton from '@aziontech/ui/split-button'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref } from 'vue'
 
   import type { VersionDetailRevertDiff, VersionDetailVersion } from '../detail-version.vue'
@@ -1767,14 +1767,14 @@ export const ADD_ENVIRONMENT = '__create-environment__'
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item-root'
-  import Tag from '@aziontech/webkit/tag'
-  import Textarea from '@aziontech/webkit/textarea'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item-root'
+  import Tag from '@aziontech/ui/tag'
+  import Textarea from '@aziontech/ui/textarea'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { ref } from 'vue'
 
   import type { VersionDetailVersion } from '../detail-version.vue'
@@ -2048,9 +2048,9 @@ export const ADD_ENVIRONMENT = '__create-environment__'
 
 ```ts
 <script setup lang="ts">
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Tag from '@aziontech/webkit/tag'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { VersionDetailEnvironment, VersionDetailVersion } from '../detail-version.vue'
@@ -2167,11 +2167,11 @@ export const ADD_ENVIRONMENT = '__create-environment__'
 
 ```ts
 <script setup lang="ts">
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { VersionDetailTab, VersionDetailVersion } from '../detail-version.vue'

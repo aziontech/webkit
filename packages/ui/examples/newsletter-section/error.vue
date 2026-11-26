@@ -1,5 +1,5 @@
 <script setup>
-  import NewsletterSection from '@aziontech/webkit/newsletter-section'
+  import NewsletterSection from '@aziontech/ui/newsletter-section'
 
   const form = {
     placeholder: 'Your email',

@@ -1,7 +1,7 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTableLoadMore from '@aziontech/webkit/data-table-load-more'
-  import StatusCode from '@aziontech/webkit/status-code'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTableLoadMore from '@aziontech/ui/data-table-load-more'
+  import StatusCode from '@aziontech/ui/status-code'
   import { onBeforeUnmount, ref } from 'vue'
 
   const PAGE = 50

@@ -2,7 +2,7 @@
 
 > Centered placeholder shown when a resource list or section has no content yet. Stacks an optional standardized adornment, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. The adornment is a standardized, size-scaled featured-icon tile driven by the `icon` prop; the consumer may instead supply custom content via the `icon` slot, or omit both for no adornment. Unlike `Alert`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background.
 
-- Import: `import EmptyState from '@aziontech/webkit/empty-state'`
+- Import: `import EmptyState from '@aziontech/ui/empty-state'`
 - Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [empty-state.json](empty-state.json)
 
@@ -76,9 +76,9 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Link from '@aziontech/webkit/link'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>
@@ -113,9 +113,9 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Link from '@aziontech/webkit/link'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>
@@ -155,9 +155,9 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Link from '@aziontech/webkit/link'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

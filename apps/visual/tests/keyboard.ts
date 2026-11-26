@@ -38,7 +38,7 @@ export type KeyboardResult = {
 }
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
-const BLOCKS = join(ROOT, 'packages/webkit/blocks')
+const BLOCKS = join(ROOT, 'packages/ui/blocks')
 export const KEYBOARD_BASELINE = resolve(
   dirname(fileURLToPath(import.meta.url)),
   '../keyboard-baseline.json'

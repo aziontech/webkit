@@ -1,5 +1,5 @@
 <script setup>
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>

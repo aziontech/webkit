@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import Tag from '@aziontech/webkit/tag'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import Tag from '@aziontech/ui/tag'
 
   import type { DeployDrawerEnvironment } from '../types'
 

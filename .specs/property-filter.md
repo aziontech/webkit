@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 500b0db524928412c27ced163b1bde2fa52213dcab97d2f3656562fe2ceb67af
+checksum: 3bf851bf39a63acbb469ceccc42ec078873b5ae13a9a479848e5b7d94cbfb5bb
 created: 2026-11-11
 last_updated: 2026-11-20
 ---
@@ -54,7 +54,7 @@ One field that filters a collection by properties and free text, after Cloudscap
 
 ```vue
 <script setup>
-  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import PropertyFilter from '@aziontech/ui/property-filter'
   import { ref } from 'vue'
 
   const properties = [
@@ -77,7 +77,7 @@ Groups, async values and a custom value editor:
 
 ```vue
 <script setup>
-  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import PropertyFilter from '@aziontech/ui/property-filter'
   import { ref } from 'vue'
 
   const properties = [
@@ -140,7 +140,7 @@ Query mode:
 | `showOperations` | `boolean`                                                                        | `true`     | false    | Shows the Match all / Match any toggle; false keeps the tokens combined with AND (a model that holds only AND conditions, such as a table's filters). |
 | `loadValues`     | `(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>` | undefined  | false    | Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions.                                   |
 
-Types (from `@aziontech/webkit/use-collection`): `PropertyFilterQuery = { tokens: PropertyFilterToken[]; operation: 'and' | 'or' }`; `PropertyFilterToken = { propertyKey?: string; operator: '=' | '!=' | ':' | '!:' | '^' | '!^' | '>' | '<' | '>=' | '<='; value: string }`; `FilteringProperty = { key: string; label: string; operators?: PropertyFilterOperator[]; options?: PropertyFilterOption[]; type?: 'text' | 'number' | 'date'; customValue?: boolean }`; `PropertyFilterOption = { value: string; label?: string; count?: number }`. Since v4, `PropertyFilterQuery` may carry `groups?: PropertyFilterTokenGroup[]` (`{ tokens, operation }`): each group is one condition next to the tokens, combined with the query's `operation`; `useCollection` matches it, sends it to `fetch` and keeps it in the URL (`groups` key). From `@aziontech/webkit/property-filter`: `PropertyFilterQuerySuggestion = { label: string; insert: string; description?: string }` (`insert` replaces the word at the caret); `PropertyFilterSubmit = { text: string; query: PropertyFilterQuery | null }`.
+Types (from `@aziontech/ui/use-collection`): `PropertyFilterQuery = { tokens: PropertyFilterToken[]; operation: 'and' | 'or' }`; `PropertyFilterToken = { propertyKey?: string; operator: '=' | '!=' | ':' | '!:' | '^' | '!^' | '>' | '<' | '>=' | '<='; value: string }`; `FilteringProperty = { key: string; label: string; operators?: PropertyFilterOperator[]; options?: PropertyFilterOption[]; type?: 'text' | 'number' | 'date'; customValue?: boolean }`; `PropertyFilterOption = { value: string; label?: string; count?: number }`. Since v4, `PropertyFilterQuery` may carry `groups?: PropertyFilterTokenGroup[]` (`{ tokens, operation }`): each group is one condition next to the tokens, combined with the query's `operation`; `useCollection` matches it, sends it to `fetch` and keeps it in the URL (`groups` key). From `@aziontech/ui/property-filter`: `PropertyFilterQuerySuggestion = { label: string; insert: string; description?: string }` (`insert` replaces the word at the caret); `PropertyFilterSubmit = { text: string; query: PropertyFilterQuery | null }`.
 
 Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<property key> <operator> <value>` or a lone value (free text, when `freeText`). Operators are the token operators (`=`, `!=`, `:`, `!:`, `^`, `!^`, `>`, `<`, `>=`, `<=`), limited to those of the property; values are a word or a quoted string (`"…"` or `'…'`); AND and OR are case-insensitive. Errors, first one wins: unknown field, operator that does not apply, missing operator, missing value, missing AND / OR, dangling AND / OR, unclosed quote. `query` in `submit` is the token list when every connective is the same (AND gives `and`, OR gives `or`), `{ tokens: [], operation }` for an empty text, and `null` when AND and OR mix or the text does not parse.
 
@@ -210,7 +210,7 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the field's own `focus-within` ring (from `input`); tokens and buttons keep theirs.
-- Page search key: while mounted and not `disabled`, the filter registers `/` with `useShortcuts` (listed in `ShortcutsDialog` as `propertyFilter.focusShortcut`, Focus search), so `/` focuses the field from anywhere on the page, never while typing in another field, with `⌘`, `Ctrl` or `Alt` held, or from inside a modal layer that does not hold the filter (the console keyboard standard, `rules/webkit-keyboard.md`). Tests: `property-filter.test.ts` › page search key.
+- Page search key: while mounted and not `disabled`, the filter registers `/` with `useShortcuts` (listed in `ShortcutsDialog` as `propertyFilter.focusShortcut`, Focus search), so `/` focuses the field from anywhere on the page, never while typing in another field, with `⌘`, `Ctrl` or `Alt` held, or from inside a modal layer that does not hold the filter (the console keyboard standard, `rules/azion-ui-keyboard.md`). Tests: `property-filter.test.ts` › page search key.
 - Keyboard map (query mode): typing opens the suggestions for the word at the caret; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option (it replaces the word and moves the caret after it) or submits the query; `Escape` closes the suggestions, then clears the text; `ArrowLeft`/`ArrowRight`, `Home`/`End` and clicks move the caret and the suggestions follow it; `Backspace` only edits text.
 - In query mode an invalid query sets `aria-invalid` on the field and `aria-describedby` to the message, which sits in a polite live region under the field; the token group is not rendered.
 - Keyboard map (tokens mode): typing opens the suggestions; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option or commits the typed text; `Escape` closes the suggestions, then clears the text; `Backspace` in an empty field removes the last token (with `grouped`: cancels a pending new group first, then removes the last token of the last group).
@@ -294,7 +294,7 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

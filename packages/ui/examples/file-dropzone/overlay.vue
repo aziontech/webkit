@@ -1,8 +1,8 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { ref } from 'vue'
 
   const picker = useFilePicker({ multiple: true })

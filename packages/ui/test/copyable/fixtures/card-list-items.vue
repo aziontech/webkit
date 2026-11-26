@@ -2,8 +2,8 @@
   import CardList, {
     type CardListItemSlotProps,
     type CardListSelectionMode
-  } from '@aziontech/webkit/card-list'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/card-list'
+  import { useCollection } from '@aziontech/ui/use-collection'
   import { ref } from 'vue'
 
   interface Domain {

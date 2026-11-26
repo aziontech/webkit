@@ -2,7 +2,7 @@
 
 > Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. The platform is read once mounted: the server and the first client render print the non-Mac names, then a Mac swaps in its glyphs, so hydration never mismatches. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`). A sequence can also be passed as a `keys` list (`['meta', 'shift', 'p']`, `['arrow-up', 'arrow-down']`), drawn either as one keycap (`variant="combined"`, the default) or as one keycap per key (`variant="separate"`, each a nested `<kbd>` as HTML specifies for key combinations). Arrow keys and the Return glyph (`↵`) are named keys like `escape`.
 
-- Import: `import Kbd from '@aziontech/webkit/kbd'`
+- Import: `import Kbd from '@aziontech/ui/kbd'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [kbd.json](kbd.json)
 
@@ -97,7 +97,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 
 ```vue
 <script setup>
-  import Kbd from '@aziontech/webkit/kbd'
+  import Kbd from '@aziontech/ui/kbd'
 </script>
 
 <template>
@@ -109,7 +109,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 
 ```vue
 <script setup>
-  import Kbd from '@aziontech/webkit/kbd'
+  import Kbd from '@aziontech/ui/kbd'
 </script>
 
 <template>
@@ -132,7 +132,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 
 ```vue
 <script setup>
-  import Kbd from '@aziontech/webkit/kbd'
+  import Kbd from '@aziontech/ui/kbd'
 </script>
 
 <template>

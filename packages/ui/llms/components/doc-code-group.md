@@ -2,7 +2,7 @@
 
 > One or more code samples of the same thing in different languages or package managers, rendered on `CodeBlock` so the docs inherit its header, copy control and syntax surface. One sample renders a block titled by a label header (the sample label, else the language's readable name: Shell, JavaScript, JSON); several render the joined tab strip. A sample's `output` — what its command prints — renders as a separate muted "Output" block under it, with no copy control, so the command block holds only what the reader runs.
 
-- Import: `import DocCodeGroup from '@aziontech/webkit/doc-code-group'`
+- Import: `import DocCodeGroup from '@aziontech/ui/doc-code-group'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-code-group.json](doc-code-group.json)
 
@@ -19,7 +19,7 @@
 - Do: keep `code` to what the reader runs or pastes; the copy control copies exactly that. A leading `$ ` prompt is drawn but never copied.
 - Do: put what the command prints in the sample's `output` (`{ language: 'bash', code: 'curl -I https://<your-azion-domain>', output: 'HTTP/2 200' }`), or say it in prose.
 - Do: show a standalone printout (a deploy log) with `type="output"`.
-- Don't: write output into `code` — never `curl -I https://example.com\n# HTTP/2 200`, never `$ azion version\nAzion CLI 4.23.0`. The lint `webkit/no-output-in-command` warns on it.
+- Don't: write output into `code` — never `curl -I https://example.com\n# HTTP/2 200`, never `$ azion version\nAzion CLI 4.23.0`. The lint `azion-ui/no-output-in-command` warns on it.
 - Don't: turn the label header off on a docs page.
 
 ## Don’t
@@ -72,7 +72,7 @@
 
 ```vue
 <script setup>
-  import DocCodeGroup from '@aziontech/webkit/doc-code-group'
+  import DocCodeGroup from '@aziontech/ui/doc-code-group'
 </script>
 
 <template>
@@ -84,12 +84,12 @@
 
 ```vue
 <script setup>
-  import DocCodeGroup from '@aziontech/webkit/doc-code-group'
+  import DocCodeGroup from '@aziontech/ui/doc-code-group'
 
   const samples = [
-    { label: 'npm', language: 'bash', code: 'npm install @aziontech/webkit' },
-    { label: 'pnpm', language: 'bash', code: 'pnpm add @aziontech/webkit' },
-    { label: 'yarn', language: 'bash', code: 'yarn add @aziontech/webkit' }
+    { label: 'npm', language: 'bash', code: 'npm install @aziontech/ui' },
+    { label: 'pnpm', language: 'bash', code: 'pnpm add @aziontech/ui' },
+    { label: 'yarn', language: 'bash', code: 'yarn add @aziontech/ui' }
   ]
 </script>
 
@@ -102,7 +102,7 @@
 
 ```vue
 <script setup>
-  import DocCodeGroup from '@aziontech/webkit/doc-code-group'
+  import DocCodeGroup from '@aziontech/ui/doc-code-group'
 
   const samples = [
     {

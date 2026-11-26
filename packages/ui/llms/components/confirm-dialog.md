@@ -2,7 +2,7 @@
 
 > A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts, `Button` and, for a typed confirmation, `Input`.
 
-- Import: `import ConfirmDialog from '@aziontech/webkit/confirm-dialog'`
+- Import: `import ConfirmDialog from '@aziontech/ui/confirm-dialog'`
 - Category: overlay · Surface: app · Structure: monolithic
 - API as JSON: [confirm-dialog.json](confirm-dialog.json)
 
@@ -89,8 +89,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -119,8 +119,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -150,8 +150,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
   import { ref } from 'vue'
 
   const open = ref(false)

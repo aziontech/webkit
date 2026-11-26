@@ -7,7 +7,7 @@
 // no longer fires (delete its entry). Set VITE_A11Y_RECORD=1 to print the current findings as
 // `A11Y_KNOWN {...}` lines instead of asserting, to rebuild the file.
 // Owner-accepted contrast exceptions (one rule, one theme, one selector each, every one a row of
-// rules/webkit-tokens.md § "Contrast: APCA and WCAG 2") live in a11y-accepted.json; only those
+// rules/azion-ui-tokens.md § "Contrast: APCA and WCAG 2") live in a11y-accepted.json; only those
 // nodes are dropped, every other finding still counts.
 // Each case imports its SFC lazily, so the first case to reach a module graph compiles it
 // (the Table graph alone takes about 1.1 s on an idle machine and several times that under CPU

@@ -38,10 +38,10 @@ import { illustrationFrame } from '../src/assets/illustrations/frames.ts'
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
 const PKG_ROOT = resolve(SCRIPT_DIR, '..')
-const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
+const PKG_PATH = resolve(REPO_ROOT, 'packages/ui/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
-const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
-const PARTS_DIR = resolve(REPO_ROOT, 'packages/webkit/catalog')
+const OUT_PATH = resolve(REPO_ROOT, 'packages/ui/catalog.json')
+const PARTS_DIR = resolve(REPO_ROOT, 'packages/ui/catalog')
 const BLOCK_HEAVY_KEYS = ['sfc', 'variants', 'guidelines', 'files']
 const COMPONENT_PROSE_KEYS = [
   'purpose',
@@ -62,7 +62,7 @@ const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/typog
 const SRC = resolve(PKG_ROOT, 'src')
 const ASSET_PART_DIR = 'catalog/assets'
 
-const PKG_NAME = '@aziontech/webkit'
+const PKG_NAME = '@aziontech/ui'
 
 const TOKEN_RULES = [
   {
@@ -84,7 +84,7 @@ const TOKEN_RULES = [
       '\\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent)-(?:gray|slate|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\\d{2,3}\\b',
     flags: 'g',
     message:
-      'Tailwind palette color. Use semantic webkit tokens (var(--primary), var(--text-default), var(--bg-surface), ...).'
+      'Tailwind palette color. Use semantic Azion UI tokens (var(--primary), var(--text-default), var(--bg-surface), ...).'
   },
   {
     id: 'typography-raw-size',
@@ -99,7 +99,7 @@ const TOKEN_RULES = [
       '(?<![\\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\\b',
     flags: 'g',
     message:
-      'Legacy/external color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...).'
+      'Legacy/external color utility. Use semantic Azion UI tokens (var(--text-default), var(--bg-surface), ...).'
   }
 ]
 
@@ -520,7 +520,7 @@ export async function build() {
 
   return {
     package: PKG_NAME,
-    webkitVersion: pkg.version,
+    azionUiVersion: pkg.version,
     deniedPrefixes: [`${PKG_NAME}/src/`],
     tokenRules: TOKEN_RULES,
     tokens: buildTokens(),
@@ -560,7 +560,7 @@ const ASSET_KINDS = {
   brandMarks: {
     title: 'Brand marks',
     summary:
-      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name. A `wordmark` entry is a brand whose terms do not let WebKit ship its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in a one-ink row): it renders as its label in plain text, in WebKit type and colour, until its owner grants the logo.',
+      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name. A `wordmark` entry is a brand whose terms do not let Azion UI ship its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in a one-ink row): it renders as its label in plain text, in Azion UI type and colour, until its owner grants the logo.',
     markers: ['assets/brands/registry.ts'],
     registry: 'src/assets/brands/registry.ts',
     unknown:
@@ -569,7 +569,7 @@ const ASSET_KINDS = {
   icons: {
     title: 'Icons',
     summary:
-      'Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, layout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry (the font); the colour logos come with the WebKit stylesheet, compiled only for the classes written whole in your sources. An `icon` prop takes the class string.',
+      'Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, layout, objects, git) and External (frameworks, AI models, developer tools, languages, online services). A monochrome icon is `az az-<name>`, coloured by the text colour; a colour logo is `az-color az-<name>`. Pick an icon by what it stands for: a product icon names only that product. Import `@aziontech/icons` once at the app entry (the font); the colour logos come with the Azion UI stylesheet, compiled only for the classes written whole in your sources. An `icon` prop takes the class string.',
     unknown: 'An unknown class renders nothing.'
   }
 }
@@ -915,7 +915,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
     const drift = checkParts(catalog, files)
     if (drift.length) {
       process.stderr.write(
-        `✖ catalog out of sync (${drift.length}):\n  ${drift.slice(0, 20).join('\n  ')}\nRun: pnpm --filter @aziontech/webkit build:catalog\n`
+        `✖ catalog out of sync (${drift.length}):\n  ${drift.slice(0, 20).join('\n  ')}\nRun: pnpm --filter @aziontech/ui build:catalog\n`
       )
       process.exit(1)
     }
@@ -932,6 +932,6 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const llms = writeLlms()
   const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
   process.stdout.write(
-    `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.blocks).length} blocks @ ${catalog.webkitVersion}; ${Object.keys(files).length} files in catalog/\n${llmsSummary(llms)}\n`
+    `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.blocks).length} blocks @ ${catalog.azionUiVersion}; ${Object.keys(files).length} files in catalog/\n${llmsSummary(llms)}\n`
   )
 }

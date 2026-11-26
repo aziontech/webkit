@@ -4,7 +4,7 @@ A looping row of analyst recognitions under a section title. Each card is a quot
 
 The loop pauses on hover and keyboard focus. Under reduced motion it stops, and the row scrolls by hand. Screen readers hear each card once: the copy that closes the loop is hidden from them.
 
-The band is the `RecognitionMarqueeSection` component from `@aziontech/webkit/recognition-marquee-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame` and `Quote`, with the `animate-brand-marquee` utility.
+The band is the `RecognitionMarqueeSection` component from `@aziontech/ui/recognition-marquee-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame` and `Quote`, with the `animate-brand-marquee` utility.
 
 ## Examples
 

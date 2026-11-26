@@ -23,7 +23,7 @@
     "árvore de recursos",
     "mover recursos"
   ],
-  "skills": ["webkit-lists", "webkit-tables", "webkit-ui-states", "webkit-microcopy"],
+  "skills": ["azion-ui-lists", "azion-ui-tables", "azion-ui-states", "azion-ui-microcopy"],
   "primary": {
     "name": "Default",
     "file": "account-hierarchy.vue"

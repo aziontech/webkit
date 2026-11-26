@@ -3,10 +3,10 @@
 > The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/view-template-browser`): a Featured row of three `featured` `IntegrationCard`s (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `IntegrationCard` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValueList` (publisher, category, context, version, last update, the applications it runs on), an Overview of what installing adds, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/state-async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/view/view-marketplace/view-marketplace.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-marketplace/view-marketplace.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-marketplace")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), `use-collection`
-- Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
+- Skills: `azion-ui-lists`, `azion-ui-form`, `azion-ui-errors`, `azion-ui-states`
 
 ## Asked as
 
@@ -83,7 +83,7 @@ While `loading` is set, the Featured row and the heading of All integrations giv
 
 ### Install toast — through `toast`
 
-Raised through `toast` with one id for the install, so progress turns into the outcome in place, and only while the drawer is closed: with the drawer open, the inline `Alert` and the Install button carry the run, so no toast covers the form; closing the drawer raises the toast for the run (an outcome once). Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running while you work elsewhere."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Raised through `toast` with one id for the install, so progress turns into the outcome in place, and only while the drawer is closed: with the drawer open, the inline `Alert` and the Install button carry the run, so no toast covers the form; closing the drawer raises the toast for the run (an outcome once). Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running while you work elsewhere."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -181,7 +181,7 @@ Then delete `sample.ts` and its import.
 - **Success:** toast "<name> is installed on <application>." / "It runs from the next request to the application.", actions "Configure" and "Open application"; the inline `Alert` says the same in one line.
 - **Failure:** toast "<name> wasn't installed on <application>." with the reason as a full sentence, actions "Edit" and "Reinstall"; the inline `Alert` carries the reason and "Choose another application", and the footer submit reads "Reinstall".
 - **No match:** "No matching integrations", "No integration matches this search. Remove a filter to widen the results.", "Clear filters".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -212,7 +212,7 @@ Then delete `sample.ts` and its import.
 - `create/create-deploy-template` — where a template's Deploy leads.
 - `state/state-async-submit` — the toast and inline outcome every install follows.
 - `state/state-form-validation` (SectionRejected) — the field, section and toast placement of a form error.
-- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/azion-ui-lists`.
 
 ## Variants
 
@@ -232,13 +232,13 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IntegrationCard from '@aziontech/ui/integration-card'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { toast } from '@aziontech/ui/toast'
+  import { useCollection } from '@aziontech/ui/use-collection'
   import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
   import IntegrationDrawer from './parts/integration-drawer.vue'
@@ -883,20 +883,20 @@ export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'ap
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import { toast } from '@aziontech/webkit/toast'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Kbd from '@aziontech/ui/kbd'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
 
   interface FormErrors {
@@ -1116,17 +1116,17 @@ export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'ap
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Field from '@aziontech/webkit/field'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Select from '@aziontech/webkit/select'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Field from '@aziontech/ui/field'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Select from '@aziontech/ui/select'
   import { computed, ref } from 'vue'
 
   import type { MarketplaceIntegration } from '../view-marketplace.vue'
@@ -1379,8 +1379,8 @@ export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'ap
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
 </script>
 
 <template>
@@ -1432,18 +1432,18 @@ export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'ap
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DataTable from '@aziontech/webkit/data-table'
-  import Field from '@aziontech/webkit/field'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DataTable from '@aziontech/ui/data-table'
+  import Field from '@aziontech/ui/field'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   import {

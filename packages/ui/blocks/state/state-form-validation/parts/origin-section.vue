@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Select from '@aziontech/ui/select'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import type { FormValidationOrigin, FormValidationService } from '../types'
 

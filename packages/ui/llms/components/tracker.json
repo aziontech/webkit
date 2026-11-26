@@ -1,8 +1,8 @@
 {
  "name": "tracker",
  "binding": "Tracker",
- "import": "@aziontech/webkit/tracker",
- "treeShakeableImport": "@aziontech/webkit/tracker",
+ "import": "@aziontech/ui/tracker",
+ "treeShakeableImport": "@aziontech/ui/tracker",
  "category": "chart",
  "surface": "app",
  "structure": "monolithic",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
+  import Card from '@aziontech/ui/card'
 
   defineSlots<{
     /** What the card holds, padding included. */

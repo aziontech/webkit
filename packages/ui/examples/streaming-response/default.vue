@@ -1,5 +1,5 @@
 <script setup>
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
 
   const content = [
     '## Purge one URL',

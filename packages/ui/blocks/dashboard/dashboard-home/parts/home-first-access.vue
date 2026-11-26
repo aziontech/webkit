@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Illustration from '@aziontech/webkit/illustration'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Illustration from '@aziontech/ui/illustration'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
+  import { useConsoleLayout } from '@aziontech/ui/use-console-layout'
 
   import type { HomeDashboardDomainAvailability } from '../dashboard-home.vue'
   import HomeDomainCheck from './home-domain-check.vue'

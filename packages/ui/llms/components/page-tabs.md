@@ -2,7 +2,7 @@
 
 > The second-level navigation strip of a resource detail page: a full-bleed bar ruled at the bottom, its `Tabs` at the page boundary inset, with room for the actions the whole resource owns on the right (a staged-changes `Tag`, Deploy). It is `Tabs` plus the strip and the actions region, so every detail page stops re-creating the same bar.
 
-- Import: `import PageTabs from '@aziontech/webkit/page-tabs'`
+- Import: `import PageTabs from '@aziontech/ui/page-tabs'`
 - Category: navigation · Surface: app · Structure: monolithic
 - API as JSON: [page-tabs.json](page-tabs.json)
 
@@ -89,8 +89,8 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
 
 ```vue
 <script setup>
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
   import { ref } from 'vue'
 
   const activeTab = ref('overview')
@@ -122,10 +122,10 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
   import { ref } from 'vue'
 
   const activeTab = ref('overview')
@@ -165,8 +165,8 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
 
 ```vue
 <script setup>
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
   import { ref } from 'vue'
 
   const activeTab = ref('general')

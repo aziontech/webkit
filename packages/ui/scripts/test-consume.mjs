@@ -25,28 +25,28 @@ const fail = (msg) => {
 
 buildWorkspace(ROOT)
 
-const work = mkdtempSync(join(tmpdir(), 'webkit-smoke-'))
+const work = mkdtempSync(join(tmpdir(), 'azion-ui-smoke-'))
 const tarballs = packWorkspace(ROOT, join(work, 'tarballs'))
 
 const app = join(work, 'app')
 writeConsumerApp(app, {
   ...tarballs,
-  appVue: `<script setup lang="ts">\nimport Button from '@aziontech/webkit/button'\n</script>\n<template>\n  <Button variant="primary" size="large">Deploy</Button>\n</template>\n`
+  appVue: `<script setup lang="ts">\nimport Button from '@aziontech/ui/button'\n</script>\n<template>\n  <Button variant="primary" size="large">Deploy</Button>\n</template>\n`
 })
 
 installConsumerApp(app)
-run('node', [join(app, 'node_modules/@aziontech/webkit/src/cli/cli.js'), 'init', '--yes'], app)
+run('node', [join(app, 'node_modules/@aziontech/ui/src/cli/cli.js'), 'init', '--yes'], app)
 installConsumerApp(app)
 
 const mainSrc = readFileSync(join(app, 'src/main.ts'), 'utf8')
-if (!mainSrc.includes('./webkit.css') || !mainSrc.includes('@aziontech/icons')) {
+if (!mainSrc.includes('./azion-ui.css') || !mainSrc.includes('@aziontech/icons')) {
   fail('init did not wire the design-system imports into src/main.ts (patch-entry).')
 }
 if (mainSrc.includes('ToastPlugin')) {
   fail('init must not wire the toast plugin — toast setup is just-in-time (catalog + doctor).')
 }
 
-const cliBin = join(app, 'node_modules/@aziontech/webkit/src/cli/cli.js')
+const cliBin = join(app, 'node_modules/@aziontech/ui/src/cli/cli.js')
 const runSync = (args) =>
   execFileSync('node', [cliBin, 'sync', ...args], { cwd: app, encoding: 'utf8' })
 
@@ -55,7 +55,7 @@ if (!/drift: no/.test(syncOut)) {
   fail(`sync --check reported drift right after init:\n${syncOut}`)
 }
 
-const ruleFile = join(app, '.claude/rules/webkit-imports.md')
+const ruleFile = join(app, '.claude/rules/azion-ui-imports.md')
 const pristine = readFileSync(ruleFile, 'utf8')
 writeFileSync(ruleFile, `${pristine}\n<!-- local note -->\n`)
 
@@ -86,7 +86,7 @@ if (!cssFiles.length) fail('no CSS emitted — the style pipeline did not run.')
 const css = cssFiles.map((f) => readFileSync(join(assetsDir, f), 'utf8')).join('\n')
 
 if (!/data-variant=primary/.test(css) && !/\[data-variant/.test(css)) {
-  fail('component classes absent from CSS — Tailwind did not scan webkit source (unstyled UI).')
+  fail('component classes absent from CSS — Tailwind did not scan Azion UI source (unstyled UI).')
 }
 
 console.log(

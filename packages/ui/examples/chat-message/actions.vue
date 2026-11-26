@@ -1,8 +1,8 @@
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import ResponseBranches from '@aziontech/webkit/response-branches'
-  import Sources from '@aziontech/webkit/sources'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import ResponseBranches from '@aziontech/ui/response-branches'
+  import Sources from '@aziontech/ui/sources'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
   import { ref } from 'vue'
 
   const sources = [

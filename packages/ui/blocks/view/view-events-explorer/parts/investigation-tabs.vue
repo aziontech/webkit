@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { nextTick, ref } from 'vue'
 
   import type { InvestigationSession } from '../composables/use-investigation-sessions'

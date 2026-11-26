@@ -1,13 +1,13 @@
-import webkitPlugin from '@aziontech/webkit/eslint-plugin'
+import azionUiPlugin from '@aziontech/ui/eslint-plugin'
 
 import eslintConfig from '../../eslint.config.js'
 
 export default [
   ...eslintConfig,
-  ...webkitPlugin.configs.strict,
+  ...azionUiPlugin.configs.strict,
   {
     files: ['*.config.{js,cjs,mjs,ts,cts,mts}'],
-    rules: { 'webkit/require-authoring-standards': 'off' }
+    rules: { 'azion-ui/require-authoring-standards': 'off' }
   },
   { ignores: ['dist/**'] }
 ]

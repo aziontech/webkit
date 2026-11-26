@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Button from '@aziontech/ui/button'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
 
   const picker = useFilePicker({ multiple: true })
 </script>

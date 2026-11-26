@@ -5,7 +5,7 @@ import { dirname, join, relative } from 'node:path'
 
 import { read } from './project-files.js'
 
-const HUSKY_COMMENT = '# Lint the source with the webkit rules before every commit.'
+const HUSKY_COMMENT = '# Lint the source with the Azion UI rules before every commit.'
 const HUSKY_ESLINT = 'npx eslint src --no-error-on-unmatched-pattern'
 const HUSKY_STYLELINT = 'npx stylelint "src/**/*.{css,scss,vue}" --allow-empty-input'
 
@@ -17,7 +17,7 @@ ${HUSKY_STYLELINT}
 export const HUSKY_HOOK_MARKER = HUSKY_STYLELINT
 
 const LEGACY_HUSKY_LINES = new Map([
-  ['# Lint with the webkit rules before every commit.', HUSKY_COMMENT],
+  ['# Lint with the Azion UI rules before every commit.', HUSKY_COMMENT],
   ['npx eslint .', HUSKY_ESLINT],
   ['npx stylelint "**/*.{css,scss,vue}"', HUSKY_STYLELINT]
 ])
@@ -58,7 +58,7 @@ export function gitState(projectDir) {
 
 export function huskyBin(projectDir) {
   try {
-    const require = createRequire(join(projectDir, '__webkit_resolve__.js'))
+    const require = createRequire(join(projectDir, '__azion_ui_resolve__.js'))
     const bin = join(dirname(require.resolve('husky')), 'bin.js')
     return existsSync(bin) ? bin : null
   } catch {
@@ -120,7 +120,7 @@ function preCommitAction(projectDir) {
 }
 
 const NO_GIT_HOOKS_NOTE =
-  'Not a git repository, so no pre-commit hook was added (husky, "prepare", .husky/pre-commit). After `git init`, run `npx @aziontech/webkit init` again to add it.'
+  'Not a git repository, so no pre-commit hook was added (husky, "prepare", .husky/pre-commit). After `git init`, run `npx @aziontech/ui init` again to add it.'
 
 function prepareAction(pkg, gitHooks) {
   const existingPrepare = pkg.scripts?.prepare

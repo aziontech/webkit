@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 9f3cecf3cdfdeaff503168aad06de77eb497b491b6de1ba83914bf7597f34e57
+checksum: 774a6b4a4177dd02ffa2bf57e2daedbf4d299249207f3a738e0f5efe7ce0eae4
 spec_version: 8
 created: 2026-11-10
 last_updated: 2026-11-24
@@ -78,9 +78,9 @@ completion.
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Wizard from '@aziontech/webkit/wizard'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Wizard from '@aziontech/ui/wizard'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
 
   const step = ref(0)
   const name = ref('')
@@ -136,8 +136,8 @@ the `Object.assign` compound is not pulled in:
 
 ```vue
 <script setup>
-  import Wizard from '@aziontech/webkit/wizard-root'
-  import WizardStep from '@aziontech/webkit/wizard-step'
+  import Wizard from '@aziontech/ui/wizard-root'
+  import WizardStep from '@aziontech/ui/wizard-step'
 </script>
 ```
 
@@ -157,7 +157,7 @@ approach `stepper` uses), not by mount order, so a step inserted later still num
 
 The root composes, and does not re-implement:
 
-- `Stepper` + `Stepper.Step` (`@aziontech/webkit/stepper`) for the rail. The root renders one
+- `Stepper` + `Stepper.Step` (`@aziontech/ui/stepper`) for the rail. The root renders one
   `Stepper.Step` per registered `Wizard.Step` and passes:
   - `value` = `String(index)`.
   - `title` = the step's `title`.
@@ -173,7 +173,7 @@ The root composes, and does not re-implement:
   An `optional` step shows the word `Optional` in the `Stepper.Step` default slot. The rail's `v-model`
   is the active index as a string, and a rail activation writes `Number(value)` back to the `v-model` index.
 
-- `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
+- `Button` (`@aziontech/ui/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
   - Cancel is `variant="ghost"`, at the start of the footer.
   - Previous is `variant="outline"`, at the end, so the filled primary action is the only filled button in the footer. It is not rendered (`v-if`, not hidden) on step 1.
@@ -201,11 +201,11 @@ The root composes, and does not re-implement:
   - Slot: `default` — the step's content (fields, review summary).
   - `data-testid` fallback: `wizard-step` (consumer `data-testid` wins).
 
-Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
+Resulting layout (no per-component `package.json`; the root `packages/ui/package.json#exports`
 resolves every path, and `.d.ts` is generated at publish time):
 
 ```
-packages/webkit/src/components/navigation/wizard/
+packages/ui/src/components/navigation/wizard/
 ├── wizard.vue                   (root; owns the model, provides the registry, renders rail + footer)
 ├── wizard.test.ts
 ├── index.ts                     (compound: attaches Step to the root)
@@ -216,7 +216,7 @@ packages/webkit/src/components/navigation/wizard/
     └── wizard-step.vue
 ```
 
-Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the
+Exports to add to `packages/ui/package.json#exports` (flat public names; category lives in the
 folder only):
 
 ```jsonc
@@ -400,7 +400,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

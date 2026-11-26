@@ -2,7 +2,7 @@
 
 > Use StatTile to show one headline metric (figure, delta, sparkline) in product UI; the strip of related metrics is a StatTileGroup, one value against a range with thresholds is a GaugeChart, and a money amount on its own is a CurrencyAmount. A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `variant` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).
 
-- Import: `import StatTile from '@aziontech/webkit/stat-tile'`
+- Import: `import StatTile from '@aziontech/ui/stat-tile'`
 - Category: chart · Surface: app · Structure: monolithic
 - API as JSON: [stat-tile.json](stat-tile.json)
 
@@ -94,7 +94,7 @@
 
 ```vue
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTile from '@aziontech/ui/stat-tile'
 </script>
 
 <template>
@@ -113,7 +113,7 @@
 
 ```vue
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTile from '@aziontech/ui/stat-tile'
 </script>
 
 <template>
@@ -151,7 +151,7 @@
 
 ```vue
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTile from '@aziontech/ui/stat-tile'
 </script>
 
 <template>

@@ -1,8 +1,8 @@
 {
  "name": "response-loading",
  "binding": "ResponseLoading",
- "import": "@aziontech/webkit/response-loading",
- "treeShakeableImport": "@aziontech/webkit/response-loading",
+ "import": "@aziontech/ui/response-loading",
+ "treeShakeableImport": "@aziontech/ui/response-loading",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

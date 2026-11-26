@@ -1,14 +1,14 @@
 name: Usage check
 
 # Opt-in and paid: a fresh Claude Code session in a clean Vite + Vue app gets an intent-only
-# prompt and must pick the new component or block through the webkit MCP; the app must then
-# pass `webkit doctor`. See CONTRIBUTING.md, "Adding a component or block (AI flow)".
+# prompt and must pick the new component or block through the Azion UI MCP; the app must then
+# pass `azion-ui doctor`. See CONTRIBUTING.md, "Adding a component or block (AI flow)".
 
 on:
   workflow_dispatch:
     inputs:
       task:
-        description: 'A fixed task of packages/webkit/scripts/usage-tasks.json (token-expiry); leave empty to pass a target and a prompt'
+        description: 'A fixed task of packages/ui/scripts/usage-tasks.json (token-expiry); leave empty to pass a target and a prompt'
         required: false
         default: ''
         type: string
@@ -63,7 +63,7 @@ jobs:
           echo "$GITHUB_WORKSPACE/.github/tools/claude-code/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Run the usage check
-        working-directory: packages/webkit
+        working-directory: packages/ui
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           TASK: ${{ inputs.task }}
@@ -80,7 +80,7 @@ jobs:
 
       - name: Publish the report
         if: always()
-        working-directory: packages/webkit
+        working-directory: packages/ui
         run: test -f usage-report.md && cat usage-report.md >> "$GITHUB_STEP_SUMMARY" || true
 
       - name: Upload the report
@@ -88,6 +88,6 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: usage-report
-          path: packages/webkit/usage-report.md
+          path: packages/ui/usage-report.md
           if-no-files-found: ignore
           retention-days: 30

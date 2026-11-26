@@ -34,11 +34,11 @@
     "espaço de trabalho do agente"
   ],
   "skills": [
-    "webkit-layout",
-    "webkit-form",
-    "webkit-ui-states",
-    "webkit-microcopy",
-    "webkit-errors"
+    "azion-ui-layout",
+    "azion-ui-form",
+    "azion-ui-states",
+    "azion-ui-microcopy",
+    "azion-ui-errors"
   ],
   "primary": {
     "name": "Default",

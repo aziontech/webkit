@@ -1,6 +1,6 @@
 <script setup>
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import HeroSection from '@aziontech/webkit/hero-section'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import HeroSection from '@aziontech/ui/hero-section'
 
   const image = {
     src: placeholderImage,

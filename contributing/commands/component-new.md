@@ -1,5 +1,5 @@
 ---
-description: AI-only flow for a new WebKit component, from a "New component" issue to a PR. Research → draft spec → second-agent spec review → build → machine gates → ui-craft review → usage check → PR. Stops on the first failure.
+description: AI-only flow for a new Azion UI component, from a "New component" issue to a PR. Research → draft spec → second-agent spec review → build → machine gates → ui-craft review → usage check → PR. Stops on the first failure.
 argument-hint: <issue number or URL>
 ---
 
@@ -13,7 +13,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 
 ## Ground rules
 
-- One component per run. Nothing under `packages/webkit/src/components/` is written before step 4
+- One component per run. Nothing under `packages/ui/src/components/` is written before step 4
   approves the spec (`enforce-spec-exists` blocks it anyway).
 - Every phase that writes runs in an isolated sub-agent with the universal envelope
   (`contributing/agents/_README.md`). The spec is the contract: no prop, event, slot or import beyond it.
@@ -23,7 +23,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 - Log one JSON line per step to `contributing/logs/<run-id>.jsonl` (gitignored).
 - Changing an existing component runs the same flow from step 2 with the existing spec: bump
   `spec_version`, move it to `template: 2`, and add a codemod entry under
-  `packages/webkit/src/cli/migrations/` for any breaking change.
+  `packages/ui/src/cli/migrations/` for any breaking change.
 
 ## Step 1 — Read the request
 
@@ -44,9 +44,9 @@ same on the issue (`gh issue comment`), and do nothing else.
    (index: `https://ui.shadcn.com/llms.txt`). Extract anatomy, props, states, keyboard map,
    accessibility notes and the "when not to use" guidance. Benchmarks inform; they are never
    copied (`contributing/rules/migration.md`).
-2. **Reuse.** Run the `reuse-auditor` sub-agent (`reuse-audit` skill); ask the webkit MCP
+2. **Reuse.** Run the `reuse-auditor` sub-agent (`reuse-audit` skill); ask the Azion UI MCP
    `search_components` and `suggest_component` with the intent in plain words; look the name and
-   its synonyms up in `packages/webkit/catalog.json#aliases`. Read the closest exports against
+   its synonyms up in `packages/ui/catalog.json#aliases`. Read the closest exports against
    the planned API: `check:look-alikes` fails a new pair that scores 35 % or more and where neither
    imports the other (`contributing/docs/CODE_QUALITY.md` § 3.3), so a near-twin is a prop or a shared
    part, not a new component.
@@ -74,7 +74,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 3. `approve` → spawn `spec-validator` (`spec-validate` skill): schema, body, Constraints block,
    template-2 sections; it writes the checksum and flips `status: draft → approved`.
 4. Exit condition: `status: approved`, checksum matches, and
-   `pnpm --filter @aziontech/webkit run check:spec-template` passes.
+   `pnpm --filter @aziontech/ui run check:spec-template` passes.
 
 ## Step 5 — Build
 
@@ -83,23 +83,23 @@ same on the issue (`gh issue comment`), and do nothing else.
    write. The code stays inside the `contributing/docs/CODE_QUALITY.md` § 3.1 limits (400-line `.vue`,
    200-line script, 60-line functions, 20 props and 5 models per root) and ships the § 3.5
    extension points; a native control or ARIA widget role it renders needs its owner entry in
-   `packages/webkit/src/eslint-plugin/owners.json` (`webkit/no-unowned-element`).
+   `packages/ui/src/eslint-plugin/owners.json` (`azion-ui/no-unowned-element`).
 2. Exports: after the scaffold adds the flat `./<name>` entries, run
-   `pnpm --filter @aziontech/webkit build:exports` (the `exports` gate wants the typed
+   `pnpm --filter @aziontech/ui build:exports` (the `exports` gate wants the typed
    `{ types, default }` shape and `typesVersions`).
 3. Co-located test `<name>.test.ts` (Vitest browser; `contributing/rules/testing.md`): every state,
    the keyboard map, axe, and the `dir="rtl"` case.
 4. Strings: every key of the spec's `## Internationalization` goes into the component's camelCase
-   namespace in all three catalogs, `packages/webkit/src/locales/en.ts`, `pt-BR.ts` and `es.ts`
+   namespace in all three catalogs, `packages/ui/src/locales/en.ts`, `pt-BR.ts` and `es.ts`
    (`naming.md` § 13; `test/standards/i18n-catalogs.test.mjs` fails a missing key or placeholder).
-5. Examples in `packages/webkit/examples/<name>/`: `examples.json` (`component`, `title`
+5. Examples in `packages/ui/examples/<name>/`: `examples.json` (`component`, `title`
    `Components/<Category>/<Pascal>`, `examples[]` with `name`, `summary`, `file`) and one copyable
    `.vue` per example of the spec's `## Examples`, no fewer (`check:complete`). The first is
    `default.vue`; file names follow `naming.md` § 4; sample data follows
-   `rules/webkit-example-data.md`; a floating overlay starts closed
-   (`rules/webkit-overlays-closed-on-load.md`).
-6. Budget: an entry in `packages/webkit/.size-limit.json` with the spec's `## Performance` budget.
-7. Regenerate: `pnpm --filter @aziontech/webkit build:catalog` (it writes `catalog.json`,
+   `rules/azion-ui-example-data.md`; a floating overlay starts closed
+   (`rules/azion-ui-overlays-closed-on-load.md`).
+6. Budget: an entry in `packages/ui/.size-limit.json` with the spec's `## Performance` budget.
+7. Regenerate: `pnpm --filter @aziontech/ui build:catalog` (it writes `catalog.json`,
    `catalog/` and `llms/`; commit all three). The docs page
    (`/components/<name>`, `/frame/example/<name>/<file>`) and the visual test of the first example follow
    from the files; its baseline comes from the `Visual baselines` workflow (`/baselines-regenerate`).
@@ -113,15 +113,15 @@ same on the issue (`gh issue comment`), and do nothing else.
 Run, from the repository root, and keep the output for the PR:
 
 ```bash
-pnpm --filter @aziontech/webkit run gates          # every gate in scripts/run-gates.mjs (GATES) → table
-pnpm --filter @aziontech/webkit lint
-pnpm --filter @aziontech/webkit lint:style
-pnpm --filter @aziontech/webkit typecheck
-pnpm --filter @aziontech/webkit check:type-coverage
-pnpm --filter @aziontech/webkit check:format
-pnpm --filter @aziontech/webkit run check:size
-pnpm --filter @aziontech/webkit test:ssr
-cd packages/webkit && pnpm exec vitest run <name>.test copyable-sfcs   # filters by file path
+pnpm --filter @aziontech/ui run gates          # every gate in scripts/run-gates.mjs (GATES) → table
+pnpm --filter @aziontech/ui lint
+pnpm --filter @aziontech/ui lint:style
+pnpm --filter @aziontech/ui typecheck
+pnpm --filter @aziontech/ui check:type-coverage
+pnpm --filter @aziontech/ui check:format
+pnpm --filter @aziontech/ui run check:size
+pnpm --filter @aziontech/ui test:ssr
+cd packages/ui && pnpm exec vitest run <name>.test copyable-sfcs   # filters by file path
 ```
 
 Exit condition: every command exits 0. The same gates run in `.github/workflows/governance.yml`,
@@ -140,18 +140,18 @@ so a skipped one fails the PR anyway.
 
 1. Write an intent-only prompt from the issue's intent and "where it is used": the product task,
    never the component name or a synonym of it.
-2. Run `pnpm --filter @aziontech/webkit run check:usage -- <name> "<prompt>" --report usage-report.md`
+2. Run `pnpm --filter @aziontech/ui run check:usage -- <name> "<prompt>" --report usage-report.md`
    when the `claude` CLI and an API key are available; otherwise the PR in step 9 opens as draft
    and you dispatch `gh workflow run usage-check.yml -f target=<name> -f prompt="<prompt>"` on the
    branch.
 3. Exit condition: the report says `Usage check passed.` (the fresh session imported
-   `@aziontech/webkit/<name>` through the MCP and `webkit doctor` passed). A failure means the
+   `@aziontech/ui/<name>` through the MCP and `azion-ui doctor` passed). A failure means the
    catalog cannot steer an agent to the component: fix its `When to use`, intents or name (back to
    step 3 or 5), never the prompt.
 
 ## Step 9 — Pull request
 
-1. Commit by context (Conventional Commits, `feat(webkit): <name>`), push, and open the PR with
+1. Commit by context (Conventional Commits, `feat(ui): <name>`), push, and open the PR with
    `/pr-open`, body generated from `.github/pull_request_template.md`:
    - `Closes #<n>`, the spec path, the spec-reviewer checklist and verdict;
    - the gates table printed by `gates` and the results of the other step-6 commands;

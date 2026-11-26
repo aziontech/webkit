@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import TagEditor from '@aziontech/webkit/tag-editor'
+  import Button from '@aziontech/ui/button'
+  import TagEditor from '@aziontech/ui/tag-editor'
   import { ref } from 'vue'
 
   const tags = ref([

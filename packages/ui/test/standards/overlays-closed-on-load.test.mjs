@@ -47,7 +47,7 @@ function trueRefs(script) {
 
 function overlayBindings(source) {
   const bindings = new Set()
-  const pattern = /import\s+(\w+)\s+from\s+['"]@aziontech\/webkit\/([\w-]+)['"]/g
+  const pattern = /import\s+(\w+)\s+from\s+['"]@aziontech\/ui\/([\w-]+)['"]/g
   for (const [, name, subpath] of source.matchAll(pattern)) {
     if (FLOATING_OVERLAYS.includes(subpath)) bindings.add(name)
   }
@@ -101,12 +101,12 @@ test('no example or block opens a floating overlay on page load', () => {
   assert.deepEqual(
     offenders,
     [],
-    'a floating overlay opens on the reader click, hover or focus, never on load (rules/webkit-overlays-closed-on-load.md)'
+    'a floating overlay opens on the reader click, hover or focus, never on load (rules/azion-ui-overlays-closed-on-load.md)'
   )
 })
 
 test('the scan flags every forced-open shape', () => {
-  const head = "<script setup>\n  import Popover from '@aziontech/webkit/popover-root'\n"
+  const head = "<script setup>\n  import Popover from '@aziontech/ui/popover-root'\n"
   const cases = [
     '<Popover :open="true">',
     '<Popover open>',
@@ -122,10 +122,10 @@ test('the scan flags every forced-open shape', () => {
 
 test('the scan stays silent on closed overlays and inline disclosures', () => {
   const sources = [
-    '<script setup>\n  import Popover from \'@aziontech/webkit/popover-root\'\n  const shown = ref(false)\n</script>\n<template><Popover v-model:open="shown" side="auto"></Popover></template>',
-    '<script setup>\n  import Popover from \'@aziontech/webkit/popover-root\'\n</script>\n<template><Popover :open="false" :default-open="false"></Popover></template>',
-    "<script setup>\n  import Accordion from '@aziontech/webkit/doc-accordion'\n</script>\n<template><Accordion default-open></Accordion></template>",
-    "<script setup>\n  import DropdownMenu from '@aziontech/webkit/dropdown-menu'\n</script>\n<template><DropdownMenu><DropdownMenu.Sub default-open /></DropdownMenu></template>"
+    '<script setup>\n  import Popover from \'@aziontech/ui/popover-root\'\n  const shown = ref(false)\n</script>\n<template><Popover v-model:open="shown" side="auto"></Popover></template>',
+    '<script setup>\n  import Popover from \'@aziontech/ui/popover-root\'\n</script>\n<template><Popover :open="false" :default-open="false"></Popover></template>',
+    "<script setup>\n  import Accordion from '@aziontech/ui/doc-accordion'\n</script>\n<template><Accordion default-open></Accordion></template>",
+    "<script setup>\n  import DropdownMenu from '@aziontech/ui/dropdown-menu'\n</script>\n<template><DropdownMenu><DropdownMenu.Sub default-open /></DropdownMenu></template>"
   ]
   for (const source of sources) assert.deepEqual(findOpenOnLoad(source), [])
 })

@@ -16,7 +16,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - An empty panel inside a dashboard or detail page: use `EmptyState` alone, without the method list.
 - Choosing what to create across every resource kind: use `create/create-hub`.
 - The Home page before the first project: use `dashboard/dashboard-home` (its Empty state).
-- A list that failed to load: that is an error, not first use; see `skills/webkit-ui-states`.
+- A list that failed to load: that is an error, not first use; see `skills/azion-ui-states`.
 
 ## Building blocks
 

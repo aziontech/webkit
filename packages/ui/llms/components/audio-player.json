@@ -1,8 +1,8 @@
 {
  "name": "audio-player",
  "binding": "AudioPlayer",
- "import": "@aziontech/webkit/audio-player",
- "treeShakeableImport": "@aziontech/webkit/audio-player",
+ "import": "@aziontech/ui/audio-player",
+ "treeShakeableImport": "@aziontech/ui/audio-player",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

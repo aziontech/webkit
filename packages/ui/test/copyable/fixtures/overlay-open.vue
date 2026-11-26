@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Command from '@aziontech/webkit/command'
-  import Dialog from '@aziontech/webkit/dialog'
-  import Drawer from '@aziontech/webkit/drawer'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import SidebarMenu from '@aziontech/webkit/sidebar-menu'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Command from '@aziontech/ui/command'
+  import Dialog from '@aziontech/ui/dialog'
+  import Drawer from '@aziontech/ui/drawer'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import SidebarMenu from '@aziontech/ui/sidebar-menu'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { ref } from 'vue'
 
   const open = ref<boolean>(false)

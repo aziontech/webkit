@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { RuleListControl } from '../lib/rule-list'
   import type { RuleListRule } from '../view-rule-list.vue'

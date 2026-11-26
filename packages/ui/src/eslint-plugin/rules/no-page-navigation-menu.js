@@ -1,6 +1,6 @@
 import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
-const WEBKIT_PREFIX = '@aziontech/webkit/'
+const AZION_UI_PREFIX = '@aziontech/ui/'
 
 const MENU_ENTRIES = new Set([
   'sidebar-menu',
@@ -20,8 +20,8 @@ const MENU_HOST = /^(?:sidebar|console-layout|doc-layout|app-layout)(?:-|$)/
 const PAGE_PATH = /(?:^|\/)(?:views|pages)\//
 
 function entryOf(source) {
-  if (typeof source !== 'string' || !source.startsWith(WEBKIT_PREFIX)) return null
-  return source.slice(WEBKIT_PREFIX.length)
+  if (typeof source !== 'string' || !source.startsWith(AZION_UI_PREFIX)) return null
+  return source.slice(AZION_UI_PREFIX.length)
 }
 
 function filenameOf(context) {
@@ -60,7 +60,7 @@ export default {
         "'{{source}}' in a page body: page navigation lives in the rail (two levels at most), " +
         'and a page has only its PageTabs, so a Menu in the page repeats their destinations. ' +
         "Drop it: list the pages in the rail, or show a resource's pages as its PageTabs (at " +
-        'most 7, related pages as sections of one tab) (rule `webkit-navigation-levels`).'
+        'most 7, related pages as sections of one tab) (rule `azion-ui-navigation-levels`).'
     }
   },
   create(context) {
@@ -99,7 +99,7 @@ export default {
 
     const menuSource = (name) =>
       menuImports.find((node) => localNames(node).includes(name))?.source.value ??
-      WEBKIT_PREFIX + 'sidebar-menu'
+      AZION_UI_PREFIX + 'sidebar-menu'
 
     return factory(
       {

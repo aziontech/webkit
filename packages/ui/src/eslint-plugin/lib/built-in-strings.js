@@ -7,7 +7,7 @@ export const STRING_MESSAGES = {
     "Prop default is an English UI string. Default the prop to '' and fall back to the locale catalog (`props.x || t('<component>.<key>')`), so the prop still wins."
 }
 
-const COMPONENT_VUE = /^packages\/webkit\/src\/components\/.+\.vue$/
+const COMPONENT_VUE = /^packages\/ui\/src\/components\/.+\.vue$/
 
 const PROPER_NOUNS = new Set(['Azion'])
 

@@ -35,7 +35,7 @@
     "type the name to delete",
     "confirm deletion by name"
   ],
-  "skills": ["webkit-ux-heuristics", "webkit-microcopy", "webkit-form", "webkit-errors"],
+  "skills": ["azion-ui-ux-heuristics", "azion-ui-microcopy", "azion-ui-form", "azion-ui-errors"],
   "primary": {
     "name": "Default",
     "file": "edit-delete-dialog.vue"

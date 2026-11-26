@@ -1,9 +1,9 @@
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Select from '@aziontech/webkit/select'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Brand from '@aziontech/ui/brand'
+  import Footer from '@aziontech/ui/footer'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Select from '@aziontech/ui/select'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { ref } from 'vue'
 
   const language = ref('en')

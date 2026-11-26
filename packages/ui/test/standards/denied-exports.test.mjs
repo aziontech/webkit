@@ -5,7 +5,7 @@ import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 
 // The cited-names gate (scripts/check-cited-names.mjs) skips every negated line, so a doc that
-// says "there is no `@aziontech/webkit/app-layout`" passes it even after the export ships, and
+// says "there is no `@aziontech/ui/app-layout`" passes it even after the export ships, and
 // keeps teaching agents to hand-build what the package already has. This test reads those
 // denials and fails when the export they deny is in the catalog.
 
@@ -17,13 +17,13 @@ const SOURCES = [
   'adapters',
   'contributing/skills',
   'contributing/docs',
-  'packages/webkit/README.md'
+  'packages/ui/README.md'
 ]
 
 const DENIAL =
-  /\b(there (is|are) no|there's no|does not exist|doesn't exist|do not exist|non-?existent|not importable|not exported|no such (export|import|subpath|component)|dead import|not a webkit (import|export|component))\b|\bno\s+`@aziontech\/webkit\//i
+  /\b(there (is|are) no|there's no|does not exist|doesn't exist|do not exist|non-?existent|not importable|not exported|no such (export|import|subpath|component)|dead import|not an Azion UI (import|export|component))\b|\bno\s+`@aziontech\/ui\//i
 const CITATION =
-  /@aziontech\/webkit\/([a-z0-9][a-z0-9-]*[a-z0-9])(?![\w/*<-])|`\/([a-z0-9][a-z0-9-]*[a-z0-9])`/g
+  /@aziontech\/ui\/([a-z0-9][a-z0-9-]*[a-z0-9])(?![\w/*<-])|`\/([a-z0-9][a-z0-9-]*[a-z0-9])`/g
 
 function markdownFiles(path, out = []) {
   if (!existsSync(path)) return out
@@ -70,16 +70,16 @@ export function deniedSubpaths(markdown) {
 test('a denial of an export is read across a wrapped line and in its short form', () => {
   const text = [
     'The primitives you compose the shells from all resolve this way. **There is no',
-    '`@aziontech/webkit/app-layout` and no `@aziontech/webkit/creation-header`:** the two shells are',
+    '`@aziontech/ui/app-layout` and no `@aziontech/ui/creation-header`:** the two shells are',
     'components _you_ compose.',
     '',
-    '- There is no `@aziontech/webkit/console-layout` or `/doc-layout` — do not import one.',
-    '- Never import a nonexistent `@aziontech/webkit/site-layout`.',
+    '- There is no `@aziontech/ui/console-layout` or `/doc-layout` — do not import one.',
+    '- Never import a nonexistent `@aziontech/ui/site-layout`.',
     '',
-    'Use `@aziontech/webkit/button` and never `@aziontech/webkit/feedback/skeleton`.',
+    'Use `@aziontech/ui/button` and never `@aziontech/ui/feedback/skeleton`.',
     '',
     '```vue',
-    "import ConsoleLayout from '@aziontech/webkit/console-layout' // there is no catch here",
+    "import ConsoleLayout from '@aziontech/ui/console-layout' // there is no catch here",
     '```'
   ].join('\n')
   assert.deepEqual(deniedSubpaths(text).sort(), [
@@ -101,7 +101,7 @@ test('no skill, rule or doc denies an export the package ships', () => {
       for (const sub of deniedSubpaths(readFileSync(file, 'utf8'))) {
         if (shipped.has(sub))
           failures.push(
-            `${relative(REPO_ROOT, file)}: says @aziontech/webkit/${sub} does not exist, but the package exports it`
+            `${relative(REPO_ROOT, file)}: says @aziontech/ui/${sub} does not exist, but the package exports it`
           )
       }
     }

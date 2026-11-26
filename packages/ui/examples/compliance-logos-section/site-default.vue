@@ -1,12 +1,12 @@
 <script setup>
-  import ccpaSymbolColor from '@aziontech/webkit/assets/ccpa-symbol-color.svg'
-  import gdprSymbolColor from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
-  import lgpdSymbolColor from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
-  import pciDssSymbolColor from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
-  import socSymbolColor from '@aziontech/webkit/assets/soc-symbol-color.svg'
-  import ComplianceLogosSection from '@aziontech/webkit/compliance-logos-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ccpaSymbolColor from '@aziontech/ui/assets/ccpa-symbol-color.svg'
+  import gdprSymbolColor from '@aziontech/ui/assets/gdpr-symbol-color.svg'
+  import lgpdSymbolColor from '@aziontech/ui/assets/lgpd-symbol-color.svg'
+  import pciDssSymbolColor from '@aziontech/ui/assets/pci-dss-symbol-color.svg'
+  import socSymbolColor from '@aziontech/ui/assets/soc-symbol-color.svg'
+  import ComplianceLogosSection from '@aziontech/ui/compliance-logos-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const certifications = [
     {

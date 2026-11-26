@@ -1,8 +1,8 @@
 {
  "name": "avatar-group",
  "binding": "AvatarGroup",
- "import": "@aziontech/webkit/avatar-group",
- "treeShakeableImport": "@aziontech/webkit/avatar-group",
+ "import": "@aziontech/ui/avatar-group",
+ "treeShakeableImport": "@aziontech/ui/avatar-group",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

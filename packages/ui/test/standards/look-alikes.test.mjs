@@ -15,7 +15,7 @@ const sfc = (script, template) =>
   `<script setup lang="ts">\n${script}\n</script>\n<template>\n${template}\n</template>\n`
 
 const LINK_OR_BUTTON = sfc(
-  `import Spinner from '@aziontech/webkit/spinner'
+  `import Spinner from '@aziontech/ui/spinner'
 interface Props {
   size?: string
   disabled?: boolean
@@ -29,7 +29,7 @@ const isAnchor = computed(() => !!props.href)`,
 )
 
 const BUILT_ON_IT = sfc(
-  `import Button from '@aziontech/webkit/button'
+  `import Button from '@aziontech/ui/button'
 interface Props {
   size?: string
   disabled?: boolean

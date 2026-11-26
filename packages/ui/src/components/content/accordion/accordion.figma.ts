@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-889
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/accordion/accordion.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/accordion/accordion.vue
 // component=Accordion
 import figma from 'figma'
 
@@ -25,7 +25,7 @@ export default {
   example: figma.code`<Accordion${size === 'medium' ? '' : figma.code` size="${size}"`}${iconPosition === 'trailing' ? '' : figma.code` icon-position="${iconPosition}"`}>
   ${items}
 </Accordion>`,
-  imports: ["import Accordion from '@aziontech/webkit/accordion'"],
+  imports: ["import Accordion from '@aziontech/ui/accordion'"],
   id: 'accordion',
   metadata: { nestable: true }
 }

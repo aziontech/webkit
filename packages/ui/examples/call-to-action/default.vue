@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
+  import Button from '@aziontech/ui/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
 </script>
 
 <template>

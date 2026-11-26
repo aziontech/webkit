@@ -1,8 +1,5 @@
-import type {
-  ConsoleLayoutAccount,
-  ConsoleLayoutNavGroup
-} from '@aziontech/webkit/console-layout-root'
-import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+import type { ConsoleLayoutAccount, ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+import type { TagSeverity, TagVariant } from '@aziontech/ui/tag'
 
 import type { ShellConsoleRecent } from './shell-console.vue'
 

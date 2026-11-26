@@ -1,8 +1,8 @@
 {
  "name": "template-gallery-section",
  "binding": "TemplateGallerySection",
- "import": "@aziontech/webkit/template-gallery-section",
- "treeShakeableImport": "@aziontech/webkit/template-gallery-section",
+ "import": "@aziontech/ui/template-gallery-section",
+ "treeShakeableImport": "@aziontech/ui/template-gallery-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

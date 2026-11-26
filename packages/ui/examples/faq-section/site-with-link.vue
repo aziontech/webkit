@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import FaqSection from '@aziontech/webkit/faq-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import FaqSection from '@aziontech/ui/faq-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const items = [
     {

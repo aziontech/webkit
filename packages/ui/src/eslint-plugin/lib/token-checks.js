@@ -15,47 +15,47 @@ const TOKEN_CHECKS = [
     regex:
       /\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent)-(?:gray|slate|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}\b/g,
     message:
-      'Tailwind palette color. Use semantic webkit tokens (var(--primary), var(--text-default), var(--bg-surface), ...).'
+      'Tailwind palette color. Use semantic Azion UI tokens (var(--primary), var(--text-default), var(--bg-surface), ...).'
   },
   {
     id: 'typography-raw-size',
     regex: /\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\b(?!-)/g,
     message:
       'Raw Tailwind text size. Use a generated typography class (text-heading-md, ' +
-      'text-body-sm, text-button-lg, text-label-md, ...) — ask the webkit MCP: list_tokens (no ' +
+      'text-body-sm, text-button-lg, text-label-md, ...) — ask the Azion UI MCP: list_tokens (no ' +
       'category) returns every typography class.'
   },
   {
     id: 'typography-raw-length',
     regex: /text-(?:\[length:var\(|\(length:)--text-/g,
     message:
-      'Raw typography token. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, ...) — ask the webkit MCP: list_tokens (no category) returns every typography class.'
+      'Raw typography token. Use a generated typography class (text-heading-md, text-body-sm, text-button-lg, ...) — ask the Azion UI MCP: list_tokens (no category) returns every typography class.'
   },
   {
     id: 'leading-raw',
     regex: /\bleading-(?:\d+|tight|snug|relaxed|loose|[[(])/g,
     message:
-      'Raw leading-* class. Line-height is part of the generated typography class (ask the webkit MCP: list_tokens); do not override.'
+      'Raw leading-* class. Line-height is part of the generated typography class (ask the Azion UI MCP: list_tokens); do not override.'
   },
   {
     id: 'tracking-raw',
     regex: /\btracking-(?:tightest|tighter|tight|wide|wider|widest|[[(])/g,
     message:
-      'Raw tracking-* class. Letter-spacing is part of the generated typography class (ask the webkit MCP: list_tokens); do not override.'
+      'Raw tracking-* class. Letter-spacing is part of the generated typography class (ask the Azion UI MCP: list_tokens); do not override.'
   },
   {
     id: 'font-family-raw',
     regex:
       /\b(?:font-(?:sans|serif|mono|rubik|proto-mono)\b|(?<![\w-])font-(?:code|display)\b|font-[[(]family-name:)/g,
     message:
-      'Raw font-family. Font family is part of the generated typography class (ask the webkit MCP: list_tokens); do not override.'
+      'Raw font-family. Font family is part of the generated typography class (ask the Azion UI MCP: list_tokens); do not override.'
   },
   {
     id: 'legacy-color-util',
     regex:
       /(?<![\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\b/g,
     message:
-      'Legacy/external color utility. Use semantic webkit tokens (var(--text-default), var(--bg-surface), ...).'
+      'Legacy/external color utility. Use semantic Azion UI tokens (var(--text-default), var(--bg-surface), ...).'
   },
   {
     id: 'zero-with-unit',
@@ -117,7 +117,7 @@ const TOKEN_CHECKS = [
     regex:
       /(["'`])(?=[^"'`]*(?<![\w-])az-(?:(?:(?:circle-)?(?:chevron|arrow)|chevrons|arrow-down|caret)-(?:left|right)|arrow-(?:left|right)-to-line|log-in|log-out|reply|undo)(?![\w-]))[^"'`]*?(?<![^\s"'`])(?:[^\s"'`]*:)?rtl:-?rotate-180(?![^\s"'`])/g,
     message:
-      'rtl:rotate-180 on a directional icon. `@aziontech/webkit/styles` already mirrors every ' +
+      'rtl:rotate-180 on a directional icon. `@aziontech/ui/styles` already mirrors every ' +
       'directional `az-*` glyph under RTL with `scale: -1 1`; adding a rotation composes with ' +
       'it and the arrow points the WRONG way. Drop the rotation (or use `rtl:-scale-x-100`, ' +
       'which sets the same scale) (contributing/rules/styling.md).'
@@ -133,7 +133,7 @@ const TOKEN_CHECKS = [
       'bar, underline, glyph or glow beside text in --text-default. It is never the colour of text, ' +
       'which misses WCAG AA on light surfaces. --text-primary and --text-brand were removed in 6.0 ' +
       '(use --text-default), and the other steps of the orange scale stay inside the theme ' +
-      '(rules/webkit-tokens.md).'
+      '(rules/azion-ui-tokens.md).'
   },
   {
     id: 'status-fill-as-text',
@@ -143,7 +143,7 @@ const TOKEN_CHECKS = [
       'A status fill colour used as text or icon colour. --danger, --success, --warning and ' +
       '--info are fills and vanish on a surface: a status icon on a surface is the -mark ' +
       'token, error text is --text-danger, text on the fill is its -foreground ' +
-      '(rules/webkit-tokens.md).'
+      '(rules/azion-ui-tokens.md).'
   },
   {
     id: 'color-logo-interpolated',
@@ -153,7 +153,7 @@ const TOKEN_CHECKS = [
       'A colour logo class built at runtime (`az-color az-${name}`). The stylesheet compiles only ' +
       'the colour logos whose whole class appears in scanned source, so a built class paints ' +
       "nothing. Write each full class ('az-color az-react'), or list a logo that only arrives in " +
-      'data with @source inline("az-react") in webkit.css (rules/webkit-performance.md).'
+      'data with @source inline("az-react") in azion-ui.css (rules/azion-ui-performance.md).'
   },
   {
     id: 'class-in-defineprops',
@@ -199,7 +199,7 @@ const TOKEN_CHECKS = [
     id: 'motion-hardcoded',
     regex: /\b(?:duration|delay|ease)-[[(]/g,
     message:
-      'Hardcoded duration/ease/delay. Use the duration/ease tokens (ask the webkit MCP: list_tokens category "ease", or "animations" for the catalogued animate-* utilities).'
+      'Hardcoded duration/ease/delay. Use the duration/ease tokens (ask the Azion UI MCP: list_tokens category "ease", or "animations" for the catalogued animate-* utilities).'
   }
 ]
 
@@ -207,13 +207,13 @@ export const TOKEN_MESSAGES = Object.fromEntries(TOKEN_CHECKS.map((c) => [c.id, 
 
 export function tokenChecksApply(rel) {
   return (
-    rel.startsWith('packages/webkit/src/components/') &&
+    rel.startsWith('packages/ui/src/components/') &&
     !/\.(test|spec)\.[tj]s$/.test(rel) &&
     /\.(vue|css|scss|ts)$/.test(rel)
   )
 }
 
-export const WIDE_TOKEN_DIRS = ['packages/webkit/blocks/', 'packages/webkit/examples/']
+export const WIDE_TOKEN_DIRS = ['packages/ui/blocks/', 'packages/ui/examples/']
 
 const WIDE_TOKEN_CHECKS = TOKEN_CHECKS.filter((c) => c.wide)
 

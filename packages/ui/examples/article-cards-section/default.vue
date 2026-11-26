@@ -1,6 +1,6 @@
 <script setup>
-  import ArticleCardsSection from '@aziontech/webkit/article-cards-section'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import ArticleCardsSection from '@aziontech/ui/article-cards-section'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
 </script>
 
 <template>

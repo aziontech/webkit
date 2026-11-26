@@ -1,8 +1,8 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import LanguageSelect from '@aziontech/webkit/language-select'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import Field from '@aziontech/ui/field'
+  import IconButton from '@aziontech/ui/icon-button'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
   import { ref } from 'vue'
 
   const locale = ref('en')

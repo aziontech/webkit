@@ -1,8 +1,8 @@
 {
  "name": "integration-card",
  "binding": "IntegrationCard",
- "import": "@aziontech/webkit/integration-card",
- "treeShakeableImport": "@aziontech/webkit/integration-card",
+ "import": "@aziontech/ui/integration-card",
+ "treeShakeableImport": "@aziontech/ui/integration-card",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

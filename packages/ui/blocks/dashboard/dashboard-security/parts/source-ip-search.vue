@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import { matchesText } from '@aziontech/webkit/use-collection'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import { matchesText } from '@aziontech/ui/use-collection'
   import { computed } from 'vue'
 
   import type { SecuritySourceIp } from '../dashboard-security.vue'

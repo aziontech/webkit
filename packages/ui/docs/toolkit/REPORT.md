@@ -1,18 +1,18 @@
-# `webkit report` and `webkit canary`
+# `azion-ui report` and `azion-ui canary`
 
 Two commands that answer "how much of this project's UI is actually the design system,
 and is that number trustworthy?"
 
-## `webkit report`
+## `azion-ui report`
 
 ```bash
-npx @aziontech/webkit report                       # Markdown to stdout
-npx @aziontech/webkit report --format json         # the same numbers, machine-readable
-npx @aziontech/webkit report --fail-on any         # exit 1 when any webkit/* violation exists
-npx @aziontech/webkit report src/components         # restrict to a subset of patterns
+npx @aziontech/ui report                       # Markdown to stdout
+npx @aziontech/ui report --format json         # the same numbers, machine-readable
+npx @aziontech/ui report --fail-on any         # exit 1 when any azion-ui/* violation exists
+npx @aziontech/ui report src/components         # restrict to a subset of patterns
 ```
 
-It runs the project's own ESLint, keeps only `webkit/*` results, and prints:
+It runs the project's own ESLint, keeps only `azion-ui/*` results, and prints:
 
 - the violation total, the number of files affected, and an **adoption score**;
 - a table per rule with what each one catches;
@@ -20,7 +20,7 @@ It runs the project's own ESLint, keeps only `webkit/*` results, and prints:
 - **a coverage section that always states what it did not look at.**
 
 Markdown goes to **stdout**, progress and warnings to **stderr**, so a CI step can do
-`webkit report >> "$GITHUB_STEP_SUMMARY"` with nothing to filter.
+`azion-ui report >> "$GITHUB_STEP_SUMMARY"` with nothing to filter.
 
 | Option        | Default    |                              |
 | ------------- | ---------- | ---------------------------- |
@@ -78,40 +78,40 @@ worse than no report:
 - **`no-style-override` cannot run on `.astro`** — it needs vue-eslint-parser's template
   visitor, which `astro-eslint-parser` does not provide. A restyled component inside an
   Astro file is invisible to this report.
-- **Raw HTML where a webkit component exists** (`<button>`, `<input>`, a hand-rolled
-  modal) is caught by no rule yet — `prefer-webkit-component` matches imports from a
+- **Raw HTML where an Azion UI component exists** (`<button>`, `<input>`, a hand-rolled
+  modal) is caught by no rule yet — `prefer-azion-ui-component` matches imports from a
   foreign package, not markup.
 - **Files with a fatal parse error** are listed by path — they were never actually
   checked, and are excluded from `uiFilesClean`.
 - **An unresolved catalog disables the catalog-backed rules** — the report checks for
   this and leads with a warning, because otherwise "clean" and "blind" look identical.
 
-## `webkit canary`
+## `azion-ui canary`
 
 ```bash
-npx @aziontech/webkit canary
+npx @aziontech/ui canary
 ```
 
 Inverted logic: each fixture violates one rule **on purpose** and must keep being flagged
 by that exact rule.
 
 ```
-OK    webkit/no-deep-internal-import denied-import.vue
-OK    webkit/no-unknown-import unknown-export.vue
-OK    webkit/no-hardcoded-color hardcoded-color.vue
-OK    webkit/no-hardcoded-color hardcoded-color.astro
+OK    azion-ui/no-deep-internal-import denied-import.vue
+OK    azion-ui/no-unknown-import unknown-export.vue
+OK    azion-ui/no-hardcoded-color hardcoded-color.vue
+OK    azion-ui/no-hardcoded-color hardcoded-color.astro
 
 4 of 4 required canaries fired — the rules reach this project.
 ```
 
-The fixtures are written into `.webkit-canary/` under the project root — so the project's
+The fixtures are written into `.azion-ui-canary/` under the project root — so the project's
 own flat config applies to them — and removed afterwards, even when the run fails or
 throws.
 
 ### Why canary exists
 
 Every way of losing the design-system rules is silent, and every one of them makes the
-adoption number reported by `webkit report` read **better**, never worse:
+adoption number reported by `azion-ui report` read **better**, never worse:
 
 | What breaks                                       | What you see                                      |
 | ------------------------------------------------- | ------------------------------------------------- |
@@ -126,8 +126,8 @@ The `.astro` fixture is **required** whenever `astro-eslint-parser` and
 `eslint-plugin-astro` resolve from the project (meaning it lints `.astro` at all);
 otherwise it is reported as `SKIP`, naming the reason — visible, never silent. A red
 canary (any `FAIL` line, exit code `1`) means the design-system rules are **not** reaching
-this project — fix the wiring (`webkit doctor` is the first stop) before trusting any
-`webkit report` output.
+this project — fix the wiring (`azion-ui doctor` is the first stop) before trusting any
+`azion-ui report` output.
 
 ## CLI contract summary
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   export interface HierarchyToolbarProps {
     /** The prefix of the ids the toolbar points at. */

@@ -7,10 +7,10 @@ import { brokenVueTscIn, VUE_TSC_BROKEN, VUE_TSC_KNOWN_GOOD, vueTscState } from 
 import { installedVersion } from './project.js'
 
 function vueState(vue) {
-  if (!vue) return ['warn', 'vue is not installed — webkit needs vue ^3.5.']
+  if (!vue) return ['warn', 'vue is not installed — Azion UI needs vue ^3.5.']
   const [major, minor] = vue.split('.').map(Number)
   if (major === 3 && minor >= 5) return ['ok', `vue ${vue}`]
-  return ['fail', `vue ${vue} is installed — webkit needs vue ^3.5.`]
+  return ['fail', `vue ${vue} is installed — Azion UI needs vue ^3.5.`]
 }
 
 export function vueVersionCheck({ projectDir, add }) {
@@ -21,14 +21,14 @@ function tailwindState(tailwind) {
   if (!tailwind) {
     return [
       'warn',
-      'tailwindcss is not installed — webkit components are styled with Tailwind v4.1 or later (it comes with @aziontech/theme).'
+      'tailwindcss is not installed — Azion UI components are styled with Tailwind v4.1 or later (it comes with @aziontech/theme).'
     ]
   }
   const [major, minor] = tailwind.split('.').map(Number)
   if (major === 4 && minor >= 1) return ['ok', `tailwindcss ${tailwind}`]
   return [
     'fail',
-    `tailwindcss ${tailwind} is installed — webkit needs Tailwind 4.1 or later (src/webkit.css uses \`@source not\`).`
+    `tailwindcss ${tailwind} is installed — Azion UI needs Tailwind 4.1 or later (src/azion-ui.css uses \`@source not\`).`
   ]
 }
 
@@ -87,47 +87,47 @@ function caretSatisfies(range, version) {
 }
 
 function nestedTheme(projectDir) {
-  const webkitDir = join(projectDir, 'node_modules', '@aziontech', 'webkit')
-  const nestedDir = join(webkitDir, 'node_modules', '@aziontech', 'theme')
+  const azionUiDir = join(projectDir, 'node_modules', '@aziontech', 'ui')
+  const nestedDir = join(azionUiDir, 'node_modules', '@aziontech', 'theme')
   const topDir = join(projectDir, 'node_modules', '@aziontech', 'theme')
   const sameCopy =
     existsSync(nestedDir) && existsSync(topDir) && realpathSync(nestedDir) === realpathSync(topDir)
-  return sameCopy ? null : installedVersion(webkitDir, '@aziontech/theme')
+  return sameCopy ? null : installedVersion(azionUiDir, '@aziontech/theme')
 }
 
-function themeProblems(projectDir, webkitPkg, themeRange, theme) {
+function themeProblems(projectDir, azionUiPkg, themeRange, theme) {
   const nested = nestedTheme(projectDir)
   const problems = []
   if (nested) {
     problems.push(
-      `a second copy of @aziontech/theme (${nested}) is nested under @aziontech/webkit — remove it so one theme drives the tokens`
+      `a second copy of @aziontech/theme (${nested}) is nested under @aziontech/ui — remove it so one theme drives the tokens`
     )
   }
   if (!theme) {
-    problems.push('@aziontech/theme is not installed — install it next to @aziontech/webkit')
+    problems.push('@aziontech/theme is not installed — install it next to @aziontech/ui')
     return problems
   }
   const fits = themeRange ? caretSatisfies(themeRange, theme) : true
   if (!fits) {
     problems.push(
-      `@aziontech/theme ${theme} does not satisfy the ${themeRange} webkit ${webkitPkg.version} expects`
+      `@aziontech/theme ${theme} does not satisfy the ${themeRange} ui ${azionUiPkg.version} expects`
     )
   }
   return problems
 }
 
 export function themeVersionCheck({ projectDir, add }) {
-  const webkitPkgPath = join(projectDir, 'node_modules', '@aziontech', 'webkit', 'package.json')
-  const webkitPkg = existsSync(webkitPkgPath) ? JSON.parse(read(webkitPkgPath)) : null
-  if (!webkitPkg) return
-  const themeRange = webkitPkg.peerDependencies?.['@aziontech/theme']
+  const azionUiPkgPath = join(projectDir, 'node_modules', '@aziontech', 'ui', 'package.json')
+  const azionUiPkg = existsSync(azionUiPkgPath) ? JSON.parse(read(azionUiPkgPath)) : null
+  if (!azionUiPkg) return
+  const themeRange = azionUiPkg.peerDependencies?.['@aziontech/theme']
   const theme = installedVersion(projectDir, '@aziontech/theme')
-  const problems = themeProblems(projectDir, webkitPkg, themeRange, theme)
+  const problems = themeProblems(projectDir, azionUiPkg, themeRange, theme)
   add(
     'theme version',
     problems.length ? 'fail' : 'ok',
     problems.length
       ? problems.join('\n')
-      : `@aziontech/theme ${theme} matches webkit ${webkitPkg.version} (${themeRange ?? 'any'})`
+      : `@aziontech/theme ${theme} matches ui ${azionUiPkg.version} (${themeRange ?? 'any'})`
   )
 }

@@ -34,7 +34,7 @@ const propsInterface = (count) =>
   `interface Props {\n${repeat(count, (i) => `  p${i}?: string`)}\n}\nconst props = defineProps<Props>()`
 
 async function run(files) {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-maintainability-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-maintainability-'))
   try {
     for (const [file, content] of Object.entries(files)) {
       mkdirSync(dirname(join(dir, file)), { recursive: true })

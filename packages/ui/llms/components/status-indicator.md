@@ -2,7 +2,7 @@
 
 > Use StatusIndicator for the current state of one resource (Active, Failed, Deploying) in a table column or detail header — the default answer for 'status'. A category or outcome word is a Tag, a number is a Badge, a level on the critical → info scale is a SeverityTag, and an HTTP code is a StatusCode. Shows the settled or transitional state of one resource as a colored dot (or a spinner while `loading`) beside a short label: Active, Failed, Paused, Deploying. It is the status column of tables and lists and the status line of a detail header, so it is static text, not a live region.
 
-- Import: `import StatusIndicator from '@aziontech/webkit/status-indicator'`
+- Import: `import StatusIndicator from '@aziontech/ui/status-indicator'`
 - Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [status-indicator.json](status-indicator.json)
 
@@ -62,7 +62,7 @@
 
 ```vue
 <script setup>
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>
@@ -77,7 +77,7 @@
 
 ```vue
 <script setup>
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>
@@ -110,7 +110,7 @@
 
 ```vue
 <script setup>
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>

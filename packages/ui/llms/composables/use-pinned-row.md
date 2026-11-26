@@ -1,10 +1,10 @@
 # usePinnedRow
 
-Composable `@aziontech/webkit/use-pinned-row`. The signatures and option tables below are read from its typed source, [`src/composables/use-pinned-row/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-pinned-row/index.ts).
+Composable `@aziontech/ui/use-pinned-row`. The signatures and option tables below are read from its typed source, [`src/composables/use-pinned-row/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-pinned-row/index.ts).
 
 ```ts
-import { usePinnedRow } from '@aziontech/webkit/use-pinned-row'
-import type { UsePinnedRowReturn, PinnedRowElements } from '@aziontech/webkit/use-pinned-row'
+import { usePinnedRow } from '@aziontech/ui/use-pinned-row'
+import type { UsePinnedRowReturn, PinnedRowElements } from '@aziontech/ui/use-pinned-row'
 ```
 
 ## `usePinnedRow`

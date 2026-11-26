@@ -23,7 +23,7 @@
     "sucesso do deploy",
     "aplicação publicada"
   ],
-  "skills": ["webkit-ui-states", "webkit-microcopy"],
+  "skills": ["azion-ui-states", "azion-ui-microcopy"],
   "primary": {
     "name": "Default",
     "file": "create-deploy-success.vue"

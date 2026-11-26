@@ -30,7 +30,7 @@ export function runMigrate(projectDir, target, { dryRun, from }) {
   const version = majorOf(target || '')
   if (!SUPPORTED_VERSIONS.includes(version)) {
     err(
-      `Usage: npx @aziontech/webkit migrate v6 [--dry-run] (supported: ${SUPPORTED_VERSIONS.map((v) => `v${v}`).join(', ')})\n`
+      `Usage: npx @aziontech/ui migrate v6 [--dry-run] (supported: ${SUPPORTED_VERSIONS.map((v) => `v${v}`).join(', ')})\n`
     )
     return 1
   }

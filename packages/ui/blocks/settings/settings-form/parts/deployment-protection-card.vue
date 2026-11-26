@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Select from '@aziontech/ui/select'
+  import Switch from '@aziontech/ui/switch'
   import { reactive } from 'vue'
 
   import { useCardSave } from '../composables/use-card-save'

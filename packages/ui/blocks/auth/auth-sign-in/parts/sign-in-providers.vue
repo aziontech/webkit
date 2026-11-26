@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Separator from '@aziontech/webkit/separator'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Button from '@aziontech/ui/button'
+  import Separator from '@aziontech/ui/separator'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import type { SignInMethod, SignInProvider } from '../auth-sign-in.vue'
   import type { SignInCopy } from '../lib/sign-in-copy'

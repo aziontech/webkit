@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/ui/utils/radio-list'
   import { computed, nextTick, ref } from 'vue'
 
   import CreateDeployTemplate from '../create-deploy-template.vue'

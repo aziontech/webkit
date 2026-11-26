@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { DateRangeValue } from '@aziontech/webkit/date-range-picker'
+  import type { DateRangeValue } from '@aziontech/ui/date-range-picker'
   import { ref } from 'vue'
 
   import AccountActivityHistory from '../account-activity-history.vue'

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import { type ChartColor } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import Hint from '@aziontech/webkit/hint'
+  import BarList, { type BarListItem } from '@aziontech/ui/bar-list'
+  import { type ChartColor } from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import Hint from '@aziontech/ui/hint'
 
   export interface ActorBarCardProps {
     /** The card title. */

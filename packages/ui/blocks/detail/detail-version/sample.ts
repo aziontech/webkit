@@ -1,4 +1,4 @@
-import type { SchemaFormSchema } from '@aziontech/webkit/schema-form'
+import type { SchemaFormSchema } from '@aziontech/ui/schema-form'
 
 import type {
   VersionDetailEnvironment,

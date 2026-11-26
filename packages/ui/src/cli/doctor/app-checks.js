@@ -20,19 +20,19 @@ export function entryImportChecks({ projectDir, pkg, add }) {
   const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
   if (!entry) return
   const src = readText(projectDir, entry)
-  const styled = src.includes('webkit.css')
+  const styled = src.includes('azion-ui.css')
   add(
     'styles import',
     styled ? 'ok' : 'warn',
     styled
       ? `imported in ${entry}`
-      : `add \`import './webkit.css'\` (theme tokens + Tailwind + the webkit source registration) to ${entry}.`
+      : `add \`import './azion-ui.css'\` (theme tokens + Tailwind + the Azion UI source registration) to ${entry}.`
   )
   iconsImportCheck(pkg, entry, src, add)
 }
 
 const PROVIDER_PATTERN =
-  /@aziontech\/webkit\/config-provider|<ConfigProvider[\s/>]|<config-provider[\s/>]/
+  /@aziontech\/ui\/config-provider|<ConfigProvider[\s/>]|<config-provider[\s/>]/
 
 export function configProviderCheck({ srcFiles, add }) {
   const provided = srcFiles.some((file) => PROVIDER_PATTERN.test(read(file) || ''))
@@ -43,7 +43,7 @@ export function configProviderCheck({ srcFiles, add }) {
       ? 'ConfigProvider is mounted'
       : 'no ConfigProvider in src/ — components read English text, left-to-right, and format for the ' +
           'device locale. Wrap the app root in `<ConfigProvider :catalogs="catalogs">` from ' +
-          "'@aziontech/webkit/config-provider' (add `:locale` for a language the user chose)."
+          "'@aziontech/ui/config-provider' (add `:locale` for a language the user chose)."
   )
 }
 
@@ -54,7 +54,7 @@ function toastUsage(srcFiles) {
   let toastWired = false
   for (const file of srcFiles) {
     const src = read(file) || ''
-    if (src.includes('@aziontech/webkit/toast')) usesToast = true
+    if (src.includes('@aziontech/ui/toast')) usesToast = true
     if (TOAST_REGION.test(src)) toastWired = true
     if (usesToast && toastWired) break
   }
@@ -70,7 +70,7 @@ export function toastCheck({ srcFiles, add }) {
     toastWired
       ? 'toast region wired (ToastPlugin or a mounted Toaster)'
       : 'toast is imported but no region is wired — toasts will not render. Add `import { ' +
-          "ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto " +
+          "ToastPlugin } from '@aziontech/ui/toast'` and chain `.use(ToastPlugin)` onto " +
           'createApp() in your entry (the plugin mounts the region automatically).'
   )
 }

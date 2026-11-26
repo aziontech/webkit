@@ -1,14 +1,14 @@
 {
  "name": "input",
  "binding": "Input",
- "import": "@aziontech/webkit/input",
- "treeShakeableImport": "@aziontech/webkit/input",
+ "import": "@aziontech/ui/input",
+ "treeShakeableImport": "@aziontech/ui/input",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Webkit / Input).",
+ "purpose": "Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Azion UI / Input).",
  "setup": null,
  "useWhen": [
   "Capture a single line of free-form text (names, titles, search terms).",

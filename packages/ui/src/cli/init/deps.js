@@ -12,7 +12,7 @@ import { usesTailwindVitePlugin } from './project-files.js'
 const OWN = JSON.parse(readFileSync(new URL('../../../package.json', import.meta.url), 'utf8'))
 
 export const DEP_VERSIONS = {
-  '@aziontech/webkit': `^${OWN.version}`,
+  '@aziontech/ui': `^${OWN.version}`,
   '@aziontech/theme': OWN.peerDependencies['@aziontech/theme'],
   '@aziontech/icons': OWN.peerDependencies['@aziontech/icons'],
   eslint: '^9.39.3',
@@ -27,7 +27,7 @@ export const DEP_VERSIONS = {
 
 export const DEP_VERSION = (dep) => DEP_VERSIONS[dep]
 
-export const RUNTIME_DEPS = ['@aziontech/webkit', '@aziontech/theme']
+export const RUNTIME_DEPS = ['@aziontech/ui', '@aziontech/theme']
 export const ICONS_DEP = '@aziontech/icons'
 
 export const DEV_DEPS = [
@@ -80,7 +80,7 @@ function vueTscActions(projectDir) {
         type: 'advise',
         message:
           `TypeScript project without vue-tsc: add it pinned to a known-good version (\`npm i -D ` +
-          `vue-tsc@${VUE_TSC_KNOWN_GOOD}\`) so \`vue-tsc -b\` type-checks WebKit templates. Avoid ` +
+          `vue-tsc@${VUE_TSC_KNOWN_GOOD}\`) so \`vue-tsc -b\` type-checks Azion UI templates. Avoid ` +
           `${why(Object.keys(VUE_TSC_BROKEN))}.`
       }
     ]

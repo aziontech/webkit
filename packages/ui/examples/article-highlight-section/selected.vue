@@ -1,6 +1,6 @@
 <script setup>
-  import ArticleHighlightSection from '@aziontech/webkit/article-highlight-section'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import ArticleHighlightSection from '@aziontech/ui/article-highlight-section'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
   import { ref } from 'vue'
 
   const selected = ref(1)

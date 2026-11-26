@@ -46,8 +46,8 @@ function componentSuggestion(catalog, q, opts) {
       alternatives: [],
       weakMatches: search.matches.slice(0, 3),
       message:
-        `No WebKit component is made for "${q}". The weak matches only share a word with it: do not bend one into this job. ` +
-        'Build the smallest custom piece from @aziontech/theme tokens and compose it with WebKit components (rule webkit-prefer-over-custom).'
+        `No Azion UI component is made for "${q}". The weak matches only share a word with it: do not bend one into this job. ` +
+        'Build the smallest custom piece from @aziontech/theme tokens and compose it with Azion UI components (rule azion-ui-prefer-over-custom).'
     }
   }
   const [best, ...rest] = search.matches
@@ -130,8 +130,8 @@ function sectionRecommendation(catalog, q, component) {
     found: true,
     hint:
       'A marketing band is a page section: import it from its flat subpath ' +
-      '(@aziontech/webkit/<name>, the site JSON _id), bind it with v-bind="section.props" and ' +
-      'place it inside Container and Spacer (rule webkit-sections).'
+      '(@aziontech/ui/<name>, the site JSON _id), bind it with v-bind="section.props" and ' +
+      'place it inside Container and Spacer (rule azion-ui-sections).'
   }
 }
 

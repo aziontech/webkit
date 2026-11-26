@@ -1,8 +1,8 @@
 {
  "name": "skip-link",
  "binding": "SkipLink",
- "import": "@aziontech/webkit/skip-link",
- "treeShakeableImport": "@aziontech/webkit/skip-link",
+ "import": "@aziontech/ui/skip-link",
+ "treeShakeableImport": "@aziontech/ui/skip-link",
  "category": "navigation",
  "surface": "app",
  "structure": "monolithic",

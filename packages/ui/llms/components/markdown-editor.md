@@ -2,7 +2,7 @@
 
 > The text area of a reply composer: a person writes Markdown in a `Textarea`, formats it from a toolbar (bold, italic, link, bulleted list, numbered list, quote, code) or with Ctrl/⌘+B, I and K, checks the result on a Preview tab, and mentions a teammate by typing `@`, which opens a filtered list of people. It is the GitHub comment box pattern (decision SUP-02): plain Markdown text with helpers, never a rich-text (WYSIWYG) editor, so no editor library enters the package. The value is the Markdown string.
 
-- Import: `import MarkdownEditor from '@aziontech/webkit/markdown-editor'`
+- Import: `import MarkdownEditor from '@aziontech/ui/markdown-editor'`
 - Category: input · Surface: app · Structure: monolithic
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [markdown-editor.json](markdown-editor.json)
@@ -109,7 +109,7 @@
   - Tabs: the `Tabs` keyboard map (arrows between Write and Preview, automatic activation).
 - ARIA: the toolbar carries `aria-label` "Formatting" and `aria-controls` the field; each button has its accessible name ("Bold") and `aria-keyshortcuts` (`Meta+B Control+B`) for the three with shortcuts. The field keeps its native textbox role (ARIA in HTML allows no `combobox` role on `textarea`) and takes the combobox attributes the role allows: `aria-autocomplete="list"`, `aria-controls` (the listbox, while open) and `aria-activedescendant` (the highlighted option). The menu is `role="listbox"` with `aria-label` "People"; options are `role="option"` with `aria-selected`. The match count is announced in a polite live region ("3 people").
 - Accessible name: from the wrapping `Field` label, or `aria-label` / `aria-labelledby` passed to the editor (forwarded to the field); with neither, the built-in "Message".
-- Contrast: only documented token pairs (`rules/webkit-tokens.md` § Contrast); the muted empty-preview text is `--text-muted` on `--bg-surface`; the disabled preview is `--text-disabled` on `--bg-disabled`, the pair `Textarea` uses (disabled text is outside the WCAG 1.4.3 minimum).
+- Contrast: only documented token pairs (`rules/azion-ui-tokens.md` § Contrast); the muted empty-preview text is `--text-muted` on `--bg-surface`; the disabled preview is `--text-disabled` on `--bg-disabled`, the pair `Textarea` uses (disabled text is outside the WCAG 1.4.3 minimum).
 - Motion: none of its own (see Motion).
 - Touch targets: toolbar buttons are `IconButton` size `small` with its 44 × 44 px hit area on a coarse pointer (TT01); menu options take `min-h-11` on a coarse pointer.
 
@@ -161,8 +161,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
+  import Field from '@aziontech/ui/field'
+  import MarkdownEditor from '@aziontech/ui/markdown-editor'
   import { ref } from 'vue'
 
   const reply = ref('')
@@ -190,8 +190,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
+  import Field from '@aziontech/ui/field'
+  import MarkdownEditor from '@aziontech/ui/markdown-editor'
   import { ref } from 'vue'
 
   const reply = ref('Thanks for the report, we are looking into it.')
@@ -212,8 +212,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
+  import Field from '@aziontech/ui/field'
+  import MarkdownEditor from '@aziontech/ui/markdown-editor'
   import { ref } from 'vue'
 
   const note = ref(

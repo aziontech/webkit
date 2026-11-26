@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Item from '@aziontech/webkit/item'
-  import Tag from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import Item from '@aziontech/ui/item'
+  import Tag from '@aziontech/ui/tag'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   import type {
     DeployDrawerProject,

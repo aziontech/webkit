@@ -3,11 +3,11 @@
 > The support agent's ticket inbox: a `PageHeader` with Create Ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `PropertyFilter` over status, priority, assignee, group, channel and tag, with free text over subject, requester and number; Refresh and `CollectionPreferences`) and a `DataTable` of the view's tickets on `useCollection`, most urgent SLA first: a selection checkbox, Subject as a `TableCellLink` with an unread mark, the requester `Avatar`, name and number under it, Status as `TableCellStatus`, `PriorityTag`, the assignee `Avatar` with presence, the next SLA as a `Countdown` (paused while Pending or On hold) and Updated as `TableCellTime`; Group and Channel are hidden columns. Selecting tickets opens a bulk bar in the controls band: the count, Select all N tickets, Clear selection, Assign and Change status as menus (`DropdownMenuRoot`), Merge (two or more; a `ConfirmDialog` asks which ticket to keep) and Close (confirmed with the count), each label counting the selection. A row click or Enter opens the ticket. A view with no tickets says You're all caught up and offers all open tickets, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
-- Source: `blocks/view/view-ticket-inbox/view-ticket-inbox.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-ticket-inbox/view-ticket-inbox.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-ticket-inbox")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [Countdown](../../components/countdown.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PriorityTag](../../components/priority-tag.md), [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tooltip](../../components/tooltip.md), `use-collection`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -125,7 +125,7 @@ Then delete `sample.ts` and its import. A queue too large for the browser moves 
 - **Statuses:** `New`, `Open`, `Pending`, `On hold`, `Solved`. **Unassigned:** `Unassigned`.
 - **Bulk:** `3 selected`, `Select all 12 tickets`, `Clear selection`, `Assign (3)`, `Change status (3)`, `Merge (3)`, `Close (3)`; Merge's reason `Select two or more tickets to merge them.`; the confirmations `Merge 3 tickets` (with Ticket to keep) and `Close 3 tickets`.
 - **Empty view:** `You're all caught up`, `No tickets in <view>.`, `Show all open tickets`. **No match:** `No matching tickets`, `No ticket in this view matches these filters.`, `Clear filters`.
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -165,24 +165,24 @@ Each variant is the same screen in another state: `get_block("view/view-ticket-i
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { AvatarPresence } from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Countdown from '@aziontech/webkit/countdown'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PriorityTag, { type PriorityTagPriority } from '@aziontech/webkit/priority-tag'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import Alert from '@aziontech/ui/alert'
+  import type { AvatarPresence } from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Countdown from '@aziontech/ui/countdown'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PriorityTag, { type PriorityTagPriority } from '@aziontech/ui/priority-tag'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
   import {
     type FilteringProperty,
     type PropertyFilterQuery,
     useCollection
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
   import { computed, watch } from 'vue'
 
   import {
@@ -804,8 +804,8 @@ export const sampleViews: TicketInboxView[] = VIEW_LABELS.map(([key, label]) => 
 ## `lib/ticket-fields.ts`
 
 ```ts
-import type { PriorityTagPriority } from '@aziontech/webkit/priority-tag'
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { PriorityTagPriority } from '@aziontech/ui/priority-tag'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 import type { TicketInboxStatus, TicketInboxTicket } from '../view-ticket-inbox.vue'
 
@@ -862,15 +862,15 @@ export const ticketHiddenColumns = [
 
 ```ts
 <script setup lang="ts">
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Select from '@aziontech/webkit/select'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import Select from '@aziontech/ui/select'
+  import Tooltip from '@aziontech/ui/tooltip'
   import type {
     CollectionPreferencesProps,
     CollectionPropertyFilterProps
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
 
   import type { TicketInboxView } from '../view-ticket-inbox.vue'
 
@@ -972,14 +972,14 @@ export const ticketHiddenColumns = [
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/data-table'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/data-table'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenuRoot from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import RadioGroup from '@aziontech/ui/radio-group'
   import { ref, watch } from 'vue'
 
   import type {
@@ -1174,11 +1174,11 @@ export const ticketHiddenColumns = [
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Countdown from '@aziontech/webkit/countdown'
-  import PriorityTag from '@aziontech/webkit/priority-tag'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import Avatar from '@aziontech/ui/avatar'
+  import Countdown from '@aziontech/ui/countdown'
+  import PriorityTag from '@aziontech/ui/priority-tag'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
 
   import { slaPaused, statusSeverity } from '../lib/ticket-fields'
   import type { TicketInboxTicket } from '../view-ticket-inbox.vue'
@@ -1258,7 +1258,7 @@ export const ticketHiddenColumns = [
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
+  import Avatar from '@aziontech/ui/avatar'
 
   import type { TicketInboxTicket } from '../view-ticket-inbox.vue'
 

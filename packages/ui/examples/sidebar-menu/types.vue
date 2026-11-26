@@ -1,11 +1,11 @@
 <script setup>
-  import SidebarMenuBack from '@aziontech/webkit/sidebar-menu-back'
-  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
-  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
-  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
-  import SidebarMenuSub from '@aziontech/webkit/sidebar-menu-sub'
-  import SidebarMenuSubContent from '@aziontech/webkit/sidebar-menu-sub-content'
-  import SidebarMenuSubTrigger from '@aziontech/webkit/sidebar-menu-sub-trigger'
+  import SidebarMenuBack from '@aziontech/ui/sidebar-menu-back'
+  import SidebarMenuGroup from '@aziontech/ui/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/ui/sidebar-menu-item'
+  import SidebarMenuRoot from '@aziontech/ui/sidebar-menu-root'
+  import SidebarMenuSub from '@aziontech/ui/sidebar-menu-sub'
+  import SidebarMenuSubContent from '@aziontech/ui/sidebar-menu-sub-content'
+  import SidebarMenuSubTrigger from '@aziontech/ui/sidebar-menu-sub-trigger'
 </script>
 
 <template>

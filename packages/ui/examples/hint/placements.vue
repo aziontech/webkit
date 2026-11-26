@@ -1,5 +1,5 @@
 <script setup>
-  import Hint from '@aziontech/webkit/hint'
+  import Hint from '@aziontech/ui/hint'
 </script>
 
 <template>

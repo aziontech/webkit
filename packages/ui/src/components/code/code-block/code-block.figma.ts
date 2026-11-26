@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4177-15489
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/code/code-block/code-block.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/code/code-block/code-block.vue
 // component=CodeBlock
 import figma from 'figma'
 
@@ -31,7 +31,7 @@ export default {
   :copyable="false"`
   }
 />`,
-  imports: ["import CodeBlock from '@aziontech/webkit/code-block'"],
+  imports: ["import CodeBlock from '@aziontech/ui/code-block'"],
   id: 'code-block',
   metadata: { nestable: false }
 }

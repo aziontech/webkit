@@ -1,23 +1,23 @@
 <script setup lang="ts">
-  import AgentActivity from '@aziontech/webkit/agent-activity'
-  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import AgentActivity from '@aziontech/ui/agent-activity'
+  import AgentQuestion from '@aziontech/ui/agent-question'
   import ChatMessage, {
     type ChatMessageFeedbackValue,
     type ChatMessageStatus
-  } from '@aziontech/webkit/chat-message'
+  } from '@aziontech/ui/chat-message'
   import FeedbackReasonDialog, {
     type FeedbackReasonDialogPayload
-  } from '@aziontech/webkit/feedback-reason-dialog'
+  } from '@aziontech/ui/feedback-reason-dialog'
   import McpAppFrame, {
     type McpAppFrameMessage,
     type McpAppFrameResource
-  } from '@aziontech/webkit/mcp-app-frame'
-  import Reasoning from '@aziontech/webkit/reasoning'
-  import ResponseBranches from '@aziontech/webkit/response-branches'
-  import Sources from '@aziontech/webkit/sources'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import { toast } from '@aziontech/webkit/toast'
-  import type { UseAiChatVersionsReturn } from '@aziontech/webkit/use-ai-chat-versions'
+  } from '@aziontech/ui/mcp-app-frame'
+  import Reasoning from '@aziontech/ui/reasoning'
+  import ResponseBranches from '@aziontech/ui/response-branches'
+  import Sources from '@aziontech/ui/sources'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import { toast } from '@aziontech/ui/toast'
+  import type { UseAiChatVersionsReturn } from '@aziontech/ui/use-ai-chat-versions'
   import {
     activitiesBefore,
     type AiChatMessage,
@@ -28,7 +28,7 @@
     type AiChatUiResourcePart,
     segmentsOf,
     textOf
-  } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/utils/ai-chat'
   import { computed, ref } from 'vue'
 
   import AiChatMediaSegment from './ai-chat-media-segment.vue'

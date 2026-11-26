@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Card from '@aziontech/webkit/card'
-  import SplitButton from '@aziontech/webkit/split-button'
+  import Alert from '@aziontech/ui/alert'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Card from '@aziontech/ui/card'
+  import SplitButton from '@aziontech/ui/split-button'
 
   import { addToFilesActions } from '../lib/file-rows'
   import FolderSearchRow from './folder-search-row.vue'

@@ -7,7 +7,7 @@ import {
 import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../lib/layout-classes.js'
 import { ctxCwd, templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
-const WEBKIT_TAG_KINDS = new Set(['component', 'root', 'subcomponent'])
+const AZION_UI_TAG_KINDS = new Set(['component', 'root', 'subcomponent'])
 
 const STYLE_ATTRS = new Set(['class', 'style'])
 
@@ -72,7 +72,7 @@ function importVisitor(catalog, allow, bindings) {
       if (typeof src !== 'string' || !src.startsWith(catalog.prefix)) return
       const sub = src.slice(catalog.prefix.length)
       const entry = catalog.getEntry(sub)
-      if (!entry || !WEBKIT_TAG_KINDS.has(entry.kind)) return
+      if (!entry || !AZION_UI_TAG_KINDS.has(entry.kind)) return
       if (entry.styleSeam || allow.has(sub)) return
       const def = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier')
       if (!def) return
@@ -87,7 +87,7 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Disallow overriding a webkit component’s styles via class/style on its tag; compose in ' +
+        'Disallow overriding an Azion UI component’s styles via class/style on its tag; compose in ' +
         'slots or use a personalizable component. A static class made only of layout utilities ' +
         '(how the box sits in its parent: w-full, h-full, min/max width and height, ' +
         'flex-1/auto/initial/none, grow, basis-*, shrink-0, self/justify-self/place-self, order, ' +
@@ -109,14 +109,14 @@ export default {
     ],
     messages: {
       override:
-        "Avoid setting {{written}} on the webkit component '<{{tag}}>' — it overrides " +
+        "Avoid setting {{written}} on the Azion UI component '<{{tag}}>' — it overrides " +
         'design-system styles. Compose inside its slots, or use a component built to be ' +
         'personalized (style_seam). Only a static class of layout utilities is allowed ' +
         '({{allowed}}), plus the chart palette variables --chart-series-1..8, ' +
         '--chart-sequential-1..7 and --chart-diverging-*.',
       overrideClasses:
-        "Avoid the class(es) {{classes}} on the webkit component '<{{tag}}>' — they override " +
-        'design-system styles. Only layout utilities are allowed on a webkit tag ({{allowed}}), ' +
+        "Avoid the class(es) {{classes}} on the Azion UI component '<{{tag}}>' — they override " +
+        'design-system styles. Only layout utilities are allowed on an Azion UI tag ({{allowed}}), ' +
         'plus [--chart-…:value] classes for the chart palette variables. Put the rest on a ' +
         'wrapper element or compose inside its slots.'
     }

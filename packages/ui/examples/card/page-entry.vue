@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SitePage, { type SitePageSection } from '@aziontech/webkit/site-page'
+  import SitePage, { type SitePageSection } from '@aziontech/ui/site-page'
 
   import entry from './page-entry.json'
 

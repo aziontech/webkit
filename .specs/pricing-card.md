@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 8
-checksum: 25d3c26f686a75eb8302770390e04b141a00e6efb04a1bd0007f7cad62cc1ca6
+checksum: 116519e38ece15d28bd282315d6e7150f40f6a9258f2df5b4e9799dade873ecb
 created: 2026-05-22
 last_updated: 2026-11-25
 ---
@@ -61,8 +61,8 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PricingCard from '@aziontech/webkit/pricing-card'
+  import Button from '@aziontech/ui/button'
+  import PricingCard from '@aziontech/ui/pricing-card'
 
   const upgrade = () => {}
 </script>
@@ -96,7 +96,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 </template>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<PricingCard>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site places it through `pricing-plans-section`; the slots stay Vue.
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as the `<PricingCard>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site places it through `pricing-plans-section`; the slots stay Vue.
 
 ## Props
 
@@ -191,7 +191,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

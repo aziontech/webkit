@@ -2,7 +2,7 @@
 
 > A band of headline figures — throughput, uptime, data centers — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `module-header` and the section body.
 
-- Import: `import Stats from '@aziontech/webkit/stats'`
+- Import: `import Stats from '@aziontech/ui/stats'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [stats.json](stats.json)
 
@@ -70,7 +70,7 @@
 
 ```vue
 <script setup>
-  import Stats from '@aziontech/webkit/stats'
+  import Stats from '@aziontech/ui/stats'
 </script>
 
 <template>
@@ -89,7 +89,7 @@
 
 ```vue
 <script setup>
-  import Stats from '@aziontech/webkit/stats'
+  import Stats from '@aziontech/ui/stats'
 </script>
 
 <template>
@@ -129,8 +129,8 @@
 
 ```vue
 <script setup>
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
 
   const source = [
     '## The network in numbers',

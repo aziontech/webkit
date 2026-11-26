@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/feedback/toast/toast.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/feedback/toast/toast.vue
 // component=Toast
 import figma from 'figma'
 
@@ -57,7 +57,7 @@ const trailing =
 export default {
   example: figma.code`<Toast.Item${severity === 'neutral' ? '' : figma.code` severity="${severity}"`}${loading ? ' loading' : ''}>${body}${trailing}
 </Toast.Item>`,
-  imports: ["import Toast from '@aziontech/webkit/toast'"],
+  imports: ["import Toast from '@aziontech/ui/toast'"],
   id: 'toast',
   metadata: { nestable: true }
 }

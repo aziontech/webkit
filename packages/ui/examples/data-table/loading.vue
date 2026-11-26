@@ -1,5 +1,5 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/ui/data-table'
 
   const rows = [
     { id: '1001', name: 'Workload Alpha', status: 'Active', modified: 'Jan 1, 2026, 09:00 AM' },

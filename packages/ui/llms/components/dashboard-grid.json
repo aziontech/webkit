@@ -1,14 +1,14 @@
 {
  "name": "dashboard-grid",
  "binding": "DashboardGrid",
- "import": "@aziontech/webkit/dashboard-grid",
- "treeShakeableImport": "@aziontech/webkit/dashboard-grid-root",
+ "import": "@aziontech/ui/dashboard-grid",
+ "treeShakeableImport": "@aziontech/ui/dashboard-grid-root",
  "category": "layout",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/dashboard-grid-item"
+  "@aziontech/ui/dashboard-grid-item"
  ],
  "purpose": "A configurable dashboard grid: the reader arranges the cards. `DashboardGrid` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `DashboardGrid.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.",
  "setup": null,

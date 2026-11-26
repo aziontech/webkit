@@ -1,8 +1,8 @@
 {
  "name": "cli-terminal-section",
  "binding": "CliTerminalSection",
- "import": "@aziontech/webkit/cli-terminal-section",
- "treeShakeableImport": "@aziontech/webkit/cli-terminal-section",
+ "import": "@aziontech/ui/cli-terminal-section",
+ "treeShakeableImport": "@aziontech/ui/cli-terminal-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

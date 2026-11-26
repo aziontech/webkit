@@ -1,6 +1,6 @@
 <script setup>
-  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ChatMessageRoot from '@aziontech/ui/chat-message-root'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
 </script>
 
 <template>

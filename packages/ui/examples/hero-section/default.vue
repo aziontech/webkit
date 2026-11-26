@@ -1,5 +1,5 @@
 <script setup>
-  import HeroSection from '@aziontech/webkit/hero-section'
+  import HeroSection from '@aziontech/ui/hero-section'
 </script>
 
 <template>

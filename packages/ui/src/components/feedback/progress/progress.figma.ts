@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/feedback/progress/progress.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/feedback/progress/progress.vue
 // component=Progress
 import figma from 'figma'
 
@@ -23,7 +23,7 @@ export default {
   variant="${shape}"`
   }
 />`,
-  imports: ["import Progress from '@aziontech/webkit/progress'"],
+  imports: ["import Progress from '@aziontech/ui/progress'"],
   id: 'progress',
   metadata: { nestable: true }
 }

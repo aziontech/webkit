@@ -1,8 +1,8 @@
 {
  "name": "container",
  "binding": "Container",
- "import": "@aziontech/webkit/container",
- "treeShakeableImport": "@aziontech/webkit/container",
+ "import": "@aziontech/ui/container",
+ "treeShakeableImport": "@aziontech/ui/container",
  "category": "layout",
  "surface": "site",
  "structure": "monolithic",

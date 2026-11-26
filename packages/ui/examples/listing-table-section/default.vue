@@ -1,5 +1,5 @@
 <script setup>
-  import ListingTableSection from '@aziontech/webkit/listing-table-section'
+  import ListingTableSection from '@aziontech/ui/listing-table-section'
 </script>
 
 <template>

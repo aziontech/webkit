@@ -34,7 +34,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'A composable that registers a listener, timer, animation frame or observer must tear it down in onScopeDispose (see the webkit-composables rule shipped by `npx @aziontech/webkit init`).'
+        'A composable that registers a listener, timer, animation frame or observer must tear it down in onScopeDispose (see the azion-ui-composables rule shipped by `npx @aziontech/ui init`).'
     },
     schema: [],
     messages: {
@@ -43,8 +43,8 @@ export default {
         '`onScopeDispose` (it also fires in a detached `effectScope()`; `onUnmounted` alone does ' +
         'not), or use the VueUse primitive that owns its cleanup (`useEventListener`, ' +
         '`useIntervalFn`, `useRafFn`, `useResizeObserver`, `useIntersectionObserver`, ' +
-        '`useMutationObserver`). See contributing/rules/webkit-composables.md (shipped by `npx ' +
-        '@aziontech/webkit init`).'
+        '`useMutationObserver`). See contributing/rules/azion-ui-composables.md (shipped by `npx ' +
+        '@aziontech/ui init`).'
     }
   },
   create(context) {

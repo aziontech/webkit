@@ -3,7 +3,7 @@ export interface UseAnnouncerReturn {
   announce: (message: string) => void
 }
 
-const REGION_ATTRIBUTE = 'data-webkit-announcer'
+const REGION_ATTRIBUTE = 'data-azion-announcer'
 
 const REGION_STYLE =
   'position:absolute;inline-size:1px;block-size:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap'

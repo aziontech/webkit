@@ -1,4 +1,4 @@
-import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+import { useShortcuts } from '@aziontech/ui/use-shortcuts'
 import type { editor as MonacoEditor } from 'monaco-editor'
 import { computed, type ComputedRef, onScopeDispose, readonly, type Ref, ref } from 'vue'
 

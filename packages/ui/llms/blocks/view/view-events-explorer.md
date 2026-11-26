@@ -3,10 +3,10 @@
 > The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, the time zone, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document (its fields, the request's `Trace` with the critical path when the event carries spans, and the JSON) beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.
 
 - Surface: app
-- Source: `blocks/view/view-events-explorer/view-events-explorer.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-events-explorer/view-events-explorer.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-events-explorer")`
 - Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [Checkbox](../../components/checkbox.md), [Chip](../../components/chip.md), [CodeBlock](../../components/code-block.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTableLoadMore`, `DataTablePagination`, [DateRangePicker](../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FilterMenu](../../components/filter-menu.md), [FilterMenu](../../components/filter-menu.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelHeader`, [Popover](../../components/popover.md), [PropertyFilter](../../components/property-filter.md), [Resizable](../../components/resizable.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-collection`, `use-locale`, `use-shortcuts`
-- Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-tables`, `azion-ui-states`
 
 ## Asked as
 
@@ -199,7 +199,7 @@ Then delete `sample.ts` and its import, and give `fields` its own list. A log th
 - **Saved queries:** "Name the current query", Save, "Delete <name>"; empty "No saved queries yet. Name the current query to keep it."
 - **Tabs:** "New investigation", "Actions for <name>", Rename, Duplicate, "Close investigation"; limit "Up to 5 investigations stay open. Close one to start another."
 - **Document tools:** "Search in this event", "Filter by <field> <value>", "Exclude <field> <value>", "Copy the fields shown as JSON"; no match "No field matches “<text>”."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -231,7 +231,7 @@ Then delete `sample.ts` and its import, and give `fields` its own list. A log th
 - `detail/detail-deployment-logs` — logs of one deployment run.
 - `dashboard/dashboard-analytics` — the metrics view for the same traffic.
 - `shell/shell-console` — the layout this explorer renders in.
-- `DataTable` — the log table; see `skills/webkit-tables`, `skills/webkit-data-viz` and `skills/webkit-ui-states`.
+- `DataTable` — the log table; see `skills/azion-ui-tables`, `skills/azion-ui-data-viz` and `skills/azion-ui-states`.
 
 ## Variants
 
@@ -250,17 +250,17 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import type { FilterMenuModel, FilterMenuValue } from '@aziontech/webkit/filter-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Resizable from '@aziontech/webkit/resizable'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import type { TraceSpan, TraceView } from '@aziontech/webkit/trace'
+  import Alert from '@aziontech/ui/alert'
+  import type { TableColumn } from '@aziontech/ui/data-table'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import type { FilterMenuModel, FilterMenuValue } from '@aziontech/ui/filter-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Resizable from '@aziontech/ui/resizable'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import type { TraceSpan, TraceView } from '@aziontech/ui/trace'
   import { computed, ref } from 'vue'
 
   import { useEventsExplorerColumns } from './composables/use-events-explorer-columns'
@@ -707,7 +707,7 @@ Each variant is the same screen in another state: `get_block("view/view-events-e
 ## `sample.ts`
 
 ```ts
-import type { TraceSpan } from '@aziontech/webkit/trace'
+import type { TraceSpan } from '@aziontech/ui/trace'
 
 import type {
   EventsExplorerEvent,
@@ -1087,11 +1087,7 @@ export const sampleEvents: EventsExplorerEvent[] = seedEvents()
 ## `composables/use-event-query-range.ts`
 
 ```ts
-import type {
-  DateRangeUnit,
-  DateRangeValue,
-  RelativeOption
-} from '@aziontech/webkit/date-range-picker'
+import type { DateRangeUnit, DateRangeValue, RelativeOption } from '@aziontech/ui/date-range-picker'
 import { computed, type ComputedRef, ref, type WritableComputedRef } from 'vue'
 
 import { fullWindowMinutes } from '../lib/event-log'
@@ -1218,8 +1214,8 @@ export function useEventQueryRange(): UseEventQueryRangeReturn {
 ## `composables/use-event-query.ts`
 
 ```ts
-import type { PropertyFilterQuery, PropertyFilterSubmit } from '@aziontech/webkit/property-filter'
-import { matchesQuery } from '@aziontech/webkit/use-collection'
+import type { PropertyFilterQuery, PropertyFilterSubmit } from '@aziontech/ui/property-filter'
+import { matchesQuery } from '@aziontech/ui/use-collection'
 import { computed, type ComputedRef, type Ref, ref, type WritableComputedRef } from 'vue'
 
 import { eventSources } from '../lib/event-log'
@@ -1387,7 +1383,7 @@ export function useEventQuery(timeRange: UseEventQueryRangeReturn): UseEventQuer
 ## `composables/use-events-explorer-columns.ts`
 
 ```ts
-import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { TableColumn } from '@aziontech/ui/data-table'
 import { computed, type ComputedRef, ref, watch } from 'vue'
 
 import type { EventsExplorerField } from '../view-events-explorer.vue'
@@ -1475,8 +1471,8 @@ export function useEventsExplorerColumns(
 ## `composables/use-events-explorer-document.ts`
 
 ```ts
-import type { CodeBlockTab } from '@aziontech/webkit/code-block'
-import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
+import type { CodeBlockTab } from '@aziontech/ui/code-block'
+import type { FilterMenuValue } from '@aziontech/ui/filter-menu'
 import { computed, type ComputedRef } from 'vue'
 
 import { canFilterField, type EventRow, hasEventValue } from '../lib/event-log'
@@ -1594,8 +1590,8 @@ export function useEventsExplorerDocument(
 ## `composables/use-events-explorer-format.ts`
 
 ```ts
-import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
-import { useLocale } from '@aziontech/webkit/use-locale'
+import type { FilterMenuValue } from '@aziontech/ui/filter-menu'
+import { useLocale } from '@aziontech/ui/use-locale'
 import { type MaybeRefOrGetter, toValue } from 'vue'
 
 import { formatFieldValue, isDate } from '../lib/event-log'
@@ -1751,7 +1747,7 @@ export function useEventsExplorerLayout(panes: EventsExplorerPanes): UseEventsEx
 ## `composables/use-events-explorer-log.ts`
 
 ```ts
-import type { FilterMenuField, FilterMenuValue } from '@aziontech/webkit/filter-menu'
+import type { FilterMenuField, FilterMenuValue } from '@aziontech/ui/filter-menu'
 import { computed, type ComputedRef, type Ref, watch } from 'vue'
 
 import {
@@ -2118,7 +2114,7 @@ export function useEventsExplorerSelection(
 ## `composables/use-events-explorer-volume.ts`
 
 ```ts
-import type { ChartRange, ChartSeries } from '@aziontech/webkit/chart'
+import type { ChartRange, ChartSeries } from '@aziontech/ui/chart'
 import { computed, type ComputedRef, type Ref } from 'vue'
 
 import {
@@ -2397,7 +2393,7 @@ export function useInvestigationSessions(): UseInvestigationSessionsReturn {
 ## `composables/use-saved-queries.ts`
 
 ```ts
-import { toast } from '@aziontech/webkit/toast'
+import { toast } from '@aziontech/ui/toast'
 import {
   computed,
   type ComputedRef,
@@ -2589,9 +2585,9 @@ export function useSimulatedRefresh(delay = 700): UseSimulatedRefreshReturn {
 ## `lib/event-log.ts`
 
 ```ts
-import type { ChartColor } from '@aziontech/webkit/chart'
-import type { FilterMenuRange, FilterMenuValue } from '@aziontech/webkit/filter-menu'
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { ChartColor } from '@aziontech/ui/chart'
+import type { FilterMenuRange, FilterMenuValue } from '@aziontech/ui/filter-menu'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 import type {
   EventsExplorerBucket,
@@ -2824,7 +2820,7 @@ import type {
   FilteringProperty,
   PropertyFilterQuery,
   PropertyFilterToken
-} from '@aziontech/webkit/property-filter'
+} from '@aziontech/ui/property-filter'
 
 import { sampleEvents, sampleFields, sampleNow } from '../sample'
 import type { EventsExplorerEvent, EventsExplorerFilters } from '../view-events-explorer.vue'
@@ -2993,10 +2989,10 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { ref, watch } from 'vue'
 
   import type {
@@ -3203,9 +3199,9 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import CodeBlock, { type CodeBlockTab } from '@aziontech/webkit/code-block'
-  import Tag from '@aziontech/webkit/tag'
-  import Trace, { type TraceView } from '@aziontech/webkit/trace'
+  import CodeBlock, { type CodeBlockTab } from '@aziontech/ui/code-block'
+  import Tag from '@aziontech/ui/tag'
+  import Trace, { type TraceView } from '@aziontech/ui/trace'
 
   import type { EventsExplorerDocumentRow } from '../composables/use-events-explorer-document'
   import { eventLevelSeverity, type EventRow } from '../lib/event-log'
@@ -3318,13 +3314,13 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
-  import DataTableLoadMore from '@aziontech/webkit/data-table-load-more'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/ui/data-table'
+  import DataTableLoadMore from '@aziontech/ui/data-table-load-more'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { ref } from 'vue'
 
   import {
@@ -3539,12 +3535,12 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import type { FilterMenuField } from '@aziontech/webkit/filter-menu'
-  import FilterMenu from '@aziontech/webkit/filter-menu-root'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import type { FilterMenuField } from '@aziontech/ui/filter-menu'
+  import FilterMenu from '@aziontech/ui/filter-menu-root'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { ref } from 'vue'
 
   import type { EventsExplorerFilters } from '../view-events-explorer.vue'
@@ -3658,13 +3654,13 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
-  import Item from '@aziontech/webkit/item-root'
-  import Popover from '@aziontech/webkit/popover'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import type { FilterMenuValue } from '@aziontech/ui/filter-menu'
+  import Item from '@aziontech/ui/item-root'
+  import Popover from '@aziontech/ui/popover'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import {
     countFieldValues,
@@ -3832,11 +3828,11 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
-  import Input from '@aziontech/webkit/input'
-  import Sidebar from '@aziontech/webkit/sidebar-root'
-  import Tag from '@aziontech/webkit/tag'
+  import Accordion from '@aziontech/ui/accordion'
+  import type { FilterMenuValue } from '@aziontech/ui/filter-menu'
+  import Input from '@aziontech/ui/input'
+  import Sidebar from '@aziontech/ui/sidebar-root'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref, watch } from 'vue'
 
   import { canFilterField, countFieldValues, type EventRow } from '../lib/event-log'
@@ -4062,11 +4058,8 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import Chip from '@aziontech/webkit/chip'
-  import FilterMenu, {
-    type FilterMenuField,
-    type FilterMenuValue
-  } from '@aziontech/webkit/filter-menu'
+  import Chip from '@aziontech/ui/chip'
+  import FilterMenu, { type FilterMenuField, type FilterMenuValue } from '@aziontech/ui/filter-menu'
 
   import type { EventsExplorerExclusionChip } from '../composables/use-events-explorer-log'
   import type { EventsExplorerFilters } from '../view-events-explorer.vue'
@@ -4130,11 +4123,11 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { nextTick, ref } from 'vue'
 
   import type { InvestigationSession } from '../composables/use-investigation-sessions'
@@ -4337,11 +4330,11 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import DateRangePicker from '@aziontech/webkit/date-range-picker'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Select from '@aziontech/webkit/select'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DateRangePicker from '@aziontech/ui/date-range-picker'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import Select from '@aziontech/ui/select'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { UseEventQueryReturn } from '../composables/use-event-query'
   import type { UseEventQueryRangeReturn } from '../composables/use-event-query-range'
@@ -4523,9 +4516,9 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import Chart, { type ChartRange, type ChartSeries } from '@aziontech/webkit/chart'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Chart, { type ChartRange, type ChartSeries } from '@aziontech/ui/chart'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type { EventsExplorerSummary } from '../view-events-explorer.vue'
 
@@ -4651,11 +4644,11 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item-root'
-  import Popover from '@aziontech/webkit/popover'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item-root'
+  import Popover from '@aziontech/ui/popover'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { QueryEntry } from '../lib/event-query'
 
@@ -4755,12 +4748,12 @@ export const tokensForFilters = (
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item-root'
-  import Popover from '@aziontech/webkit/popover'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item-root'
+  import Popover from '@aziontech/ui/popover'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { SavedQuery } from '../lib/event-query'
 

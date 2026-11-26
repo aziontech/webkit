@@ -1,13 +1,13 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import DialogTrigger from '@aziontech/ui/dialog-trigger'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
   import { reactive, watch } from 'vue'
 
   const sizes = ['small', 'medium', 'large']

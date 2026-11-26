@@ -1,5 +1,5 @@
 {
-  "package": "@aziontech/webkit",
+  "package": "@aziontech/ui",
   "blocks": {
     "account/account-onboarding-form": {
       "version": "5.13.0",

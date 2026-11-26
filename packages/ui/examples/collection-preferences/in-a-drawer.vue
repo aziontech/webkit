@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import Button from '@aziontech/ui/button'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
   import { ref } from 'vue'
 
   const columns = [

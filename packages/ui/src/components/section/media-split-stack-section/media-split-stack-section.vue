@@ -18,7 +18,7 @@
 
   export type { ModuleHeaderAction }
 
-  /** A live scene drawn in a band's media cell, every webkit scene asset except the request-flow diagram. */
+  /** A live scene drawn in a band's media cell, every Azion UI scene asset except the request-flow diagram. */
   export type MediaSplitStackSectionScene = {
     /** Registry name of the scene. */
     component: Exclude<SceneName, 'Diagram'>
@@ -42,7 +42,7 @@
 
   /** A band's picture drawn as a live scene. */
   export type MediaSplitStackSectionSceneMedia = {
-    /** Live scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset; wins over every other picture. */
+    /** Live scene drawn in the media cell, `{ component, props? }` naming an Azion UI scene asset; wins over every other picture. */
     scene: MediaSplitStackSectionScene
   }
 
@@ -90,7 +90,7 @@
      * The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its
      * required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`),
      * where `eyebrow` is the band's overline, `href` the link the whole band follows (falling
-     * back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a
+     * back to the action's), `scene` an Azion UI scene asset other than `Diagram`, `widget` a
      * `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{
      * label, href }` the outlined button.
      */
@@ -133,7 +133,7 @@
       (titles) => {
         if (titles.length)
           console.warn(
-            `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. ` +
+            `[azion-ui] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. ` +
               'Give every band an illustration, a widget or a scene; ' +
               'a request-flow diagram goes in ConsoleShowcaseSection.'
           )

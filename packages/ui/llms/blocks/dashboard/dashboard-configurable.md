@@ -3,10 +3,10 @@
 > A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a DashboardGrid with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `DashboardGrid`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-configurable/dashboard-configurable.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-configurable/dashboard-configurable.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-configurable")`
 - Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DashboardGrid](../../components/dashboard-grid.md), [DonutChart](../../components/donut-chart.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [Tag](../../components/tag.md), `use-locale`
-- Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-layout`, `azion-ui-states`
 
 ## Asked as
 
@@ -212,19 +212,19 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Button from '@aziontech/webkit/button'
-  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DashboardGrid, { type DashboardGridLayoutItem } from '@aziontech/webkit/dashboard-grid'
-  import DonutChart from '@aziontech/webkit/donut-chart'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import BarList, { type BarListItem } from '@aziontech/ui/bar-list'
+  import Button from '@aziontech/ui/button'
+  import Chart, { type ChartSeries } from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DashboardGrid, { type DashboardGridLayoutItem } from '@aziontech/ui/dashboard-grid'
+  import DonutChart from '@aziontech/ui/donut-chart'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref } from 'vue'
 
   import { sampleLabels, sampleSeries, sampleSources } from './sample'
@@ -581,7 +581,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ## `sample.ts`
 
 ```ts
-import type { BarListItem } from '@aziontech/webkit/bar-list'
+import type { BarListItem } from '@aziontech/ui/bar-list'
 
 import type { ConfigurableDashboardSeries } from './dashboard-configurable.vue'
 

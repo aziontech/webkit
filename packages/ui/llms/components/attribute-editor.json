@@ -1,8 +1,8 @@
 {
  "name": "attribute-editor",
  "binding": "AttributeEditor",
- "import": "@aziontech/webkit/attribute-editor",
- "treeShakeableImport": "@aziontech/webkit/attribute-editor",
+ "import": "@aziontech/ui/attribute-editor",
+ "treeShakeableImport": "@aziontech/ui/attribute-editor",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

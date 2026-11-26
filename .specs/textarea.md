@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 3291af9cf4f73c745008d1bda9d74dbf01b7f68b250c3539cbe0cbe5dc904111
+checksum: a3b8a196adea6e7c0395af4685e9eb030db2133ce75776a43c50d4f74aaebccb
 created: 2026-06-23
 last_updated: 2026-11-22
 ---
@@ -46,7 +46,7 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 
 ```vue
 <script setup>
-  import Textarea from '@aziontech/webkit/textarea'
+  import Textarea from '@aziontech/ui/textarea'
   import { ref } from 'vue'
 
   const value = ref('')
@@ -217,7 +217,7 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

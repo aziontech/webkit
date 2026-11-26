@@ -2,7 +2,7 @@
 
 > The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another. Stacked inside a `container`, a run of modules reads as one continuous frame, because each module draws only its own top rule and hands its sides to the column. It is where a band's header and a band's content are joined, so no page has to re-draw that join.
 
-- Import: `import Module from '@aziontech/webkit/module'`
+- Import: `import Module from '@aziontech/ui/module'`
 - Category: layout · Surface: site · Structure: monolithic
 - API as JSON: [module.json](module.json)
 
@@ -76,7 +76,7 @@
 
 ```vue
 <script setup>
-  import Module from '@aziontech/webkit/module'
+  import Module from '@aziontech/ui/module'
 </script>
 
 <template>
@@ -97,7 +97,7 @@
 
 ```vue
 <script setup>
-  import Module from '@aziontech/webkit/module'
+  import Module from '@aziontech/ui/module'
 </script>
 
 <template>
@@ -135,7 +135,7 @@
 
 ```vue
 <script setup>
-  import Module from '@aziontech/webkit/module'
+  import Module from '@aziontech/ui/module'
 </script>
 
 <template>

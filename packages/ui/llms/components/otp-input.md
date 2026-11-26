@@ -2,7 +2,7 @@
 
 > The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS. It looks like a row of boxes, one character each, but it is **one real text input** laid over the boxes, so the browser's one-time-code autofill (`autocomplete="one-time-code"`), password managers, paste and screen readers all see a single field. Typing fills the next box (auto-advance), Backspace empties the last one, and a pasted code (`123 456`, `123-456`, with a line break) keeps only its valid characters and fills every box. When the last box fills it emits `complete`, so the screen can submit without a button press. It replaces six hand-wired text inputs with focus moves between them; the `account/account-mfa-settings` block uses it to set up and confirm an authenticator.
 
-- Import: `import OtpInput from '@aziontech/webkit/otp-input'`
+- Import: `import OtpInput from '@aziontech/ui/otp-input'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [otp-input.json](otp-input.json)
 
@@ -99,8 +99,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import OtpInput from '@aziontech/webkit/otp-input'
+  import Field from '@aziontech/ui/field'
+  import OtpInput from '@aziontech/ui/otp-input'
   import { ref } from 'vue'
 
   const code = ref('')
@@ -133,8 +133,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import OtpInput from '@aziontech/webkit/otp-input'
+  import Field from '@aziontech/ui/field'
+  import OtpInput from '@aziontech/ui/otp-input'
   import { ref } from 'vue'
 
   const code = ref('')
@@ -171,8 +171,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import OtpInput from '@aziontech/webkit/otp-input'
+  import Field from '@aziontech/ui/field'
+  import OtpInput from '@aziontech/ui/otp-input'
   import { ref } from 'vue'
 
   const rejected = ref('')

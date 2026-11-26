@@ -1,5 +1,5 @@
 {
-  "name": "@aziontech/webkit-monorepo",
+  "name": "@aziontech/design-monorepo",
   "version": "5.13.0",
   "author": "@aziontech",
   "private": true,
@@ -23,46 +23,46 @@
     "build:icons": "pnpm --filter @aziontech/icons run build",
     "check:icons": "pnpm --filter @aziontech/icons run check:svg && pnpm --filter @aziontech/icons run check:manifest",
     "release:icons": "pnpm --filter @aziontech/icons run release",
-    "dev:docs": "pnpm build:icons && pnpm --filter @aziontech/webkit-docs run dev",
-    "build:docs": "pnpm build:icons && pnpm --filter @aziontech/webkit-docs run build",
-    "preview:docs": "pnpm --filter @aziontech/webkit-docs run preview",
-    "check:docs:links": "pnpm --filter @aziontech/webkit-docs run check:links",
-    "check:docs:editor-chunks": "pnpm --filter @aziontech/webkit-docs run check:editor-chunks",
-    "test:docs": "pnpm --filter @aziontech/webkit-docs test",
-    "test:docs:smoke": "pnpm --filter @aziontech/webkit-docs run test:smoke",
-    "test:docs:shell": "pnpm --filter @aziontech/webkit-docs run test:shell",
-    "lint:docs": "pnpm --filter @aziontech/webkit-docs run lint",
-    "typecheck:docs": "pnpm --filter @aziontech/webkit-docs run typecheck",
-    "dev:demos": "pnpm build:icons && pnpm --filter @aziontech/webkit-demos run dev",
-    "build:demos": "pnpm build:icons && pnpm --filter @aziontech/webkit-demos run build",
-    "preview:demos": "pnpm --filter @aziontech/webkit-demos run preview",
-    "test:visual": "pnpm --filter @aziontech/webkit-visual run test",
-    "update:visual": "pnpm --filter @aziontech/webkit-visual run update",
+    "dev:docs": "pnpm build:icons && pnpm --filter @aziontech/ui-docs run dev",
+    "build:docs": "pnpm build:icons && pnpm --filter @aziontech/ui-docs run build",
+    "preview:docs": "pnpm --filter @aziontech/ui-docs run preview",
+    "check:docs:links": "pnpm --filter @aziontech/ui-docs run check:links",
+    "check:docs:editor-chunks": "pnpm --filter @aziontech/ui-docs run check:editor-chunks",
+    "test:docs": "pnpm --filter @aziontech/ui-docs test",
+    "test:docs:smoke": "pnpm --filter @aziontech/ui-docs run test:smoke",
+    "test:docs:shell": "pnpm --filter @aziontech/ui-docs run test:shell",
+    "lint:docs": "pnpm --filter @aziontech/ui-docs run lint",
+    "typecheck:docs": "pnpm --filter @aziontech/ui-docs run typecheck",
+    "dev:demos": "pnpm build:icons && pnpm --filter @aziontech/ui-demos run dev",
+    "build:demos": "pnpm build:icons && pnpm --filter @aziontech/ui-demos run build",
+    "preview:demos": "pnpm --filter @aziontech/ui-demos run preview",
+    "test:visual": "pnpm --filter @aziontech/ui-visual run test",
+    "update:visual": "pnpm --filter @aziontech/ui-visual run update",
     "update:baselines": "gh workflow run visual-baselines.yml -r $(git branch --show-current) -f update_baselines=true",
     "build:tokens": "pnpm --filter @aziontech/theme run build:tokens",
     "build:theme-types": "pnpm --filter @aziontech/theme run build:types",
     "clean:theme-types": "pnpm --filter @aziontech/theme run clean:types",
     "format:theme": "pnpm --filter @aziontech/theme run format",
-    "lint:webkit": "pnpm --filter @aziontech/webkit run lint",
-    "lint:webkit:fix": "pnpm --filter @aziontech/webkit run lint:fix",
-    "lint:webkit:style": "stylelint \"packages/webkit/**/*.{css,scss,vue}\"",
-    "lint:webkit:style:fix": "stylelint \"packages/webkit/**/*.{css,scss,vue}\" --fix",
-    "typecheck:webkit": "pnpm --filter @aziontech/webkit run typecheck",
-    "typecheck:webkit:tests": "pnpm --filter @aziontech/webkit run typecheck:tests",
-    "check:webkit:type-coverage": "pnpm --filter @aziontech/webkit run check:type-coverage",
-    "test:webkit": "pnpm --filter @aziontech/webkit run test",
-    "test:webkit:coverage": "pnpm --filter @aziontech/webkit run test:coverage",
-    "test:webkit:watch": "pnpm --filter @aziontech/webkit run test:watch",
-    "test:webkit:ui": "pnpm --filter @aziontech/webkit run test:ui",
-    "format:webkit": "pnpm --filter @aziontech/webkit run format",
-    "check:webkit:format": "pnpm --filter @aziontech/webkit run check:format",
+    "lint:ui": "pnpm --filter @aziontech/ui run lint",
+    "lint:ui:fix": "pnpm --filter @aziontech/ui run lint:fix",
+    "lint:ui:style": "stylelint \"packages/ui/**/*.{css,scss,vue}\"",
+    "lint:ui:style:fix": "stylelint \"packages/ui/**/*.{css,scss,vue}\" --fix",
+    "typecheck:ui": "pnpm --filter @aziontech/ui run typecheck",
+    "typecheck:ui:tests": "pnpm --filter @aziontech/ui run typecheck:tests",
+    "check:ui:type-coverage": "pnpm --filter @aziontech/ui run check:type-coverage",
+    "test:ui": "pnpm --filter @aziontech/ui run test",
+    "test:ui:coverage": "pnpm --filter @aziontech/ui run test:coverage",
+    "test:ui:watch": "pnpm --filter @aziontech/ui run test:watch",
+    "test:ui:ui": "pnpm --filter @aziontech/ui run test:ui",
+    "format:ui": "pnpm --filter @aziontech/ui run format",
+    "check:ui:format": "pnpm --filter @aziontech/ui run check:format",
     "check:audit": "pnpm audit",
     "generate:sbom": "pnpm sbom --sbom-format cyclonedx --prod --lockfile-only --filter './packages/*' --sbom-supplier 'Azion Technologies' --out 'sbom/%s.cdx.json'",
     "check:workflows": "if command -v actionlint >/dev/null; then actionlint -no-color; else echo \"check:workflows: actionlint is not on PATH, skipped\"; fi && if command -v zizmor >/dev/null; then zizmor --offline --no-progress --color never .github/workflows; else echo \"check:workflows: zizmor is not on PATH, skipped\"; fi",
     "check:spelling": "typos --format brief",
     "check:unused": "npx --yes knip@5.88.1 --no-progress",
     "check:versions": "npx --yes syncpack@13.0.4 list-mismatches && pnpm dedupe --check --prefer-offline",
-    "gates": "pnpm run lint:webkit && pnpm run lint:webkit:style && pnpm run check:webkit:format && pnpm run typecheck:webkit && pnpm run typecheck:webkit:tests && pnpm run typecheck:docs && pnpm run check:webkit:type-coverage && pnpm run check:audit"
+    "gates": "pnpm run lint:ui && pnpm run lint:ui:style && pnpm run check:ui:format && pnpm run typecheck:ui && pnpm run typecheck:ui:tests && pnpm run typecheck:docs && pnpm run check:ui:type-coverage && pnpm run check:audit"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
@@ -89,15 +89,15 @@
     "vue-eslint-parser": "^10.4.0"
   },
   "lint-staged": {
-    "packages/webkit/**/*.{js,ts,vue}": [
+    "packages/ui/**/*.{js,ts,vue}": [
       "eslint --fix --max-warnings=0",
       "prettier --write"
     ],
-    "packages/webkit/**/*.{css,scss}": [
+    "packages/ui/**/*.{css,scss}": [
       "stylelint --fix",
       "prettier --write"
     ],
-    "packages/webkit/**/*.{json,md}": [
+    "packages/ui/**/*.{json,md}": [
       "prettier --write"
     ]
   }

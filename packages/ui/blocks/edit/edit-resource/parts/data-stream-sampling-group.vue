@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import NumberInput from '@aziontech/webkit/number-input'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Alert from '@aziontech/ui/alert'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import NumberInput from '@aziontech/ui/number-input'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
 
   import { useDataStreamContext } from '../use-data-stream'
 

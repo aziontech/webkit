@@ -1,14 +1,14 @@
 {
  "name": "feature-tabs-section",
  "binding": "FeatureTabsSection",
- "import": "@aziontech/webkit/feature-tabs-section",
- "treeShakeableImport": "@aziontech/webkit/feature-tabs-section",
+ "import": "@aziontech/ui/feature-tabs-section",
+ "treeShakeableImport": "@aziontech/ui/feature-tabs-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
+ "purpose": "The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the Azion UI scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
  "setup": null,
  "useWhen": [
   "Use FeatureTabsSection for up to three tabs beside a media on a product page.",
@@ -70,7 +70,7 @@
    "type": "FeatureTabsSectionScene",
    "default": "undefined",
    "required": "false",
-   "doc": "Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations."
+   "doc": "Live scene drawn as the media of every tab without code, `{ component, props? }` naming an Azion UI scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations."
   },
   {
    "name": "autoplay",

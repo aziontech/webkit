@@ -38,7 +38,7 @@
     "origin proxy template",
     "instalar integração"
   ],
-  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
+  "skills": ["azion-ui-create-surface", "azion-ui-form", "azion-ui-errors"],
   "steps": ["where-it-runs", "connect-git", "form"],
   "primary": {
     "name": "ConnectGit",

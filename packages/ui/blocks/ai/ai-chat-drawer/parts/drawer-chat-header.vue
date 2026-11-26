@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Tag from '@aziontech/webkit/tag'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Tag from '@aziontech/ui/tag'
 
   defineProps<{ empty: boolean }>()
 

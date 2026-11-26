@@ -1,5 +1,5 @@
 <script setup>
-  import CardCarouselSection from '@aziontech/webkit/card-carousel-section'
+  import CardCarouselSection from '@aziontech/ui/card-carousel-section'
 
   const items = [
     {

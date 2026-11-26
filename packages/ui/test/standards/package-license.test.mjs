@@ -6,7 +6,7 @@ import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 
 const PACKAGES = join(dirname(fileURLToPath(import.meta.url)), '../../..')
-const PUBLISHED = ['webkit', 'webkit-mcp', 'theme', 'icons']
+const PUBLISHED = ['ui', 'ui-mcp', 'theme', 'icons']
 
 function packedFiles(dir) {
   const [pack] = JSON.parse(

@@ -28,12 +28,12 @@
     "notas do cliente"
   ],
   "skills": [
-    "webkit-layout",
-    "webkit-ui-states",
-    "webkit-tables",
-    "webkit-form",
-    "webkit-lists",
-    "webkit-microcopy"
+    "azion-ui-layout",
+    "azion-ui-states",
+    "azion-ui-tables",
+    "azion-ui-form",
+    "azion-ui-lists",
+    "azion-ui-microcopy"
   ],
   "primary": {
     "name": "Tickets",

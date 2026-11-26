@@ -2,7 +2,7 @@
 
 > Use StatusCode only for an HTTP status code or method (200, 404, GET); for resource state use StatusIndicator, and for any other word use Tag. StatusCode shows the HTTP status of a request, optionally preceded by its method, as one compact monospace pill whose colour comes from the status class: informational, success and redirect responses (1xx, 2xx, 3xx) stay neutral, client errors (4xx) take the warning colour and server errors (5xx) the danger colour, so failures stand out in a long request log without every successful row competing for attention. Anything that is not a status from 100 to 599 renders muted, as written. It composes `Tag` for the surface, so its sizes, shape and colours are the tag's; the component owns only the mapping from status to colour and the method plus code layout that every logs table would otherwise repeat.
 
-- Import: `import StatusCode from '@aziontech/webkit/status-code'`
+- Import: `import StatusCode from '@aziontech/ui/status-code'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [status-code.json](status-code.json)
 
@@ -79,7 +79,7 @@ _none_ — the method and the code are data and are never translated; the compon
 
 ```vue
 <script setup>
-  import StatusCode from '@aziontech/webkit/status-code'
+  import StatusCode from '@aziontech/ui/status-code'
 </script>
 
 <template>
@@ -114,7 +114,7 @@ _none_ — the method and the code are data and are never translated; the compon
 
 ```vue
 <script setup>
-  import StatusCode from '@aziontech/webkit/status-code'
+  import StatusCode from '@aziontech/ui/status-code'
 </script>
 
 <template>
@@ -137,8 +137,8 @@ _none_ — the method and the code are data and are never translated; the compon
 
 ```vue
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import StatusCode from '@aziontech/webkit/status-code'
+  import DataTable from '@aziontech/ui/data-table'
+  import StatusCode from '@aziontech/ui/status-code'
 
   const rows = [
     { id: 'r1', time: '12:04:31', method: 'GET', status: 200, path: '/', duration: '38 ms' },

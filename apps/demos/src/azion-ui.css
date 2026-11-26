@@ -1,13 +1,13 @@
-/* @aziontech/webkit design-system styles. Import this once from your app entry. */
+/* @aziontech/ui design-system styles. Import this once from your app entry. */
 @import '@aziontech/theme';
 @import '@aziontech/theme/fonts.css';
 
-/* The base rules WebKit components share. */
-@import '@aziontech/webkit/styles';
+/* The base rules Azion UI components share. */
+@import '@aziontech/ui/styles';
 
-/* The WebKit files the demos import, so Tailwind compiles only the classes they use. The
-   Vite plugin (@aziontech/webkit/vite-plugin) rewrites it when the imports change. */
-@import './webkit.sources.css';
+/* The Azion UI files the demos import, so Tailwind compiles only the classes they use. The
+   Vite plugin (@aziontech/ui/vite-plugin) rewrites it when the imports change. */
+@import './azion-ui.sources.css';
 @source './';
 
 /* Text rendering. The type ladder is drawn at these settings, so they are the design

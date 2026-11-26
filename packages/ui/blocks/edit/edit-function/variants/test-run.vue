@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import ResizableHandle from '@aziontech/webkit/resizable-handle'
-  import { toAriaKeyshortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import ResizableHandle from '@aziontech/ui/resizable-handle'
+  import { toAriaKeyshortcuts } from '@aziontech/ui/use-shortcuts'
 
   import { useFunctionTestRun } from '../composables/use-function-test-run'
   import EditFunction from '../edit-function.vue'

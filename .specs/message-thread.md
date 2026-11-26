@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 2
 template: 2
-checksum: 4bf6e76a26d710d6bfc21a802cae037c846d5feb2d99d878720218c4a1f8e917
+checksum: 09984e95cdc62c536316b032f98df2575371f1f09729b62e7624852b2e531b73
 created: 2026-11-23
 last_updated: 2026-11-25
 ---
@@ -60,9 +60,9 @@ generative AI chat (decision SUP-03).
 
 ```vue
 <script setup>
-  import MessageThread from '@aziontech/webkit/message-thread'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import MessageThread from '@aziontech/ui/message-thread'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import IconButton from '@aziontech/ui/icon-button'
 
   const attachments = [{ file: { name: 'invoice-1042.pdf', size: 84000 } }]
 </script>
@@ -133,9 +133,9 @@ Tree-shaking alternative — the standalone root and each part from its own entr
 
 ```vue
 <script setup>
-  import MessageThread from '@aziontech/webkit/message-thread-root'
-  import MessageThreadItem from '@aziontech/webkit/message-thread-item'
-  import MessageThreadGroup from '@aziontech/webkit/message-thread-group'
+  import MessageThread from '@aziontech/ui/message-thread-root'
+  import MessageThreadItem from '@aziontech/ui/message-thread-item'
+  import MessageThreadGroup from '@aziontech/ui/message-thread-group'
 </script>
 ```
 
@@ -173,7 +173,7 @@ Exported types: `MessageThreadProps`, `MessageThreadItemProps`, `MessageThreadGr
 `skeleton`.
 
 ```
-packages/webkit/src/components/content/message-thread/
+packages/ui/src/components/content/message-thread/
 ├── message-thread.vue
 ├── message-thread.test.ts
 ├── index.ts
@@ -328,7 +328,7 @@ _None._
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/primitives/animations/animate.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
 
   const source = [
     '---',

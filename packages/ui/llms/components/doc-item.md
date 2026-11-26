@@ -2,7 +2,7 @@
 
 > One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is. When it has an `href` the title becomes an anchor stretched over the whole row — one tab stop, the full row as the hit area — closed by a trailing chevron, or a diagonal arrow when the destination leaves the documentation. The shell keeps `role="listitem"`, so a set of rows inside an `ItemList` is a real list to assistive technology.
 
-- Import: `import DocItem from '@aziontech/webkit/doc-item'`
+- Import: `import DocItem from '@aziontech/ui/doc-item'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-item.json](doc-item.json)
 
@@ -27,7 +27,7 @@
 ## Related
 
 - `DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.
-- `Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.
+- `Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the Azion UI anatomy this row composes.
 - `RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
 
 ## Props
@@ -81,9 +81,9 @@
 
 ```vue
 <script setup>
-  import DocItem from '@aziontech/webkit/doc-item'
-  import ItemList from '@aziontech/webkit/item-list'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import DocItem from '@aziontech/ui/doc-item'
+  import ItemList from '@aziontech/ui/item-list'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>
@@ -121,9 +121,9 @@
 
 ```vue
 <script setup>
-  import DocItem from '@aziontech/webkit/doc-item'
-  import ItemList from '@aziontech/webkit/item-list'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import DocItem from '@aziontech/ui/doc-item'
+  import ItemList from '@aziontech/ui/item-list'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>

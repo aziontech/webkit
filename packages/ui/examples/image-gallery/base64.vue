@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import ImageGallery from '@aziontech/ui/image-gallery'
 
   const items = [
     {

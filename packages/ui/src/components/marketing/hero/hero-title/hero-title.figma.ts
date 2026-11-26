@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17153
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/marketing/hero/hero-title/hero-title.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/marketing/hero/hero-title/hero-title.vue
 // component=HeroTitle
 import figma from 'figma'
 
@@ -61,7 +61,7 @@ export default {
       : ''
   }
 </HeroTitle>`,
-  imports: ["import HeroTitle from '@aziontech/webkit/hero-title'"],
+  imports: ["import HeroTitle from '@aziontech/ui/hero-title'"],
   id: 'hero-title',
   metadata: { nestable: false }
 }

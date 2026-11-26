@@ -1,4 +1,4 @@
-<h1 align="center">Azion Webkit Monorepo</h1>
+<h1 align="center">Azion UI Monorepo</h1>
 
 <p align="center">
   <a href="https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=event%3Apull_request"><img src="https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?event=pull_request" alt="Governance"></a>
@@ -8,80 +8,82 @@
   <img src="https://img.shields.io/badge/Vue-3.5%2B-42b883" alt="Vue 3.5+">
 </p>
 
-The shared front-end foundation for Azion products. Webkit ships the Vue components, design tokens, and icon fonts that keep Console, Marketplace, and partner surfaces visually and behaviorally consistent.
+The shared front-end foundation for Azion products. Azion UI ships the Vue components, design tokens, and icon fonts that keep Console, Marketplace, and partner surfaces visually and behaviorally consistent.
 
-## The goal: an agentic AI WebKit
+> Upgrading a 5.x app? The package is now `@aziontech/ui` and its MCP server `@aziontech/ui-mcp`: run `npx @aziontech/ui migrate v6` ([MIGRATION_V6.md § 0](./packages/ui/MIGRATION_V6.md#0-the-package-is-now-aziontechui)).
 
-WebKit is built so that **AI agents build Azion screens, and people review them**. Every part of
+## The goal: an agentic AI Azion UI
+
+Azion UI is built so that **AI agents build Azion screens, and people review them**. Every part of
 the package exists to make an agent's first attempt correct:
 
-- **Agents find the right piece instead of guessing.** The `webkit` MCP server, `catalog.json` and
-  `webkit search` answer "which component or screen fits this job" from the real package.
-- **Agents start from reviewed screens, not from scratch.** Blocks (`webkit add <block-id>`) are
+- **Agents find the right piece instead of guessing.** The `azion-ui` MCP server, `catalog.json` and
+  `azion-ui search` answer "which component or screen fits this job" from the real package.
+- **Agents start from reviewed screens, not from scratch.** Blocks (`azion-ui add <block-id>`) are
   finished, accessible screens an agent copies and only changes the content of.
-- **Machines check the result, not reviewers' memory.** Lint rules, `webkit check`, type checks
+- **Machines check the result, not reviewers' memory.** Lint rules, `azion-ui check`, type checks
   and browser tests reject off-standard code in the agent's own loop, before a person looks at it.
 - **One way to do each thing.** Same prop names, event shapes and file layout everywhere, so what
   an agent learns from one component holds for all of them.
 
 Old or unused parts are removed rather than kept for compatibility. Breaking changes ship as a new
-major version (v6), with `webkit migrate` to move existing apps across.
+major version (v6), with `azion-ui migrate` to move existing apps across.
 
 Every component follows one [component lifecycle](./CONTRIBUTING.md#component-lifecycle) — Add, Change, Deprecate, Remove — spec first, enforced by CI gates.
 
 ## For AI agents: start here
 
-Creating or changing WebKit itself? Skip to [Changing WebKit](#changing-webkit-contribute). Building
-a screen or an app with WebKit? Follow these steps.
+Creating or changing Azion UI itself? Skip to [Changing Azion UI](#changing-azion-ui-contribute). Building
+a screen or an app with Azion UI? Follow these steps.
 
-1. Run `npx @aziontech/webkit init`. It installs the `webkit` MCP server, the lint, the skills and
-   rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
+1. Run `npx @aziontech/ui init`. It installs the `azion-ui` MCP server, the lint, the skills and
+   rules, and writes the Azion UI block into `AGENTS.md` (and `CLAUDE.md`).
 2. A whole screen (login, signup, settings, a list, a create flow): start from a block.
-   `npx @aziontech/webkit search <the screen in plain words>`, then
-   `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state). It copies the
+   `npx @aziontech/ui search <the screen in plain words>`, then
+   `npx @aziontech/ui add <block-id>` (`--variant <state>` for another state). It copies the
    reviewed SFC into your views, checks its imports against the installed version, records it in
-   `webkit.blocks.json` and prints the route to add. Change only the content. Do not build the
+   `azion-ui.blocks.json` and prints the route to add. Change only the content. Do not build the
    screen from scratch. (The MCP gives an agent the same blocks: `search_blocks`, `get_block`.) Blocks are grouped by job (`<account|ai|auth|create|dashboard|detail|edit|settings|state|view|shell|top-bar>/…`),
    one per job with its states as variants; an id from before v6 still resolves, with a `note`
    naming the new one.
 3. A single piece: `suggest_component`, then `get_component`.
-4. Follow the `webkit-usage` skill, which points to the skill for each case. Building a console:
-   read [`webkit-navigation`](./skills/webkit-navigation/SKILL.md) before the first screen. It fixes
+4. Follow the `azion-ui-usage` skill, which points to the skill for each case. Building a console:
+   read [`azion-ui-navigation`](./skills/azion-ui-navigation/SKILL.md) before the first screen. It fixes
    the shell, the navigation levels and where a drawer may open (never as the way into a resource).
-5. Before you hand it over: `npx @aziontech/webkit check` (the CI gate: setup, v5 names, imports,
-   lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
+5. Before you hand it over: `npx @aziontech/ui check` (the CI gate: setup, v5 names, imports,
+   lint, blocks drifting from the canonical copy) and the `azion-ui-verify` skill.
 
 Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use `contributing/`,
-`.specs/` or `apps/` to build screens; they belong to the people who maintain WebKit.
+`.specs/` or `apps/` to build screens; they belong to the people who maintain Azion UI.
 
-## Building with WebKit (consume)
+## Building with Azion UI (consume)
 
-The path for apps and screens that use the packages. AI agents start with the blocks in the `webkit` MCP (above); agents without the MCP read `node_modules/@aziontech/webkit/llms/llms.txt`, a page per block, component and foundation.
+The path for apps and screens that use the packages. AI agents start with the blocks in the `azion-ui` MCP (above); agents without the MCP read `node_modules/@aziontech/ui/llms/llms.txt`, a page per block, component and foundation.
 
 ### Use in your app
 
-The `webkit` CLI ships inside the `@aziontech/webkit` package — there is no separate CLI to install. One command adopts the design system in an existing project:
+The `ui` CLI ships inside the `@aziontech/ui` package — there is no separate CLI to install. One command adopts the design system in an existing project:
 
 ```bash
-npx @aziontech/webkit init
+npx @aziontech/ui init
 ```
 
-`init` reads the project before it writes anything, never clobbers a file, and is safe to re-run. It records `@aziontech/webkit`, `@aziontech/theme` and `@aziontech/icons` (plus the lint peers) in `package.json`, writes the ESLint, Stylelint and PostCSS configs, creates `src/webkit.css` as the single CSS entry (with `src/webkit.sources.css`, the WebKit files the app imports, so the stylesheet holds only their classes; init adds the `@aziontech/webkit/vite-plugin` plugin to `vite.config` to keep that list current), registers the webkit MCP server in `.mcp.json` so AI tools get the component catalog, adds a lint-on-commit hook, and prepends the entry imports to `src/main.*`. Preview the whole plan with `--dry-run`, and use `-y` for CI or scripted runs.
+`init` reads the project before it writes anything, never clobbers a file, and is safe to re-run. It records `@aziontech/ui`, `@aziontech/theme` and `@aziontech/icons` (plus the lint peers) in `package.json`, writes the ESLint, Stylelint and PostCSS configs, creates `src/azion-ui.css` as the single CSS entry (with `src/azion-ui.sources.css`, the Azion UI files the app imports, so the stylesheet holds only their classes; init adds the `@aziontech/ui/vite-plugin` plugin to `vite.config` to keep that list current), registers the Azion UI MCP server in `.mcp.json` so AI tools get the component catalog, adds a lint-on-commit hook, and prepends the entry imports to `src/main.*`. Preview the whole plan with `--dry-run`, and use `-y` for CI or scripted runs.
 
 `init` records the dependencies but does not install them — run your package manager afterwards, then confirm the wiring:
 
 ```bash
 pnpm install
-npx @aziontech/webkit doctor
+npx @aziontech/ui doctor
 ```
 
-`doctor` writes nothing and exits non-zero on a broken setup, so it also works as a CI gate. To pull in a newer webkit's `.claude/` bundle and `CLAUDE.md` fragment later, run `npx @aziontech/webkit sync` (`--check` reports drift without writing). Full flag reference: [`packages/webkit/docs/toolkit/CLI.md`](./packages/webkit/docs/toolkit/CLI.md).
+`doctor` writes nothing and exits non-zero on a broken setup, so it also works as a CI gate. To pull in a newer Azion UI's `.claude/` bundle and `CLAUDE.md` fragment later, run `npx @aziontech/ui sync` (`--check` reports drift without writing). Full flag reference: [`packages/ui/docs/toolkit/CLI.md`](./packages/ui/docs/toolkit/CLI.md).
 
 Once the project is wired, import components by path:
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
@@ -132,12 +134,12 @@ Once the project is wired, import components by path:
 
 ### Live previews
 
-- **Docs site** — `apps/docs` (`pnpm dev:docs`) — every component's API and examples beside their source, every block in every state, the foundations. Publishing it at <https://webkit.azion.app/> is pending (ROADMAP M2.10).
+- **Docs site** — `apps/docs` (`pnpm dev:docs`) — every component's API and examples beside their source, every block in every state, the foundations. Publishing it at <https://design.azion.com/> is pending (ROADMAP M2.10).
 - **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the icon sets of `@aziontech/icons`.
 
 Run them locally with `pnpm dev:docs`, `pnpm dev:demos` and `pnpm dev:icons-gallery`.
 
-## Changing WebKit (contribute)
+## Changing Azion UI (contribute)
 
 The path for people and agents who maintain the design system itself.
 
@@ -152,32 +154,32 @@ Designers file the issue forms and review screenshots: see
 
 1. Read [`contributing/AGENTS.md`](./contributing/AGENTS.md).
 2. Every component starts from a spec in `.specs/`, through `/component-new`.
-3. Every block in `packages/webkit/blocks/` is a screen agents copy and every folder in
-   `packages/webkit/examples/` documents a component. Changed one? Run
-   `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled visual test follow
+3. Every block in `packages/ui/blocks/` is a screen agents copy and every folder in
+   `packages/ui/examples/` documents a component. Changed one? Run
+   `pnpm --filter @aziontech/ui build:catalog`; the docs page and the styled visual test follow
    from the files.
-4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](./CONTRIBUTING.md).
+4. Before the PR: "What to update when Azion UI changes", in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ### What is in this repository
 
-- `@aziontech/webkit`: Vue component library and UI building blocks.
+- `@aziontech/ui`: Vue component library and UI building blocks.
 - `@aziontech/theme`: design token system, CSS variables, and Tailwind integration.
 - `@aziontech/icons`: the Azion icon font and colored brand icons as CSS/woff2 assets.
-- `@aziontech/webkit-mcp`: the MCP server that gives AI tools the WebKit catalog (`npx -y @aziontech/webkit-mcp@^6`).
+- `@aziontech/ui-mcp`: the MCP server that gives AI tools the Azion UI catalog (`npx -y @aziontech/ui-mcp@^6`).
 - Docs site (`apps/docs`), demos (`apps/demos`) and the styled visual suite (`apps/visual`).
 - Icons Gallery app for icon exploration and QA.
 
 ### Workspace structure
 
 ```text
-webkit/
+azion-ui/
 ├── apps/
 │   ├── docs/           # Docs site: components, blocks, foundations (vite-ssg)
-│   ├── demos/          # Routed flows assembled from blocks with `webkit add`
+│   ├── demos/          # Routed flows assembled from blocks with `azion-ui add`
 │   ├── visual/         # Playwright visual suite with the real theme CSS
 │   └── icons-gallery/  # Interactive icon browser
 ├── packages/
-│   ├── webkit/         # Reusable Vue components
+│   ├── Azion UI/         # Reusable Vue components
 │   ├── theme/          # Tokens and theme styles
 │   └── icons/          # Icon generation and distribution
 ├── .specs/             # Component specs (source of truth for the API)
@@ -185,7 +187,7 @@ webkit/
 └── pnpm-workspace.yaml
 ```
 
-**Internal dependencies:** `icons` is standalone. `theme` has no internal deps. `webkit` depends on `theme`. Apps depend on all three.
+**Internal dependencies:** `icons` is standalone. `theme` has no internal deps. `ui` depends on `theme`. Apps depend on all three.
 
 ### How to read this repo
 
@@ -193,26 +195,26 @@ If you are new (human or AI), open these in order — together they describe the
 
 1. [`.specs/_template.md`](./.specs/_template.md) — the spec format every component conforms to.
 2. [`.specs/button.md`](./.specs/button.md) — canonical filled-in spec.
-3. [`packages/webkit/src/components/action/button/button.vue`](./packages/webkit/src/components/action/button/button.vue) — canonical implementation matching that spec.
+3. [`packages/ui/src/components/action/button/button.vue`](./packages/ui/src/components/action/button/button.vue) — canonical implementation matching that spec.
 4. [`contributing/rules/`](./contributing/rules/) — the constraints every component must respect.
 
 ### Packages
 
-| Package                                                                      | Description                                                    | CI                                                                                                                                                                                                                            | Version                                                                                                                       |
-| ---------------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [@aziontech/icons](https://www.npmjs.com/package/@aziontech/icons)           | The Azion icon font used across products.                      | [![Publish Icons](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml?query=branch%3Amain)                | [![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons)           |
-| [@aziontech/theme](https://www.npmjs.com/package/@aziontech/theme)           | Theme configuration, semantic tokens, and styling foundations. | [![Publish Theme](https://github.com/aziontech/webkit/actions/workflows/publish-theme.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-theme.yml?query=branch%3Amain)                | [![npm version](https://img.shields.io/npm/v/@aziontech/theme.svg)](https://www.npmjs.com/package/@aziontech/theme)           |
-| [@aziontech/webkit](https://www.npmjs.com/package/@aziontech/webkit)         | Reusable UI components and design system utilities.            | [![Publish Webkit](https://github.com/aziontech/webkit/actions/workflows/publish-webkit.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-webkit.yml?query=branch%3Amain)             | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit.svg)](https://www.npmjs.com/package/@aziontech/webkit)         |
-| [@aziontech/webkit-mcp](https://www.npmjs.com/package/@aziontech/webkit-mcp) | MCP server that gives AI tools the WebKit catalog.             | [![Publish Webkit MCP](https://github.com/aziontech/webkit/actions/workflows/publish-webkit-mcp.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-webkit-mcp.yml?query=branch%3Amain) | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit-mcp.svg)](https://www.npmjs.com/package/@aziontech/webkit-mcp) |
+| Package                                                              | Description                                                    | CI                                                                                                                                                                                                                      | Version                                                                                                               |
+| -------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| [@aziontech/icons](https://www.npmjs.com/package/@aziontech/icons)   | The Azion icon font used across products.                      | [![Publish Icons](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml?query=branch%3Amain)          | [![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons)   |
+| [@aziontech/theme](https://www.npmjs.com/package/@aziontech/theme)   | Theme configuration, semantic tokens, and styling foundations. | [![Publish Theme](https://github.com/aziontech/webkit/actions/workflows/publish-theme.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-theme.yml?query=branch%3Amain)          | [![npm version](https://img.shields.io/npm/v/@aziontech/theme.svg)](https://www.npmjs.com/package/@aziontech/theme)   |
+| [@aziontech/ui](https://www.npmjs.com/package/@aziontech/ui)         | Reusable UI components and design system utilities.            | [![Publish Azion UI](https://github.com/aziontech/webkit/actions/workflows/publish-ui.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-ui.yml?query=branch%3Amain)             | [![npm version](https://img.shields.io/npm/v/@aziontech/ui.svg)](https://www.npmjs.com/package/@aziontech/ui)         |
+| [@aziontech/ui-mcp](https://www.npmjs.com/package/@aziontech/ui-mcp) | MCP server that gives AI tools the Azion UI catalog.           | [![Publish Azion UI MCP](https://github.com/aziontech/webkit/actions/workflows/publish-ui-mcp.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-ui-mcp.yml?query=branch%3Amain) | [![npm version](https://img.shields.io/npm/v/@aziontech/ui-mcp.svg)](https://www.npmjs.com/package/@aziontech/ui-mcp) |
 
 ### Apps
 
-| App                                   | Description                                                                           | CI                                                                                                                                                                                                                                  |
-| ------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [docs](./apps/docs)                   | Docs site for `@aziontech/webkit`: components, blocks and foundations from the files. | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                               |
-| [demos](./apps/demos)                 | Routed console flows on mock data, assembled from blocks with `webkit add`.           | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                               |
-| [visual](./apps/visual)               | Styled visual regression (Playwright) over examples, blocks and demos.                | [![Visual baselines](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml/badge.svg)](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml)                                             |
-| [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion icons. Live: <https://icons-gallery.azion.app/>         | [![Deploy icons gallery](https://github.com/aziontech/webkit/actions/workflows/deploy-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/deploy-icons-gallery.yml?query=branch%3Amain) |
+| App                                   | Description                                                                       | CI                                                                                                                                                                                                                                  |
+| ------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [docs](./apps/docs)                   | Docs site for `@aziontech/ui`: components, blocks and foundations from the files. | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                               |
+| [demos](./apps/demos)                 | Routed console flows on mock data, assembled from blocks with `azion-ui add`.     | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                               |
+| [visual](./apps/visual)               | Styled visual regression (Playwright) over examples, blocks and demos.            | [![Visual baselines](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml/badge.svg)](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml)                                             |
+| [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion icons. Live: <https://icons-gallery.azion.app/>     | [![Deploy icons gallery](https://github.com/aziontech/webkit/actions/workflows/deploy-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/deploy-icons-gallery.yml?query=branch%3Amain) |
 
 ### Getting started (contributors)
 
@@ -229,7 +231,7 @@ corepack enable
 
 ```bash
 git clone https://github.com/aziontech/webkit.git
-cd webkit
+cd Azion UI
 pnpm install
 ```
 
@@ -238,7 +240,7 @@ Always install from the repository root: it links the workspace packages to each
 #### Run the docs site and the demos
 
 The docs site in [`apps/docs`](./apps/docs) is the development playground: every component page
-renders its examples (`packages/webkit/examples/<name>/`) live beside the exact source file, every
+renders its examples (`packages/ui/examples/<name>/`) live beside the exact source file, every
 block page shows each state in a resizable frame, and the foundations pages read the theme.
 
 ```bash
@@ -256,7 +258,7 @@ with `pnpm preview:docs`. How pages are generated and how to deploy is in the
 Components ship a co-located `*.test.ts` run by **Vitest in browser mode** (real Chromium, never jsdom). The first run needs the browser installed:
 
 ```bash
-pnpm --filter @aziontech/webkit exec playwright install chromium
+pnpm --filter @aziontech/ui exec playwright install chromium
 pnpm test:browser-webkit
 ```
 
@@ -286,17 +288,17 @@ pnpm dev:icons-gallery    # Icons Gallery dev server
 
 # Tests
 pnpm test:browser-webkit            # Unit suite (headless Chromium)
-pnpm test:webkit:watch      # Unit suite in watch mode
-pnpm test:webkit:ui         # Vitest UI (headed browser)
-pnpm test:webkit:coverage   # v8 coverage report
+pnpm test:ui:watch      # Unit suite in watch mode
+pnpm test:ui:ui         # Vitest UI (headed browser)
+pnpm test:ui:coverage   # v8 coverage report
 pnpm test:visual            # Styled visual regression against the baselines
 
-# Webkit quality gates
-pnpm lint:webkit            # ESLint (max-warnings 0)
-pnpm lint:webkit:style      # Stylelint
-pnpm typecheck:webkit      # vue-tsc --noEmit
-pnpm check:webkit:type-coverage   # type-coverage >= 95%
-pnpm check:webkit:format    # Prettier check
+# Azion UI quality gates
+pnpm lint:ui            # ESLint (max-warnings 0)
+pnpm lint:ui:style      # Stylelint
+pnpm typecheck:ui      # vue-tsc --noEmit
+pnpm check:ui:type-coverage   # type-coverage >= 95%
+pnpm check:ui:format    # Prettier check
 
 # Aggregate
 pnpm gates             # Lint + type-check + format + audit
@@ -314,7 +316,7 @@ New components follow a **spec-driven pipeline**: spec → scaffold → verify. 
 1. Draft the spec with `/spec-create <name>`, then flip `status: draft` → `approved`.
 2. Scaffold with `/component-create <name>`.
 3. Verify with `/component-verify <name>` and `pnpm gates`.
-4. Commit using Conventional Commits with a package scope (e.g. `feat(webkit): …`).
+4. Commit using Conventional Commits with a package scope (e.g. `feat(ui): …`).
 5. Open a pull request.
 
 Changing, deprecating or removing a component: [component lifecycle](./CONTRIBUTING.md#component-lifecycle). Full workflow, commit-scope table, and review checklist: [CONTRIBUTING.md](./CONTRIBUTING.md). Non-negotiable rules: [`contributing/rules/`](./contributing/rules/).
@@ -331,8 +333,8 @@ If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with
 - [Demos guide](./apps/demos/README.md)
 - [Theme package guide](./packages/theme/README.md)
 - [Icons package guide](./packages/icons/README.md)
-- [Webkit package guide](./packages/webkit/README.md)
-- [webkit CLI reference](./packages/webkit/docs/toolkit/CLI.md) — `init`, `doctor`, `report`, `canary`, `sync`
+- [Azion UI package guide](./packages/ui/README.md)
+- [Azion UI CLI reference](./packages/ui/docs/toolkit/CLI.md) — `init`, `doctor`, `report`, `canary`, `sync`
 - [Contributing guide](./CONTRIBUTING.md) — workflow, commit conventions, review checklist
 - [Contribution rules](./contributing/rules/) — dependencies, migration, styling, no-invention
 - [Component specs](./.specs/) — source of truth for every component API

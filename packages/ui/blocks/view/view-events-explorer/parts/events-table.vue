@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
-  import DataTableLoadMore from '@aziontech/webkit/data-table-load-more'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/ui/data-table'
+  import DataTableLoadMore from '@aziontech/ui/data-table-load-more'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { ref } from 'vue'
 
   import {

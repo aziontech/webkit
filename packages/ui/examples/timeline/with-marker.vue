@@ -1,6 +1,6 @@
 <script setup>
-  import Avatar from '@aziontech/webkit/avatar'
-  import Timeline from '@aziontech/webkit/timeline'
+  import Avatar from '@aziontech/ui/avatar'
+  import Timeline from '@aziontech/ui/timeline'
 </script>
 
 <template>

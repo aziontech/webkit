@@ -1,8 +1,8 @@
 {
  "name": "upload-progress",
  "binding": "UploadProgress",
- "import": "@aziontech/webkit/upload-progress",
- "treeShakeableImport": "@aziontech/webkit/upload-progress",
+ "import": "@aziontech/ui/upload-progress",
+ "treeShakeableImport": "@aziontech/ui/upload-progress",
  "category": "feedback",
  "surface": "app",
  "structure": "monolithic",

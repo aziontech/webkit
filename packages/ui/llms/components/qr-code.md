@@ -1,8 +1,8 @@
 # Qr Code
 
-> A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws them as one path. It is for setup flows that hand a URI to a phone, first the `otpauth://` URI of an authenticator app in `auth#MfaSetup`, where it replaces the image the API returned and the framed placeholder of the demo. The code is always dark on a light plate (the plate pins the light theme), because several authenticator scanners do not read an inverted code.
+> A QR code drawn as SVG from a string, with no image request and no dependency: Azion UI's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws them as one path. It is for setup flows that hand a URI to a phone, first the `otpauth://` URI of an authenticator app in `auth#MfaSetup`, where it replaces the image the API returned and the framed placeholder of the demo. The code is always dark on a light plate (the plate pins the light theme), because several authenticator scanners do not read an inverted code.
 
-- Import: `import QrCode from '@aziontech/webkit/qr-code'`
+- Import: `import QrCode from '@aziontech/ui/qr-code'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [qr-code.json](qr-code.json)
 
@@ -78,8 +78,8 @@
 
 ```vue
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import QrCode from '@aziontech/webkit/qr-code'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import QrCode from '@aziontech/ui/qr-code'
 
   const account = 'jane.doe@example.com'
   const secret = 'JBSWY3DPEHPK3PXP'
@@ -116,7 +116,7 @@
 
 ```vue
 <script setup>
-  import QrCode from '@aziontech/webkit/qr-code'
+  import QrCode from '@aziontech/ui/qr-code'
 </script>
 
 <template>

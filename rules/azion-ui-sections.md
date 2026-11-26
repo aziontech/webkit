@@ -1,20 +1,20 @@
 # Rule: marketing page sections
 
 A marketing band (hero, features, pricing, FAQ, newsletter, footer) is a **page section**: a
-complete webkit component published at `@aziontech/webkit/<name>`, where `<name>` is the section's `_id` in
+complete Azion UI component published at `@aziontech/ui/<name>`, where `<name>` is the section's `_id` in
 the site JSON. The site places it from
 JSON. Never rebuild a band from primitives when a section exists.
 
 Which sections a page uses, in which order, with which hero, labels and assets is the Web Design
-Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/webkit-site-pages`.
+Guide, rule `azion-ui-site-pages` (SD-01 to SD-25); a page task runs through `/azion-ui-site-pages`.
 
 ## Do
 
-- Find the section with the webkit MCP: `suggest_component` with the band's purpose ("pricing page",
+- Find the section with the Azion UI MCP: `suggest_component` with the band's purpose ("pricing page",
   "newsletter sign-up") returns it with `recommendation: "section"`; `list_components` with category
   `sections` lists all of them.
 - Import it from its flat path and name the binding after it:
-  `import PricingPlansSection from '@aziontech/webkit/pricing-plans-section'`.
+  `import PricingPlansSection from '@aziontech/ui/pricing-plans-section'`.
 - Pass the site JSON entry's props as the whole API: `<PricingPlansSection v-bind="section.props" />`. The
   `_id` in the JSON is the section's name.
 - Place sections inside the page column: `Container` (`max-width="site"`) with a
@@ -22,7 +22,7 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
 - For a section with a form (lead form, newsletter): listen to `submit` (`(event, values)`) and send
   from the site. The section never posts. Feed the outcome back through its `loading`, `submitted`
   and `error` props; the messages come from the JSON.
-- Compose the site chrome once: `SiteLayout` (`@aziontech/webkit/site-layout`) in `App.vue`, with
+- Compose the site chrome once: `SiteLayout` (`@aziontech/ui/site-layout`) in `App.vue`, with
   the `SiteHeaderSection` data as `navigation` and the `SiteFooterSection` data as `footer`, around `RouterView`. It
   places `SiteHeaderSection` first and `SiteFooterSection` last, unwrapped, and opens the ⌘K palette from the bar's
   search. A page is only its sections, in the layout's slot. The `shell/shell-site` block is this
@@ -62,17 +62,17 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
   2 → halves, 4 → 2 × 2), and a short last row keeps the column width with its trailing cells left
   empty, as azion.com does (5 → 3 + 2, 7 → 3 + 3 + 1). Never stretch the last row yourself.
 - Import the logos, badges and illustrations a section shows from
-  `@aziontech/webkit/assets/<file>` (`import zoop from '@aziontech/webkit/assets/zoop-extended-color.svg'`)
+  `@aziontech/ui/assets/<file>` (`import zoop from '@aziontech/ui/assets/zoop-extended-color.svg'`)
   and pass the import as the item's `logo` / `src`; `catalog.json` lists the files under `imports`
   with `"kind": "asset"`. Photos, covers and banners are the site's content: pass URLs the app
-  serves, or `@aziontech/webkit/assets/placeholder-image.svg` until it has them.
+  serves, or `@aziontech/ui/assets/placeholder-image.svg` until it has them.
 
 ## Don't
 
-- Do not import a section from `/src/` or with a category prefix (`@aziontech/webkit/sections/pricing-plans-section`
+- Do not import a section from `/src/` or with a category prefix (`@aziontech/ui/sections/pricing-plans-section`
   no longer exists).
 - Do not pass slots or extra props a section does not declare. If the JSON needs a new field, the
-  section changes in webkit first.
+  section changes in Azion UI first.
 - Do not wrap a section in your own `max-w-*`, padding or border to change its look. Spacing between
   bands is `Spacer`.
 - Do not build the site header or footer from `AppHeader`, `NavigationMenu` or `Footer`, and do
@@ -84,10 +84,10 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
   default `layout="balanced"` is the grid.
 - Do not let the form section fetch, and do not fake a success state in the component.
 - Do not copy a root-relative `/marketing-components/…` or `/media/…` URL from azion.com or the
-  WebKit docs site into another app: it does not serve it and the image breaks (lint
-  `webkit/no-root-relative-asset`).
+  Azion UI docs site into another app: it does not serve it and the image breaks (lint
+  `azion-ui/no-root-relative-asset`).
 - Do not put a `Spacer` or a closing `RegistrationFrame` after a closing section: the hatch doubles
-  (`webkit/no-gap-after-closing-section`).
+  (`azion-ui/no-gap-after-closing-section`).
 - Do not wrap a bare `CapabilityGridSection` in a `Module` to move its title: set `titleAlign`, or
   its capability headings rise to `h2`.
 
@@ -95,14 +95,14 @@ Guide, rule `webkit-site-pages` (SD-01 to SD-25); a page task runs through `/web
 
 ```vue
 <script setup lang="ts">
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
   import PricingPlansSection, {
     type PricingPlansSectionProps
-  } from '@aziontech/webkit/pricing-plans-section'
+  } from '@aziontech/ui/pricing-plans-section'
   import NewsletterSection, {
     type NewsletterSectionProps
-  } from '@aziontech/webkit/newsletter-section'
+  } from '@aziontech/ui/newsletter-section'
 
   interface Props {
     /** The page JSON, one entry per section, each holding that section's props. */

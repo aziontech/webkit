@@ -1,8 +1,8 @@
 {
  "name": "hint",
  "binding": "Hint",
- "import": "@aziontech/webkit/hint",
- "treeShakeableImport": "@aziontech/webkit/hint",
+ "import": "@aziontech/ui/hint",
+ "treeShakeableImport": "@aziontech/ui/hint",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",
@@ -27,7 +27,7 @@
   "`help-panel` — level D: page-level help in the console's tools region, opened from an \"Info\" link after the page title.",
   "`popover` — the overlay Hint composes; use it for interactive content.",
   "`Field.Label`, `settings-row`, `settings-group` — render a Hint from their `hint` prop.",
-  "`/webkit-in-product-help` — the consumer skill that picks the level of help."
+  "`/azion-ui-in-product-help` — the consumer skill that picks the level of help."
  ],
  "bestPractices": [
   "One to three plain sentences, each ending in a period.",

@@ -10,18 +10,18 @@ const PKG_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const THEME_SRC = join(PKG_ROOT, '..', 'theme', 'src')
 const STYLES = join(PKG_ROOT, 'src', 'styles.css')
 const STYLES_ALL = join(PKG_ROOT, 'src', 'styles', 'all.css')
-const requireFromWebkit = createRequire(join(PKG_ROOT, 'package.json'))
+const requireFromAzionUi = createRequire(join(PKG_ROOT, 'package.json'))
 
 const flipped = [...new Set(readFileSync(STYLES, 'utf8').match(/\.az-[a-z-]+/g))]
 
 async function buildConsumerCss() {
-  const { build } = await import(requireFromWebkit.resolve('vite'))
-  const { default: tailwindcss } = await import(requireFromWebkit.resolve('@tailwindcss/vite'))
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-rtl-'))
+  const { build } = await import(requireFromAzionUi.resolve('vite'))
+  const { default: tailwindcss } = await import(requireFromAzionUi.resolve('@tailwindcss/vite'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-rtl-'))
   try {
     writeFileSync(
       join(dir, 'app.css'),
-      `@import '${requireFromWebkit.resolve('tailwindcss/index.css')}';\n@import '${STYLES_ALL}';\n`
+      `@import '${requireFromAzionUi.resolve('tailwindcss/index.css')}';\n@import '${STYLES_ALL}';\n`
     )
     writeFileSync(join(dir, 'main.js'), "import './app.css'\n")
     writeFileSync(

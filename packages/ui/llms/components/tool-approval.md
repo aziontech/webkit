@@ -2,7 +2,7 @@
 
 > A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValueList` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can require typing a phrase first. With `editable` (opt-in) the reader corrects the call's arguments in a code field before approving; the edit comes back through `v-model` and `approve`. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
 
-- Import: `import ToolApproval from '@aziontech/webkit/tool-approval'`
+- Import: `import ToolApproval from '@aziontech/ui/tool-approval'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [tool-approval.json](tool-approval.json)
 
@@ -130,8 +130,8 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 
 ```vue
 <script setup>
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import ToolApproval from '@aziontech/ui/tool-approval'
   import { ref } from 'vue'
 
   const status = ref('pending')
@@ -167,7 +167,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 
 ```vue
 <script setup>
-  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import ToolApproval from '@aziontech/ui/tool-approval'
   import { ref } from 'vue'
 
   const status = ref('pending')
@@ -193,7 +193,7 @@ Composed DS components: `button`, `status-indicator`; for `editable`, `field-roo
 
 ```vue
 <script setup>
-  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import ToolApproval from '@aziontech/ui/tool-approval'
   import { computed, ref } from 'vue'
 
   const status = ref('pending')

@@ -2,7 +2,7 @@
 
 > A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNavigation`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift. Inside `DocLayout`, a level 2 or 3 heading with an `anchor` registers itself (through `useHeadingOutline`) as an entry of the layout's "On this page" rail, with its rendered text and its level, once it mounts, and leaves the rail when it unmounts; the page never lists its headings anywhere else.
 
-- Import: `import DocHeading from '@aziontech/webkit/doc-heading'`
+- Import: `import DocHeading from '@aziontech/ui/doc-heading'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-heading.json](doc-heading.json)
 
@@ -74,8 +74,8 @@
 
 ```vue
 <script setup>
-  import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocHeading from '@aziontech/ui/doc-heading'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>
@@ -95,8 +95,8 @@
 
 ```vue
 <script setup>
-  import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocHeading from '@aziontech/ui/doc-heading'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>

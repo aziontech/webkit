@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import MarkdownEditor from '@aziontech/ui/markdown-editor'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { computed, ref, useId } from 'vue'
 
   import type {

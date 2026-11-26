@@ -2,7 +2,7 @@
 
 > A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs. It is the one place external content enters a page, so the attributes that are easy to forget are not optional.
 
-- Import: `import Embed from '@aziontech/webkit/embed'`
+- Import: `import Embed from '@aziontech/ui/embed'`
 - Category: content · Surface: site · Structure: monolithic
 - API as JSON: [embed.json](embed.json)
 
@@ -65,7 +65,7 @@
 
 ```vue
 <script setup>
-  import Embed from '@aziontech/webkit/embed'
+  import Embed from '@aziontech/ui/embed'
 </script>
 
 <template>
@@ -81,7 +81,7 @@
 
 ```vue
 <script setup>
-  import Embed from '@aziontech/webkit/embed'
+  import Embed from '@aziontech/ui/embed'
 </script>
 
 <template>
@@ -109,8 +109,8 @@
 
 ```vue
 <script setup>
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
 
   const source = [
     '## Watch the demo',

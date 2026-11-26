@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Link from '@aziontech/webkit/link'
+  import Card from '@aziontech/ui/card'
+  import Link from '@aziontech/ui/link'
 
   import FirstDeployServiceCard from '../parts/first-deploy-service-card.vue'
   import SummaryFact from '../parts/summary-fact.vue'

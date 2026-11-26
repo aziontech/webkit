@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Button from '@aziontech/ui/button'
+  import ConsoleLayout from '@aziontech/ui/console-layout'
+  import PageHeader from '@aziontech/ui/page-header'
 </script>
 
 <template>

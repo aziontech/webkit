@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CopyText from '@aziontech/webkit/copy-text'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import Illustration from '@aziontech/webkit/illustration'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CopyText from '@aziontech/ui/copy-text'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import Illustration from '@aziontech/ui/illustration'
   import { useHead } from '@unhead/vue'
   import assets from 'virtual:docs-assets'
   import { computed } from 'vue'
@@ -14,7 +14,7 @@
 
   const t = messages
   useHead({
-    title: 'Assets — WebKit',
+    title: 'Assets — Azion UI',
     meta: [{ name: 'description', content: computed(() => t.value.assetsLead) }]
   })
 

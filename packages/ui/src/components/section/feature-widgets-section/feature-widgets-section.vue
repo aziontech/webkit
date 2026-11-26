@@ -47,7 +47,7 @@
     title: string
     /** The rest of the cell's sentence, after the lead. */
     description: string
-    /** Live scene drawn above the sentence, `{ component, props? }` naming a webkit scene asset; it plays its beat while the pointer is over the cell and wins over the illustration. */
+    /** Live scene drawn above the sentence, `{ component, props? }` naming an Azion UI scene asset; it plays its beat while the pointer is over the cell and wins over the illustration. */
     scene?: FeatureWidgetsSectionScene
     /** Name of the illustration drawn above the sentence when no scene is set. */
     illustration?: string
@@ -78,7 +78,7 @@
     copiedLabel?: string
     /**
      * The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy?
-     * }` where `scene` is a webkit scene asset handed `hovered` while the pointer is over the
+     * }` where `scene` is an Azion UI scene asset handed `hovered` while the pointer is over the
      * cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered
      * as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that
      * puts `text` on the clipboard; a cell may carry both.

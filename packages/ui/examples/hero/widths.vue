@@ -1,5 +1,5 @@
 <script setup>
-  import HeroRoot from '@aziontech/webkit/hero-root'
+  import HeroRoot from '@aziontech/ui/hero-root'
 </script>
 
 <template>

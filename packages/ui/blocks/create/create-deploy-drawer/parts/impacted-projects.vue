@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { DeployDrawerImpact } from '../types'

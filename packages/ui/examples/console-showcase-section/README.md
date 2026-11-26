@@ -2,7 +2,7 @@
 
 A framed console scene under a section title, with tabs that play one beat of the scene each.
 
-The band is the `ConsoleShowcaseSection` component from `@aziontech/webkit/console-showcase-section`; it composes `Module`, `ModuleHeader`, `ToggleGroup`, `RegistrationFrame`, `Texture` and `Button`. The scene comes from the page entry's `scenes`.
+The band is the `ConsoleShowcaseSection` component from `@aziontech/ui/console-showcase-section`; it composes `Module`, `ModuleHeader`, `ToggleGroup`, `RegistrationFrame`, `Texture` and `Button`. The scene comes from the page entry's `scenes`.
 
 ## Examples
 

@@ -1,8 +1,8 @@
 {
  "name": "outcome-icon",
  "binding": "OutcomeIcon",
- "import": "@aziontech/webkit/outcome-icon",
- "treeShakeableImport": "@aziontech/webkit/outcome-icon",
+ "import": "@aziontech/ui/outcome-icon",
+ "treeShakeableImport": "@aziontech/ui/outcome-icon",
  "category": "feedback",
  "surface": "app",
  "structure": "monolithic",

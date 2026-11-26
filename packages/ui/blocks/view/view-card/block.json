@@ -26,7 +26,7 @@
     "cartões de recursos",
     "grade de cards"
   ],
-  "skills": ["webkit-lists", "webkit-ui-states"],
+  "skills": ["azion-ui-lists", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "view-card.vue"

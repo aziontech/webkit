@@ -1,9 +1,9 @@
 ---
 name: spec-create
-description: Interactively draft `.specs/<name>.md` for a new webkit component. Owns the questions, the cross-reference with TOKENS.md and Figma, and the initial `status: draft` write. Never writes component code.
+description: Interactively draft `.specs/<name>.md` for a new Azion UI component. Owns the questions, the cross-reference with TOKENS.md and Figma, and the initial `status: draft` write. Never writes component code.
 status: active
 last_updated: 2026-11-23
-scope: webkit
+scope: ui
 enforced_by: [no-invention, props, styling]
 ---
 
@@ -29,7 +29,7 @@ Confirm the mode with the user before drafting. If it's ambiguous which one they
 
 ## Workflow — shared steps
 
-1. **Argument parsing & name resolution.** Parse the flags. A passed `<name>` must be kebab-case (reject otherwise) and always **wins** (explicit override). If `<name>` is absent: in **Mode B** reject (no frame to derive from); in **Mode A** defer — the name is resolved from the frame in **Name resolution** below, *before* any file path is computed. Only once the name is known: reject if `.specs/<name>.md` already exists with `status ∈ {approved, implemented, locked}` (the user is editing the wrong file) and ask for a different name.
+1. **Argument parsing & name resolution.** Parse the flags. A passed `<name>` must be kebab-case (reject otherwise) and always **wins** (explicit override). If `<name>` is absent: in **Mode B** reject (no frame to derive from); in **Mode A** defer — the name is resolved from the frame in **Name resolution** below, _before_ any file path is computed. Only once the name is known: reject if `.specs/<name>.md` already exists with `status ∈ {approved, implemented, locked}` (the user is editing the wrong file) and ask for a different name.
 2. **Category.** Use the taxonomy in `.specs/_template.md` frontmatter. State the inferred/received category and **ask the user to confirm** (mandatory in Mode B — never assume).
 3. **Structure decision.** Call `structure-decide` with the regions/answers. Default to `monolithic` when in doubt.
 4. **Write the spec.** Copy `.specs/_template.md` to `.specs/<name>.md`, fill every section, frontmatter `status: draft`, `stability: preview` (a new component ships as preview until the owner marks it GA), `template: 2`, `created`/`last_updated` = today, no `checksum`. Template 2 adds four required sections — `## Internationalization` (every built-in string as a message key with its English source and override prop; `Intl` for dates, numbers, plurals), `## Right-to-left` (logical utilities, mirrored icons, arrow keys, `<bdi>` around user data), `## Responsive` (container queries, narrow-container behaviour, touch targets, 320 px reflow) and `## Performance` (gzip budget, runtime budget, lazy parts). No template placeholder line may survive (`check:spec-template` and `enforce-spec-exists` reject it). Every spec created on or after 2026-11-12 must be on template 2; never add `template: 2` to an older spec without filling the four sections.
@@ -37,10 +37,11 @@ Confirm the mode with the user before drafting. If it's ambiguous which one they
    What each section must hold, so the later gates pass:
    - `## When to use`, `## When NOT to use` (naming the sibling to use instead) and `## Related` are filled: the catalog extracts them (`useWhen`, `avoidWhen`, `related`), the MCP answers `suggest_component` from them, and the `/component-new` usage check fails when a fresh agent cannot find the component from its intent.
    - Props, events, slots and models follow [`prop-vocabulary.md`](../../rules/prop-vocabulary.md), [`emits.md`](../../rules/emits.md) and [`event-payloads.md`](../../rules/event-payloads.md) (activation events are `(event, item?)`, event first). A list-showing component takes the list state contract and an `options` / `items` prop, an action control takes `disabledReason`, and a root stays within 20 props and 5 models ([`CODE_QUALITY.md`](../../docs/CODE_QUALITY.md) § 3.4, 3.6, 3.7, 3.9).
-   - `## Internationalization` keys use the camelCase component name as namespace (`feedbackReasonDialog.title`; shared words in `common`, [`naming.md`](../../rules/naming.md) § 13). The build adds every key to all three catalogs, `packages/webkit/src/locales/en.ts`, `pt-BR.ts` and `es.ts`, which `packages/webkit/test/standards/i18n-catalogs.test.mjs` holds to the same keys and placeholders.
+   - `## Internationalization` keys use the camelCase component name as namespace (`feedbackReasonDialog.title`; shared words in `common`, [`naming.md`](../../rules/naming.md) § 13). The build adds every key to all three catalogs, `packages/ui/src/locales/en.ts`, `pt-BR.ts` and `es.ts`, which `packages/ui/test/standards/i18n-catalogs.test.mjs` holds to the same keys and placeholders.
    - `## Performance` names the gzip budget that becomes the component's `.size-limit.json` entry ([`bundle-budget.md`](../../rules/bundle-budget.md)).
    - `## Examples` starts with Default (the file `default.vue`), then one composite example per axis (`variants.vue`, `sizes.vue`) and the state examples; names follow [`naming.md`](../../rules/naming.md) § 4. `examples.json` later ships at least this many (`check-complete`).
    - Sample text in `## Usage` and the examples follows [`example-data.md`](../../rules/example-data.md) (`example.com`, Acme, no national formats).
+
 5. **Echo.** Print the path. Tell the user to review it, then run `/component-create <name>` (which calls `spec-validator`) or set `status: approved` and re-run.
 
 ## Mode A — Figma-driven (`--figma <url>`)

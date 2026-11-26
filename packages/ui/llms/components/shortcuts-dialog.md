@@ -1,8 +1,8 @@
 # Shortcuts Dialog
 
-> The list of every keyboard shortcut the current screen offers, opened with `?` (Shift+/) as the console keyboard standard asks. It reads the shortcuts screens register with `useShortcuts` (`@aziontech/webkit/use-shortcuts`), so the list is generated, never written by hand: a shortcut that a screen stops offering leaves the list with it. Built from `Dialog`, the `Panel` parts and `Kbd`.
+> The list of every keyboard shortcut the current screen offers, opened with `?` (Shift+/) as the console keyboard standard asks. It reads the shortcuts screens register with `useShortcuts` (`@aziontech/ui/use-shortcuts`), so the list is generated, never written by hand: a shortcut that a screen stops offering leaves the list with it. Built from `Dialog`, the `Panel` parts and `Kbd`.
 
-- Import: `import ShortcutsDialog from '@aziontech/webkit/shortcuts-dialog'`
+- Import: `import ShortcutsDialog from '@aziontech/ui/shortcuts-dialog'`
 - Category: overlay · Surface: app · Structure: monolithic
 - API as JSON: [shortcuts-dialog.json](shortcuts-dialog.json)
 
@@ -103,10 +103,10 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Input from '@aziontech/webkit/input'
-  import ShortcutsDialog from '@aziontech/webkit/shortcuts-dialog'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Button from '@aziontech/ui/button'
+  import Input from '@aziontech/ui/input'
+  import ShortcutsDialog from '@aziontech/ui/shortcuts-dialog'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { ref } from 'vue'
 
   const searchEl = ref(null)

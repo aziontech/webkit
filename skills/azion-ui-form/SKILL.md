@@ -1,13 +1,13 @@
 ---
-name: webkit-form
-description: Accessible forms on @aziontech/webkit, and which control each kind of value takes (a date or date and time is DatePicker, a range DateRangePicker, a number NumberInput, a phone PhoneInput, a secret PasswordInput — never a text Input that asks for a format). Use for any field, even one. Also: one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
+name: azion-ui-form
+description: Accessible forms on @aziontech/ui, and which control each kind of value takes (a date or date and time is DatePicker, a range DateRangePicker, a number NumberInput, a phone PhoneInput, a secret PasswordInput — never a text Input that asks for a format). Use for any field, even one. Also: one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /azion-ui-ux-heuristics (states) and /azion-ui-states (locking + toast).
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
+enforced_by: [azion-ui-accessibility, azion-ui-component-states, ui-verify]
 ---
 
-# Skill: webkit-form
+# Skill: azion-ui-form
 
 ## In short
 
@@ -25,9 +25,9 @@ enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 Forms are where a product is most keyboard- and screen-reader-tested and most often fails: a label
 that is really a placeholder, a select whose `<label for>` points at nothing, a validation error shown
 only in colour, a field that never says it was required. This pattern fixes the accessibility of a form
-built on `@aziontech/webkit` so it is operable by keyboard, understandable by a screen reader, and
-recoverable when it rejects input. It is the a11y companion to `/webkit-ux-heuristics`
-(which establishes the states) and [Loading, empty and error states](../webkit-ui-states/SKILL.md) (which locks the scope and
+built on `@aziontech/ui` so it is operable by keyboard, understandable by a screen reader, and
+recoverable when it rejects input. It is the a11y companion to `/azion-ui-ux-heuristics`
+(which establishes the states) and [Loading, empty and error states](../azion-ui-states/SKILL.md) (which locks the scope and
 toasts request errors) — this pattern owns **layout, labels, grouping, validation semantics, and submit**.
 
 There are **two ways to lay out a form**, and both are first-class:
@@ -44,24 +44,24 @@ Pick one per form; don't mix row-fields and stacked-fields in the same section.
 
 ## How to use
 
-- `/webkit-form`
+- `/azion-ui-form`
   Apply the layout + patterns below to any form you build in this conversation.
-- `/webkit-form <file>`
+- `/azion-ui-form <file>`
   Review the file's form against the patterns and output, per gap:
   - the exact line / element (quoted),
   - which pattern it breaks (1 short sentence),
-  - the concrete fix, naming the webkit component to use.
+  - the concrete fix, naming the Azion UI component to use.
 
 ## When to invoke
 
 - Building or reviewing any create/edit page, settings panel, drawer form, or multi-field form.
 - The user asks "is this form accessible", "wire up the labels", "the screen reader skips this",
   "where do errors go", "which layout for this form".
-- After `/webkit-ux-heuristics` establishes the states and before [Loading, empty and error states](../webkit-ui-states/SKILL.md) locks the async submit.
+- After `/azion-ui-ux-heuristics` establishes the states and before [Loading, empty and error states](../azion-ui-states/SKILL.md) locks the async submit.
 
 ## Wrap every control in a `Field` — loose inputs are the fallback
 
-webkit ships **one** form-field component, `Field` (`@aziontech/webkit/field`), and wraps **any** control
+Azion UI ships **one** form-field component, `Field` (`@aziontech/ui/field`), and wraps **any** control
 in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`,
 `InputGroup` (with `InputGroup.Input`), `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `DatePicker`,
 `DateRangePicker`, `Combobox`, `OtpInput`, `TagEditor`, `LanguageSelect`. **Default to a `Field`**; leave
@@ -76,7 +76,7 @@ a control bare only when no label belongs next to it. Which control a value take
   below are satisfied **by construction**.
 - **Extra help on a field:** `Field.Description` first (always visible); detail some people want goes in
   `<Field.Label hint="…">`, a Hint glyph that opens a short note on click. Never a typed `?`, a boxed icon
-  button or a long `Tooltip` beside a label ([In-product help](../webkit-in-product-help/SKILL.md)).
+  button or a long `Tooltip` beside a label ([In-product help](../azion-ui-in-product-help/SKILL.md)).
 - **Checkbox, switch:** `<Field orientation="horizontal">` with the control first and a
   `<Field.Content>` holding `Field.Label` + `Field.Description`.
 - **One of a few (radios):** always `<RadioGroup v-model>` with a `RadioGroup.Item` per option
@@ -91,7 +91,7 @@ a control bare only when no label belongs next to it. Which control a value take
 - **Types come from the binding.** `Select` and `MultiSelect` take their value type from the bound
   model (a `string` model gives `@update:model-value` and `display-value` a `string`, so handlers are
   `(value: string)` with no `typeof` guard), and an options list is `SelectOptionItem[]` from
-  `@aziontech/webkit/select`. `Input`, `Textarea` and `PasswordInput` expose `focus()`: type the ref
+  `@aziontech/ui/select`. `Input`, `Textarea` and `PasswordInput` expose `focus()`: type the ref
   `ref<InstanceType<typeof Input> | null>(null)` and call `field.value?.focus()`, never `$el.querySelector`.
 
 ```vue
@@ -118,7 +118,7 @@ a control bare only when no label belongs next to it. Which control a value take
 
 ## Pick the control from the kind of value
 
-Before you write a field, name the **kind of value** it holds and take the control WebKit ships for
+Before you write a field, name the **kind of value** it holds and take the control Azion UI ships for
 it. A plain `Input` is for free text only. A typed value in a text box (a date as
 `2026-12-31T00:00:00Z`, a phone as digits, a port as text) makes the person learn a format, fails
 only at submit and loses the keyboard, locale and time zone handling the real control already has.
@@ -173,10 +173,10 @@ only at submit and loses the keyboard, locale and time zone handling the real co
   (`Lowercase letters, digits and _, 3 to 40 characters`), filled from the name until edited.
 - **To show a value the person does not edit**, use `Timestamp` for a moment in time and a readonly
   `Input` for text, never a disabled picker.
-- **Lint holds the clear cases.** `webkit/prefer-value-control` fails an `Input` with a native
+- **Lint holds the clear cases.** `azion-ui/prefer-value-control` fails an `Input` with a native
   `type` of `number`, `date`, `datetime-local`, `time`, `tel` or `password`, or with a date format in
   its placeholder.
-- **Not sure a control exists?** Ask the webkit MCP `suggest_component` with the kind of value ("date
+- **Not sure a control exists?** Ask the Azion UI MCP `suggest_component` with the kind of value ("date
   and time", "phone number") before you reach for `Input`; `Input` is the answer only for free text.
 
 ```vue
@@ -189,8 +189,8 @@ only at submit and loses the keyboard, locale and time zone handling the real co
 
 ```vue
 <script setup lang="ts">
-  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
-  import Field from '@aziontech/webkit/field'
+  import DatePickerRoot from '@aziontech/ui/date-picker-root'
+  import Field from '@aziontech/ui/field'
   import { reactive } from 'vue'
 
   const props = defineProps<{ today: Date }>()
@@ -233,8 +233,8 @@ all read in that zone while `v-model` stays the same instant. Name the zone besi
 
 ```vue
 <script setup lang="ts">
-  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
-  import Field from '@aziontech/webkit/field'
+  import DatePickerRoot from '@aziontech/ui/date-picker-root'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const due = ref<Date | null>(null)
@@ -258,14 +258,14 @@ all read in that zone while `v-model` stays the same instant. Name the zone besi
 </template>
 ```
 
-A period is one `DateRangePicker` (`@aziontech/webkit/date-range-picker`). In a form, offer absolute
+A period is one `DateRangePicker` (`@aziontech/ui/date-range-picker`). In a form, offer absolute
 ranges only; its value is `{ type: 'absolute', start, end }` with ISO strings, ready to send.
 Relative ranges (`Last 24 hours`) belong to filters and dashboards, not to a stored period.
 
 ```vue
 <script setup lang="ts">
-  import DateRangePicker, { type DateRangeValue } from '@aziontech/webkit/date-range-picker'
-  import Field from '@aziontech/webkit/field'
+  import DateRangePicker, { type DateRangeValue } from '@aziontech/ui/date-range-picker'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const period = ref<DateRangeValue | null>(null)
@@ -292,9 +292,9 @@ types part of a name, sees names, and picks one; the ID travels in `v-model` and
 read or typed. Each option shows the **name first**, with the kind or a shortened ID
 (`org_01a1…3f2a`) as secondary text, so two resources with the same name can still be told apart.
 
-The picker follows the long-list rule in `/webkit-ux-heuristics`: search past 7 options, a fixed
+The picker follows the long-list rule in `/azion-ui-ux-heuristics`: search past 7 options, a fixed
 first batch with Load more, a no-match line, and a `Create <noun>` action when the person may not
-have the resource yet ([Create flows](../webkit-create-surface/SKILL.md), section 6). A whole resource the flow may reuse or
+have the resource yet ([Create flows](../azion-ui-create-surface/SKILL.md), section 6). A whole resource the flow may reuse or
 create gets its own band instead: the `create/create-resource-picker` block (Existing / New).
 
 **A `Select` with a search field** is the default: the search sits in `Select.Content`'s `#search`
@@ -303,10 +303,10 @@ even when the current page of results does not hold it (an edit form opens on a 
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
   import { onBeforeUnmount, ref, watch } from 'vue'
 
   type Organization = { id: string; name: string }
@@ -414,8 +414,8 @@ the raw value.
 
 ```vue
 <script setup lang="ts">
-  import Combobox, { type ComboboxOption } from '@aziontech/webkit/combobox'
-  import Field from '@aziontech/webkit/field'
+  import Combobox, { type ComboboxOption } from '@aziontech/ui/combobox'
+  import Field from '@aziontech/ui/field'
   import { onBeforeUnmount, ref } from 'vue'
 
   type Person = { id: string; name: string; email: string }
@@ -470,7 +470,7 @@ the raw value.
 Several references are a `MultiSelect` with `searchable` (and `:filter="false"` plus its `search`
 event when the server filters): the chosen resources show as chips with their names. A list filter
 on a referenced resource is a `PropertyFilter` property whose values come from `loadValues`, so the
-token prints the name while the URL keeps the ID ([List pages](../webkit-lists/SKILL.md), section 3).
+token prints the name while the URL keeps the ID ([List pages](../azion-ui-lists/SKILL.md), section 3).
 
 Pasting a full ID into the search is still useful to people who have one: when the text matches
 the ID's pattern, resolve it with the API's get-by-ID call and offer that one resource as the
@@ -480,7 +480,7 @@ result.
 
 The same values in a detail page or a table: **the name first**, linked by name; the ID as
 secondary mono text with a copy button (`TableCellId`, with `resource` naming what it copies); a time
-as `Timestamp` or `TableCellTime`, relative with the absolute date a hover away. [Tables](../webkit-tables/SKILL.md)
+as `Timestamp` or `TableCellTime`, relative with the absolute date a hover away. [Tables](../azion-ui-tables/SKILL.md)
 owns the cell recipes.
 
 ### Do and Don't
@@ -492,9 +492,9 @@ owns the cell recipes.
 - **Don't:** put a format in the placeholder (`YYYY-MM-DD`, `org_…`) as the only guidance; the
   right control makes the format disappear.
 
-The consumer lint backs this section beyond `prefer-value-control`: `webkit/prefer-date-picker` warns on a text field that holds a
+The consumer lint backs this section beyond `prefer-value-control`: `azion-ui/prefer-date-picker` warns on a text field that holds a
 date or time by its key (`*_at` / `*At` / `*date` / `*time`) or label (`Start date`), or a `Textarea` or native input with a date format, and
-`webkit/no-raw-id-input` on one that asks for an ID (key `*_id` / `*Id`, a label ending in `ID`, an
+`azion-ui/no-raw-id-input` on one that asks for an ID (key `*_id` / `*Id`, a label ending in `ID`, an
 opaque identifier as placeholder). An identifier from another system that people copy in (a tax ID,
 an OAuth client ID) is the one legitimate text field for an ID; the rule skips those names, and a
 `readonly` field that only shows an ID.
@@ -560,7 +560,7 @@ contexts** in Azion products:
 - **Drawer form.** In-context creation — the user is working inside a resource and adds an item that
   only exists in it (a rule, an origin, a domain, a record) _without leaving the page they're on_. A
   first-level resource started from its own module creates on a page, not here
-  ([Create flows](../webkit-create-surface/SKILL.md); variables are the one exception). A `large` drawer ([Navigation](../webkit-navigation/SKILL.md), Drawers). One scoped save (the drawer's primary
+  ([Create flows](../azion-ui-create-surface/SKILL.md); variables are the one exception). A `large` drawer ([Navigation](../azion-ui-navigation/SKILL.md), Drawers). One scoped save (the drawer's primary
   action).
   Approach A for grouped/config-heavy creates (one flush ItemGroup, or several `SettingsGroup` bands),
   Approach B for short ones.
@@ -569,7 +569,7 @@ contexts** in Azion products:
   being created needs a digital certificate the reader has not made. The field offers `Create <noun>`,
   and a drawer holding **that resource's own create form** opens over the form, creates it and selects
   it back. A must, for first-level resources too: never send the reader to another page to create it
-  and come back ([Navigation](../webkit-navigation/SKILL.md), Create what is missing). `large` when opened from a page;
+  and come back ([Navigation](../azion-ui-navigation/SKILL.md), Create what is missing). `large` when opened from a page;
   from a drawer it is the nested drawer below.
 
 - **Nested drawer.** A drawer form whose Select points at a resource or an item that may not exist
@@ -585,7 +585,7 @@ contexts** in Azion products:
 
 - **Dialog form.** Small, focused, usually confirmational or destructive — e.g. removing a resource.
   Few (or zero) fields, a single confirm action. A yes-or-no decision is `ConfirmDialog`
-  (`@aziontech/webkit/confirm-dialog`); a typed confirmation puts its field in the default slot and
+  (`@aziontech/ui/confirm-dialog`); a typed confirmation puts its field in the default slot and
   keeps the confirm `disabled` until it matches. Approach B (stacked fields). A destructive confirm
   typically gates its action on a typed phrase (error prevention) rather than surfacing a required-error.
 
@@ -596,8 +596,8 @@ contexts** in Azion products:
   Integrations, Account Settings — "define and manage personal account preferences and profile config".
   The read-only cards beside them are components too, never a hand-written `dl` or `ul`: plan
   facts (Plan Price, Billing Period, Next Invoice) are `KeyValueList variant="split"`
-  (`@aziontech/webkit/key-value-list`, label at the start, value at the end of each row), and
-  the perks of an upgrade card are `PlanFeatureList` (`@aziontech/webkit/plan-feature-list`, a check per
+  (`@aziontech/ui/key-value-list`, label at the start, value at the end of each row), and
+  the perks of an upgrade card are `PlanFeatureList` (`@aziontech/ui/plan-feature-list`, a check per
   included feature, `:columns="2"` in a wide card).
 
 - **Card with independent saves.** Long configuration pages split into multiple `Card` sections
@@ -608,9 +608,9 @@ contexts** in Azion products:
 save** — a Drawer, a Dialog, or an ItemGroup (whether a single flush block **or** several
 `SettingsGroup` bands, like Account Settings; the sections group the topic, not the save). A form deliberately split
 into independently-committed cards — the **Card with independent saves** type — has **one save per
-card**, each locking off its own `submitting` flag (the [Loading, empty and error states](../webkit-ui-states/SKILL.md) contract).
+card**, each locking off its own `submitting` flag (the [Loading, empty and error states](../azion-ui-states/SKILL.md) contract).
 
-Each form type has its pattern in the `webkit` MCP (`get_block`): the Drawer form and the Nested
+Each form type has its pattern in the `azion-ui` MCP (`get_block`): the Drawer form and the Nested
 drawer are `create/create-drawer` (variant `NestedDrawer` for the stacked child); the
 Dialog form is `edit/edit-delete-dialog` (variant `SettingsRow` for the labelled
 typed confirmation); ItemGroup settings and Card with independent saves are
@@ -630,12 +630,12 @@ link on the left and Save on the right. Canonical pattern:
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Link from '@aziontech/webkit/link'
-  import Alert from '@aziontech/webkit/alert'
-  import Select from '@aziontech/webkit/select'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Link from '@aziontech/ui/link'
+  import Alert from '@aziontech/ui/alert'
+  import Select from '@aziontech/ui/select'
   import { reactive, ref } from 'vue'
 
   const form = reactive({ preprod: 'default', prod: 'default' })
@@ -645,7 +645,7 @@ link on the left and Save on the right. Canonical pattern:
     { label: 'Disabled', value: 'disabled' }
   ]
   const displayValue = (v) => options.find((o) => o.value === v)?.label ?? ''
-  const submitting = ref(false) // /webkit-ui-states: Save :loading + fields :disabled off one flag
+  const submitting = ref(false) // /azion-ui-states: Save :loading + fields :disabled off one flag
 </script>
 
 <template>
@@ -739,19 +739,19 @@ Canonical pattern:
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DialogRoot from '@aziontech/webkit/dialog-root'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import Input from '@aziontech/webkit/input'
-  import Alert from '@aziontech/webkit/alert'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Button from '@aziontech/ui/button'
+  import DialogRoot from '@aziontech/ui/dialog-root'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import Input from '@aziontech/ui/input'
+  import Alert from '@aziontech/ui/alert'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
   import { computed, ref } from 'vue'
 
   const open = ref(false)
-  const phrase = 'webkit-docs-dev'
+  const phrase = 'azion-ui-docs-dev'
   const confirmation = ref('')
   const canDelete = computed(() => confirmation.value.trim() === phrase)
 
@@ -843,7 +843,7 @@ create page in a new tab, so the form keeps its typing, and give the field a `Re
 Three decisions make it safe:
 
 - **Independent scopes.** The parent and child are separate `<form>`s, each with its **own** `submitting`
-  flag, its own `<fieldset :disabled>`, its own Save `:loading` (the [Loading, empty and error states](../webkit-ui-states/SKILL.md) Pattern 1 lock, per
+  flag, its own `<fieldset :disabled>`, its own Save `:loading` (the [Loading, empty and error states](../azion-ui-states/SKILL.md) Pattern 1 lock, per
   drawer). Submitting the child never locks the parent, and the parent's save never touches the child.
 - **A controlled Select + a sentinel value.** The parent `Select` is **controlled** (`:model-value`, not
   `v-model`) so picking the quick-add never commits a real value. The quick-add is a normal
@@ -987,10 +987,10 @@ Rules:
 
 ## Approach A — Cards + ItemGroups (grouped / settings forms)
 
-Each section is a `SettingsGroup` (`@aziontech/webkit/settings-group`) over a flush `Card`
+Each section is a `SettingsGroup` (`@aziontech/ui/settings-group`) over a flush `Card`
 (`:padded="false"`) whose body is an `Item.List`. `Item.List` draws the dividers between rows, so every
 field reads as a divided row inside one box. Each row is a `SettingsRow`
-(`@aziontech/webkit/settings-row`): the field's name and guidance on the left, the control on the right.
+(`@aziontech/ui/settings-row`): the field's name and guidance on the left, the control on the right.
 Sections stack at the section gap; the first one takes no top margin.
 
 **In a SettingsRow, `title` IS the label.** Do **not** use `<Field.Label>` inside a row — the field name is
@@ -998,7 +998,7 @@ Sections stack at the section gap; the first one takes no top margin.
 its accessible name. `<Field.Label>` is reserved for **Fields separated** (Approach B) and composed `Select`
 fields, where there is a real `<label for>` wired to a control `id`.
 
-**A language setting is `LanguageSelect`** (`@aziontech/webkit/language-select`), the full field
+**A language setting is `LanguageSelect`** (`@aziontech/ui/language-select`), the full field
 (the default `variant="outline"`: round flag and the language named in itself) in a `field` row, with
 `aria-label="Language"`; never a `Select` of language names you list yourself.
 
@@ -1019,13 +1019,13 @@ Canonical pattern:
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Switch from '@aziontech/ui/switch'
 </script>
 
 <template>
@@ -1115,7 +1115,7 @@ Rules:
   collapsible band, outside the disclosure, so pressing it never folds the band. A one-sentence note
   stays in `hint`; never put a button in the `label` slot, which renders inside the h2 and the toggle.
 - **A band with a description line and its own actions** (Billing's Payment methods with Add payment
-  method) is a `Subheader` (`@aziontech/webkit/subheader`) over its card, not a
+  method) is a `Subheader` (`@aziontech/ui/subheader`) over its card, not a
   `SettingsGroup`.
 - **`SettingsGroup` vs `Card` title — pick by role.** A `SettingsGroup` titles a _band of a larger
   page_. A **`Card` `title`** (in the card header) names a _self-contained card that is the form_ — the
@@ -1124,7 +1124,7 @@ Rules:
 ## Approach B — Fields separated (short focused forms)
 
 A field is a **triad**: a visible label, the control, and a description. Ship it as a
-`Field` (`@aziontech/webkit/field`) — it renders the triad and wires the a11y for you: the label's `for`
+`Field` (`@aziontech/ui/field`) — it renders the triad and wires the a11y for you: the label's `for`
 matches the control `id`, the description is linked via `aria-describedby`, `required` sets
 `aria-required`, and `invalid` sets `aria-invalid`. Stack the fields in a single column (`Field.Group`
 gives the `--spacing-lg` rhythm).
@@ -1136,8 +1136,8 @@ colour. A failed submit sets the Field's `:invalid` for any blocking problem, em
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
 </script>
 
 <template>
@@ -1191,8 +1191,8 @@ A form library gives you the same object: VeeValidate with a zod schema returns 
 name, and `z.string().optional()` is the optional field. Keep the schema in the app; the `Field` only
 shows the state it is given. The full example is the `Validation` example of `field` in the catalog.
 
-Parts of the `Field` compound (ask the webkit MCP `suggest_component`, or read
-`node_modules/@aziontech/webkit/catalog.json` (`imports`)): `Field.Label`, `Field.Description`,
+Parts of the `Field` compound (ask the Azion UI MCP `suggest_component`, or read
+`node_modules/@aziontech/ui/catalog.json` (`imports`)): `Field.Label`, `Field.Description`,
 `Field.Error`, `Field.Group`, `Field.Set`, `Field.Legend`, `Field.Content`, `Field.Title`,
 `Field.Separator`. Controls: `input`, `textarea`, `select`, `multi-select`, `number-input`,
 `password-input` (+ `password-requirements` for the rules row), `phone-input`, `input-group` (+
@@ -1282,7 +1282,7 @@ there. `Input` takes `type`, `autocomplete` and `spellcheck` on its `<input>`; `
   number, a password or a one-time code is never an `Input` with a `type`, a mask or a format in its
   placeholder: each has its own control (see "Pick the control from the kind of value").
 - Give every control a meaningful `name` next to `autocomplete`; autofill needs both.
-- WebKit hides every field **without** `autocomplete` from password managers (`data-1p-ignore` and the
+- Azion UI hides every field **without** `autocomplete` from password managers (`data-1p-ignore` and the
   LastPass, Bitwarden and Dashlane equivalents), so 1Password never offers a sign-in on an account name
   or a search box. A login or contact field **must** set `autocomplete` to stay fillable;
   `type="email"` alone is not enough, so the e-mail of a profile or settings form stays hidden. A
@@ -1366,22 +1366,22 @@ Rules:
 - **No custom error-summary block** (`role="alert"` list of links) and **no `Alert` callout** for
   field validation. Those were removed on purpose: the field's own state + its `FieldError` is the feedback.
 - **Never `toast` a field error.** Missing/invalid input stays on the field. Toast is for
-  request/API failures only (see [Loading, empty and error states](../webkit-ui-states/SKILL.md)).
+  request/API failures only (see [Loading, empty and error states](../azion-ui-states/SKILL.md)).
 
 > **A server rejection scoped to one field is a different case**, and it is the one place a `Alert`
 > is right. The value is not malformed — the API rejected it (a referenced object was deleted, a name
 > is already taken), so it takes **both** surfaces: a `Alert` inside that field's own section _and_
 > the field's red `invalid` state. On a
 > long form, scroll-anchor the erroring section. The full placement table — field, section `Alert`,
-> toast, auth card, background-job toast — is **[Errors](../webkit-errors/SKILL.md)**.
+> toast, auth card, background-job toast — is **[Errors](../azion-ui-errors/SKILL.md)**.
 
 ## Submission — native submit, one locked scope, sticky actions
 
 The primary action drives the native submit so **Enter submits**. While the request runs, **one flag
-locks the whole scope** — this is [Loading, empty and error states](../webkit-ui-states/SKILL.md) **Pattern 1**; this pattern **references it, does not
+locks the whole scope** — this is [Loading, empty and error states](../azion-ui-states/SKILL.md) **Pattern 1**; this pattern **references it, does not
 re-derive it**. Save shows `:loading`, and **every field the action reads takes `:disabled` off the same
 flag**. On a long form, the actions live in a **sticky bar** — `SaveBar`
-(`@aziontech/webkit/save-bar`) — so Save/Cancel are always reachable. A create page uses
+(`@aziontech/ui/save-bar`) — so Save/Cancel are always reachable. A create page uses
 `variant="centered"` (Cancel and Create in a raised card centred at the bottom of the form, always
 shown, at every width — never a hand-built sticky pill); an in-page form saved as one unit uses
 `variant="plain"` (always shown, on the form column); a full-page wizard step uses
@@ -1390,7 +1390,7 @@ mounts the default `floating` bar only while the form is dirty or saving, with t
 in its default slot.
 
 **Bind `:disabled` on the controls, not only the `<fieldset>`.** A native `<fieldset :disabled>` blocks
-_interaction_ for the whole subtree, but webkit controls (`Select`, `Switch`, `Input`, …)
+_interaction_ for the whole subtree, but Azion UI controls (`Select`, `Switch`, `Input`, …)
 render their **disabled visual** from their own `disabled` prop — a fieldset alone leaves them looking
 active mid-submit. Keep the `<fieldset :disabled="submitting">` as the native safety net **and** pass
 `:disabled="submitting"` to each `Field` (it disables the control inside) or to each bare control. Multi-save forms
@@ -1414,8 +1414,8 @@ Rules:
   to wrap the footer too. No hidden `sr-only` submit button.
 - **Lock off one flag.** `<fieldset :disabled="submitting">` + `:disabled="submitting"` on **every**
   control + Save `:loading="submitting"`; guard the handler and release in `finally` (this IS
-  [Loading, empty and error states](../webkit-ui-states/SKILL.md) Pattern 1 — the fieldset is the native lock, the per-control
-  `:disabled` is what makes webkit `Select`/`Switch`/`Input` show the disabled visual).
+  [Loading, empty and error states](../azion-ui-states/SKILL.md) Pattern 1 — the fieldset is the native lock, the per-control
+  `:disabled` is what makes Azion UI `Select`/`Switch`/`Input` show the disabled visual).
 - **Report the request result where the user is looking** — `toast.success` on the happy path,
   `toast.error` with a Retry on failure. Field errors stay inline.
 
@@ -1438,7 +1438,7 @@ exists.`), wired by `aria-describedby`. After the reload clears the stale value 
    scroll container (instant under `prefers-reduced-motion`) and focus the field with
    `preventScroll`. Every other entry is kept.
 
-Where each error renders, row by row, is [Errors](../webkit-errors/SKILL.md).
+Where each error renders, row by row, is [Errors](../azion-ui-errors/SKILL.md).
 
 ### Unsaved changes — `useUnsavedChanges` (`edit/edit-resource`)
 
@@ -1446,8 +1446,8 @@ Every edit form keeps a saved baseline and asks before its edits are lost. Do no
 `JSON.stringify` baselines or `beforeunload` listeners: use the composable.
 
 ```js
-import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
 import { onBeforeRouteLeave } from 'vue-router'
 
 const guard = useUnsavedChanges(() => form, {
@@ -1551,11 +1551,11 @@ Rules:
 The module **create** action for a first-level resource lands on a dedicated **page** (route
 `/<module>/new`), not a modal, so it is linkable and back-button-safe, however short the form; a
 drawer creates only an item inside a resource (and variables, the one exception in
-[Create flows](../webkit-create-surface/SKILL.md)).
+[Create flows](../azion-ui-create-surface/SKILL.md)).
 
 ## Review output
 
-For `/webkit-form <file>`, list gaps grouped by pattern. Each:
+For `/azion-ui-form <file>`, list gaps grouped by pattern. Each:
 
 ```
 ✗ SomeForm.vue:NN  <Field.Label for="runtime" /> but no element has id="runtime"
@@ -1577,18 +1577,18 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 
 ## References
 
-- [Showing API data](../webkit-api-data/SKILL.md) — a `Select` or `MultiSelect` whose options come from an API: server search,
+- [Showing API data](../azion-ui-api-data/SKILL.md) — a `Select` or `MultiSelect` whose options come from an API: server search,
   selected values that are not in the loaded page, names instead of IDs, revalidated options.
 - `Field` and its parts, `FieldDescription`, `Item`, `Card`, `Select`, `Button` import paths: ask the
-  webkit MCP `suggest_component`, or read `node_modules/@aziontech/webkit/catalog.json` (`imports`) —
+  Azion UI MCP `suggest_component`, or read `node_modules/@aziontech/ui/catalog.json` (`imports`) —
   every key is a real subpath.
-- Companion skills: `/webkit-ux-heuristics` (states + inline error placement), [Loading, empty and error states](../webkit-ui-states/SKILL.md)
-  (lock-the-scope + toast for request errors), and [Errors](../webkit-errors/SKILL.md) (where every failure goes: the
+- Companion skills: `/azion-ui-ux-heuristics` (states + inline error placement), [Loading, empty and error states](../azion-ui-states/SKILL.md)
+  (lock-the-scope + toast for request errors), and [Errors](../azion-ui-errors/SKILL.md) (where every failure goes: the
   field, a section `Alert`, a toast, the auth card — including the signed-out screens, which never
   toast).
 - Token catalog (spacing, colour, shape, typography): the `@aziontech/theme` tokens (the `--*` CSS
-  variables it ships; the webkit MCP lists them).
-- Compose only webkit components and theme tokens — no external UI libraries, no hex/rgb colours, no
+  variables it ships; the Azion UI MCP lists them).
+- Compose only Azion UI components and theme tokens — no external UI libraries, no hex/rgb colours, no
   component-local CSS.
 
 ## How to check it works
@@ -1644,5 +1644,5 @@ End with: `form is accessible` or `N gaps — fix before polish`.
   with a helper saying why), never `disabled` and never an editable field the save ignores.
 - Leaving the page with unsaved edits asks first (or the edits survive the navigation).
 - `<form novalidate @submit.prevent>`; Enter submits; the scope locks off one flag
-  (`<fieldset :disabled>` **and** `:disabled` on every control + Save `:loading`, per [Loading, empty and error states](../webkit-ui-states/SKILL.md)
+  (`<fieldset :disabled>` **and** `:disabled` on every control + Save `:loading`, per [Loading, empty and error states](../azion-ui-states/SKILL.md)
   Pattern 1); request errors toast, field errors stay inline.

@@ -22,7 +22,7 @@ The user started a deployment and wants to know where it is, whether it went liv
 
 ### A. Steps — `LogViewer.Steps` (required)
 
-`LogViewer.Steps` (`@aziontech/webkit/log-viewer`, or `@aziontech/webkit/log-viewer-steps` on its own) takes the steps in run order, each with its key, title, one sentence of outcome, status (`done`, `running`, `failed`, `skipped`, `pending`), time and its own log lines. It draws a single collapsible `Accordion` with the status glyph, a visually hidden status word, the title, the sentence and the time per step, and a borderless `LogViewer` per open step. Only one step is open at a time: unbound, the running step opens, else the failed one; bind `v-model:open-step` to open the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted; the running step's sentence shimmers only when motion is allowed. Put a step's outcome `Tag` (Failed, Skipped) in the `step-meta` slot and the skipped step's sentence in `step-empty`. Never rebuild this list by hand from `Accordion` and `LogViewer`.
+`LogViewer.Steps` (`@aziontech/ui/log-viewer`, or `@aziontech/ui/log-viewer-steps` on its own) takes the steps in run order, each with its key, title, one sentence of outcome, status (`done`, `running`, `failed`, `skipped`, `pending`), time and its own log lines. It draws a single collapsible `Accordion` with the status glyph, a visually hidden status word, the title, the sentence and the time per step, and a borderless `LogViewer` per open step. Only one step is open at a time: unbound, the running step opens, else the failed one; bind `v-model:open-step` to open the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted; the running step's sentence shimmers only when motion is allowed. Put a step's outcome `Tag` (Failed, Skipped) in the `step-meta` slot and the skipped step's sentence in `step-empty`. Never rebuild this list by hand from `Accordion` and `LogViewer`.
 
 ### B. Toolbar row — `LogViewer.Steps` header slot, `Tag` (required)
 
@@ -92,7 +92,7 @@ Then delete `sample.ts` and its import.
 - **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
 - **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing rules."
 - **Splash line:** names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
-- Follow `skills/webkit-microcopy` and `skills/webkit-errors`: say what failed and why, no "please", no exclamation in console copy.
+- Follow `skills/azion-ui-microcopy` and `skills/azion-ui-errors`: say what failed and why, no "please", no exclamation in console copy.
 
 ## Accessibility
 
@@ -122,4 +122,4 @@ Then delete `sample.ts` and its import.
 - `create/create-deploy-success` — where a create flow lands once the run goes live.
 - `state/state-async-submit` — a long run the user leaves and comes back to, with the same steps in its logs card.
 - `detail/detail-resource` — the overview of the resource a deployment belongs to; its Deployments tab links here.
-- `LogViewer` — `LogViewer.Steps` draws the steps; see `skills/webkit-ui-states` for the running and failed states.
+- `LogViewer` — `LogViewer.Steps` draws the steps; see `skills/azion-ui-states` for the running and failed states.

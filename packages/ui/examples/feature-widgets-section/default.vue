@@ -1,5 +1,5 @@
 <script setup>
-  import FeatureWidgetsSection from '@aziontech/webkit/feature-widgets-section'
+  import FeatureWidgetsSection from '@aziontech/ui/feature-widgets-section'
 </script>
 
 <template>

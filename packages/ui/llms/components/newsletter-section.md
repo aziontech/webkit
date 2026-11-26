@@ -2,7 +2,7 @@
 
 > The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'newsletter-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `eyebrow`, `field`, `input`, `button` and `texture`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `failed`, which the band renders with the messages from `form`.
 
-- Import: `import NewsletterSection from '@aziontech/webkit/newsletter-section'`
+- Import: `import NewsletterSection from '@aziontech/ui/newsletter-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [newsletter-section.json](newsletter-section.json)
 
@@ -16,7 +16,7 @@
 - Set `loading` while the address is sent, then `submitted` or `failed` with the outcome.
 - Keep `description` to one sentence; it is set as the large headline.
 - Write `form.invalidMessage` with an example address so the fix is obvious.
-- Place it last on the page, right above `site-footer-section`, after a hatched `spacer`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `Spacer` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
+- Place it last on the page, right above `site-footer-section`, after a hatched `spacer`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `Spacer` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `azion-ui/no-gap-after-closing-section` flags the doubled close.
 
 ## Don’t
 
@@ -99,7 +99,7 @@ The ask, the button label and every message are props from the page JSON (`title
 
 ```vue
 <script setup>
-  import NewsletterSection from '@aziontech/webkit/newsletter-section'
+  import NewsletterSection from '@aziontech/ui/newsletter-section'
   import { ref } from 'vue'
 
   const form = {
@@ -135,7 +135,7 @@ The ask, the button label and every message are props from the page JSON (`title
 
 ```vue
 <script setup>
-  import NewsletterSection from '@aziontech/webkit/newsletter-section'
+  import NewsletterSection from '@aziontech/ui/newsletter-section'
 
   const form = {
     placeholder: 'Your email',
@@ -163,7 +163,7 @@ The ask, the button label and every message are props from the page JSON (`title
 
 ```vue
 <script setup>
-  import NewsletterSection from '@aziontech/webkit/newsletter-section'
+  import NewsletterSection from '@aziontech/ui/newsletter-section'
 
   const form = {
     placeholder: 'Your email',

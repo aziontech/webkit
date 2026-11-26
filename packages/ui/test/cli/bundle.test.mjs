@@ -55,9 +55,9 @@ test('every .md under the templates dir is in the bundle (nothing is silently dr
   assert.deepEqual(actual, expected)
 })
 
-test('listBundle includes webkit-comments.md (the file the hand-maintained list dropped)', () => {
+test('listBundle includes azion-ui-comments.md (the file the hand-maintained list dropped)', () => {
   const bundle = listBundle()
-  assert.ok(bundle.includes('rules/webkit-comments.md'))
+  assert.ok(bundle.includes('rules/azion-ui-comments.md'))
 })
 
 test('listBundle includes every skill SKILL.md', () => {
@@ -88,7 +88,7 @@ test('listBundle returns sorted POSIX-relative paths', () => {
 })
 
 test('listBundle accepts an injected templates dir (for testing exclusions/fixtures)', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-bundle-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-bundle-'))
   try {
     mkdirSync(join(dir, 'rules'), { recursive: true })
     mkdirSync(join(dir, 'skills', 'foo'), { recursive: true })
@@ -134,7 +134,7 @@ test('spliceFragment: existing user content gets the fragment appended after it'
 })
 
 test('spliceFragment: a legacy single marker is converted to a fenced block', () => {
-  const source = `# Proj\n\n${LEGACY_MARKER}\n## @aziontech/webkit design system\nOld body.\n\n## Other section\nuser stuff\n`
+  const source = `# Proj\n\n${LEGACY_MARKER}\n## @aziontech/ui design system\nOld body.\n\n## Other section\nuser stuff\n`
   const result = spliceFragment(source, 'NEWBODY')
 
   assert.ok(!result.includes(LEGACY_MARKER), 'legacy marker must be gone')
@@ -150,7 +150,7 @@ test('spliceFragment: a legacy single marker is converted to a fenced block', ()
 })
 
 test('spliceFragment: a duplicated legacy fragment (docs-repo case) is repaired to one block', () => {
-  const legacyBody = '## @aziontech/webkit design system\nOld body.\n'
+  const legacyBody = '## @aziontech/ui design system\nOld body.\n'
   const source = `# Proj heading\n\n${LEGACY_MARKER}\n${legacyBody}${LEGACY_MARKER}\n${legacyBody}`
   const result = spliceFragment(source, 'NEWBODY')
 
@@ -161,10 +161,10 @@ test('spliceFragment: a duplicated legacy fragment (docs-repo case) is repaired 
 })
 
 test('spliceFragment: a legacy block does not stop early at its own heading', () => {
-  // The fragment's own first heading ("## @aziontech/webkit design system") must not be
+  // The fragment's own first heading ("## @aziontech/ui design system") must not be
   // treated as a foreign section boundary, or the legacy block would be truncated to
   // just the marker line and the real body would leak out as "user content".
-  const legacyBody = '## @aziontech/webkit design system\nLine one.\nLine two.\n'
+  const legacyBody = '## @aziontech/ui design system\nLine one.\nLine two.\n'
   const source = `${LEGACY_MARKER}\n${legacyBody}`
   const result = spliceFragment(source, 'NEWBODY')
   assert.ok(
@@ -192,7 +192,7 @@ test('spliceFragment: a heading that exists in the new body is not a foreign bou
 })
 
 test('spliceFragment: a legacy block stops at the next foreign heading, preserving it', () => {
-  const source = `${LEGACY_MARKER}\n## @aziontech/webkit design system\nOld.\n## User Section\nkeep this\n`
+  const source = `${LEGACY_MARKER}\n## @aziontech/ui design system\nOld.\n## User Section\nkeep this\n`
   const result = spliceFragment(source, 'NEWBODY')
   assert.ok(result.includes('## User Section\nkeep this'))
   assert.ok(!result.includes('Old.'))
@@ -218,7 +218,7 @@ test('spliceFragment: a stray second fenced block collapses to one', () => {
 })
 
 test('spliceFragment: a lone start marker (no end marker) is replaced, not left stale', () => {
-  const source = `# Proj\n\n${FRAGMENT_START}\n## @aziontech/webkit design system\nStale body.\n\n## User Section\nkeep\n`
+  const source = `# Proj\n\n${FRAGMENT_START}\n## @aziontech/ui design system\nStale body.\n\n## User Section\nkeep\n`
   const result = spliceFragment(source, 'NEWBODY')
   assert.ok(!result.includes('Stale body.'), 'the stale fragment must be gone')
   assert.equal(result.split(FRAGMENT_START).length - 1, 1)
@@ -230,14 +230,14 @@ test('spliceFragment: a lone start marker (no end marker) is replaced, not left 
 })
 
 test('spliceFragment: a lone start marker at the end of the file is replaced', () => {
-  const source = `# Proj\n\n${FRAGMENT_START}\n## @aziontech/webkit design system\nStale.\n`
+  const source = `# Proj\n\n${FRAGMENT_START}\n## @aziontech/ui design system\nStale.\n`
   const result = spliceFragment(source, 'NEWBODY')
   assert.equal(result, `# Proj\n\n${FRAGMENT_START}\nNEWBODY\n${FRAGMENT_END}\n`)
 })
 
 test('spliceFragment: a lone start marker next to a fenced block is removed', () => {
   const fenced = spliceFragment('', 'OLD')
-  const source = `${FRAGMENT_START}\n## @aziontech/webkit design system\nStale.\n\n## User Section\nkeep\n\n${fenced}`
+  const source = `${FRAGMENT_START}\n## @aziontech/ui design system\nStale.\n\n## User Section\nkeep\n\n${fenced}`
   const result = spliceFragment(source, 'NEWBODY')
   assert.ok(!result.includes('Stale.'))
   assert.ok(!result.includes('OLD'))
@@ -248,7 +248,7 @@ test('spliceFragment: a lone start marker next to a fenced block is removed', ()
 })
 
 test('spliceFragment is idempotent across every case', () => {
-  const legacyBody = '## @aziontech/webkit design system\nOld.\n'
+  const legacyBody = '## @aziontech/ui design system\nOld.\n'
   const cases = [
     ['', 'BODY'],
     ['# Heading\n\nContent.\n', 'BODY'],
@@ -263,7 +263,7 @@ test('spliceFragment is idempotent across every case', () => {
 
 // --- Provenance marker: stamp / parseMarker / stripMarker / bodyHash / classify -------
 
-const MARKER_RE = /^<!-- webkit-sync source=\S+ version=\S+ sha256=[0-9a-f]{16} -->$/m
+const MARKER_RE = /^<!-- azion-ui-sync source=\S+ version=\S+ sha256=[0-9a-f]{16} -->$/m
 
 test('stamp places the marker on line 1 for a file with no frontmatter', () => {
   const content = 'line one\nline two\n'
@@ -276,8 +276,11 @@ test('stamp places the marker on line 1 for a file with no frontmatter', () => {
 })
 
 test('stamp places the marker right after the closing --- of a frontmatter block', () => {
-  const content = '---\nname: webkit-foo\ndescription: bar\n---\n\n# Skill: webkit-foo\nBody.\n'
-  const stamped = stamp(content, { source: 'claude/skills/webkit-foo/SKILL.md', version: '5.0.0' })
+  const content = '---\nname: azion-ui-foo\ndescription: bar\n---\n\n# Skill: azion-ui-foo\nBody.\n'
+  const stamped = stamp(content, {
+    source: 'claude/skills/azion-ui-foo/SKILL.md',
+    version: '5.0.0'
+  })
   const fmEnd = stamped.indexOf('---\n', 4) + 4
   const rest = stamped.slice(fmEnd)
   assert.match(rest.split('\n')[0], MARKER_RE)
@@ -358,20 +361,20 @@ test('the bundle is read from the repo-root layout: skills/, rules/, adapters/',
   assert.ok(agentsDir(AI_TEMPLATES).endsWith(join('adapters', 'claude', 'agents')))
   assert.ok(fragmentFile(AI_TEMPLATES).endsWith(join('adapters', 'AGENTS_FRAGMENT.md')))
   const bundle = listBundle()
-  assert.ok(bundle.includes('rules/webkit-sections.md'))
-  assert.ok(bundle.includes('rules/webkit-page-layout.md'))
-  assert.ok(bundle.includes('rules/webkit-header-search.md'))
-  assert.ok(bundle.includes('rules/webkit-navigation-levels.md'))
-  assert.ok(bundle.includes('rules/webkit-direction.md'))
-  assert.ok(bundle.includes('rules/webkit-strings.md'))
-  assert.ok(bundle.includes('rules/webkit-keyboard.md'))
-  assert.ok(bundle.includes('rules/webkit-api-data.md'))
-  assert.ok(bundle.includes('agents/webkit-advisor.md'))
+  assert.ok(bundle.includes('rules/azion-ui-sections.md'))
+  assert.ok(bundle.includes('rules/azion-ui-page-layout.md'))
+  assert.ok(bundle.includes('rules/azion-ui-header-search.md'))
+  assert.ok(bundle.includes('rules/azion-ui-navigation-levels.md'))
+  assert.ok(bundle.includes('rules/azion-ui-direction.md'))
+  assert.ok(bundle.includes('rules/azion-ui-strings.md'))
+  assert.ok(bundle.includes('rules/azion-ui-keyboard.md'))
+  assert.ok(bundle.includes('rules/azion-ui-api-data.md'))
+  assert.ok(bundle.includes('agents/azion-ui-advisor.md'))
   assert.equal(bundle.filter((rel) => rel.startsWith('skills/')).length, 25)
 })
 
 test('copyAiBundle writes skills/, rules/ and adapters/ only — no legacy cli-templates/ copy', () => {
-  const pkg = mkdtempSync(join(tmpdir(), 'webkit-pkg-'))
+  const pkg = mkdtempSync(join(tmpdir(), 'azion-ui-pkg-'))
   try {
     copyAiBundle(join(import.meta.dirname, '../../../..'), pkg)
     assert.deepEqual(readdirSync(pkg).sort(), ['adapters', 'rules', 'skills'])
@@ -382,7 +385,7 @@ test('copyAiBundle writes skills/, rules/ and adapters/ only — no legacy cli-t
 })
 
 test('the CLI never falls back to the legacy agents/ or CLAUDE.fragment.md layout', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-legacy-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-legacy-'))
   try {
     mkdirSync(join(dir, 'agents'), { recursive: true })
     writeFileSync(join(dir, 'agents', 'old.md'), '# old')

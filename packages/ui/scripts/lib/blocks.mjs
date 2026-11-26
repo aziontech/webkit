@@ -3,7 +3,7 @@ import { dirname, join, normalize, relative } from 'node:path'
 
 import { GUIDELINE_FILE, guidelinesSummary } from './guidelines.mjs'
 
-const PKG_PREFIX = '@aziontech/webkit/'
+const PKG_PREFIX = '@aziontech/ui/'
 const BLOCK_STABILITIES = ['preview', 'ga']
 
 const EXAMPLES_PER_COMPONENT = 3

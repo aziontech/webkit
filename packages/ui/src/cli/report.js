@@ -24,7 +24,7 @@ export function resolvePackageBin(cwd, name) {
   )
   if (existsSync(shim)) return { command: shim, prefix: [] }
 
-  const require = createRequire(join(cwd, '__webkit_report__.js'))
+  const require = createRequire(join(cwd, '__azion_ui_report__.js'))
   const manifestPath = require.resolve(`${name}/package.json`)
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
   const entry = typeof manifest.bin === 'string' ? manifest.bin : manifest.bin?.[name]
@@ -88,7 +88,7 @@ function collectResult(state, result, cwd) {
       if (message.fatal && isUiFile) state.fatalFiles.add(path)
       continue
     }
-    if (message.ruleId.startsWith('webkit/')) tally(state, path, extension, message.ruleId)
+    if (message.ruleId.startsWith('azion-ui/')) tally(state, path, extension, message.ruleId)
   }
 }
 
@@ -132,7 +132,7 @@ export function collect(results, cwd) {
 function renderJson(report, catalog) {
   const body = {
     package: catalog.package,
-    webkitVersion: catalog.version,
+    azionUiVersion: catalog.version,
     catalogAvailable: catalog.available,
     total: report.total,
     filesAffected: report.filesAffected,
@@ -153,7 +153,7 @@ export function runReport(cwd, options = {}) {
 
   const catalog = loadCatalog(cwd)
   if (!catalog.available) {
-    log('WARNING: no webkit catalog resolved — the catalog-backed rules were disabled.')
+    log('WARNING: no Azion UI catalog resolved — the catalog-backed rules were disabled.')
   }
 
   log('Linting…')
@@ -170,7 +170,7 @@ export function runReport(cwd, options = {}) {
   }
 
   log(
-    `${report.total} webkit/* violation(s) in ${report.filesAffected} file(s); adoption ${report.score}%.`
+    `${report.total} azion-ui/* violation(s) in ${report.filesAffected} file(s); adoption ${report.score}%.`
   )
 
   const stdout =

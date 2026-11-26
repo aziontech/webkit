@@ -3,10 +3,10 @@
 > A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows the Required marker from the start and turns invalid only after Save is pressed with it empty. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add rule or Edit rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsGroup`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
 
 - Surface: app
-- Source: `blocks/edit/edit-rule-builder/edit-rule-builder.vue` in `@aziontech/webkit`
+- Source: `blocks/edit/edit-rule-builder/edit-rule-builder.vue` in `@aziontech/ui`
 - MCP: `get_block("edit/edit-rule-builder")`
 - Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [Field](../../components/field.md), `FieldDescription`, [Input](../../components/input.md), [Item](../../components/item.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md)
-- Skills: `webkit-form`, `webkit-errors`, `webkit-create-surface`
+- Skills: `azion-ui-form`, `azion-ui-errors`, `azion-ui-create-surface`
 
 ## Asked as
 
@@ -31,7 +31,7 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 ### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
+A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/azion-ui-create-surface`.
 
 ### B. General — `SettingsGroup`, `Field`, `Input` (required)
 
@@ -102,7 +102,7 @@ With no `loading` set during the `submit` handler the block treats the save as d
 - Make every argument field follow what was picked before it, so the user never types a value the operator or behavior cannot take.
 - Offer both drag and buttons to reorder behaviors and criteria; the buttons are the keyboard path.
 - Filter variables and behaviors by phase, and lock the phase on an existing rule.
-- Follow `skills/webkit-form` for fields and `skills/webkit-errors` for error timing.
+- Follow `skills/azion-ui-form` for fields and `skills/azion-ui-errors` for error timing.
 
 ## Don't
 
@@ -121,7 +121,7 @@ With no `loading` set during the `submit` handler the block treats the save as d
 - **Add buttons:** verb first, e.g. "Add condition", "Add OR group", "Add behavior".
 - **Errors:** "Name is required.", "Enter the variable to compare."
 - **Reorder controls:** the editor names them with the row number ("Move item 2 up", "Remove behavior 2", "Reorder group 1").
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -144,7 +144,7 @@ With no `loading` set during the `submit` handler the block treats the save as d
 - `view/view-rule-list` — the list of rules by phase this drawer opens from.
 - `state/state-form-validation` — when errors appear after Save.
 - `edit/edit-resource` — the resource settings that sit beside the Rules tab.
-- `Drawer` — the side panel; see `skills/webkit-create-surface`.
+- `Drawer` — the side panel; see `skills/azion-ui-create-surface`.
 
 ## Variants
 
@@ -157,24 +157,24 @@ Each variant is the same screen in another state: `get_block("edit/edit-rule-bui
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import DrawerTrigger from '@aziontech/ui/drawer-trigger'
+  import Field from '@aziontech/ui/field'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   import { PHASES } from './lib/rule-behavior-data'
@@ -551,7 +551,7 @@ export const sampleRule: RuleBuilderRule = {
 ## `lib/rule-behavior-data.ts`
 
 ```ts
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 type ArgumentInput = { field: string; placeholder: string; label: string }
 export type BehaviorArgument =
@@ -840,7 +840,7 @@ export const sources: Record<string, SelectOptionItem[]> = {
 ## `lib/rule-catalog.ts`
 
 ```ts
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 import {
   catalog,
@@ -980,12 +980,12 @@ export const criteriaErrorsOf = (form: RuleForm) =>
 
 ```ts
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Card from '@aziontech/webkit/card'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Card from '@aziontech/ui/card'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { computed, reactive } from 'vue'
 
   import type { RuleBehavior } from '../lib/rule-behavior-data'
@@ -1202,11 +1202,11 @@ export const criteriaErrorsOf = (form: RuleForm) =>
 
 ```ts
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Combobox from '@aziontech/webkit/combobox'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Combobox from '@aziontech/ui/combobox'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { computed } from 'vue'
 
   import { type Condition, OPERATORS } from '../lib/rule-behavior-data'

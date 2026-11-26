@@ -2,8 +2,8 @@
 
 > RadioGroup is the one "pick one of a few" component: it picks exactly one value from a short list of labelled options shown at once. The root is a `radiogroup` that owns the value (`v-model`), the shared form `name`, the group `disabled` / `required` / `invalid` state, the layout axis and the option look (`variant`), and hands them to every `RadioGroup.Item` through `provide`/`inject`; each item draws a radio circle beside its label, or, with `variant="card"`, a bordered card with an optional icon, description and trailing tag (Radix and shadcn style card radios the same way). The options are composed as `RadioGroup.Item`s, or passed as data through `options`. Because the items are native radios that share one `name`, the group is a single tab stop and the arrow keys move the selection, as the APG radio group pattern asks, with no wiring by the consumer. Before 6.0 the bare circle was `RadioButton` and the card look was `RadioCards`; both are folded in here.
 
-- Import: `import RadioGroupRoot from '@aziontech/webkit/radio-group-root'`
-- Compound import (dot notation, not tree-shakeable): `import RadioGroup from '@aziontech/webkit/radio-group'`
+- Import: `import RadioGroupRoot from '@aziontech/ui/radio-group-root'`
+- Compound import (dot notation, not tree-shakeable): `import RadioGroup from '@aziontech/ui/radio-group'`
 - Category: input · Surface: app · Structure: composition
 - API as JSON: [radio-group.json](radio-group.json)
 
@@ -64,7 +64,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/radio-group-item`
+- `@aziontech/ui/radio-group-item`
 
 ## Sub-components
 
@@ -73,7 +73,7 @@
 Layout:
 
 ```
-packages/webkit/src/components/input/radio-group/
+packages/ui/src/components/input/radio-group/
 ├── radio-group.vue
 ├── index.ts
 ├── injection-key.ts
@@ -132,8 +132,8 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import Field from '@aziontech/ui/field'
+  import RadioGroup from '@aziontech/ui/radio-group'
   import { ref, useId } from 'vue'
 
   const labelId = useId()
@@ -170,8 +170,8 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import Field from '@aziontech/ui/field'
+  import RadioGroup from '@aziontech/ui/radio-group'
   import { ref, useId } from 'vue'
 
   const labelId = useId()
@@ -204,8 +204,8 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import Field from '@aziontech/ui/field'
+  import RadioGroup from '@aziontech/ui/radio-group'
   import { ref, useId } from 'vue'
 
   const labelId = useId()

@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import Module from '@aziontech/webkit/module'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import Module from '@aziontech/ui/module'
+  import Spacer from '@aziontech/ui/spacer'
 
   const regions = [
     { name: 'North America', latency: '18 ms' },

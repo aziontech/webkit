@@ -1,5 +1,5 @@
 <script setup>
-  import ConversationHistory from '@aziontech/webkit/conversation-history'
+  import ConversationHistory from '@aziontech/ui/conversation-history'
 </script>
 
 <template>

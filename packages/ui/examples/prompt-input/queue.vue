@@ -1,6 +1,6 @@
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import PromptQueue from '@aziontech/webkit/prompt-queue'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
+  import PromptQueue from '@aziontech/ui/prompt-queue'
   import { ref } from 'vue'
 
   const prompt = ref('Then list the five slowest paths')

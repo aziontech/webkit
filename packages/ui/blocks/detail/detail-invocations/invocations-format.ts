@@ -1,4 +1,4 @@
-import type { UseLocaleReturn } from '@aziontech/webkit/use-locale'
+import type { UseLocaleReturn } from '@aziontech/ui/use-locale'
 
 export const formatInvocationTime = (formatDate: UseLocaleReturn['formatDate'], value: Date) =>
   `${formatDate(value, {

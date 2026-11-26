@@ -1,6 +1,6 @@
 <script setup>
-  import RuntimeApiScene from '@aziontech/webkit/assets/runtime-api-scene'
-  import HeroSection from '@aziontech/webkit/hero-section'
+  import RuntimeApiScene from '@aziontech/ui/assets/runtime-api-scene'
+  import HeroSection from '@aziontech/ui/hero-section'
 </script>
 
 <template>

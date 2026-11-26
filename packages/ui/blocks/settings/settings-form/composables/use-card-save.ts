@@ -1,5 +1,5 @@
-import { toast } from '@aziontech/webkit/toast'
-import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+import { toast } from '@aziontech/ui/toast'
+import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
 import {
   computed,
   type ComputedRef,

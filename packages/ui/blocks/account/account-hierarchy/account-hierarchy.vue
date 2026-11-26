@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { toast } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, ref, useId, watch } from 'vue'
 
   import {

@@ -3,10 +3,10 @@
 > The Review and deploy page of a release that carries several resources at once. The left column holds one `Card` per resource: its type and icon, a Required or Read-only `Tag` or an include `Switch` named by a `Tooltip`, the resource and a version `Select` that tracks the latest Ready version or pins one (each with a Current `Tag` and its age), an invalid line and Build a version when nothing is Ready, and a Dependencies box whose `Accordion` groups modules and integrations with counts, a Shared `Tag` with the resources that also reference it and one info `Alert` saying a shared dependency deploys at one version. The right column is the sticky Impact `Card`: a `ToggleGroup` switches a Tree (Deployment Settings, their environments and the projects they publish to, with rails and counts) and a Flow (the same as left-to-right cards), and its footer sums up what the release reaches. A sticky footer holds the hint, Cancel and Deploy release, which asks in a `ConfirmDialog` and then runs as an async action: a Deploying release… toast follows the run and is dismissed when it ends, and the page shows the outcome `Alert` with Edit and Redeploy, so no toast covers the bar. On a phone the hint hides and Cancel and Deploy release share one row. A ChooseSettings step before it picks the Deployment Settings the release deploys with, as grouped `Field` checkbox choice cards with search, Select all and Clear. Built from `Card`, `Tag`, `Switch`, `Tooltip`, `Field`, `Select`, `Checkbox`, `Input`, `Badge`, `Accordion`, `Alert`, `ToggleGroup`, `Skeleton`, `Spinner`, `Button`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
 
 - Surface: app
-- Source: `blocks/create/create-release-impact/create-release-impact.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-release-impact/create-release-impact.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-release-impact")`
 - Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [OverflowCount](../../components/overflow-count.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-shortcuts`
-- Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`, `webkit-errors`
+- Skills: `azion-ui-create-surface`, `azion-ui-form`, `azion-ui-states`, `azion-ui-errors`
 
 ## Asked as
 
@@ -63,7 +63,7 @@ The `Card` footer sums the reach in one sentence: projects, environments and Dep
 
 ### G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
 
-`SaveBar variant="docked"` at the bottom of the page: the hint on the start side, replaced by the blocker with a warning icon when there is one, so each sits on one line; on the end side Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and emits `deploy`; the parent sets `deploying`, then `deployed` or `deployError`, and the block shows the run as an async action (`state/state-async-submit`): one `toast.loading` ("Deploying release…", with "It keeps running if you leave.") follows the run, and when it ends that toast is dismissed and the page `Alert` takes over with **Edit** and **Redeploy**. Never View deployments. On a phone the hint is hidden and Cancel and Deploy release share one row, so the bar stays short. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+`SaveBar variant="docked"` at the bottom of the page: the hint on the start side, replaced by the blocker with a warning icon when there is one, so each sits on one line; on the end side Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and emits `deploy`; the parent sets `deploying`, then `deployed` or `deployError`, and the block shows the run as an async action (`state/state-async-submit`): one `toast.loading` ("Deploying release…", with "It keeps running if you leave.") follows the run, and when it ends that toast is dismissed and the page `Alert` takes over with **Edit** and **Redeploy**. Never View deployments. On a phone the hint is hidden and Cancel and Deploy release share one row, so the bar stays short. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ### Before the review: choosing the Deployment Settings
 
@@ -148,7 +148,7 @@ Then delete `sample.ts` and its import.
 - **Versions:** "Track latest Ready", "resolves at deploy", "Pin a ready version", tag "Current".
 - **Blockers:** "<name> has no Ready version, so the release cannot be deployed."
 - **Outcome:** "Release deployed." / "The release wasn't deployed." with the cause and that nothing changed in traffic.
-- Follow `skills/webkit-microcopy`: Deploy, never publish; sentence case; no em dash.
+- Follow `skills/azion-ui-microcopy`: Deploy, never publish; sentence case; no em dash.
 
 ## Accessibility
 
@@ -192,14 +192,14 @@ Each variant is the same screen in another state: `get_block("create/create-rele
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import { toast } from '@aziontech/webkit/toast'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Kbd from '@aziontech/ui/kbd'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import { toast } from '@aziontech/ui/toast'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
   import { cloneResource, plural, resolvedVersion } from './lib/release-impact'
@@ -831,13 +831,13 @@ export const dependencyCount = (card: ReleaseImpactResource) =>
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Spinner from '@aziontech/webkit/spinner'
-  import Tag from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Spinner from '@aziontech/ui/spinner'
+  import Tag from '@aziontech/ui/tag'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   import { plural } from '../lib/release-impact'
   import type { ReleaseImpactProject, ReleaseImpactSettings } from '../types'
@@ -1145,18 +1145,18 @@ export const dependencyCount = (card: ReleaseImpactResource) =>
 
 ```ts
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import Alert from '@aziontech/webkit/alert'
-  import Badge from '@aziontech/webkit/badge'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Accordion from '@aziontech/ui/accordion'
+  import Alert from '@aziontech/ui/alert'
+  import Badge from '@aziontech/ui/badge'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Select from '@aziontech/ui/select'
+  import Switch from '@aziontech/ui/switch'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import {
     dependencyCount,

@@ -12,14 +12,14 @@ const require = createRequire(import.meta.url)
 const AXE_SOURCE = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8')
 const KNOWN_FILE = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  '../../../packages/webkit/src/test/a11y-known.json'
+  '../../../packages/ui/src/test/a11y-known.json'
 )
 const KNOWN = existsSync(KNOWN_FILE) ? JSON.parse(readFileSync(KNOWN_FILE, 'utf8')) : {}
 const ACCEPTED = JSON.parse(
   readFileSync(
     resolve(
       dirname(fileURLToPath(import.meta.url)),
-      '../../../packages/webkit/src/test/a11y-accepted.json'
+      '../../../packages/ui/src/test/a11y-accepted.json'
     ),
     'utf8'
   )
@@ -68,7 +68,7 @@ const context = await browser.newContext({ viewport: { width: 1440, height: 900 
 const failures = []
 const axeFailures = []
 let axeChecked = 0
-let knownWebkit = 0
+let knownAzionUi = 0
 
 async function visit(route) {
   const page = await context.newPage()
@@ -150,7 +150,7 @@ async function visit(route) {
         },
         { known: KNOWN, chrome: COMPONENT_KNOWN, accepted: ACCEPTED }
       )
-      knownWebkit += result.known
+      knownAzionUi += result.known
       axeChecked++
       if (result.violations.length) axeFailures.push({ route, violations: result.violations })
     }
@@ -183,6 +183,6 @@ for (const failure of axeFailures) {
     )
 }
 console.log(
-  `\nRoutes: ${only.length}, console/page errors on ${failures.length}; axe (dark + light) on ${axeChecked}, violations on ${axeFailures.length}; known WebKit findings listed in packages/webkit/src/test/a11y-known.json: ${knownWebkit} nodes`
+  `\nRoutes: ${only.length}, console/page errors on ${failures.length}; axe (dark + light) on ${axeChecked}, violations on ${axeFailures.length}; known Azion UI findings listed in packages/ui/src/test/a11y-known.json: ${knownAzionUi} nodes`
 )
 process.exit(failures.length || axeFailures.length ? 1 : 0)

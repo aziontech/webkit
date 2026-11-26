@@ -101,7 +101,7 @@
       (bare) => {
         if (bare > 0)
           console.warn(
-            `[webkit] <CapabilityGridSection>: ${bare} of ${props.items.length} items have no icon. A benefits grid gives every item an icon; a resource list or text columns give none.`
+            `[azion-ui] <CapabilityGridSection>: ${bare} of ${props.items.length} items have no icon. A benefits grid gives every item an icon; a resource list or text columns give none.`
           )
       },
       { immediate: true }

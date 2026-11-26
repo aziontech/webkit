@@ -2,7 +2,7 @@
 
 > The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset. Pass `src` and the frame decides from the extension whether it holds a still or a clip; compose the default slot when the framed thing is markup. A still opens full screen out of its own frame — the picture is the button — while a clip keeps its player controls (or, when it plays on its own, a pause control) and composed content has no source to open. The caption reads under the frame, centered, as part of the picture; the hint reads above it on the text's own left edge, as part of the sentence that led the reader here; each is a string prop for the plain case with a slot of the same name for rich content.
 
-- Import: `import DocFrame from '@aziontech/webkit/doc-frame'`
+- Import: `import DocFrame from '@aziontech/ui/doc-frame'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-frame.json](doc-frame.json)
 
@@ -78,7 +78,7 @@
 
 ```vue
 <script setup>
-  import DocFrame from '@aziontech/webkit/doc-frame'
+  import DocFrame from '@aziontech/ui/doc-frame'
 </script>
 
 <template>
@@ -99,9 +99,9 @@
 
 ```vue
 <script setup>
-  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import DocFrame from '@aziontech/webkit/doc-frame'
+  import placeholderClip from '@aziontech/ui/assets/placeholder-clip.webm'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import DocFrame from '@aziontech/ui/doc-frame'
 </script>
 
 <template>
@@ -125,8 +125,8 @@
 
 ```vue
 <script setup>
-  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
-  import DocFrame from '@aziontech/webkit/doc-frame'
+  import placeholderClip from '@aziontech/ui/assets/placeholder-clip.webm'
+  import DocFrame from '@aziontech/ui/doc-frame'
 </script>
 
 <template>

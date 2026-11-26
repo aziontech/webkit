@@ -1,9 +1,9 @@
 <script setup>
-  import BarList from '@aziontech/webkit/bar-list'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ErrorBoundary from '@aziontech/webkit/error-boundary'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import BarList from '@aziontech/ui/bar-list'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ErrorBoundary from '@aziontech/ui/error-boundary'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { ref } from 'vue'
 
   const items = [

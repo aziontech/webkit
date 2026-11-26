@@ -1,5 +1,5 @@
 <script setup>
-  import DataGrid from '@aziontech/webkit/data-grid'
+  import DataGrid from '@aziontech/ui/data-grid'
   import { ref } from 'vue'
 
   const rows = ref([

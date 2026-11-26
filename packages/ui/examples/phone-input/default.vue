@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import PhoneInput from '@aziontech/webkit/phone-input'
+  import Field from '@aziontech/ui/field'
+  import PhoneInput from '@aziontech/ui/phone-input'
   import { ref } from 'vue'
 
   const digits = ref('')

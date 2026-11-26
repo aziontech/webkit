@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 9eadd5205a62f4c761615e237ca26367e155dfb2a2b0f0d7d69d867bbc42b1c3
+checksum: 7b71aac60621d5d4abf6713800ce97af534ba05e6b02fb5007b510fce4a4e156
 created: 2026-08-22
 last_updated: 2026-11-22
 ---
@@ -29,7 +29,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
 ## Related
 
 - `DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.
-- `Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.
+- `Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the Azion UI anatomy this row composes.
 - `RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
 
 ## Best practices
@@ -42,9 +42,9 @@ One row of the documentation's related-content list: a leading glyph in a framed
 
 ```vue
 <script setup>
-  import DocItem from '@aziontech/webkit/doc-item'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import ItemList from '@aziontech/webkit/item-list'
+  import DocItem from '@aziontech/ui/doc-item'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import ItemList from '@aziontech/ui/item-list'
 </script>
 
 <template>
@@ -156,7 +156,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

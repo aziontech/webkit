@@ -2,7 +2,7 @@
 
 > Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one select per facet (industry, solution, product) on one row, each starting with an option that clears it — then a grid of story cards and a load-more button that reveals the next page. Below `lg` the toolbar folds to the search field (with its shorter placeholder) and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-index-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `input`, `select`, `chip`, `button` and `empty-state`; the search, the facet selections, each select's own option search and the page count are local state, and facets can be seeded from the URL query.
 
-- Import: `import StoryIndexSection from '@aziontech/webkit/story-index-section'`
+- Import: `import StoryIndexSection from '@aziontech/ui/story-index-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [story-index-section.json](story-index-section.json)
 
@@ -14,7 +14,7 @@
 
 - Derive each facet's `options` from the values the items carry, so every option matches at least one story.
 - Give every item a `facets` entry per facet `id`; an item without one never matches a selection on that facet.
-- Pass `client.logo` as any image URL or imported asset (`import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'`); the card fits a mark of any intrinsic size, so do not pre-scale or crop it.
+- Pass `client.logo` as any image URL or imported asset (`import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'`); the card fits a mark of any intrinsic size, so do not pre-scale or crop it.
 
 ## Don’t
 
@@ -105,10 +105,10 @@
 
 ```vue
 <script setup>
-  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import StoryIndexSection from '@aziontech/webkit/story-index-section'
+  import axurExtendedReversed from '@aziontech/ui/assets/axur-extended-reversed.svg'
+  import exameExtendedReversed from '@aziontech/ui/assets/exame-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import StoryIndexSection from '@aziontech/ui/story-index-section'
 </script>
 
 <template>
@@ -181,7 +181,7 @@
 
 ```vue
 <script setup>
-  import StoryIndexSection from '@aziontech/webkit/story-index-section'
+  import StoryIndexSection from '@aziontech/ui/story-index-section'
 </script>
 
 <template>
@@ -223,10 +223,10 @@
 
 ```vue
 <script setup>
-  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import StoryIndexSection from '@aziontech/webkit/story-index-section'
+  import axurExtendedReversed from '@aziontech/ui/assets/axur-extended-reversed.svg'
+  import exameExtendedReversed from '@aziontech/ui/assets/exame-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import StoryIndexSection from '@aziontech/ui/story-index-section'
 </script>
 
 <template>

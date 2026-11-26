@@ -1,15 +1,15 @@
 {
  "name": "message-thread",
  "binding": "MessageThread",
- "import": "@aziontech/webkit/message-thread",
- "treeShakeableImport": "@aziontech/webkit/message-thread-root",
+ "import": "@aziontech/ui/message-thread",
+ "treeShakeableImport": "@aziontech/ui/message-thread-root",
  "category": "content",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/message-thread-item",
-  "@aziontech/webkit/message-thread-group"
+  "@aziontech/ui/message-thread-item",
+  "@aziontech/ui/message-thread-group"
  ],
  "purpose": "The conversation of a support ticket, oldest first, as Help Scout, Front, Plain and the Zendesk Agent Workspace show it: each message names its author (avatar, name, customer or agent), the channel it came by, when it was sent and, for email, who received it; then the body, the attachments and the quoted previous messages behind a toggle. Three types of item share the list: a public reply, an internal note (a warning band labelled \"Internal note\", so it never reads as a reply sent to the customer), and a system event line (\"Jane Doe changed status to Pending\"). A long middle collapses behind \"Show 6 earlier messages\". It is not `ChatMessage`, which is the generative AI chat (decision SUP-03).",
  "setup": null,

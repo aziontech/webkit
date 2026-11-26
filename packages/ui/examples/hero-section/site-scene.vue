@@ -1,8 +1,8 @@
 <script setup>
-  import ConsoleApplicationScene from '@aziontech/webkit/assets/console-application-scene'
-  import Container from '@aziontech/webkit/container'
-  import HeroSection from '@aziontech/webkit/hero-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ConsoleApplicationScene from '@aziontech/ui/assets/console-application-scene'
+  import Container from '@aziontech/ui/container'
+  import HeroSection from '@aziontech/ui/hero-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const primaryAction = {
     label: 'Start for free',

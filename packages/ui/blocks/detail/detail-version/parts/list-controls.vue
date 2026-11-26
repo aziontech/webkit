@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import type { TableExposed } from '@aziontech/webkit/data-table'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import type { TableExposed } from '@aziontech/ui/data-table'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   export interface ListControlsProps {
     /** The placeholder and accessible name of the search field. */

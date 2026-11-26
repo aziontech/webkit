@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
+  import Avatar from '@aziontech/ui/avatar'
 
   import type { TicketInboxTicket } from '../view-ticket-inbox.vue'
 

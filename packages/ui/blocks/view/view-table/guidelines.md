@@ -25,7 +25,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined medium Documentation button, which opens the docs in a new tab, and the primary `Create <Object>` button at the same `size="medium"`, set apart by its colour, as `skills/webkit-lists` asks; everything on the controls row stays medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears; the breadcrumb starts at the second level.
+`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined medium Documentation button, which opens the docs in a new tab, and the primary `Create <Object>` button at the same `size="medium"`, set apart by its colour, as `skills/azion-ui-lists` asks; everything on the controls row stays medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears; the breadcrumb starts at the second level.
 
 ### B. Property filter — `PropertyFilter` (required)
 
@@ -45,7 +45,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### F. Cell presets — `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime` (optional)
 
-Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `TableCellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `TableCellId` (copy button named after the resource). The domain is `TableCellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `TableCellStatus`. Last modified is `TableCellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
+Every cell is a preset from `@aziontech/ui/table`, so the list reads like every other Azion UI list. Name is `TableCellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `TableCellId` (copy button named after the resource). The domain is `TableCellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `TableCellStatus`. Last modified is `TableCellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
 
 ### G. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
@@ -138,7 +138,7 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 - **No match:** "No matching resources", then "No resource matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No resources yet"; description is one sentence with what to do, e.g. "Create a resource to start serving traffic on your domains."
 - **Copy buttons:** name what they copy, e.g. "Copy resource ID", "Copy domain name".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -169,4 +169,4 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 - `detail/detail-resource` — where a row name leads; its Deployments tab renders the Deployments table without the page heading.
 - `edit/edit-delete-dialog` — the dialog behind the row menu's Delete.
 - `state/state-first-use` — the module before its first resource.
-- `DataTable` and `useCollection` — the table this page wraps and the state behind it; see `skills/webkit-tables` and `skills/webkit-lists`.
+- `DataTable` and `useCollection` — the table this page wraps and the state behind it; see `skills/azion-ui-tables` and `skills/azion-ui-lists`.

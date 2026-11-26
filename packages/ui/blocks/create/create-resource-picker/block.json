@@ -28,7 +28,7 @@
     "bind firewall",
     "vincular firewall"
   ],
-  "skills": ["webkit-form", "webkit-ui-states"],
+  "skills": ["azion-ui-form", "azion-ui-states"],
   "primary": {
     "name": "Existing",
     "file": "create-resource-picker.vue"

@@ -2,7 +2,7 @@
 
 > Use CodeEditor only when the person edits the code (its diff mode is for editing one side beside the original); to show code, config or JSON the person reads or copies, including read-only diffs, use CodeBlock, and for build, deploy or runtime log lines use LogViewer. An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
 
-- Import: `import CodeEditor from '@aziontech/webkit/code-editor'`
+- Import: `import CodeEditor from '@aziontech/ui/code-editor'`
 - Category: code · Surface: app · Structure: monolithic
 - API as JSON: [code-editor.json](code-editor.json)
 
@@ -17,7 +17,7 @@
 ## Do
 
 - Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.
-- Pass `loader` from the app so Monaco is code-split and never part of the WebKit bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.
+- Pass `loader` from the app so Monaco is code-split and never part of the Azion UI bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.
 - Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.
 - Function calls are coloured for you (JavaScript and TypeScript, with `--code-syntax-function`); do not register your own Monarch grammar for that.
 - Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.
@@ -35,7 +35,7 @@
 - Free prose or a description → use `textarea`.
 - A stream of log lines → use `log-viewer`.
 - A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both).
-- In a docs Markdown page or the site's page JSON. CodeEditor is app-only (decision RV-C2-1, rule `webkit-content-channels`): the person edits code in it, so it has no `DocMarkdown` tag and no page JSON entry. A docs page shows code as a code fence (`DocCodeGroup`); the site uses `CodeBlock`.
+- In a docs Markdown page or the site's page JSON. CodeEditor is app-only (decision RV-C2-1, rule `azion-ui-content-channels`): the person edits code in it, so it has no `DocMarkdown` tag and no page JSON entry. A docs page shows code as a code fence (`DocCodeGroup`); the site uses `CodeBlock`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -149,8 +149,8 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 ```vue
 <script setup>
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import Field from '@aziontech/webkit/field'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const code = ref(`export default async function handler(request) {
@@ -184,8 +184,8 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 ```vue
 <script setup>
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import Field from '@aziontech/webkit/field'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const loadMonaco = async () => {
@@ -283,9 +283,9 @@ addEventListener('fetch', (event) => {
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Button from '@aziontech/ui/button'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, ref } from 'vue'
 
   const documents = [

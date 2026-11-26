@@ -3,10 +3,10 @@
 > A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `Item`, `PageHeader`, `Select`, `Skeleton`, `StatTile`, `Tag`, `Tracker` and `Alert`. The RealUser variant shows the real-user web vitals behind such a score: median page load time, largest contentful paint, first input delay and sessions, with a trend tile per vital. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-health-score/dashboard-health-score.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-health-score/dashboard-health-score.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-health-score")`
 - Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Card](../../components/card.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [Tag](../../components/tag.md), [Tracker](../../components/tracker.md), `use-locale`
-- Skills: `webkit-data-viz`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-states`
 
 ## Asked as
 
@@ -226,17 +226,17 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import Hint from '@aziontech/webkit/hint'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import type { TrackerItem } from '@aziontech/webkit/tracker'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import BarList, { type BarListItem } from '@aziontech/ui/bar-list'
+  import Chart, { type ChartSeries } from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import Hint from '@aziontech/ui/hint'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import type { TrackerItem } from '@aziontech/ui/tracker'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref } from 'vue'
 
   import HourlyScoreCard from './parts/hourly-score-card.vue'
@@ -583,7 +583,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ## `sample.ts`
 
 ```ts
-import type { BarListItem } from '@aziontech/webkit/bar-list'
+import type { BarListItem } from '@aziontech/ui/bar-list'
 
 import type {
   HealthScoreHourlyRow,
@@ -1610,12 +1610,12 @@ export const sampleFractions = (seed: string, count: number): number[] => {
 
 ```ts
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
-  import Tracker from '@aziontech/webkit/tracker'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
+  import Tracker from '@aziontech/ui/tracker'
   import { computed } from 'vue'
 
   import type { HealthScoreHourlyRow } from '../dashboard-health-score.vue'
@@ -1728,11 +1728,11 @@ export const sampleFractions = (seed: string, count: number): number[] => {
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
 
   import type { HealthScoreIncident } from '../dashboard-health-score.vue'
 

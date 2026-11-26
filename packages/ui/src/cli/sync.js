@@ -3,6 +3,7 @@ import { dirname, join, sep } from 'node:path'
 
 import {
   AI_TEMPLATES,
+  AZION_UI_VERSION,
   classify,
   FRAGMENT_END,
   FRAGMENT_START,
@@ -11,8 +12,7 @@ import {
   listBundle,
   spliceFragment,
   stamp,
-  templateFile,
-  WEBKIT_VERSION
+  templateFile
 } from './bundle.js'
 
 function toPosix(path) {
@@ -49,11 +49,11 @@ function walkMarkdown(dir) {
 
 const BUNDLE_DIRS = ['rules', 'skills', 'agents']
 
-function isWebkitBundleName(rel) {
+function isAzionUiBundleName(rel) {
   return (
-    /^rules\/webkit-[^/]+\.md$/.test(rel) ||
-    /^agents\/webkit-[^/]+\.md$/.test(rel) ||
-    /^skills\/webkit-[^/]+\/SKILL\.md$/.test(rel)
+    /^rules\/azion-ui-[^/]+\.md$/.test(rel) ||
+    /^agents\/azion-ui-[^/]+\.md$/.test(rel) ||
+    /^skills\/azion-ui-[^/]+\/SKILL\.md$/.test(rel)
   )
 }
 
@@ -84,7 +84,7 @@ function classifyFragment(claudeMdContent, fragmentBody) {
 }
 
 export function hasBundle(dir) {
-  if (listConsumerClaudeFiles(join(dir, '.claude')).some(isWebkitBundleName)) return true
+  if (listConsumerClaudeFiles(join(dir, '.claude')).some(isAzionUiBundleName)) return true
   return ['AGENTS.md', 'CLAUDE.md'].some((name) => {
     const content = readOrNull(join(dir, name))
     return Boolean(content && (content.includes(FRAGMENT_START) || content.includes(LEGACY_MARKER)))
@@ -153,7 +153,7 @@ function bundleEntries(claudeDir, bundleRels, options) {
   })
 }
 
-const SYNC_MARKER = /^<!-- webkit-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->/m
+const SYNC_MARKER = /^<!-- azion-ui-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->/m
 
 function orphanEntry(claudeDir, rel) {
   const content = readOrNull(join(claudeDir, rel))
@@ -165,14 +165,14 @@ function orphanEntry(claudeDir, rel) {
     rel,
     state: 'orphan',
     reportResult: 'skipped',
-    detail: `${join('.claude', rel)} carries a webkit-sync marker for "${marker[1]}", which no longer exists in the bundle — left in place`
+    detail: `${join('.claude', rel)} carries an azion-ui-sync marker for "${marker[1]}", which no longer exists in the bundle — left in place`
   }
   return { rel, state: 'orphan', action }
 }
 
 function orphanEntries(claudeDir, bundleRelSet) {
   return listConsumerClaudeFiles(claudeDir)
-    .filter((rel) => !bundleRelSet.has(rel) && isWebkitBundleName(rel))
+    .filter((rel) => !bundleRelSet.has(rel) && isAzionUiBundleName(rel))
     .map((rel) => orphanEntry(claudeDir, rel))
     .filter(Boolean)
 }
@@ -192,7 +192,7 @@ const isEntryDrift = (e) => e.state === 'missing' || e.state === 'stale' || e.st
 
 export function planSync(
   projectDir,
-  { force = false, templatesDir = AI_TEMPLATES, version = WEBKIT_VERSION } = {}
+  { force = false, templatesDir = AI_TEMPLATES, version = AZION_UI_VERSION } = {}
 ) {
   const claudeDir = join(projectDir, '.claude')
   const bundleRels = listBundle(templatesDir)

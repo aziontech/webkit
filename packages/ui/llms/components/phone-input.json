@@ -1,8 +1,8 @@
 {
  "name": "phone-input",
  "binding": "PhoneInput",
- "import": "@aziontech/webkit/phone-input",
- "treeShakeableImport": "@aziontech/webkit/phone-input",
+ "import": "@aziontech/ui/phone-input",
+ "treeShakeableImport": "@aziontech/ui/phone-input",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

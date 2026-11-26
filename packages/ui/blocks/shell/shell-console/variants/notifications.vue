@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Badge from '@aziontech/webkit/badge'
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Alert from '@aziontech/ui/alert'
+  import Badge from '@aziontech/ui/badge'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, ref } from 'vue'
 
   import NotificationList from '../parts/notification-list.vue'

@@ -1,18 +1,18 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { AvatarPresence } from '@aziontech/webkit/avatar'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Countdown from '@aziontech/webkit/countdown'
+  import Alert from '@aziontech/ui/alert'
+  import type { AvatarPresence } from '@aziontech/ui/avatar'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Countdown from '@aziontech/ui/countdown'
   import type {
     MessageThreadChannel,
     MessageThreadFrom,
     MessageThreadItemType
-  } from '@aziontech/webkit/message-thread'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PriorityTag, { type PriorityTagPriority } from '@aziontech/webkit/priority-tag'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
-  import type { TimelineItemSeverity } from '@aziontech/webkit/timeline'
+  } from '@aziontech/ui/message-thread'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PriorityTag, { type PriorityTagPriority } from '@aziontech/ui/priority-tag'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
+  import type { TimelineItemSeverity } from '@aziontech/ui/timeline'
   import { computed } from 'vue'
 
   import { slaPaused, statusSeverity } from './lib/ticket-fields'

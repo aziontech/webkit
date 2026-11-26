@@ -1,8 +1,8 @@
 {
  "name": "separator",
  "binding": "Separator",
- "import": "@aziontech/webkit/separator",
- "treeShakeableImport": "@aziontech/webkit/separator",
+ "import": "@aziontech/ui/separator",
+ "treeShakeableImport": "@aziontech/ui/separator",
  "category": "layout",
  "surface": "app",
  "structure": "monolithic",

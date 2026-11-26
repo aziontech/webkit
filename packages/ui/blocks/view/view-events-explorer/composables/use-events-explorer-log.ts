@@ -1,4 +1,4 @@
-import type { FilterMenuField, FilterMenuValue } from '@aziontech/webkit/filter-menu'
+import type { FilterMenuField, FilterMenuValue } from '@aziontech/ui/filter-menu'
 import { computed, type ComputedRef, type Ref, watch } from 'vue'
 
 import {

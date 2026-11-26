@@ -2,7 +2,7 @@
 
 > The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel framed like the cells, a registration mark in each of its corners and one shared hairline at its seam with the wall — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `variant` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and, like the square wall, it runs three columns below `sm`.
 
-- Import: `import LogoWall from '@aziontech/webkit/logo-wall'`
+- Import: `import LogoWall from '@aziontech/ui/logo-wall'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [logo-wall.json](logo-wall.json)
 
@@ -89,20 +89,20 @@
 
 ```vue
 <script setup>
-  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
-  import ifoodLogoDark from '@aziontech/webkit/assets/ifood-extended-reversed.svg'
-  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
-  import itauLogoDark from '@aziontech/webkit/assets/itau-extended-reversed.webp'
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import magaluLogoDark from '@aziontech/webkit/assets/magalu-extended-reversed.svg'
-  import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import netshoesLogoDark from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
-  import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import LogoWall from '@aziontech/webkit/logo-wall'
-  import Quote from '@aziontech/webkit/quote'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import ifoodLogo from '@aziontech/ui/assets/ifood-extended-color.svg'
+  import ifoodLogoDark from '@aziontech/ui/assets/ifood-extended-reversed.svg'
+  import itauLogo from '@aziontech/ui/assets/itau-extended-color.svg'
+  import itauLogoDark from '@aziontech/ui/assets/itau-extended-reversed.webp'
+  import magaluLogo from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import magaluLogoDark from '@aziontech/ui/assets/magalu-extended-reversed.svg'
+  import netshoesLogo from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import netshoesLogoDark from '@aziontech/ui/assets/netshoes-extended-reversed.svg'
+  import stoneLogo from '@aziontech/ui/assets/stone-extended-color.svg'
+  import zoopLogo from '@aziontech/ui/assets/zoop-extended-color.svg'
+  import LogoWall from '@aziontech/ui/logo-wall'
+  import Quote from '@aziontech/ui/quote'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 </script>
 
 <template>
@@ -164,18 +164,18 @@
 
 ```vue
 <script setup>
-  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
-  import ifoodLogoDark from '@aziontech/webkit/assets/ifood-extended-reversed.svg'
-  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
-  import itauLogoDark from '@aziontech/webkit/assets/itau-extended-reversed.webp'
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import magaluLogoDark from '@aziontech/webkit/assets/magalu-extended-reversed.svg'
-  import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import netshoesLogoDark from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
-  import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import LogoWall from '@aziontech/webkit/logo-wall'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import ifoodLogo from '@aziontech/ui/assets/ifood-extended-color.svg'
+  import ifoodLogoDark from '@aziontech/ui/assets/ifood-extended-reversed.svg'
+  import itauLogo from '@aziontech/ui/assets/itau-extended-color.svg'
+  import itauLogoDark from '@aziontech/ui/assets/itau-extended-reversed.webp'
+  import magaluLogo from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import magaluLogoDark from '@aziontech/ui/assets/magalu-extended-reversed.svg'
+  import netshoesLogo from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import netshoesLogoDark from '@aziontech/ui/assets/netshoes-extended-reversed.svg'
+  import stoneLogo from '@aziontech/ui/assets/stone-extended-color.svg'
+  import zoopLogo from '@aziontech/ui/assets/zoop-extended-color.svg'
+  import LogoWall from '@aziontech/ui/logo-wall'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>
@@ -249,26 +249,26 @@
 
 ```vue
 <script setup>
-  import exameLogo from '@aziontech/webkit/assets/exame-extended-color.svg'
-  import exameLogoDark from '@aziontech/webkit/assets/exame-extended-reversed.svg'
-  import ifoodLogo from '@aziontech/webkit/assets/ifood-extended-color.svg'
-  import ifoodLogoDark from '@aziontech/webkit/assets/ifood-extended-reversed.svg'
-  import itauLogo from '@aziontech/webkit/assets/itau-extended-color.svg'
-  import itauLogoDark from '@aziontech/webkit/assets/itau-extended-reversed.webp'
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import magaluLogoDark from '@aziontech/webkit/assets/magalu-extended-reversed.svg'
-  import marisaLogo from '@aziontech/webkit/assets/marisa-extended-color.svg'
-  import marisaLogoDark from '@aziontech/webkit/assets/marisa-extended-reversed.svg'
-  import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import netshoesLogoDark from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import rennerLogo from '@aziontech/webkit/assets/renner-extended-color.svg'
-  import rennerLogoDark from '@aziontech/webkit/assets/renner-extended-reversed.svg'
-  import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
-  import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import LogoWall from '@aziontech/webkit/logo-wall'
-  import Quote from '@aziontech/webkit/quote'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import exameLogo from '@aziontech/ui/assets/exame-extended-color.svg'
+  import exameLogoDark from '@aziontech/ui/assets/exame-extended-reversed.svg'
+  import ifoodLogo from '@aziontech/ui/assets/ifood-extended-color.svg'
+  import ifoodLogoDark from '@aziontech/ui/assets/ifood-extended-reversed.svg'
+  import itauLogo from '@aziontech/ui/assets/itau-extended-color.svg'
+  import itauLogoDark from '@aziontech/ui/assets/itau-extended-reversed.webp'
+  import magaluLogo from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import magaluLogoDark from '@aziontech/ui/assets/magalu-extended-reversed.svg'
+  import marisaLogo from '@aziontech/ui/assets/marisa-extended-color.svg'
+  import marisaLogoDark from '@aziontech/ui/assets/marisa-extended-reversed.svg'
+  import netshoesLogo from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import netshoesLogoDark from '@aziontech/ui/assets/netshoes-extended-reversed.svg'
+  import rennerLogo from '@aziontech/ui/assets/renner-extended-color.svg'
+  import rennerLogoDark from '@aziontech/ui/assets/renner-extended-reversed.svg'
+  import stoneLogo from '@aziontech/ui/assets/stone-extended-color.svg'
+  import zoopLogo from '@aziontech/ui/assets/zoop-extended-color.svg'
+  import LogoWall from '@aziontech/ui/logo-wall'
+  import Quote from '@aziontech/ui/quote'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 </script>
 
 <template>

@@ -3,10 +3,10 @@
 > A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `Subheader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveError); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Profile is the full profile page of a signed-in account, and the layout every account settings page follows: seven `SettingsGroup`s of flush `Card`s of rows with the unsaved-changes `SaveBar`, MFA linked to `account/account-mfa-settings`, and Delete account behind a type-to-confirm `ConfirmDialog`; ProfileLoading and ProfileError are its first load and its load failure. Each group or card is its own form: its Save stays disabled until that card changes, emits `submit` with the card's values, and its `loading` and `error` props drive the spinner, the success toast and an error toast with Retry; saving one disables just its own fieldset while the others stay editable. Built from `PageHeader`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Link`, `FieldError`, `ConfirmDialog`, `CopyButton`, `Skeleton` and `Button`.
 
 - Surface: app
-- Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
+- Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/ui`
 - MCP: `get_block("settings/settings-form")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [LanguageSelect](../../components/language-select.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-unsaved-changes`
-- Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
+- Skills: `azion-ui-form`, `azion-ui-errors`, `azion-ui-ux-heuristics`
 
 ## Asked as
 
@@ -142,7 +142,7 @@ Then delete `sample.ts` and its import.
 - **Errors:** what is wrong plus what to do, e.g. "Enter a valid email address."
 - **Docs link:** names the topic, e.g. "Learn more about the Preview Toolbar".
 - **Profile:** section hints are one sentence on what the group affects ("The company that owns the account, as it appears on every invoice."); optional fields say it in the description ("Optional. Apartment, suite or floor."); the destructive row uses one verb for the title and the button ("Delete personal account" with "Delete account", never "Remove"); the save bar reads "You have unsaved changes."; the load failure reads "The profile could not be loaded. Nothing was changed; try again." with "Retry"; the app confirms the deletion itself once `deleting` ends
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -174,7 +174,7 @@ Then delete `sample.ts` and its import.
 - `state/state-form-validation` — every outcome of a submit.
 - `state/state-async-submit` — a save that runs long and reports back later.
 - `edit/edit-delete-dialog` — the delete row a settings page can end with.
-- `SettingsRow` — the row this form is made of; see `skills/webkit-form` for the ItemGroup settings and Card with independent saves types.
+- `SettingsRow` — the row this form is made of; see `skills/azion-ui-form` for the ItemGroup settings and Card with independent saves types.
 
 ## Variants
 
@@ -195,21 +195,21 @@ Each variant is the same screen in another state: `get_block("settings/settings-
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
-  import LanguageSelect from '@aziontech/webkit/language-select'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Subheader from '@aziontech/webkit/subheader'
-  import Switch from '@aziontech/webkit/switch'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Kbd from '@aziontech/ui/kbd'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Subheader from '@aziontech/ui/subheader'
+  import Switch from '@aziontech/ui/switch'
+  import { toast } from '@aziontech/ui/toast'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { sampleProfile } from './sample'

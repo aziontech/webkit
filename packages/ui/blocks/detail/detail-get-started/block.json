@@ -20,7 +20,7 @@
     "como começar",
     "passos de configuração"
   ],
-  "skills": ["webkit-microcopy"],
+  "skills": ["azion-ui-microcopy"],
   "primary": {
     "name": "Cli",
     "file": "detail-get-started.vue"

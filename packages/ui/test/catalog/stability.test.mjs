@@ -21,7 +21,7 @@ test('a preview entry carries stability and its note; a GA entry carries nothing
 
 test('component cards and block cards surface preview', () => {
   const card = componentCard(
-    fakeCatalog({ import: '@aziontech/webkit/ticket', stability: 'preview' }),
+    fakeCatalog({ import: '@aziontech/ui/ticket', stability: 'preview' }),
     'ticket'
   )
   assert.equal(card.stability, 'preview')
@@ -34,7 +34,7 @@ test('component cards and block cards surface preview', () => {
 })
 
 function blockRoot(stability) {
-  const root = mkdtempSync(join(tmpdir(), 'webkit-stability-'))
+  const root = mkdtempSync(join(tmpdir(), 'azion-ui-stability-'))
   const dir = join(root, 'blocks', 'view', 'view-ticket')
   mkdirSync(dir, { recursive: true })
   writeFileSync(join(dir, 'view-ticket.vue'), '<template><div /></template>\n')

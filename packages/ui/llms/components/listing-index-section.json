@@ -1,8 +1,8 @@
 {
  "name": "listing-index-section",
  "binding": "ListingIndexSection",
- "import": "@aziontech/webkit/listing-index-section",
- "treeShakeableImport": "@aziontech/webkit/listing-index-section",
+ "import": "@aziontech/ui/listing-index-section",
+ "treeShakeableImport": "@aziontech/ui/listing-index-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

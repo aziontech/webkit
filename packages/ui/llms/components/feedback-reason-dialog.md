@@ -2,7 +2,7 @@
 
 > Asks why an assistant response was not helpful, right after Bad response in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
 
-- Import: `import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'`
+- Import: `import FeedbackReasonDialog from '@aziontech/ui/feedback-reason-dialog'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [feedback-reason-dialog.json](feedback-reason-dialog.json)
 
@@ -98,9 +98,9 @@
 
 ```vue
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import FeedbackReasonDialog from '@aziontech/ui/feedback-reason-dialog'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
   import { ref } from 'vue'
 
   const answer =

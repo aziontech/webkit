@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import Card from '@aziontech/ui/card'
+  import DocProse from '@aziontech/ui/doc-prose'
   import { computed } from 'vue'
 
   import { messages } from '../lib/i18n'

@@ -1,5 +1,5 @@
 <script setup>
-  import HeroSection from '@aziontech/webkit/hero-section'
+  import HeroSection from '@aziontech/ui/hero-section'
 
   const DESCRIPTION =
     'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center — no servers to size, no ' +

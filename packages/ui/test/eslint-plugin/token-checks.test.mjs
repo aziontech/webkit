@@ -401,38 +401,36 @@ test('tokenChecksFor runs only the wide checks over blocks, examples and given e
     'color-logo-interpolated'
   ]
   const idsFor = (rel, dirs) => tokenChecksFor(rel, dirs).map((c) => c.id)
-  assert.ok(idsFor('packages/webkit/src/components/action/button/button.vue').includes('hex-color'))
+  assert.ok(idsFor('packages/ui/src/components/action/button/button.vue').includes('hex-color'))
   for (const rel of [
-    'packages/webkit/blocks/login/login.vue',
-    'packages/webkit/examples/button/default.vue'
+    'packages/ui/blocks/login/login.vue',
+    'packages/ui/examples/button/default.vue'
   ]) {
     assert.deepEqual(idsFor(rel), WIDE, rel)
   }
   assert.deepEqual(idsFor('site/src/nav.vue'), [])
   assert.deepEqual(idsFor('site/src/nav.vue', ['site/src/']), WIDE)
   for (const rel of [
-    'packages/webkit/examples/button/button.test.ts',
-    'packages/webkit/examples/button/examples.json',
-    'packages/webkit/src/composables/use-controllable.ts'
+    'packages/ui/examples/button/button.test.ts',
+    'packages/ui/examples/button/examples.json',
+    'packages/ui/src/composables/use-controllable.ts'
   ]) {
     assert.deepEqual(idsFor(rel), [], rel)
   }
   assert.ok(
-    !scanTokens(
-      'class="text-sm az az-arrow-right"',
-      tokenChecksFor('packages/webkit/examples/a/a.vue')
-    ).length
+    !scanTokens('class="text-sm az az-arrow-right"', tokenChecksFor('packages/ui/examples/a/a.vue'))
+      .length
   )
 })
 
 test('tokenChecksApply scopes enforcement to component sources', () => {
-  assert.ok(tokenChecksApply('packages/webkit/src/components/action/button/button.vue'))
-  assert.ok(tokenChecksApply('packages/webkit/src/components/data/table/injection-key.ts'))
+  assert.ok(tokenChecksApply('packages/ui/src/components/action/button/button.vue'))
+  assert.ok(tokenChecksApply('packages/ui/src/components/data/table/injection-key.ts'))
   // Tests assert browser-serialized values (a collapsed height reads back as '0px')
   // and use @ts-expect-error to exercise type surfaces — exempt on both surfaces.
-  assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.test.ts'))
-  assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.spec.ts'))
-  assert.ok(!tokenChecksApply('packages/webkit/src/composables/use-controllable.ts'))
+  assert.ok(!tokenChecksApply('packages/ui/src/components/action/button/button.test.ts'))
+  assert.ok(!tokenChecksApply('packages/ui/src/components/action/button/button.spec.ts'))
+  assert.ok(!tokenChecksApply('packages/ui/src/composables/use-controllable.ts'))
 })
 
 test('status-fill-as-text fires on a status fill used as text or icon colour', () => {

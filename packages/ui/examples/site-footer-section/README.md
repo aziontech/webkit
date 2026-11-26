@@ -4,7 +4,7 @@ The footer under every marketing page: four link columns, then one bottom bar: t
 
 `Footer variant="site"` spans the page like the site header: it opens on a full-width rule with a corner mark at each end, draws no side rules, and insets its columns and bottom bar to the header’s measure. The page above must not draw a bottom rule of its own.
 
-The band is the `SiteFooterSection` component from `@aziontech/webkit/site-footer-section`; it composes `Footer` (`Footer.Column`, `Footer.Link`), `Brand`, `IconButton`, `StatusIndicator` and `Select`.
+The band is the `SiteFooterSection` component from `@aziontech/ui/site-footer-section`; it composes `Footer` (`Footer.Column`, `Footer.Link`), `Brand`, `IconButton`, `StatusIndicator` and `Select`.
 
 ## Examples
 

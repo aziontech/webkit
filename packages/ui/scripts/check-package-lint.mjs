@@ -28,10 +28,10 @@ const PACKAGES = [
     attw: []
   },
   {
-    name: '@aziontech/webkit',
-    dir: 'packages/webkit',
-    prepare: [['node', 'packages/webkit/scripts/pack-files.mjs']],
-    cleanup: [['node', 'packages/webkit/scripts/pack-files.mjs', '--clean']],
+    name: '@aziontech/ui',
+    dir: 'packages/ui',
+    prepare: [['node', 'packages/ui/scripts/pack-files.mjs']],
+    cleanup: [['node', 'packages/ui/scripts/pack-files.mjs', '--clean']],
     packArgs: ['--config.ignore-scripts=true'],
     attw: null
   }
@@ -73,7 +73,7 @@ function lintPackage(pkg, packDir) {
 }
 
 function main() {
-  const packDir = mkdtempSync(join(tmpdir(), 'webkit-package-lint-'))
+  const packDir = mkdtempSync(join(tmpdir(), 'azion-ui-package-lint-'))
   const failed = []
   try {
     for (const pkg of PACKAGES) if (!lintPackage(pkg, packDir)) failed.push(pkg.name)

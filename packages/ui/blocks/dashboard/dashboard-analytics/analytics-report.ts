@@ -1,7 +1,7 @@
-import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
-import { toast } from '@aziontech/webkit/toast'
-import { copyText } from '@aziontech/webkit/utils/clipboard'
-import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+import type { ChartLabel, ChartSeries } from '@aziontech/ui/chart'
+import { toast } from '@aziontech/ui/toast'
+import { copyText } from '@aziontech/ui/utils/clipboard'
+import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/ui/utils/csv'
 
 /** The unit a figure is written in. */
 export type MetricFormat = 'count' | 'bytes' | 'percentage' | 'ms' | 'seconds'

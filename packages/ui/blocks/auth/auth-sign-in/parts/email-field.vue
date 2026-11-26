@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Field from '@aziontech/webkit/field'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
 
   export interface EmailFieldProps {
     /** The id of the input, also the stem of its error id. */

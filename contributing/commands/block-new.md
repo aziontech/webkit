@@ -1,5 +1,5 @@
 ---
-description: AI-only flow for a new WebKit block (a screen agents copy), from a "New block" issue to a PR. Research → block brief → second-agent review → build → machine gates → ui-craft review → usage check → PR. Stops on the first failure.
+description: AI-only flow for a new Azion UI block (a screen agents copy), from a "New block" issue to a PR. Research → block brief → second-agent review → build → machine gates → ui-craft review → usage check → PR. Stops on the first failure.
 argument-hint: <issue number or URL>
 ---
 
@@ -13,12 +13,12 @@ the differences are written here.
 
 ## What a block is
 
-A screen built only from `@aziontech/webkit` components, which agents copy through the MCP
+A screen built only from `@aziontech/ui` components, which agents copy through the MCP
 (`search_blocks` → `get_block`). It lives in one folder:
 
-| Group                                                                                                             | Folder                                   |
-| ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| `account`, `ai`, `auth`, `create`, `dashboard`, `detail`, `edit`, `settings`, `state`, `view`, `shell`, `top-bar` | `packages/webkit/blocks/<group>/<name>/` |
+| Group                                                                                                             | Folder                               |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `account`, `ai`, `auth`, `create`, `dashboard`, `detail`, `edit`, `settings`, `state`, `view`, `shell`, `top-bar` | `packages/ui/blocks/<group>/<name>/` |
 
 The group is the job, never the surface: `block.json#surface` says where the screen lives (`app`,
 `docs` or `site`). The `<name>` starts with the group word, once: `<group>-<what>`
@@ -60,7 +60,7 @@ A block is a screen an app feeds, not a demo. The primary SFC:
 `sample.ts` holds every record, series and fixed clock (`Date.UTC`), typed with
 `import type { … } from './<name>.vue'`; UI config (columns, filter properties, menus) stays in
 the SFC. A variant imports the primary (`import X from '../<name>.vue'`) and passes it other props
-or slots; only a genuinely different screen may stay a full SFC. `npx @aziontech/webkit add`
+or slots; only a genuinely different screen may stay a full SFC. `npx @aziontech/ui add`
 copies the `files` beside the SFC (a part SFC as kebab `<stem>-<part>.vue`, or `<part>.vue` when
 its name already starts with `<stem>-`; data and helpers as `<stem>.<file>`) and rewrites the
 local imports, and
@@ -75,13 +75,13 @@ findings and only shrinks). The exemplar is
 
 - **Size** (`contributing/docs/CODE_QUALITY.md` § 3.1, § 3.12): the page file stays under 400 lines and
   each variant under 120; logic two blocks share moves to the package (`check:duplication`), and
-  blocks and examples own no raw native control or ARIA widget role (`webkit/no-unowned-element`).
+  blocks and examples own no raw native control or ARIA widget role (`azion-ui/no-unowned-element`).
 - **Copy**: the block's PascalCase name appears only in code, `name`, `title` and the guidelines
   H1, never in text a person reads (`check:blocks`, `scripts/lib/block-code-names.mjs`).
-- **Sample data** follows `rules/webkit-example-data.md` (`example.com`, Acme, no national
+- **Sample data** follows `rules/azion-ui-example-data.md` (`example.com`, Acme, no national
   formats, blank forms start empty).
 - **Overlays** start closed; only a variant whose job is to show the overlay renders it open
-  (`rules/webkit-overlays-closed-on-load.md`).
+  (`rules/azion-ui-overlays-closed-on-load.md`).
 - **Keyboard**: a task screen declares `"keyboard": { "entry": "field" }` in `block.json` (plus
   `"escape": "cancel"` for a full-page create) and every control is reachable with a visible ring
   (`apps/visual/tests/keyboard.spec.ts`).
@@ -115,10 +115,10 @@ present. Create the branch with `/branch-create new block <name> #<n>`.
 Write the brief to the run log: the draft `block.json` (no files in `blocks/` yet), one line per
 region naming the components that render it, the variant list from the issue's states, the sample
 content, and the draft `guidelines.md` in the shared format (see any
-`packages/webkit/blocks/view/view-table/guidelines.md`: `# <Block name>`, the purpose
+`packages/ui/blocks/view/view-table/guidelines.md`: `# <Block name>`, the purpose
 paragraph, `## When to use`, `## When not to use`, `## Building blocks` with
 ``### A. <Element> — `Component` ``, `## Data`, `## Do`, `## Don't`, `## Copy`, `## Accessibility`,
-`## States`, `## Related`), written against the consumer skills the block lists. Every component named exists in `packages/webkit/package.json#exports` (check it
+`## States`, `## Related`), written against the consumer skills the block lists. Every component named exists in `packages/ui/package.json#exports` (check it
 with the MCP `get_component`, never from memory).
 
 ## Step 4 — Brief review by a second agent
@@ -132,21 +132,21 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
 1. Write `block.json`, `<name>.vue`, `variants/<state>.vue` and `guidelines.md` in the folder
    above; update `guidelines.md` to the built SFC (letters follow the SFC order, every imported
    component appears in one building block, one States line per variant). Each SFC
-   imports only `@aziontech/webkit/*` subpaths and `@aziontech/icons`, follows
+   imports only `@aziontech/ui/*` subpaths and `@aziontech/icons`, follows
    `contributing/skills/ui-craft` "Start here", and follows the data contract above (the primary
    plus its `files` run on their own; a variant needs only them).
-2. `pnpm --filter @aziontech/webkit build:catalog` and
+2. `pnpm --filter @aziontech/ui build:catalog` and
    commit `catalog.json`, `catalog/` and `llms/`. The docs page and the visual test follow from the files;
    baselines for a new block come from the `Visual baselines` workflow (`/baselines-regenerate`).
-3. Exit condition: `node packages/webkit/scripts/check-naming.mjs` and
-   `node packages/webkit/scripts/check-blocks.mjs` pass (the latter fails when `guidelines.md`
+3. Exit condition: `node packages/ui/scripts/check-naming.mjs` and
+   `node packages/ui/scripts/check-blocks.mjs` pass (the latter fails when `guidelines.md`
    is missing, a section is missing or empty, a building block names a component the primary SFC
    does not import or leaves one out, or a variant has no States line).
 
 ## Step 6 — Machine gates
 
 The `/component-new` step-6 commands, with the browser run narrowed to the copyable SFCs:
-`cd packages/webkit && pnpm exec vitest run copyable-sfcs`. Exit condition: all exit 0.
+`cd packages/ui && pnpm exec vitest run copyable-sfcs`. Exit condition: all exit 0.
 
 ## Step 7 — `ui-craft` review (mandatory)
 
@@ -155,11 +155,11 @@ blocker.
 
 ## Step 8 — Usage check
 
-`pnpm --filter @aziontech/webkit run check:usage -- <category-path>/<name> "<prompt>" --report usage-report.md`
+`pnpm --filter @aziontech/ui run check:usage -- <category-path>/<name> "<prompt>" --report usage-report.md`
 (for example `settings/settings-api-tokens`), or the `usage-check.yml` workflow. The prompt asks for
 the screen by its job, never by the block id. Pass: the generated `src/**/*.vue` imports at least
 80 % of the components the block's primary SFC imports (the session copied it through
-`get_block`) and `webkit doctor` passes.
+`get_block`) and `azion-ui doctor` passes.
 
 ## Step 9 — Pull request
 

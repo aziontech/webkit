@@ -2,7 +2,7 @@
 
 > The safe frame for an interactive widget a tool returns inside a chat answer: an MCP app (MCP Apps, or the older MCP-UI) such as a plan picker, a booking form or a map that a tool call rendered as HTML. It runs the widget in a sandboxed `iframe` with an opaque origin and a strict content policy, gives it an accessible name, shows a loading state while it starts and a blocked state when the resource cannot be shown safely, grows to the height the widget reports, and forwards every well-formed message the widget sends (call a tool, open a link, send a prompt, the start handshake) to the app as a `message` event. It never acts on a message itself: the app decides, and answers through `post()`. Unlike `embed` (a third-party page an author places on purpose and trusts), the content here is written by a tool at run time and is untrusted by default, so the frame owns the sandbox, the content policy, the message checks and the navigation guard instead of leaving them to the consumer. Threat model. The widget is hostile: it comes from an MCP server the reader may not control, through a model hostile content may have steered. - Page access: the `iframe` has exactly `sandbox="allow-scripts"` (no `allow-same-origin`, `allow-top-navigation`, `allow-popups`, `allow-forms`, `allow-modals` or `allow-downloads`), `referrerpolicy="no-referrer"` and `allow=""`. Its document has an opaque origin: no parent DOM, cookies, storage or session (`window.parent.document` throws), no device permissions, no tab navigation, windows, forms, downloads or dialogs. - Network: inline HTML is prefixed with `<!doctype html>` and a Content Security Policy `meta` (`default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'`), so it cannot fetch or load remote content. A resolved URL follows its server's policy. An inline widget also inherits the page's own policy: with a nonce, a hash or `'strict-dynamic'` there, its scripts never run (it stays `ready` and silent), so such an app resolves widgets to an https origin of its own. - URLs: the frame never loads a URL taken from the resource; only an absolute `https:` URL that `resolveUrl` returns. - Messages: accepted only from the current `iframe`'s window with the origin `null`, in one of two shapes, and rebuilt from their known keys; the raw `MessageEvent` (its `source` window and `ports`) never reaches the app. `post()` targets `*`, the only target an opaque origin has, and only that window. - Navigation: the widget can navigate its own frame; the second `load` blocks the frame, but the new page runs until then. The app's own `frame-src`, limited to the origins `resolveUrl` returns, stops it before it leaves. - Residual: WebRTC, DNS prefetch and self-navigation can carry out what the widget holds, so everything sent with `post()` counts as disclosed; a widget can draw look-alike controls inside its bordered box (show its `tool-call` row before it, never ask for credentials in it) and can hold keyboard focus. Height is clamped to 48 px–`maxHeight`. - Out of scope: the MCP Apps sandbox-proxy flow (it needs `allow-same-origin` on a second origin) and what the app does with a message (check tool names and arguments; `tool-approval` for a sensitive tool).
 
-- Import: `import McpAppFrame from '@aziontech/webkit/mcp-app-frame'`
+- Import: `import McpAppFrame from '@aziontech/ui/mcp-app-frame'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [mcp-app-frame.json](mcp-app-frame.json)
 
@@ -25,7 +25,7 @@
 
 - A third-party page an author places on purpose (a demo, a player, a form) → `embed`.
 - A remote multi-page site: the frame blocks a widget that navigates.
-- Live WebKit components shown in the documentation → `browser-frame`.
+- Live Azion UI components shown in the documentation → `browser-frame`.
 - A generated file the reader may copy, download or open → `artifact-preview`.
 - The record of what the tool did (name, input, output, status) → `tool-call`; the app frame sits after it in the same message.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -101,7 +101,7 @@
 
 ```vue
 <script setup>
-  import McpAppFrame from '@aziontech/webkit/mcp-app-frame'
+  import McpAppFrame from '@aziontech/ui/mcp-app-frame'
   import { ref } from 'vue'
 
   const widget = `<style>
@@ -251,7 +251,7 @@
 
 ```vue
 <script setup>
-  import McpAppFrame from '@aziontech/webkit/mcp-app-frame'
+  import McpAppFrame from '@aziontech/ui/mcp-app-frame'
 
   const widgetUrls = {
     'ui://status/overview': 'https://example.com/'
@@ -291,7 +291,7 @@
 
 ```vue
 <script setup>
-  import McpAppFrame from '@aziontech/webkit/mcp-app-frame'
+  import McpAppFrame from '@aziontech/ui/mcp-app-frame'
 
   const resource = {
     uri: 'ui://analytics/traffic-map',

@@ -9,7 +9,7 @@
       "entry": ["contributing/hooks/*.mjs"],
       "project": ["*.{js,mjs}", "contributing/hooks/**/*.mjs"]
     },
-    "packages/webkit": {
+    "packages/ui": {
       "entry": [
         "scripts/check-deprecated-usage.mjs",
         "src/**/*.figma.ts",

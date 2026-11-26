@@ -1,9 +1,9 @@
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import NumberInput from '@aziontech/webkit/number-input'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import NumberInput from '@aziontech/ui/number-input'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { reactive } from 'vue'
 
   const form = reactive({ ttl: 3600, stale: false })

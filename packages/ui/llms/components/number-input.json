@@ -1,8 +1,8 @@
 {
  "name": "number-input",
  "binding": "NumberInput",
- "import": "@aziontech/webkit/number-input",
- "treeShakeableImport": "@aziontech/webkit/number-input",
+ "import": "@aziontech/ui/number-input",
+ "treeShakeableImport": "@aziontech/ui/number-input",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { toast } from '@aziontech/webkit/toast'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { toast } from '@aziontech/ui/toast'
   import { onScopeDispose, ref } from 'vue'
 
   import { sampleResourceName } from '../sample'

@@ -2,7 +2,7 @@
 
 > The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline. It is a docs card built like every other card on the page: a `RegistrationFrame` with corner marks, a flat `--bg-surface` face, the wordmark at its small size, a headline, a subtitle and full-width stacked actions. Set on the rail scale (14 px headline, 12 px copy) so it never out-shouts the page outline. Every string is content passed by the page. Its actions are `{ label, href }` objects, the same shape as the marketing bands' `primaryAction` / `secondaryAction`.
 
-- Import: `import DocCallToAction from '@aziontech/webkit/doc-call-to-action'`
+- Import: `import DocCallToAction from '@aziontech/ui/doc-call-to-action'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-call-to-action.json](doc-call-to-action.json)
 
@@ -73,7 +73,7 @@
 
 ```vue
 <script setup>
-  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
+  import DocCallToAction from '@aziontech/ui/doc-call-to-action'
 </script>
 
 <template>
@@ -92,7 +92,7 @@
 
 ```vue
 <script setup>
-  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
+  import DocCallToAction from '@aziontech/ui/doc-call-to-action'
 </script>
 
 <template>
@@ -112,8 +112,8 @@
 
 ```vue
 <script setup>
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
 
   const source = [
     '## Next steps',

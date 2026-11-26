@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Alert from '@aziontech/ui/alert'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
   import { computed, onScopeDispose, ref } from 'vue'
 
   import { oauthClient as client, oauthScopes as scopes, signedInAccount } from '../sample'

@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import MediaSplitSection from '@aziontech/webkit/media-split-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import MediaSplitSection from '@aziontech/ui/media-split-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const scene = {
     component: 'BrandGlobeScene'

@@ -1,8 +1,8 @@
 {
  "name": "file-token-group",
  "binding": "FileTokenGroup",
- "import": "@aziontech/webkit/file-token-group",
- "treeShakeableImport": "@aziontech/webkit/file-token-group",
+ "import": "@aziontech/ui/file-token-group",
+ "treeShakeableImport": "@aziontech/ui/file-token-group",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

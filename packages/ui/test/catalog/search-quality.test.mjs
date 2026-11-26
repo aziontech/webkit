@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import test from 'node:test'
 
-process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
+process.env.AZION_UI_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
 
 const { loadCatalog, _resetCatalogCache } = await import('../../src/catalog/catalog.js')
 const { searchBlocks, searchComponents, suggestComponent } =

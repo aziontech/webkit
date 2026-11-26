@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/feedback/empty-state/empty-state.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/feedback/empty-state/empty-state.vue
 // component=EmptyState
 import figma from 'figma'
 
@@ -36,7 +36,7 @@ export default {
     ${actions}
   </template>
 </EmptyState>`,
-  imports: ["import EmptyState from '@aziontech/webkit/empty-state'"],
+  imports: ["import EmptyState from '@aziontech/ui/empty-state'"],
   id: 'empty-state',
   metadata: { nestable: false }
 }

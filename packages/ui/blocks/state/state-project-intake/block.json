@@ -19,7 +19,7 @@
     "enviar projeto",
     "upload de arquivos"
   ],
-  "skills": ["webkit-ui-states", "webkit-motion-polish"],
+  "skills": ["azion-ui-states", "azion-ui-motion-polish"],
   "primary": {
     "name": "DropZone",
     "file": "state-project-intake.vue"

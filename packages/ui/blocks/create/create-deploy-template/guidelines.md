@@ -115,7 +115,7 @@ Then delete `sample.ts` and its import.
 - **Upload:** breadcrumb "Upload a project"; "Project files"; "Root (/)" with "Select a file".
 - **Import:** breadcrumb "Import from Git"; preview "Import and deploy the acme-web repository from GitHub."
 - **Commit:** "Deploy", the same verb on the button and in the run that follows.
-- Follow `skills/webkit-microcopy`: sentence case, no em dash in labels or `aria-label`s, no parentheses in labels.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash in labels or `aria-label`s, no parentheses in labels.
 
 ## Accessibility
 

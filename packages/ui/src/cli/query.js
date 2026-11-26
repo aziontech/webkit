@@ -78,7 +78,7 @@ const clip = (s, n = 160) => {
 }
 
 export function formatSearch(result) {
-  const out = [`webkit ${result.version} — "${result.query}"`, '']
+  const out = [`ui ${result.version} — "${result.query}"`, '']
   out.push(`Blocks (${result.blocks.length})`)
   for (const b of result.blocks) out.push(`  ${b.id}  ${clip(b.summary, 110)}`)
   if (!result.blocks.length) out.push('  none')

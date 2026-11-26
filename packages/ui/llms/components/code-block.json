@@ -1,8 +1,8 @@
 {
  "name": "code-block",
  "binding": "CodeBlock",
- "import": "@aziontech/webkit/code-block",
- "treeShakeableImport": "@aziontech/webkit/code-block",
+ "import": "@aziontech/ui/code-block",
+ "treeShakeableImport": "@aziontech/ui/code-block",
  "category": "code",
  "surface": "app",
  "structure": "monolithic",
@@ -38,7 +38,7 @@
   "Set `:copyable=\"false\"` on decorative blocks, and `:bordered=\"false\"` when the block sits inside a surface that already frames it.",
   "Keep `animate-lines` for marketing layouts; leave it off in docs and console screens.",
   "Do: keep a command block to what the reader runs — the copy control copies exactly that. Put what it prints in a second block with `type=\"output\"` (or in prose).",
-  "Don't: write expected output into the command, as a `# HTTP/2 200` comment or as unprompted lines after a `$ ` prompt — the reader pastes it into the terminal. The `webkit/no-output-in-command` lint warns on it.",
+  "Don't: write expected output into the command, as a `# HTTP/2 200` comment or as unprompted lines after a `$ ` prompt — the reader pastes it into the terminal. The `azion-ui/no-output-in-command` lint warns on it.",
   "Do: turn `show-label` on in docs (`DocCodeGroup` does by default) so every block is titled with its language; set `title` only when the language name is not the right title."
  ],
  "props": [

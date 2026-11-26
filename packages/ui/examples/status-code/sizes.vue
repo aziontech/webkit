@@ -1,5 +1,5 @@
 <script setup>
-  import StatusCode from '@aziontech/webkit/status-code'
+  import StatusCode from '@aziontech/ui/status-code'
 </script>
 
 <template>

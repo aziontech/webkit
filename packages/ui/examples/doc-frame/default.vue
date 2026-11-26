@@ -1,5 +1,5 @@
 <script setup>
-  import DocFrame from '@aziontech/webkit/doc-frame'
+  import DocFrame from '@aziontech/ui/doc-frame'
 </script>
 
 <template>

@@ -12,13 +12,13 @@ import { FRAGMENT_END, FRAGMENT_START } from '../../src/cli/bundle.js'
 import { planDoctor } from '../../src/cli/doctor.js'
 import { planInit } from '../../src/cli/plan.js'
 import { hasBundle, resolveBundleRoot } from '../../src/cli/sync.js'
-import webkitPlugin from '../../src/eslint-plugin/index.js'
+import azionUiPlugin from '../../src/eslint-plugin/index.js'
 import { cli, PKG_ROOT } from './lib/cli-project.mjs'
 
 const REPO_ROOT = join(PKG_ROOT, '..', '..')
 
 function makeMonorepo({ git = true } = {}) {
-  const root = mkdtempSync(join(tmpdir(), 'webkit-monorepo-'))
+  const root = mkdtempSync(join(tmpdir(), 'azion-ui-monorepo-'))
   if (git) mkdirSync(join(root, '.git'))
   writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'mono', private: true }))
   const app = join(root, 'apps', 'web')
@@ -41,11 +41,11 @@ test('an app with no agent files of its own uses the bundle at the repository ro
     assert.equal(check.status, 'ok')
     assert.match(check.detail, /\.\.\/\.\. are current/)
 
-    rmSync(join(root, '.claude', 'rules', 'webkit-imports.md'))
+    rmSync(join(root, '.claude', 'rules', 'azion-ui-imports.md'))
     check = bundleCheck(app)
     assert.equal(check.status, 'fail')
     assert.match(check.detail, /sync` in \.\.\/\.\./)
-    assert.match(check.detail, /missing: \.\.\/\.\.\/\.claude\/rules\/webkit-imports\.md/)
+    assert.match(check.detail, /missing: \.\.\/\.\.\/\.claude\/rules\/azion-ui-imports\.md/)
   } finally {
     rmSync(root, { recursive: true, force: true })
   }
@@ -59,7 +59,7 @@ test('sync run inside the app reconciles the root bundle instead of writing a se
     assert.equal(r.code, 0, r.stderr)
     assert.match(r.stdout, /the repository root that owns the agent files/)
     assert.equal(existsSync(join(app, '.claude')), false)
-    assert.equal(existsSync(join(root, '.claude', 'rules', 'webkit-imports.md')), true)
+    assert.equal(existsSync(join(root, '.claude', 'rules', 'azion-ui-imports.md')), true)
     assert.equal(bundleCheck(app).status, 'ok')
   } finally {
     rmSync(root, { recursive: true, force: true })
@@ -81,7 +81,7 @@ test('an app keeps its own bundle, and an ancestor outside the repository is ign
   }
 })
 
-test('an app inside the WebKit repository reads the bundle sources at the root', () => {
+test('an app inside the Azion UI repository reads the bundle sources at the root', () => {
   const demos = join(REPO_ROOT, 'apps', 'demos')
   assert.equal(resolveBundleRoot(demos).kind, 'source')
   const check = bundleCheck(demos)
@@ -98,12 +98,12 @@ test('an app config can spread the repository ESLint config and the strict prese
   const eslint = new ESLint({
     cwd: join(REPO_ROOT, 'apps', 'demos'),
     overrideConfigFile: true,
-    overrideConfig: [...rootConfig, ...webkitPlugin.configs.strict]
+    overrideConfig: [...rootConfig, ...azionUiPlugin.configs.strict]
   })
   const [result] = await eslint.lintText('<template><div class="ml-2" /></template>\n', {
     filePath: join(REPO_ROOT, 'apps', 'demos', 'src', 'Probe.vue')
   })
-  const direction = result.messages.filter((m) => m.ruleId === 'webkit/no-physical-direction')
+  const direction = result.messages.filter((m) => m.ruleId === 'azion-ui/no-physical-direction')
   assert.equal(direction.length, 1)
 })
 

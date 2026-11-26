@@ -2,7 +2,7 @@
 
 > A native video player with play and pause, seek with time, mute and volume, captions and full screen. It also shows the states of a generated video before it plays: generating (with an optional percentage) and error. It plays the URL the app hands it (https, `blob:` or `data:`) and fetches nothing.
 
-- Import: `import VideoPlayer from '@aziontech/webkit/video-player'`
+- Import: `import VideoPlayer from '@aziontech/ui/video-player'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [video-player.json](video-player.json)
 
@@ -104,9 +104,9 @@
 
 ```vue
 <script setup>
-  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import VideoPlayer from '@aziontech/webkit/video-player'
+  import placeholderClip from '@aziontech/ui/assets/placeholder-clip.webm'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import VideoPlayer from '@aziontech/ui/video-player'
 
   const vtt = 'WEBVTT\n\n00:00.000 --> 00:05.000\nCreate an application for Acme Store.'
   const captions = [
@@ -135,7 +135,7 @@
 
 ```vue
 <script setup>
-  import VideoPlayer from '@aziontech/webkit/video-player'
+  import VideoPlayer from '@aziontech/ui/video-player'
   import { ref } from 'vue'
 
   const failedStatus = ref('error')

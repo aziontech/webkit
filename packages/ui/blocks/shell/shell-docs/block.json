@@ -57,7 +57,7 @@
     "documentation page body",
     "docs outline from headings"
   ],
-  "skills": ["webkit-layout", "webkit-navigation"],
+  "skills": ["azion-ui-layout", "azion-ui-navigation"],
   "primary": {
     "name": "Default",
     "file": "shell-docs.vue"

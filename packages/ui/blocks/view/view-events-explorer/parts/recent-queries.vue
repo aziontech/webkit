@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item-root'
-  import Popover from '@aziontech/webkit/popover'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item-root'
+  import Popover from '@aziontech/ui/popover'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { QueryEntry } from '../lib/event-query'
 

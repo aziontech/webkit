@@ -1,6 +1,6 @@
 <script setup>
-  import DocAccordion from '@aziontech/webkit/doc-accordion'
-  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
+  import DocAccordion from '@aziontech/ui/doc-accordion'
+  import DocAccordionGroup from '@aziontech/ui/doc-accordion-group'
 </script>
 
 <template>

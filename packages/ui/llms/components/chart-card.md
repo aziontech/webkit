@@ -2,8 +2,8 @@
 
 > Use ChartCard as the frame of a chart on a dashboard; for one box of other content use Card, and for a collection of records as cards use CardList. The box a dashboard chart lives in: a header with the title, the description and a controls zone, a content area padded or flush, an optional footer, and two optional handles that let the person move the card and resize it on a dashboard grid. The span (grid columns) and height are two-way models applied through custom properties, so the consumer's grid lays cards out with no script, and the reorder state stays with the page that owns the grid.
 
-- Import: `import ChartCardRoot from '@aziontech/webkit/chart-card-root'`
-- Compound import (dot notation, not tree-shakeable): `import ChartCard from '@aziontech/webkit/chart-card'`
+- Import: `import ChartCardRoot from '@aziontech/ui/chart-card-root'`
+- Compound import (dot notation, not tree-shakeable): `import ChartCard from '@aziontech/ui/chart-card'`
 - Category: chart · Surface: app · Structure: composition
 - API as JSON: [chart-card.json](chart-card.json)
 
@@ -66,14 +66,14 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/chart-card-content`
-- `@aziontech/webkit/chart-card-controls`
-- `@aziontech/webkit/chart-card-description`
-- `@aziontech/webkit/chart-card-drag-handle`
-- `@aziontech/webkit/chart-card-footer`
-- `@aziontech/webkit/chart-card-header`
-- `@aziontech/webkit/chart-card-resize-handle`
-- `@aziontech/webkit/chart-card-title`
+- `@aziontech/ui/chart-card-content`
+- `@aziontech/ui/chart-card-controls`
+- `@aziontech/ui/chart-card-description`
+- `@aziontech/ui/chart-card-drag-handle`
+- `@aziontech/ui/chart-card-footer`
+- `@aziontech/ui/chart-card-header`
+- `@aziontech/ui/chart-card-resize-handle`
+- `@aziontech/ui/chart-card-title`
 
 ## Sub-components
 
@@ -92,7 +92,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text description.
-- `chart-card-controls/chart-card-controls.vue` — the trailing zone of the header for tags and the options menu. Attached to the root as `ChartCard.Action` (shadcn's CardAction); imported alone from `@aziontech/webkit/chart-card-controls`.
+- `chart-card-controls/chart-card-controls.vue` — the trailing zone of the header for tags and the options menu. Attached to the root as `ChartCard.Action` (shadcn's CardAction); imported alone from `@aziontech/ui/chart-card-controls`.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the consumer's tags, buttons and dropdown.
@@ -151,9 +151,9 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ```vue
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import Hint from '@aziontech/webkit/hint'
+  import Chart from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import Hint from '@aziontech/ui/hint'
 
   const labels = [
     '13:05',
@@ -219,8 +219,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ```vue
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
+  import Chart from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
 
   const labels = [
     '13:05',
@@ -303,15 +303,15 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ```vue
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tag from '@aziontech/webkit/tag'
+  import Chart from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenuRoot from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tag from '@aziontech/ui/tag'
 
   const labels = [
     '13:05',

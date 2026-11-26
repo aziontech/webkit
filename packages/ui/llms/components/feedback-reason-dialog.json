@@ -1,8 +1,8 @@
 {
  "name": "feedback-reason-dialog",
  "binding": "FeedbackReasonDialog",
- "import": "@aziontech/webkit/feedback-reason-dialog",
- "treeShakeableImport": "@aziontech/webkit/feedback-reason-dialog",
+ "import": "@aziontech/ui/feedback-reason-dialog",
+ "treeShakeableImport": "@aziontech/ui/feedback-reason-dialog",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

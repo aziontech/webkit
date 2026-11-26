@@ -22,11 +22,11 @@ const EXPORTS: Record<string, string | { default: string }> = JSON.parse(
 ).exports
 
 const selfExports = {
-  name: 'webkit-self-exports',
+  name: 'azion-ui-self-exports',
   enforce: 'pre' as const,
   resolveId(id: string) {
-    if (!id.startsWith('@aziontech/webkit/')) return null
-    const entry = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    if (!id.startsWith('@aziontech/ui/')) return null
+    const entry = EXPORTS[`./${id.slice('@aziontech/ui/'.length)}`]
     const target = typeof entry === 'string' ? entry : entry?.default
     return target ? join(PKG, target) : null
   }

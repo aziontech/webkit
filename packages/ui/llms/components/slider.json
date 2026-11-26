@@ -1,8 +1,8 @@
 {
  "name": "slider",
  "binding": "Slider",
- "import": "@aziontech/webkit/slider",
- "treeShakeableImport": "@aziontech/webkit/slider",
+ "import": "@aziontech/ui/slider",
+ "treeShakeableImport": "@aziontech/ui/slider",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

@@ -2,7 +2,7 @@
 // PreToolUse hook (Write|Edit|MultiEdit): runs the naming standard (contributing/rules/naming.md)
 // on the file a write produces and blocks only the violations the write ADDS. Rules in
 // the "staged" stage block too while NAMING_STAGED_BLOCKS is true in
-// packages/webkit/scripts/lib/naming-rules.mjs (or WEBKIT_NAMING_STRICT=1). The engine is
+// packages/ui/scripts/lib/naming-rules.mjs (or AZION_UI_NAMING_STRICT=1). The engine is
 // the same one the CI gate (scripts/check-naming.mjs) runs. Fail-open on any error.
 
 import { readFileSync } from 'node:fs'
@@ -67,7 +67,7 @@ async function main() {
     process.exit(0)
   const baseline = readExisting(ti.file_path)
   const result = resultingContent(tool, ti, baseline)
-  const strict = process.env.WEBKIT_NAMING_STRICT === '1'
+  const strict = process.env.AZION_UI_NAMING_STRICT === '1'
   const blocking = blockingAdditions(rel, baseline, result, loadContext(ROOT), strict)
   if (!blocking.length) process.exit(0)
   const lines = [`Naming standard blocked ${tool} on ${rel}:`, '']

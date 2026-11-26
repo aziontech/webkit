@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import RadioGroup, { type RadioGroupOption } from '@aziontech/webkit/radio-group'
+  import RadioGroup, { type RadioGroupOption } from '@aziontech/ui/radio-group'
   import { ref } from 'vue'
 
   interface Plan extends RadioGroupOption {

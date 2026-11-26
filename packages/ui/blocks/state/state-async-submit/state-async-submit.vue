@@ -1,17 +1,14 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import LogViewer, {
-    type LogViewerStep,
-    type LogViewerStepsView
-  } from '@aziontech/webkit/log-viewer'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import LogViewer, { type LogViewerStep, type LogViewerStepsView } from '@aziontech/ui/log-viewer'
+  import PageHeader from '@aziontech/ui/page-header'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import { toast } from '@aziontech/ui/toast'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   /** Where the run stands, read from the props. */

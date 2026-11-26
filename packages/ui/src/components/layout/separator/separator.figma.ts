@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-886
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/layout/separator/separator.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/layout/separator/separator.vue
 // component=Separator
 import figma from 'figma'
 
@@ -14,7 +14,7 @@ const label = instance.getString('label')
 
 export default {
   example: figma.code`<Separator${orientation === 'horizontal' ? '' : figma.code` orientation="${orientation}"`}${showContent ? figma.code` label="${label}"` : ''} />`,
-  imports: ["import Separator from '@aziontech/webkit/separator'"],
+  imports: ["import Separator from '@aziontech/ui/separator'"],
   id: 'divider',
   metadata: { nestable: true }
 }

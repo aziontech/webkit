@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import ConfigProvider from '@aziontech/webkit/config-provider'
+  import ConfigProvider from '@aziontech/ui/config-provider'
 
   export interface CustomerClockProps {
     /** A fixed reference time for every countdown and relative time inside; the sample also reads its dates in UTC; left out, the page reads the real clock and zone or the app provider's. */

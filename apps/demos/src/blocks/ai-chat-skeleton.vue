@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Skeleton from '@aziontech/ui/skeleton'
 </script>
 
 <template>

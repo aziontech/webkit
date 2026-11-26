@@ -29,8 +29,8 @@
 
   const BUCKETS = [
     {
-      id: 'webkit-docs-dev',
-      name: 'webkit-docs-dev',
+      id: 'azion-ui-docs-dev',
+      name: 'azion-ui-docs-dev',
       access: 'Public',
       objects: 128,
       size: '412.6 MB'

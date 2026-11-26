@@ -1,8 +1,8 @@
 {
  "name": "kbd",
  "binding": "Kbd",
- "import": "@aziontech/webkit/kbd",
- "treeShakeableImport": "@aziontech/webkit/kbd",
+ "import": "@aziontech/ui/kbd",
+ "treeShakeableImport": "@aziontech/ui/kbd",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

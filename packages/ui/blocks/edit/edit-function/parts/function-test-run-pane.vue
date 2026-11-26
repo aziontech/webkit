@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import LogViewerContent from '@aziontech/webkit/log-viewer-content'
-  import LogViewer from '@aziontech/webkit/log-viewer-root'
-  import ResizablePane from '@aziontech/webkit/resizable-pane'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Trace from '@aziontech/webkit/trace'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import LogViewerContent from '@aziontech/ui/log-viewer-content'
+  import LogViewer from '@aziontech/ui/log-viewer-root'
+  import ResizablePane from '@aziontech/ui/resizable-pane'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import Trace from '@aziontech/ui/trace'
 
   import {
     sampleRunDetails,

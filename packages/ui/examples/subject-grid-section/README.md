@@ -4,7 +4,7 @@ A library of subjects in a divider grid. Each subject is one card with its name,
 
 A call to action closes the grid and spans its last two cells, so the grid has no empty cell at any breakpoint. The Learning Center renders it.
 
-The band is the `SubjectGridSection` component from `@aziontech/webkit/subject-grid-section`; it composes `Module`, `RegistrationFrame`, `CardGrid`, `CallToAction` and `Button`.
+The band is the `SubjectGridSection` component from `@aziontech/ui/subject-grid-section`; it composes `Module`, `RegistrationFrame`, `CardGrid`, `CallToAction` and `Button`.
 
 ## Examples
 

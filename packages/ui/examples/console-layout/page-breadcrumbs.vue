@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Select from '@aziontech/webkit/select'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Card from '@aziontech/ui/card'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Select from '@aziontech/ui/select'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
   import { ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [

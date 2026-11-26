@@ -2,7 +2,7 @@
 
 > Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, for a catalog tile use IntegrationCard, and for the frame of a dashboard chart use ChartCard. A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. It holds a settings block, a summary or a form section.
 
-- Import: `import Card from '@aziontech/webkit/card'`
+- Import: `import Card from '@aziontech/ui/card'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [card.json](card.json)
 
@@ -99,7 +99,7 @@
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
+  import Card from '@aziontech/ui/card'
 </script>
 
 <template>
@@ -120,8 +120,8 @@
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Card from '@aziontech/ui/card'
+  import IconButton from '@aziontech/ui/icon-button'
 </script>
 
 <template>
@@ -150,9 +150,9 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Link from '@aziontech/webkit/link'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

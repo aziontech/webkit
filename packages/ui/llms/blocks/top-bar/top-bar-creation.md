@@ -3,10 +3,10 @@
 > The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `AppHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the Creation Center (`create/create-hub`) render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `AppHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `AppHeaderAccount`, `DropdownMenu` and `Brand`.
 
 - Surface: app
-- Source: `blocks/top-bar/top-bar-creation/top-bar-creation.vue` in `@aziontech/webkit`
+- Source: `blocks/top-bar/top-bar-creation/top-bar-creation.vue` in `@aziontech/ui`
 - MCP: `get_block("top-bar/top-bar-creation")`
 - Components: [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [DropdownMenu](../../components/dropdown-menu.md), [IconButton](../../components/icon-button.md), [Tooltip](../../components/tooltip.md)
-- Skills: `webkit-navigation`, `webkit-layout`
+- Skills: `azion-ui-navigation`, `azion-ui-layout`
 
 ## Asked as
 
@@ -142,13 +142,13 @@ Each variant is the same screen in another state: `get_block("top-bar/top-bar-cr
 
 ```vue
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppHeaderAccount from '@aziontech/ui/app-header-account'
+  import Brand from '@aziontech/ui/brand'
+  import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/ui/breadcrumb-root'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed } from 'vue'
 
   import { sampleAccount } from './sample'

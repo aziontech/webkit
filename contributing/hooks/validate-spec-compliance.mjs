@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// PostToolUse hook: after a Write/Edit/MultiEdit on a webkit-layer .vue,
+// PostToolUse hook: after a Write/Edit/MultiEdit on an azion-ui-layer .vue,
 // re-read the file and verify the props/events/slots/animations in the code
 // match the spec at .specs/<name>.md 1-to-1. Blocks on any divergence.
 //
 // The checks themselves live in ./lib/spec-compliance-checks.mjs and are ALSO run
-// repo-wide by the CI ratchet (packages/webkit/scripts/check-authoring.mjs) — one
+// repo-wide by the CI ratchet (packages/ui/scripts/check-authoring.mjs) — one
 // definition, two surfaces, so an editor push can't bypass this hook.
 
 import { readFileSync } from 'node:fs'
@@ -18,7 +18,7 @@ const ROOT = process.cwd()
 function baselinedSpecKeys() {
   try {
     const entries = JSON.parse(
-      readFileSync(resolve(ROOT, 'packages/webkit/scripts/authoring-baseline.json'), 'utf-8')
+      readFileSync(resolve(ROOT, 'packages/ui/scripts/authoring-baseline.json'), 'utf-8')
     )
     return new Set(Array.isArray(entries) ? entries : [])
   } catch {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import SettingsGroup from '@aziontech/ui/settings-group'
 
   import DeployDrawerFrame from '../parts/deploy-drawer-frame.vue'
 </script>

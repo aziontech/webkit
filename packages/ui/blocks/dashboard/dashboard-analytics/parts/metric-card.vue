@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Link from '@aziontech/ui/link'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** The change tag in a card header. */
   export interface MetricCardVariation {

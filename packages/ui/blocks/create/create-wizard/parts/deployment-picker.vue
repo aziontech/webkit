@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/webkit/utils/radio-list'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import { onRadioListKeydown, radioListTabIndex } from '@aziontech/ui/utils/radio-list'
 
   import {
     type ServiceWizardForm,

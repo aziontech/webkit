@@ -1,5 +1,5 @@
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
+  import CopyButton from '@aziontech/ui/copy-button'
 </script>
 
 <template>

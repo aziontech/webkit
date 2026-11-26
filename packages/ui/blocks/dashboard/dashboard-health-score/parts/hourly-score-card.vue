@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
-  import Tracker from '@aziontech/webkit/tracker'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
+  import Tracker from '@aziontech/ui/tracker'
   import { computed } from 'vue'
 
   import type { HealthScoreHourlyRow } from '../dashboard-health-score.vue'

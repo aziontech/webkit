@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 10
 template: 2
-checksum: 3d46b767119668055b1ad76ee7893262abfceaeb653e71c88e0f6cd0845e4ca7
+checksum: d005f8b075ae7b0075cc3746bf2585450a181cb2476d588f8d051d7f7c9877aa
 created: 2026-06-25
 last_updated: 2026-11-25
 ---
@@ -44,7 +44,7 @@ The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old F
 
 ```vue
 <script setup>
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
+  import FlowDiagram from '@aziontech/ui/flow-diagram'
 
   const nodes = [
     { id: 'you', title: 'You', description: 'Browser', status: 'Working', severity: 'success' },
@@ -77,7 +77,7 @@ The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old F
 </template>
 ```
 
-**Three ways in** (decision RV-F2-1, rule `webkit-content-channels`). The same data renders from a docs page and from the site's page JSON:
+**Three ways in** (decision RV-F2-1, rule `azion-ui-content-channels`). The same data renders from a docs page and from the site's page JSON:
 
 ```mdx
 <FlowDiagram
@@ -97,7 +97,7 @@ The one in-product diagram (owner decision RV-Y1, 2026-11-18): it kept the old F
 
 Markdown takes the data mode only (the composed parts stay Vue); `DocMarkdown` loads the diagram as an async chunk. On the site the diagram is the `FlowDiagram` scene inside a band, never an `_id` of its own.
 
-The root is also published standalone as `@aziontech/webkit/flow-diagram-root`, and every part as `@aziontech/webkit/flow-diagram-<part>`. The data-mode card is loaded as a lazy chunk, so a composed diagram never downloads it.
+The root is also published standalone as `@aziontech/ui/flow-diagram-root`, and every part as `@aziontech/ui/flow-diagram-<part>`. The data-mode card is loaded as a lazy chunk, so a composed diagram never downloads it.
 
 ## Sub-components
 
@@ -242,7 +242,7 @@ The root emits nothing; the bind events live on the `flow-diagram-bind` companio
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

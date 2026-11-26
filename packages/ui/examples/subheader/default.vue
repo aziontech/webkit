@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Subheader from '@aziontech/webkit/subheader'
+  import Button from '@aziontech/ui/button'
+  import Subheader from '@aziontech/ui/subheader'
 </script>
 
 <template>

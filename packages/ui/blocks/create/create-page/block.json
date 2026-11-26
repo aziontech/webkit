@@ -42,7 +42,7 @@
     "one page create",
     "create form page"
   ],
-  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors", "webkit-layout"],
+  "skills": ["azion-ui-create-surface", "azion-ui-form", "azion-ui-errors", "azion-ui-layout"],
   "primary": {
     "name": "Default",
     "file": "create-page.vue"

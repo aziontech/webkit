@@ -1,8 +1,8 @@
 {
  "name": "bar-list",
  "binding": "BarList",
- "import": "@aziontech/webkit/bar-list",
- "treeShakeableImport": "@aziontech/webkit/bar-list",
+ "import": "@aziontech/ui/bar-list",
+ "treeShakeableImport": "@aziontech/ui/bar-list",
  "category": "chart",
  "surface": "app",
  "structure": "monolithic",

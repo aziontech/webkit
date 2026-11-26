@@ -1,8 +1,8 @@
 {
  "name": "texture",
  "binding": "Texture",
- "import": "@aziontech/webkit/texture",
- "treeShakeableImport": "@aziontech/webkit/texture",
+ "import": "@aziontech/ui/texture",
+ "treeShakeableImport": "@aziontech/ui/texture",
  "category": "content",
  "surface": "site",
  "structure": "monolithic",

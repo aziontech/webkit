@@ -1,8 +1,8 @@
 {
  "name": "alert",
  "binding": "Alert",
- "import": "@aziontech/webkit/alert",
- "treeShakeableImport": "@aziontech/webkit/alert",
+ "import": "@aziontech/ui/alert",
+ "treeShakeableImport": "@aziontech/ui/alert",
  "category": "feedback",
  "surface": "app",
  "structure": "monolithic",

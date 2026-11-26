@@ -1,8 +1,8 @@
 {
  "name": "investor-marks-section",
  "binding": "InvestorMarksSection",
- "import": "@aziontech/webkit/investor-marks-section",
- "treeShakeableImport": "@aziontech/webkit/investor-marks-section",
+ "import": "@aziontech/ui/investor-marks-section",
+ "treeShakeableImport": "@aziontech/ui/investor-marks-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

@@ -1,8 +1,8 @@
 {
-  "name": "@aziontech/webkit-demos",
+  "name": "@aziontech/ui-demos",
   "version": "0.1.0",
   "private": true,
-  "description": "WebKit demos: routed console flows assembled from blocks with `webkit add`, on mock data",
+  "description": "Azion UI demos: routed console flows assembled from blocks with `azion-ui add`, on mock data",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -15,7 +15,7 @@
   "dependencies": {
     "@aziontech/icons": "workspace:*",
     "@aziontech/theme": "workspace:*",
-    "@aziontech/webkit": "workspace:*",
+    "@aziontech/ui": "workspace:*",
     "@tanstack/ai": "1.5.0",
     "@tanstack/ai-vue": "1.0.1",
     "vue": "^3.5.29",

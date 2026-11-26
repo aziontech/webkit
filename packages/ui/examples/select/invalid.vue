@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Select from '@aziontech/webkit/select'
+  import Field from '@aziontech/ui/field'
+  import Select from '@aziontech/ui/select'
   import { computed, ref } from 'vue'
 
   const value = ref('')

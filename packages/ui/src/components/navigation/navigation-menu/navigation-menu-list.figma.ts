@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3782-17415
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/navigation-menu/navigation-menu-list.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/navigation-menu/navigation-menu-list.vue
 // component=NavigationMenuList
 import figma from 'figma'
 
@@ -22,7 +22,7 @@ const items = instance
 export default {
   example: figma.code`<NavigationMenu.List${label ? figma.code` label="${label}"` : ''}>${items}
 </NavigationMenu.List>`,
-  imports: ["import NavigationMenu from '@aziontech/webkit/navigation-menu'"],
+  imports: ["import NavigationMenu from '@aziontech/ui/navigation-menu'"],
   id: 'navigation-menu-list',
   metadata: { nestable: true }
 }

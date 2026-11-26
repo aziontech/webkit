@@ -1,5 +1,5 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/ui/data-table'
 
   const rows = [
     { id: 'r1', name: 'Functions 2.4', area: 'Build', released: 'Jan 14, 2026' },

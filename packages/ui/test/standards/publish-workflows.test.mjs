@@ -13,8 +13,8 @@ test('every package has a publish workflow', () => {
   assert.deepEqual(files.sort(), [
     'publish-icons.yml',
     'publish-theme.yml',
-    'publish-webkit-mcp.yml',
-    'publish-webkit.yml'
+    'publish-ui-mcp.yml',
+    'publish-ui.yml'
   ])
 })
 

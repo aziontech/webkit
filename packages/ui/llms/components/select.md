@@ -2,8 +2,8 @@
 
 > Select control for choosing exactly one option from a list; several values are `multi-select`. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. A selected option shows a trailing check (`az az-check`) (the shadcn pattern), optionally a leading slot/icon and a trailing tag. The trigger shows the selected option's label (each option records its text, as Radix `SelectValue` does), not its raw value. Search and "Create new" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).
 
-- Import: `import SelectRoot from '@aziontech/webkit/select-root'`
-- Compound import (dot notation, not tree-shakeable): `import Select from '@aziontech/webkit/select'`
+- Import: `import SelectRoot from '@aziontech/ui/select-root'`
+- Compound import (dot notation, not tree-shakeable): `import Select from '@aziontech/ui/select'`
 - Category: input · Surface: app · Structure: composition
 - API as JSON: [select.json](select.json)
 
@@ -63,10 +63,10 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/select-trigger`
-- `@aziontech/webkit/select-content`
-- `@aziontech/webkit/select-group`
-- `@aziontech/webkit/select-item`
+- `@aziontech/ui/select-trigger`
+- `@aziontech/ui/select-content`
+- `@aziontech/ui/select-group`
+- `@aziontech/ui/select-item`
 
 ## Sub-components
 
@@ -118,7 +118,7 @@
 
 ```vue
 <script setup>
-  import Select from '@aziontech/webkit/select'
+  import Select from '@aziontech/ui/select'
   import { ref } from 'vue'
 
   const value = ref('')
@@ -156,7 +156,7 @@
 
 ```vue
 <script setup>
-  import Select from '@aziontech/webkit/select'
+  import Select from '@aziontech/ui/select'
   import { ref } from 'vue'
 
   const value = ref('')
@@ -195,8 +195,8 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import Select from '@aziontech/webkit/select'
+  import Breadcrumb from '@aziontech/ui/breadcrumb'
+  import Select from '@aziontech/ui/select'
   import { ref } from 'vue'
 
   const environment = ref('Production')

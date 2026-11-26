@@ -1,5 +1,5 @@
 export const CHANNELS = {
-  app: 'Vue: the component imported from @aziontech/webkit/<name> in an app, a block or a page.',
+  app: 'Vue: the component imported from @aziontech/ui/<name> in an app, a block or a page.',
   docs: 'Markdown: a tag DocMarkdown renders, such as <FlowDiagram nodes={[…]} />.',
   site: 'Page JSON: an entry SitePage renders, either a page section by _id or a scene a band draws by name.'
 }

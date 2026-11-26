@@ -1,5 +1,5 @@
 <script setup>
-  import CliTerminalSection from '@aziontech/webkit/cli-terminal-section'
+  import CliTerminalSection from '@aziontech/ui/cli-terminal-section'
 
   const primaryAction = {
     label: 'Install the CLI',

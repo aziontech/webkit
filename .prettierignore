@@ -1,6 +1,6 @@
-packages/webkit/catalog.json
-packages/webkit/scripts/api-snapshot.json
-packages/webkit/catalog/
+packages/ui/catalog.json
+packages/ui/scripts/api-snapshot.json
+packages/ui/catalog/
 **/CHANGELOG.md
 
 # Lint canaries are DELIBERATELY rule-breaking / mis-formatted fixtures that
@@ -9,7 +9,7 @@ packages/webkit/catalog/
 # this file with --ignore-path=/dev/null.
 lint-canaries/
 
-packages/webkit/llms/
-packages/webkit/docs/migration-v6-maps.md
+packages/ui/llms/
+packages/ui/docs/migration-v6-maps.md
 
 packages/icons/docs/ICONS.md

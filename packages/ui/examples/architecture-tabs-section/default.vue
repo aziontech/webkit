@@ -1,5 +1,5 @@
 <script setup>
-  import ArchitectureTabsSection from '@aziontech/webkit/architecture-tabs-section'
+  import ArchitectureTabsSection from '@aziontech/ui/architecture-tabs-section'
 
   const tabs = [
     {

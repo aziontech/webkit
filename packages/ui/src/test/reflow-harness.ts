@@ -48,7 +48,7 @@ export function describeOverflow(root: HTMLElement): string {
 
 export async function mountInBox(component: Component, width: number): Promise<HTMLElement> {
   await page.viewport(width, 900)
-  // WebKit applies the new frame size after the command resolves and re-evaluates
+  // Azion UI applies the new frame size after the command resolves and re-evaluates
   // media queries later still; `max-lg:` folding must see the width before measuring.
   await vi.waitFor(() => {
     expect(window.innerWidth).toBe(width)

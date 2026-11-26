@@ -1,13 +1,13 @@
 ---
-name: webkit-ui-states
-description: Every data-backed view in a @aziontech/webkit app declares its full state surface — loading, empty, partial, error, success — not just the happy path, AND behaves correctly while an async action is in flight and when it fails. Use when building or reviewing any screen that fetches, filters, submits, or paginates. Maps each state to the shipped component (Skeleton, EmptyState, Alert), locks the scope off one flag while an action runs (trigger :loading + every field :disabled, released in finally), and reports request errors via toast.
+name: azion-ui-states
+description: Every data-backed view in a @aziontech/ui app declares its full state surface — loading, empty, partial, error, success — not just the happy path, AND behaves correctly while an async action is in flight and when it fails. Use when building or reviewing any screen that fetches, filters, submits, or paginates. Maps each state to the shipped component (Skeleton, EmptyState, Alert), locks the scope off one flag while an action runs (trigger :loading + every field :disabled, released in finally), and reports request errors via toast.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-component-states, webkit-prefer-over-custom, ui-verify]
+enforced_by: [azion-ui-component-states, azion-ui-prefer-over-custom, ui-verify]
 ---
 
-# Skill: webkit-ui-states
+# Skill: azion-ui-states
 
 ## Purpose
 
@@ -21,7 +21,7 @@ request that fails silently leaves the user staring at a spinner that never clea
 This pattern fixes **both halves** of a trustworthy data-backed view:
 
 1. **The state surface** every view owns — loading, empty, partial, error, success — each mapped to
-   the `@aziontech/webkit` component that renders it, so the loading/empty/error of every screen
+   the `@aziontech/ui` component that renders it, so the loading/empty/error of every screen
    looks the same.
 2. **The async behavior** — what happens **while** an action is in flight (lock the scope off one
    flag) and **when it fails** (report the failure where the user is looking, via toast) — so the
@@ -29,11 +29,11 @@ This pattern fixes **both halves** of a trustworthy data-backed view:
 
 ## How to use
 
-- [Loading, empty and error states](../webkit-ui-states/SKILL.md) — apply the state matrix **and** the async-behavior contract to any view you
+- [Loading, empty and error states](../azion-ui-states/SKILL.md) — apply the state matrix **and** the async-behavior contract to any view you
   build in this conversation.
-- `/webkit-ui-states <file>` — review the file's views and async flows and report, per gap: the
+- `/azion-ui-states <file>` — review the file's views and async flows and report, per gap: the
   quoted line, which state or behavior is missing or mis-handled, and the concrete fix naming the
-  webkit component.
+  Azion UI component.
 
 ## When to invoke
 
@@ -45,9 +45,9 @@ This pattern fixes **both halves** of a trustworthy data-backed view:
 
 Never guess an import path. Resolve it the same way for every component below:
 
-- Ask the **webkit MCP** — `suggest_component` in plain words ("empty state", "loading placeholder",
+- Ask the **Azion UI MCP** — `suggest_component` in plain words ("empty state", "loading placeholder",
   "toast").
-- Or read **`node_modules/@aziontech/webkit/catalog.json`** — every key under `imports` is a real
+- Or read **`node_modules/@aziontech/ui/catalog.json`** — every key under `imports` is a real
   published subpath. If a subpath is not a key there, it does not exist.
 
 Do **not** rely on a path you saw in another repo file — files move; the catalog and MCP are the
@@ -69,7 +69,7 @@ missing any is not done.
 | **Success** (transient)                  | a mutation completed                            | optional toast; don't leave the user guessing whether it worked                           |
 
 Field-level validation is **not** in this matrix — a bad email or a required value stays inline next
-to the field (see [Forms](../webkit-form/SKILL.md) and the toast-vs-field boundary below). This pattern is about the
+to the field (see [Forms](../azion-ui-form/SKILL.md) and the toast-vs-field boundary below). This pattern is about the
 **view's** data states, not a single input's.
 
 ## Loading: pick by the direction of the flow
@@ -112,10 +112,10 @@ The state-matrix render — Skeleton (data in), then Alert / EmptyState / data:
 ```vue
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
 
   type Row = { id: string; name: string }
   const rows = ref<Row[]>([])
@@ -233,9 +233,9 @@ Why both, off one flag:
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Button from '@aziontech/webkit/button'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import Button from '@aziontech/ui/button'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
 
   const submitting = ref(false)
   const scope = ref('')
@@ -288,12 +288,12 @@ Rules:
 ## Report request/API errors via toast
 
 A request-level failure (network down, 4xx/5xx not tied to one field, "Deploy failed") is a
-**transient, screen-level event** — it surfaces through `@aziontech/webkit/toast`, not by mutating the
+**transient, screen-level event** — it surfaces through `@aziontech/ui/toast`, not by mutating the
 form and not by a silent `console.error`. Mount the region once; raise from anywhere.
 
 ```js
 // main.js — mount the region once for the whole app.
-import { ToastPlugin } from '@aziontech/webkit/toast'
+import { ToastPlugin } from '@aziontech/ui/toast'
 createApp(App).use(router).use(ToastPlugin).mount('#app')
 // ToastPlugin registers <Toaster> globally. (Alternatively: place a single
 // <Toaster /> at the app root and import { toast } directly.)
@@ -302,7 +302,7 @@ createApp(App).use(router).use(ToastPlugin).mount('#app')
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
 
   const submitting = ref(false)
 
@@ -358,7 +358,7 @@ Rules:
 
 `toast` is for **request / system** errors. **Field validation is not.** A bad email, a missing
 required value, an out-of-range number stays **next to the field** with the field/message components
-([Forms](../webkit-form/SKILL.md), and `/webkit-ux-heuristics` for error placement) — validating before submit is error
+([Forms](../azion-ui-form/SKILL.md), and `/azion-ui-ux-heuristics` for error placement) — validating before submit is error
 prevention, and it never fires a global toast.
 
 | Failure                                                  | Where it goes                                 |
@@ -371,7 +371,7 @@ Two more rows exist, and both are places a toast is **wrong**: a server rejectio
 field** (→ a `Alert` in that field's own section + the field's `invalid` state) and anything on a
 **signed-out** screen (→ one `Alert` in the card; **auth never toasts**). The inverse case — a
 failure that arrives **after** the user left the screen — is the one that _must_ be a toast, and a
-permanent, closable one. The full table lives in **[Errors](../webkit-errors/SKILL.md)**.
+permanent, closable one. The full table lives in **[Errors](../azion-ui-errors/SKILL.md)**.
 
 ## Async actions — the run that outlives its screen (`state/state-async-submit`)
 
@@ -416,7 +416,7 @@ if you leave.' })`, not closable, no action. The failure is `toast.error` with `
 
 ## Review output
 
-For `/webkit-ui-states <file>`, list gaps grouped by view / flow. Each:
+For `/azion-ui-states <file>`, list gaps grouped by view / flow. Each:
 
 ```
 ✗ WorkloadsList.vue:31  v-if="items.length" with no empty/error branch

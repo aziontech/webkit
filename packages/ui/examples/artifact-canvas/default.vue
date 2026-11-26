@@ -1,8 +1,8 @@
 <script setup>
-  import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
-  import ArtifactPreview from '@aziontech/webkit/artifact-preview'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import Resizable from '@aziontech/webkit/resizable'
+  import ArtifactCanvas from '@aziontech/ui/artifact-canvas'
+  import ArtifactPreview from '@aziontech/ui/artifact-preview'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import Resizable from '@aziontech/ui/resizable'
   import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
   const versions = [

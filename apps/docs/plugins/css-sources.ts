@@ -4,14 +4,14 @@ import { fileURLToPath } from 'node:url'
 
 import type { Plugin } from 'vite'
 
-import { readBlocks, REPO, walk, WEBKIT } from './paths.ts'
+import { readBlocks, REPO, walk, AZION_UI } from './paths.ts'
 
 const APP = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const CSS_DIR = join(APP, '.build/css')
 export const DOCS_SOURCES = join(CSS_DIR, 'docs.css')
 const SRC = join(APP, 'src')
-const EXAMPLES_DIR = join(WEBKIT, 'examples')
-const BLOCKS_DIR = join(WEBKIT, 'blocks')
+const EXAMPLES_DIR = join(AZION_UI, 'examples')
+const BLOCKS_DIR = join(AZION_UI, 'blocks')
 const FRAME_PAGES = {
   examples: join(SRC, 'pages/example-frame-page.vue'),
   blocks: join(SRC, 'pages/block-frame-page.vue')
@@ -22,7 +22,7 @@ const CODE = /\.(vue|[cm]?[jt]s)$/
 const TEST = /\.(test|spec)\.[cm]?[jt]s$/
 const SPECIFIER = /(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"\n]+)['"]/g
 const SUFFIXES = ['', '.vue', '.ts', '.js', '.mjs', '/index.ts', '/index.js']
-const PACKAGE = '@aziontech/webkit/'
+const PACKAGE = '@aziontech/ui/'
 
 const UTILITIES_HEADER = [
   "@import 'tailwindcss/utilities' source(none);",
@@ -35,9 +35,9 @@ export type FrameKind = keyof typeof FRAME_PAGES
 
 let exportsCache: Record<string, ExportEntry> | null = null
 
-function webkitExports(): Record<string, ExportEntry> {
+function azionUiExports(): Record<string, ExportEntry> {
   exportsCache ??= (
-    JSON.parse(readFileSync(join(WEBKIT, 'package.json'), 'utf8')) as {
+    JSON.parse(readFileSync(join(AZION_UI, 'package.json'), 'utf8')) as {
       exports: Record<string, ExportEntry>
     }
   ).exports
@@ -47,9 +47,9 @@ function webkitExports(): Record<string, ExportEntry> {
 const isFile = (path: string) => existsSync(path) && statSync(path).isFile()
 
 function fromExport(subpath: string): string | null {
-  const entry = webkitExports()[`./${subpath}`]
+  const entry = azionUiExports()[`./${subpath}`]
   const target = typeof entry === 'string' ? entry : (entry?.default ?? entry?.import)
-  return target ? join(WEBKIT, target) : null
+  return target ? join(AZION_UI, target) : null
 }
 
 function fromRelative(base: string, specifier: string): string | null {

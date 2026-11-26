@@ -16,9 +16,9 @@ const vue = new RuleTester({
 })
 
 const IMPORTS = [
-  "import PageHeader from '@aziontech/webkit/page-header'",
-  "import Button from '@aziontech/webkit/button'",
-  "import IconButton from '@aziontech/webkit/icon-button'"
+  "import PageHeader from '@aziontech/ui/page-header'",
+  "import Button from '@aziontech/ui/button'",
+  "import IconButton from '@aziontech/ui/icon-button'"
 ].join('\n')
 
 const sfc = (actions, header = 'PageHeader') =>
@@ -38,7 +38,7 @@ test('consistent-header-action-size', () => {
         code: `<script setup lang="ts">\n${IMPORTS}\n</script>\n<template><div><Button label="Save" size="large" /><PageHeader title="Resources" /></div></template>\n`
       },
       {
-        code: `<script setup lang="ts">\nimport Button from '@aziontech/webkit/button'\n</script>\n<template><Card><template #actions><Button label="Save" size="large" /></template></Card></template>\n`
+        code: `<script setup lang="ts">\nimport Button from '@aziontech/ui/button'\n</script>\n<template><Card><template #actions><Button label="Save" size="large" /></template></Card></template>\n`
       }
     ],
     invalid: [

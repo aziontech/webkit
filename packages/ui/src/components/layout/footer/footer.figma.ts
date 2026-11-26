@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/layout/footer/footer.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/layout/footer/footer.vue
 // component=Footer
 import figma from 'figma'
 
@@ -62,7 +62,7 @@ export default {
       : ''
   }
 </Footer>`,
-  imports: ["import Footer from '@aziontech/webkit/footer'"],
+  imports: ["import Footer from '@aziontech/ui/footer'"],
   id: 'footer',
   metadata: { nestable: false }
 }

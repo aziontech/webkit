@@ -2,7 +2,7 @@
 
 > The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleAlign: 'center'`. From the design sample's site `ProcessScrollSection`.
 
-- Import: `import ProcessScrollSection from '@aziontech/webkit/process-scroll-section'`
+- Import: `import ProcessScrollSection from '@aziontech/ui/process-scroll-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [process-scroll-section.json](process-scroll-section.json)
 
@@ -74,7 +74,7 @@
 
 ```vue
 <script setup>
-  import ProcessScrollSection from '@aziontech/webkit/process-scroll-section'
+  import ProcessScrollSection from '@aziontech/ui/process-scroll-section'
 
   const steps = [
     { title: 'Push', description: 'Every push to the main branch builds a new version.' },
@@ -101,7 +101,7 @@
 
 ```vue
 <script setup>
-  import ProcessScrollSection from '@aziontech/webkit/process-scroll-section'
+  import ProcessScrollSection from '@aziontech/ui/process-scroll-section'
 
   const steps = [
     { title: 'Role request', description: 'A hiring manager requests a new role.' },

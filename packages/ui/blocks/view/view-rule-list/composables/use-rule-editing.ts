@@ -1,4 +1,4 @@
-import { toast } from '@aziontech/webkit/toast'
+import { toast } from '@aziontech/ui/toast'
 import { computed, type ComputedRef, ref, type WritableComputedRef } from 'vue'
 
 import { type RuleForm, type RuleSeed, seedFor } from '../lib/rule-builder'

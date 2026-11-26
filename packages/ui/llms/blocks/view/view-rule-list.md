@@ -3,10 +3,10 @@
 > An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s, folded on a phone into one Move `DropdownMenu` (Move to top, Move up, Move down, Move to bottom) in a Move column pinned to the end edge beside a pinned Status; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `DropdownMenu`, `Tooltip`, `Tag`, `Switch`, `TableCellTime`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-rule-list/view-rule-list.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-rule-list")`
 - Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-shortcuts`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-form`, `azion-ui-errors`
 
 ## Asked as
 
@@ -54,7 +54,7 @@ Below 48rem of the viewport every phase table shows the same narrow column set: 
 
 ### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 
-Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save emits `save` with every rule in its new order, shows its loading state while `saving` is set, and the dialog cannot be dismissed while saving. On success (`saving` turns off with no `saveError`) the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure (`saveError` set) the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save emits `save` with every rule in its new order, shows its loading state while `saving` is set, and the dialog cannot be dismissed while saving. On success (`saving` turns off with no `saveError`) the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure (`saveError` set) the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ### G. States — `EmptyState`, `Alert` (required)
 
@@ -128,7 +128,7 @@ Then delete `sample.ts` and its import.
 - Say why a control is disabled, in its accessible name and its tooltip.
 - Collect changes and apply them only after Review changes and Save; the review lists every rule whose position changes, not only the one the user dragged.
 - Let a rule be turned off in place; an inactive rule keeps its position and is skipped at runtime.
-- Follow `skills/webkit-tables` for the table, `skills/webkit-form` for the save bar and `skills/webkit-errors` for the failed save.
+- Follow `skills/azion-ui-tables` for the table, `skills/azion-ui-form` for the save bar and `skills/azion-ui-errors` for the failed save.
 
 ## Don't
 
@@ -148,7 +148,7 @@ Then delete `sample.ts` and its import.
 - **Review lines:** "<Rule> moves from position 5 to 3.", "<Rule> is turned on."
 - **Failure:** "The new order wasn't saved. The rules still run in the saved order; save again to apply it."
 - **Success toast:** "Rule order saved." with "The application runs its rules in the new order."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -198,17 +198,17 @@ Each variant is the same screen in another state: `get_block("view/view-rule-lis
 
 ```vue
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Accordion from '@aziontech/ui/accordion'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import Kbd from '@aziontech/ui/kbd'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import { toast } from '@aziontech/ui/toast'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { useNarrowViewport } from './composables/use-narrow-viewport'
@@ -1398,7 +1398,7 @@ export function useRuleBuilderForm(
 ## `composables/use-rule-editing.ts`
 
 ```ts
-import { toast } from '@aziontech/webkit/toast'
+import { toast } from '@aziontech/ui/toast'
 import { computed, type ComputedRef, ref, type WritableComputedRef } from 'vue'
 
 import { type RuleForm, type RuleSeed, seedFor } from '../lib/rule-builder'
@@ -1620,7 +1620,7 @@ export function useRuleListDraft(
 ## `composables/use-rule-list-position.ts`
 
 ```ts
-import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
 import { type Ref, ref } from 'vue'
 
 import type { RuleListControl, RuleListDraft } from '../lib/rule-list'
@@ -2057,7 +2057,7 @@ export const ruleFormFactory = () => {
 ## `lib/rule-list.ts`
 
 ```ts
-import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { TableColumn } from '@aziontech/ui/data-table'
 
 import type { RuleListEdit, RuleListPhase, RuleListRule } from '../view-rule-list.vue'
 
@@ -2247,13 +2247,13 @@ export const pageDescription = (subject: string) =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { ref, watch } from 'vue'
 
   import type { UseBehaviorDragReturn } from '../composables/use-behavior-drag'
@@ -2546,22 +2546,22 @@ export const pageDescription = (subject: string) =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Field from '@aziontech/ui/field'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { computed, reactive, ref } from 'vue'
 
   import { useBehaviorDrag } from '../composables/use-behavior-drag'
@@ -2783,10 +2783,10 @@ export const pageDescription = (subject: string) =>
 
 ```ts
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Combobox from '@aziontech/webkit/combobox'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Combobox from '@aziontech/ui/combobox'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
 
   import {
     type Condition,
@@ -2894,10 +2894,10 @@ export const pageDescription = (subject: string) =>
 
 ```ts
 <script setup lang="ts">
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { RuleListControl } from '../lib/rule-list'
   import type { RuleListRule } from '../view-rule-list.vue'
@@ -3055,13 +3055,13 @@ export const pageDescription = (subject: string) =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
-  import Switch from '@aziontech/webkit/switch'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Field from '@aziontech/ui/field'
+  import Switch from '@aziontech/ui/switch'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { UseRuleListPositionReturn } from '../composables/use-rule-list-position'
@@ -3226,15 +3226,15 @@ export const pageDescription = (subject: string) =>
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
 
   import type { RuleListPhaseChanges } from '../lib/rule-list'
   import type { RuleListSubject } from '../view-rule-list.vue'

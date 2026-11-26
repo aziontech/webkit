@@ -50,7 +50,7 @@ On the first load (`loading` with no `settings`), `Skeleton`s take the place of 
 
 ### Outcomes — through `toast`
 
-Saving defaults, rebinding, creating, editing, cloning and deleting end in a toast; a rebind onto a shared setting is a warning. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Saving defaults, rebinding, creating, editing, cloning and deleting end in a toast; a rebind onto a shared setting is a warning. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ### I. Shortcut keycap — `Kbd` (optional)
 
@@ -131,7 +131,7 @@ Then delete `sample.ts` and its import, and persist `bind`, `create`, `update`, 
 - **Tags:** `System`, `Shared`, `Linked automatically`, `Shared · 2 services`, `1 on a shared setting`.
 - **Toasts:** `Deployment defaults saved.`, `checkout-api · Production now publishes with storefront-production.`, `preview-versioned created.`, `legacy-rollout deleted.`
 - **Errors:** `This field is required.`, `A Deployment Setting with this name already exists.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 

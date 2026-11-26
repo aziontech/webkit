@@ -1,9 +1,9 @@
 # Item
 
-> Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and what a plan includes is a PlanFeatureList. Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `Card`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).
+> Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and what a plan includes is a PlanFeatureList. Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `Card`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Azion UI tokens and naming).
 
-- Import: `import ItemRoot from '@aziontech/webkit/item-root'`
-- Compound import (dot notation, not tree-shakeable): `import Item from '@aziontech/webkit/item'`
+- Import: `import ItemRoot from '@aziontech/ui/item-root'`
+- Compound import (dot notation, not tree-shakeable): `import Item from '@aziontech/ui/item'`
 - Category: content · Surface: app · Structure: composition
 - API as JSON: [item.json](item.json)
 
@@ -55,16 +55,16 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/item-group`
-- `@aziontech/webkit/item-list`
-- `@aziontech/webkit/item-separator`
-- `@aziontech/webkit/item-media`
-- `@aziontech/webkit/item-content`
-- `@aziontech/webkit/item-title`
-- `@aziontech/webkit/item-description`
-- `@aziontech/webkit/item-actions`
-- `@aziontech/webkit/item-header`
-- `@aziontech/webkit/item-footer`
+- `@aziontech/ui/item-group`
+- `@aziontech/ui/item-list`
+- `@aziontech/ui/item-separator`
+- `@aziontech/ui/item-media`
+- `@aziontech/ui/item-content`
+- `@aziontech/ui/item-title`
+- `@aziontech/ui/item-description`
+- `@aziontech/ui/item-actions`
+- `@aziontech/ui/item-header`
+- `@aziontech/ui/item-footer`
 
 ## Sub-components
 
@@ -105,8 +105,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Item from '@aziontech/webkit/item'
+  import Button from '@aziontech/ui/button'
+  import Item from '@aziontech/ui/item'
 </script>
 
 <template>
@@ -130,8 +130,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Item from '@aziontech/webkit/item'
+  import Button from '@aziontech/ui/button'
+  import Item from '@aziontech/ui/item'
 </script>
 
 <template>
@@ -155,8 +155,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Item from '@aziontech/webkit/item'
+  import Button from '@aziontech/ui/button'
+  import Item from '@aziontech/ui/item'
 </script>
 
 <template>

@@ -3,10 +3,10 @@
 > The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead offers to upload a file or a folder through the system picker, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a bordered EmptyState with Continue with GitHub until an account is connected (a danger Alert under the button when the connection fails), then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of the ten most recently pushed repositories with a named Import button each and Load more for the rest; skeleton rows with a status line while a scope loads, a danger Alert with Retry when the list fails to load, and a small EmptyState with Clear search when nothing matches. On the right, Start from template: a template search over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column `IntegrationCard`s with the vendor beside the title; each tile links to its deploy page, and a search with no match shows an EmptyState with Clear search. Each Recommended card turns its mark from grey to colour and lights a glow drawn from its mark on hover and focus. Built from `PageHeader`, `AppHeader`, `Breadcrumb`, `EmptyState`, `Alert`, `Link`, `Select`, `Input`, `Card`, `IntegrationCard`, `Item`, `Skeleton`, `ScrollArea` and `Button`.
 
 - Surface: app
-- Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-hub/create-hub.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-hub")`
 - Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [IntegrationCard](../../components/integration-card.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), `use-file-picker`, `use-locale`
-- Skills: `webkit-create-surface`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-create-surface`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -137,7 +137,7 @@ Then delete the sample imports. Pass `templates` from the template catalog, or k
 - **Buttons:** verb first, three words or fewer, e.g. "Continue with GitHub", "Import", "Load more", "Clear search".
 - **Search:** placeholder and `aria-label` name what it takes, e.g. "Search repositories or paste a repository URL".
 - **Template cards:** title is the template name; description one sentence, e.g. "Compile Rust to WebAssembly and run it."
-- Follow `skills/webkit-microcopy`: sentence case, select rather than choose or pick, no em dash.
+- Follow `skills/azion-ui-microcopy`: sentence case, select rather than choose or pick, no em dash.
 
 ## Accessibility
 
@@ -177,19 +177,19 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Alert from '@aziontech/ui/alert'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppHeaderAccount from '@aziontech/ui/app-header-account'
+  import Brand from '@aziontech/ui/brand'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { computed, ref } from 'vue'
 
   import RepositoryList from './parts/repository-list.vue'
@@ -852,13 +852,13 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import type { CreateHubRepository } from '../types'
@@ -1056,12 +1056,12 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
-  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import IntegrationCard from '@aziontech/ui/integration-card'
+  import ScrollArea from '@aziontech/ui/scroll-area'
   import { computed, ref } from 'vue'
 
   import type { CreateHubTemplate, CreateHubTemplateSection } from '../types'

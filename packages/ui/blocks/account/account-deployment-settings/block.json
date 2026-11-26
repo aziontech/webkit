@@ -24,11 +24,11 @@
     "vincular ambiente"
   ],
   "skills": [
-    "webkit-form",
-    "webkit-tables",
-    "webkit-lists",
-    "webkit-ui-states",
-    "webkit-microcopy"
+    "azion-ui-form",
+    "azion-ui-tables",
+    "azion-ui-lists",
+    "azion-ui-states",
+    "azion-ui-microcopy"
   ],
   "primary": {
     "name": "Default",

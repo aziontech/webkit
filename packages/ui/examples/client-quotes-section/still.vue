@@ -1,5 +1,5 @@
 <script setup>
-  import ClientQuotesSection from '@aziontech/webkit/client-quotes-section'
+  import ClientQuotesSection from '@aziontech/ui/client-quotes-section'
   import { ref } from 'vue'
 
   const selected = ref(1)

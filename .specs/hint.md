@@ -4,7 +4,7 @@ category: input
 structure: monolithic
 status: implemented
 spec_version: 9
-checksum: 09f5bc6b7ae466c93756eeed4a5691b24ca76037678a6652b21d60a4b8e02dbf
+checksum: d0b2787ca84cad92efe0bc6298a574ea0c0bb884438b067db4fc8c4c371f28ca
 created: 2026-08-10
 last_updated: 2026-11-23
 ---
@@ -35,7 +35,7 @@ Click-open note (a "toggletip") on a small muted `az az-circle-info` glyph. A cl
 - `help-panel` — level D: page-level help in the console's tools region, opened from an "Info" link after the page title.
 - `popover` — the overlay Hint composes; use it for interactive content.
 - `Field.Label`, `settings-row`, `settings-group` — render a Hint from their `hint` prop.
-- `/webkit-in-product-help` — the consumer skill that picks the level of help.
+- `/azion-ui-in-product-help` — the consumer skill that picks the level of help.
 
 ## Best practices
 
@@ -50,7 +50,7 @@ Click-open note (a "toggletip") on a small muted `az az-circle-info` glyph. A cl
 
 ```vue
 <script setup>
-  import Hint from '@aziontech/webkit/hint'
+  import Hint from '@aziontech/ui/hint'
 </script>
 
 <template>
@@ -72,7 +72,7 @@ Click-open note (a "toggletip") on a small muted `az az-circle-info` glyph. A cl
 | `target`    | `'_blank' \| '_self'`                             | `'_blank'` | false    | Where the docs link opens.                                                                                     |
 | `ariaLabel` | `string`                                          | `''`       | false    | Accessible name of the glyph button; empty uses the locale catalog (`More information`).                       |
 
-Types (exported from `@aziontech/webkit/hint`): `HintSide` is `'top' | 'bottom' | 'start' | 'end'`; `HintTarget` is `'_blank' | '_self'`. `start` and `end` follow the text direction. The panel always aligns to the glyph's start edge.
+Types (exported from `@aziontech/ui/hint`): `HintSide` is `'top' | 'bottom' | 'start' | 'end'`; `HintTarget` is `'_blank' | '_self'`. `start` and `end` follow the text direction. The panel always aligns to the glyph's start edge.
 
 ## v-model
 
@@ -150,7 +150,7 @@ The panel's open/close motion belongs to `popover` and is specified there.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

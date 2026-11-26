@@ -386,7 +386,7 @@ describe('CodeEditor', () => {
     const root = view.getByTestId('code-editor')
     await waitFor(() => expect(root.getAttribute('data-mode')).toBe('monaco'))
     expect(onReady).toHaveBeenCalledOnce()
-    expect(fake.calls.themes[0]?.name).toBe('webkit')
+    expect(fake.calls.themes[0]?.name).toBe('ui')
     expect(fake.calls.themes[0]?.theme.colors['editor.background']).toMatch(/^#[0-9a-f]{6}/)
     expect(fake.calls.options[0]).toMatchObject({ readOnly: false, ariaLabel: 'Script' })
     expect(fake.calls.markers.at(-1)).toEqual([
@@ -478,9 +478,9 @@ describe('CodeEditor', () => {
     })
     expect(
       toCodeEditorMarkers(
-        [marker(4, 1), marker(2, 8), marker(3, 4), marker(1, 8, 'webkit')],
+        [marker(4, 1), marker(2, 8), marker(3, 4), marker(1, 8, 'ui')],
         { Error: 8, Warning: 4, Info: 2 },
-        'webkit'
+        'ui'
       )
     ).toEqual([
       { line: 2, column: 3, endLine: 2, endColumn: 9, severity: 'danger', message: 'm2' },

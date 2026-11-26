@@ -1,9 +1,9 @@
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import Hint from '@aziontech/webkit/hint'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Link from '@aziontech/webkit/link'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import Hint from '@aziontech/ui/hint'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Link from '@aziontech/ui/link'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>

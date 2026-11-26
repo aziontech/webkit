@@ -2,7 +2,7 @@
 
 > A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open. Each claim expands in turn while the ones already read collapse and stack above it, so the column keeps one height and the reader always sees where they are in the run. The media beside it is replaced, not dimmed: the outgoing scene leaves and the incoming one mounts, so a scene that animates plays its entrance every time it is reached.
 
-- Import: `import MediaScroll from '@aziontech/webkit/media-scroll'`
+- Import: `import MediaScroll from '@aziontech/ui/media-scroll'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [media-scroll.json](media-scroll.json)
 
@@ -94,8 +94,8 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaScroll from '@aziontech/webkit/media-scroll'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaScroll from '@aziontech/ui/media-scroll'
 
   const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']
 
@@ -131,8 +131,8 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaScroll from '@aziontech/webkit/media-scroll'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaScroll from '@aziontech/ui/media-scroll'
 
   const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']
 

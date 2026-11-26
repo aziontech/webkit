@@ -3,10 +3,10 @@
 > The onboarding block for a resource made from the CLI: a section heading with a toggle between the CLI and GitHub Actions paths, then three numbered step cards, each with a code block for its commands. It sits under the summary on a resource Overview tab and at the end of a create wizard, on the deploy success screen. Built from `Subheader`, `ToggleGroup`, `Card` and `CodeBlock`.
 
 - Surface: app
-- Source: `blocks/detail/detail-get-started/detail-get-started.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-get-started/detail-get-started.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-get-started")`
 - Components: [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [Link](../../components/link.md), [Subheader](../../components/subheader.md), [ToggleGroup](../../components/toggle-group.md)
-- Skills: `webkit-microcopy`
+- Skills: `azion-ui-microcopy`
 
 ## Asked as
 
@@ -100,7 +100,7 @@ Then delete `sample.ts` and its import.
 - **Step titles:** verb first, sentence case, no period, e.g. "Install the CLI", "Link your project", "Push to deploy".
 - **Step descriptions:** one or two sentences that say what the step does and why, e.g. "Authenticate, then link the local project to this resource so every deploy lands on it."
 - **Copy button label:** names the step, e.g. "Copy the commands for Install the CLI".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -133,11 +133,11 @@ Each variant is the same screen in another state: `get_block("detail/detail-get-
 
 ```vue
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import Link from '@aziontech/webkit/link'
-  import Subheader from '@aziontech/webkit/subheader'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Card from '@aziontech/ui/card'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import Link from '@aziontech/ui/link'
+  import Subheader from '@aziontech/ui/subheader'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed } from 'vue'
 
   import { sampleResourceName } from './sample'

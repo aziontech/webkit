@@ -1,8 +1,8 @@
 {
  "name": "split-stack",
  "binding": "SplitStack",
- "import": "@aziontech/webkit/split-stack",
- "treeShakeableImport": "@aziontech/webkit/split-stack",
+ "import": "@aziontech/ui/split-stack",
+ "treeShakeableImport": "@aziontech/ui/split-stack",
  "category": "layout",
  "surface": "site",
  "structure": "monolithic",

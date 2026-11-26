@@ -1,9 +1,7 @@
 <script setup lang="ts">
-  import Command from '@aziontech/webkit/command'
-  import ConsoleLayoutRoot, {
-    type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Command from '@aziontech/ui/command'
+  import ConsoleLayoutRoot, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+  import PageHeader from '@aziontech/ui/page-header'
   import { ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [

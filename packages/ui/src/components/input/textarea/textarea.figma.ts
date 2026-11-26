@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/input/textarea/textarea.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/input/textarea/textarea.vue
 // component=Textarea
 import figma from 'figma'
 
@@ -43,7 +43,7 @@ export default {
       : ''
   }
 />`,
-  imports: ["import Textarea from '@aziontech/webkit/textarea'"],
+  imports: ["import Textarea from '@aziontech/ui/textarea'"],
   id: 'textarea',
   metadata: { nestable: true }
 }

@@ -2,7 +2,7 @@
 
 > Use ResponseLoading only while a generative AI answer is being produced; never for loading product data, which uses Skeleton (known shape), Spinner (inline) or Progress (measurable). The loading state of a generative AI response (Cloudscape generative AI loading states and loading bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads` — paired with three pulsing dots (`inline`, for text) or an indeterminate bar (`bar`, where a table, list or code block is about to appear). It waits `delay` milliseconds before showing anything, so a response that arrives within a second never flickers a loading state.
 
-- Import: `import ResponseLoading from '@aziontech/webkit/response-loading'`
+- Import: `import ResponseLoading from '@aziontech/ui/response-loading'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [response-loading.json](response-loading.json)
 
@@ -81,7 +81,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 ```vue
 <script setup>
-  import ResponseLoading from '@aziontech/webkit/response-loading'
+  import ResponseLoading from '@aziontech/ui/response-loading'
 </script>
 
 <template>
@@ -95,7 +95,7 @@ _None. Exports: `"./response-loading"`; type `ResponseLoadingVariant`. Composed 
 
 ```vue
 <script setup>
-  import ResponseLoading from '@aziontech/webkit/response-loading'
+  import ResponseLoading from '@aziontech/ui/response-loading'
 </script>
 
 <template>

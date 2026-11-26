@@ -1,4 +1,4 @@
-import { splitCsvLine } from '@aziontech/webkit/utils/csv'
+import { splitCsvLine } from '@aziontech/ui/utils/csv'
 
 export type CsvRow = Record<string, string>
 

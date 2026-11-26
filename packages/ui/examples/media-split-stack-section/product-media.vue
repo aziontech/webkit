@@ -1,5 +1,5 @@
 <script setup>
-  import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
+  import MediaSplitStackSection from '@aziontech/ui/media-split-stack-section'
 
   const bands = [
     {

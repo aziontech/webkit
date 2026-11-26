@@ -1,6 +1,6 @@
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaScroll from '@aziontech/webkit/media-scroll'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaScroll from '@aziontech/ui/media-scroll'
 
   const scenes = ['ai-applications', 'live-debugging', 'deploy-secure-mcp-server']
 

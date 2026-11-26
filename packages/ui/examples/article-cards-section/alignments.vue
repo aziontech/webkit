@@ -1,9 +1,9 @@
 <script setup>
-  import ArticleCardsSection from '@aziontech/webkit/article-cards-section'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
+  import ArticleCardsSection from '@aziontech/ui/article-cards-section'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import netshoesExtendedReversed from '@aziontech/ui/assets/netshoes-extended-reversed.svg'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
 </script>
 
 <template>

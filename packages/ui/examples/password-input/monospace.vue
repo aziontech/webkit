@@ -1,7 +1,7 @@
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import Field from '@aziontech/webkit/field'
-  import PasswordInput from '@aziontech/webkit/password-input'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import Field from '@aziontech/ui/field'
+  import PasswordInput from '@aziontech/ui/password-input'
 
   const token = 'azn_7Kq0lO1Il9xR4vT2mW8pZ3'
 </script>

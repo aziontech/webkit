@@ -70,7 +70,7 @@
     "threat sensitivity",
     "configurações do waf"
   ],
-  "skills": ["webkit-form", "webkit-errors", "webkit-layout", "webkit-ux-heuristics"],
+  "skills": ["azion-ui-form", "azion-ui-errors", "azion-ui-layout", "azion-ui-ux-heuristics"],
   "primary": {
     "name": "ProjectSettings",
     "file": "edit-resource.vue"

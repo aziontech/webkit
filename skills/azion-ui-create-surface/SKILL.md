@@ -1,13 +1,13 @@
 ---
-name: webkit-create-surface
+name: azion-ui-create-surface
 description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited), and how a flow picks an existing resource (an Existing / New band whose picker carries search past 7 options and Load more).
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
+enforced_by: [ui-verify, azion-ui-component-states, azion-ui-accessibility, azion-ui-prefer-over-custom]
 ---
 
-# Skill: webkit-create-surface
+# Skill: azion-ui-create-surface
 
 ## Purpose
 
@@ -67,7 +67,7 @@ a page.
 **Configuring a resource is never a drawer.** A Configure, Settings or Edit action on a product or a
 resource navigates to that resource's page, on its settings tab; drawers open only over the screen
 that owns their item. The first drawer is `large`, a nested one `medium`, never a third
-([Navigation](../webkit-navigation/SKILL.md), Drawers).
+([Navigation](../azion-ui-navigation/SKILL.md), Drawers).
 
 **A form creates what it is missing.** When a field needs a resource that does not exist yet (the
 certificate of a workload being created), the field offers `Create <noun>` and a drawer opens over the
@@ -75,7 +75,7 @@ form with that resource's own create form, the same bands as its create page. On
 resource is selected in the field and the form is as the reader left it. This holds for first-level
 resources too: their page is where they start from their own module, the drawer is where another form
 needs them. Never send the reader away to create it and come back. Only a resource that creates in
-several steps opens its create page in a new tab ([Navigation](../webkit-navigation/SKILL.md), Create what is missing).
+several steps opens its create page in a new tab ([Navigation](../azion-ui-navigation/SKILL.md), Create what is missing).
 
 **Settings use the create surface again.** The page that edits a resource is the page that created
 it, with values in it. Same bands, same rows, same order — so the two are one object seen twice, and
@@ -116,7 +116,7 @@ Heading (what this is, one line)
 - **The band step is the same everywhere**, and the page opens on that same step: header → heading →
   first band → every band after it. One rhythm, top to bottom.
 
-**The control in the row follows the type of the value** ([Forms](../webkit-form/SKILL.md), Pick the control from the kind of value): an
+**The control in the row follows the type of the value** ([Forms](../azion-ui-form/SKILL.md), Pick the control from the kind of value): an
 instant is a `DatePicker` with `show-time`, a period one `DateRangePicker`, an enum a `Select` or
 `RadioGroup` with human labels, a reference to another resource a searchable picker labelled with
 the thing (`Organization`, never `Organization ID`). A row never asks for an ISO date or an ID typed
@@ -124,13 +124,13 @@ by hand.
 
 Each piece of the anatomy is a component — compose them, never re-type their markup:
 
-| Piece                        | Component                                                                                                                                                                                                                                                             |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                                                                                                                                                                                      |
-| Section, Advanced band       | `SettingsGroup` (`@aziontech/webkit/settings-group`); Advanced is `collapsible icon="az az-settings"`                                                                                                                                                                 |
-| Row (field, switch, stacked) | `SettingsRow` (`@aziontech/webkit/settings-row`) with `variant` `field`, `compact` or `stacked`                                                                                                                                                                       |
-| Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `variant="centered"` on a create page (Cancel and Save in a raised card centred at the bottom), `variant="plain"` on an in-page form saved as one unit, `variant="fade"` on a wizard step, the floating default on settings |
-| Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                                                                                                                                                                                  |
+| Piece                        | Component                                                                                                                                                                                                                                                         |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Heading                      | `PageHeader` (`@aziontech/ui/page-header`), `size="small"` on a settings tab                                                                                                                                                                                      |
+| Section, Advanced band       | `SettingsGroup` (`@aziontech/ui/settings-group`); Advanced is `collapsible icon="az az-settings"`                                                                                                                                                                 |
+| Row (field, switch, stacked) | `SettingsRow` (`@aziontech/ui/settings-row`) with `variant` `field`, `compact` or `stacked`                                                                                                                                                                       |
+| Commit bar                   | `SaveBar` (`@aziontech/ui/save-bar`): `variant="centered"` on a create page (Cancel and Save in a raised card centred at the bottom), `variant="plain"` on an in-page form saved as one unit, `variant="fade"` on a wizard step, the floating default on settings |
+| Destructive guard            | `ConfirmDialog` (`@aziontech/ui/confirm-dialog`)                                                                                                                                                                                                                  |
 
 ## 3. Advanced is the endpoint's not-required set
 
@@ -172,7 +172,7 @@ it — a hidden bar still reserves its space.
 - **A page-level commit owes a Discard.** Without it the only way back is undoing each field by hand
   and hoping the bar goes away. The word is exactly `Discard` (outlined, before Save): it restores the
   saved record and the reader stays on the page. `Cancel` is for leaving a create page or closing a
-  dialog, so a settings bar never says Cancel ([Interface text](../webkit-microcopy/SKILL.md) § Verbs).
+  dialog, so a settings bar never says Cancel ([Interface text](../azion-ui-microcopy/SKILL.md) § Verbs).
 - **Per-band saves are for pages whose bands are genuinely separate records** (an application's build
   configuration vs. its branch controls). When the page is ONE record, a per-band Save asks which part
   of one record the reader meant.
@@ -180,13 +180,13 @@ it — a hidden bar still reserves its space.
   Escape are already the dismissal, and a fourth exit only competes with the commit for the eye.
 - **Leaving never throws typed work away silently.** Every exit of a create or edit surface (a page's
   Cancel and header Back, a drawer's X, overlay and Escape, a route change) goes through one guard:
-  `useUnsavedChanges(() => form)` from `@aziontech/webkit/use-unsaved-changes` and one
+  `useUnsavedChanges(() => form)` from `@aziontech/ui/use-unsaved-changes` and one
   `ConfirmDialog v-bind="guard.dialogProps"` with Keep editing (`guard.keepEditing`) and Discard
   changes (`guard.discardAndLeave`). A page calls `await guard.confirmLeave()` before it emits
   `cancel` and pairs it with `onBeforeRouteLeave(() => guard.confirmLeave())`; a drawer binds
   `:open` and asks in its `@update:open` handler. A clean form leaves at once, with no dialog.
 - **Escape on a full-page create = Cancel.** A create page or wizard calls
-  `useEscapeToCancel(onCancel)` from `@aziontech/webkit/use-escape-to-cancel`, so Escape runs the
+  `useEscapeToCancel(onCancel)` from `@aziontech/ui/use-escape-to-cancel`, so Escape runs the
   Cancel path above (clean leaves, dirty asks). It stays inert while the request is in flight, while a
   menu, listbox, popover, tooltip or dialog is open, during IME composition, and when a control used
   the key. Edit and settings pages are places, not tasks: Escape stays inert there.
@@ -234,7 +234,7 @@ reuses one or makes one, and the form says which in one place.
   `aria-pressed`. **New** shows the resource's own create fields in the same band.
 - Switching modes keeps both answers: going to New and back finds the same resource still chosen.
 
-**The picker is a long list**, so it follows the long-list rule in `/webkit-ux-heuristics`
+**The picker is a long list**, so it follows the long-list rule in `/azion-ui-ux-heuristics`
 (Usability rules § 2 and § 3):
 
 - a search above the rows **when there are more than 7 resources**, matching name and description;
@@ -252,7 +252,7 @@ certificate, a rule's function, an environment. It follows the same rule in the 
 panel: search in `Select.Content`'s `#search` slot past 7 options, Load more in its `#footer`, and a
 `Create <noun>` option there that opens the resource's create form in a drawer (section 1). When the
 options come from the server, debounce the search, page with Load more and pass `display-value` so the
-chosen name shows before its page is loaded; [Forms](../webkit-form/SKILL.md) (Pick the control from the kind of value) has the code, and a
+chosen name shows before its page is loaded; [Forms](../azion-ui-form/SKILL.md) (Pick the control from the kind of value) has the code, and a
 `Combobox` with server search for the case where typing is the way in. The person never types the
 resource's ID.
 
@@ -287,4 +287,4 @@ would ship without search never exists.
 - `required` static from the first render; validation on submit only sets `invalid` for an empty or a malformed value.
 - A reusable resource gets an Existing / New band; Existing is the default when any exist, and the segment is absent when none do.
 - Every pick of an existing resource (inline picker or `Select`) has search past 7, Load more, a no-match line, and shows a pre-chosen value on open.
-- Every control matches its value's type ([Forms](../webkit-form/SKILL.md), Pick the control from the kind of value): no date, time or resource ID typed as text.
+- Every control matches its value's type ([Forms](../azion-ui-form/SKILL.md), Pick the control from the kind of value): no date, time or resource ID typed as text.

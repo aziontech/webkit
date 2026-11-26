@@ -1,23 +1,53 @@
-# Migrating to `@aziontech/webkit` v6
+# Migrating to `@aziontech/ui` v6
 
-v6 aligns WebKit's names with the vocabulary of shadcn/ui and Radix — the names AI agents and most
+v6 aligns Azion UI's names with the vocabulary of shadcn/ui and Radix — the names AI agents and most
 developers already know — removes duplicated components, and settles one name per prop idea. Most of
 it is mechanical: run the codemod, then do the few manual steps it lists.
+
+## 0. The package is now `@aziontech/ui`
+
+The library was called WebKit and shipped as `@aziontech/webkit` up to 5.x. From 6.0 it is
+**Azion UI**, published as `@aziontech/ui`, and its MCP server as `@aziontech/ui-mcp`.
+`@aziontech/theme` and `@aziontech/icons` keep their names. There is no 6.x of
+`@aziontech/webkit`; the old package is deprecated on npm.
+
+`npx @aziontech/ui migrate v6` (step 1) does the whole switch before the other renames:
+
+| Was (5.x)                                                                            | Is (6.0)                                                                                                             |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `@aziontech/webkit` and `@aziontech/webkit/<subpath>`                                | `@aziontech/ui` and `@aziontech/ui/<subpath>`                                                                        |
+| `@aziontech/webkit-mcp`                                                              | `@aziontech/ui-mcp`                                                                                                  |
+| the `webkit` CLI (`npx webkit init`)                                                 | `azion-ui` (`npx @aziontech/ui init`)                                                                                |
+| ESLint rules `webkit/<rule>`                                                         | `azion-ui/<rule>`                                                                                                    |
+| `src/webkit.css`, `src/webkit.sources.css`, `webkit.blocks.json`                     | `src/azion-ui.css`, `src/azion-ui.sources.css`, `azion-ui.blocks.json`                                               |
+| the `webkit` server in `.mcp.json`                                                   | the `azion-ui` server, running `@aziontech/ui-mcp`                                                                   |
+| `.claude/skills/webkit-*`, `.claude/rules/webkit-*.md`, `.claude/agents/webkit-*.md` | `azion-ui-*` (`webkit-ui-states` and `webkit-ui-verify` drop the doubled word: `azion-ui-states`, `azion-ui-verify`) |
+| `WEBKIT_CATALOG_PATH`                                                                | `AZION_UI_CATALOG_PATH`                                                                                              |
+| the `<!-- @aziontech/webkit:start -->` block in `AGENTS.md` and `CLAUDE.md`          | `<!-- @aziontech/ui:start -->`                                                                                       |
+
+It rewrites `package.json` (dependencies and scripts), every source file, `.mcp.json`,
+`AGENTS.md`, `CLAUDE.md` and the AI bundle in `.claude/`, and moves the files above. Then run
+`npx @aziontech/ui sync` to refresh the moved skills, rules and agents, and `pnpm install`.
+
+The lint rule `azion-ui/no-deprecated-name` flags any import of `@aziontech/webkit` that is left.
+
+The saved light or dark choice moves from the `webkit-color-mode` storage key to
+`azion-ui-color-mode`, so a visitor sees the system theme once after the upgrade.
 
 ## 1. Run the codemod
 
 ```bash
-pnpm add @aziontech/webkit@^6 @aziontech/theme@^6
-npx @aziontech/webkit migrate v6 --dry-run   # see every change first
-npx @aziontech/webkit migrate v6             # rewrite the project
-npx @aziontech/webkit doctor
+pnpm add @aziontech/ui@^6 @aziontech/theme@^6   # on 5.x, @aziontech/webkit: the codemod below removes it
+npx @aziontech/ui migrate v6 --dry-run   # see every change first
+npx @aziontech/ui migrate v6             # rewrite the project
+npx @aziontech/ui doctor
 ```
 
 It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `dist` that imports from
-`@aziontech/webkit`:
+`@aziontech/ui`:
 
 - import paths, including sub-components (`dropdown-trigger` → `dropdown-menu-trigger`), and the
-  same paths in any other string (`vi.mock('@aziontech/webkit/…')`, `import('…')`);
+  same paths in any other string (`vi.mock('@aziontech/ui/…')`, `import('…')`);
 - component bindings, in PascalCase and in kebab-case tags (comments keep their words);
 - renamed props and prop values on those components (`v-model:value` → `v-model`, `border` →
   `bordered`, `kind="outlined"` → `variant="outline"`, `<Table.Cell kind="checkbox">` →
@@ -25,7 +55,7 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
 - renamed exported types where you import them (`AccordionArrowPosition` → `AccordionIconPosition`,
   `DocCardGroupMobileCols` → `DocCardGroupMobileColumns`, `SegmentedButtonOption` →
   `ToggleGroupOption`, …; the `types` map of `src/cli/migrations/v6.json`);
-- PrimeIcons classes, in every source file whether it imports WebKit or not: each `pi pi-<name>`
+- PrimeIcons classes, in every source file whether it imports Azion UI or not: each `pi pi-<name>`
   pair becomes its Azion twin (`pi pi-check` → `az az-check`, `pi pi-minus-circle` →
   `az az-circle-minus`, `pi pi-times` → `az az-x`, `pi pi-twitter` → `az az-x-brand`; the map is
   `src/cli/migrations/v6-icons.json`). A `pi-<name>` outside a pair, and a third-party mark with no
@@ -44,8 +74,8 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
   `text-heading-xxs` → `text-heading-2xs`, `animate-slide-in-left` → `animate-slide-in-start`, and
   the `@aziontech/theme/texts` / `layouts` imports (the map is `src/cli/migrations/v6-tokens.json`).
   A removed token (`--line-height-*`, `.azion-dark`, …) is listed to fix by hand;
-- renamed WebKit lint rule ids, in every source file (ESLint configs and `eslint-disable` comments):
-  `webkit/valid-import-path` → `webkit/no-unknown-import`, … (section 4, "Lint rules renamed"; the
+- renamed Azion UI lint rule ids, in every source file (ESLint configs and `eslint-disable` comments):
+  `azion-ui/valid-import-path` → `azion-ui/no-unknown-import`, … (section 4, "Lint rules renamed"; the
   map is `src/cli/migrations/v6-lint.json`).
 
 It prints `MANUAL` for anything it cannot rewrite safely (section 4), and for any import that v6
@@ -54,12 +84,12 @@ bound single literal (`:severity="'error'"`). A bound expression whose strings a
 (`:severity="ok ? 'success' : 'neutral'"`) is left alone; one that holds an old value
 (`:severity="ok ? 'info' : 'error'"`) is listed as `MANUAL`, because its strings may be your own
 values; one with no strings at all (`:severity="level"`) is listed once to review, and
-`webkit check` reports it as a warning. Put `<!-- webkit-migrate-ok -->` on the line above the tag
+`azion-ui check` reports it as a warning. Put `<!-- azion-ui-migrate-ok -->` on the line above the tag
 once you have checked it (also for an old value kept only in a comparison, such as
 `x === 'error' ? 'danger' : 'info'`), and neither `migrate` nor `check` lists it again.
 
 The codemod rewrites v5 code. It reads the version your `package.json` declares: a semver range,
-the version in an `aziontech-webkit-<version>.tgz` tarball name, or the installed copy in
+the version in an `aziontech-ui-<version>.tgz` tarball name, or the installed copy in
 `node_modules` for a `file:`, `link:` or `workspace:` dependency (or, once you have bumped it,
 recognizes a v3 project by its v3-only imports such as `inputtext` or `plugin`). When it cannot
 tell, it says so; pass `--from 3` or `--from 5` to say it yourself. On a v3 project it moves the native components off
@@ -71,128 +101,128 @@ the paths it moved onto a name a v3 wrapper also used (`button`, `card`, `dialog
 
 ## 2. Renamed components
 
-| v5 import                               | v6 import                                  | v5 component         | v6 component           |
-| --------------------------------------- | ------------------------------------------ | -------------------- | ---------------------- |
-| `@aziontech/webkit/paginator`           | `@aziontech/webkit/pagination`             | `Paginator`          | `Pagination`           |
-| `@aziontech/webkit/tab-view`            | `@aziontech/webkit/tabs`                   | `TabView`            | `Tabs`                 |
-| `@aziontech/webkit/card-box`            | `@aziontech/webkit/card`                   | `CardBox`            | `Card`                 |
-| `@aziontech/webkit/message`             | `@aziontech/webkit/alert`                  | `Message`            | `Alert`                |
-| `@aziontech/webkit/divider`             | `@aziontech/webkit/separator`              | `Divider`            | `Separator`            |
-| `@aziontech/webkit/progress-bar`        | `@aziontech/webkit/progress`               | `ProgressBar`        | `Progress`             |
-| `@aziontech/webkit/command-menu`        | `@aziontech/webkit/command`                | `CommandMenu`        | `Command`              |
-| `@aziontech/webkit/dropdown`            | `@aziontech/webkit/dropdown-menu`          | `Dropdown`           | `DropdownMenu`         |
-| `@aziontech/webkit/input-text`          | `@aziontech/webkit/input`                  | `InputText`          | `Input`                |
-| `@aziontech/webkit/input-number`        | `@aziontech/webkit/number-input`           | `InputNumber`        | `NumberInput`          |
-| `@aziontech/webkit/input-password`      | `@aziontech/webkit/password-input`         | `InputPassword`      | `PasswordInput`        |
-| `@aziontech/webkit/box-grid-selection`  | `@aziontech/webkit/radio-group`            | `BoxGridSelection`   | `RadioGroup`           |
-| `@aziontech/webkit/calendar`            | `@aziontech/webkit/date-picker`            | `Calendar`           | `DatePicker`           |
-| `@aziontech/webkit/pick-list`           | `@aziontech/webkit/transfer-list`          | `PickList`           | `TransferList`         |
-| `@aziontech/webkit/radio-cards`         | `@aziontech/webkit/radio-group`            | `RadioCards`         | `RadioGroup`           |
-| `@aziontech/webkit/radio-button`        | `@aziontech/webkit/radio-group-item`       | `RadioButton`        | `RadioGroup.Item`      |
-| `@aziontech/webkit/resizable-panel`     | `@aziontech/webkit/resizable`              | `ResizablePanel`     | `Resizable`            |
-| `@aziontech/webkit/segmented-button`    | `@aziontech/webkit/toggle-group`           | `SegmentedButton`    | `ToggleGroup`          |
-| `@aziontech/webkit/doc-pagination`      | `@aziontech/webkit/doc-previous-next`      | `DocPagination`      | `DocPreviousNext`      |
-| `@aziontech/webkit/cards`               | `@aziontech/webkit/card-list`              | `Cards`              | `CardList`             |
-| `@aziontech/webkit/menu`                | `@aziontech/webkit/sidebar-menu`           | `Menu`               | `SidebarMenu`          |
-| `@aziontech/webkit/action-confirmation` | `@aziontech/webkit/tool-approval`          | `ActionConfirmation` | `ToolApproval`         |
-| `@aziontech/webkit/hotspot`             | `@aziontech/webkit/tutorial-panel-hotspot` | `Hotspot`            | `TutorialPanelHotspot` |
+| v5 import                           | v6 import                              | v5 component         | v6 component           |
+| ----------------------------------- | -------------------------------------- | -------------------- | ---------------------- |
+| `@aziontech/ui/paginator`           | `@aziontech/ui/pagination`             | `Paginator`          | `Pagination`           |
+| `@aziontech/ui/tab-view`            | `@aziontech/ui/tabs`                   | `TabView`            | `Tabs`                 |
+| `@aziontech/ui/card-box`            | `@aziontech/ui/card`                   | `CardBox`            | `Card`                 |
+| `@aziontech/ui/message`             | `@aziontech/ui/alert`                  | `Message`            | `Alert`                |
+| `@aziontech/ui/divider`             | `@aziontech/ui/separator`              | `Divider`            | `Separator`            |
+| `@aziontech/ui/progress-bar`        | `@aziontech/ui/progress`               | `ProgressBar`        | `Progress`             |
+| `@aziontech/ui/command-menu`        | `@aziontech/ui/command`                | `CommandMenu`        | `Command`              |
+| `@aziontech/ui/dropdown`            | `@aziontech/ui/dropdown-menu`          | `Dropdown`           | `DropdownMenu`         |
+| `@aziontech/ui/input-text`          | `@aziontech/ui/input`                  | `InputText`          | `Input`                |
+| `@aziontech/ui/input-number`        | `@aziontech/ui/number-input`           | `InputNumber`        | `NumberInput`          |
+| `@aziontech/ui/input-password`      | `@aziontech/ui/password-input`         | `InputPassword`      | `PasswordInput`        |
+| `@aziontech/ui/box-grid-selection`  | `@aziontech/ui/radio-group`            | `BoxGridSelection`   | `RadioGroup`           |
+| `@aziontech/ui/calendar`            | `@aziontech/ui/date-picker`            | `Calendar`           | `DatePicker`           |
+| `@aziontech/ui/pick-list`           | `@aziontech/ui/transfer-list`          | `PickList`           | `TransferList`         |
+| `@aziontech/ui/radio-cards`         | `@aziontech/ui/radio-group`            | `RadioCards`         | `RadioGroup`           |
+| `@aziontech/ui/radio-button`        | `@aziontech/ui/radio-group-item`       | `RadioButton`        | `RadioGroup.Item`      |
+| `@aziontech/ui/resizable-panel`     | `@aziontech/ui/resizable`              | `ResizablePanel`     | `Resizable`            |
+| `@aziontech/ui/segmented-button`    | `@aziontech/ui/toggle-group`           | `SegmentedButton`    | `ToggleGroup`          |
+| `@aziontech/ui/doc-pagination`      | `@aziontech/ui/doc-previous-next`      | `DocPagination`      | `DocPreviousNext`      |
+| `@aziontech/ui/cards`               | `@aziontech/ui/card-list`              | `Cards`              | `CardList`             |
+| `@aziontech/ui/menu`                | `@aziontech/ui/sidebar-menu`           | `Menu`               | `SidebarMenu`          |
+| `@aziontech/ui/action-confirmation` | `@aziontech/ui/tool-approval`          | `ActionConfirmation` | `ToolApproval`         |
+| `@aziontech/ui/hotspot`             | `@aziontech/ui/tutorial-panel-hotspot` | `Hotspot`            | `TutorialPanelHotspot` |
 
 ### Naming standard: renamed components
 
-One name per job, the same word across the catalog. `webkit migrate` rewrites each import, the
-component binding, its parts (`Flow.Node` → `FlowDiagram.Node`, `@aziontech/webkit/log-view-header`
-→ `@aziontech/webkit/log-viewer-header`) and its exported types (`LogViewLine` → `LogViewerLine`,
+One name per job, the same word across the catalog. `azion-ui migrate` rewrites each import, the
+component binding, its parts (`Flow.Node` → `FlowDiagram.Node`, `@aziontech/ui/log-view-header`
+→ `@aziontech/ui/log-viewer-header`) and its exported types (`LogViewLine` → `LogViewerLine`,
 `BoardLayoutItem` → `DashboardGridLayoutItem`).
 
-| Old import                                            | New import                                         | Old component                        | New component                                      |
-| ----------------------------------------------------- | -------------------------------------------------- | ------------------------------------ | -------------------------------------------------- |
-| `@aziontech/webkit/global-header`                     | `@aziontech/webkit/app-header`                     | `GlobalHeader`                       | `AppHeader`                                        |
-| `@aziontech/webkit/table-export`                      | `@aziontech/webkit/table-export-button`            | `TableExport`                        | `TableExportButton`                                |
-| `@aziontech/webkit/overline`                          | `@aziontech/webkit/eyebrow`                        | `Overline`                           | `Eyebrow`                                          |
-| `@aziontech/webkit/card-pricing`                      | `@aziontech/webkit/pricing-card`                   | `CardPricing`                        | `PricingCard`                                      |
-| `@aziontech/webkit/button-highlight`                  | `@aziontech/webkit/highlight-button`               | `ButtonHighlight`                    | `HighlightButton`                                  |
-| `@aziontech/webkit/site-nav`                          | `@aziontech/webkit/site-header-section`            | `SiteNav`                            | `SiteHeaderSection`                                |
-| `@aziontech/webkit/setting-row`                       | `@aziontech/webkit/settings-row`                   | `SettingRow`                         | `SettingsRow`                                      |
-| `@aziontech/webkit/hero-band`                         | `@aziontech/webkit/hero-section`                   | `HeroBand`                           | `HeroSection`                                      |
-| `@aziontech/webkit/stats-band`                        | `@aziontech/webkit/stats-section`                  | `StatsBand`                          | `StatsSection`                                     |
-| `@aziontech/webkit/media-split-band`                  | `@aziontech/webkit/media-split-section`            | `MediaSplitBand`                     | `MediaSplitSection`                                |
-| `@aziontech/webkit/logo-wall-quote`                   | `@aziontech/webkit/logo-wall-section`              | `LogoWallQuote`                      | `LogoWallSection`                                  |
-| `@aziontech/webkit/band-stack`                        | `@aziontech/webkit/split-stack`                    | `BandStack`                          | `SplitStack`                                       |
-| `@aziontech/webkit/section-container`                 | `@aziontech/webkit/container`                      | `SectionContainer`                   | `Container`                                        |
-| `@aziontech/webkit/section-gap`                       | `@aziontech/webkit/spacer`                         | `SectionGap`                         | `Spacer`                                           |
-| `@aziontech/webkit/section-module`                    | `@aziontech/webkit/module`                         | `SectionModule`                      | `Module`                                           |
-| `@aziontech/webkit/section-title`                     | `@aziontech/webkit/module-header`                  | `SectionTitle`                       | `ModuleHeader`                                     |
-| `@aziontech/webkit/big-numbers`                       | `@aziontech/webkit/stats`                          | `BigNumbers`                         | `Stats`                                            |
-| `@aziontech/webkit/closing-call-to-action-newsletter` | `@aziontech/webkit/newsletter-section`             | `ClosingCallToActionNewsletter`      | `NewsletterSection`                                |
-| `@aziontech/webkit/ticker`                            | `@aziontech/webkit/marquee`                        | `Ticker`                             | `Marquee`                                          |
-| `@aziontech/webkit/texture-material`                  | `@aziontech/webkit/texture`                        | `TextureMaterial`                    | `Texture`                                          |
-| `@aziontech/webkit/banner-art`                        | `@aziontech/webkit/backdrop`                       | `BannerArt`                          | `Backdrop`                                         |
-| `@aziontech/webkit/frame-box`                         | `@aziontech/webkit/registration-frame`             | `FrameBox`                           | `RegistrationFrame`                                |
-| `@aziontech/webkit/board`                             | `@aziontech/webkit/dashboard-grid`                 | `Board`                              | `DashboardGrid`                                    |
-| `@aziontech/webkit/flow`                              | `@aziontech/webkit/flow-diagram`                   | `Flow`                               | `FlowDiagram`                                      |
-| `@aziontech/webkit/currency`                          | `@aziontech/webkit/currency-amount`                | `Currency`                           | `CurrencyAmount`                                   |
-| `@aziontech/webkit/doc-update`                        | `@aziontech/webkit/doc-changelog-entry`            | `DocUpdate`                          | `DocChangelogEntry`                                |
-| `@aziontech/webkit/doc-accordion-item`                | `@aziontech/webkit/doc-accordion`                  | `DocAccordionItem`                   | `DocAccordion`                                     |
-| `@aziontech/webkit/console-panel`                     | `@aziontech/webkit/console-showcase-section`       | `ConsolePanel`                       | `ConsoleShowcaseSection`                           |
-| `@aziontech/webkit/compare-plans`                     | `@aziontech/webkit/plan-comparison-section`        | `ComparePlans`                       | `PlanComparisonSection`                            |
-| `@aziontech/webkit/comparison-table`                  | `@aziontech/webkit/competitor-comparison-section`  | `ComparisonTable`                    | `CompetitorComparisonSection`                      |
-| `@aziontech/webkit/compliance-badges`                 | `@aziontech/webkit/compliance-logos-section`       | `ComplianceBadges`                   | `ComplianceLogosSection`                           |
-| `@aziontech/webkit/section-command`                   | `@aziontech/webkit/copy-command-section`           | `SectionCommand`                     | `CopyCommandSection`                               |
-| `@aziontech/webkit/client-mosaic-columns`             | `@aziontech/webkit/client-story-columns-section`   | `ClientMosaicColumns`                | `ClientStoryColumnsSection`                        |
-| `@aziontech/webkit/story-library`                     | `@aziontech/webkit/story-index-section`            | `StoryLibrary`                       | `StoryIndexSection`                                |
-| `@aziontech/webkit/listing-browser`                   | `@aziontech/webkit/listing-index-section`          | `ListingBrowser`                     | `ListingIndexSection`                              |
-| `@aziontech/webkit/subject-library`                   | `@aziontech/webkit/subject-grid-section`           | `SubjectLibrary`                     | `SubjectGridSection`                               |
-| `@aziontech/webkit/feature-list`                      | `@aziontech/webkit/plan-feature-list`              | `FeatureList`                        | `PlanFeatureList`                                  |
-| `@aziontech/webkit/topic`                             | `@aziontech/webkit/feature-item`                   | `Topic`                              | `FeatureItem`                                      |
-| `@aziontech/webkit/column-navigation`                 | `@aziontech/webkit/link-directory`                 | `ColumnNavigation`                   | `LinkDirectory`                                    |
-| `@aziontech/webkit/product-widget`                    | `@aziontech/webkit/console-mockup`                 | `ProductWidget`                      | `ConsoleMockup`                                    |
-| `@aziontech/webkit/log-view`                          | `@aziontech/webkit/log-viewer`                     | `LogView`                            | `LogViewer`                                        |
-| `@aziontech/webkit/ai-loading`                        | `@aziontech/webkit/response-loading`               | `AiLoading`                          | `ResponseLoading`                                  |
-| `@aziontech/webkit/outcome-mark`                      | `@aziontech/webkit/outcome-icon`                   | `OutcomeMark`                        | `OutcomeIcon`                                      |
-| `@aziontech/webkit/use-cases`                         | `@aziontech/webkit/customer-use-cases-section`     | `UseCases`                           | `CustomerUseCasesSection`                          |
-| `@aziontech/webkit/hero-form`                         | `@aziontech/webkit/hero-form-section`              | `HeroForm`                           | `HeroFormSection`                                  |
-| `@aziontech/webkit/media-split-stack`                 | `@aziontech/webkit/media-split-stack-section`      | `MediaSplitStack`                    | `MediaSplitStackSection`                           |
-| `@aziontech/webkit/doc-prev-next`                     | `@aziontech/webkit/doc-previous-next`              | `DocPrevNext`                        | `DocPreviousNext`                                  |
-| `@aziontech/webkit/doc-on-this-page`                  | `@aziontech/webkit/doc-table-of-contents`          | `DocOnThisPage`                      | `DocTableOfContents`                               |
-| `@aziontech/webkit/sticky-stack`                      | `@aziontech/webkit/media-scroll`                   | `StickyStack`                        | `MediaScroll`                                      |
-| `@aziontech/webkit/use-heading-nav`                   | `@aziontech/webkit/use-heading-navigation`         | `useHeadingNav`, `provideHeadingNav` | `useHeadingNavigation`, `provideHeadingNavigation` |
-| `@aziontech/webkit/architecture-tabs`                 | `@aziontech/webkit/architecture-tabs-section`      | `ArchitectureTabs`                   | `ArchitectureTabsSection`                          |
-| `@aziontech/webkit/article-body`                      | `@aziontech/webkit/article-body-section`           | `ArticleBody`                        | `ArticleBodySection`                               |
-| `@aziontech/webkit/article-cards`                     | `@aziontech/webkit/article-cards-section`          | `ArticleCards`                       | `ArticleCardsSection`                              |
-| `@aziontech/webkit/article-highlight`                 | `@aziontech/webkit/article-highlight-section`      | `ArticleHighlight`                   | `ArticleHighlightSection`                          |
-| `@aziontech/webkit/article-index`                     | `@aziontech/webkit/article-index-section`          | `ArticleIndex`                       | `ArticleIndexSection`                              |
-| `@aziontech/webkit/capability-grid`                   | `@aziontech/webkit/capability-grid-section`        | `CapabilityGrid`                     | `CapabilityGridSection`                            |
-| `@aziontech/webkit/card-carousel`                     | `@aziontech/webkit/card-carousel-section`          | `CardCarousel`                       | `CardCarouselSection`                              |
-| `@aziontech/webkit/cli-terminal`                      | `@aziontech/webkit/cli-terminal-section`           | `CliTerminal`                        | `CliTerminalSection`                               |
-| `@aziontech/webkit/client-mosaic`                     | `@aziontech/webkit/client-mosaic-section`          | `ClientMosaic`                       | `ClientMosaicSection`                              |
-| `@aziontech/webkit/client-quotes`                     | `@aziontech/webkit/client-quotes-section`          | `ClientQuotes`                       | `ClientQuotesSection`                              |
-| `@aziontech/webkit/client-story-columns`              | `@aziontech/webkit/client-story-columns-section`   | `ClientStoryColumns`                 | `ClientStoryColumnsSection`                        |
-| `@aziontech/webkit/closing-call-to-action`            | `@aziontech/webkit/closing-call-to-action-section` | `ClosingCallToAction`                | `ClosingCallToActionSection`                       |
-| `@aziontech/webkit/competitor-comparison`             | `@aziontech/webkit/competitor-comparison-section`  | `CompetitorComparison`               | `CompetitorComparisonSection`                      |
-| `@aziontech/webkit/compliance-logos`                  | `@aziontech/webkit/compliance-logos-section`       | `ComplianceLogos`                    | `ComplianceLogosSection`                           |
-| `@aziontech/webkit/console-showcase`                  | `@aziontech/webkit/console-showcase-section`       | `ConsoleShowcase`                    | `ConsoleShowcaseSection`                           |
-| `@aziontech/webkit/contact-hub`                       | `@aziontech/webkit/contact-hub-section`            | `ContactHub`                         | `ContactHubSection`                                |
-| `@aziontech/webkit/copy-command`                      | `@aziontech/webkit/copy-command-section`           | `CopyCommand`                        | `CopyCommandSection`                               |
-| `@aziontech/webkit/customer-use-cases`                | `@aziontech/webkit/customer-use-cases-section`     | `CustomerUseCases`                   | `CustomerUseCasesSection`                          |
-| `@aziontech/webkit/feature-scroll`                    | `@aziontech/webkit/feature-scroll-section`         | `FeatureScroll`                      | `FeatureScrollSection`                             |
-| `@aziontech/webkit/feature-tabs`                      | `@aziontech/webkit/feature-tabs-section`           | `FeatureTabs`                        | `FeatureTabsSection`                               |
-| `@aziontech/webkit/feature-tiles`                     | `@aziontech/webkit/feature-tiles-section`          | `FeatureTiles`                       | `FeatureTilesSection`                              |
-| `@aziontech/webkit/feature-widgets`                   | `@aziontech/webkit/feature-widgets-section`        | `FeatureWidgets`                     | `FeatureWidgetsSection`                            |
-| `@aziontech/webkit/investor-marks`                    | `@aziontech/webkit/investor-marks-section`         | `InvestorMarks`                      | `InvestorMarksSection`                             |
-| `@aziontech/webkit/job-posting`                       | `@aziontech/webkit/job-posting-section`            | `JobPosting`                         | `JobPostingSection`                                |
-| `@aziontech/webkit/listing-index`                     | `@aziontech/webkit/listing-index-section`          | `ListingIndex`                       | `ListingIndexSection`                              |
-| `@aziontech/webkit/listing-table`                     | `@aziontech/webkit/listing-table-section`          | `ListingTable`                       | `ListingTableSection`                              |
-| `@aziontech/webkit/photo-marquee`                     | `@aziontech/webkit/photo-marquee-section`          | `PhotoMarquee`                       | `PhotoMarqueeSection`                              |
-| `@aziontech/webkit/plan-comparison`                   | `@aziontech/webkit/plan-comparison-section`        | `PlanComparison`                     | `PlanComparisonSection`                            |
-| `@aziontech/webkit/platform-directory`                | `@aziontech/webkit/platform-directory-section`     | `PlatformDirectory`                  | `PlatformDirectorySection`                         |
-| `@aziontech/webkit/pricing-plans`                     | `@aziontech/webkit/pricing-plans-section`          | `PricingPlans`                       | `PricingPlansSection`                              |
-| `@aziontech/webkit/process-scroll`                    | `@aziontech/webkit/process-scroll-section`         | `ProcessScroll`                      | `ProcessScrollSection`                             |
-| `@aziontech/webkit/recognition-marquee`               | `@aziontech/webkit/recognition-marquee-section`    | `RecognitionMarquee`                 | `RecognitionMarqueeSection`                        |
-| `@aziontech/webkit/site-footer`                       | `@aziontech/webkit/site-footer-section`            | `SiteFooter`                         | `SiteFooterSection`                                |
-| `@aziontech/webkit/site-header`                       | `@aziontech/webkit/site-header-section`            | `SiteHeader`                         | `SiteHeaderSection`                                |
-| `@aziontech/webkit/story-index`                       | `@aziontech/webkit/story-index-section`            | `StoryIndex`                         | `StoryIndexSection`                                |
-| `@aziontech/webkit/subject-grid`                      | `@aziontech/webkit/subject-grid-section`           | `SubjectGrid`                        | `SubjectGridSection`                               |
-| `@aziontech/webkit/template-gallery`                  | `@aziontech/webkit/template-gallery-section`       | `TemplateGallery`                    | `TemplateGallerySection`                           |
+| Old import                                        | New import                                     | Old component                        | New component                                      |
+| ------------------------------------------------- | ---------------------------------------------- | ------------------------------------ | -------------------------------------------------- |
+| `@aziontech/ui/global-header`                     | `@aziontech/ui/app-header`                     | `GlobalHeader`                       | `AppHeader`                                        |
+| `@aziontech/ui/table-export`                      | `@aziontech/ui/table-export-button`            | `TableExport`                        | `TableExportButton`                                |
+| `@aziontech/ui/overline`                          | `@aziontech/ui/eyebrow`                        | `Overline`                           | `Eyebrow`                                          |
+| `@aziontech/ui/card-pricing`                      | `@aziontech/ui/pricing-card`                   | `CardPricing`                        | `PricingCard`                                      |
+| `@aziontech/ui/button-highlight`                  | `@aziontech/ui/highlight-button`               | `ButtonHighlight`                    | `HighlightButton`                                  |
+| `@aziontech/ui/site-nav`                          | `@aziontech/ui/site-header-section`            | `SiteNav`                            | `SiteHeaderSection`                                |
+| `@aziontech/ui/setting-row`                       | `@aziontech/ui/settings-row`                   | `SettingRow`                         | `SettingsRow`                                      |
+| `@aziontech/ui/hero-band`                         | `@aziontech/ui/hero-section`                   | `HeroBand`                           | `HeroSection`                                      |
+| `@aziontech/ui/stats-band`                        | `@aziontech/ui/stats-section`                  | `StatsBand`                          | `StatsSection`                                     |
+| `@aziontech/ui/media-split-band`                  | `@aziontech/ui/media-split-section`            | `MediaSplitBand`                     | `MediaSplitSection`                                |
+| `@aziontech/ui/logo-wall-quote`                   | `@aziontech/ui/logo-wall-section`              | `LogoWallQuote`                      | `LogoWallSection`                                  |
+| `@aziontech/ui/band-stack`                        | `@aziontech/ui/split-stack`                    | `BandStack`                          | `SplitStack`                                       |
+| `@aziontech/ui/section-container`                 | `@aziontech/ui/container`                      | `SectionContainer`                   | `Container`                                        |
+| `@aziontech/ui/section-gap`                       | `@aziontech/ui/spacer`                         | `SectionGap`                         | `Spacer`                                           |
+| `@aziontech/ui/section-module`                    | `@aziontech/ui/module`                         | `SectionModule`                      | `Module`                                           |
+| `@aziontech/ui/section-title`                     | `@aziontech/ui/module-header`                  | `SectionTitle`                       | `ModuleHeader`                                     |
+| `@aziontech/ui/big-numbers`                       | `@aziontech/ui/stats`                          | `BigNumbers`                         | `Stats`                                            |
+| `@aziontech/ui/closing-call-to-action-newsletter` | `@aziontech/ui/newsletter-section`             | `ClosingCallToActionNewsletter`      | `NewsletterSection`                                |
+| `@aziontech/ui/ticker`                            | `@aziontech/ui/marquee`                        | `Ticker`                             | `Marquee`                                          |
+| `@aziontech/ui/texture-material`                  | `@aziontech/ui/texture`                        | `TextureMaterial`                    | `Texture`                                          |
+| `@aziontech/ui/banner-art`                        | `@aziontech/ui/backdrop`                       | `BannerArt`                          | `Backdrop`                                         |
+| `@aziontech/ui/frame-box`                         | `@aziontech/ui/registration-frame`             | `FrameBox`                           | `RegistrationFrame`                                |
+| `@aziontech/ui/board`                             | `@aziontech/ui/dashboard-grid`                 | `Board`                              | `DashboardGrid`                                    |
+| `@aziontech/ui/flow`                              | `@aziontech/ui/flow-diagram`                   | `Flow`                               | `FlowDiagram`                                      |
+| `@aziontech/ui/currency`                          | `@aziontech/ui/currency-amount`                | `Currency`                           | `CurrencyAmount`                                   |
+| `@aziontech/ui/doc-update`                        | `@aziontech/ui/doc-changelog-entry`            | `DocUpdate`                          | `DocChangelogEntry`                                |
+| `@aziontech/ui/doc-accordion-item`                | `@aziontech/ui/doc-accordion`                  | `DocAccordionItem`                   | `DocAccordion`                                     |
+| `@aziontech/ui/console-panel`                     | `@aziontech/ui/console-showcase-section`       | `ConsolePanel`                       | `ConsoleShowcaseSection`                           |
+| `@aziontech/ui/compare-plans`                     | `@aziontech/ui/plan-comparison-section`        | `ComparePlans`                       | `PlanComparisonSection`                            |
+| `@aziontech/ui/comparison-table`                  | `@aziontech/ui/competitor-comparison-section`  | `ComparisonTable`                    | `CompetitorComparisonSection`                      |
+| `@aziontech/ui/compliance-badges`                 | `@aziontech/ui/compliance-logos-section`       | `ComplianceBadges`                   | `ComplianceLogosSection`                           |
+| `@aziontech/ui/section-command`                   | `@aziontech/ui/copy-command-section`           | `SectionCommand`                     | `CopyCommandSection`                               |
+| `@aziontech/ui/client-mosaic-columns`             | `@aziontech/ui/client-story-columns-section`   | `ClientMosaicColumns`                | `ClientStoryColumnsSection`                        |
+| `@aziontech/ui/story-library`                     | `@aziontech/ui/story-index-section`            | `StoryLibrary`                       | `StoryIndexSection`                                |
+| `@aziontech/ui/listing-browser`                   | `@aziontech/ui/listing-index-section`          | `ListingBrowser`                     | `ListingIndexSection`                              |
+| `@aziontech/ui/subject-library`                   | `@aziontech/ui/subject-grid-section`           | `SubjectLibrary`                     | `SubjectGridSection`                               |
+| `@aziontech/ui/feature-list`                      | `@aziontech/ui/plan-feature-list`              | `FeatureList`                        | `PlanFeatureList`                                  |
+| `@aziontech/ui/topic`                             | `@aziontech/ui/feature-item`                   | `Topic`                              | `FeatureItem`                                      |
+| `@aziontech/ui/column-navigation`                 | `@aziontech/ui/link-directory`                 | `ColumnNavigation`                   | `LinkDirectory`                                    |
+| `@aziontech/ui/product-widget`                    | `@aziontech/ui/console-mockup`                 | `ProductWidget`                      | `ConsoleMockup`                                    |
+| `@aziontech/ui/log-view`                          | `@aziontech/ui/log-viewer`                     | `LogView`                            | `LogViewer`                                        |
+| `@aziontech/ui/ai-loading`                        | `@aziontech/ui/response-loading`               | `AiLoading`                          | `ResponseLoading`                                  |
+| `@aziontech/ui/outcome-mark`                      | `@aziontech/ui/outcome-icon`                   | `OutcomeMark`                        | `OutcomeIcon`                                      |
+| `@aziontech/ui/use-cases`                         | `@aziontech/ui/customer-use-cases-section`     | `UseCases`                           | `CustomerUseCasesSection`                          |
+| `@aziontech/ui/hero-form`                         | `@aziontech/ui/hero-form-section`              | `HeroForm`                           | `HeroFormSection`                                  |
+| `@aziontech/ui/media-split-stack`                 | `@aziontech/ui/media-split-stack-section`      | `MediaSplitStack`                    | `MediaSplitStackSection`                           |
+| `@aziontech/ui/doc-prev-next`                     | `@aziontech/ui/doc-previous-next`              | `DocPrevNext`                        | `DocPreviousNext`                                  |
+| `@aziontech/ui/doc-on-this-page`                  | `@aziontech/ui/doc-table-of-contents`          | `DocOnThisPage`                      | `DocTableOfContents`                               |
+| `@aziontech/ui/sticky-stack`                      | `@aziontech/ui/media-scroll`                   | `StickyStack`                        | `MediaScroll`                                      |
+| `@aziontech/ui/use-heading-nav`                   | `@aziontech/ui/use-heading-navigation`         | `useHeadingNav`, `provideHeadingNav` | `useHeadingNavigation`, `provideHeadingNavigation` |
+| `@aziontech/ui/architecture-tabs`                 | `@aziontech/ui/architecture-tabs-section`      | `ArchitectureTabs`                   | `ArchitectureTabsSection`                          |
+| `@aziontech/ui/article-body`                      | `@aziontech/ui/article-body-section`           | `ArticleBody`                        | `ArticleBodySection`                               |
+| `@aziontech/ui/article-cards`                     | `@aziontech/ui/article-cards-section`          | `ArticleCards`                       | `ArticleCardsSection`                              |
+| `@aziontech/ui/article-highlight`                 | `@aziontech/ui/article-highlight-section`      | `ArticleHighlight`                   | `ArticleHighlightSection`                          |
+| `@aziontech/ui/article-index`                     | `@aziontech/ui/article-index-section`          | `ArticleIndex`                       | `ArticleIndexSection`                              |
+| `@aziontech/ui/capability-grid`                   | `@aziontech/ui/capability-grid-section`        | `CapabilityGrid`                     | `CapabilityGridSection`                            |
+| `@aziontech/ui/card-carousel`                     | `@aziontech/ui/card-carousel-section`          | `CardCarousel`                       | `CardCarouselSection`                              |
+| `@aziontech/ui/cli-terminal`                      | `@aziontech/ui/cli-terminal-section`           | `CliTerminal`                        | `CliTerminalSection`                               |
+| `@aziontech/ui/client-mosaic`                     | `@aziontech/ui/client-mosaic-section`          | `ClientMosaic`                       | `ClientMosaicSection`                              |
+| `@aziontech/ui/client-quotes`                     | `@aziontech/ui/client-quotes-section`          | `ClientQuotes`                       | `ClientQuotesSection`                              |
+| `@aziontech/ui/client-story-columns`              | `@aziontech/ui/client-story-columns-section`   | `ClientStoryColumns`                 | `ClientStoryColumnsSection`                        |
+| `@aziontech/ui/closing-call-to-action`            | `@aziontech/ui/closing-call-to-action-section` | `ClosingCallToAction`                | `ClosingCallToActionSection`                       |
+| `@aziontech/ui/competitor-comparison`             | `@aziontech/ui/competitor-comparison-section`  | `CompetitorComparison`               | `CompetitorComparisonSection`                      |
+| `@aziontech/ui/compliance-logos`                  | `@aziontech/ui/compliance-logos-section`       | `ComplianceLogos`                    | `ComplianceLogosSection`                           |
+| `@aziontech/ui/console-showcase`                  | `@aziontech/ui/console-showcase-section`       | `ConsoleShowcase`                    | `ConsoleShowcaseSection`                           |
+| `@aziontech/ui/contact-hub`                       | `@aziontech/ui/contact-hub-section`            | `ContactHub`                         | `ContactHubSection`                                |
+| `@aziontech/ui/copy-command`                      | `@aziontech/ui/copy-command-section`           | `CopyCommand`                        | `CopyCommandSection`                               |
+| `@aziontech/ui/customer-use-cases`                | `@aziontech/ui/customer-use-cases-section`     | `CustomerUseCases`                   | `CustomerUseCasesSection`                          |
+| `@aziontech/ui/feature-scroll`                    | `@aziontech/ui/feature-scroll-section`         | `FeatureScroll`                      | `FeatureScrollSection`                             |
+| `@aziontech/ui/feature-tabs`                      | `@aziontech/ui/feature-tabs-section`           | `FeatureTabs`                        | `FeatureTabsSection`                               |
+| `@aziontech/ui/feature-tiles`                     | `@aziontech/ui/feature-tiles-section`          | `FeatureTiles`                       | `FeatureTilesSection`                              |
+| `@aziontech/ui/feature-widgets`                   | `@aziontech/ui/feature-widgets-section`        | `FeatureWidgets`                     | `FeatureWidgetsSection`                            |
+| `@aziontech/ui/investor-marks`                    | `@aziontech/ui/investor-marks-section`         | `InvestorMarks`                      | `InvestorMarksSection`                             |
+| `@aziontech/ui/job-posting`                       | `@aziontech/ui/job-posting-section`            | `JobPosting`                         | `JobPostingSection`                                |
+| `@aziontech/ui/listing-index`                     | `@aziontech/ui/listing-index-section`          | `ListingIndex`                       | `ListingIndexSection`                              |
+| `@aziontech/ui/listing-table`                     | `@aziontech/ui/listing-table-section`          | `ListingTable`                       | `ListingTableSection`                              |
+| `@aziontech/ui/photo-marquee`                     | `@aziontech/ui/photo-marquee-section`          | `PhotoMarquee`                       | `PhotoMarqueeSection`                              |
+| `@aziontech/ui/plan-comparison`                   | `@aziontech/ui/plan-comparison-section`        | `PlanComparison`                     | `PlanComparisonSection`                            |
+| `@aziontech/ui/platform-directory`                | `@aziontech/ui/platform-directory-section`     | `PlatformDirectory`                  | `PlatformDirectorySection`                         |
+| `@aziontech/ui/pricing-plans`                     | `@aziontech/ui/pricing-plans-section`          | `PricingPlans`                       | `PricingPlansSection`                              |
+| `@aziontech/ui/process-scroll`                    | `@aziontech/ui/process-scroll-section`         | `ProcessScroll`                      | `ProcessScrollSection`                             |
+| `@aziontech/ui/recognition-marquee`               | `@aziontech/ui/recognition-marquee-section`    | `RecognitionMarquee`                 | `RecognitionMarqueeSection`                        |
+| `@aziontech/ui/site-footer`                       | `@aziontech/ui/site-footer-section`            | `SiteFooter`                         | `SiteFooterSection`                                |
+| `@aziontech/ui/site-header`                       | `@aziontech/ui/site-header-section`            | `SiteHeader`                         | `SiteHeaderSection`                                |
+| `@aziontech/ui/story-index`                       | `@aziontech/ui/story-index-section`            | `StoryIndex`                         | `StoryIndexSection`                                |
+| `@aziontech/ui/subject-grid`                      | `@aziontech/ui/subject-grid-section`           | `SubjectGrid`                        | `SubjectGridSection`                               |
+| `@aziontech/ui/template-gallery`                  | `@aziontech/ui/template-gallery-section`       | `TemplateGallery`                    | `TemplateGallerySection`                           |
 
 Every marketing page section ends in `-section` (`hero-band` → `hero-section`, `client-quotes` →
 `client-quotes-section`, `site-header` → `site-header-section`, …). The section's exported types
@@ -208,7 +238,7 @@ write the new `_id` and props in new pages. Hero, hero-section
 and hero-form-section call their client strip `marquee` (`marquee`, `marqueeMarks`,
 `marqueeLabel`), after the component.
 
-`HelperText` (`@aziontech/webkit/helper-text`) is removed. Use `FieldDescription` (`Field.Description`)
+`HelperText` (`@aziontech/ui/helper-text`) is removed. Use `FieldDescription` (`Field.Description`)
 for guidance and `FieldError` (`Field.Error`) for a validation message; both work outside a `Field`,
 and inside one they wire `aria-describedby` for you. `type="helper"` → `FieldDescription`;
 `type="invalid"` or `type="required"` → `FieldError`; `label="…"` becomes the default slot.
@@ -319,7 +349,7 @@ this by hand: write `side="end"`. The panels render `data-side` and `data-align`
 logical values) instead of `data-placement`. The types follow: `TooltipSide`, `PopoverSide`,
 `HoverCardSide`, `DropdownMenuSide` and `HintSide` (`top · bottom · start · end`; the prop is
 `XSide | 'auto'`) plus `PopoverAlign`, `HoverCardAlign`, `DropdownMenuAlign` and `TooltipAlign`
-replace `*Placement` and `*PlacementSide`. `usePlacement` from `@aziontech/webkit/use-placement`
+replace `*Placement` and `*PlacementSide`. `usePlacement` from `@aziontech/ui/use-placement`
 takes `side`, `align`, `sideOffset`, `alignOffset`, `autoSides` and an optional `dir`, and returns
 `resolvedSide` and `resolvedAlign` instead of `resolvedPlacement`.
 
@@ -495,9 +525,9 @@ payload take `DocTableOfContentsItem` / `DocTableOfContentsGroup` (was `DocTocIt
 
 Every exported type starts with its component's name, and a shape several components shared is one
 type now, exported by the component that owns it: a section's `primaryAction` / `secondaryAction`
-is `ModuleHeaderAction` (`@aziontech/webkit/module-header`), a breadcrumb entry is
+is `ModuleHeaderAction` (`@aziontech/ui/module-header`), a breadcrumb entry is
 `BreadcrumbItemData`, a client mark `{ name, logo }` is `ThirdPartyLogoMark` and a mark's ink is
-`ThirdPartyLogoTreatment` (`@aziontech/webkit/third-party-logo`). Each section still re-exports the shared type, so an
+`ThirdPartyLogoTreatment` (`@aziontech/ui/third-party-logo`). Each section still re-exports the shared type, so an
 import the codemod rewrote keeps its path. `ThirdPartyLogoTreatment` uses the `ThirdPartyLogo` words: `as-is` is
 `color`, and `logoTreatment: 'invert-light'` on a `LogoWallSection` mark is `artwork: 'light'`
 (change those values by hand). The overlay position types are `TooltipSide`, `PopoverSide`,
@@ -526,7 +556,7 @@ section item arrays (`items[].illustration`):
 
 ### Naming standard: one word per concept
 
-6.0 uses one word for each recurring concept: `status` for a job or step (`pending`, `running`, `success`, `error`, `canceled`, `skipped`), `severity` for colour meaning (`neutral`, `info`, `success`, `warning`, `danger`), `active` for the item you are on, `selected` / `selectedKeys` for picked items, `open` / `openKeys` for anything that opens, `leading` / `trailing` for adornments and in-component positions, `start` / `end` for sides and alignment. The codemod rewrites static attributes, `v-model:*`, listeners and slot templates (`#prefix` → `#leading`) on WebKit tags, including `<Root.Part>` tags; values in bound data, CSS selectors on `data-*` attributes and handlers that read event arguments need a hand edit.
+6.0 uses one word for each recurring concept: `status` for a job or step (`pending`, `running`, `success`, `error`, `canceled`, `skipped`), `severity` for colour meaning (`neutral`, `info`, `success`, `warning`, `danger`), `active` for the item you are on, `selected` / `selectedKeys` for picked items, `open` / `openKeys` for anything that opens, `leading` / `trailing` for adornments and in-component positions, `start` / `end` for sides and alignment. The codemod rewrites static attributes, `v-model:*`, listeners and slot templates (`#prefix` → `#leading`) on Azion UI tags, including `<Root.Part>` tags; values in bound data, CSS selectors on `data-*` attributes and handlers that read event arguments need a hand edit.
 
 #### Props and values
 
@@ -645,7 +675,7 @@ section item arrays (`items[].illustration`):
 
 #### Compound parts
 
-A part name comes from one closed list (Trigger, Content, Header, Body, Footer, Title, Description, Close, Item, Group, Label, Separator, List) plus the domain parts a component declares, and every part is importable on its own as `@aziontech/webkit/<root>-<part>`. The codemod rewrites the dot-notation (`<Tabs.Item>` → `<Tabs.Trigger>`), the standalone import paths and the named imports (`SelectOption` → `SelectItem`).
+A part name comes from one closed list (Trigger, Content, Header, Body, Footer, Title, Description, Close, Item, Group, Label, Separator, List) plus the domain parts a component declares, and every part is importable on its own as `@aziontech/ui/<root>-<part>`. The codemod rewrites the dot-notation (`<Tabs.Item>` → `<Tabs.Trigger>`), the standalone import paths and the named imports (`SelectOption` → `SelectItem`).
 
 | v5                                                                                                 | v6                                                                                                                         |
 | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
@@ -827,14 +857,14 @@ New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-heade
 
 ### Icons: `az` classes, product names, Lucide names, no PrimeIcons
 
-Every WebKit component, default `icon` and example now draws `az az-<name>` from `@aziontech/icons`;
+Every Azion UI component, default `icon` and example now draws `az az-<name>` from `@aziontech/icons`;
 no component renders a PrimeIcons (`pi pi-*`) class, and `@aziontech/icons` no longer ships the
 PrimeIcons font or its `@aziontech/icons/primeicons` entry. If your app still renders one of the
 third-party marks the codemod lists (`pi-apple`, `pi-paypal`, …), draw your own SVG or install the
 `primeicons` package.
 
 The base classes are `az` (was `ai`, which read as "artificial intelligence") and `az-color` (was
-`ai-cor`). Product icons take the product names WebKit uses, and the other glyphs take the
+`ai-cor`). Product icons take the product names Azion UI uses, and the other glyphs take the
 [Lucide](https://lucide.dev/icons) names. `migrate v6` rewrites them all (the `base`, `azionicons`
 and `color` maps of `src/cli/migrations/v6-icons.json`); every icon, with what it stands for, is
 listed in `@aziontech/icons/manifest` and `ICONS.md` in the icons package:
@@ -897,35 +927,35 @@ listed in `@aziontech/icons/manifest` and `ICONS.md` in the icons package:
   `az-javascript`, `az-typescript`, `az-azure-devops`, `az-x-brand`.
 
 `import '@aziontech/icons'` now loads the icon font only. The colour logos come with
-`@aziontech/webkit/styles` (in the `webkit.css` that `webkit init` writes), which compiles only the
+`@aziontech/ui/styles` (in the `azion-ui.css` that `azion-ui init` writes), which compiles only the
 logos your sources name: with that stylesheet there is nothing to change, as long as each logo's
 class is written whole in your code (`'az-color az-react'`, not `` `az-color az-${name}` ``). A logo
-named only in fetched data goes in `@source inline("az-react");` in `webkit.css`. An app without
+named only in fetched data goes in `@source inline("az-react");` in `azion-ui.css`. An app without
 Tailwind, or a page that shows every logo, imports the whole set:
 `import '@aziontech/icons/azionicons-color'`.
 
 The brand mark `workers-cloudflare` (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`,
 `HeroSection` `carouselMarks`) is `cloudflare-workers`; rename the string by hand.
 
-The RTL mirror of `@aziontech/webkit/styles` targets the `az` names (`az-chevron-left`,
+The RTL mirror of `@aziontech/ui/styles` targets the `az` names (`az-chevron-left`,
 `az-arrow-right`, `az-log-out`, …).
 
 ### `@aziontech/theme` is a peer dependency
 
 v5 listed `@aziontech/theme@^4` as a dependency, so an app on theme 5 got a second, nested theme
-copy under `@aziontech/webkit/node_modules`. v6 declares it as a peer (`^5.2.2 || ^6.0.0`): install it
-next to WebKit (`npm install @aziontech/theme@^6`; `npx @aziontech/webkit init` adds it). `webkit doctor`
+copy under `@aziontech/ui/node_modules`. v6 declares it as a peer (`^5.2.2 || ^6.0.0`): install it
+next to Azion UI (`npm install @aziontech/theme@^6`; `npx @aziontech/ui init` adds it). `azion-ui doctor`
 fails when a nested copy is left or the installed theme misses the range. `init` now writes caret
 ranges for every dependency it adds, never `latest`. The `@aziontech/icons` peer accepts
 `^4.4.0 || ^5.0.0 || ^6.0.0`, so the icons major that drops PrimeIcons from its default entry installs as is.
 
-From 6.0 the four packages (`@aziontech/webkit`, `@aziontech/theme`, `@aziontech/icons`,
-`@aziontech/webkit-mcp`) share one version and release together: theme and icons jump to 6.0.0 with
-WebKit, and every later release (`6.1.0`, `6.1.1`, …) carries the same number on all four.
+From 6.0 the four packages (`@aziontech/ui`, `@aziontech/theme`, `@aziontech/icons`,
+`@aziontech/ui-mcp`) share one version and release together: theme and icons jump to 6.0.0 with
+Azion UI, and every later release (`6.1.0`, `6.1.1`, …) carries the same number on all four.
 
 ### Theme: dark mode follows the device, fonts are a separate import, unused variables are gone
 
-The theme that ships with WebKit 6 changes three things your app can see:
+The theme that ships with Azion UI 6 changes three things your app can see:
 
 - **Dark mode follows the device.** With no theme pinned, a user whose device is set to dark now gets
   the dark tokens (before, a page without `data-theme` was always light). It is CSS only, so there is
@@ -935,14 +965,14 @@ The theme that ships with WebKit 6 changes three things your app can see:
 - **Fonts are their own file, and they ship in the package.** `@import '@aziontech/theme'` no longer
   loads the Azion fonts. Add `@import '@aziontech/theme/fonts.css';` next to it (or
   `import '@aziontech/theme/fonts.css'` in `main.ts`) to keep them; leave it out if your app hosts its
-  own fonts. `npx @aziontech/webkit init` writes the line. The woff2 files now come from
+  own fonts. `npx @aziontech/ui init` writes the line. The woff2 files now come from
   `@aziontech/theme/fonts/` (your bundler copies them), not from `fonts.azion.com` or jsDelivr, so
   drop those hosts from your Content Security Policy's `font-src`. `fonts.css` declares only the faces
   the tokens use: Rubik, Roboto Mono and Noto Sans Arabic. The `Roboto`, `Roboto Condensed` and
   `Titillium Web` faces are gone; an app that still sets them declares its own `@font-face`. Proto Mono,
   first in the display stack, is a commercial face the package cannot redistribute: an app licensed
   for it declares its own `@font-face`, and every other app renders display text in Roboto Mono.
-- **Removed variables** (nothing in WebKit read them). Replace any use in your own CSS:
+- **Removed variables** (nothing in Azion UI read them). Replace any use in your own CSS:
 
   | Removed                                            | Use instead                                                                     |
   | -------------------------------------------------- | ------------------------------------------------------------------------------- |
@@ -953,7 +983,7 @@ The theme that ships with WebKit 6 changes three things your app can see:
   | `--z-input-popup`                                  | `--z-control-overlay`                                                           |
   | `surfacePrimitives` (`@aziontech/theme/colors`)    | `primitives.gray`                                                               |
 
-- **Renamed tokens** (same values; `webkit migrate` rewrites them in `.vue`, `.css`, `.scss`, `.html`,
+- **Renamed tokens** (same values; `azion-ui migrate` rewrites them in `.vue`, `.css`, `.scss`, `.html`,
   `.ts` and `.js` files, from `src/cli/migrations/v6-tokens.json`):
 
   | Old                                                                                                                         | New                                                             |
@@ -998,62 +1028,62 @@ The theme that ships with WebKit 6 changes three things your app can see:
 Two additions need nothing from you: `--border-input` is the outline token of every form field (same
 value as `--border-default`), and dark mode has its own, visible elevation shadows (`--shadow-*`).
 
-### CSS: the app compiles only the WebKit files it imports
+### CSS: the app compiles only the Azion UI files it imports
 
-In v5, `@aziontech/theme` and `@aziontech/webkit/styles` both pointed Tailwind at the whole WebKit
+In v5, `@aziontech/theme` and `@aziontech/ui/styles` both pointed Tailwind at the whole Azion UI
 source, so every app shipped the classes of every component (77 KB gzipped of CSS for a Button-only
-app). In v6 neither scans WebKit: `src/webkit.css` imports `./webkit.sources.css`, a generated list
-with one `@source` per WebKit file the app imports, and the Button-only app ships about 10 KB.
+app). In v6 neither scans Azion UI: `src/azion-ui.css` imports `./azion-ui.sources.css`, a generated list
+with one `@source` per Azion UI file the app imports, and the Button-only app ships about 10 KB.
 
-- Run `npx @aziontech/webkit init` again: an untouched v5 `src/webkit.css` is replaced with the
+- Run `npx @aziontech/ui init` again: an untouched v5 `src/azion-ui.css` is replaced with the
   v6 one, and an edited one keeps your edits and gets only the lines it lacks (the
-  `./webkit.sources.css` import and the three `@source not` lines). Or by hand add
-  `@import './webkit.sources.css';` to `src/webkit.css` after `@import '@aziontech/webkit/styles';`,
-  and `webkit()` from `@aziontech/webkit/vite-plugin` to the `plugins` of `vite.config`. The plugin
-  writes the list on every dev start and build. Without Vite, run `npx @aziontech/webkit css` after
-  adding or removing a WebKit import. `webkit doctor` fails while the list is stale.
-- `@aziontech/webkit/styles` now holds only the base rules (right-to-left icon mirroring). An app
-  that imported just `@aziontech/theme` (no `webkit.css`) renders every component unstyled until it
+  `./azion-ui.sources.css` import and the three `@source not` lines). Or by hand add
+  `@import './azion-ui.sources.css';` to `src/azion-ui.css` after `@import '@aziontech/ui/styles';`,
+  and `azionUi()` from `@aziontech/ui/vite-plugin` to the `plugins` of `vite.config`. The plugin
+  writes the list on every dev start and build. Without Vite, run `npx @aziontech/ui css` after
+  adding or removing an Azion UI import. `azion-ui doctor` fails while the list is stale.
+- `@aziontech/ui/styles` now holds only the base rules (right-to-left icon mirroring). An app
+  that imported just `@aziontech/theme` (no `azion-ui.css`) renders every component unstyled until it
   imports the list.
 - An app that really renders every component (a catalogue, a playground) imports
-  `@aziontech/webkit/styles/all` instead of the list.
+  `@aziontech/ui/styles/all` instead of the list.
 - Tailwind 4.1 or later: the stylesheet `init` writes keeps the AI guidance files out of the scan
   with `@source not '../.claude'` (and `CLAUDE.md`, `AGENTS.md`).
 
 ### TypeScript reads declarations
 
-Every `@aziontech/webkit/<name>` export now has a `types` condition that points at a declaration
+Every `@aziontech/ui/<name>` export now has a `types` condition that points at a declaration
 under `types/` (`{ "types": "./types/…/x.vue.d.ts", "default": "./src/…/x.vue" }`), so a fresh
 Vite `vue-ts` app builds with its default `vue-tsc -b && vite build`: no more TS2307 on a `.vue`
-export, and no WebKit source in your program, so `skipLibCheck` covers WebKit and your compiler
+export, and no Azion UI source in your program, so `skipLibCheck` covers Azion UI and your compiler
 options never type-check it. `@aziontech/theme` and `@aziontech/icons` declare their CSS entries
-the same way. Remove any local `declare module '@aziontech/webkit/…'` or
+the same way. Remove any local `declare module '@aziontech/ui/…'` or
 `declare module '@aziontech/icons'` shim you added as a workaround. Bundlers still load the `.vue`
 and `.ts` sources (`default`).
 
 Keep `vue-tsc` off 3.3.12 to 3.3.14: in those releases a static attribute containing `//` on a
 component (`href="https://…"`) inside a `v-for` drops the loop variable from type-checking
 (TS2304), and 3.3.14 also types later template expressions as refs ("Property 'value' does not
-exist"); upstream tracks it in vuejs/language-tools#6240. `webkit init` leaves your `vue-tsc`
+exist"); upstream tracks it in vuejs/language-tools#6240. `azion-ui init` leaves your `vue-tsc`
 version as it is and prints the pin (`npm i -D vue-tsc@3.3.11`) when your range admits an affected
-release, and `webkit doctor` warns when one is installed. Binding the value from a script constant
+release, and `azion-ui doctor` warns when one is installed. Binding the value from a script constant
 avoids it on every release.
 
-### `vee-validate` is no longer a dependency; `@aziontech/webkit/vite` is removed
+### `vee-validate` is no longer a dependency; `@aziontech/ui/vite` is removed
 
-Nothing in WebKit imports `vee-validate`, so v6 drops it from `dependencies`. An app that uses it
-installs it itself (`npm install vee-validate@^4`). `@aziontech/webkit/vite` (`webkitViteConfig`),
+Nothing in Azion UI imports `vee-validate`, so v6 drops it from `dependencies`. An app that uses it
+installs it itself (`npm install vee-validate@^4`). `@aziontech/ui/vite` (`azionUiViteConfig`),
 which only pre-bundled `vee-validate`, is removed (the codemod lists the import as `MANUAL`): put
 `optimizeDeps: { include: ['vee-validate'] }` in your own Vite config, or drop the import if you do
 not use `vee-validate`.
 
-### The MCP server is its own package: `@aziontech/webkit-mcp`
+### The MCP server is its own package: `@aziontech/ui-mcp`
 
-v5 shipped the MCP server inside `@aziontech/webkit` (bin `webkit-mcp`), so every app downloaded
+v5 shipped the MCP server inside `@aziontech/ui` (bin `azion-ui-mcp`), so every app downloaded
 `@modelcontextprotocol/sdk`, `zod` and their HTTP libraries (about 90 packages). v6 moves it to
-`@aziontech/webkit-mcp`; `@aziontech/webkit` no longer has the `webkit-mcp` bin. Point `.mcp.json`
-at the new package: `{ "command": "npx", "args": ["-y", "@aziontech/webkit-mcp"] }` (re-running
-`npx @aziontech/webkit init` rewrites the v5 entry for you; `webkit doctor` fails until it is fixed).
+`@aziontech/ui-mcp`; `@aziontech/ui` no longer has the `azion-ui-mcp` bin. Point `.mcp.json`
+at the new package: `{ "command": "npx", "args": ["-y", "@aziontech/ui-mcp"] }` (re-running
+`npx @aziontech/ui init` rewrites the v5 entry for you; `azion-ui doctor` fails until it is fixed).
 The block tools are renamed, with no alias: `search_patterns` → `search_blocks`, `get_pattern` →
 `get_block`, and `suggest_component` answers a screen with `recommendation: "block"` and `block` /
 `blockAlternatives` (was `"pattern"`, `pattern`, `patternAlternatives`). The other tools are unchanged.
@@ -1081,39 +1111,39 @@ state on its own.
 </Field>
 ```
 
-| Removed                                  | Use instead                                                                                                |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `@aziontech/webkit/field-text`           | Field + FieldLabel + Input + FieldDescription                                                              |
-| `@aziontech/webkit/field-textarea`       | Field + FieldLabel + Textarea + FieldDescription                                                           |
-| `@aziontech/webkit/field-select`         | Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription                                    |
-| `@aziontech/webkit/field-password`       | Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)           |
-| `@aziontech/webkit/field-phone-number`   | Field + FieldLabel + PhoneInput + FieldDescription                                                         |
-| `@aziontech/webkit/field-time`           | Field + FieldLabel + Input + FieldDescription                                                              |
-| `@aziontech/webkit/field-file-upload`    | Field + FieldLabel + FileDropzone + FieldDescription                                                       |
-| `@aziontech/webkit/field-input-group`    | Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription                               |
-| `@aziontech/webkit/field-text-switch`    | Field + FieldLabel + InputGroup (InputGroupInput + Addon with Switch) + FieldDescription                   |
-| `@aziontech/webkit/field-checkbox`       | Field orientation=horizontal + Checkbox + FieldContent (FieldLabel + FieldDescription)                     |
-| `@aziontech/webkit/field-radio`          | RadioGroup v-model with a RadioGroup.Item per option (description on the item)                             |
-| `@aziontech/webkit/field-switch`         | Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)                       |
-| `@aziontech/webkit/field-checkbox-block` | FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription) |
-| `@aziontech/webkit/field-radio-block`    | RadioGroup variant="card" with a RadioGroup.Item per option (description on the item)                      |
-| `@aziontech/webkit/field-switch-block`   | FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)   |
+| Removed                              | Use instead                                                                                                |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| `@aziontech/ui/field-text`           | Field + FieldLabel + Input + FieldDescription                                                              |
+| `@aziontech/ui/field-textarea`       | Field + FieldLabel + Textarea + FieldDescription                                                           |
+| `@aziontech/ui/field-select`         | Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription                                    |
+| `@aziontech/ui/field-password`       | Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)           |
+| `@aziontech/ui/field-phone-number`   | Field + FieldLabel + PhoneInput + FieldDescription                                                         |
+| `@aziontech/ui/field-time`           | Field + FieldLabel + Input + FieldDescription                                                              |
+| `@aziontech/ui/field-file-upload`    | Field + FieldLabel + FileDropzone + FieldDescription                                                       |
+| `@aziontech/ui/field-input-group`    | Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription                               |
+| `@aziontech/ui/field-text-switch`    | Field + FieldLabel + InputGroup (InputGroupInput + Addon with Switch) + FieldDescription                   |
+| `@aziontech/ui/field-checkbox`       | Field orientation=horizontal + Checkbox + FieldContent (FieldLabel + FieldDescription)                     |
+| `@aziontech/ui/field-radio`          | RadioGroup v-model with a RadioGroup.Item per option (description on the item)                             |
+| `@aziontech/ui/field-switch`         | Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)                       |
+| `@aziontech/ui/field-checkbox-block` | FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription) |
+| `@aziontech/ui/field-radio-block`    | RadioGroup variant="card" with a RadioGroup.Item per option (description on the item)                      |
+| `@aziontech/ui/field-switch-block`   | FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)   |
 
-New pieces that came out of the old wrappers: `PhoneInput` (`@aziontech/webkit/phone-input`),
-`PasswordRequirements` (`@aziontech/webkit/password-requirements`) and `InputGroup.Input`
-(`@aziontech/webkit/input-group-input`). `Hint` remains (`HelperText` is removed, see [Naming standard: renamed components](#naming-standard-renamed-components)); `Label` is removed (use `Field.Label`, or `FieldLabel` with `for` and `required` beside its control).
+New pieces that came out of the old wrappers: `PhoneInput` (`@aziontech/ui/phone-input`),
+`PasswordRequirements` (`@aziontech/ui/password-requirements`) and `InputGroup.Input`
+(`@aziontech/ui/input-group-input`). `Hint` remains (`HelperText` is removed, see [Naming standard: renamed components](#naming-standard-renamed-components)); `Label` is removed (use `Field.Label`, or `FieldLabel` with `for` and `required` beside its control).
 
 ### Preview-only names
 
 These shipped only in the 6.0 previews (`feat/webkit-ai-ready`), never in 5.x; they are gone in 6.0.
 
-- `DocCta` (`@aziontech/webkit/doc-cta`) → `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`):
+- `DocCta` (`@aziontech/ui/doc-cta`) → `DocCallToAction` (`@aziontech/ui/doc-call-to-action`):
   `primary-label` / `primary-href` become `:primary-action="{ label, href }"`, `secondary-label` /
   `secondary-href` become `:secondary-action="{ label, href }"`. The codemod lists the import as `MANUAL`.
 - `CapabilityGridSection` and `ConsoleShowcaseSection`: `actions` → `primaryAction` and `secondaryAction` (one object
   each, same `{ label, href, trailing?, target?, variant? }` shape). The codemod lists it as `MANUAL`.
-- `WebkitProvider` (`@aziontech/webkit/webkit-provider`) → `ConfigProvider`
-  (`@aziontech/webkit/config-provider`), the name Reka UI, Element Plus, Naive UI and Ant Design
+- `WebkitProvider` (`@aziontech/ui/webkit-provider`) → `ConfigProvider`
+  (`@aziontech/ui/config-provider`), the name Reka UI, Element Plus, Naive UI and Ant Design
   use for the same job. Same props (`locale`, `catalogs`, `messages`, `dir`, `now`, `time-zone`);
   the test id is `config-provider`. The codemod rewrites the import, the tag and
   `WebkitProviderProps` → `ConfigProviderProps`.
@@ -1138,7 +1168,7 @@ inside `DocProse`, put `data-doc-block` on `Tabs`. The test ids
 are `tabs`, `tabs-list`, `tabs-trigger` and `tabs-content` (were `doc-tabs` and `doc-tab`). The
 codemod lists the imports as `MANUAL`.
 
-`DocStep` is now `DocSteps.Step`: `@aziontech/webkit/doc-steps` is a compound and `doc-step` has
+`DocStep` is now `DocSteps.Step`: `@aziontech/ui/doc-steps` is a compound and `doc-step` has
 no standalone export, since a step only renders inside `DocSteps`. Drop the `doc-step` import and
 write `<DocSteps.Step title>`; Markdown sources (`<Steps><Step>`) need no change. The step's test id
 is `doc-steps-step` (was `documentation-doc-step`). The codemod rewrites each `<DocStep>` that sits
@@ -1177,15 +1207,15 @@ Landing headings carry no `anchor`, so the docs home shows no outline rail.
 Markup that every screen used to copy is now a component. Screens copied from v5 keep working; replace
 the copied markup when you touch them.
 
-| Component       | Import                             | Replaces                                                     |
-| --------------- | ---------------------------------- | ------------------------------------------------------------ |
-| `PageHeader`    | `@aziontech/webkit/page-header`    | the h1 + description + actions row of every page             |
-| `Subheader`     | `@aziontech/webkit/subheader`      | the h2 + description (+ copy-link anchor) of a section       |
-| `PageTabs`      | `@aziontech/webkit/page-tabs`      | the full-bleed tab strip under a resource header (`v-model`) |
-| `SettingsGroup` | `@aziontech/webkit/settings-group` | a titled settings band (collapsible)                         |
-| `SettingsRow`   | `@aziontech/webkit/settings-row`   | one settings row: title, description, control                |
-| `SaveBar`       | `@aziontech/webkit/save-bar`       | the floating or docked save / discard bar                    |
-| `ConfirmDialog` | `@aziontech/webkit/confirm-dialog` | a confirm / discard / delete dialog                          |
+| Component       | Import                         | Replaces                                                     |
+| --------------- | ------------------------------ | ------------------------------------------------------------ |
+| `PageHeader`    | `@aziontech/ui/page-header`    | the h1 + description + actions row of every page             |
+| `Subheader`     | `@aziontech/ui/subheader`      | the h2 + description (+ copy-link anchor) of a section       |
+| `PageTabs`      | `@aziontech/ui/page-tabs`      | the full-bleed tab strip under a resource header (`v-model`) |
+| `SettingsGroup` | `@aziontech/ui/settings-group` | a titled settings band (collapsible)                         |
+| `SettingsRow`   | `@aziontech/ui/settings-row`   | one settings row: title, description, control                |
+| `SaveBar`       | `@aziontech/ui/save-bar`       | the floating or docked save / discard bar                    |
+| `ConfirmDialog` | `@aziontech/ui/confirm-dialog` | a confirm / discard / delete dialog                          |
 
 The screens (blocks) that were only these fragments are gone from the catalog:
 `platform/page/page-header`, `platform/page/subheader`, `platform/page/page-tabs`,
@@ -1196,7 +1226,7 @@ The screens (blocks) that were only these fragments are gone from the catalog:
 Every console block now takes its records, `loading` and `error` as typed props and emits its
 actions; it fetches nothing and fakes no request. Its sample records live in a `sample.ts` beside
 it, and each state variant imports the primary instead of copying it. Blocks copied from v5 keep
-working as they are. To move one to live data, copy it again (`npx @aziontech/webkit add <block-id> --force`,
+working as they are. To move one to live data, copy it again (`npx @aziontech/ui add <block-id> --force`,
 which also copies `<name>.sample.ts` and any API adapter), render it from the routed page that owns
 the request, pass the data as props (the block's `## Data` guidelines list them) and delete the
 `.sample.ts` once real data flows.
@@ -1208,11 +1238,11 @@ the `@tanstack/vue-table` engine (`table-root` is about 2 KB, down from 56 KB). 
 takes `data` + `columns` moved to `DataTable`:
 
 ```diff
-- import Table from '@aziontech/webkit/table'
-- import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
-+ import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-+ import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-+ import TableSearch from '@aziontech/webkit/table-search'
+- import Table from '@aziontech/ui/table'
+- import TableRoot, { type TableColumn } from '@aziontech/ui/table-root'
++ import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
++ import DataTablePagination from '@aziontech/ui/data-table-pagination'
++ import TableSearch from '@aziontech/ui/table-search'
 
 - <Table :data="rows" :columns="columns" paginated>
 + <DataTable :data="rows" :columns="columns">
@@ -1227,7 +1257,7 @@ takes `data` + `columns` moved to `DataTable`:
   on `DataTable`, except the optional features below, which are companion parts now (next
   section); `useCollection().tableProps` binds the root and `paginationProps` the pagination.
 - The types (`TableColumn`, `TableExposed`, `TableStateSnapshot`, the slot scopes) come from
-  `@aziontech/webkit/data-table` or `@aziontech/webkit/table`; `@aziontech/webkit/table-root` no
+  `@aziontech/ui/data-table` or `@aziontech/ui/table`; `@aziontech/ui/table-root` no
   longer exports them.
 - `Table` keeps `maxHeight`, `bordered`, `density`, `wrapLines` and the `default`, `title`,
   `toolbar` and `footer` slots. Its `toolbar` slot has no scope.
@@ -1240,15 +1270,15 @@ takes `data` + `columns` moved to `DataTable`:
   `:data`, `:columns` or `v-bind="tableProps"` by hand.
 - The cell presets and toolbar controls are no longer attached to the `Table` compound, which now
   carries only the structural parts (`Header`, `Body`, `Footer`, `Caption`, `Row`, `HeadCell`,
-  `Cell`, `SortButton`, `Toolbar`), so `import Table from '@aziontech/webkit/table'` costs what its
+  `Cell`, `SortButton`, `Toolbar`), so `import Table from '@aziontech/ui/table'` costs what its
   parts cost (6.7 KB gzip, down from 39 KB). Import each preset or control from its own entry; the
   codemod rewrites the tags and `h()` calls, adds the imports and drops a `Table` import nothing
   uses any more:
 
-  | v5                                                                                                            | v6                                                                                                                                              |
-  | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-  | `Table.CellStatus`, `Table.CellLink`, `Table.CellId`, `Table.CellTime`, `Table.CellTags`, `Table.CellActions` | `TableCellStatus` (`@aziontech/webkit/table-cell-status`), `TableCellLink`, `TableCellId`, `TableCellTime`, `TableCellTags`, `TableCellActions` |
-  | `Table.Search`, `Table.Filter`, `Table.Export`, `Table.RefreshButton`, `Table.LiveButton`                     | `TableSearch` (`@aziontech/webkit/table-search`), `TableFilter`, `TableExportButton`, `TableRefreshButton`, `TableLiveButton`                   |
+  | v5                                                                                                            | v6                                                                                                                                          |
+  | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `Table.CellStatus`, `Table.CellLink`, `Table.CellId`, `Table.CellTime`, `Table.CellTags`, `Table.CellActions` | `TableCellStatus` (`@aziontech/ui/table-cell-status`), `TableCellLink`, `TableCellId`, `TableCellTime`, `TableCellTags`, `TableCellActions` |
+  | `Table.Search`, `Table.Filter`, `Table.Export`, `Table.RefreshButton`, `Table.LiveButton`                     | `TableSearch` (`@aziontech/ui/table-search`), `TableFilter`, `TableExportButton`, `TableRefreshButton`, `TableLiveButton`                   |
 
 ### DataTable features are companion parts
 
@@ -1258,18 +1288,18 @@ the export rows moved to the parts that show them (CODE_QUALITY 3.4): each reads
 has its own import and stays out of a table that does not use it, so a root-only table no longer
 carries them. The codemod reports every moved name with the line to write; move them by hand:
 
-| v6 before                                                                                   | v6 now                                                                                                                                                           |
-| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `paginated`, `:page-size-options`, `v-model:page`, `v-model:page-size`                      | `<template #footer><DataTablePagination v-model:page="…" v-model:page-size="…" :page-size-options="…" /></template>` (`@aziontech/webkit/data-table-pagination`) |
-| `manual-pagination`, `:row-count`                                                           | `manual` and `:total` on `DataTablePagination`                                                                                                                   |
-| `:more-rows`, `:loading-more`, `@load-more`                                                 | `<template #load-more><DataTableLoadMore :more-rows="…" :loading="…" @load-more="…" /></template>` (`@aziontech/webkit/data-table-load-more`)                    |
-| `v-model:global-filter`                                                                     | `<TableSearch v-model="…" />` in the toolbar; a search field outside the table filters `data` itself (`matchesText` from `@aziontech/webkit/use-collection`)     |
-| `:filter-fields`, `v-model:filters`                                                         | `<TableFilter v-model="…" :fields="…" />`; `FilterMenu.ChipGroup` labels its chips with the fields the mounted `TableFilter` registers                           |
-| `v-model:live`                                                                              | `<TableLiveButton v-model="…" />`                                                                                                                                |
-| `:export-rows`, `export-filename`                                                           | `<TableExportButton :rows="…" filename="…" />` (`useCollection().exportItems` for `rows`), or `exportCsv({ filename, rows })` on the ref                         |
-| `v-model:snapshot`, `:default-snapshot`                                                     | `tableEl.value.getSnapshot()` / `tableEl.value.setSnapshot(snapshot)` (call it once the table is mounted to seed it)                                             |
-| `:estimate-row-height`                                                                      | removed: virtual rows measure themselves, a row counts 48 px until the first is measured                                                                         |
-| `useCollection().tableProps` with `paginated`, `page`, `pageSize`, `rowCount`, `exportRows` | `tableProps` on the DataTable, `<DataTablePagination v-bind="paginationProps" manual />` in its `footer` slot, `exportItems` for `TableExportButton` `rows`      |
+| v6 before                                                                                   | v6 now                                                                                                                                                       |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `paginated`, `:page-size-options`, `v-model:page`, `v-model:page-size`                      | `<template #footer><DataTablePagination v-model:page="…" v-model:page-size="…" :page-size-options="…" /></template>` (`@aziontech/ui/data-table-pagination`) |
+| `manual-pagination`, `:row-count`                                                           | `manual` and `:total` on `DataTablePagination`                                                                                                               |
+| `:more-rows`, `:loading-more`, `@load-more`                                                 | `<template #load-more><DataTableLoadMore :more-rows="…" :loading="…" @load-more="…" /></template>` (`@aziontech/ui/data-table-load-more`)                    |
+| `v-model:global-filter`                                                                     | `<TableSearch v-model="…" />` in the toolbar; a search field outside the table filters `data` itself (`matchesText` from `@aziontech/ui/use-collection`)     |
+| `:filter-fields`, `v-model:filters`                                                         | `<TableFilter v-model="…" :fields="…" />`; `FilterMenu.ChipGroup` labels its chips with the fields the mounted `TableFilter` registers                       |
+| `v-model:live`                                                                              | `<TableLiveButton v-model="…" />`                                                                                                                            |
+| `:export-rows`, `export-filename`                                                           | `<TableExportButton :rows="…" filename="…" />` (`useCollection().exportItems` for `rows`), or `exportCsv({ filename, rows })` on the ref                     |
+| `v-model:snapshot`, `:default-snapshot`                                                     | `tableEl.value.getSnapshot()` / `tableEl.value.setSnapshot(snapshot)` (call it once the table is mounted to seed it)                                         |
+| `:estimate-row-height`                                                                      | removed: virtual rows measure themselves, a row counts 48 px until the first is measured                                                                     |
+| `useCollection().tableProps` with `paginated`, `page`, `pageSize`, `rowCount`, `exportRows` | `tableProps` on the DataTable, `<DataTablePagination v-bind="paginationProps" manual />` in its `footer` slot, `exportItems` for `TableExportButton` `rows`  |
 
 Test ids: the footer band is `data-table-pagination` (was `data-table__footer`, its loading line
 `data-table-pagination__loading`), the load-more line `data-table-load-more` (was `data-table__more`;
@@ -1420,32 +1450,32 @@ rewrite this, because the replacement depends on whether the child was a link or
 is `bottom` (was `top`). Pass `side="top"` to keep the old position. The glyph's accessible name is
 `ariaLabel` (default "More information") and the note is its description. Explanations that sat in
 a `Tooltip` move to a `Hint` or a field description: a `Tooltip` only names a control in a few
-words (`webkit/prefer-hint` flags one longer than 80 characters).
+words (`azion-ui/prefer-hint` flags one longer than 80 characters).
 
 ### `LineFigure` is removed
 
-`LineFigure` (`@aziontech/webkit/line-figure`) and its line figures are removed, with no
+`LineFigure` (`@aziontech/ui/line-figure`) and its line figures are removed, with no
 replacement: delete the import and the `<LineFigure>` element. The `lineFigures` kind is gone from
 `catalog.assets`, the MCP `list_assets` and the llms foundation pages. The codemod lists the import
 as `MANUAL`.
 
 ### The Azion mark is `Brand`; the loose `svg/azion/*` files are removed
 
-`Brand` (`@aziontech/webkit/brand`) is the one way to draw the Azion mark. The loose drawings
-`@aziontech/webkit/svg/azion/*` are no longer exported:
+`Brand` (`@aziontech/ui/brand`) is the one way to draw the Azion mark. The loose drawings
+`@aziontech/ui/svg/azion/*` are no longer exported:
 
-| Removed import                                 | Write instead                  |
-| ---------------------------------------------- | ------------------------------ |
-| `@aziontech/webkit/svg/azion/default`          | `<Brand />`                    |
-| `@aziontech/webkit/svg/azion/min`              | `<Brand variant="reduced" />`  |
-| `@aziontech/webkit/svg/azion/technologies`     | `<Brand variant="extended" />` |
-| `@aziontech/webkit/svg/azion/full`             | no replacement (see below)     |
-| `@aziontech/webkit/svg/azion/move-to-the-edge` | no replacement (see below)     |
+| Removed import                             | Write instead                  |
+| ------------------------------------------ | ------------------------------ |
+| `@aziontech/ui/svg/azion/default`          | `<Brand />`                    |
+| `@aziontech/ui/svg/azion/min`              | `<Brand variant="reduced" />`  |
+| `@aziontech/ui/svg/azion/technologies`     | `<Brand variant="extended" />` |
+| `@aziontech/ui/svg/azion/full`             | no replacement (see below)     |
+| `@aziontech/ui/svg/azion/move-to-the-edge` | no replacement (see below)     |
 
 The two lockups with the "Move to the Edge" tagline are retired: remove them, or use
 `<Brand variant="extended" />` (AZION technologies) where a tagline lockup stood. The codemod
 rewrites `svg/azion/default` to `Brand` and lists the other imports as `MANUAL`. Another company's
-mark (a client, a competitor, a coding agent) is `ThirdPartyLogo` (`@aziontech/webkit/third-party-logo`),
+mark (a client, a competitor, a coding agent) is `ThirdPartyLogo` (`@aziontech/ui/third-party-logo`),
 never `Brand`.
 
 ### Removed in 6.0: feedback, content, code and chart names
@@ -1479,12 +1509,12 @@ default slot no longer reserves a 160px band under its action.
 `Badge` is for counts only (`12`, `99+`): a status word goes to `StatusIndicator` (the state of a
 resource) or `Tag` (a category or outcome word). `CodeEditor`'s plain diff mode now marks added and
 removed lines in its gutters with the same line diff `CodeBlock` draws. `LogViewer.Steps`
-(`@aziontech/webkit/log-viewer-steps`) is the one pipeline of steps for a build or deploy run.
+(`@aziontech/ui/log-viewer-steps`) is the one pipeline of steps for a build or deploy run.
 
 ### `Card` has one layout; the catalog tile is `IntegrationCard`
 
 `Card variant="integration"` is now its own component, `IntegrationCard`
-(`@aziontech/webkit/integration-card`), with the same props (`title`, `logo`, `vendor`,
+(`@aziontech/ui/integration-card`), with the same props (`title`, `logo`, `vendor`,
 `description`, `badges`, `installed`, `href`, `featured`), the `select` event and the `logo`,
 `actions` and default slots. `Card` keeps `title`, `padded` and its `header`, `header-actions`,
 default and `footer` slots, and drops `variant`. Swap the tag and drop `variant="integration"`:
@@ -1553,7 +1583,7 @@ root, a `data-testid` you set on the root no longer renames its sub-components: 
 (`within(getByTestId('signup-dialog')).getByTestId('dialog-header')`) or set `data-testid` on the
 part.
 
-`webkit migrate` rewrites the old ids in test files (`*.test.*`, `*.spec.*`, `e2e/`, `tests/`,
+`azion-ui migrate` rewrites the old ids in test files (`*.test.*`, `*.spec.*`, `e2e/`, `tests/`,
 `cypress/`, `playwright/`) from the full map in
 [`src/cli/migrations/v6-testids.json`](./src/cli/migrations/v6-testids.json). Ids built in code
 (`` `${prefix}-button` ``) and CSS selectors outside test files need a hand edit.
@@ -1665,7 +1695,7 @@ copies into your app (`dashboard-alerts.vue`, `DashboardAlerts`, route `/dashboa
 keeps the group word, and the docs list shows the same full name ("Dashboard Alerts"). Blocks
 that already started with their group (`create/create-hub`, `ai/ai-chat`,
 `settings/settings-form`, `account/account-hierarchy`, `dashboard/dashboard-switcher`,
-`edit/edit-resource`) keep their id. `webkit migrate v6` rewrites the ids in `webkit.blocks.json`
+`edit/edit-resource`) keep their id. `azion-ui migrate v6` rewrites the ids in `azion-ui.blocks.json`
 and keeps your copied file names; `add <old id>` resolves an old id with a note. The map is
 `src/cli/migrations/v6-blocks.json`.
 
@@ -1739,7 +1769,7 @@ Variant states use one word set, `loading`, `empty`, `error`, `success`, written
 `RepositoriesLoading`, `LoadingSettings` → `SettingsLoading`, query-editor's `EmptyDatabase` →
 `NoTables`, production-checklist's `Complete` → `Success` and delete-dialog's `LabelledField` →
 `SettingsRow`. A `#variant` fragment and `add --variant` take the variant file name
-(`view/view-table#error`); the PascalCase name still works. Your `webkit.blocks.json` keeps the old
+(`view/view-table#error`); the PascalCase name still works. Your `azion-ui.blocks.json` keeps the old
 ids: `add <old id>` resolves them with a note. `add` now writes kebab-case files named after the
 block: `create-hub.vue`, and `create-hub-connected.vue` for a variant (was `CreateHub.vue` and
 `CreateHubConnected.vue`); a PascalCase `--dest` file keeps its casing.
@@ -1810,7 +1840,7 @@ the old look.
 
 ### Marketing names removed in 6.0
 
-These names are removed in 6.0, with no alias. `webkit migrate` rewrites the prop
+These names are removed in 6.0, with no alias. `azion-ui migrate` rewrites the prop
 renames marked with a codemod; move the rest by hand.
 
 | Component                           | Removed                                      | Use                                       | Codemod |
@@ -1857,14 +1887,14 @@ lists it as manual work); page JSON that still names the old `_id` keeps renderi
 | `shell-mockup` (and `-root`, `-part`) | internal to `console-mockup`; show a console screen with `ConsoleMockup`                         |
 
 Their exported types map to the survivor's (`ArticleIndexBlogItem` → `ArticleIndexSectionItem`, …);
-`webkit migrate` rewrites them. `CodeSplitTab` and `MediaSplitBandCodeTab` have no successor (code left
+`azion-ui migrate` rewrites them. `CodeSplitTab` and `MediaSplitBandCodeTab` have no successor (code left
 the media band): type the files as `FeatureScrollSectionCode`.
 `sticky-carousel`'s header offset now follows `--layout-header-height` instead of a fixed `3.5rem`.
 
 ### Marketing layouts and media removed in 6.0
 
 The owner's site review (round 2) removed layouts no page uses and limited what a media band shows.
-`webkit migrate` rewrites the values it can and lists the rest as MANUAL; page JSON keeps rendering,
+`azion-ui migrate` rewrites the values it can and lists the rest as MANUAL; page JSON keeps rendering,
 because `SitePage` translates each old entry as the table says.
 
 | Component                        | Removed                                                                            | Use                                                                                                                       | Codemod                          | Old page JSON renders as                                                          |
@@ -1890,7 +1920,7 @@ because `SitePage` translates each old entry as the table says.
   registry scene in `illustration` instead (`llms/foundations/illustrations.md`, MCP `list_assets`);
   the scenes that shipped only as files (`branches`, `personal-tokens`, `usage-chart`) are
   registered. A tile or band left without an illustration renders
-  without its picture, and `webkit migrate` reports an `image` attribute on `MediaSplitSection`.
+  without its picture, and `azion-ui migrate` reports an `image` attribute on `MediaSplitSection`.
 - `CapabilityGridSection` icons are all or none: a benefits grid gives every item an icon, a resource
   list or text columns none. A grid that mixes them logs a development warning.
 
@@ -1903,16 +1933,16 @@ became `border-s`/`border-e` and `rounded-l`/`rounded-tr`… became `rounded-s`/
 `left-1/2 -translate-x-1/2` centering pair is the one physical form kept. Copied blocks keep working;
 copy them again to get the mirrored version.
 
-- **Lint.** The ESLint presets add `webkit/no-physical-direction` (error, autofix). Run
+- **Lint.** The ESLint presets add `azion-ui/no-physical-direction` (error, autofix). Run
   `npx eslint --fix .` once to rewrite your own `ml-`/`pr-`/`left-`/`text-right` classes; it skips
   the centering pair.
-- **`useDirection`.** `import { useDirection, logicalArrowKey } from '@aziontech/webkit/use-direction'`
+- **`useDirection`.** `import { useDirection, logicalArrowKey } from '@aziontech/ui/use-direction'`
   returns a reactive `'ltr' | 'rtl'` read from the closest `[dir]` ancestor (or `<html dir>`), and
   follows changes. Tabs, ToggleGroup, Slider, Pagination, NavigationMenu, Menu
   submenus, Tree, DatePicker, Resizable, Carousel, QuoteTabs, Tracker and CodeBlock tabs already use
   it: under `rtl`, ArrowLeft moves to the next item.
 - **Icons.** Arrows, chevrons, carets and log-in/log-out glyphs mirror under `rtl`
-  (`@aziontech/webkit/styles` and the `icon` props of Button, IconButton, Link, Breadcrumb and
+  (`@aziontech/ui/styles` and the `icon` props of Button, IconButton, Link, Breadcrumb and
   MenuItem); external-link arrows, media controls and logos do not. Add `rtl:-scale-x-100` to a
   directional glyph you draw yourself.
 - **Toast.** `Toaster` `position` and the per-toast `position` option take
@@ -1930,7 +1960,7 @@ copy them again to get the mirrored version.
   with Noto Sans Arabic loaded only for Arabic code points, and `:lang(ar)`, `:lang(fa)` and
   `:lang(ur)` get a taller default line height. Set `lang` with `dir`.
 
-See the `webkit-direction` rule for the full standard.
+See the `azion-ui-direction` rule for the full standard.
 
 ### Devices
 
@@ -1976,7 +2006,7 @@ split view or a card these change:
   happen inside a page column (at most 1388 px on the site, 1620 px in the console) may now never
   happen. Move it to the nearest step that still fits (`@6xl:` → `@5xl:`, `@7xl:` → `@6xl:`)
   rather than writing a raw `@min-[…]:`. Width utilities (`max-w-md`, `w-2xl`,
-  `max-w-(--container-md)`) already read the theme values and do not change. In WebKit itself
+  `max-w-(--container-md)`) already read the theme values and do not change. In Azion UI itself
   `Hero.Title` keeps its actions in a row from `@2xs`, the wide `Diagram` layout now starts at
   `@5xl` and `CardList` shows four columns from `@6xl`; the `get-started` steps (`detail/detail-get-started`, the Overview of
   `detail/detail-resource`) sit side by side from `@4xl` (1024 px), so a 1280 px console
@@ -2001,13 +2031,13 @@ split view or a card these change:
 
 ### Languages
 
-v6 adds `ConfigProvider` (`@aziontech/webkit/config-provider`). Mount it once at the app root with the
+v6 adds `ConfigProvider` (`@aziontech/ui/config-provider`). Mount it once at the app root with the
 user's locale:
 
 ```vue
 <script setup>
-  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
+  import { ptBR } from '@aziontech/ui/locales/pt-BR'
+  import ConfigProvider from '@aziontech/ui/config-provider'
 </script>
 
 <template>
@@ -2026,7 +2056,7 @@ sizes, relative times and plurals format with `Intl` for the locale. The root ca
 `dir`; `dir` defaults to `auto`, which turns Arabic, Hebrew, Persian and Urdu right-to-left.
 
 English is built into the provider. Portuguese and Spanish are separate entries,
-`@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es`, so an app that runs only in
+`@aziontech/ui/locales/pt-BR` and `@aziontech/ui/locales/es`, so an app that runs only in
 English does not download them: import the ones your app offers and pass them through `catalogs`
 (`{ 'pt-BR': ptBR, es }`). A `pt-BR` or `es` locale with no registered catalog renders English and
 warns once in development. v5 had no provider, so there is nothing to rewrite and no codemod step.
@@ -2041,7 +2071,7 @@ still win. Props whose default was an English string (`ariaLabel: 'Close'`, `con
 `emptyTitle: 'No data available'`, `placeholder: 'Search'`…) now default to `''` and fall back to the
 catalog, so an empty string no longer removes the label; `HelpPanel.Links` `title` defaults to
 `undefined` and still hides its heading when you pass `''`. The pagination line formats its numbers
-(`1,200`, `1.200` in Portuguese). `useLocale()` from `@aziontech/webkit/use-locale` gives your own
+(`1,200`, `1.200` in Portuguese). `useLocale()` from `@aziontech/ui/use-locale` gives your own
 components the same locale, `t()` and `Intl` helpers.
 
 `messages` overrides use the catalog's `group.key`: the group is the component's camelCase name
@@ -2049,7 +2079,7 @@ components the same locale, `t()` and `Intl` helpers.
 `copyButton.fallbackTitle`), and strings several components share are in `common` (`common.copy`,
 `common.copied`, `common.newTab`, the autoplay pause and resume labels). A search miss is `noMatch`
 and a no-data title `emptyTitle` in every group. The catalogs live in `src/locales/<bcp47>.ts`, the
-files behind `@aziontech/webkit/locales/pt-BR` and `/locales/es`.
+files behind `@aziontech/ui/locales/pt-BR` and `/locales/es`.
 
 ### Layout: one name for the rail and the pane state
 
@@ -2057,9 +2087,9 @@ files behind `@aziontech/webkit/locales/pt-BR` and `/locales/es`.
 (`open = !collapsed`). The codemod lists it as `MANUAL`, because the bound value inverts.
 
 The navigation rail now has one name across the layouts: `open` on `Sidebar` and `navigationOpen`
-on `AppLayout` and `ConsoleLayout`. `@aziontech/webkit/sidebar` is now the compound
-(`Sidebar.Header`, `Sidebar.Footer`); `@aziontech/webkit/sidebar-root` is the
-standalone root. `SidebarGroup` (`@aziontech/webkit/sidebar-group`, `Sidebar.Group`) is removed:
+on `AppLayout` and `ConsoleLayout`. `@aziontech/ui/sidebar` is now the compound
+(`Sidebar.Header`, `Sidebar.Footer`); `@aziontech/ui/sidebar-root` is the
+standalone root. `SidebarGroup` (`@aziontech/ui/sidebar-group`, `Sidebar.Group`) is removed:
 group the rows with `SidebarMenu.Group` inside a `SidebarMenu` (`label`, rows as
 `SidebarMenu.Item`).
 
@@ -2094,8 +2124,8 @@ Two behaviour changes need a hand edit:
 
 ### `Hotspot` is a part of `TutorialPanel`
 
-`Hotspot` (`@aziontech/webkit/hotspot`, from the 6.0 previews) is `TutorialPanelHotspot`
-(`@aziontech/webkit/tutorial-panel-hotspot`): it only works inside `TutorialPanel.Provider`, so it
+`Hotspot` (`@aziontech/ui/hotspot`, from the 6.0 previews) is `TutorialPanelHotspot`
+(`@aziontech/ui/tutorial-panel-hotspot`): it only works inside `TutorialPanel.Provider`, so it
 lives with it. It is a companion part, imported on its own (no `TutorialPanel.Hotspot`). The codemod
 rewrites the import and the tag. Its type is `TutorialPanelHotspotSide`, its test id
 `tutorial-panel-hotspot`, and its locale keys moved into the `tutorialPanel` group
@@ -2129,7 +2159,7 @@ The codemod rewrites the renamed paths and bindings and prints `MANUAL` for a re
 - `Tree` with an `actions` slot renders as a `treegrid`: rows are `role="row"` with a label and an
   actions `gridcell`, the row buttons are reached with the arrow keys, and the tree stays one tab
   stop. Without `actions` it is the same `tree` as before.
-- `Breadcrumb.Item` moved into the breadcrumb folder; its import `@aziontech/webkit/breadcrumb-item`
+- `Breadcrumb.Item` moved into the breadcrumb folder; its import `@aziontech/ui/breadcrumb-item`
   is unchanged.
 - `MiniButton` is removed. A text link that navigates → `<Link label href icon>` (it takes the
   link colour); a text action with no `href` → `<Button variant="link">`.
@@ -2141,7 +2171,7 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
 
 - **`Input` is text only.** `type="number"` is gone from `Input` (`InputType` is `'text' | 'email'`): a
   number is `NumberInput`, bound to a number with `min`, `max` and `step`. The lint rule
-  `webkit/prefer-value-control` reports every `Input` left with a native `type` of `number`, `date`,
+  `azion-ui/prefer-value-control` reports every `Input` left with a native `type` of `number`, `date`,
   `time`, `tel` or `password`.
 - **Removed aliases.** `Checkbox` drops `binary`, `inputId` and the `tabindex` prop (a boolean
   `v-model` needs no flag; pass `id` and `tabindex` as attributes). `Input`, `PasswordInput`,
@@ -2152,7 +2182,7 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `<MultiSelect v-model="arr">` with the same options. `Select` no longer sets `data-mode`.
 - **`Label` is removed.** Wrap the control in `Field` and use `Field.Label`; for a label set apart
   from its control, use `FieldLabel` with `for`, and its new `required` prop for the Required marker.
-- **`Calendar` → `DatePicker`, for one date.** `DatePicker` (`@aziontech/webkit/date-picker`,
+- **`Calendar` → `DatePicker`, for one date.** `DatePicker` (`@aziontech/ui/date-picker`,
   `-root`, `DatePicker.Clear`) picks one date, optionally with a time. `mode`, `period`,
   `presets` (and `Calendar.Preset`, the `#presets` slot), `showTimeZone`, `timeZones` and the
   `showTimezone` / `timezones` / `v-model:timezone` / `horizontal` aliases are gone; the
@@ -2176,14 +2206,14 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   off at first binds `v-model:refresh-interval` to `0`. (DateRangePicker is new in 6.0, so no 5.x
   app needs a change.)
 - **Radios are one `RadioGroup`.** `RadioButton` and `RadioCards` are removed. Every radio is a
-  `RadioGroup.Item` (`@aziontech/webkit/radio-group-item`) inside a `RadioGroup` that holds the
+  `RadioGroup.Item` (`@aziontech/ui/radio-group-item`) inside a `RadioGroup` that holds the
   `v-model`: `<RadioGroup v-model="plan"><RadioGroup.Item value="pro">Pro</RadioGroup.Item></RadioGroup>`.
   A hand-built `Field.Label` choice card with a radio becomes `variant="card"` with `description` on
   the item. `<RadioCards v-model :items>` becomes
   `<RadioGroup v-model variant="card" orientation="horizontal" :options>` (the codemod renames
   `items`); its `#default="{ item }"` slot is `#option="{ option }"` and `#tag="{ item }"` is
   `#tag="{ option }"`. `RadioCardsItem` → `RadioGroupOption`.
-- **`PickList` → `TransferList`.** `@aziontech/webkit/pick-list` and its parts become
+- **`PickList` → `TransferList`.** `@aziontech/ui/pick-list` and its parts become
   `transfer-list` (`TransferList.Source`, `.Target`, `.Controls`), the test id
   `transfer-list`, the catalog group `transferList`; `dataKey` is gone (the
   codemod writes `itemKey`).
@@ -2194,16 +2224,16 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
 `FlowDiagram` parts (`Node`, `Anchor`) and adds a data mode (`nodes` + `edges`) whose default card
 draws everything `TopologyDiagram` drew. `TopologyDiagram` is removed.
 
-| v5 / early 6.0                                          | 6.0                                                                                                               | Codemod |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------- |
-| `@aziontech/webkit/topology-diagram`, `TopologyDiagram` | `@aziontech/webkit/flow-diagram`, `FlowDiagram`                                                                   | yes     |
-| `FlowDiagram.Parallel`, `flow-diagram-parallel`         | `FlowDiagram.Group`, `flow-diagram-group`                                                                         | yes     |
-| `FlowDiagram.Parallel` `align`                          | removed: a group stacks its nodes at full width                                                                   | MANUAL  |
-| `TopologyDiagram` `levels`                              | `nodes` (flat) + `edges` (`{ from, to, label?, severity? }`); the edges set columns                               | MANUAL  |
-| node `type` / `name`                                    | `eyebrow` / `title`                                                                                               | MANUAL  |
-| `@bind`, `@remove`, `@create` on the root               | the same events on `FlowDiagramBind`, placed in the `actions` slot                                                | MANUAL  |
-| status `Tag` in the node header                         | a status dot and text (`status` + `severity`)                                                                     | —       |
-| `TopologyDiagram*` types                                | `FlowDiagramNodeData`, `FlowDiagramNodeField`, `FlowDiagramBindOption`, `FlowDiagramSeverity`, `FlowDiagramProps` | yes     |
+| v5 / early 6.0                                      | 6.0                                                                                                               | Codemod |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------- |
+| `@aziontech/ui/topology-diagram`, `TopologyDiagram` | `@aziontech/ui/flow-diagram`, `FlowDiagram`                                                                       | yes     |
+| `FlowDiagram.Parallel`, `flow-diagram-parallel`     | `FlowDiagram.Group`, `flow-diagram-group`                                                                         | yes     |
+| `FlowDiagram.Parallel` `align`                      | removed: a group stacks its nodes at full width                                                                   | MANUAL  |
+| `TopologyDiagram` `levels`                          | `nodes` (flat) + `edges` (`{ from, to, label?, severity? }`); the edges set columns                               | MANUAL  |
+| node `type` / `name`                                | `eyebrow` / `title`                                                                                               | MANUAL  |
+| `@bind`, `@remove`, `@create` on the root           | the same events on `FlowDiagramBind`, placed in the `actions` slot                                                | MANUAL  |
+| status `Tag` in the node header                     | a status dot and text (`status` + `severity`)                                                                     | —       |
+| `TopologyDiagram*` types                            | `FlowDiagramNodeData`, `FlowDiagramNodeField`, `FlowDiagramBindOption`, `FlowDiagramSeverity`, `FlowDiagramProps` | yes     |
 
 Recipe for a topology: flatten every level's nodes into one `nodes` array, rename `type` to
 `eyebrow` and `name` to `title`, and write one edge per connection the levels drew (each node of
@@ -2238,36 +2268,36 @@ rail when its container is narrower than 36rem. A fixed-size scene keeps a row w
 
 ### AI skills renamed
 
-Four skills in the AI bundle have plain names. `npx @aziontech/webkit sync` writes them under the
+Four skills in the AI bundle have plain names. `npx @aziontech/ui sync` writes them under the
 new folders and reports the old ones as orphans; delete the old folders in `.claude/skills/`.
 
-| 5.x skill                  | 6.0 skill              |
-| -------------------------- | ---------------------- |
-| `webkit-ds-adoption`       | `webkit-adoption`      |
-| `webkit-genai`             | `webkit-ai-surfaces`   |
-| `webkit-baseline-ui`       | `webkit-quick-cleanup` |
-| `webkit-impeccable-polish` | `webkit-final-polish`  |
+| 5.x skill                    | 6.0 skill                |
+| ---------------------------- | ------------------------ |
+| `azion-ui-ds-adoption`       | `azion-ui-adoption`      |
+| `azion-ui-genai`             | `azion-ui-ai-surfaces`   |
+| `azion-ui-baseline-ui`       | `azion-ui-quick-cleanup` |
+| `azion-ui-impeccable-polish` | `azion-ui-final-polish`  |
 
-The Claude Code agent `webkit-expert` is `webkit-advisor` (an agent name ends in an agent noun):
-`sync` writes `.claude/agents/webkit-advisor.md`; delete the old `webkit-expert.md`.
+The Claude Code agent `webkit-expert` is `azion-ui-advisor` (an agent name ends in an agent noun):
+`sync` writes `.claude/agents/azion-ui-advisor.md`; delete the old `webkit-expert.md`.
 
 ### Lint rules renamed
 
-Every rule of `@aziontech/webkit/eslint-plugin` starts with a `no-`, `prefer-` or `require-` verb.
+Every rule of `@aziontech/ui/eslint-plugin` starts with a `no-`, `prefer-` or `require-` verb.
 The old ids are gone, so a config or `eslint-disable` comment that names one reports an unknown rule;
 `migrate v6` rewrites them. `valid-import-path` and `authoring-standards` shipped in 5.x; the others
 existed only in 6.0 previews.
 
-| Old rule                            | 6.0 rule                                    |
-| ----------------------------------- | ------------------------------------------- |
-| `webkit/authoring-standards`        | `webkit/require-authoring-standards`        |
-| `webkit/composable-readonly-return` | `webkit/require-readonly-composable-return` |
-| `webkit/composable-scope-cleanup`   | `webkit/require-composable-scope-cleanup`   |
-| `webkit/accessible-name`            | `webkit/require-accessible-name`            |
-| `webkit/container-needs-width`      | `webkit/require-container-width`            |
-| `webkit/header-search-trigger`      | `webkit/require-header-search`              |
-| `webkit/menu-node-href`             | `webkit/prefer-href-in-menu-node`           |
-| `webkit/valid-import-path`          | `webkit/no-unknown-import`                  |
+| Old rule                              | 6.0 rule                                      |
+| ------------------------------------- | --------------------------------------------- |
+| `azion-ui/authoring-standards`        | `azion-ui/require-authoring-standards`        |
+| `azion-ui/composable-readonly-return` | `azion-ui/require-readonly-composable-return` |
+| `azion-ui/composable-scope-cleanup`   | `azion-ui/require-composable-scope-cleanup`   |
+| `azion-ui/accessible-name`            | `azion-ui/require-accessible-name`            |
+| `azion-ui/container-needs-width`      | `azion-ui/require-container-width`            |
+| `azion-ui/header-search-trigger`      | `azion-ui/require-header-search`              |
+| `azion-ui/menu-node-href`             | `azion-ui/prefer-href-in-menu-node`           |
+| `azion-ui/valid-import-path`          | `azion-ui/no-unknown-import`                  |
 
 ### Component CSS variables carry the component name
 
@@ -2285,12 +2315,12 @@ mockup fades a host sets are `--console-mockup-fade-start` / `-end` / `-edge` / 
 ## 5. Field report: Azion Console
 
 The codemod ran on a copy of `azion-console-kit` (November 2026). The console declares
-`@aziontech/webkit` 3.9.4, the PrimeVue-wrapper generation, so most of what it imports changed meaning
+`@aziontech/ui` 3.9.4, the PrimeVue-wrapper generation, so most of what it imports changed meaning
 before v6, not in it.
 
 | Measure                                       | Count |
 | --------------------------------------------- | ----: |
-| Files that reference `@aziontech/webkit`      |   877 |
+| Files that reference `@aziontech/ui`          |   877 |
 | Files rewritten                               |    27 |
 | Rewrites (path, binding or prop)              |    52 |
 | Files with at least one `MANUAL` item         |   853 |
@@ -2328,8 +2358,8 @@ defaults`); comments are now left alone.
 - **Silent misses.** About 80 v3 paths (`inputtext`, `plugin`, `use-toast`, `field-dropdown`, …) and
   the category paths passed without a word; each now has a rewrite or a `MANUAL` hint, and any path
   v6 does not export is `MANUAL`.
-- **Test mocks.** `vi.mock('@aziontech/webkit/…')` kept the old path while the import moved; every
-  string that names a WebKit path is rewritten with it.
+- **Test mocks.** `vi.mock('@aziontech/ui/…')` kept the old path while the import moved; every
+  string that names an Azion UI path is rewritten with it.
 - **Sub-components of a rename into a shorter name.** `command-menu-item`, `resizable-panel-pane`
   and the other parts of `command-menu` and `resizable-panel` were taken for v6 names and never
   renamed (found by `scripts/check-migrations.mjs` against v5).
@@ -2342,7 +2372,7 @@ The console does not build after the run, as expected: the `MANUAL` list is the 
 ### Tools that read `catalog.json` directly
 
 The MCP server, the ESLint plugin and the CLI read the new layout; this section matters only for your
-own scripts that open `node_modules/@aziontech/webkit/catalog.json`. The file is now metadata only
+own scripts that open `node_modules/@aziontech/ui/catalog.json`. The file is now metadata only
 (1.0 MB, was 7.5 MB); the source code and the component prose moved next to it into `catalog/`:
 
 | v5 field                                                                       | v6 location                                                                                           |
@@ -2381,7 +2411,7 @@ folder.
   blank. The closed field shows the selected country's flag, name and dial code.
 - `PhoneInput` offers every country and territory with a calling code (245, from Google's
   libphonenumber metadata), with the United States first; set `default-country` to start on another.
-- The flag sprite behind `@aziontech/webkit/styles/country-flags` is now
+- The flag sprite behind `@aziontech/ui/styles/country-flags` is now
   `src/images/country-flags.webp` (it was a PNG) and covers 252 flags. Its `.flag-an`, `.flag-tp`,
   `.flag-ty` and `.flag-zr` classes are removed (Netherlands Antilles, East Timor and Zaire no longer
   exist; use `.flag-cw`/`.flag-sx`/`.flag-bq`, `.flag-tl` and `.flag-cd`); `.flag-ac`, `.flag-ax`,
@@ -2400,9 +2430,9 @@ folder.
 
 ### Collections
 
-v6 adds `useCollection` (`@aziontech/webkit/use-collection`) and three components that bind to it:
-`PropertyFilter` (`@aziontech/webkit/property-filter`), `CollectionPreferences`
-(`@aziontech/webkit/collection-preferences`) and `CardList` (`@aziontech/webkit/card-list`). Nothing is
+v6 adds `useCollection` (`@aziontech/ui/use-collection`) and three components that bind to it:
+`PropertyFilter` (`@aziontech/ui/property-filter`), `CollectionPreferences`
+(`@aziontech/ui/collection-preferences`) and `CardList` (`@aziontech/ui/card-list`). Nothing is
 removed, and the codemod changes nothing here: this is the shape a list page moves to when you touch it.
 `Cards` is now `CardList`: the codemod renames the import and the tag; rename `cardsProps` to
 `cardListProps` (from `useCollection`) and any locale override of `cards.*` to `cardList.*` by hand.
@@ -2412,11 +2442,11 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 
 ```vue
 <script setup>
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import { useCollection } from '@aziontech/ui/use-collection'
 
   const { tableProps, paginationProps, propertyFilterProps, preferencesProps } = useCollection({
     items: rows,
@@ -2445,7 +2475,7 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 - A server-side list passes `fetch({ filteringText, filter, sort, page, pageSize, signal })` returning
   `{ items, total }` instead of `items`, and drops its own `manualSorting` / `manualPagination` /
   `rowCount` wiring: `tableProps` and `paginationProps` set them.
-- The chip filter bar of the `webkit-lists` skill (a `{ fieldId: values[] }` state behind one Popover)
+- The chip filter bar of the `azion-ui-lists` skill (a `{ fieldId: values[] }` state behind one Popover)
   becomes `PropertyFilter` tokens: each field is a property with `options`, each picked value a
   `property = value` token, and values of one field are combined with Match any.
 - The search field beside it goes: a token without a property searches the text fields.
@@ -2459,9 +2489,9 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 ## 7. Unchanged
 
 Theme tokens (apart from the sans stack, the container variants above and the theme changes in section 4), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
-(`@aziontech/webkit/<name>`) are the same. The theme's removed variables, fonts entry and device-default dark mode are in section 4. The AI bundle (`skills/`, `rules/`) is updated by
-`npx @aziontech/webkit sync`.
+(`@aziontech/ui/<name>`) are the same. The theme's removed variables, fonts entry and device-default dark mode are in section 4. The AI bundle (`skills/`, `rules/`) is updated by
+`npx @aziontech/ui sync`.
 
 ## Appendix: every rename in the codemod maps
 
-[`docs/migration-v6-maps.md`](./docs/migration-v6-maps.md) lists every entry of `src/cli/migrations/*.json`, the maps `webkit migrate v6` applies: components, types and parts, props and values, block ids, test ids, icon classes, tokens and ESLint rules. It is generated from the maps (`pnpm --filter @aziontech/webkit build:migration-maps`), and a toolkit test fails when it falls behind them.
+[`docs/migration-v6-maps.md`](./docs/migration-v6-maps.md) lists every entry of `src/cli/migrations/*.json`, the maps `azion-ui migrate v6` applies: components, types and parts, props and values, block ids, test ids, icon classes, tokens and ESLint rules. It is generated from the maps (`pnpm --filter @aziontech/ui build:migration-maps`), and a toolkit test fails when it falls behind them.

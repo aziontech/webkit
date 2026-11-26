@@ -2,7 +2,7 @@
 
 > A decorative, full-bleed layer that paints the dotted world map with Azion's data centers lit in the brand accent. It is a material — it takes no content and claims no space — but unlike a static illustration it is tuned by the consumer (region, data center density, landmass opacity, static or animated) to sit behind a band's copy.
 
-- Import: `import NetworkMap from '@aziontech/webkit/network-map'`
+- Import: `import NetworkMap from '@aziontech/ui/network-map'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [network-map.json](network-map.json)
 
@@ -81,7 +81,7 @@
 
 ```vue
 <script setup>
-  import NetworkMap from '@aziontech/webkit/network-map'
+  import NetworkMap from '@aziontech/ui/network-map'
 </script>
 
 <template>
@@ -102,7 +102,7 @@
 
 ```vue
 <script setup>
-  import NetworkMap from '@aziontech/webkit/network-map'
+  import NetworkMap from '@aziontech/ui/network-map'
 </script>
 
 <template>
@@ -157,7 +157,7 @@
 
 ```vue
 <script setup>
-  import NetworkMap from '@aziontech/webkit/network-map'
+  import NetworkMap from '@aziontech/ui/network-map'
 </script>
 
 <template>

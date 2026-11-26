@@ -26,7 +26,7 @@
     "lista de reglas",
     "reordenar reglas"
   ],
-  "skills": ["webkit-lists", "webkit-tables", "webkit-form", "webkit-errors"],
+  "skills": ["azion-ui-lists", "azion-ui-tables", "azion-ui-form", "azion-ui-errors"],
   "primary": {
     "name": "Application",
     "file": "view-rule-list.vue"

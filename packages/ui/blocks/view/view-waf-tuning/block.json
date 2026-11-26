@@ -23,7 +23,7 @@
     "ajuste de waf",
     "falsos positivos waf"
   ],
-  "skills": ["webkit-tables", "webkit-lists", "webkit-form", "webkit-errors"],
+  "skills": ["azion-ui-tables", "azion-ui-lists", "azion-ui-form", "azion-ui-errors"],
   "primary": {
     "name": "Default",
     "file": "view-waf-tuning.vue"

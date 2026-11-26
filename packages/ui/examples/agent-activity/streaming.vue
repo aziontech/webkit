@@ -1,6 +1,6 @@
 <script setup>
-  import AgentActivity from '@aziontech/webkit/agent-activity'
-  import Button from '@aziontech/webkit/button'
+  import AgentActivity from '@aziontech/ui/agent-activity'
+  import Button from '@aziontech/ui/button'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
   const titles = [

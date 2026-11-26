@@ -22,9 +22,9 @@ const TAG = /<([A-Z][A-Za-z0-9]*)[\s/>.]/g
 const SKIPPED_MESSAGES = new Set(['prose-comment'])
 const SKIPPED_WITHOUT_SCRIPT = new Set(['slot-without-defineslots'])
 
-process.env.WEBKIT_CATALOG_PATH = join(PKG_ROOT, 'catalog.json')
+process.env.AZION_UI_CATALOG_PATH = join(PKG_ROOT, 'catalog.json')
 const catalog = JSON.parse(readFileSync(join(PKG_ROOT, 'catalog.json'), 'utf8'))
-const { default: webkit } = await import('../../src/eslint-plugin/index.js')
+const { default: ui } = await import('../../src/eslint-plugin/index.js')
 
 const kebab = (name) => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
@@ -73,7 +73,7 @@ function synthesizedImports(code) {
     if (!catalog.imports?.[sub]) continue
     const compound = code.includes(`<${name}.`)
     const root = !compound && catalog.imports[`${sub}-root`] ? `${sub}-root` : sub
-    lines.push(`import ${name} from '@aziontech/webkit/${root}'`)
+    lines.push(`import ${name} from '@aziontech/ui/${root}'`)
   }
   return lines
 }
@@ -114,7 +114,7 @@ export function codeSamples() {
 
 const linter = new Linter({ configType: 'flat', cwd: PKG_ROOT })
 const config = [
-  ...webkit.configs.strict,
+  ...ui.configs.strict,
   {
     files: ['**/*.vue'],
     languageOptions: { parser: vueParser, parserOptions: { parser: tsParser } }
@@ -141,15 +141,15 @@ function lintSample(sample) {
 test('the sample reader finds the code and tells wrong examples apart', () => {
   const samples = codeSamples()
   assert.ok(samples.length > 100, `found ${samples.length} samples`)
-  const style = samples.filter((s) => s.file === 'rules/webkit-style-override.md')
+  const style = samples.filter((s) => s.file === 'rules/azion-ui-style-override.md')
   assert.ok(style.some((s) => s.negative && s.code.includes('bg-[#0a0a0a]')))
   assert.ok(style.some((s) => !s.negative))
   assert.ok(samples.filter((s) => !s.negative).length > 80)
 })
 
-test('a synthesized import makes a fragment lintable, so a style override on a webkit tag fails', () => {
+test('a synthesized import makes a fragment lintable, so a style override on an Azion UI tag fails', () => {
   const [hit] = lintSample({ lang: 'vue', code: '<Tag label="x" class="p-4" />' })
-  assert.equal(hit?.ruleId, 'webkit/no-style-override')
+  assert.equal(hit?.ruleId, 'azion-ui/no-style-override')
   assert.deepEqual(
     lintSample({ lang: 'vue', code: '<DataTable :data="rows" class="h-full" />' }),
     []

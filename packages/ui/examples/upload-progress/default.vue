@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import Button from '@aziontech/ui/button'
+  import UploadProgress from '@aziontech/ui/upload-progress'
   import { onBeforeUnmount, ref } from 'vue'
 
   const initial = () => [

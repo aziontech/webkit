@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import ddosProtection from '@aziontech/ui/assets/ddos-protection.svg'
+  import ImageGallery from '@aziontech/ui/image-gallery'
 
   const items = [{ key: 'ddos', src: ddosProtection, alt: 'DDoS protection illustration' }]
 </script>

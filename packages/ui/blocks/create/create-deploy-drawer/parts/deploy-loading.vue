@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Skeleton from '@aziontech/ui/skeleton'
 </script>
 
 <template>

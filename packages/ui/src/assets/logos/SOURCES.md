@@ -1,6 +1,6 @@
 # Brand mark sources
 
-Where each third-party mark in WebKit comes from, under which terms it ships, and the marks we
+Where each third-party mark in Azion UI comes from, under which terms it ships, and the marks we
 asked for but did not add. One row per file. A new third-party mark lands with its row here: the
 source URL, the licence or usage line quoted from the owner, and the date it was fetched.
 
@@ -63,7 +63,7 @@ monochrome glyph in `@aziontech/icons`, `fill="currentColor"`.
 
 ## Not added
 
-Each needs the owner's permission or a licence WebKit does not have, or has no official source.
+Each needs the owner's permission or a licence Azion UI does not have, or has no official source.
 Checked on 2026-11-12.
 
 | Mark                                | Why not                                                                                                                                                                        | Owner's terms                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -79,10 +79,10 @@ Checked on 2026-11-12.
 
 ## Text wordmarks
 
-Owner decision of 2026-11-17: until a brand above grants its logo, WebKit names it in plain text.
+Owner decision of 2026-11-17: until a brand above grants its logo, Azion UI names it in plain text.
 Each is an entry of `brandWordmarks` in `src/assets/brands/registry.ts`, offered under the same
 names as the marks with artwork (`Marquee` `marks`, `QuoteTabs` `mark`, the catalog's brand-mark
-list, where it carries `wordmark: true`). A wordmark is the brand's name set in WebKit's own font,
+list, where it carries `wordmark: true`). A wordmark is the brand's name set in Azion UI's own font,
 type scale and text colour (`text-heading-2xs`, `var(--text-default)` in `Marquee`): it copies
 none of the brand's typeface, colours or shapes, so it ships no artwork and needs no licence. The
 name is used only to refer to the product, as each owner's terms allow.

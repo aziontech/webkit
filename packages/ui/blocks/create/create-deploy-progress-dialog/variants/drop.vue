@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
   import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   import CreateDeployProgressDialog, {

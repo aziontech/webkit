@@ -2,8 +2,8 @@
 
 > Use KeyValueList to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows. A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`. It renders a native description list laid out in 1 to 4 responsive columns, optionally split into titled groups, and owns its loading and empty-value surfaces. It replaces the hand-rolled label/value grids the resource detail templates (`ResourceSummary`, the detail Overview tabs) draw today.
 
-- Import: `import KeyValueListRoot from '@aziontech/webkit/key-value-list-root'`
-- Compound import (dot notation, not tree-shakeable): `import KeyValueList from '@aziontech/webkit/key-value-list'`
+- Import: `import KeyValueListRoot from '@aziontech/ui/key-value-list-root'`
+- Compound import (dot notation, not tree-shakeable): `import KeyValueList from '@aziontech/ui/key-value-list'`
 - Category: content · Surface: app · Structure: composition
 - API as JSON: [key-value-list.json](key-value-list.json)
 
@@ -62,8 +62,8 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/key-value-list-item`
-- `@aziontech/webkit/key-value-list-group`
+- `@aziontech/ui/key-value-list-item`
+- `@aziontech/ui/key-value-list-group`
 
 ## Sub-components
 
@@ -114,10 +114,10 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ```vue
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Link from '@aziontech/webkit/link'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Link from '@aziontech/ui/link'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>
@@ -153,10 +153,10 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ```vue
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Link from '@aziontech/webkit/link'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Link from '@aziontech/ui/link'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>
@@ -253,11 +253,11 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ```vue
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import Hint from '@aziontech/webkit/hint'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Link from '@aziontech/webkit/link'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import Hint from '@aziontech/ui/hint'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Link from '@aziontech/ui/link'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>

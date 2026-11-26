@@ -2,7 +2,7 @@
 
 > Use OutcomeIcon for the bare round glyph that says how one run ended, with no label; with a label, the state of a resource is a StatusIndicator. A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.
 
-- Import: `import OutcomeIcon from '@aziontech/webkit/outcome-icon'`
+- Import: `import OutcomeIcon from '@aziontech/ui/outcome-icon'`
 - Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [outcome-icon.json](outcome-icon.json)
 
@@ -85,7 +85,7 @@
 
 ```vue
 <script setup>
-  import OutcomeIcon from '@aziontech/webkit/outcome-icon'
+  import OutcomeIcon from '@aziontech/ui/outcome-icon'
 </script>
 
 <template>
@@ -102,7 +102,7 @@
 
 ```vue
 <script setup>
-  import OutcomeIcon from '@aziontech/webkit/outcome-icon'
+  import OutcomeIcon from '@aziontech/ui/outcome-icon'
 </script>
 
 <template>
@@ -133,8 +133,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import OutcomeIcon from '@aziontech/webkit/outcome-icon'
+  import Button from '@aziontech/ui/button'
+  import OutcomeIcon from '@aziontech/ui/outcome-icon'
   import { computed, ref } from 'vue'
 
   const severity = ref('neutral')

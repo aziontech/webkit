@@ -1,20 +1,20 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { type TableColumn } from '@aziontech/webkit/table'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { type TableColumn } from '@aziontech/ui/table'
+  import Tooltip from '@aziontech/ui/tooltip'
   import {
     type FilteringProperty,
     type PropertyFilterQuery,
     useCollection
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
   import { computed, ref, watch } from 'vue'
 
   import ResponseDrawer from './parts/response-drawer.vue'

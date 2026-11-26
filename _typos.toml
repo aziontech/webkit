@@ -4,25 +4,25 @@
 [files]
 extend-exclude = [
   # Translation catalogs: pt-BR and es product strings, not English.
-  "packages/webkit/src/locales/pt-BR.ts",
-  "packages/webkit/src/locales/es.ts",
+  "packages/ui/src/locales/pt-BR.ts",
+  "packages/ui/src/locales/es.ts",
   "apps/docs/src/lib/i18n.ts",
   "apps/docs/src/lib/i18n-pt-br.ts",
   "apps/docs/src/lib/i18n-es.ts",
   # Multilingual search synonyms (pt-BR and es queries an app user types).
-  "packages/webkit/src/catalog/lexicon/",
-  "packages/webkit/test/catalog/search-queries.json",
+  "packages/ui/src/catalog/lexicon/",
+  "packages/ui/test/catalog/search-queries.json",
   # Generated from the sources by build:catalog / build:llms / build:migration-maps (old names, typos included).
-  "packages/webkit/catalog.json",
-  "packages/webkit/catalog/",
-  "packages/webkit/llms/",
-  "packages/webkit/docs/migration-v6-maps.md",
+  "packages/ui/catalog.json",
+  "packages/ui/catalog/",
+  "packages/ui/llms/",
+  "packages/ui/docs/migration-v6-maps.md",
   # Built theme output.
   "packages/theme/dist/",
   # Release history written by release-please from past commit messages.
   "CHANGELOG.md",
   # Recorded agent runs and judge transcripts of the M2.7 evaluation, kept verbatim as evidence.
-  "packages/webkit/docs/reviews/m2.7/",
+  "packages/ui/docs/reviews/m2.7/",
   # Lint canary: the misspelled aria-lable is the violation the canary must catch.
   "lint-canaries/eslint/accessibility/aria-props.vue",
   # Lockfiles and visual baselines.

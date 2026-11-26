@@ -1,7 +1,7 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import StatusCode from '@aziontech/webkit/status-code'
-  import TableLiveButton from '@aziontech/webkit/table-live-button'
+  import DataTable from '@aziontech/ui/data-table'
+  import StatusCode from '@aziontech/ui/status-code'
+  import TableLiveButton from '@aziontech/ui/table-live-button'
   import { onBeforeUnmount, ref, watch } from 'vue'
 
   const paths = ['/', '/api/products', '/api/cart', '/assets/app.js', '/api/orders']

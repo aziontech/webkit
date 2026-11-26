@@ -6,7 +6,7 @@ const CONTAINERS = new Map([
   ['chart-card', 'ChartCard']
 ])
 
-const WEBKIT_PREFIX = '@aziontech/webkit/'
+const AZION_UI_PREFIX = '@aziontech/ui/'
 
 const SIZING = [
   /^w-(?!auto$|fit$|min$|max$)/,
@@ -28,8 +28,8 @@ const kebab = (name) =>
 
 function containerOf(source) {
   if (typeof source !== 'string') return null
-  if (source.startsWith(WEBKIT_PREFIX)) {
-    return CONTAINERS.get(source.slice(WEBKIT_PREFIX.length)) ?? null
+  if (source.startsWith(AZION_UI_PREFIX)) {
+    return CONTAINERS.get(source.slice(AZION_UI_PREFIX.length)) ?? null
   }
   const file = source.match(/\/([a-z-]+)\.vue$/)
   return file ? (CONTAINERS.get(file[1]) ?? null) : null

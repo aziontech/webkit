@@ -1,9 +1,6 @@
 <script setup lang="ts">
-  import LogViewer, {
-    type LogViewerStep,
-    type LogViewerStepsView
-  } from '@aziontech/webkit/log-viewer'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import LogViewer, { type LogViewerStep, type LogViewerStepsView } from '@aziontech/ui/log-viewer'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import { sampleSteps } from './sample'

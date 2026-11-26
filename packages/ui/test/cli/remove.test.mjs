@@ -13,7 +13,7 @@ const HUB_FILES = [
   'src/views/create-hub.types.ts',
   'src/views/create-hub.vue'
 ]
-const manifestOf = (dir) => JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+const manifestOf = (dir) => JSON.parse(readFileSync(join(dir, 'azion-ui.blocks.json'), 'utf8'))
 
 test('remove deletes every file of a copied block, its guidelines and its manifest entry', () => {
   const dir = makeProject()
@@ -41,13 +41,13 @@ test('remove --dry-run deletes nothing and lists what it would delete', () => {
   const dir = makeProject()
   try {
     assert.equal(cli(dir, 'add', BLOCK).code, 0)
-    const before = readFileSync(join(dir, 'webkit.blocks.json'), 'utf8')
+    const before = readFileSync(join(dir, 'azion-ui.blocks.json'), 'utf8')
     const r = cli(dir, 'remove', BLOCK, '--dry-run')
     assert.equal(r.code, 0, r.stderr)
     assert.match(r.stdout, /would delete src\/views\/create-hub\.vue/)
     assert.match(r.stdout, /Dry run/)
     assert.ok(existsSync(join(dir, 'src/views/create-hub.vue')))
-    assert.equal(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'), before)
+    assert.equal(readFileSync(join(dir, 'azion-ui.blocks.json'), 'utf8'), before)
   } finally {
     cleanup(dir)
   }
@@ -90,7 +90,10 @@ test('remove of a block that was never copied fails and names what is recorded',
     assert.equal(cli(dir, 'add', BLOCK).code, 0)
     const r = cli(dir, 'remove', 'auth/auth-sign-in')
     assert.equal(r.code, 1)
-    assert.match(r.stderr, /not recorded in webkit\.blocks\.json \(recorded: create\/create-hub\)/)
+    assert.match(
+      r.stderr,
+      /not recorded in azion-ui\.blocks\.json \(recorded: create\/create-hub\)/
+    )
   } finally {
     cleanup(dir)
   }
@@ -104,7 +107,7 @@ test('remove never deletes a manifest path that resolves outside the project', (
     writeFileSync(outside, 'keep me\n')
     const manifest = manifestOf(dir)
     manifest.blocks[BLOCK].files.push({ path: `../${outside.split('/').at(-1)}` })
-    writeFileSync(join(dir, 'webkit.blocks.json'), `${JSON.stringify(manifest, null, 2)}\n`)
+    writeFileSync(join(dir, 'azion-ui.blocks.json'), `${JSON.stringify(manifest, null, 2)}\n`)
 
     const r = cli(dir, 'remove', BLOCK)
     assert.equal(r.code, 0, r.stderr)

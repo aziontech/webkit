@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 
   export interface SummaryStateBandProps {
     /** The documentation the band links to. */

@@ -1,5 +1,5 @@
 <script setup>
-  import InputGroup from '@aziontech/webkit/input-group'
+  import InputGroup from '@aziontech/ui/input-group'
 </script>
 
 <template>

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 809fa810b5cba13ed7718157e50a6b652f781e53d17cc475281ca625d7062aac
+checksum: 5ce9b75366cc11c41ac35df157d6570d7bd29e60f8ed71a74c66ffa112ec72ae
 created: 2026-11-12
 last_updated: 2026-11-18
 ---
@@ -40,7 +40,7 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 
 - Wire `@open` to the same state the shortcut opens (`<Command v-model:open="open">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.
 - Keep `shortcut` equal to the key the `Command` root listens for (`K`), or clear it (`shortcut=""`) when no shortcut exists.
-- Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/require-header-search` lint rule flags both.
+- Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `azion-ui/require-header-search` lint rule flags both.
 - With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds while that container is narrower than 47rem (752 px, the `--container-2xl` token) and without a container it stays folded. Do not add your own breakpoint around it: 47rem is the one threshold every header uses.
 - With `collapsible`, the button sits inside the `Tooltip` wrapper, so put layout classes (`ms-auto`, `order-*`) on a parent, not on the trigger.
 - Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name.
@@ -51,8 +51,8 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Command from '@aziontech/webkit/command'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
+  import Command from '@aziontech/ui/command'
 
   const open = ref(false)
 </script>
@@ -168,7 +168,7 @@ The Collapsible example is justified: `collapsible` is the prop whose output dep
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

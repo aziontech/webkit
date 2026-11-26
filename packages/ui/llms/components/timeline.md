@@ -2,8 +2,8 @@
 
 > Use Timeline for the history of one record: a vertical list of dated events joined by a line, newest or oldest first, such as the activity of a ticket (status changed, assigned, SLA breached, merged), the audit trail of one resource or the deployment history of an application. Each event is a `Timeline.Item`: a marker (a dot or an icon in its severity's `-mark` colour, or any small component the app puts in its `marker` slot), a title that says what happened, an optional description, who did it, when it happened (a `Timestamp`) and any content the app adds under it (a quoted comment, a diff summary, a link). `Timeline.Group` gathers the events of one day (or any period) under a label. It is read-only and has no current position: unlike `Stepper` it does not move anyone through steps, unlike `Trace` it does not place spans on a clock, and unlike `LogViewer` it does not stream lines.
 
-- Import: `import TimelineRoot from '@aziontech/webkit/timeline-root'`
-- Compound import (dot notation, not tree-shakeable): `import Timeline from '@aziontech/webkit/timeline'`
+- Import: `import TimelineRoot from '@aziontech/ui/timeline-root'`
+- Compound import (dot notation, not tree-shakeable): `import Timeline from '@aziontech/ui/timeline'`
 - Category: content · Surface: app · Structure: composition
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [timeline.json](timeline.json)
@@ -64,8 +64,8 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/timeline-item`
-- `@aziontech/webkit/timeline-group`
+- `@aziontech/ui/timeline-item`
+- `@aziontech/ui/timeline-group`
 
 ## Sub-components
 
@@ -104,7 +104,7 @@ Markup: the root is an `<ol>`. An Item is an `<li>`. A Group is an `<li>` holdin
 Resulting layout:
 
 ```
-packages/webkit/src/components/content/timeline/
+packages/ui/src/components/content/timeline/
 ├── timeline.vue
 ├── timeline.test.ts
 ├── index.ts
@@ -117,7 +117,7 @@ packages/webkit/src/components/content/timeline/
     └── timeline-group.vue
 ```
 
-Exports (flat; run `pnpm --filter @aziontech/webkit build:exports` after adding them):
+Exports (flat; run `pnpm --filter @aziontech/ui build:exports` after adding them):
 
 ```jsonc
 "./timeline": "./src/components/content/timeline/index.ts",
@@ -126,7 +126,7 @@ Exports (flat; run `pnpm --filter @aziontech/webkit build:exports` after adding 
 "./timeline-group": "./src/components/content/timeline/timeline-group/timeline-group.vue"
 ```
 
-The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrations/v6.json` (`legacy.manual`) to "PrimeVue Timeline; use Timeline with Timeline.Item and Timeline.Group (different API)", so `webkit migrate` points v3 apps at the new export.
+The same change rewrites the `timeline` entry of `packages/ui/src/cli/migrations/v6.json` (`legacy.manual`) to "PrimeVue Timeline; use Timeline with Timeline.Item and Timeline.Group (different API)", so `azion-ui migrate` points v3 apps at the new export.
 
 `./timeline` and `./timeline-root` export `TimelineProps`, `TimelineSize`, `TimelineTimeFormat`; `./timeline-item` exports `TimelineItemProps` and `TimelineItemSeverity` (derived from `Severity`); `./timeline-group` exports `TimelineGroupProps`; `./timeline` also exports `useTimelineContext` and `TimelineContext`.
 
@@ -180,7 +180,7 @@ The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrat
 
 ```vue
 <script setup>
-  import Timeline from '@aziontech/webkit/timeline'
+  import Timeline from '@aziontech/ui/timeline'
 </script>
 
 <template>
@@ -220,7 +220,7 @@ The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrat
 
 ```vue
 <script setup>
-  import Timeline from '@aziontech/webkit/timeline'
+  import Timeline from '@aziontech/ui/timeline'
 </script>
 
 <template>
@@ -267,7 +267,7 @@ The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrat
 
 ```vue
 <script setup>
-  import Timeline from '@aziontech/webkit/timeline'
+  import Timeline from '@aziontech/ui/timeline'
 </script>
 
 <template>

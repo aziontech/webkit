@@ -1,5 +1,5 @@
 <script setup>
-  import FeatureTabsSection from '@aziontech/webkit/feature-tabs-section'
+  import FeatureTabsSection from '@aziontech/ui/feature-tabs-section'
 
   const file = (value, fileName, code) => ({
     label: fileName,

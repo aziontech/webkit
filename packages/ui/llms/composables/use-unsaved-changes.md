@@ -1,10 +1,10 @@
 # useUnsavedChanges
 
-Composable `@aziontech/webkit/use-unsaved-changes`. The signatures and option tables below are read from its typed source, [`src/composables/use-unsaved-changes/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-unsaved-changes/index.ts).
+Composable `@aziontech/ui/use-unsaved-changes`. The signatures and option tables below are read from its typed source, [`src/composables/use-unsaved-changes/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-unsaved-changes/index.ts).
 
 ```ts
-import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-import type { UseUnsavedChangesOptions, UseUnsavedChangesReturn, UnsavedChangesDialogProps } from '@aziontech/webkit/use-unsaved-changes'
+import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
+import type { UseUnsavedChangesOptions, UseUnsavedChangesReturn, UnsavedChangesDialogProps } from '@aziontech/ui/use-unsaved-changes'
 ```
 
 ## `useUnsavedChanges`

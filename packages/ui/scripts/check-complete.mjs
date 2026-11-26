@@ -12,12 +12,12 @@ export const DEFAULT_ROOT = resolve(SCRIPT_DIR, '../../..')
 export const BASELINE = join(SCRIPT_DIR, 'complete-baseline.json')
 
 export const CHECKS = {
-  export: 'The spec is implemented but packages/webkit/package.json#exports has no entry for it.',
+  export: 'The spec is implemented but packages/ui/package.json#exports has no entry for it.',
   'root-export':
     'The compound export points at index.ts but there is no "./<name>-root" export pointing at the root .vue (compound-api.md).',
   'size-budget':
-    'No entry in packages/webkit/.size-limit.json for the component or its -root path (bundle-budget.md).',
-  examples: 'No packages/webkit/examples/<name>/examples.json.',
+    'No entry in packages/ui/.size-limit.json for the component or its -root path (bundle-budget.md).',
+  examples: 'No packages/ui/examples/<name>/examples.json.',
   'examples-count':
     'examples.json ships fewer examples than the spec lists in its ## Examples section.',
   'visual-baseline':
@@ -108,7 +108,7 @@ function loadSpec(root, name) {
 }
 
 export function collectFindings(root = DEFAULT_ROOT) {
-  const pkgDir = join(root, 'packages/webkit')
+  const pkgDir = join(root, 'packages/ui')
   const catalog = readJson(join(pkgDir, 'catalog.json'))
   const exportsMap = Object.fromEntries(
     Object.entries(readJson(join(pkgDir, 'package.json')).exports ?? {}).map(([k, v]) => [

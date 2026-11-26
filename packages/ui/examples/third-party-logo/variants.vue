@@ -1,9 +1,9 @@
 <script setup>
-  import claudeSymbol from '@aziontech/webkit/assets/claude-symbol-color.svg'
-  import itauExtendedReversed from '@aziontech/webkit/assets/itau-extended-reversed.webp'
-  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import claudeSymbol from '@aziontech/ui/assets/claude-symbol-color.svg'
+  import itauExtendedReversed from '@aziontech/ui/assets/itau-extended-reversed.webp'
+  import netshoesExtendedColor from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import netshoesExtendedReversed from '@aziontech/ui/assets/netshoes-extended-reversed.svg'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 
   const variants = [
     { variant: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },

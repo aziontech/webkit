@@ -1,6 +1,6 @@
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import PaginationRoot from '@aziontech/webkit/pagination-root'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import PaginationRoot from '@aziontech/ui/pagination-root'
 </script>
 
 <template>

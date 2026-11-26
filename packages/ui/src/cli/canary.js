@@ -6,12 +6,12 @@ import { join } from 'node:path'
 import { loadCatalog } from '../eslint-plugin/lib/catalog.js'
 import { resolveEslintBin } from './report.js'
 
-export const CANARY_DIR = '.webkit-canary'
+export const CANARY_DIR = '.azion-ui-canary'
 
 const ASTRO_LINT_PACKAGES = ['astro-eslint-parser', 'eslint-plugin-astro']
 
 function astroParserAvailable(cwd) {
-  const require = createRequire(join(cwd, '__webkit_canary__.js'))
+  const require = createRequire(join(cwd, '__azion_ui_canary__.js'))
   try {
     for (const name of ASTRO_LINT_PACKAGES) require.resolve(name)
     return true
@@ -25,10 +25,10 @@ function buildFixtures(cwd) {
   return [
     {
       file: 'denied-import.vue',
-      rule: 'webkit/no-deep-internal-import',
+      rule: 'azion-ui/no-deep-internal-import',
       optional: false,
       content: `<script setup>
-import Button from '@aziontech/webkit/src/components/action/button/button.vue'
+import Button from '@aziontech/ui/src/components/action/button/button.vue'
 </script>
 
 <template>
@@ -38,10 +38,10 @@ import Button from '@aziontech/webkit/src/components/action/button/button.vue'
     },
     {
       file: 'unknown-export.vue',
-      rule: 'webkit/no-unknown-import',
+      rule: 'azion-ui/no-unknown-import',
       optional: false,
       content: `<script setup>
-import Nope from '@aziontech/webkit/this-export-does-not-exist'
+import Nope from '@aziontech/ui/this-export-does-not-exist'
 </script>
 
 <template>
@@ -51,7 +51,7 @@ import Nope from '@aziontech/webkit/this-export-does-not-exist'
     },
     {
       file: 'hardcoded-color.vue',
-      rule: 'webkit/no-hardcoded-color',
+      rule: 'azion-ui/no-hardcoded-color',
       optional: false,
       content: `<template>
   <div class="bg-[#ff0000]">deliberately hardcoded</div>
@@ -60,7 +60,7 @@ import Nope from '@aziontech/webkit/this-export-does-not-exist'
     },
     {
       file: 'hardcoded-color.astro',
-      rule: 'webkit/no-hardcoded-color',
+      rule: 'azion-ui/no-hardcoded-color',
       optional: !astroAvailable,
       why: `${ASTRO_LINT_PACKAGES.join(' / ')} is not installed in this project`,
       content: `---
@@ -153,7 +153,7 @@ function reportCanaries(fixtures, lint, catalog) {
   const skipped = verdicts.filter((v) => v.status === 'skip').length
   const lines = [...verdicts.map((v) => v.line), '']
   if (!catalog.available) {
-    lines.push('The webkit catalog did not resolve, which disables the catalog-backed rules.')
+    lines.push('The Azion UI catalog did not resolve, which disables the catalog-backed rules.')
   }
   lines.push(summaryLine(fixtures, failed, skipped))
   return { exitCode: failed === 0 ? 0 : 1, lines }

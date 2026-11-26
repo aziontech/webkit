@@ -1,5 +1,5 @@
 <script setup>
-  import IconButton from '@aziontech/webkit/icon-button'
+  import IconButton from '@aziontech/ui/icon-button'
   import { ref } from 'vue'
 
   const shown = ref(false)

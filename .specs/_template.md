@@ -9,7 +9,7 @@ template: 2
 figma:
   url: <https://figma.com/design/...>
   node_id: <e.g. 10:42>
-checksum: 3ffda110ef2247896df1b33c2ffdd71894ed52f37f1835a3bd218825b0331a2f
+checksum: fea9de05cc854315a0ad1ac44b44d60de80a6d3bfcdb5dea7d76497eefe33963
 created: <YYYY-MM-DD>
 last_updated: 2026-11-15
 ---
@@ -51,7 +51,7 @@ last_updated: 2026-11-15
 ## Usage
 
 <!-- ONE fenced ```vue block with:
-       • the canonical import path from packages/webkit/package.json#exports
+       • the canonical import path from packages/ui/package.json#exports
        • a minimal <script setup> that imports the component
        • a minimal <template> showing the public API
      For structure: composition, the template MUST render the full anatomy
@@ -63,7 +63,7 @@ last_updated: 2026-11-15
 
 ```vue
 <script setup>
-import MyComponent from '@aziontech/webkit/<name>'
+import MyComponent from '@aziontech/ui/<name>'
 </script>
 
 <template>
@@ -82,7 +82,7 @@ import MyComponent from '@aziontech/webkit/<name>'
 
 ```vue
 <script setup>
-import Dialog from '@aziontech/webkit/dialog'
+import Dialog from '@aziontech/ui/dialog'
 </script>
 
 <template>
@@ -102,9 +102,9 @@ entry (no `Object.assign` compound pulled in):
 
 ```vue
 <script setup>
-import Dialog from '@aziontech/webkit/dialog-root'
-import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-import DialogContent from '@aziontech/webkit/dialog-content'
+import Dialog from '@aziontech/ui/dialog-root'
+import DialogTrigger from '@aziontech/ui/dialog-trigger'
+import DialogContent from '@aziontech/ui/dialog-content'
 </script>
 ```
 -->
@@ -127,7 +127,7 @@ import DialogContent from '@aziontech/webkit/dialog-content'
 
 <!-- Resulting layout (composition, canonical):
 
-  packages/webkit/src/components/<category>/<name>/
+  packages/ui/src/components/<category>/<name>/
   ├── <name>.vue
   ├── index.ts                    (compound: Object.assign attaches every sub-component; vue-tsc emits index.d.ts)
   ├── injection-key.ts            (shared by every sub-component; one directory up from each sub-component)
@@ -143,7 +143,7 @@ import DialogContent from '@aziontech/webkit/dialog-content'
   `index.ts`, NOT the root `.vue`, and a standalone `./<name>-root` points at
   the root `.vue`. Sub-component exports stay flat (`./<name>-trigger`) and
   point at their `.vue` regardless of the folder nesting. Run
-  `pnpm --filter @aziontech/webkit build:exports` after adding them. -->
+  `pnpm --filter @aziontech/ui build:exports` after adding them. -->
 
 <!-- Compound API file (composition only), beside `<name>.vue` — one `.ts`; vue-tsc derives index.d.ts:
 
@@ -262,7 +262,7 @@ export default Object.assign(Root, { Part: RootPart })
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `<Tab focuses; Enter/Space activates; Esc closes; arrows navigate; ...>`
 - ARIA: `<aria-label / aria-busy / aria-disabled / aria-hidden / aria-current / aria-expanded as applicable>`
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state, and the APCA targets: only documented token pairs (`rules/webkit-tokens.md` § Contrast)
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state, and the APCA targets: only documented token pairs (`rules/azion-ui-tokens.md` § Contrast)
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states
 - Touch target ≥44×44 px on a coarse pointer, through an invisible hit area (decision TT01), or a justified deviation
 
@@ -274,7 +274,7 @@ export default Object.assign(Root, { Part: RootPart })
      prop that overrides it. Dates, numbers, currency, relative time and plurals go through
      `Intl` with the locale from `ConfigProvider`. Write "No built-in strings" when that is true.
      Keys sit in the camelCase component namespace (`<componentName>.<key>`; shared words in
-     `common`) and are added to all three catalogs, `packages/webkit/src/locales/en.ts`, `pt-BR.ts`
+     `common`) and are added to all three catalogs, `packages/ui/src/locales/en.ts`, `pt-BR.ts`
      and `es.ts` (`contributing/rules/naming.md` § 13). -->
 
 | Key | English source | Override prop |
@@ -334,7 +334,7 @@ Canonical layout — composite examples (`variants.vue`, `sizes.vue`) render eve
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/primitives/animations/animate.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

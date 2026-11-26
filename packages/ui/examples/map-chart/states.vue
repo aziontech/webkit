@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import MapChart from '@aziontech/webkit/map-chart'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import MapChart from '@aziontech/ui/map-chart'
   import { ref } from 'vue'
 
   const regions = [

@@ -3,10 +3,10 @@
 > The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `PricingCard` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, with what is included as a `PlanFeatureList`, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelBody`, `ToggleGroup`, `PricingCard`, `PlanFeatureList` and `Button`.
 
 - Surface: app
-- Source: `blocks/account/account-change-plan-drawer/account-change-plan-drawer.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-change-plan-drawer/account-change-plan-drawer.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-change-plan-drawer")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [Field](../../components/field.md), [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [PlanFeatureList](../../components/plan-feature-list.md), [PricingCard](../../components/pricing-card.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md)
-- Skills: `webkit-navigation`, `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
+- Skills: `azion-ui-navigation`, `azion-ui-microcopy`, `azion-ui-ux-heuristics`, `azion-ui-form`, `azion-ui-errors`
 
 ## Asked as
 
@@ -109,7 +109,7 @@ What's included in the upgrade drawer, under its visible heading: one check per 
 
 ### Toasts — through `toast`
 
-A failure no section owns (the payment service did not answer) is `toast.error` with Retry, and the drawer stays open with the entries kept; a successful upgrade closes both drawers and toasts `The account was upgraded to Pro.` This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+A failure no section owns (the payment service did not answer) is `toast.error` with Retry, and the drawer stays open with the entries kept; a successful upgrade closes both drawers and toasts `The account was upgraded to Pro.` This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -216,15 +216,15 @@ Each variant is the same screen in another state: `get_block("account/account-ch
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import { type SelectOptionItem } from '@aziontech/webkit/select'
-  import { toast } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import { type SelectOptionItem } from '@aziontech/ui/select'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   import { blankAddress, blankCard, cardErrorsOf, cardFieldIds } from './change-plan-card'
@@ -915,16 +915,16 @@ export const cardErrorsOf = (card: ChangePlanDrawerCard): Record<CardField, stri
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
-  import PricingCard from '@aziontech/webkit/pricing-card'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import DrawerDescription from '@aziontech/ui/drawer-description'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import PlanFeatureList from '@aziontech/ui/plan-feature-list'
+  import PricingCard from '@aziontech/ui/pricing-card'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed } from 'vue'
 
   import type {
@@ -1032,11 +1032,11 @@ export const cardErrorsOf = (card: ChangePlanDrawerCard): Record<CardField, stri
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import Card from '@aziontech/ui/card'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
 
   import type { ChangePlanDrawerAddress } from '../account-change-plan-drawer.vue'
 
@@ -1182,9 +1182,9 @@ export const cardErrorsOf = (card: ChangePlanDrawerCard): Record<CardField, stri
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Separator from '@aziontech/webkit/separator'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Card from '@aziontech/ui/card'
+  import Separator from '@aziontech/ui/separator'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   import type {
     ChangePlanDrawerCharges,
@@ -1274,9 +1274,9 @@ export const cardErrorsOf = (card: ChangePlanDrawerCard): Record<CardField, stri
 
 ```ts
 <script setup lang="ts">
-  import Link from '@aziontech/webkit/link'
-  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
-  import Separator from '@aziontech/webkit/separator'
+  import Link from '@aziontech/ui/link'
+  import PlanFeatureList from '@aziontech/ui/plan-feature-list'
+  import Separator from '@aziontech/ui/separator'
 
   import type { ChangePlanDrawerFeature } from '../account-change-plan-drawer.vue'
 
@@ -1329,13 +1329,13 @@ export const cardErrorsOf = (card: ChangePlanDrawerCard): Record<CardField, stri
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PaymentBrand from '@aziontech/ui/payment-brand'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
 
   import type { ChangePlanDrawerCard } from '../account-change-plan-drawer.vue'
   import { type CardField, cardFieldIds } from '../change-plan-card'
@@ -1532,9 +1532,9 @@ export const cardErrorsOf = (card: ChangePlanDrawerCard): Record<CardField, stri
 
 ```ts
 <script setup lang="ts">
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import Link from '@aziontech/webkit/link'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Link from '@aziontech/ui/link'
 
   export interface UpgradeTermsFieldProps {
     /** The upgrade request is in flight. */

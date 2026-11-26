@@ -1,7 +1,7 @@
 <script setup>
-  import ArchitectureTabsSection from '@aziontech/webkit/architecture-tabs-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ArchitectureTabsSection from '@aziontech/ui/architecture-tabs-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const tabs = [
     {

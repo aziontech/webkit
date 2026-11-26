@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import Button from '@aziontech/ui/button'
+  import UploadProgress from '@aziontech/ui/upload-progress'
 
   const items = [
     { id: 'logo', name: 'logo.svg', size: 4210, status: 'success' },

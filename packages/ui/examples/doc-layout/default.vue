@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
-  import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import Button from '@aziontech/ui/button'
+  import DocCallToAction from '@aziontech/ui/doc-call-to-action'
+  import DocHeading from '@aziontech/ui/doc-heading'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/ui/doc-layout'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/ui/theme-switcher'
   import { ref } from 'vue'
 
   const navigation: DocLayoutNavGroup[] = [

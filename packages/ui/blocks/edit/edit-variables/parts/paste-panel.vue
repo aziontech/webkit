@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Textarea from '@aziontech/ui/textarea'
 
   export interface PastePanelProps {
     /** The id of the text field; the panel and its report derive theirs from it. */

@@ -1,5 +1,5 @@
 <script setup>
-  import LanguageSelect from '@aziontech/webkit/language-select'
+  import LanguageSelect from '@aziontech/ui/language-select'
   import { ref } from 'vue'
 
   const locale = ref('en')

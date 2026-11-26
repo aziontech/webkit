@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import HoverCardContent from '@aziontech/webkit/hover-card-content'
-  import HoverCard from '@aziontech/webkit/hover-card-root'
-  import HoverCardTrigger from '@aziontech/webkit/hover-card-trigger'
+  import HoverCardContent from '@aziontech/ui/hover-card-content'
+  import HoverCard from '@aziontech/ui/hover-card-root'
+  import HoverCardTrigger from '@aziontech/ui/hover-card-trigger'
   import { computed } from 'vue'
 
   import { type AiChatProject, type AiChatThread, sampleProducts } from '../sample'

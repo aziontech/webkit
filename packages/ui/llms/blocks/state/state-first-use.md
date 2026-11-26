@@ -1,12 +1,12 @@
 # StateFirstUse (`state/state-first-use`)
 
-> The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by `Item.Media type="icon"` (the CLI method copies `azion deploy`), with the promo cards below it, each a link covering its card: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by `Item.Media type="icon"` (the CLI method copies `azion deploy`), with the promo cards below it, each a link covering its card: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the Azion UI assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/state/state-first-use/state-first-use.vue` in `@aziontech/webkit`
+- Source: `blocks/state/state-first-use/state-first-use.vue` in `@aziontech/ui`
 - MCP: `get_block("state/state-first-use")`
 - Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [Skeleton](../../components/skeleton.md), [ThirdPartyLogo](../../components/third-party-logo.md)
-- Skills: `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -28,7 +28,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - An empty panel inside a dashboard or detail page: use `EmptyState` alone, without the method list.
 - Choosing what to create across every resource kind: use `create/create-hub`.
 - The Home page before the first project: use `dashboard/dashboard-home` (its Empty state).
-- A list that failed to load: that is an error, not first use; see `skills/webkit-ui-states`.
+- A list that failed to load: that is an error, not first use; see `skills/azion-ui-states`.
 
 ## Building blocks
 
@@ -171,20 +171,20 @@ Each variant is the same screen in another state: `get_block("state/state-first-
 
 ```vue
 <script setup lang="ts">
-  import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
-  import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
-  import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
-  import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import claudeMark from '@aziontech/ui/assets/claude-symbol-color.svg'
+  import codexMark from '@aziontech/ui/assets/codex-symbol-mono.svg'
+  import cursorMark from '@aziontech/ui/assets/cursor-symbol-mono.svg'
+  import geminiMark from '@aziontech/ui/assets/gemini-symbol-color.svg'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 
   const agentMarks = [
     { name: 'Claude', src: claudeMark, mono: false },

@@ -16,14 +16,14 @@ const ROOT = resolve(PKG, '..', '..')
 export const CREATE_VITE = 'create-vite@9.3.4'
 
 export const APP_VUE = `<script setup lang="ts">
-  import Button, { type ButtonVariant, type ButtonProps } from '@aziontech/webkit/button'
-  import HeroSection from '@aziontech/webkit/hero-section'
-  import SiteHeaderSection from '@aziontech/webkit/site-header-section'
-  import Table from '@aziontech/webkit/table'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useCollection } from '@aziontech/webkit/use-collection'
-  import { cn } from '@aziontech/webkit/utils/cn'
+  import Button, { type ButtonVariant, type ButtonProps } from '@aziontech/ui/button'
+  import HeroSection from '@aziontech/ui/hero-section'
+  import SiteHeaderSection from '@aziontech/ui/site-header-section'
+  import Table from '@aziontech/ui/table'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import { toast } from '@aziontech/ui/toast'
+  import { useCollection } from '@aziontech/ui/use-collection'
+  import { cn } from '@aziontech/ui/utils/cn'
 
   interface Edge {
     id: string
@@ -65,8 +65,8 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 import '@aziontech/icons'
 import '@aziontech/theme'
 import '@aziontech/theme/fonts.css'
-import '@aziontech/webkit/styles'
-import { ToastPlugin } from '@aziontech/webkit/toast'
+import '@aziontech/ui/styles'
+import { ToastPlugin } from '@aziontech/ui/toast'
 import App from './App.vue'
 
 const router = createRouter({ history: createMemoryHistory(), routes: [] })
@@ -74,7 +74,7 @@ const router = createRouter({ history: createMemoryHistory(), routes: [] })
 createApp(App).use(router).use(ToastPlugin).mount('#app')
 `
 
-export const PROBE_TS = `import { useCollection } from '@aziontech/webkit/use-collection'
+export const PROBE_TS = `import { useCollection } from '@aziontech/ui/use-collection'
 
 // @ts-expect-error
 useCollection({ items: [1, 2] })
@@ -83,7 +83,7 @@ useCollection({ items: [1, 2] })
 export function allExportsModule(exportsMap) {
   const lines = Object.entries(exportsMap)
     .filter(([, entry]) => entry && typeof entry === 'object' && entry.types)
-    .map(([key], i) => `export type * as e${i} from '@aziontech/webkit/${key.slice(2)}'`)
+    .map(([key], i) => `export type * as e${i} from '@aziontech/ui/${key.slice(2)}'`)
   return `${lines.join('\n')}\n`
 }
 
@@ -91,7 +91,7 @@ export function sourceFilesInProgram(fileList) {
   return fileList
     .split('\n')
     .map((line) => line.trim())
-    .filter((line) => /node_modules[\\/]@aziontech[\\/]webkit[\\/]/.test(line))
+    .filter((line) => /node_modules[\\/]@aziontech[\\/]ui[\\/]/.test(line))
     .filter((line) => !line.endsWith('.d.ts'))
 }
 
@@ -104,7 +104,7 @@ function main() {
   const keep = process.argv.includes('--keep')
   if (!process.argv.includes('--skip-build')) buildWorkspace(ROOT)
 
-  const work = mkdtempSync(join(tmpdir(), 'webkit-consumer-types-'))
+  const work = mkdtempSync(join(tmpdir(), 'azion-ui-consumer-types-'))
   const tarballs = packWorkspace(ROOT, join(work, 'tarballs'))
 
   run(
@@ -131,7 +131,7 @@ function main() {
   }
   appPkg.dependencies = {
     ...appPkg.dependencies,
-    '@aziontech/webkit': `file:${tarballs.webkitTgz}`,
+    '@aziontech/ui': `file:${tarballs.azionUiTgz}`,
     '@aziontech/theme': `file:${tarballs.themeTgz}`,
     '@aziontech/icons': `file:${tarballs.iconsTgz}`,
     'vue-router': '^5.5.0'
@@ -144,11 +144,11 @@ function main() {
   writeFileSync(appPkgPath, `${JSON.stringify(appPkg, null, 2)}\n`)
   writeFileSync(join(app, 'postcss.config.mjs'), initPlan.postcssConfig())
 
-  const webkitPkg = JSON.parse(readFileSync(join(PKG, 'package.json'), 'utf8'))
+  const azionUiPkg = JSON.parse(readFileSync(join(PKG, 'package.json'), 'utf8'))
   writeFileSync(join(app, 'src/App.vue'), APP_VUE)
   writeFileSync(join(app, 'src/main.ts'), MAIN_TS)
   writeFileSync(join(app, 'src/probe.ts'), PROBE_TS)
-  writeFileSync(join(app, 'src/all-exports.ts'), allExportsModule(webkitPkg.exports))
+  writeFileSync(join(app, 'src/all-exports.ts'), allExportsModule(azionUiPkg.exports))
 
   run('npm', ['install', '--no-audit', '--no-fund'], app)
   run('npm', ['run', 'build'], app)
@@ -161,12 +161,12 @@ function main() {
   const sources = sourceFilesInProgram(listed)
   if (sources.length) {
     fail(
-      `the consumer program type-checks ${sources.length} WebKit source file(s); every export must resolve to types/:\n  ${sources.slice(0, 10).join('\n  ')}`
+      `the consumer program type-checks ${sources.length} Azion UI source file(s); every export must resolve to types/:\n  ${sources.slice(0, 10).join('\n  ')}`
     )
   }
 
   console.log(
-    `\n✓ consumer-types: a fresh ${CREATE_VITE} vue-ts app builds with the packed tarballs; ${Object.keys(webkitPkg.exports).length} exports, declaration-only program.`
+    `\n✓ consumer-types: a fresh ${CREATE_VITE} vue-ts app builds with the packed tarballs; ${Object.keys(azionUiPkg.exports).length} exports, declaration-only program.`
   )
   if (keep) console.log(`  workdir kept: ${work}`)
   else rmSync(work, { recursive: true, force: true })

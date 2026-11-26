@@ -23,7 +23,7 @@
     "SiteLayout",
     "layout do site com SiteHeaderSection"
   ],
-  "skills": ["webkit-layout"],
+  "skills": ["azion-ui-layout"],
   "primary": {
     "name": "Default",
     "file": "shell-site.vue"

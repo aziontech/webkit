@@ -1,5 +1,5 @@
-import type { BarListItem } from '@aziontech/webkit/bar-list'
-import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'
+import type { BarListItem } from '@aziontech/ui/bar-list'
+import type { ChartColor, ChartSeries } from '@aziontech/ui/chart'
 
 import type {
   DashboardSwitcherData,

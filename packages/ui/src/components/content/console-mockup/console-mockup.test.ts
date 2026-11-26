@@ -329,7 +329,7 @@ describe('ConsoleMockup', () => {
 
       expect(view.getByTestId(TESTID).children).toHaveLength(0)
       expect(warn).toHaveBeenCalledWith(
-        '[webkit] <ConsoleMockup>: no widget registered under name "not-a-widget".'
+        '[azion-ui] <ConsoleMockup>: no widget registered under name "not-a-widget".'
       )
       warn.mockRestore()
     })

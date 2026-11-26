@@ -1,5 +1,5 @@
 <script setup>
-  import CardList from '@aziontech/webkit/card-list'
+  import CardList from '@aziontech/ui/card-list'
   import { ref } from 'vue'
 
   const plans = [

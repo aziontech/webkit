@@ -10,7 +10,7 @@ import DocItem from '../components/docs/doc-item/doc-item.vue'
 import DocProse from '../components/docs/doc-prose/doc-prose.vue'
 
 const SENTENCE =
-  '<code>PageHeader</code> with <code>Button</code> (<code>variant="primary"</code>, <code>label="Run query"</code>) in its actions, then <code>DateRangePicker</code> with <code>:relative-options="TIME_RANGE_PRESETS"</code> and <code>@aziontech/webkit/use-time-range</code>'
+  '<code>PageHeader</code> with <code>Button</code> (<code>variant="primary"</code>, <code>label="Run query"</code>) in its actions, then <code>DateRangePicker</code> with <code>:relative-options="TIME_RANGE_PRESETS"</code> and <code>@aziontech/ui/use-time-range</code>'
 
 type Box = { top: number; bottom: number; left: number; right: number }
 
@@ -94,7 +94,7 @@ describe('inline code chips on wrapped lines', () => {
     const { container } = render(() =>
       h(Narrow, { width: 120 }, () =>
         h(DocProse, null, () =>
-          h('p', { innerHTML: 'Import <code>@aziontech/webkit/use-time-range-and-more</code>.' })
+          h('p', { innerHTML: 'Import <code>@aziontech/ui/use-time-range-and-more</code>.' })
         )
       )
     )

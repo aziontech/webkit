@@ -1,8 +1,8 @@
 {
  "name": "plan-feature-list",
  "binding": "PlanFeatureList",
- "import": "@aziontech/webkit/plan-feature-list",
- "treeShakeableImport": "@aziontech/webkit/plan-feature-list",
+ "import": "@aziontech/ui/plan-feature-list",
+ "treeShakeableImport": "@aziontech/ui/plan-feature-list",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

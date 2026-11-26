@@ -2,8 +2,8 @@
 
 > Composition-based terminal log viewer for CI/deploy output. **LogViewer** is the root shell and context provider; **`LogViewer.Header`**, **`LogViewer.Content`**, and **`LogViewer.Footer`** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer. **`LogViewer.Steps`** shows a run with known steps (build, deploy, provisioning) as a pipeline: one collapsible step per phase, each with its own log, a Phased or Complete switch and an optional flush progress bar. Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when the run has named steps; for code the person reads or copies use CodeBlock, and for code the person edits use CodeEditor.
 
-- Import: `import LogViewerRoot from '@aziontech/webkit/log-viewer-root'`
-- Compound import (dot notation, not tree-shakeable): `import LogViewer from '@aziontech/webkit/log-viewer'`
+- Import: `import LogViewerRoot from '@aziontech/ui/log-viewer-root'`
+- Compound import (dot notation, not tree-shakeable): `import LogViewer from '@aziontech/ui/log-viewer'`
 - Category: code · Surface: app · Structure: composition
 - API as JSON: [log-viewer.json](log-viewer.json)
 
@@ -31,7 +31,7 @@
 - Rows of structured records with columns, sorting or paging → use `table`.
 - The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
 - The timed spans of one request or invocation → use `trace`.
-- In a docs Markdown page or the site's page JSON. LogViewer is app-only (decision RV-C2-1, rule `webkit-content-channels`): it views a live run log (search, level filter, follow), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site shows sample output as a code fence or `CodeBlock`.
+- In a docs Markdown page or the site's page JSON. LogViewer is app-only (decision RV-C2-1, rule `azion-ui-content-channels`): it views a live run log (search, level filter, follow), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site shows sample output as a code fence or `CodeBlock`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -72,17 +72,17 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/log-viewer-content`
-- `@aziontech/webkit/log-viewer-footer`
-- `@aziontech/webkit/log-viewer-steps`
-- `@aziontech/webkit/log-viewer-header`
+- `@aziontech/ui/log-viewer-content`
+- `@aziontech/ui/log-viewer-footer`
+- `@aziontech/ui/log-viewer-steps`
+- `@aziontech/ui/log-viewer-header`
 
 ## Sub-components
 
-LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `LogViewer.Content`, `LogViewer.Footer`, `LogViewer.Steps`, via `index.ts`) and individually importable (each from its own `@aziontech/webkit/log-viewer-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
+LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `LogViewer.Content`, `LogViewer.Footer`, `LogViewer.Steps`, via `index.ts`) and individually importable (each from its own `@aziontech/ui/log-viewer-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
 - `log-viewer-header.vue` (`LogViewer.Header`) — Default 48px toolbar: line count, the level filter and a search field. The level filter is one toggle per entry of `levels` (a dot in the level colour, the level name, its line count); with `levels` empty it offers the `warn` toggle alone while the log has a warning line, so the warnings shortcut is the same control, never a second one. Every toggle is the same native button: 32 px tall with a 44 px hit area on coarse pointers, `.text-label-sm`, the count in tabular numbers; the line count uses the same font. The line count and the toggles sit on one row that scrolls sideways (no visible scrollbar) when it does not fit, so a phone never wraps them into a second row. When `copyable` is set and the log is neither loading nor in error, the copy control (a `CopyButton`, `__copy` under the root test id) sits at the end of the `end` row, beside the search, so the log body keeps its full width on a phone. While `loading`, the line count gives way to a `Skeleton` (`__line-count-loading`), the level filter is hidden and the search is disabled, so the toolbar never describes lines the reader cannot see. Slots: `start`, `end`, `search`.
-- `log-viewer-content.vue` (`LogViewer.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and, when no `LogViewer.Header` is composed, the copy-to-clipboard control (a `CopyButton` pinned top-right in a column of its own beside the log body, so no line runs under it, shown when `copyable` is set; while it shows, `data-copyable` keeps the body at least as tall as the button and its two insets, so a one-line log never pushes the button onto the frame's bottom rule). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). When `error` is set, it replaces the body with a danger `Alert` holding the message. With no line to show, it renders the package `EmptyState` (small): "No log lines yet." for an empty log, "No line matches “query”" with a Clear search action for a search with no result, and "No log lines match the current filters." for a level or warnings filter with no result. Slot: `empty` (replaces the EmptyState).
+- `log-viewer-content.vue` (`LogViewer.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and, when no `LogViewer.Header` is composed, the copy-to-clipboard control (a `CopyButton` pinned top-right in a column of its own beside the log body, so no line runs under it, shown when `copyable` is set; while it shows, `data-copyable` keeps the body at least as tall as the button and its two insets, so a one-line log never pushes the button onto the frame's bottom rule). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/ui/spinner`) and the `loadingLabel` text (`role="status"`). When `error` is set, it replaces the body with a danger `Alert` holding the message. With no line to show, it renders the package `EmptyState` (small): "No log lines yet." for an empty log, "No line matches “query”" with a Clear search action for a search with no result, and "No log lines match the current filters." for a level or warnings filter with no result. Slot: `empty` (replaces the EmptyState).
 - `log-viewer-footer.vue` (`LogViewer.Footer`) — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
 - `log-viewer-steps.vue` (`LogViewer.Steps`) — A run with known steps, standalone (it renders its own `LogViewer` per step and needs no parent `LogViewer`). An optional toolbar row (`__toolbar`, shown when the `header` slot is filled or `viewSwitch` is on) holds the `header` slot at the start and, with `viewSwitch`, a `ToggleGroup` (`__view-switch`, named `Log view`) switching **Phased** and **Complete** at the end. Phased renders an `Accordion` (`type="single"`, collapsible) with one item per step (`__step`, `data-status`): the trigger shows the status glyph (success: a success check; error: a danger cross; skipped: a muted minus; running: a `Spinner`; pending: a dashed circle), the status in words for assistive technology (`sr-only`), the title, the `step-meta` slot (it keeps its width, so a Tag there is never squeezed; the description truncates instead), the description (danger text on error, a shimmer while running) and the duration; the panel holds a borderless `LogViewer` + `LogViewer.Content` over the step's lines, loading with `Waiting to start…` while the step is pending, and the `step-empty` slot in place of the empty state (a skipped step defaults to `Never ran.`). Complete renders every step's lines as one borderless `LogViewer` (`__complete`; line ids are prefixed with the step id). With `progress`, a flush, small, flat `Progress` (`__progress`, named `Run progress`) sits on the bottom edge; its value is the share of steps that succeeded. Props: `steps?: LogViewerStep[]` (default `[]`), `copyable?: boolean` (default `true`, forwarded to each log), `viewSwitch?: boolean` (default `true`), `progress?: boolean` (default `false`). Models: `v-model:view` (`LogViewerStepsView` = `'phased' | 'complete'`, default `'phased'`), `v-model:open-step` (`string`, the id of the open step; unbound, the running step opens, else the one in error, else none). Slots: `header`, `step-meta({ step })`, `step-empty({ step })`. Test ids: `log-viewer-steps` (a consumer `data-testid` wins) and `__toolbar`, `__view-switch`, `__step`, `__complete`, `__progress` under it.
 
@@ -168,7 +168,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 
 ```vue
 <script setup>
-  import LogViewer from '@aziontech/webkit/log-viewer'
+  import LogViewer from '@aziontech/ui/log-viewer'
   import { ref } from 'vue'
 
   const lines = [
@@ -214,7 +214,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 
 ```vue
 <script setup>
-  import LogViewer from '@aziontech/webkit/log-viewer'
+  import LogViewer from '@aziontech/ui/log-viewer'
   import { ref } from 'vue'
 
   const lines = [
@@ -266,7 +266,7 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 
 ```vue
 <script setup>
-  import LogViewer from '@aziontech/webkit/log-viewer'
+  import LogViewer from '@aziontech/ui/log-viewer'
   import { ref } from 'vue'
 
   const lines = [

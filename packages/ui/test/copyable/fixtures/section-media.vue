@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
-  import HeroSection from '@aziontech/webkit/hero-section'
+  import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
+  import HeroSection from '@aziontech/ui/hero-section'
   import MediaSplitStackSection, {
     type MediaSplitStackSectionBand
-  } from '@aziontech/webkit/media-split-stack-section'
-  import NetworkSection, { type NetworkSectionBenefit } from '@aziontech/webkit/network-section'
+  } from '@aziontech/ui/media-split-stack-section'
+  import NetworkSection, { type NetworkSectionBenefit } from '@aziontech/ui/network-section'
 
   const bands: MediaSplitStackSectionBand[] = [
     { title: 'Scene', description: 'A live scene.', scene: { component: 'SpinningGlobe' } },

@@ -7,9 +7,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
-const SIZE_LIMIT = 'packages/webkit/.size-limit.json'
+const SIZE_LIMIT = 'packages/ui/.size-limit.json'
 export const FALLBACK_BASE = 'origin/main'
-const RECORD = 'packages/webkit/docs/reviews/size-budgets-v6.md'
+const RECORD = 'packages/ui/docs/reviews/size-budgets-v6.md'
 
 export function limitToBytes(limit) {
   const m = String(limit)

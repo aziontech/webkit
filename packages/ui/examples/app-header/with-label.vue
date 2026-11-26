@@ -1,6 +1,6 @@
 <script setup>
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Brand from '@aziontech/ui/brand'
 </script>
 
 <template>

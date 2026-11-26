@@ -2,7 +2,7 @@
 
 > Collects multi-line free-form text from the user. Sibling of `input` in the `input` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
 
-- Import: `import Textarea from '@aziontech/webkit/textarea'`
+- Import: `import Textarea from '@aziontech/ui/textarea'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [textarea.json](textarea.json)
 
@@ -103,8 +103,8 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Field from '@aziontech/ui/field'
+  import Textarea from '@aziontech/ui/textarea'
   import { ref } from 'vue'
 
   const value = ref('')
@@ -125,8 +125,8 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Field from '@aziontech/ui/field'
+  import Textarea from '@aziontech/ui/textarea'
   import { ref } from 'vue'
 
   const value = ref('')
@@ -151,8 +151,8 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Field from '@aziontech/ui/field'
+  import Textarea from '@aziontech/ui/textarea'
   import { ref } from 'vue'
 
   const value = ref('Assets')

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Kbd from '@aziontech/ui/kbd'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { ref } from 'vue'
 
   export interface VariablesDrawerFormProps {

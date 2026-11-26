@@ -15,7 +15,7 @@ with. One pattern per concern — follow ✅, avoid ❌.
 | Styling         | `const variantClasses = {…}` · `<style>` blocks · hex/palette   | utilities inline on the root, variants via `data-*` + theme tokens                                              |
 | Structure       | one file, many components · random script order                 | one component per folder/file · fixed `<script setup>` order (options → props → emits → models → slots → state) |
 | Root element    | wrapper `<div>` swallowing attrs · `as` prop · `class` in props | own the root · `inheritAttrs: false` + `v-bind="$attrs"` · polymorphism via `href`                              |
-| States          | ad-hoc spinner / "no results" string                            | `data-*` states + `@aziontech/webkit/skeleton` / `empty-state`                                                  |
+| States          | ad-hoc spinner / "no results" string                            | `data-*` states + `@aziontech/ui/skeleton` / `empty-state`                                                      |
 | Accessibility   | `<div @click>` · ids by counter                                 | native elements · `focus-visible` · `useId()` · `motion-reduce:` on every animation                             |
 | data-testid     | none, or duplicated                                             | root `:data-testid` with a stable, derived fallback                                                             |
 | Deprecation     | silent rename/removal                                           | `@deprecated` naming the replacement + version, then remove in a major                                          |
@@ -23,16 +23,16 @@ with. One pattern per concern — follow ✅, avoid ❌.
 ## The full rules (one per pattern)
 
 Each row above is a one-line digest; the full rule (with examples) ships alongside this
-file: `webkit-v-model.md`, `webkit-props.md`, `webkit-prop-vocabulary.md`,
-`webkit-emits.md`, `webkit-slots.md`, `webkit-composables.md`, `webkit-styling.md`,
-`webkit-component-structure.md`, `webkit-root-element.md`, `webkit-component-states.md`,
-`webkit-accessibility.md`, `webkit-testid.md`, `webkit-deprecation.md`.
+file: `azion-ui-v-model.md`, `azion-ui-props.md`, `azion-ui-prop-vocabulary.md`,
+`azion-ui-emits.md`, `azion-ui-slots.md`, `azion-ui-composables.md`, `azion-ui-styling.md`,
+`azion-ui-component-structure.md`, `azion-ui-root-element.md`, `azion-ui-component-states.md`,
+`azion-ui-accessibility.md`, `azion-ui-testid.md`, `azion-ui-deprecation.md`.
 
 ## Notes
 
 - These are the design system's `scope: general` standards — they apply to any Vue
-  component, not only to webkit's. The mechanizable ones are **blocked** by the
-  `webkit/require-authoring-standards` ESLint rule (error) at commit and in CI; the rest are
+  component, not only to Azion UI's. The mechanizable ones are **blocked** by the
+  `azion-ui/require-authoring-standards` ESLint rule (error) at commit and in CI; the rest are
   convention + review.
-- Before building, check the catalog first (`suggest_component` on the `webkit` MCP or
-  `node_modules/@aziontech/webkit/catalog.json`) — the component may already exist.
+- Before building, check the catalog first (`suggest_component` on the `azion-ui` MCP or
+  `node_modules/@aziontech/ui/catalog.json`) — the component may already exist.

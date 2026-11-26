@@ -1,5 +1,5 @@
 <script setup>
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
   import { ref } from 'vue'
 
   const columns = [

@@ -2,7 +2,7 @@
 
 > Guards one region of a page. When a component inside the region throws while it renders, sets up or runs a lifecycle hook, the boundary catches the error, reports it through its `error` event, and puts a recoverable message in the region's place: a danger `Alert` that says the section failed and offers **Try again**, which mounts the region again. The rest of the page keeps working. A `fallback` slot replaces the built-in message when the region needs a different shape (a card-sized `EmptyState`, for example).
 
-- Import: `import ErrorBoundary from '@aziontech/webkit/error-boundary'`
+- Import: `import ErrorBoundary from '@aziontech/ui/error-boundary'`
 - Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [error-boundary.json](error-boundary.json)
 
@@ -23,7 +23,7 @@
 
 ## Don’t
 
-- A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/state-form-validation` (SectionRejected) and `skills/webkit-ui-states` describe.
+- A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/state-form-validation` (SectionRejected) and `skills/azion-ui-states` describe.
 - A whole page that cannot be shown (missing route, no access, server failure) → use the `state/state-error-page` block.
 - A field that failed validation → use `field` with its error message.
 - Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`.
@@ -107,11 +107,11 @@
 
 ```vue
 <script setup>
-  import BarList from '@aziontech/webkit/bar-list'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ErrorBoundary from '@aziontech/webkit/error-boundary'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import BarList from '@aziontech/ui/bar-list'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ErrorBoundary from '@aziontech/ui/error-boundary'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { ref } from 'vue'
 
   const items = [
@@ -180,12 +180,12 @@
 
 ```vue
 <script setup>
-  import BarList from '@aziontech/webkit/bar-list'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import ErrorBoundary from '@aziontech/webkit/error-boundary'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import BarList from '@aziontech/ui/bar-list'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import ErrorBoundary from '@aziontech/ui/error-boundary'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { ref } from 'vue'
 
   const items = [

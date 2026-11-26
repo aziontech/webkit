@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
   import { computed } from 'vue'
 
   import type { DetailTicketRequester } from '../detail-ticket.vue'

@@ -1,8 +1,8 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PhoneInput from '@aziontech/webkit/phone-input'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PhoneInput from '@aziontech/ui/phone-input'
   import { computed, reactive, ref } from 'vue'
 
   const form = reactive({ name: '', email: '', digits: '', country: 'US' })

@@ -46,13 +46,13 @@ function blockPieces(block, paths, dependencies, { keepPrimary, keepExtra }) {
   ]
 }
 
-function pieceFile(projectDir, webkit, block, targets, piece) {
+function pieceFile(projectDir, ui, block, targets, piece) {
   const original = readFileSync(join(block.dir, piece.file), 'utf8')
   const imports = localImports(original, posix.normalize(piece.file), targets, piece.path)
   const content = rewriteImports(original, imports)
   return {
     path: piece.path,
-    source: toPosix(relative(webkit.root, join(block.dir, piece.file))),
+    source: toPosix(relative(ui.root, join(block.dir, piece.file))),
     variant: piece.variant,
     ...(Object.keys(imports).length ? { imports } : {}),
     content,
@@ -72,17 +72,17 @@ function guidelinesFile(projectDir, block, paths, opts) {
   }
 }
 
-function sourceWarning(webkit) {
-  if (!webkit.installed) {
-    return `${PACKAGE_NAME} is not installed in this project: the block was taken from ${PACKAGE_NAME}@${webkit.version} (the CLI). Install it before building.`
+function sourceWarning(ui) {
+  if (!ui.installed) {
+    return `${PACKAGE_NAME} is not installed in this project: the block was taken from ${PACKAGE_NAME}@${ui.version} (the CLI). Install it before building.`
   }
-  if (!webkit.fromInstalled) {
-    return `the installed ${PACKAGE_NAME}@${webkit.installedVersion} ships no blocks/: the block was taken from ${PACKAGE_NAME}@${webkit.version} (the CLI).`
+  if (!ui.fromInstalled) {
+    return `the installed ${PACKAGE_NAME}@${ui.installedVersion} ships no blocks/: the block was taken from ${PACKAGE_NAME}@${ui.version} (the CLI).`
   }
   return null
 }
 
-function addWarnings(block, paths, keepPrimary, webkit, imports) {
+function addWarnings(block, paths, keepPrimary, ui, imports) {
   const warnings = []
   if (block.note) warnings.push(block.note)
   if (keepPrimary) {
@@ -90,9 +90,9 @@ function addWarnings(block, paths, keepPrimary, webkit, imports) {
       `${paths.primary} was added before and is kept as it is: only the ${block.variant.name} variant is copied.`
     )
   }
-  const source = sourceWarning(webkit)
+  const source = sourceWarning(ui)
   if (source) warnings.push(source)
-  if (!webkit.installed) return warnings
+  if (!ui.installed) return warnings
   for (const pkg of imports.packages.filter((p) => !p.ok)) {
     warnings.push(
       `the block imports ${pkg.name}, which is not installed: add it to your dependencies.`
@@ -101,11 +101,11 @@ function addWarnings(block, paths, keepPrimary, webkit, imports) {
   return warnings
 }
 
-function addErrors(webkit, imports, clashes, opts) {
-  const installed = webkit.installedVersion ? `@${webkit.installedVersion}` : ''
+function addErrors(ui, imports, clashes, opts) {
+  const installed = ui.installedVersion ? `@${ui.installedVersion}` : ''
   const errors = imports.missing.map(
     (spec) =>
-      `${spec} is not exported by the installed ${PACKAGE_NAME}${installed}: upgrade it to ${webkit.version} or later.`
+      `${spec} is not exported by the installed ${PACKAGE_NAME}${installed}: upgrade it to ${ui.version} or later.`
   )
   if (clashes.length && !opts.force) {
     errors.push(
@@ -115,8 +115,8 @@ function addErrors(webkit, imports, clashes, opts) {
   return errors
 }
 
-export function planAdd(projectDir, webkit, catalog, id, opts = {}) {
-  const block = resolveBlock(webkit, catalog, id, { variant: opts.variant })
+export function planAdd(projectDir, ui, catalog, id, opts = {}) {
+  const block = resolveBlock(ui, catalog, id, { variant: opts.variant })
   if (!block.ok) return { ok: false, errors: [block.message], suggestions: block.suggestions }
 
   const paths = targetPaths(projectDir, block, opts.dest)
@@ -124,29 +124,29 @@ export function planAdd(projectDir, webkit, catalog, id, opts = {}) {
   const targets = blockTargets(block, paths)
   const dependencies = dependencyPieces(block, paths, targets)
   const files = blockPieces(block, paths, dependencies, keep).map((piece) =>
-    pieceFile(projectDir, webkit, block, targets, piece)
+    pieceFile(projectDir, ui, block, targets, piece)
   )
   const guidelines = guidelinesFile(projectDir, block, paths, opts)
   const imports = checkImports(
     projectDir,
-    webkit,
+    ui,
     files.map((f) => f.content)
   )
   const clashes = [...files, ...(guidelines ? [guidelines] : [])].filter((f) => f.exists)
-  const errors = addErrors(webkit, imports, clashes, opts)
+  const errors = addErrors(ui, imports, clashes, opts)
 
   return {
     ok: errors.length === 0,
     id: block.id,
     name: block.meta.name,
-    version: webkit.version,
+    version: ui.version,
     viewsReason: paths.viewsReason,
     files,
     guidelines,
     imports,
     route: suggestRoute(projectDir, { id: block.id, name: block.meta.name, file: paths.primary }),
     errors,
-    warnings: addWarnings(block, paths, keep.keepPrimary, webkit, imports)
+    warnings: addWarnings(block, paths, keep.keepPrimary, ui, imports)
   }
 }
 

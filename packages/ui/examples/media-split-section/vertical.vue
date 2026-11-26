@@ -1,5 +1,5 @@
 <script setup>
-  import MediaSplitSection from '@aziontech/webkit/media-split-section'
+  import MediaSplitSection from '@aziontech/ui/media-split-section'
 </script>
 
 <template>

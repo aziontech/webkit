@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import SchemaForm from '@aziontech/webkit/schema-form'
+  import Button from '@aziontech/ui/button'
+  import SchemaForm from '@aziontech/ui/schema-form'
   import { ref } from 'vue'
 
   const schema = {

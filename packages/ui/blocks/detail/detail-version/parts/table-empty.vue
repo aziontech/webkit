@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
 
   export interface TableEmptyProps {
     /** The search term; when set, the state says nothing matches it and offers to clear it. */

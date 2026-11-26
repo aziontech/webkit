@@ -1,8 +1,8 @@
 {
  "name": "media-scroll",
  "binding": "MediaScroll",
- "import": "@aziontech/webkit/media-scroll",
- "treeShakeableImport": "@aziontech/webkit/media-scroll",
+ "import": "@aziontech/ui/media-scroll",
+ "treeShakeableImport": "@aziontech/ui/media-scroll",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

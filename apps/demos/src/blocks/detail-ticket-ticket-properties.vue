@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Avatar from '@aziontech/ui/avatar'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import Select from '@aziontech/ui/select'
+  import Skeleton from '@aziontech/ui/skeleton'
   import { computed, ref, watch } from 'vue'
 
   import { priorityOptions, TICKET_STATUSES, TICKET_TYPES } from './detail-ticket.ticket-fields'

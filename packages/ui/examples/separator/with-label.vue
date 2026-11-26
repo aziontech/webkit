@@ -1,5 +1,5 @@
 <script setup>
-  import Separator from '@aziontech/webkit/separator'
+  import Separator from '@aziontech/ui/separator'
 </script>
 
 <template>

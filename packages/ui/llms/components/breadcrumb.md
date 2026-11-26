@@ -1,9 +1,9 @@
 # Breadcrumb
 
-> Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).
+> Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Azion UI tokens).
 
-- Import: `import BreadcrumbRoot from '@aziontech/webkit/breadcrumb-root'`
-- Compound import (dot notation, not tree-shakeable): `import Breadcrumb from '@aziontech/webkit/breadcrumb'`
+- Import: `import BreadcrumbRoot from '@aziontech/ui/breadcrumb-root'`
+- Compound import (dot notation, not tree-shakeable): `import Breadcrumb from '@aziontech/ui/breadcrumb'`
 - Category: navigation · Surface: app · Structure: composition
 - API as JSON: [breadcrumb.json](breadcrumb.json)
 
@@ -56,13 +56,13 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/breadcrumb-item`
+- `@aziontech/ui/breadcrumb-item`
 
 ## Sub-components
 
 - `breadcrumb.vue` — Root `<nav>` with `aria-label` from `ariaLabel`, or the locale catalog (`Breadcrumb`) when empty; a consumer `aria-label` lands on the prop and wins.
 - `breadcrumb-list.vue` — Ordered list wrapper (`<ol>`) for segments.
-- `breadcrumb-item/breadcrumb-item.vue` — `Breadcrumb.Item`, the segment control; it lives in this component's folder and keeps its flat export `@aziontech/webkit/breadcrumb-item`.
+- `breadcrumb-item/breadcrumb-item.vue` — `Breadcrumb.Item`, the segment control; it lives in this component's folder and keeps its flat export `@aziontech/ui/breadcrumb-item`.
 - `breadcrumb-separator.vue` — Decorative chevron between segments (`aria-hidden`).
 
 ## States
@@ -98,7 +98,7 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
 
   const items = [
     { label: 'Page Name', href: '#' },
@@ -121,7 +121,7 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
 
   const single = [{ label: 'Page Name', active: true }]
   const two = [
@@ -150,7 +150,7 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
 
   const items = [
     { label: 'Page Name', href: '#' },

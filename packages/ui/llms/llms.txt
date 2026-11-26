@@ -1,10 +1,10 @@
-# Azion WebKit
+# Azion UI
 
-> The Vue 3 design system of Azion (`@aziontech/webkit` 5.13.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
+> The Vue 3 design system of Azion (`@aziontech/ui` 5.13.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
 
-Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
+Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/ui/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/ui-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
 
-Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
+Installed copy: `node_modules/@aziontech/ui/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
 
 ## Foundations
 
@@ -19,7 +19,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Accessibility](foundations/accessibility.md): WCAG 2.1 AA rules every component and screen follows: names, focus, keyboard, contrast, motion.
 - [Keyboard](foundations/keyboard.md): The console keyboard contract: focus on open, Esc, Enter and Cmd+Enter, Cmd+S, Cmd+K, /, ?, list keys, and no single-key shortcut while typing.
 - [Site pages (Web Design Guide)](foundations/site-pages.md): The Web Design Guide, SD-01 to SD-25 (SD-07 headline lines, SD-04 action labels): sections, heroes, line budgets and assets of every Azion web page.
-- [Using WebKit in an app](foundations/usage.md): Start from a block, find a component, import it tree-shakeably, app-level setup and the quality checklist.
+- [Using Azion UI in an app](foundations/usage.md): Start from a block, find a component, import it tree-shakeably, app-level setup and the quality checklist.
 - [Illustrations](foundations/illustrations.md): The official product illustration scenes, drawn into the page as inline SVG and repainted from the theme.
 - [Diagrams](foundations/diagrams.md): The registered product architecture diagrams.
 - [Brand marks](foundations/brand-marks.md): Client, analyst and framework marks drawn as theme-aware SVG.
@@ -27,23 +27,23 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Patterns
 
-- [Building a console screen](https://github.com/aziontech/webkit/blob/main/skills/webkit-product-screens/SKILL.md): Where to start a console screen: the block, the pattern and the rule for each problem.
-- [Building a site page](https://github.com/aziontech/webkit/blob/main/skills/webkit-site-pages/SKILL.md): How a marketing page is built from page sections, in order, from the content up.
-- [Forms](https://github.com/aziontech/webkit/blob/main/skills/webkit-form/SKILL.md): Which control each value takes, labels, grouping, the two layouts and how a form submits.
-- [Create flows](https://github.com/aziontech/webkit/blob/main/skills/webkit-create-surface/SKILL.md): Page, drawer or dialog: the surface follows what is created, with one shared anatomy.
-- [Tables](https://github.com/aziontech/webkit/blob/main/skills/webkit-tables/SKILL.md): One data-driven table: columns, toolbar, internal scroll and the shared cell recipes.
-- [List pages](https://github.com/aziontech/webkit/blob/main/skills/webkit-lists/SKILL.md): One list page: the controls row, the collection model, filters in the URL, selection.
-- [Charts and figures](https://github.com/aziontech/webkit/blob/main/skills/webkit-data-viz/SKILL.md): Pick the chart for the question, take every colour from the chart role, render its states.
-- [Showing API data](https://github.com/aziontech/webkit/blob/main/skills/webkit-api-data/SKILL.md): References by name, pickers that keep their values, fresh lookups and typed records.
-- [Loading, empty and error states](https://github.com/aziontech/webkit/blob/main/skills/webkit-ui-states/SKILL.md): Every data-backed view owns its states, and an action locks its scope while it runs.
-- [Errors](https://github.com/aziontech/webkit/blob/main/skills/webkit-errors/SKILL.md): Where an error goes, what it carries there and what it says: field, section or toast.
-- [In-product help](https://github.com/aziontech/webkit/blob/main/skills/webkit-in-product-help/SKILL.md): A description first, a Hint note on click, an Info trigger for the page; a Tooltip only names.
-- [Navigation](https://github.com/aziontech/webkit/blob/main/skills/webkit-navigation/SKILL.md): The two shells, navigation levels, tabs, drawers, breadcrumbs and router wiring.
-- [Page layout](https://github.com/aziontech/webkit/blob/main/skills/webkit-layout/SKILL.md): Three decisions per page: the boundary, the measure and the rhythm, each a named token.
-- [Interface text](https://github.com/aziontech/webkit/blob/main/skills/webkit-microcopy/SKILL.md): Punctuation and case, which surface owns which words, and one word per concept.
-- [AI chat and actions](https://github.com/aziontech/webkit/blob/main/skills/webkit-ai-surfaces/SKILL.md): The conversation, a streamed answer and the step where a person authorizes an action.
-- [Calling the Azion API](https://github.com/aziontech/webkit/blob/main/skills/webkit-azion-api/SKILL.md): CORS, a dev proxy and an edge proxy, and where the personal token lives.
-- [Query explorer](https://github.com/aziontech/webkit/blob/main/skills/webkit-query-explorer/SKILL.md): A Metrics and Events GraphQL explorer built from WebKit components.
+- [Building a console screen](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-product-screens/SKILL.md): Where to start a console screen: the block, the pattern and the rule for each problem.
+- [Building a site page](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-site-pages/SKILL.md): How a marketing page is built from page sections, in order, from the content up.
+- [Forms](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-form/SKILL.md): Which control each value takes, labels, grouping, the two layouts and how a form submits.
+- [Create flows](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-create-surface/SKILL.md): Page, drawer or dialog: the surface follows what is created, with one shared anatomy.
+- [Tables](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-tables/SKILL.md): One data-driven table: columns, toolbar, internal scroll and the shared cell recipes.
+- [List pages](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-lists/SKILL.md): One list page: the controls row, the collection model, filters in the URL, selection.
+- [Charts and figures](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-data-viz/SKILL.md): Pick the chart for the question, take every colour from the chart role, render its states.
+- [Showing API data](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-api-data/SKILL.md): References by name, pickers that keep their values, fresh lookups and typed records.
+- [Loading, empty and error states](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-states/SKILL.md): Every data-backed view owns its states, and an action locks its scope while it runs.
+- [Errors](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-errors/SKILL.md): Where an error goes, what it carries there and what it says: field, section or toast.
+- [In-product help](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-in-product-help/SKILL.md): A description first, a Hint note on click, an Info trigger for the page; a Tooltip only names.
+- [Navigation](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-navigation/SKILL.md): The two shells, navigation levels, tabs, drawers, breadcrumbs and router wiring.
+- [Page layout](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-layout/SKILL.md): Three decisions per page: the boundary, the measure and the rhythm, each a named token.
+- [Interface text](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-microcopy/SKILL.md): Punctuation and case, which surface owns which words, and one word per concept.
+- [AI chat and actions](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-ai-surfaces/SKILL.md): The conversation, a streamed answer and the step where a person authorizes an action.
+- [Calling the Azion API](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-azion-api/SKILL.md): CORS, a dev proxy and an edge proxy, and where the personal token lives.
+- [Query explorer](https://github.com/aziontech/webkit/blob/main/skills/azion-ui-query-explorer/SKILL.md): A Metrics and Events GraphQL explorer built from Azion UI components.
 
 ## Blocks: Account
 
@@ -223,10 +223,10 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [AvatarGroup](components/avatar-group.md): Shows the people behind one thing as a row of overlapping avatars: the members of a team, the owners of a resource, who is viewing a page now.
 - [Badge](components/badge.md): Use Badge only for a number attached to something else (unread count, 12, 99+).
 - [Brand](components/brand.md): The Azion brand logo, rendered as an inline SVG lockup.
-- [BrowserFrame](components/browser-frame.md): A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.
+- [BrowserFrame](components/browser-frame.md): A browser window that renders live Azion UI components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.
 - [Card](components/card.md): Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, for a catalog tile use IntegrationCard, and for the frame of a dashboard chart use ChartCard.
 - [Carousel](components/carousel.md): A horizontally scrollable track of cards with snap points and a pair of step controls.
-- [ConsoleMockup](components/console-mockup.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketin…
+- [ConsoleMockup](components/console-mockup.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real Azion UI components inside an internal `ConsoleMockupShell` frame (not exported), that market…
 - [CopyText](components/copy-text.md): CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies…
 - [Countdown](components/countdown.md): Preview. Countdown shows the time left until a deadline as a compact tag: the SLA badge of a support ticket (`Due in 2h 15m`, `Due tomorrow`, `Overdue by 15m`), or the time before a certificate or a trial expires (`Expires in…
 - [CurrencyAmount](components/currency-amount.md): Use CurrencyAmount to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
@@ -247,7 +247,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [PlanFeatureList](components/plan-feature-list.md): Use PlanFeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList.
 - [PricingCard](components/pricing-card.md): One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it.
 - [PriorityTag](components/priority-tag.md): Preview. Use PriorityTag only for the priority of a ticket, task or request on the urgent → low scale, or for "no priority"; the severity of a finding or alert is a SeverityTag, and the state of a ticket is a StatusIndicator o…
-- [QrCode](components/qr-code.md): A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws the…
+- [QrCode](components/qr-code.md): A QR code drawn as SVG from a string, with no image request and no dependency: Azion UI's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws t…
 - [SeverityTag](components/severity-tag.md): Use SeverityTag only for a level on the critical → info scale of findings and alerts; the state of a resource is a StatusIndicator, and any other category word is a Tag.
 - [StatusCode](components/status-code.md): Use StatusCode only for an HTTP status code or method (200, 404, GET); for resource state use StatusIndicator, and for any other word use Tag.
 - [Tag](components/tag.md): Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state.
@@ -279,7 +279,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocAccordionGroup](components/doc-accordion-group.md): The FAQ and "expand for detail" block of a documentation page.
 - [DocAgentCard](components/doc-agent-card.md): The "Your AI agent, fluent in Azion" card that opens the first section of a documentation home.
 - [DocCallToAction](components/doc-call-to-action.md): The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline.
-- [DocCallout](components/doc-callout.md): The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the border, the icon and the radius come from the design system rather…
+- [DocCallout](components/doc-callout.md): The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the Azion UI `Alert` surface, so the border, the icon and the radius come from the design system rathe…
 - [DocCard](components/doc-card.md): One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot.
 - [DocCardGroup](components/doc-card-group.md): The framed, responsive grid a `DocCard` set sits in.
 - [DocChangelogEntry](components/doc-changelog-entry.md): One entry in a changelog: what shipped, when, and under which version.
@@ -417,7 +417,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Components: Providers
 
-- [ConfigProvider](components/config-provider.md): Sets the language and text direction of every WebKit component below it.
+- [ConfigProvider](components/config-provider.md): Sets the language and text direction of every Azion UI component below it.
 
 ## Components: Page sections
 

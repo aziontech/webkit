@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
 
   export interface AuthBarProps {
     /** Where the brand goes. */

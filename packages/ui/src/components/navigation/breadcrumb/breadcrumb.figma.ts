@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/breadcrumb/breadcrumb.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/breadcrumb/breadcrumb.vue
 // component=Breadcrumb
 import figma from 'figma'
 
@@ -28,7 +28,7 @@ export default {
   :items="[${items}
   ]"
 />`,
-  imports: ["import Breadcrumb from '@aziontech/webkit/breadcrumb'"],
+  imports: ["import Breadcrumb from '@aziontech/ui/breadcrumb'"],
   id: 'breadcrumb',
   metadata: { nestable: true }
 }

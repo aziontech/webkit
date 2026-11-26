@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import AgentQuestion from '@aziontech/webkit/agent-question'
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import Conversation from '@aziontech/webkit/conversation'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import ToolCall from '@aziontech/webkit/tool-call'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import AgentQuestion from '@aziontech/ui/agent-question'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import ChatMessage, { type ChatMessageStatus } from '@aziontech/ui/chat-message'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import Conversation from '@aziontech/ui/conversation'
+  import ImageGallery from '@aziontech/ui/image-gallery'
+  import type { PromptInputStatus } from '@aziontech/ui/prompt-input'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import ToolApproval from '@aziontech/ui/tool-approval'
+  import ToolCall from '@aziontech/ui/tool-call'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import {
     type AiChatInterrupt,
     type AiChatInterruptError,
@@ -38,7 +38,7 @@
     textOf,
     toolContentOf,
     toolStatusOf
-  } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/utils/ai-chat'
   import { computed, ref } from 'vue'
 
   import AiActionApprovalComposer from './parts/ai-action-approval-composer.vue'

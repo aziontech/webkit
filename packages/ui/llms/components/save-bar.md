@@ -2,7 +2,7 @@
 
 > The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown; `fade` closes a wizard step with no border or surface, the step content fading into the canvas above Back and Next; `centered` floats the actions as a raised card centred over the bottom of a create page, always shown.
 
-- Import: `import SaveBar from '@aziontech/webkit/save-bar'`
+- Import: `import SaveBar from '@aziontech/ui/save-bar'`
 - Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [save-bar.json](save-bar.json)
 
@@ -20,7 +20,7 @@
 - Disable Discard and set `loading` on Save while saving.
 - Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant="centered"`.
 - `floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.
-- Listen to `save` to give the page `⌘ S` (`Ctrl S` off Apple): run the same save as the Save button, and do nothing when the form has no unsaved changes. Show the shortcut on Save with `Kbd` and `aria-keyshortcuts="Meta+S Control+S"` (the console keyboard standard, `rules/webkit-keyboard.md`).
+- Listen to `save` to give the page `⌘ S` (`Ctrl S` off Apple): run the same save as the Save button, and do nothing when the form has no unsaved changes. Show the shortcut on Save with `Kbd` and `aria-keyshortcuts="Meta+S Control+S"` (the console keyboard standard, `rules/azion-ui-keyboard.md`).
 
 ## Don’t
 
@@ -101,9 +101,9 @@ The status sentence and the action labels come from the consumer's slots. One bu
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import SaveBar from '@aziontech/webkit/save-bar'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import SaveBar from '@aziontech/ui/save-bar'
   import { ref } from 'vue'
 
   const saving = ref(false)
@@ -159,8 +159,8 @@ The status sentence and the action labels come from the consumer's slots. One bu
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import SaveBar from '@aziontech/webkit/save-bar'
+  import Button from '@aziontech/ui/button'
+  import SaveBar from '@aziontech/ui/save-bar'
 </script>
 
 <template>
@@ -188,8 +188,8 @@ The status sentence and the action labels come from the consumer's slots. One bu
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import SaveBar from '@aziontech/webkit/save-bar'
+  import Button from '@aziontech/ui/button'
+  import SaveBar from '@aziontech/ui/save-bar'
 </script>
 
 <template>

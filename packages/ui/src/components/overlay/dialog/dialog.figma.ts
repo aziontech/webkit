@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4331-21485
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/overlay/dialog/dialog.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/overlay/dialog/dialog.vue
 // component=Dialog
 import figma from 'figma'
 
@@ -47,14 +47,14 @@ export default {
   </DialogContent>
 </Dialog>`,
   imports: [
-    "import Dialog from '@aziontech/webkit/dialog'",
-    "import DialogTrigger from '@aziontech/webkit/dialog-trigger'",
-    "import DialogContent from '@aziontech/webkit/dialog-content'",
-    "import DialogTitle from '@aziontech/webkit/dialog-title'",
-    "import PanelHeader from '@aziontech/webkit/panel-header'",
-    "import PanelBody from '@aziontech/webkit/panel-body'",
-    "import PanelFooter from '@aziontech/webkit/panel-footer'",
-    "import Button from '@aziontech/webkit/button'"
+    "import Dialog from '@aziontech/ui/dialog'",
+    "import DialogTrigger from '@aziontech/ui/dialog-trigger'",
+    "import DialogContent from '@aziontech/ui/dialog-content'",
+    "import DialogTitle from '@aziontech/ui/dialog-title'",
+    "import PanelHeader from '@aziontech/ui/panel-header'",
+    "import PanelBody from '@aziontech/ui/panel-body'",
+    "import PanelFooter from '@aziontech/ui/panel-footer'",
+    "import Button from '@aziontech/ui/button'"
   ],
   id: 'dialog',
   metadata: { nestable: false }

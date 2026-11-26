@@ -4,7 +4,7 @@ One claim beside its picture, on its own frame: copy on one side, the media on a
 
 The media cell sits on the small pixelate texture, fading toward the top. With `size="large"` the headline is set at `heading-xl` and centred beside the media. With one action the whole band links to it; with two the band stays unlinked and the reader picks a button.
 
-The band is the `MediaSplitSection` component from `@aziontech/webkit/media-split-section`; it composes `Module` and a `framed` `MediaSplit`, with a scene (a `ConsoleMockup` widget among them) or an `Illustration` from the illustration registry in the media cell. The media is required; code goes in `FeatureScrollSection` and a request-flow diagram in `ConsoleShowcaseSection`.
+The band is the `MediaSplitSection` component from `@aziontech/ui/media-split-section`; it composes `Module` and a `framed` `MediaSplit`, with a scene (a `ConsoleMockup` widget among them) or an `Illustration` from the illustration registry in the media cell. The media is required; code goes in `FeatureScrollSection` and a request-flow diagram in `ConsoleShowcaseSection`.
 
 ## Examples
 
@@ -22,7 +22,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `size` sets the type scale: `large` sets the headline at `heading-xl` and centres the copy beside the media; `medium`, the default, aligns it to the top of the media.
 - `orientation` is `horizontal` (the default) or `vertical`, which stacks the media under the copy; `texture` picks the texture under the media (`pixelate` by default).
 - `anchor` is the band's id for in-page links.
-- The media is required and is one of `scene` (`{ component, props? }`, naming a webkit scene asset such as `BrandGlobeScene`, `SpinningGlobe` or `ConsoleMockup`, and the props bound onto it; not `Diagram`), `widget` (a `ConsoleMockup` name) or `illustration` (a registry name) with `illustrationAriaLabel`. When several are set, that order decides. Code and request-flow diagrams do not go in this band.
+- The media is required and is one of `scene` (`{ component, props? }`, naming an Azion UI scene asset such as `BrandGlobeScene`, `SpinningGlobe` or `ConsoleMockup`, and the props bound onto it; not `Diagram`), `widget` (a `ConsoleMockup` name) or `illustration` (a registry name) with `illustrationAriaLabel`. When several are set, that order decides. Code and request-flow diagrams do not go in this band.
 - `primaryAction` and `secondaryAction` are optional, each a `label`, an `href`, an optional `target`, an optional `trailing` chevron, an optional leading `icon` and an optional `variant` (`secondary`, `outline` or `ghost`) that wins over the drawn one: one renders outlined with the chevron and makes the whole band a link to it (set `linked` to `false` when the media holds controls), two leave the band unlinked. A band showing code is never a link.
 
 Example:

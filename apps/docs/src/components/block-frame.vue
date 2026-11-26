@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import IconButton from '@aziontech/ui/icon-button'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import { messages } from '../lib/i18n'
@@ -67,7 +67,7 @@
   function post() {
     frameEl.value?.contentWindow?.postMessage(
       {
-        source: 'webkit-docs',
+        source: 'azion-ui-docs',
         theme: resolvedTheme(settings.theme),
         dir: settings.dir,
         locale: settings.locale

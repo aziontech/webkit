@@ -1,8 +1,8 @@
 {
  "name": "hero-section",
  "binding": "HeroSection",
- "import": "@aziontech/webkit/hero-section",
- "treeShakeableImport": "@aziontech/webkit/hero-section",
+ "import": "@aziontech/ui/hero-section",
+ "treeShakeableImport": "@aziontech/ui/hero-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

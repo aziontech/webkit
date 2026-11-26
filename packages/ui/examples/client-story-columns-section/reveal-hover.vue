@@ -1,8 +1,8 @@
 <script setup>
-  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
-  import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'
-  import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
-  import ClientStoryColumnsSection from '@aziontech/webkit/client-story-columns-section'
+  import agibankExtendedReversed from '@aziontech/ui/assets/agibank-extended-reversed.svg'
+  import americanasExtendedReversed from '@aziontech/ui/assets/americanas-extended-reversed.svg'
+  import arezzoExtendedReversed from '@aziontech/ui/assets/arezzo-extended-reversed.svg'
+  import ClientStoryColumnsSection from '@aziontech/ui/client-story-columns-section'
 
   const cells = [
     {

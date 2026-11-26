@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import MessageThreadItem from '@aziontech/webkit/message-thread-item'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import MessageThreadItem from '@aziontech/ui/message-thread-item'
   import { computed } from 'vue'
 
   import type { DetailTicketMessage } from './detail-ticket.vue'

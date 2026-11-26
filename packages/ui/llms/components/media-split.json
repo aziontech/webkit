@@ -1,8 +1,8 @@
 {
  "name": "media-split",
  "binding": "MediaSplit",
- "import": "@aziontech/webkit/media-split",
- "treeShakeableImport": "@aziontech/webkit/media-split",
+ "import": "@aziontech/ui/media-split",
+ "treeShakeableImport": "@aziontech/ui/media-split",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

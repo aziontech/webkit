@@ -1,8 +1,8 @@
 {
  "name": "otp-input",
  "binding": "OtpInput",
- "import": "@aziontech/webkit/otp-input",
- "treeShakeableImport": "@aziontech/webkit/otp-input",
+ "import": "@aziontech/ui/otp-input",
+ "treeShakeableImport": "@aziontech/ui/otp-input",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

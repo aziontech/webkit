@@ -1,14 +1,14 @@
 {
  "name": "qr-code",
  "binding": "QrCode",
- "import": "@aziontech/webkit/qr-code",
- "treeShakeableImport": "@aziontech/webkit/qr-code",
+ "import": "@aziontech/ui/qr-code",
+ "treeShakeableImport": "@aziontech/ui/qr-code",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws them as one path. It is for setup flows that hand a URI to a phone, first the `otpauth://` URI of an authenticator app in `auth#MfaSetup`, where it replaces the image the API returned and the framed placeholder of the demo. The code is always dark on a light plate (the plate pins the light theme), because several authenticator scanners do not read an inverted code.",
+ "purpose": "A QR code drawn as SVG from a string, with no image request and no dependency: Azion UI's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws them as one path. It is for setup flows that hand a URI to a phone, first the `otpauth://` URI of an authenticator app in `auth#MfaSetup`, where it replaces the image the API returned and the framed placeholder of the demo. The code is always dark on a light plate (the plate pins the light theme), because several authenticator scanners do not read an inverted code.",
  "setup": null,
  "useWhen": [
   "A phone has to pick up a value the screen shows: an authenticator `otpauth://` URI, a pairing link, a short download URL.",

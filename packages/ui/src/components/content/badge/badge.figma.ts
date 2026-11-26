@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/badge/badge.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/badge/badge.vue
 // component=Badge
 import figma from 'figma'
 
@@ -34,7 +34,7 @@ export default {
   size="${size}"`
   }
 />`,
-  imports: ["import Badge from '@aziontech/webkit/badge'"],
+  imports: ["import Badge from '@aziontech/ui/badge'"],
   id: 'badge',
   metadata: { nestable: true }
 }

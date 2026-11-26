@@ -42,7 +42,7 @@ Below 48rem of the viewport every phase table shows the same narrow column set: 
 
 ### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert` (required)
 
-Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save emits `save` with every rule in its new order, shows its loading state while `saving` is set, and the dialog cannot be dismissed while saving. On success (`saving` turns off with no `saveError`) the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure (`saveError` set) the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save emits `save` with every rule in its new order, shows its loading state while `saving` is set, and the dialog cannot be dismissed while saving. On success (`saving` turns off with no `saveError`) the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure (`saveError` set) the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ### G. States — `EmptyState`, `Alert` (required)
 
@@ -116,7 +116,7 @@ Then delete `sample.ts` and its import.
 - Say why a control is disabled, in its accessible name and its tooltip.
 - Collect changes and apply them only after Review changes and Save; the review lists every rule whose position changes, not only the one the user dragged.
 - Let a rule be turned off in place; an inactive rule keeps its position and is skipped at runtime.
-- Follow `skills/webkit-tables` for the table, `skills/webkit-form` for the save bar and `skills/webkit-errors` for the failed save.
+- Follow `skills/azion-ui-tables` for the table, `skills/azion-ui-form` for the save bar and `skills/azion-ui-errors` for the failed save.
 
 ## Don't
 
@@ -136,7 +136,7 @@ Then delete `sample.ts` and its import.
 - **Review lines:** "<Rule> moves from position 5 to 3.", "<Rule> is turned on."
 - **Failure:** "The new order wasn't saved. The rules still run in the saved order; save again to apply it."
 - **Success toast:** "Rule order saved." with "The application runs its rules in the new order."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 

@@ -2,7 +2,7 @@
 
 > A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
 
-- Import: `import ArticleCardsSection from '@aziontech/webkit/article-cards-section'`
+- Import: `import ArticleCardsSection from '@aziontech/ui/article-cards-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [article-cards-section.json](article-cards-section.json)
 
@@ -86,8 +86,8 @@
 
 ```vue
 <script setup>
-  import ArticleCardsSection from '@aziontech/webkit/article-cards-section'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import ArticleCardsSection from '@aziontech/ui/article-cards-section'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
 </script>
 
 <template>
@@ -132,11 +132,11 @@
 
 ```vue
 <script setup>
-  import ArticleCardsSection from '@aziontech/webkit/article-cards-section'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
+  import ArticleCardsSection from '@aziontech/ui/article-cards-section'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import netshoesExtendedReversed from '@aziontech/ui/assets/netshoes-extended-reversed.svg'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3782-18192
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/navigation-menu/navigation-menu.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/navigation-menu/navigation-menu.vue
 // component=NavigationMenu
 import figma from 'figma'
 
@@ -42,7 +42,7 @@ export default {
   <NavigationMenu.List>${items}
   </NavigationMenu.List>${viewport}
 </NavigationMenu>`,
-  imports: ["import NavigationMenu from '@aziontech/webkit/navigation-menu'"],
+  imports: ["import NavigationMenu from '@aziontech/ui/navigation-menu'"],
   id: 'navigation-menu',
   metadata: { nestable: true }
 }

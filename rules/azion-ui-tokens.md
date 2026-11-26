@@ -12,7 +12,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 - Let the class pick the family: headings, titles, body copy and buttons are sans (`text-heading-*` except `text-heading-code-md`, `text-title-*`, `text-body-*`, `text-button-*`); eyebrows, big numbers and code are mono (`text-overline-*`, `text-big-number-*`, `text-label-code-*`, `text-body-code-sm`, `text-body-code-lg`, and `text-heading-code-md` for a code the reader compares by eye, such as a device code). Code that wraps or runs over several lines takes a `text-body-code-*` class, which has a real line height; the `text-label-code-*` set is one row per line, with no leading. The heading and big-number classes change size by breakpoint, so a page never sets its own type scale. A big number never wraps: inside a size container (`@container`) it shrinks to fit `--text-big-number-characters` glyphs (less the `--text-big-number-inset` gap width) on one line, which `Stats` sets for you.
 - Weight lives in the role, never in a `font-*` utility. Every role is regular (400) except the `text-title-*` set, which is medium (500): the title of a contained surface, such as a dialog or drawer (`text-title-lg`), a side panel (`text-title-md`), or a popover, card, alert or toast (`text-title-sm`). Those parts already apply it; a page or section heading stays `text-heading-*`, regular, so large display type keeps the brand's light look.
 - Keep heading letter spacing in `em`: the heading classes shrink on phones, and a tracking in `rem` stays the same width while the letters get smaller, so a small display heading runs its words together. `text-heading-3xl` tracks at `-0.046em` and `text-heading-2xl` at `-0.053em` from `md` up (2.56px at their desktop size) and both open to `-0.035em` on phones, so word spaces stay readable at 30px; a new heading role with tracking takes `em` or `0`, never `rem` or `px`.
-- Import the styles once, near your app entry: `import './webkit.css'` (the theme, `@aziontech/theme/fonts.css` for the Azion font faces, and `./webkit.sources.css`, the WebKit files Tailwind compiles; `npx @aziontech/webkit init` writes it) and `import '@aziontech/icons'` for icons (the colour logos come with `./webkit.css`, compiled only for the logos your sources name).
+- Import the styles once, near your app entry: `import './azion-ui.css'` (the theme, `@aziontech/theme/fonts.css` for the Azion font faces, and `./azion-ui.sources.css`, the Azion UI files Tailwind compiles; `npx @aziontech/ui init` writes it) and `import '@aziontech/icons'` for icons (the colour logos come with `./azion-ui.css`, compiled only for the logos your sources name).
 
 ## Don't
 
@@ -115,7 +115,7 @@ Do not "fix" an accepted pair; do not add a pair to this list without the design
 
 ## Chart palettes
 
-WebKit ships **one** chart palette: the values of the `--chart-*` tokens. There are no alternate
+Azion UI ships **one** chart palette: the values of the `--chart-*` tokens. There are no alternate
 palettes in `@aziontech/theme`. An app that offers other palettes (the console API's palette picker)
 sets these variables on the dashboard's root element, and every chart inside re-colours:
 
@@ -146,9 +146,9 @@ sets these variables on the dashboard's root element, and every chart inside re-
   that sets the diverging variables sets all seven.
 - **Eight series, then Other.** A palette has at most eight series; a chart with more folds the
   rest into `--chart-series-other`. A palette never adds `--chart-series-9`.
-- **Where.** On your own root element, or on a webkit tag as a static `style`, an object-literal
-  `:style` or `[--chart-series-1:…]` classes; `webkit/no-style-override` allows exactly these
-  variables (`CHART_PALETTE_VARIABLES` in `@aziontech/webkit/eslint-plugin`) and nothing else.
+- **Where.** On your own root element, or on an Azion UI tag as a static `style`, an object-literal
+  `:style` or `[--chart-series-1:…]` classes; `azion-ui/no-style-override` allows exactly these
+  variables (`CHART_PALETTE_VARIABLES` in `@aziontech/ui/eslint-plugin`) and nothing else.
 
 ## One outline per toolbar
 

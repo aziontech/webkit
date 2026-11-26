@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import Button from '@aziontech/ui/button'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
   import { reactive, ref } from 'vue'
 
   const columns = reactive({ status: true, region: true, updated: false })

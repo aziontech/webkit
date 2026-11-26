@@ -1,8 +1,8 @@
 # Doc Callout
 
-> The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the border, the icon and the radius come from the design system rather than from this layer. Every variant sits on the calm `--bg-surface` of the reading column: the severity reads from the border and the glyph colour, never from a full status fill. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
+> The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the Azion UI `Alert` surface, so the border, the icon and the radius come from the design system rather than from this layer. Every variant sits on the calm `--bg-surface` of the reading column: the severity reads from the border and the glyph colour, never from a full status fill. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
-- Import: `import DocCallout from '@aziontech/webkit/doc-callout'`
+- Import: `import DocCallout from '@aziontech/ui/doc-callout'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-callout.json](doc-callout.json)
 
@@ -27,7 +27,7 @@
 
 ## Related
 
-- `Alert` — the webkit surface this renders on; reach for it directly outside documentation prose.
+- `Alert` — the Azion UI surface this renders on; reach for it directly outside documentation prose.
 - `DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder.
 
 ## Props
@@ -69,7 +69,7 @@
 
 ```vue
 <script setup>
-  import DocCallout from '@aziontech/webkit/doc-callout'
+  import DocCallout from '@aziontech/ui/doc-callout'
 </script>
 
 <template>
@@ -83,7 +83,7 @@
 
 ```vue
 <script setup>
-  import DocCallout from '@aziontech/webkit/doc-callout'
+  import DocCallout from '@aziontech/ui/doc-callout'
 </script>
 
 <template>
@@ -107,7 +107,7 @@
 
 ```vue
 <script setup>
-  import DocCallout from '@aziontech/webkit/doc-callout'
+  import DocCallout from '@aziontech/ui/doc-callout'
 </script>
 
 <template>

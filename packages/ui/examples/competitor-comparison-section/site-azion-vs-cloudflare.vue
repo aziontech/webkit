@@ -1,9 +1,9 @@
 <script setup>
-  import cloudflareExtendedColor from '@aziontech/webkit/assets/cloudflare-extended-color.svg'
-  import cloudflareExtendedReversed from '@aziontech/webkit/assets/cloudflare-extended-reversed.svg'
-  import CompetitorComparisonSection from '@aziontech/webkit/competitor-comparison-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import cloudflareExtendedColor from '@aziontech/ui/assets/cloudflare-extended-color.svg'
+  import cloudflareExtendedReversed from '@aziontech/ui/assets/cloudflare-extended-reversed.svg'
+  import CompetitorComparisonSection from '@aziontech/ui/competitor-comparison-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const competitor = {
     name: 'Cloudflare',

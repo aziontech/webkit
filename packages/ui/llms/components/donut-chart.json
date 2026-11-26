@@ -1,8 +1,8 @@
 {
  "name": "donut-chart",
  "binding": "DonutChart",
- "import": "@aziontech/webkit/donut-chart",
- "treeShakeableImport": "@aziontech/webkit/donut-chart",
+ "import": "@aziontech/ui/donut-chart",
+ "treeShakeableImport": "@aziontech/ui/donut-chart",
  "category": "chart",
  "surface": "app",
  "structure": "monolithic",

@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/code/log-viewer/log-viewer.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/code/log-viewer/log-viewer.vue
 // component=LogViewer
 import figma from 'figma'
 
@@ -31,7 +31,7 @@ export default {
       : ''
   }
 </LogViewer>`,
-  imports: ["import LogViewer from '@aziontech/webkit/log-viewer'"],
+  imports: ["import LogViewer from '@aziontech/ui/log-viewer'"],
   id: 'log-viewer',
   metadata: { nestable: false }
 }

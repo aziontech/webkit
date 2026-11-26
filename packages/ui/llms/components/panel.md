@@ -2,8 +2,8 @@
 
 > The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions. `DialogContent` and `DrawerContent` lay their regions out with it, and a page can render it on its own as a static preview of an overlay.
 
-- Import: `import PanelRoot from '@aziontech/webkit/panel-root'`
-- Compound import (dot notation, not tree-shakeable): `import Panel from '@aziontech/webkit/panel'`
+- Import: `import PanelRoot from '@aziontech/ui/panel-root'`
+- Compound import (dot notation, not tree-shakeable): `import Panel from '@aziontech/ui/panel'`
 - Category: overlay · Surface: app · Structure: composition
 - API as JSON: [panel.json](panel.json)
 
@@ -49,13 +49,13 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/panel-body`
-- `@aziontech/webkit/panel-footer`
-- `@aziontech/webkit/panel-header`
+- `@aziontech/ui/panel-body`
+- `@aziontech/ui/panel-footer`
+- `@aziontech/ui/panel-header`
 
 ## Sub-components
 
-- `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Body` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/webkit/panel`; the root alone is `@aziontech/webkit/panel-root`.
+- `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Body` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/ui/panel`; the root alone is `@aziontech/ui/panel-root`.
 - `panel-body.vue` — Public sub-component `panel-body`. Inside a drawer it wraps its content in a `ScrollArea` (`panel-body`) around the padded region (`panel-body__content`).
 - `panel-footer.vue` — Public sub-component `panel-footer`.
 - `panel-header.vue` — Public sub-component `panel-header`. Inside `DialogContent` / `DrawerContent` it appends the overlay's close button after its content (the content then sits in one flex row that keeps its own start/end spread), while the overlay's `closable` is true; a `PanelHeader` of a nested `Panel` gets nothing. Standalone it renders only its slot.
@@ -84,11 +84,11 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Panel from '@aziontech/webkit/panel-root'
+  import Button from '@aziontech/ui/button'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Panel from '@aziontech/ui/panel-root'
 </script>
 
 <template>

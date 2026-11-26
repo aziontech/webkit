@@ -1,6 +1,6 @@
 import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
-const WEBKIT_PREFIX = '@aziontech/webkit/'
+const AZION_UI_PREFIX = '@aziontech/ui/'
 
 const CLOSING = new Set(['closing-call-to-action-section', 'newsletter-section'])
 
@@ -19,8 +19,8 @@ const kebab = (name) =>
     .toLowerCase()
 
 function subpathOf(source) {
-  if (typeof source !== 'string' || !source.startsWith(WEBKIT_PREFIX)) return null
-  return source.slice(WEBKIT_PREFIX.length)
+  if (typeof source !== 'string' || !source.startsWith(AZION_UI_PREFIX)) return null
+  return source.slice(AZION_UI_PREFIX.length)
 }
 
 function lookup(map, element) {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import AppHeader, { type AppHeaderVariant } from '@aziontech/webkit/app-header'
-  import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb'
-  import NavigationMenu, { type NavigationMenuValue } from '@aziontech/webkit/navigation-menu'
-  import Tabs, { type TabsListAlign, type TabsValue } from '@aziontech/webkit/tabs'
+  import AppHeader, { type AppHeaderVariant } from '@aziontech/ui/app-header'
+  import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/ui/breadcrumb'
+  import NavigationMenu, { type NavigationMenuValue } from '@aziontech/ui/navigation-menu'
+  import Tabs, { type TabsListAlign, type TabsValue } from '@aziontech/ui/tabs'
   import { ref } from 'vue'
 
   const active = ref<TabsValue>('overview')

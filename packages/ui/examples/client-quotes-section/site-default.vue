@@ -1,13 +1,13 @@
 <script setup>
-  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-  import contabilizeiExtendedReversed from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
-  import dafitiExtendedReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
-  import herosparkExtendedColor from '@aziontech/webkit/assets/herospark-extended-color.svg'
-  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import ClientQuotesSection from '@aziontech/webkit/client-quotes-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import axurExtendedReversed from '@aziontech/ui/assets/axur-extended-reversed.svg'
+  import contabilizeiExtendedReversed from '@aziontech/ui/assets/contabilizei-extended-reversed.svg'
+  import dafitiExtendedReversed from '@aziontech/ui/assets/dafiti-extended-reversed.svg'
+  import herosparkExtendedColor from '@aziontech/ui/assets/herospark-extended-color.svg'
+  import magaluExtendedColor from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import zoopExtendedColor from '@aziontech/ui/assets/zoop-extended-color.svg'
+  import ClientQuotesSection from '@aziontech/ui/client-quotes-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const items = [
     {

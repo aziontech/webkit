@@ -105,7 +105,7 @@ Then delete `sample.ts` and its import.
 - **Categories:** `Sign-in`, `Security`, `Users`, `Billing`, `Deploy`.
 - **Empty period:** `No activity in this period`, then `Nothing happened in the account in the selected period. Select a longer period to see older events.` and `Show the last <next preset>`; at 90 days, `Nothing happened in the account in the last 90 days, the longest period events are kept.` with no action.
 - **No match:** `No matching events`, `No event in this period matches these filters.`, `Clear filters`.
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 

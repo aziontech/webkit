@@ -1,4 +1,4 @@
-import type { SiteLayoutFooter, SiteLayoutNavigation } from '@aziontech/webkit/site-layout'
+import type { SiteLayoutFooter, SiteLayoutNavigation } from '@aziontech/ui/site-layout'
 
 export const sampleNavigation: SiteLayoutNavigation = {
   home: '/en/',

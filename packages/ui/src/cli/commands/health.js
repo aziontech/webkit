@@ -3,13 +3,13 @@ import { exitCodeFor, formatCheck, runCheck, withNavigation } from '../check.js'
 import { planSources, SOURCES_FILE, writeSources } from '../css-sources.js'
 import { planDoctor } from '../doctor.js'
 import { FAIL_MODES, FORMATS, runReport } from '../report.js'
-import { resolveWebkit } from '../source.js'
+import { resolveAzionUi } from '../source.js'
 import { err, json, out } from './output.js'
 
 const DOCTOR_LABEL = { ok: 'OK   ', warn: 'WARN ', fail: 'FAIL ' }
 
 export function runDoctor(projectDir) {
-  out(`\n@aziontech/webkit doctor\nproject: ${projectDir}\n\n`)
+  out(`\n@aziontech/ui doctor\nproject: ${projectDir}\n\n`)
   const report = planDoctor(projectDir)
   for (const { check, status, detail } of report) {
     const [head, ...rest] = detail.split('\n')
@@ -24,10 +24,10 @@ export function runDoctor(projectDir) {
 
 export function runCss(projectDir, parsed) {
   const plan = planSources(projectDir)
-  const summary = `${plan.files.length} WebKit file(s) for ${plan.subpaths.length} import(s)`
+  const summary = `${plan.files.length} Azion UI file(s) for ${plan.subpaths.length} import(s)`
   if (!plan.resolved && plan.subpaths.length) {
     err(
-      `@aziontech/webkit is not installed here, so ${SOURCES_FILE} cannot list the files of ${plan.subpaths.length} import(s). Install it first.\n`
+      `@aziontech/ui is not installed here, so ${SOURCES_FILE} cannot list the files of ${plan.subpaths.length} import(s). Install it first.\n`
     )
     return 1
   }
@@ -54,7 +54,7 @@ export async function runCheckCommand(projectDir, parsed) {
     }
   }
   const result = await withNavigation(
-    runCheck(projectDir, resolveWebkit(projectDir), { lint: !parsed.noLint }),
+    runCheck(projectDir, resolveAzionUi(projectDir), { lint: !parsed.noLint }),
     projectDir,
     parsed.urls
   )

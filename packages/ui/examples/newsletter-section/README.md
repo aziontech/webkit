@@ -1,6 +1,6 @@
 # NewsletterSection
 
-The close whose ask is a subscribe form. It is `NewsletterSection` from `@aziontech/webkit/newsletter-section`.
+The close whose ask is a subscribe form. It is `NewsletterSection` from `@aziontech/ui/newsletter-section`.
 
 ## Examples
 

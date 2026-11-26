@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   export interface StepBackProps {
     /** The name of the back control, also its tooltip. */

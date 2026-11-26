@@ -1,5 +1,5 @@
 <script setup>
-  import Eyebrow from '@aziontech/webkit/eyebrow'
+  import Eyebrow from '@aziontech/ui/eyebrow'
 </script>
 
 <template>

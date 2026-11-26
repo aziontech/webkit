@@ -3,10 +3,10 @@
 > The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, the view-table controls row (`PropertyFilter` over name, description and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `DataTable` of tokens (name, description, `TableCellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `TableCellTime` for last use and creation, `TableCellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date, or a custom date and time picked in a `DatePickerRoot` (the DatePicker) with `show-time`), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
-- Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-personal-tokens/account-personal-tokens.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-personal-tokens")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DatePickerRoot`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Textarea](../../components/textarea.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-form`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -65,7 +65,7 @@ When the page sets `v-model:secret` to what the create request returned, the dra
 
 ### J. Confirmations and outcomes — `ConfirmDialog` (required)
 
-Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone, then marks the row revoked and emits `revoke`. Delete asks the same way, removes the row and emits `delete`. The page that runs the request ends both in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy. The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Revoke asks in a danger `ConfirmDialog` that says what stops working and that it cannot be undone, then marks the row revoked and emits `revoke`. Delete asks the same way, removes the row and emits `delete`. The page that runs the request ends both in a success toast; a create, revoke or delete is not a deploy, so the toast carries no Edit or Redeploy. The page calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -148,7 +148,7 @@ Then delete `sample.ts` and its import.
 - **Status:** `Active`, `Expires in 3 days`, `Expired`, `Revoked`. **Last used:** relative time, or `Never used`.
 - **Reveal:** title `Copy your new token`; warning `Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost.`
 - **Revoke:** title `Revoke token`; description `Scripts and tools that use “<name>” stop working right away. You cannot undo this.`; button `Revoke token`; toast `Token “<name>” revoked. Requests that use it are now refused.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -188,22 +188,22 @@ Each variant is the same screen in another state: `get_block("account/account-pe
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { type TableColumn } from '@aziontech/webkit/table'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { type TableColumn } from '@aziontech/ui/table'
+  import type { TagSeverity } from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { type FilteringProperty, useCollection } from '@aziontech/ui/use-collection'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import CreateTokenDrawer from './parts/create-token-drawer.vue'
@@ -636,20 +636,20 @@ export const sampleTokens: PersonalTokensToken[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import Input from '@aziontech/webkit/input'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Button from '@aziontech/ui/button'
+  import DatePickerRoot from '@aziontech/ui/date-picker-root'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Field from '@aziontech/ui/field'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import Input from '@aziontech/ui/input'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Textarea from '@aziontech/ui/textarea'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   import type { PersonalTokensCreateValues } from '../account-personal-tokens.vue'
@@ -871,18 +871,18 @@ export const sampleTokens: PersonalTokensToken[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import Field from '@aziontech/webkit/field'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PasswordInput from '@aziontech/webkit/password-input'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import Field from '@aziontech/ui/field'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import PasswordInput from '@aziontech/ui/password-input'
   import { computed, ref } from 'vue'
 
   import type { PersonalTokensSecret } from '../account-personal-tokens.vue'
@@ -974,21 +974,21 @@ export const sampleTokens: PersonalTokensToken[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import { type TableColumn, type TableExposed } from '@aziontech/ui/table'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import type { TagSeverity } from '@aziontech/ui/tag'
   import type {
     CollectionPaginationProps,
     CollectionTableProps
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
   import { ref } from 'vue'
 
   import type { PersonalTokensToken } from '../account-personal-tokens.vue'

@@ -1,5 +1,5 @@
 <script setup>
-  import DateRangePicker from '@aziontech/webkit/date-range-picker'
+  import DateRangePicker from '@aziontech/ui/date-range-picker'
   import { ref } from 'vue'
 
   const zones = ['UTC', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Asia/Tokyo']

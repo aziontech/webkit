@@ -24,7 +24,7 @@
     },
     {
       "name": "Integrations",
-      "summary": "The Data Stream connectors. Elastic and Kafka resolve to their marks; Datadog, Splunk, Google BigQuery, Amazon Kinesis and Amazon S3 are text wordmarks, because their owners' terms do not let WebKit ship the logo in a one-ink row. Name them like any mark (`splunk`, `amazon-s3`) and the row writes each brand's proper name in WebKit's own type and colour, one gap from the artwork beside it. When an owner grants its logo, the artwork replaces the text with no change at the call site.",
+      "summary": "The Data Stream connectors. Elastic and Kafka resolve to their marks; Datadog, Splunk, Google BigQuery, Amazon Kinesis and Amazon S3 are text wordmarks, because their owners' terms do not let Azion UI ship the logo in a one-ink row. Name them like any mark (`splunk`, `amazon-s3`) and the row writes each brand's proper name in Azion UI's own type and colour, one gap from the artwork beside it. When an owner grants its logo, the artwork replaces the text with no change at the call site.",
       "file": "integrations.vue"
     },
     {

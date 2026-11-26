@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 import { loadCatalogFrom } from '../catalog/catalog.js'
 
-export const PACKAGE_NAME = '@aziontech/webkit'
+export const PACKAGE_NAME = '@aziontech/ui'
 const OWN_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 
 function readJson(path) {
@@ -18,7 +18,7 @@ function readJson(path) {
 
 function installedRoot(projectDir) {
   try {
-    const require = createRequire(join(projectDir, '__webkit_resolve__.js'))
+    const require = createRequire(join(projectDir, '__azion_ui_resolve__.js'))
     return dirname(require.resolve(`${PACKAGE_NAME}/package.json`))
   } catch {
     return null
@@ -29,7 +29,7 @@ function exportSet(pkg) {
   return new Set(Object.keys(pkg?.exports || {}).map((key) => key.replace(/^\.\/?/, '')))
 }
 
-export function resolveWebkit(projectDir) {
+export function resolveAzionUi(projectDir) {
   const installed = installedRoot(projectDir)
   const installedPkg = installed ? readJson(join(installed, 'package.json')) : null
   const root = installed && existsSync(join(installed, 'blocks')) ? installed : OWN_ROOT
@@ -44,10 +44,10 @@ export function resolveWebkit(projectDir) {
   }
 }
 
-export function catalogFor(webkit) {
-  const path = join(webkit.root, 'catalog.json')
+export function catalogFor(ui) {
+  const path = join(ui.root, 'catalog.json')
   if (!existsSync(path)) {
-    throw new Error(`${PACKAGE_NAME}@${webkit.version} ships no catalog.json at ${path}`)
+    throw new Error(`${PACKAGE_NAME}@${ui.version} ships no catalog.json at ${path}`)
   }
   return loadCatalogFrom(path)
 }

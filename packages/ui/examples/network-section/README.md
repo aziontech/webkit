@@ -4,7 +4,7 @@ A framed section that makes the case for Azion's distributed infrastructure: a h
 
 The headline sits at the top and the claims at the bottom, so the map shows between them. On phones the map moves into its own box between the headline and the claims, so no text ever sits on it.
 
-The band is the `NetworkSection` component from `@aziontech/webkit/network-section`; it composes `Module`, `RegistrationFrame`, `NetworkMap`, `ModuleHeader`, and, on the floor, `CardGrid` with a `Quote` per client or a `FeatureItem` per benefit, or `Stats` for figures. `variant` picks the floor: `outcomes` (the default), `benefits` or `stats`.
+The band is the `NetworkSection` component from `@aziontech/ui/network-section`; it composes `Module`, `RegistrationFrame`, `NetworkMap`, `ModuleHeader`, and, on the floor, `CardGrid` with a `Quote` per client or a `FeatureItem` per benefit, or `Stats` for figures. `variant` picks the floor: `outcomes` (the default), `benefits` or `stats`.
 
 ## Examples
 

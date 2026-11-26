@@ -6,7 +6,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-04
 last_updated: 2026-11-17
-checksum: 01b493bd3495b61aa35a1df0e7ba6e1cf75c88249d84c1321b41de82fe2a0d67
+checksum: b8ef33b77dcc3463712c1da5ce10a69b46f334ad5636fd51d7fff4153ab27999
 ---
 
 # FeatureTilesSection — Component Spec
@@ -40,7 +40,7 @@ The reasons band of a marketing page: an optional centered section title over a 
 
 ```vue
 <script setup>
-  import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'
+  import FeatureTilesSection from '@aziontech/ui/feature-tiles-section'
 </script>
 
 <template>
@@ -130,7 +130,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

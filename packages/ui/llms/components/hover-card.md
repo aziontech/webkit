@@ -2,8 +2,8 @@
 
 > Rich preview that appears beside a link or name when the pointer rests on it or keyboard focus reaches it, and goes away when both leave. The root `HoverCard` owns the open state, the open and close delays and positioning (the shared `usePlacement`, the same engine as `Popover`); `HoverCard.Trigger` wraps the element being previewed; `HoverCard.Content` is the floating card. It sits between `Tooltip` (one line of plain text) and `Popover` (opened by a click, holds interactive content): the card shows a few lines of supplementary context, such as a person, a resource or a commit, without asking for a click.
 
-- Import: `import HoverCardRoot from '@aziontech/webkit/hover-card-root'`
-- Compound import (dot notation, not tree-shakeable): `import HoverCard from '@aziontech/webkit/hover-card'`
+- Import: `import HoverCardRoot from '@aziontech/ui/hover-card-root'`
+- Compound import (dot notation, not tree-shakeable): `import HoverCard from '@aziontech/ui/hover-card'`
 - Category: overlay · Surface: app · Structure: composition
 - API as JSON: [hover-card.json](hover-card.json)
 
@@ -54,8 +54,8 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/hover-card-trigger`
-- `@aziontech/webkit/hover-card-content`
+- `@aziontech/ui/hover-card-trigger`
+- `@aziontech/ui/hover-card-content`
 
 ## Sub-components
 
@@ -118,9 +118,9 @@ No built-in strings: the card shows only consumer content.
 
 ```vue
 <script setup>
-  import Avatar from '@aziontech/webkit/avatar'
-  import HoverCard from '@aziontech/webkit/hover-card'
-  import Link from '@aziontech/webkit/link'
+  import Avatar from '@aziontech/ui/avatar'
+  import HoverCard from '@aziontech/ui/hover-card'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>
@@ -156,9 +156,9 @@ No built-in strings: the card shows only consumer content.
 
 ```vue
 <script setup>
-  import HoverCard from '@aziontech/webkit/hover-card'
-  import Link from '@aziontech/webkit/link'
-  import Tag from '@aziontech/webkit/tag'
+  import HoverCard from '@aziontech/ui/hover-card'
+  import Link from '@aziontech/ui/link'
+  import Tag from '@aziontech/ui/tag'
 </script>
 
 <template>
@@ -202,8 +202,8 @@ No built-in strings: the card shows only consumer content.
 
 ```vue
 <script setup>
-  import HoverCard from '@aziontech/webkit/hover-card'
-  import Link from '@aziontech/webkit/link'
+  import HoverCard from '@aziontech/ui/hover-card'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

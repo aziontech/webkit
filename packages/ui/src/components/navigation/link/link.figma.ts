@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/link/link.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/link/link.vue
 // component=Link
 import figma from 'figma'
 
@@ -27,7 +27,7 @@ export default {
   }
   href="#"
 />`,
-  imports: ["import Link from '@aziontech/webkit/link'"],
+  imports: ["import Link from '@aziontech/ui/link'"],
   id: 'link',
   metadata: { nestable: true }
 }

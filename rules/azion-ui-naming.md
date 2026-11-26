@@ -1,12 +1,12 @@
-# Rule: one name per thing — the WebKit naming standard in your app
+# Rule: one name per thing — the Azion UI naming standard in your app
 
-WebKit names every component, prop, value, slot, event, icon, test id and block with one
-standard. Code that uses WebKit reads the same everywhere when you use those words exactly,
+Azion UI names every component, prop, value, slot, event, icon, test id and block with one
+standard. Code that uses Azion UI reads the same everywhere when you use those words exactly,
 and components, composables and handlers you author in this project follow the same shapes,
 so a person or an agent never has to guess which of three spellings is the right one.
 
-Old names from before 6.0 do not work: the ESLint rule `webkit/no-deprecated-name` flags
-them, and `npx @aziontech/webkit migrate` rewrites them for you.
+Old names from before 6.0 do not work: the ESLint rule `azion-ui/no-deprecated-name` flags
+them, and `npx @aziontech/ui migrate` rewrites them for you.
 
 ## Imports and bindings
 
@@ -17,10 +17,10 @@ them, and `npx @aziontech/webkit migrate` rewrites them for you.
   `SiteFooterSection`), and its kebab name is the `_id` in a site page's `sections[]`; the
   building pieces it is made of keep the bare name (`Hero`, `Stats`, `Quote`).
 
-| ✅                                                       | ❌                                                                           |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `import EmptyState from '@aziontech/webkit/empty-state'` | `import Empty from '@aziontech/webkit/empty-state'` (binding does not match) |
-| `<Dialog.Header>`                                        | `<DialogPanelContent>` (not a part name)                                     |
+| ✅                                                   | ❌                                                                       |
+| ---------------------------------------------------- | ------------------------------------------------------------------------ |
+| `import EmptyState from '@aziontech/ui/empty-state'` | `import Empty from '@aziontech/ui/empty-state'` (binding does not match) |
+| `<Dialog.Header>`                                    | `<DialogPanelContent>` (not a part name)                                 |
 
 ## Props and values
 
@@ -42,7 +42,7 @@ them, and `npx @aziontech/webkit migrate` rewrites them for you.
 | Optional part on or off           | `show-header`, `show-line-numbers`                             | `hide-header`                                            |
 | A capability                      | `sortable`, `copyable`, `closable`                             | `sortable`                                               |
 
-The full dictionary is [`webkit-prop-vocabulary.md`](./webkit-prop-vocabulary.md).
+The full dictionary is [`azion-ui-prop-vocabulary.md`](./azion-ui-prop-vocabulary.md).
 
 ## Slots and events
 
@@ -77,7 +77,7 @@ Solution has its product or Solution icon, named after the product (`az az-orche
 
 ## Test ids
 
-A WebKit component's `data-testid` is its own kebab name, with no category: `button`,
+An Azion UI component's `data-testid` is its own kebab name, with no category: `button`,
 `dialog`, `dialog-header`. Inner elements are `<testid>__<part>`. Pass your own
 `data-testid` on the tag to override it.
 
@@ -94,14 +94,14 @@ is named after its state: `loading`, `empty`, `error`, `success`, `<subject>-<st
 (`deploy-error`), or `no-<thing>`.
 
 ```bash
-npx @aziontech/webkit add create/create-hub#repositories-loading
+npx @aziontech/ui add create/create-hub#repositories-loading
 ```
 
 ## Naming your own code the same way
 
 - **Components:** kebab file and folder (`invoice-card.vue`), PascalCase name, modifier first
   (`invoice-card`, never `card-invoice`), whole English words (`navigation`, never `nav`).
-- **Props, slots, events:** the words above; do not invent a synonym for a concept WebKit
+- **Props, slots, events:** the words above; do not invent a synonym for a concept Azion UI
   already names.
 - **Composables:** file `use-x.ts` exporting `useX`.
 - **Handlers:** `onX` in Vue's DOM casing — `onClick`, `onKeydown`, `onPointerdown` — never
@@ -114,7 +114,7 @@ npx @aziontech/webkit add create/create-hub#repositories-loading
 
 ## Don't
 
-- Never use a pre-6.0 name; run `npx @aziontech/webkit migrate` instead of fixing call sites
+- Never use a pre-6.0 name; run `npx @aziontech/ui migrate` instead of fixing call sites
   by hand.
 - Never write `left` / `right` for a position, side or alignment — it breaks in right-to-left.
   The one exception is an edge of a picture that does not mirror (`NetworkMap` `fade` and
@@ -126,8 +126,8 @@ npx @aziontech/webkit add create/create-hub#repositories-loading
 
 ## Enforcement
 
-- **`webkit/no-deprecated-name`** (ESLint, in the presets `webkit init` installs) flags a
-  retired component import, a renamed prop on a WebKit tag and a retired icon class, each with
-  its replacement, read from the migration maps WebKit ships.
-- **`npx @aziontech/webkit migrate`** rewrites the same names from the same maps.
+- **`azion-ui/no-deprecated-name`** (ESLint, in the presets `azion-ui init` installs) flags a
+  retired component import, a renamed prop on an Azion UI tag and a retired icon class, each with
+  its replacement, read from the migration maps Azion UI ships.
+- **`npx @aziontech/ui migrate`** rewrites the same names from the same maps.
 - Names in the components you author are held in review.

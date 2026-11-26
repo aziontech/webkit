@@ -2,8 +2,8 @@
 
 > The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `SidebarMenu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`, sets its own trail with `ConsoleLayout.Breadcrumb`, opens its help in the tools region with `ConsoleLayout.ToolsTrigger` (the `Info` link after its title), and fills a fixed-height main with `data-layout-fill` on its root. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
 
-- Import: `import ConsoleLayoutRoot from '@aziontech/webkit/console-layout-root'`
-- Compound import (dot notation, not tree-shakeable): `import ConsoleLayout from '@aziontech/webkit/console-layout'`
+- Import: `import ConsoleLayoutRoot from '@aziontech/ui/console-layout-root'`
+- Compound import (dot notation, not tree-shakeable): `import ConsoleLayout from '@aziontech/ui/console-layout'`
 - Category: layout · Surface: app · Structure: composition
 - API as JSON: [console-layout.json](console-layout.json)
 
@@ -16,7 +16,7 @@
 ## Do
 
 - Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
-- Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/prefer-href-in-menu-node`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
+- Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `azion-ui/prefer-href-in-menu-node`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
 - Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
 - A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumb`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `variant="ghost"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place. While compact the crumbs are hidden, but the controls stay in the header in place of the brand, so a phone user always sees and can switch the environment.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
@@ -26,13 +26,13 @@
 - Page help (level D of the in-product help standard) is a `HelpPanel` in the `tools` slot, opened by `ConsoleLayout.ToolsTrigger` placed first in `PageHeader`'s `meta` slot, so the `Info` link sits right after the page title on the same line. One per page. Never a boxed `IconButton`, a typed `?` or a `Tooltip` to open page help; never hand-build the toggle with `useConsoleLayout()` and a `Button`.
 - The app-wide help or notifications entry in the header (`actions` with `toggleTools`) and a page's `Info` link drive the same tools region: the page swaps the panel's topic in the trigger's `click` handler, which runs before the region toggles. To keep the region open while switching topic, call `event.preventDefault()` in the handler and then `useConsoleLayout().openTools()`.
 - A section of a page (a `Subheader`, a `SettingsGroup`, a `Card` header) takes no `Info` link: one per page, after the h1. A section explains itself with its `description` (level A) or a `Hint` after its title (level C).
-- A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
+- A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `azion-ui/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
 - Bind `v-model:navigation-open` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
-- Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`. `useConsoleLayout()` throws outside a `ConsoleLayout`, so a misplaced call fails loudly.
+- Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/ui/use-console-layout`); never mount a second `Command`. `useConsoleLayout()` throws outside a `ConsoleLayout`, so a misplaced call fails loudly.
 - A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
 - The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
-- A destination appears once per screen (rule `webkit-navigation-levels`): never render a `SidebarMenu` in the page body: page navigation lives in the rail and a page has only its `PageTabs`. The rail holds two levels at most: a product with 3 or fewer resources lists them on level 1, a product with more is a drill row whose level lists them, and no drill level nests another. In development builds the layout scans the `SidebarMenu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
+- A destination appears once per screen (rule `azion-ui-navigation-levels`): never render a `SidebarMenu` in the page body: page navigation lives in the rail and a page has only its `PageTabs`. The rail holds two levels at most: a product with 3 or fewer resources lists them on level 1, a product with more is a drill row whose level lists them, and no drill level nests another. In development builds the layout scans the `SidebarMenu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
 
 ## Don’t
 
@@ -89,15 +89,15 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/console-layout-breadcrumb`
-- `@aziontech/webkit/console-layout-tools-trigger`
+- `@aziontech/ui/console-layout-breadcrumb`
+- `@aziontech/ui/console-layout-tools-trigger`
 
 ## Sub-components
 
 The root ships a compound API via `index.ts` (`Object.assign` attaches the part; vue-tsc emits `index.d.ts`), and `index.ts` re-exports the root's types (`ConsoleLayoutNavGroup`, `ConsoleLayoutNavItem`, `BreadcrumbItemData`, `ConsoleLayoutAccount`). Root binding is PascalCase `ConsoleLayout`.
 
 ```
-packages/webkit/src/components/layout/console-layout/
+packages/ui/src/components/layout/console-layout/
 ├── console-layout.vue          (root — the chrome, provides the context)
 ├── index.ts                    (compound Object.assign)
 ├── injection-key.ts            (the page context and the trail registry)
@@ -141,10 +141,10 @@ packages/webkit/src/components/layout/console-layout/
 
 - Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `AppHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
 - Skip link: the first `Tab` stop is the `SkipLink` `AppLayout` renders (`Skip to content`); it jumps past the rail and the header to the content region that holds the `<main>`.
-- Keyboard map: `Tab` runs skip link → rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. `?` (`Shift /`) opens the layout's one `ShortcutsDialog`, which lists every shortcut the current screen registers with `useShortcuts` (`@aziontech/webkit/use-shortcuts`); the layout lists `⌘K` there (`consoleLayout.searchShortcut`) without binding it a second time (`Command` owns the key). The app does not mount a second `ShortcutsDialog` under the layout. Tests: `console-layout.test.ts` › shortcuts list. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
+- Keyboard map: `Tab` runs skip link → rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. `?` (`Shift /`) opens the layout's one `ShortcutsDialog`, which lists every shortcut the current screen registers with `useShortcuts` (`@aziontech/ui/use-shortcuts`); the layout lists `⌘K` there (`consoleLayout.searchShortcut`) without binding it a second time (`Command` owns the key). The app does not mount a second `ShortcutsDialog` under the layout. Tests: `console-layout.test.ts` › shortcuts list. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them and then says whose menu it is (`JD, Jane Doe, account menu`, `consoleLayout.accountMenuFor`; the initials are the first letters of the first and last words of the name, as `Avatar` draws them) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
-- Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- Visible focus: every interactive part is an Azion UI control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it, and so does any route change, so a link or a list in `sidebar-header` (a chat history) that navigates also closes the drawer and shows the page.
 - A page's control crumb is the last item of the header's `Breadcrumb` list (while compact, the only items of a `Breadcrumb` list that holds just the controls); it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
 - Page help: `ConsoleLayout.ToolsTrigger` is a native `button` (a disclosure: `Enter` and `Space` toggle) with `aria-expanded` and, while open, `aria-controls` pointing at the tools region's body (`useId()`-based, stable in the server render). Its name is the visible `Info` or an `aria-label` that starts with it. Focus stays on the trigger when the region opens; the region's close button (`AppLayout`) and the trigger both close it. Tests: `console-layout.test.ts` › tools trigger.
@@ -188,17 +188,15 @@ packages/webkit/src/components/layout/console-layout/
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Command from '@aziontech/webkit/command'
-  import ConsoleLayoutRoot, {
-    type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import HighlightButton from '@aziontech/webkit/highlight-button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Command from '@aziontech/ui/command'
+  import ConsoleLayoutRoot, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import HighlightButton from '@aziontech/ui/highlight-button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [
@@ -360,12 +358,10 @@ packages/webkit/src/components/layout/console-layout/
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConsoleLayoutRoot, {
-    type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
+  import Button from '@aziontech/ui/button'
+  import ConsoleLayoutRoot, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { useConsoleLayout } from '@aziontech/ui/use-console-layout'
   import { defineComponent, h } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [
@@ -419,11 +415,9 @@ packages/webkit/src/components/layout/console-layout/
 
 ```vue
 <script setup lang="ts">
-  import Command from '@aziontech/webkit/command'
-  import ConsoleLayoutRoot, {
-    type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Command from '@aziontech/ui/command'
+  import ConsoleLayoutRoot, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+  import PageHeader from '@aziontech/ui/page-header'
   import { ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [

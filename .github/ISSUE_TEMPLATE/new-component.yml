@@ -1,5 +1,5 @@
 name: New component
-description: Request a new WebKit component. An agent builds it through /component-new from this issue.
+description: Request a new Azion UI component. An agent builds it through /component-new from this issue.
 title: 'component: <name>'
 labels: ['new-component', 'ai-flow']
 body:
@@ -54,7 +54,7 @@ body:
     id: surface
     attributes:
       label: Surface
-      description: Where it is used first; a content component works in all three (`rules/webkit-content-channels.md`).
+      description: Where it is used first; a content component works in all three (`rules/azion-ui-content-channels.md`).
       options:
         - app
         - site

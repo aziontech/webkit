@@ -20,7 +20,7 @@ test('each photograph is exported and mapped for page JSON as WebP, and stays li
     const webp = exportsMap[`./assets/${name}.webp`]
     assert.ok(webp, `no ./assets/${name}.webp export`)
     assert.equal(exportsMap[`./assets/${name}.jpg`], undefined)
-    assert.ok(Object.values(siteAssets).includes(`@aziontech/webkit/assets/${name}.webp`))
+    assert.ok(Object.values(siteAssets).includes(`@aziontech/ui/assets/${name}.webp`))
     assert.ok(statSync(join(PKG, webp)).size < 50 * 1024, `${name}.webp is over 50 KB`)
   }
 })

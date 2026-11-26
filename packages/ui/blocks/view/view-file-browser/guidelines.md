@@ -198,7 +198,7 @@ A file's object key is `path + entry.name`. To go live on Azion Object Storage, 
 - **Drop overlay:** `Drop files to upload them to <folder>`, description `Up to 300 MB per file.`
 - **Move dialog:** title `Move <name>` or `Move 2 files`, field `Destination folder`, placeholder `/ (storage root)`, errors `Use letters, numbers, dots, hyphens and slashes only.`, `A destination cannot go up with "..". Type the full path.`, `The files are already in this folder. Pick another one.`
 - **Toasts:** `5 files uploaded to acme-assets.` with Open folder; `1 of 5 files weren't uploaded.` with Retry failed; `2 files moved to logs/.` with Open folder.
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -232,4 +232,4 @@ A file's object key is `path + entry.name`. To go live on Azion Object Storage, 
 - `detail/detail-dns-zone` — records of a resource, not files.
 - `FileTokenGroup`, `FileDropzone` and `UploadProgress` — the upload pieces; see their component docs.
 - `state/state-async-submit` — the rule for long actions; storage transfers follow it with item actions instead of Edit and Redeploy.
-- `DataTable` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.
+- `DataTable` — the data-driven table this page wraps; see `skills/azion-ui-tables` and `skills/azion-ui-lists`.

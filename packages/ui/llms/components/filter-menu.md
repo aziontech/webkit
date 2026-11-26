@@ -2,8 +2,8 @@
 
 > The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu. The first level lists the fields, each with a summary of what is applied to it; picking a field slides to its values (check rows for a `multiple` field, radio rows for a `single` one, an optional avatar per value, a search box and a no-match line), and a `date` field offers periods plus a custom whole-day range on a `DateRangePicker` (`range-selector-mode="absolute-only"`, no times, no zone selector). Back returns to the fields, Clear removes the field's filter, and the panel's height follows each level. `FilterMenu.ChipGroup` shows the applied fields as chips under the controls row: the field label in muted ink, an avatar stack, the first value and `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a `Record<fieldId, values[]>` bound with `v-model`; the menu never filters anything itself. Inside a DataTable, `TableFilter type="menu"` renders it and `FilterMenu.ChipGroup` with no `fields` renders its chips, both mapped onto the table's `filters` model. It differs from `property-filter` (one text field that builds `property operator value` tokens and combines them with operators and and/or): this menu offers only the values a field has, one click each, which is what most lists need.
 
-- Import: `import FilterMenuRoot from '@aziontech/webkit/filter-menu-root'`
-- Compound import (dot notation, not tree-shakeable): `import FilterMenu from '@aziontech/webkit/filter-menu'`
+- Import: `import FilterMenuRoot from '@aziontech/ui/filter-menu-root'`
+- Compound import (dot notation, not tree-shakeable): `import FilterMenu from '@aziontech/ui/filter-menu'`
 - Category: data · Surface: app · Structure: composition
 - API as JSON: [filter-menu.json](filter-menu.json)
 
@@ -52,7 +52,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/filter-menu-chip-group`
+- `@aziontech/ui/filter-menu-chip-group`
 
 ## Sub-components
 
@@ -80,7 +80,7 @@ field. That is the one applied-filters row of a table.
 Resulting layout:
 
 ```
-packages/webkit/src/components/data/filter-menu/
+packages/ui/src/components/data/filter-menu/
 ├── filter-menu.vue
 ├── filter-menu.test.ts
 ├── index.ts
@@ -190,7 +190,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ```vue
 <script setup>
-  import FilterMenu from '@aziontech/webkit/filter-menu'
+  import FilterMenu from '@aziontech/ui/filter-menu'
   import { ref } from 'vue'
 
   const fields = [
@@ -236,7 +236,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ```vue
 <script setup>
-  import FilterMenu from '@aziontech/webkit/filter-menu-root'
+  import FilterMenu from '@aziontech/ui/filter-menu-root'
   import { ref } from 'vue'
 
   const fields = [

@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Link from '@aziontech/webkit/link'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup>
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
   import { ref } from 'vue'
 
   const definition = [

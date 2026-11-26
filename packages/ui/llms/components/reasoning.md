@@ -2,7 +2,7 @@
 
 > Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is done, with the trace inside. Collapsed by default in a chat, where the response is the main content. The duration comes from the server (`duration`) or is measured from `streaming` turning on to turning off, rounded to whole seconds. An optional `Skip thinking` lets the reader ask for the response now.
 
-- Import: `import Reasoning from '@aziontech/webkit/reasoning'`
+- Import: `import Reasoning from '@aziontech/ui/reasoning'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [reasoning.json](reasoning.json)
 
@@ -105,7 +105,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 ```vue
 <script setup>
-  import Reasoning from '@aziontech/webkit/reasoning'
+  import Reasoning from '@aziontech/ui/reasoning'
 </script>
 
 <template>
@@ -126,7 +126,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 ```vue
 <script setup>
-  import Reasoning from '@aziontech/webkit/reasoning'
+  import Reasoning from '@aziontech/ui/reasoning'
   import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   const steps = [

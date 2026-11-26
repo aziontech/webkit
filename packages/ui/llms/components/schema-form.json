@@ -1,8 +1,8 @@
 {
  "name": "schema-form",
  "binding": "SchemaForm",
- "import": "@aziontech/webkit/schema-form",
- "treeShakeableImport": "@aziontech/webkit/schema-form",
+ "import": "@aziontech/ui/schema-form",
+ "treeShakeableImport": "@aziontech/ui/schema-form",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

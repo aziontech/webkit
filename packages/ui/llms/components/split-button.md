@@ -2,7 +2,7 @@
 
 > A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by an `items` array. The primary button runs the default action; the joined toggle composes `dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.
 
-- Import: `import SplitButton from '@aziontech/webkit/split-button'`
+- Import: `import SplitButton from '@aziontech/ui/split-button'`
 - Category: action · Surface: app · Structure: monolithic
 - API as JSON: [split-button.json](split-button.json)
 
@@ -111,7 +111,7 @@
 
 ```vue
 <script setup>
-  import SplitButton from '@aziontech/webkit/split-button'
+  import SplitButton from '@aziontech/ui/split-button'
 
   const items = [
     { label: 'Update', value: 'update', icon: 'az az-refresh' },
@@ -135,7 +135,7 @@
 
 ```vue
 <script setup>
-  import SplitButton from '@aziontech/webkit/split-button'
+  import SplitButton from '@aziontech/ui/split-button'
 
   const items = [
     { label: 'Update', value: 'update', icon: 'az az-refresh' },
@@ -169,7 +169,7 @@
 
 ```vue
 <script setup>
-  import SplitButton from '@aziontech/webkit/split-button'
+  import SplitButton from '@aziontech/ui/split-button'
 
   const items = [
     { label: 'Update', value: 'update', icon: 'az az-refresh' },

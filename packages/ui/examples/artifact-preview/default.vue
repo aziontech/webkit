@@ -1,6 +1,6 @@
 <script setup>
-  import ArtifactPreview from '@aziontech/webkit/artifact-preview'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import ArtifactPreview from '@aziontech/ui/artifact-preview'
+  import CodeBlock from '@aziontech/ui/code-block'
   import { ref } from 'vue'
 
   const opened = ref(false)

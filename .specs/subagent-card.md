@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 22d7299bd635e219ad04f9f9cb7ac31322fa235f2da54813d81b302b6e81b242
+checksum: 2fcdab9b7e23d24c48462a23c49f5474c187203d4703df8fe8dc120b488891f6
 created: 2026-11-19
 last_updated: 2026-11-22
 ---
@@ -57,8 +57,8 @@ never uses.
 
 ```vue
 <script setup>
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import SubagentCard from '@aziontech/ui/subagent-card'
 </script>
 
 <template>
@@ -191,7 +191,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/subagent-card/`: Default (every status as a static row, with elapsed time and a summary line), With messages (a running helper opened with its messages, `Stop`, a nested helper, and a failed helper with its task)._
+_Examples in `packages/ui/examples/subagent-card/`: Default (every status as a static row, with elapsed time and a summary line), With messages (a running helper opened with its messages, `Stop`, a nested helper, and a failed helper with its task)._
 
 ## Constraints — DO NOT
 
@@ -200,7 +200,7 @@ _Examples in `packages/webkit/examples/subagent-card/`: Default (every status as
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

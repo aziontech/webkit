@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import Alert from '@aziontech/webkit/alert'
-  import Badge from '@aziontech/webkit/badge'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Accordion from '@aziontech/ui/accordion'
+  import Alert from '@aziontech/ui/alert'
+  import Badge from '@aziontech/ui/badge'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Select from '@aziontech/ui/select'
+  import Switch from '@aziontech/ui/switch'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import {
     dependencyCount,

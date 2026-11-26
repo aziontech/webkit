@@ -3,7 +3,7 @@ name: key-value-list
 category: content
 structure: composition
 status: implemented
-checksum: 62f83b9cbcaca854cc7d6935f01909d408c543968e13fddc76d78b15a8d02845
+checksum: 9dd07d22752bd8a560e0f90129fc078a47f37c2e1c8f2ceefb896f251dfa4ea1
 spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-24
@@ -58,11 +58,11 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
 
 ```vue
 <script setup>
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import Hint from '@aziontech/webkit/hint'
-  import Link from '@aziontech/webkit/link'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import Hint from '@aziontech/ui/hint'
+  import Link from '@aziontech/ui/link'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>
@@ -110,13 +110,13 @@ Tree-shaking alternative — the standalone root plus each sub-component from it
 
 ```vue
 <script setup>
-  import KeyValueList from '@aziontech/webkit/key-value-list-root'
-  import KeyValueListItem from '@aziontech/webkit/key-value-list-item'
-  import KeyValueListGroup from '@aziontech/webkit/key-value-list-group'
+  import KeyValueList from '@aziontech/ui/key-value-list-root'
+  import KeyValueListItem from '@aziontech/ui/key-value-list-item'
+  import KeyValueListGroup from '@aziontech/ui/key-value-list-group'
 </script>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same facts render from a docs page as tags (`DocMarkdown`) and from the site's page JSON as the `KeyValueList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot). The items nest: in Markdown each `<KeyValueListItem label="…">` (and `<KeyValueListGroup label="…">`) sits inside the `<KeyValueList>` tag and its value is the text between the tags, with inline Markdown (bold, emphasis, code, links) and an inline `<StatusIndicator severity label />` tag; in page JSON the items are the scene's `children` and a value is a text child or a `StatusIndicator` scene. A status reads as the same dot and label in all three channels:
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). The same facts render from a docs page as tags (`DocMarkdown`) and from the site's page JSON as the `KeyValueList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot). The items nest: in Markdown each `<KeyValueListItem label="…">` (and `<KeyValueListGroup label="…">`) sits inside the `<KeyValueList>` tag and its value is the text between the tags, with inline Markdown (bold, emphasis, code, links) and an inline `<StatusIndicator severity label />` tag; in page JSON the items are the scene's `children` and a value is a text child or a `StatusIndicator` scene. A status reads as the same dot and label in all three channels:
 
 ```mdx
 <KeyValueList aria-label="Workload details">
@@ -165,7 +165,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/content/key-value-list/
+  packages/ui/src/components/content/key-value-list/
   ├── key-value-list.vue
   ├── key-value-list.test.ts
   ├── index.ts
@@ -281,7 +281,7 @@ Decisions taken while drafting (non-interactive run):
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

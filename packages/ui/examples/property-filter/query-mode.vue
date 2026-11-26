@@ -1,6 +1,6 @@
 <script setup>
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { matchesQuery } from '@aziontech/webkit/use-collection'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { matchesQuery } from '@aziontech/ui/use-collection'
   import { computed, ref } from 'vue'
 
   const events = Array.from({ length: 40 }, (_, i) => ({

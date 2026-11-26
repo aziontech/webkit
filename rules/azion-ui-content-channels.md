@@ -2,11 +2,11 @@
 
 A content component (a diagram, a table, a callout, a card, stats, a quote, logos, code, a chart)
 is written once and used in three places. Each place has its own way in, and a content component
-is usable through all three unless the WebKit channel registry records why not.
+is usable through all three unless the Azion UI channel registry records why not.
 
 | Channel | Who writes it                     | Way in                                                                                |
 | ------- | --------------------------------- | ------------------------------------------------------------------------------------- |
-| `app`   | a developer, in an app or block   | `import FlowDiagram from '@aziontech/webkit/flow-diagram'`                            |
+| `app`   | a developer, in an app or block   | `import FlowDiagram from '@aziontech/ui/flow-diagram'`                                |
 | `docs`  | a docs author, in a Markdown page | a tag `DocMarkdown` renders: `<FlowDiagram nodes={[…]} edges={[…]} />`                |
 | `site`  | the marketing site's page JSON    | an entry `SitePage` renders: a page section by `_id`, or a scene a band draws by name |
 
@@ -68,17 +68,17 @@ The catalog lists the channels a component is wired for (`channels` on its entry
 - A part's value can be text: in Markdown the text between the part tags, with inline Markdown
   (`<KeyValueListItem label="Region">US East</KeyValueListItem>`); in page JSON a string in
   `children` (`{ "component": "KeyValueListItem", "props": { "label": "Region" }, "children": ["US East"] }`).
-- A Markdown pipe table renders as the WebKit `Table`; write a pipe table, not a tag.
+- A Markdown pipe table renders as the Azion UI `Table`; write a pipe table, not a tag.
 - On the site, place a scene on a band with no texture behind it: `console-showcase-section` with
   `variant: "diagram"` draws its scene on the plain canvas. The texture goes behind text only
-  (see `webkit-styling`); `SitePage` marks every content scene so a texture beside it hides itself.
+  (see `azion-ui-styling`); `SitePage` marks every content scene so a texture beside it hides itself.
 - Some components are app-only, and the registry says why (an editor, a live log, a run explorer,
   the data-driven table). Show their content another way: a code fence, a `Chart`, a pipe table.
 
 ## Don't
 
 - Don't screenshot a component into a docs page or a site page because it has no tag or entry
-  yet. Ask for the channel; it is a WebKit gap.
+  yet. Ask for the channel; it is an Azion UI gap.
 - Don't copy a component into a docs or site project to make it render from content. The content
   calls the package's own component.
 

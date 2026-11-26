@@ -1,14 +1,14 @@
 {
  "name": "wizard",
  "binding": "Wizard",
- "import": "@aziontech/webkit/wizard",
- "treeShakeableImport": "@aziontech/webkit/wizard-root",
+ "import": "@aziontech/ui/wizard",
+ "treeShakeableImport": "@aziontech/ui/wizard-root",
  "category": "navigation",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/wizard-step"
+  "@aziontech/ui/wizard-step"
  ],
  "purpose": "A multi-step create flow in one surface. It puts the step rail on the start side, the current step's header and fields in the content column, and a fixed footer with Cancel, Previous and Next. On the last step, Next becomes the submit action. It owns the order, which steps can be reached and where focus goes. The consumer owns the fields, the validation and the request. It differs from its siblings by owning the **whole flow**. `stepper` is only the rail and leaves layout, actions and gating to the caller. `tabs` switches between peer views that have no order and no completion.",
  "setup": null,

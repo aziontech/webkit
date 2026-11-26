@@ -51,7 +51,7 @@ The `Card` footer sums the reach in one sentence: projects, environments and Dep
 
 ### G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
 
-`SaveBar variant="docked"` at the bottom of the page: the hint on the start side, replaced by the blocker with a warning icon when there is one, so each sits on one line; on the end side Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and emits `deploy`; the parent sets `deploying`, then `deployed` or `deployError`, and the block shows the run as an async action (`state/state-async-submit`): one `toast.loading` ("Deploying release…", with "It keeps running if you leave.") follows the run, and when it ends that toast is dismissed and the page `Alert` takes over with **Edit** and **Redeploy**. Never View deployments. On a phone the hint is hidden and Cancel and Deploy release share one row, so the bar stays short. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+`SaveBar variant="docked"` at the bottom of the page: the hint on the start side, replaced by the blocker with a warning icon when there is one, so each sits on one line; on the end side Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and emits `deploy`; the parent sets `deploying`, then `deployed` or `deployError`, and the block shows the run as an async action (`state/state-async-submit`): one `toast.loading` ("Deploying release…", with "It keeps running if you leave.") follows the run, and when it ends that toast is dismissed and the page `Alert` takes over with **Edit** and **Redeploy**. Never View deployments. On a phone the hint is hidden and Cancel and Deploy release share one row, so the bar stays short. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ### Before the review: choosing the Deployment Settings
 
@@ -136,7 +136,7 @@ Then delete `sample.ts` and its import.
 - **Versions:** "Track latest Ready", "resolves at deploy", "Pin a ready version", tag "Current".
 - **Blockers:** "<name> has no Ready version, so the release cannot be deployed."
 - **Outcome:** "Release deployed." / "The release wasn't deployed." with the cause and that nothing changed in traffic.
-- Follow `skills/webkit-microcopy`: Deploy, never publish; sentence case; no em dash.
+- Follow `skills/azion-ui-microcopy`: Deploy, never publish; sentence case; no em dash.
 
 ## Accessibility
 

@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/input/password-input/password-input.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/input/password-input/password-input.vue
 // component=PasswordInput
 import figma from 'figma'
 
@@ -34,7 +34,7 @@ export default {
       : ''
   }
 />`,
-  imports: ["import PasswordInput from '@aziontech/webkit/password-input'"],
+  imports: ["import PasswordInput from '@aziontech/ui/password-input'"],
   id: 'password-input',
   metadata: { nestable: true }
 }

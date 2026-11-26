@@ -21,12 +21,12 @@
   /** Axis the band splits on. */
   export type MediaSplitSectionOrientation = 'horizontal' | 'vertical'
 
-  /** Name of a webkit scene asset a media band may draw, every one except the request-flow diagram. */
+  /** Name of an Azion UI scene asset a media band may draw, every one except the request-flow diagram. */
   export type MediaSplitSectionSceneName = Exclude<SceneName, 'Diagram'>
 
   /** A scene drawn in the media cell. */
   export type MediaSplitSectionScene = {
-    /** The webkit scene asset to draw. */
+    /** The Azion UI scene asset to draw. */
     component: MediaSplitSectionSceneName
     /** MediaSplitSectionProps bound onto the scene. */
     props?: Record<string, unknown>
@@ -68,7 +68,7 @@
     texture?: TextureVariant
     /** Links the whole band to a lone action; turn it off when the media holds controls of its own. */
     linked?: boolean
-    /** Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset other than `Diagram` and the props bound onto it; wins over every other media. */
+    /** Scene drawn in the media cell, `{ component, props? }` naming an Azion UI scene asset other than `Diagram` and the props bound onto it; wins over every other media. */
     scene?: MediaSplitSectionScene
     /** Name of the product console widget drawn in the media cell when no scene is set. */
     widget?: ConsoleMockupName
@@ -148,7 +148,7 @@
       (bare) => {
         if (bare)
           console.warn(
-            `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. ` +
+            `[azion-ui] <MediaSplitSection>: the band "${props.title}" has no media. ` +
               'Give it an illustration, a widget or a scene; ' +
               'code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.'
           )

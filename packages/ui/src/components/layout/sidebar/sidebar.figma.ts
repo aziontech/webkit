@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3777-17139
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/layout/sidebar/sidebar.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/layout/sidebar/sidebar.vue
 // component=Sidebar
 import figma from 'figma'
 
@@ -34,9 +34,9 @@ export default {
   }
 </Sidebar>`,
   imports: [
-    "import Sidebar from '@aziontech/webkit/sidebar'",
-    "import SidebarHeader from '@aziontech/webkit/sidebar-header'",
-    "import SidebarFooter from '@aziontech/webkit/sidebar-footer'"
+    "import Sidebar from '@aziontech/ui/sidebar'",
+    "import SidebarHeader from '@aziontech/ui/sidebar-header'",
+    "import SidebarFooter from '@aziontech/ui/sidebar-footer'"
   ],
   id: 'sidebar',
   metadata: { nestable: false }

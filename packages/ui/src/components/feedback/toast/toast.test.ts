@@ -464,7 +464,7 @@ describe('Toast', () => {
         await nextTick()
 
         // The plugin mounted the region itself — no manual Toaster anywhere.
-        expect(document.body.querySelector('[data-webkit-toaster]')).not.toBeNull()
+        expect(document.body.querySelector('[data-azion-toaster]')).not.toBeNull()
 
         toast('Raised through the service', { duration: 0 })
         const region = await regionFor('bottom-end')
@@ -475,7 +475,7 @@ describe('Toast', () => {
         app.unmount()
         root.remove()
         await nextTick()
-        expect(document.body.querySelector('[data-webkit-toaster]')).toBeNull()
+        expect(document.body.querySelector('[data-azion-toaster]')).toBeNull()
       })
     })
   })

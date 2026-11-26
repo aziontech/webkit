@@ -1,5 +1,5 @@
 <script setup>
-  import SplitButton from '@aziontech/webkit/split-button'
+  import SplitButton from '@aziontech/ui/split-button'
 
   const items = [
     { label: 'Update', value: 'update', icon: 'az az-refresh' },

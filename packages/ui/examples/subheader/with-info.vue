@@ -1,10 +1,10 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Drawer from '@aziontech/webkit/drawer'
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import Subheader from '@aziontech/webkit/subheader'
+  import Button from '@aziontech/ui/button'
+  import Drawer from '@aziontech/ui/drawer'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Link from '@aziontech/ui/link'
+  import Subheader from '@aziontech/ui/subheader'
   import { ref } from 'vue'
 
   const helpOpen = ref(false)

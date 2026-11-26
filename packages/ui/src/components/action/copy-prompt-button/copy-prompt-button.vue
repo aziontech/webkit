@@ -14,7 +14,7 @@
     name: string
     /** Icon-font class of the single-colour mark, such as `az az-claude`; used when `logo` is not set. */
     icon?: string
-    /** URL of the agent's mark file, such as the `@aziontech/webkit/assets/claude-symbol-color.svg` asset, drawn through `ThirdPartyLogo` in the chip's own ink. */
+    /** URL of the agent's mark file, such as the `@aziontech/ui/assets/claude-symbol-color.svg` asset, drawn through `ThirdPartyLogo` in the chip's own ink. */
     logo?: string
   }
 

@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Chart from '@aziontech/webkit/chart'
-  import EmptyState from '@aziontech/webkit/empty-state'
+  import Button from '@aziontech/ui/button'
+  import Chart from '@aziontech/ui/chart'
+  import EmptyState from '@aziontech/ui/empty-state'
 
   const labels = [
     '13:05',

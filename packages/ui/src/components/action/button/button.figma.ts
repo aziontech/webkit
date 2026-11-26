@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=373-5427
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/action/button/button.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/action/button/button.vue
 // component=Button
 import figma from 'figma'
 
@@ -51,7 +51,7 @@ export default {
       : ''
   }
 />`,
-  imports: ["import Button from '@aziontech/webkit/button'"],
+  imports: ["import Button from '@aziontech/ui/button'"],
   id: 'button',
   metadata: { nestable: true }
 }

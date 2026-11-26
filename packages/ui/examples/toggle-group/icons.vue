@@ -1,5 +1,5 @@
 <script setup>
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
 
   const speed = ref('standard')

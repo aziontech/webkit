@@ -3,13 +3,13 @@
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
-  } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
-  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
-  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import { type AiChatSendContent, contentOf } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/prompt-input'
+  import PromptInputAttachButton from '@aziontech/ui/prompt-input-attach-button'
+  import PromptInputContextPicker from '@aziontech/ui/prompt-input-context-picker'
+  import PromptInputDictateButton from '@aziontech/ui/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/ui/prompt-input-model-picker'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
+  import { type AiChatSendContent, contentOf } from '@aziontech/ui/utils/ai-chat'
   import { ref } from 'vue'
 
   const props = defineProps<{

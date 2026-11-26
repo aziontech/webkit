@@ -2,7 +2,7 @@
 
 > A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact). The header names it (title, description, metadata such as size or format, a file-type icon) and carries its actions: Copy (when `copyValue` is set), Download (when `downloadHref` is set) and Open (when `openable`, emitting `open` so the owner shows the full artifact in a side panel — Cloudscape's canvas preview). The body holds a short inline preview (Cloudscape's inline preview): the first lines of code, the first rows of a table.
 
-- Import: `import ArtifactPreview from '@aziontech/webkit/artifact-preview'`
+- Import: `import ArtifactPreview from '@aziontech/ui/artifact-preview'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [artifact-preview.json](artifact-preview.json)
 
@@ -106,8 +106,8 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 ```vue
 <script setup>
-  import ArtifactPreview from '@aziontech/webkit/artifact-preview'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import ArtifactPreview from '@aziontech/ui/artifact-preview'
+  import CodeBlock from '@aziontech/ui/code-block'
   import { ref } from 'vue'
 
   const opened = ref(false)
@@ -155,8 +155,8 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 ```vue
 <script setup>
-  import ArtifactPreview from '@aziontech/webkit/artifact-preview'
-  import Table from '@aziontech/webkit/table'
+  import ArtifactPreview from '@aziontech/ui/artifact-preview'
+  import Table from '@aziontech/ui/table'
 
   const rows = [
     { country: 'United States', requests: '1,204,330', hit: '92%' },

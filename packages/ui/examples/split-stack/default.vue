@@ -1,7 +1,7 @@
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
-  import SplitStack from '@aziontech/webkit/split-stack'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaSplit from '@aziontech/ui/media-split'
+  import SplitStack from '@aziontech/ui/split-stack'
 </script>
 
 <template>

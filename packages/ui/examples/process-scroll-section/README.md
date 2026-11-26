@@ -2,7 +2,7 @@
 
 A numbered row of process stages under a section title; with `pinned` the row pins under the site header and slides as the page scrolls.
 
-The band is the `ProcessScrollSection` component from `@aziontech/webkit/process-scroll-section`; it composes `Module` and `ModuleHeader`.
+The band is the `ProcessScrollSection` component from `@aziontech/ui/process-scroll-section`; it composes `Module` and `ModuleHeader`.
 
 ## Examples
 

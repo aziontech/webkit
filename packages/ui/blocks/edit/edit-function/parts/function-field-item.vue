@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { UseFunctionFieldsReturn } from '../composables/use-function-fields'
   import type { FunctionEditorField } from '../edit-function.vue'

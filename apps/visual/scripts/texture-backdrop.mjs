@@ -77,8 +77,8 @@ async function worker() {
     await context.addInitScript(
       ({ theme, dir }) => {
         try {
-          localStorage.setItem('webkit-docs:theme', theme)
-          localStorage.setItem('webkit-docs:dir', dir)
+          localStorage.setItem('azion-ui-docs:theme', theme)
+          localStorage.setItem('azion-ui-docs:dir', dir)
         } catch {}
       },
       { theme, dir: values.dir }

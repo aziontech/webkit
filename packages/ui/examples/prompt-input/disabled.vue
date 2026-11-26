@@ -1,5 +1,5 @@
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import PromptInput from '@aziontech/ui/prompt-input'
   import { ref } from 'vue'
 
   const model = ref('sol')

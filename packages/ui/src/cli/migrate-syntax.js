@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs'
 
-export const PREFIX = '@aziontech/webkit/'
+export const PREFIX = '@aziontech/ui/'
 
-export const SUBPATH_LITERAL = /(['"`])@aziontech\/webkit\/([^'"`\s]+)\1/g
+export const SUBPATH_LITERAL = /(['"`])@aziontech\/ui\/([^'"`\s]+)\1/g
 
 export const readJson = (file) => (existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : {})
 
@@ -18,9 +18,9 @@ export const pascalCase = (s) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.t
 
 const stripType = (text) => text.replace(/^\s*type\s+(?=[\w${])/, '')
 
-export function webkitImports(source) {
+export function azionUiImports(source) {
   const out = []
-  const re = /import\s+([\w$\s{},*]+?)\s+from\s+(['"])@aziontech\/webkit\/([^'"]+)\2/g
+  const re = /import\s+([\w$\s{},*]+?)\s+from\s+(['"])@aziontech\/ui\/([^'"]+)\2/g
   for (const m of source.matchAll(re)) {
     const clause = stripType(m[1])
     const names = []

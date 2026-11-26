@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=395-5596
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/feedback/status-indicator/status-indicator.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/feedback/status-indicator/status-indicator.vue
 // component=StatusIndicator
 import figma from 'figma'
 
@@ -37,7 +37,7 @@ export default {
       : ''
   }
 />`,
-  imports: ["import StatusIndicator from '@aziontech/webkit/status-indicator'"],
+  imports: ["import StatusIndicator from '@aziontech/ui/status-indicator'"],
   id: 'status-indicator',
   metadata: { nestable: true }
 }

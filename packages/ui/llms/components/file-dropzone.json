@@ -1,8 +1,8 @@
 {
  "name": "file-dropzone",
  "binding": "FileDropzone",
- "import": "@aziontech/webkit/file-dropzone",
- "treeShakeableImport": "@aziontech/webkit/file-dropzone",
+ "import": "@aziontech/ui/file-dropzone",
+ "treeShakeableImport": "@aziontech/ui/file-dropzone",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

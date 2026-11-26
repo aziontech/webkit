@@ -58,7 +58,7 @@ export default {
       styleTiming:
         'Literal motion timing in a style string ("{{sample}}"). Read duration/curve from the theme tokens (var(--…) / the animate-* utilities) instead.',
       unknownAnimation:
-        '"animate-{{name}}" is not in the webkit animation catalog. Pick a catalogued utility (ask the webkit MCP: list_tokens category "animations").',
+        '"animate-{{name}}" is not in the Azion UI animation catalog. Pick a catalogued utility (ask the Azion UI MCP: list_tokens category "animations").',
       pairing:
         'Motion class without a reduced-motion escape. Pair it with motion-reduce:transition-none / motion-reduce:animate-none on the same class string.'
     }

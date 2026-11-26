@@ -2,7 +2,7 @@
 name: figma-extractor
 description: Isolated sub-agent that runs the Figma MCP read-only verbs on the target frame and emits a structured token JSON. Never decides anything, never maps to TOKENS.md.
 status: active
-scope: webkit
+scope: ui
 ---
 
 # Agent: figma-extractor

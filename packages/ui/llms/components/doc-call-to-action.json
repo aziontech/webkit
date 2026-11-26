@@ -1,8 +1,8 @@
 {
  "name": "doc-call-to-action",
  "binding": "DocCallToAction",
- "import": "@aziontech/webkit/doc-call-to-action",
- "treeShakeableImport": "@aziontech/webkit/doc-call-to-action",
+ "import": "@aziontech/ui/doc-call-to-action",
+ "treeShakeableImport": "@aziontech/ui/doc-call-to-action",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

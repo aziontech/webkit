@@ -3071,3 +3071,7 @@ Budget-raise: map-chart 18.7 KB → 18.75 KB (measured 18.70 KB, a few bytes ove
 ## Patterns and the AI page in the llms bundle (2026-11-26)
 
 Budget-raise: llms-full.txt 2,600,000 → 2,650,000 bytes (measured 2,600,963): the docs Patterns section (PAT-1) sends agents to the pattern for each job, and the new `/ai` page (HOME-AI-1, `docs/AI.md`) is in the bundle.
+
+## The package rename to Azion UI (2026-11-26)
+
+Budget-raise: @aziontech/ui packed tarball 9,100,000 → 9,150,000 bytes (measured 9,100,127): `migrate v6` gains the package step that moves a 5.x app to the new name (`src/cli/migrate-package.js`, `src/cli/migrations/v6-package.json`, NAME-1). No component entry grows.

@@ -1,8 +1,8 @@
 {
  "name": "doc-prompt",
  "binding": "DocPrompt",
- "import": "@aziontech/webkit/doc-prompt",
- "treeShakeableImport": "@aziontech/webkit/doc-prompt",
+ "import": "@aziontech/ui/doc-prompt",
+ "treeShakeableImport": "@aziontech/ui/doc-prompt",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

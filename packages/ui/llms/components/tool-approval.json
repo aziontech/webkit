@@ -1,8 +1,8 @@
 {
  "name": "tool-approval",
  "binding": "ToolApproval",
- "import": "@aziontech/webkit/tool-approval",
- "treeShakeableImport": "@aziontech/webkit/tool-approval",
+ "import": "@aziontech/ui/tool-approval",
+ "treeShakeableImport": "@aziontech/ui/tool-approval",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

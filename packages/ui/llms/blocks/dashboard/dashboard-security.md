@@ -3,10 +3,10 @@
 > The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated DataTable. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `DataTable`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`. The ByActor variant pivots the same blocked and allowed data per actor: a FilterMenu of actor, outcome and category with a destination Input, seven outcome StatTiles, outcomes over time as stacked bars in status colors, breakdowns by actor, category and destination, and a request log DataTable naming the rule that decided each request. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-security/dashboard-security.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-security/dashboard-security.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-security")`
 - Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [FilterMenu](../../components/filter-menu.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), `TableCellStatus`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
-- Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-tables`, `azion-ui-states`
 
 ## Asked as
 
@@ -84,7 +84,7 @@ after a failure.
 
 `Copy query` copies the card's GraphQL query (`securityMetrics`, the period as `tsRange`) and
 confirms with `Query copied.`; `Export CSV` saves the card's rows with `toCsv` and `downloadCsv`
-from `@aziontech/webkit/utils/csv` and confirms with `CSV exported.` and the file name. Export is
+from `@aziontech/ui/utils/csv` and confirms with `CSV exported.` and the file name. Export is
 disabled while loading and after a failure; the app mounts the toast region.
 
 ### J. Matched requests — `Chart` (required)
@@ -265,17 +265,17 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Button from '@aziontech/webkit/button'
-  import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import BarList, { type BarListItem } from '@aziontech/ui/bar-list'
+  import Button from '@aziontech/ui/button'
+  import type { ChartLabel, ChartSeries } from '@aziontech/ui/chart'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import type { TagSeverity } from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref } from 'vue'
 
   import AttentionCard from './parts/attention-card.vue'
@@ -713,11 +713,11 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ## `sample.ts`
 
 ```ts
-import type { BarListItem } from '@aziontech/webkit/bar-list'
-import type { ChartSeries } from '@aziontech/webkit/chart'
-import type { FilterMenuField } from '@aziontech/webkit/filter-menu'
-import type { SelectOptionItem } from '@aziontech/webkit/select'
-import type { SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
+import type { BarListItem } from '@aziontech/ui/bar-list'
+import type { ChartSeries } from '@aziontech/ui/chart'
+import type { FilterMenuField } from '@aziontech/ui/filter-menu'
+import type { SelectOptionItem } from '@aziontech/ui/select'
+import type { SeverityTagSeverity } from '@aziontech/ui/severity-tag'
 
 import type {
   SecurityAttentionEntry,
@@ -1337,12 +1337,12 @@ export const sampleActorRows: ActorActivityRow[] = [
 
 ```ts
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import Hint from '@aziontech/webkit/hint'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import Hint from '@aziontech/ui/hint'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
 
   import type { SecurityAttentionEntry } from '../dashboard-security.vue'
 
@@ -1443,7 +1443,7 @@ export const sampleActorRows: ActorActivityRow[] = [
 
 ```ts
 <script setup lang="ts">
-  import Chart from '@aziontech/webkit/chart'
+  import Chart from '@aziontech/ui/chart'
 
   import type { SecurityMatchedRequests } from '../dashboard-security.vue'
 
@@ -1502,13 +1502,13 @@ export const sampleActorRows: ActorActivityRow[] = [
 
 ```ts
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** The change tag beside the Sum tag. */
   export interface SecurityCardChange {
@@ -1643,17 +1643,17 @@ export const sampleActorRows: ActorActivityRow[] = [
 
 ```ts
 <script setup lang="ts">
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import BarList, { type BarListItem } from '@aziontech/ui/bar-list'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
 
   import type {
     SecurityCardId,
@@ -1759,11 +1759,11 @@ export const sampleActorRows: ActorActivityRow[] = [
 
 ```ts
 <script setup lang="ts">
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import { matchesText } from '@aziontech/webkit/use-collection'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import { matchesText } from '@aziontech/ui/use-collection'
   import { computed } from 'vue'
 
   import type { SecuritySourceIp } from '../dashboard-security.vue'
@@ -1846,10 +1846,10 @@ export const sampleActorRows: ActorActivityRow[] = [
 ## `security-cards.ts`
 
 ```ts
-import type { TableColumn } from '@aziontech/webkit/data-table'
-import { toast } from '@aziontech/webkit/toast'
-import { copyText } from '@aziontech/webkit/utils/clipboard'
-import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+import type { TableColumn } from '@aziontech/ui/data-table'
+import { toast } from '@aziontech/ui/toast'
+import { copyText } from '@aziontech/ui/utils/clipboard'
+import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/ui/utils/csv'
 
 import type { SecurityCardId, SecurityPeriodRange } from './dashboard-security.vue'
 

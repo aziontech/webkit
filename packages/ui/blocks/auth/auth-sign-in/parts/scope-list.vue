@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Item from '@aziontech/webkit/item'
+  import Item from '@aziontech/ui/item'
 
   /** One permission the app asks for. */
   export interface AuthScope {

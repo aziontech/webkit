@@ -1,5 +1,5 @@
-import type { CodeBlockTab } from '@aziontech/webkit/code-block'
-import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
+import type { CodeBlockTab } from '@aziontech/ui/code-block'
+import type { FilterMenuValue } from '@aziontech/ui/filter-menu'
 import { computed, type ComputedRef } from 'vue'
 
 import { canFilterField, type EventRow, hasEventValue } from '../lib/event-log'

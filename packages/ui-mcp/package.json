@@ -1,13 +1,13 @@
 {
-  "name": "@aziontech/webkit-mcp",
+  "name": "@aziontech/ui-mcp",
   "version": "5.12.0",
-  "description": "MCP server that guides AI assistants to the right @aziontech/webkit blocks, components, imports and tokens.",
+  "description": "MCP server that guides AI assistants to the right @aziontech/ui blocks, components, imports and tokens.",
   "license": "MIT",
   "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/aziontech/webkit.git",
-    "directory": "packages/webkit-mcp"
+    "directory": "packages/ui-mcp"
   },
   "publishConfig": {
     "access": "public"
@@ -16,7 +16,7 @@
     "node": ">=22"
   },
   "bin": {
-    "webkit-mcp": "./src/server.js"
+    "azion-ui-mcp": "./src/server.js"
   },
   "files": [
     "src",
@@ -26,7 +26,7 @@
     "test": "node --test \"test/**/*.test.mjs\""
   },
   "dependencies": {
-    "@aziontech/webkit": "workspace:^",
+    "@aziontech/ui": "workspace:^",
     "@modelcontextprotocol/sdk": "^1.31.0",
     "zod": "^4.6.7"
   }

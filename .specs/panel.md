@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 8
-checksum: 4bb6b71ea57ddd91c312eff97a9b34a10df43fd06bb35b62b1b8ca6bbc5e9869
+checksum: 3f6d00127ce2e1342fde51b7dbaba51dd0438212c324ac7c816570de1b8bcea7
 created: 2026-05-22
 last_updated: 2026-11-25
 ---
@@ -45,8 +45,8 @@ The shell inside an overlay: a sized surface with a header for the title and the
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Panel from '@aziontech/webkit/panel'
+  import Button from '@aziontech/ui/button'
+  import Panel from '@aziontech/ui/panel'
 </script>
 
 <template>
@@ -73,11 +73,11 @@ The shell inside an overlay: a sized surface with a header for the title and the
 </template>
 ```
 
-Tree-shaking: `@aziontech/webkit/panel-root` is the root alone, and `panel-header`, `panel-body` and `panel-footer` keep their own paths.
+Tree-shaking: `@aziontech/ui/panel-root` is the root alone, and `panel-header`, `panel-body` and `panel-footer` keep their own paths.
 
 ## Sub-components
 
-- `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Body` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/webkit/panel`; the root alone is `@aziontech/webkit/panel-root`.
+- `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Body` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/ui/panel`; the root alone is `@aziontech/ui/panel-root`.
 - `panel-body.vue` — Public sub-component `panel-body`. Inside a drawer it wraps its content in a `ScrollArea` (`panel-body`) around the padded region (`panel-body__content`).
 - `panel-footer.vue` — Public sub-component `panel-footer`.
 - `panel-header.vue` — Public sub-component `panel-header`. Inside `DialogContent` / `DrawerContent` it appends the overlay's close button after its content (the content then sits in one flex row that keeps its own start/end spread), while the overlay's `closable` is true; a `PanelHeader` of a nested `Panel` gets nothing. Standalone it renders only its slot.
@@ -152,7 +152,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

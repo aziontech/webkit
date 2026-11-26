@@ -2,7 +2,7 @@
 
 > The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `RegistrationFrame` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `columns` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileColumns`.
 
-- Import: `import DocCardGroup from '@aziontech/webkit/doc-card-group'`
+- Import: `import DocCardGroup from '@aziontech/ui/doc-card-group'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-card-group.json](doc-card-group.json)
 
@@ -63,8 +63,8 @@
 
 ```vue
 <script setup>
-  import DocCard from '@aziontech/webkit/doc-card'
-  import DocCardGroup from '@aziontech/webkit/doc-card-group'
+  import DocCard from '@aziontech/ui/doc-card'
+  import DocCardGroup from '@aziontech/ui/doc-card-group'
 </script>
 
 <template>
@@ -91,8 +91,8 @@
 
 ```vue
 <script setup>
-  import DocCard from '@aziontech/webkit/doc-card'
-  import DocCardGroup from '@aziontech/webkit/doc-card-group'
+  import DocCard from '@aziontech/ui/doc-card'
+  import DocCardGroup from '@aziontech/ui/doc-card-group'
 </script>
 
 <template>

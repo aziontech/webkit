@@ -4,7 +4,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, posix } from 'node:path'
 
 import { checksum, planAdd } from '../../src/cli/blocks.js'
-import { catalogFor, resolveWebkit } from '../../src/cli/source.js'
+import { catalogFor, resolveAzionUi } from '../../src/cli/source.js'
 import { cleanup, cli, cliJson, makeProject, PKG_ROOT } from './lib/cli-project.mjs'
 
 const BLOCK = 'create/create-hub'
@@ -34,7 +34,7 @@ test('add copies the primary SFC into src/views and records it in the manifest',
     assert.equal(copied, copiedPrimary())
     const sample = readFileSync(join(dir, 'src/views/create-hub.sample.ts'), 'utf8')
     assert.equal(sample, canonical('sample.ts'))
-    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const manifest = JSON.parse(readFileSync(join(dir, 'azion-ui.blocks.json'), 'utf8'))
     const entry = manifest.blocks[BLOCK]
     assert.equal(entry.version, JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'))).version)
     const sampleEntry = entry.files.find((f) => f.path === 'src/views/create-hub.sample.ts')
@@ -80,7 +80,7 @@ test('add resolves a short name, copies the chosen variant and the guidelines si
     const guide = readFileSync(join(dir, 'src/views/create-hub.guidelines.md'), 'utf8')
     assert.ok(!guide.startsWith('#'), 'the H1 heading is stripped')
     assert.ok(canonical('guidelines.md').endsWith(guide))
-    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const manifest = JSON.parse(readFileSync(join(dir, 'azion-ui.blocks.json'), 'utf8'))
     assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
       'Connected',
       'Data',
@@ -108,7 +108,7 @@ test('add --variant after the primary was added keeps the primary copy and adds 
       readFileSync(join(dir, 'src/views/create-hub-connected.vue'), 'utf8'),
       copiedVariant('variants/connected.vue')
     )
-    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const manifest = JSON.parse(readFileSync(join(dir, 'azion-ui.blocks.json'), 'utf8'))
     assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
       'Connected',
       'Data',
@@ -129,7 +129,7 @@ test('add never overwrites without --force', () => {
     assert.equal(r.code, 1)
     assert.match(r.stderr, /already exists: pass --force/)
     assert.equal(readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8'), 'mine\n')
-    assert.ok(!existsSync(join(dir, 'webkit.blocks.json')))
+    assert.ok(!existsSync(join(dir, 'azion-ui.blocks.json')))
     const forced = cli(dir, 'add', BLOCK, '--force')
     assert.equal(forced.code, 0, forced.stderr)
     assert.equal(readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8'), copiedPrimary())
@@ -185,13 +185,13 @@ test('add --dry-run writes nothing; --dest and the router views dir pick the tar
   }
 })
 
-test('add verifies every @aziontech/webkit import against the installed exports', () => {
-  const dir = makeProject({}, { installWebkit: true })
+test('add verifies every @aziontech/ui import against the installed exports', () => {
+  const dir = makeProject({}, { installAzionUi: true })
   try {
     const r = cliJson(dir, 'add', BLOCK, '--dry-run')
     assert.equal(r.code, 0)
-    assert.ok(r.json.imports.webkit.length > 3)
-    assert.ok(r.json.imports.webkit.every((i) => i.ok))
+    assert.ok(r.json.imports.ui.length > 3)
+    assert.ok(r.json.imports.ui.every((i) => i.ok))
     assert.deepEqual(r.json.imports.missing, [])
     assert.ok(!r.json.warnings.some((w) => /not installed in this project/.test(w)))
   } finally {
@@ -233,7 +233,7 @@ test('add copies the block data files beside the SFC and points every local impo
     )
     const variant = readFileSync(join(dir, 'src/views/view-table-empty.vue'), 'utf8')
     assert.match(variant, /import ViewTable from '\.\/view-table\.vue'/)
-    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const manifest = JSON.parse(readFileSync(join(dir, 'azion-ui.blocks.json'), 'utf8'))
     const files = manifest.blocks['view/view-table'].files
     assert.deepEqual(
       files.map((f) => [f.path, f.variant, f.imports]),
@@ -373,7 +373,7 @@ test('add copies the sibling variant a variant imports and points the import at 
       )
     )
     assert.ok(existsSync(join(dir, 'src/views/settings-form-save-per-group.vue')))
-    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const manifest = JSON.parse(readFileSync(join(dir, 'azion-ui.blocks.json'), 'utf8'))
     const files = manifest.blocks['settings/settings-form'].files
     assert.deepEqual(files.map((f) => f.variant).sort(), [
       'Data',
@@ -437,7 +437,7 @@ test('add reaches a part through the sibling variant a variant imports', () => {
     ]) {
       assert.ok(existsSync(join(dir, `src/views/${file}`)), file)
     }
-    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const manifest = JSON.parse(readFileSync(join(dir, 'azion-ui.blocks.json'), 'utf8'))
     const paths = manifest.blocks['create/create-page'].files.map((f) => f.path)
     assert.equal(new Set(paths).size, paths.length)
     assert.ok(
@@ -451,15 +451,15 @@ test('add reaches a part through the sibling variant a variant imports', () => {
 test('every block and variant plans a copy whose relative imports all point at planned files', () => {
   const dir = makeProject()
   try {
-    const webkit = resolveWebkit(dir)
-    const catalog = catalogFor(webkit)
+    const ui = resolveAzionUi(dir)
+    const catalog = catalogFor(ui)
     const problems = []
     let plans = 0
     for (const id of blockIds()) {
       const meta = JSON.parse(readFileSync(join(PKG_ROOT, 'blocks', id, 'block.json'), 'utf8'))
       for (const variant of [undefined, ...(meta.variants || []).map((v) => v.name)]) {
         const label = `${id}${variant ? ` --variant ${variant}` : ''}`
-        const plan = planAdd(dir, webkit, catalog, id, { variant })
+        const plan = planAdd(dir, ui, catalog, id, { variant })
         plans += 1
         if (!plan.files) {
           problems.push(`${label}: ${plan.errors.join(' ')}`)

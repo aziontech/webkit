@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import IntegrationCard, { type IntegrationCardBadge } from '@aziontech/webkit/integration-card'
-  import Item from '@aziontech/webkit/item'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import IntegrationCard, { type IntegrationCardBadge } from '@aziontech/ui/integration-card'
+  import Item from '@aziontech/ui/item'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import ConnectPaths from './parts/connect-paths.vue'

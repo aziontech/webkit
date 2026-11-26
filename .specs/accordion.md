@@ -7,7 +7,7 @@ spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: ae6f23a92030c231ba0d8e410619e458f48463b05c2a823a8113397a764702a4
+checksum: 24e87e52fea980a4f7a5266e8137f050924d7eb04c1f110efe6e6084fcd2ab42
 created: 2026-06-26
 last_updated: 2026-11-24
 ---
@@ -50,7 +50,7 @@ A vertically stacked set of disclosure items: each item has a clickable header t
 
 ```vue
 <script setup>
-  import Accordion from '@aziontech/webkit/accordion'
+  import Accordion from '@aziontech/ui/accordion'
 </script>
 
 <template>
@@ -84,14 +84,14 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ```vue
 <script setup>
-  import Accordion from '@aziontech/webkit/accordion'
-  import AccordionItem from '@aziontech/webkit/accordion-item'
-  import AccordionTrigger from '@aziontech/webkit/accordion-trigger'
-  import AccordionContent from '@aziontech/webkit/accordion-content'
+  import Accordion from '@aziontech/ui/accordion'
+  import AccordionItem from '@aziontech/ui/accordion-item'
+  import AccordionTrigger from '@aziontech/ui/accordion-trigger'
+  import AccordionContent from '@aziontech/ui/accordion-content'
 </script>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). Markdown writes `<AccordionGroup>` and `<Accordion>`, which render `DocAccordionGroup` (a docs piece). From the site's page JSON it is the `Accordion` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); its items are the scene's `children`, each `AccordionItem` holding an `AccordionTrigger` and an `AccordionContent` whose text is a text child.
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). Markdown writes `<AccordionGroup>` and `<Accordion>`, which render `DocAccordionGroup` (a docs piece). From the site's page JSON it is the `Accordion` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); its items are the scene's `children`, each `AccordionItem` holding an `AccordionTrigger` and an `AccordionContent` whose text is a text child.
 
 ## Sub-components
 
@@ -107,10 +107,10 @@ The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attach
   - Props: `padded?: boolean` (default `true` — pads the body on the trigger's inset, after the chevron when it leads, with `--spacing-xs` above and `--spacing-md` below; set false for edge-to-edge content such as a `LogViewer` or table rows).
   - Slot: `default` — panel body content.
 
-Resulting layout (no per-component `package.json` — dropped repo-wide; the root `packages/webkit/package.json#exports` resolves every path; `.d.ts` is generated at publish time, never committed):
+Resulting layout (no per-component `package.json` — dropped repo-wide; the root `packages/ui/package.json#exports` resolves every path; `.d.ts` is generated at publish time, never committed):
 
 ```
-packages/webkit/src/components/content/accordion/
+packages/ui/src/components/content/accordion/
 ├── accordion.vue                 (root; owns type/modelValue/size/iconPosition, provides context)
 ├── index.ts                      (compound: attaches Item / Trigger / Content to the root)
 ├── injection-key.ts              (shared AccordionContext)
@@ -122,7 +122,7 @@ packages/webkit/src/components/content/accordion/
     └── accordion-content.vue
 ```
 
-Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the folder only):
+Exports to add to `packages/ui/package.json#exports` (flat public names; category lives in the folder only):
 
 ```jsonc
 "./accordion": "./src/components/content/accordion/index.ts",
@@ -227,7 +227,7 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

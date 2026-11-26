@@ -1,5 +1,5 @@
 <script setup>
-  import Texture from '@aziontech/webkit/texture'
+  import Texture from '@aziontech/ui/texture'
 </script>
 
 <template>

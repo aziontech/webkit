@@ -3,10 +3,10 @@
 > The query editor page (the app passes the Databases breadcrumb to the layout): the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band (rows paged in a `DataTable`, or JSON in a copyable `CodeBlock`); on Tables the panel lists the tables as option `Item` rows and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `DataTable`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main; CreateDatabase is a focused create page with its own header and no rail, rendered outside it. Its root carries data-layout-fill (every variant but CreateDatabase), so the main stops scrolling and the panel, the rows, the editor and the results scroll on their own.
 
 - Surface: app
-- Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-query-editor/view-query-editor.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-query-editor")`
 - Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-file-picker`, `use-shortcuts`, `utils/csv`
-- Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
+- Skills: `azion-ui-layout`, `azion-ui-tables`, `azion-ui-states`
 
 ## Asked as
 
@@ -182,7 +182,7 @@ Then delete `sample.ts` and its import.
 - **Empty states:** title states the fact and the description says what to do, e.g. "No tables yet" with "Create your first table to store your data."; "Ready to execute" with "Execute a query to see the results here."
 - **Import:** `Import data from CSV` opens `Import data into <table>`; the submit is `Insert <n> rows`; per-line errors read `Line <n>: <column> “<value>” is not <expected> (<type>).` or `<column> is empty and cannot be.`
 - **Row menus:** verb and object, e.g. "Delete table", "Run query", "Delete query".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -218,7 +218,7 @@ Then delete `sample.ts` and its import.
 - `edit/edit-schema` — the Create Table, Add column, Add row, Alter column and Truncate table drawers and dialogs behind this page's buttons.
 - `state/state-form-validation` (SectionRejected) — the rule the Create Database name conflict follows.
 - `detail/detail-dns-zone` — records of a resource without SQL.
-- `DataTable` — the definition and results tables; see `skills/webkit-tables` and `skills/webkit-layout`.
+- `DataTable` — the definition and results tables; see `skills/azion-ui-tables` and `skills/azion-ui-layout`.
 
 ## Variants
 
@@ -239,14 +239,14 @@ Each variant is the same screen in another state: `get_block("view/view-query-ed
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Button from '@aziontech/ui/button'
+  import CodeEditor, { type CodeEditorMarker } from '@aziontech/ui/code-editor'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { computed, onMounted, ref, watch } from 'vue'
 
   import EditorToolbar from './parts/editor-toolbar.vue'
@@ -990,9 +990,9 @@ export const SIDEBAR_FRAME_CLASS =
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import { toAriaKeyshortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import { toAriaKeyshortcuts } from '@aziontech/ui/use-shortcuts'
 
   export interface EditorToolbarProps {
     /** A query is in flight: Run query spins and the other actions lock. */
@@ -1072,12 +1072,12 @@ export const SIDEBAR_FRAME_CLASS =
 
 ```ts
 <script setup lang="ts">
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item-root'
-  import Sidebar from '@aziontech/webkit/sidebar-root'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item-root'
+  import Sidebar from '@aziontech/ui/sidebar-root'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, ref } from 'vue'
 
   import { SIDEBAR_FRAME_CLASS } from '../lib/sidebar-frame'
@@ -1219,16 +1219,16 @@ export const SIDEBAR_FRAME_CLASS =
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Alert from '@aziontech/ui/alert'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, ref } from 'vue'
 
   import type { QueryEditorResult, QueryEditorResultRow } from '../types'
@@ -1413,15 +1413,15 @@ export const SIDEBAR_FRAME_CLASS =
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { computed, ref } from 'vue'
 
   import type { QueryEditorRow, QueryEditorTable } from '../types'
@@ -1688,10 +1688,10 @@ export const SIDEBAR_FRAME_CLASS =
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { QueryEditorTable } from '../types'
@@ -1768,15 +1768,15 @@ export const SIDEBAR_FRAME_CLASS =
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item-root'
-  import Sidebar from '@aziontech/webkit/sidebar-root'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item-root'
+  import Sidebar from '@aziontech/ui/sidebar-root'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, ref } from 'vue'
 
   import { SIDEBAR_FRAME_CLASS } from '../lib/sidebar-frame'
@@ -1967,15 +1967,15 @@ export const SIDEBAR_FRAME_CLASS =
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelHeader from '@aziontech/ui/panel-header'
   import { computed, ref, watch } from 'vue'
 
   import { type QueryEditorTemplate, sampleTemplates } from '../sample'

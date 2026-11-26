@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Link from '@aziontech/webkit/link'
+  import Link from '@aziontech/ui/link'
 
   export interface SignInFooterProps {
     /** The question before the link. */

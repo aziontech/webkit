@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Field from '@aziontech/ui/field'
+  import Textarea from '@aziontech/ui/textarea'
   import { ref } from 'vue'
 
   const zoneFile = ref(

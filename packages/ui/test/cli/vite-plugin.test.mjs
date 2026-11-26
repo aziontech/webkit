@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path'
 import { setTimeout as sleep } from 'node:timers/promises'
 
 import { SOURCES_FILE } from '../../src/cli/css-sources.js'
-import webkit from '../../src/vite-plugin.js'
+import azionUi from '../../src/vite-plugin.js'
 
 const SETTLE = 30
 
@@ -18,14 +18,14 @@ function put(dir, rel, content) {
 }
 
 function makeApp() {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-vite-plugin-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-vite-plugin-'))
   put(dir, 'package.json', JSON.stringify({ name: 'app', version: '1.0.0' }))
-  const pkg = 'node_modules/@aziontech/webkit'
+  const pkg = 'node_modules/@aziontech/ui'
   put(
     dir,
     `${pkg}/package.json`,
     JSON.stringify({
-      name: '@aziontech/webkit',
+      name: '@aziontech/ui',
       exports: {
         './button': './src/components/action/button/button.vue',
         './dialog': './src/components/overlay/dialog/dialog.vue'
@@ -37,12 +37,12 @@ function makeApp() {
   return dir
 }
 
-const PAGE = "<script setup>\nimport Button from '@aziontech/webkit/button'\n</script>\n"
+const PAGE = "<script setup>\nimport Button from '@aziontech/ui/button'\n</script>\n"
 const BOTH =
-  "<script setup>\nimport Button from '@aziontech/webkit/button'\nimport Dialog from '@aziontech/webkit/dialog'\n</script>\n"
+  "<script setup>\nimport Button from '@aziontech/ui/button'\nimport Dialog from '@aziontech/ui/dialog'\n</script>\n"
 
 function start(dir) {
-  const plugin = webkit({ settle: SETTLE })
+  const plugin = azionUi({ settle: SETTLE })
   const watcher = new EventEmitter()
   plugin.configResolved({ root: dir })
   plugin.configureServer({ watcher })
@@ -155,11 +155,7 @@ test('build start re-scans the whole app and corrects a missed change', () => {
   try {
     put(dir, 'src/page.vue', PAGE)
     const { plugin } = start(dir)
-    put(
-      dir,
-      'src/other.vue',
-      "<script setup>\nimport D from '@aziontech/webkit/dialog'\n</script>\n"
-    )
+    put(dir, 'src/other.vue', "<script setup>\nimport D from '@aziontech/ui/dialog'\n</script>\n")
     assert.doesNotMatch(sources(dir), /dialog\.vue/)
     plugin.buildStart()
     assert.match(sources(dir), /dialog\.vue/)

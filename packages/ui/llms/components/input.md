@@ -1,8 +1,8 @@
 # Input
 
-> Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Webkit / Input).
+> Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Azion UI / Input).
 
-- Import: `import Input from '@aziontech/webkit/input'`
+- Import: `import Input from '@aziontech/ui/input'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [input.json](input.json)
 
@@ -104,8 +104,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   const value = ref('')
@@ -126,8 +126,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   const name = ref('')
@@ -166,8 +166,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   const leading = ref('')

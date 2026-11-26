@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import Alert from '@aziontech/webkit/alert'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import Tag from '@aziontech/webkit/tag'
+  import Accordion from '@aziontech/ui/accordion'
+  import Alert from '@aziontech/ui/alert'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import Tag from '@aziontech/ui/tag'
 
   const ENABLED = ['Canary', 'Skew protection']
 

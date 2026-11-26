@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 
   const emit = defineEmits<{
     edit: [event: MouseEvent]

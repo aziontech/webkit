@@ -3,10 +3,10 @@
 > The Invocation page of one function run, as a page body for ConsoleLayout: one run end to end. A `PageHeader` titled Invocation opens on the invocation summary `Card` (the function `Link`, the copyable invocation ID with its `StatusIndicator`, Replay, the Recent switcher, an outlined `Button` whose `DropdownMenu` picks another invocation, the Invocation actions menu with Open in Real-Time Events and Function settings, the Started, Completed, Duration and Location facts, and the triggering request with its outcome). Below it the Request path is a `FlowDiagram` with one node per hop (service, resource, function, origin), each with its `Tag`, its facts and the time spent there; a node's `IconButton` selects its span in the `Trace` waterfall and scrolls it into view. The `LogViewer` lists what the function printed, timed on the same clock as the trace. The Error variant opens on a run the origin timed out, with the failing span selected; Running shows a run still in progress, its spans running and the lines printed so far under a Streaming indicator. Built from `PageHeader`, `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton`, `Link`, `Subheader`, `FlowDiagram`, `Tag`, `Trace`, `LogViewer` and `LogViewerContent`; Replay emits `replay`, which the page reports through `toast`.
 
 - Surface: app
-- Source: `blocks/detail/detail-invocations/detail-invocations.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-invocations/detail-invocations.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-invocations")`
 - Components: [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [DropdownMenu](../../components/dropdown-menu.md), [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageHeader](../../components/page-header.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md), `use-locale`
-- Skills: `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`
+- Skills: `azion-ui-layout`, `azion-ui-states`, `azion-ui-data-viz`
 
 ## Asked as
 
@@ -70,7 +70,7 @@ To go live, render the block from a page that owns the request and the route:
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import { ref } from 'vue'
 
   import DetailInvocations, { type InvocationsInvocation } from './detail-invocations.vue'
@@ -121,7 +121,7 @@ Then delete `sample.ts` and its import.
 - **Outcome:** the status code and one sentence, e.g. "502, the origin did not answer within the 1 s budget."
 - **Node actions:** "Show <name> in the trace".
 - **Menu:** "Open in Real-Time Events", "Function settings"; switcher "Recent", group "Recent invocations".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -142,7 +142,7 @@ Then delete `sample.ts` and its import.
 - `edit/edit-function` — its TestRun variant runs the function before it ships, with the same trace and logs.
 - `detail/detail-resource` — the overview of the function; this page owns the invocation summary card.
 - `detail/detail-deployment-logs` — the step logs of a deployment.
-- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-layout`.
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/azion-ui-layout`.
 
 ## Variants
 
@@ -156,14 +156,14 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
 
 ```vue
 <script setup lang="ts">
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import LogViewerContent from '@aziontech/webkit/log-viewer-content'
-  import LogViewer, { type LogViewerLine } from '@aziontech/webkit/log-viewer-root'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import Subheader from '@aziontech/webkit/subheader'
-  import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import LogViewerContent from '@aziontech/ui/log-viewer-content'
+  import LogViewer, { type LogViewerLine } from '@aziontech/ui/log-viewer-root'
+  import PageHeader from '@aziontech/ui/page-header'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+  import Subheader from '@aziontech/ui/subheader'
+  import Trace, { type TraceSpan } from '@aziontech/ui/trace'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, nextTick, ref } from 'vue'
 
   import { formatInvocationDuration, formatInvocationTime } from './invocations-format'
@@ -722,7 +722,7 @@ export const sampleInvocations: InvocationsInvocation[] = [
 ## `invocations-format.ts`
 
 ```ts
-import type { UseLocaleReturn } from '@aziontech/webkit/use-locale'
+import type { UseLocaleReturn } from '@aziontech/ui/use-locale'
 
 export const formatInvocationTime = (formatDate: UseLocaleReturn['formatDate'], value: Date) =>
   `${formatDate(value, {
@@ -748,11 +748,11 @@ export const formatInvocationDuration = (
 
 ```ts
 <script setup lang="ts">
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Subheader from '@aziontech/webkit/subheader'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import FlowDiagram from '@aziontech/ui/flow-diagram'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Subheader from '@aziontech/ui/subheader'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** One resource on the request path. */
   export interface InvocationPathNode {
@@ -880,15 +880,15 @@ export const formatInvocationDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Link from '@aziontech/ui/link'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type { InvocationsFunction, InvocationsInvocation } from '../detail-invocations.vue'
   import { formatInvocationTime } from '../invocations-format'

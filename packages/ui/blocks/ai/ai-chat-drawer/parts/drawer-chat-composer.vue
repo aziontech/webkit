@@ -3,12 +3,12 @@
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
-  } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
-  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
-  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  } from '@aziontech/ui/prompt-input'
+  import PromptInputAttachButton from '@aziontech/ui/prompt-input-attach-button'
+  import PromptInputContextPicker from '@aziontech/ui/prompt-input-context-picker'
+  import PromptInputDictateButton from '@aziontech/ui/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/ui/prompt-input-model-picker'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
   import { ref } from 'vue'
 
   defineProps<{

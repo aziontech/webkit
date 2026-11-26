@@ -1,6 +1,6 @@
 <script setup>
-  import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'
-  import Illustration from '@aziontech/webkit/illustration'
+  import ConsoleShowcaseSection from '@aziontech/ui/console-showcase-section'
+  import Illustration from '@aziontech/ui/illustration'
 </script>
 
 <template>

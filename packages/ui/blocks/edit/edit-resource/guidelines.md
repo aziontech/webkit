@@ -29,7 +29,7 @@ A small `PageHeader` titled Settings with one sentence about what these settings
 
 ### C. Settings sections — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
 
-One `form` with a `fieldset` and a visually hidden legend; while saving, every field turns read-only. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/webkit-form`.
+One `form` with a `fieldset` and a visually hidden legend; while saving, every field turns read-only. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/azion-ui-form`.
 
 ### D. Locked settings — `Tooltip`, `Switch`, `Link` (optional)
 
@@ -53,7 +53,7 @@ A setting with a side effect beyond this resource carries a warning `Alert` abov
 
 ### I. Leave guard — `Tabs`, `SaveBar` (optional)
 
-`useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Trigger` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
+`useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Trigger` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/azion-ui-form`.
 
 ### J. Changed elsewhere — `Alert`, `ConfirmDialog`, `Button`, `SaveBar` (optional)
 
@@ -120,7 +120,7 @@ Then delete `sample.ts` and its import.
 - Give every section a short hint that says what it controls, and an anchor so a link can land on it.
 - Keep locked settings visible, disabled, with the reason and the way to unlock them.
 - Put destructive actions in a Danger zone section at the end, never in the save bar.
-- Check every field when Save is pressed and show errors only then; see `skills/webkit-errors`.
+- Check every field when Save is pressed and show errors only then; see `skills/azion-ui-errors`.
 - Put the choice that decides other fields first, and show only the fields that choice needs.
 - Show a preset document read-only, with Copy, beside the way to make it editable.
 - Mark the tab that holds unsaved changes with `dirty`, and ask before leaving it while dirty.
@@ -155,7 +155,7 @@ Then delete `sample.ts` and its import.
 - **Leave dialog:** "Unsaved changes", "This page has changes you haven't saved. If you leave now, they're discarded." (with Save: "Save them before you leave, or discard them and continue."); buttons "Keep editing", "Discard changes", "Save changes". These are the built-in `unsavedChanges` messages in en, pt-BR and es.
 - **Changed elsewhere:** "Changed elsewhere." + "This project was saved by someone else after you opened it. …"; button "Reload"; dialog "Overwrite changes made elsewhere?" with "Go back" and "Overwrite and save"; after a reload "Edits discarded." with "Undo".
 - **Danger zone:** section "Danger zone" with "Actions that cannot be undone."; row "Delete this project"; dialog "Delete project", "Once confirmed, this action can't be reversed.", "Type <name> to confirm."; buttons "Cancel" and "Delete project".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -205,7 +205,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 - `detail/detail-domains-card` — the Domains section body in DeployableSettings.
 - `edit/edit-delete-dialog` — the dialog behind the Danger zone action.
 - `settings/settings-form` — account settings that end with the same save band.
-- `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
+- `SaveBar` — the unsaved-changes band; see `skills/azion-ui-form`.
 - `state/state-form-validation` (SectionRejected) — the section-scoped server error DataStream and the changed-elsewhere notice follow.
 - `dashboard/dashboard-analytics` (Metrics) — where the records a stream sends are counted.
 - `useUnsavedChanges` — the dirty baseline and leave guard behind the save bar, the tab mark and the leave dialog.

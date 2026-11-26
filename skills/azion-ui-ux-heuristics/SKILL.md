@@ -1,41 +1,41 @@
 ---
-name: webkit-ux-heuristics
-description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing az-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
+name: azion-ui-ux-heuristics
+description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/ui component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing az-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /azion-ui-states.
 status: active
 last_updated: 2026-11-21
 scope: general
 # prettier-ignore
-enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-accessibility, webkit-keyboard, ui-verify, review]
+enforced_by: [azion-ui-prefer-over-custom, azion-ui-component-states, azion-ui-accessibility, azion-ui-keyboard, ui-verify, review]
 ---
 
-# Skill: webkit-ux-heuristics
+# Skill: azion-ui-ux-heuristics
 
 ## Purpose
 
 Get the flow right before it is made to look good. Most UI slop is not a styling problem — it is a
 missing loading state, an error in the wrong place, an empty screen with no next step, or a
 destructive action with no confirmation. This is the **discovery pass**: for each moment in a flow,
-name the `@aziontech/webkit` component that already serves it, so you compose shipped behavior instead
+name the `@aziontech/ui` component that already serves it, so you compose shipped behavior instead
 of hand-rolling it. **Before polish, the flow must be sound.**
 
 Boundary: this skill picks the component per moment. How each state actually **renders** (the loading
 shape, the empty layout, the error affordance) and how **async behavior** sequences belong to
-`/webkit-ui-states`.
+`/azion-ui-states`.
 
 ## How to use
 
-- `/webkit-ux-heuristics`
+- `/azion-ui-ux-heuristics`
   Apply the component map to any flow you design or build in this conversation.
-- `/webkit-ux-heuristics <file>`
+- `/azion-ui-ux-heuristics <file>`
   Review the file's flow against the map and output, per gap:
   - the exact line / element (quoted),
   - the moment it mishandles (1 short sentence),
-  - the concrete fix, naming the webkit component to use.
+  - the concrete fix, naming the Azion UI component to use.
 
 ## When to invoke
 
-- Designing or reviewing a flow, form, list, or screen — **before** `/webkit-quick-cleanup` /
-  `/webkit-motion-polish`.
+- Designing or reviewing a flow, form, list, or screen — **before** `/azion-ui-quick-cleanup` /
+  `/azion-ui-motion-polish`.
 - The user asks "is this good UX", "what am I missing", "review this flow".
 
 ## Component map (the right tool per moment)
@@ -43,21 +43,21 @@ shape, the empty layout, the error affordance) and how **async behavior** sequen
 Each moment below is a Nielsen heuristic made concrete — the map **is** the checklist. Pick the
 component for the moment; don't re-derive the principle.
 
-| Moment                            | Use                                                                                                                     | Don't                                                 |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| Loading (content vs. inline)      | `@aziontech/webkit/skeleton` for content shape; the control's own loading / `@aziontech/webkit/spinner` for inline busy | a bare full-page spinner for content that has a shape |
-| Destructive / irreversible action | `@aziontech/webkit/dialog` (confirm)                                                                                    | a silent immediate action                             |
-| Field validation error            | `@aziontech/webkit/field` + `@aziontech/webkit/alert` **next to the field**                                             | a global toast for a field error                      |
-| Page / section status             | `@aziontech/webkit/alert`, `@aziontech/webkit/status-indicator`                                                         | inventing a banner                                    |
-| Empty state                       | `@aziontech/webkit/button` for the one next action + a one-line reason it's empty                                       | a dead-end "no results" string                        |
-| Contextual actions / menu         | `@aziontech/webkit/dropdown-menu`                                                                                       | a hand-rolled popover                                 |
-| Side surface                      | `@aziontech/webkit/panel`, `@aziontech/webkit/drawer`                                                                   | a fixed div without focus management                  |
-| Name of an icon-only control      | `@aziontech/webkit/tooltip` (a few words)                                                                               | `title` attribute only                                |
-| Help beside a label or title      | a description first, then `@aziontech/webkit/hint`; page help: Info trigger + `HelpPanel` (`/webkit-in-product-help`)   | a typed `?`, a boxed icon button, a long tooltip      |
-| Field label                       | `Field.Label` from `@aziontech/webkit/field` (`@aziontech/webkit/field-label` beside a bare control)                    | placeholder-as-label                                  |
-| Link to an external resource      | `@aziontech/webkit/link` with `target="_blank"` (trailing `az-external-link`) — see rule 1 below                        | a bare `<a>`, a `ButtonMini`, or a silent new tab     |
-| More items than the space holds   | first item + `+N` `@aziontech/webkit/tag` opening a `@aziontech/webkit/popover` with search and Load more — rule 2      | a wrapped inline list, or every item rendered at once |
-| Picking from more than 7 options  | `@aziontech/webkit/select` with an `Input` in `Select.Content`'s `#search` slot, or one above the overlay list — rule 3 | a long list the user has to scroll to scan            |
+| Moment                            | Use                                                                                                                 | Don't                                                 |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Loading (content vs. inline)      | `@aziontech/ui/skeleton` for content shape; the control's own loading / `@aziontech/ui/spinner` for inline busy     | a bare full-page spinner for content that has a shape |
+| Destructive / irreversible action | `@aziontech/ui/dialog` (confirm)                                                                                    | a silent immediate action                             |
+| Field validation error            | `@aziontech/ui/field` + `@aziontech/ui/alert` **next to the field**                                                 | a global toast for a field error                      |
+| Page / section status             | `@aziontech/ui/alert`, `@aziontech/ui/status-indicator`                                                             | inventing a banner                                    |
+| Empty state                       | `@aziontech/ui/button` for the one next action + a one-line reason it's empty                                       | a dead-end "no results" string                        |
+| Contextual actions / menu         | `@aziontech/ui/dropdown-menu`                                                                                       | a hand-rolled popover                                 |
+| Side surface                      | `@aziontech/ui/panel`, `@aziontech/ui/drawer`                                                                       | a fixed div without focus management                  |
+| Name of an icon-only control      | `@aziontech/ui/tooltip` (a few words)                                                                               | `title` attribute only                                |
+| Help beside a label or title      | a description first, then `@aziontech/ui/hint`; page help: Info trigger + `HelpPanel` (`/azion-ui-in-product-help`) | a typed `?`, a boxed icon button, a long tooltip      |
+| Field label                       | `Field.Label` from `@aziontech/ui/field` (`@aziontech/ui/field-label` beside a bare control)                        | placeholder-as-label                                  |
+| Link to an external resource      | `@aziontech/ui/link` with `target="_blank"` (trailing `az-external-link`) — see rule 1 below                        | a bare `<a>`, a `ButtonMini`, or a silent new tab     |
+| More items than the space holds   | first item + `+N` `@aziontech/ui/tag` opening a `@aziontech/ui/popover` with search and Load more — rule 2          | a wrapped inline list, or every item rendered at once |
+| Picking from more than 7 options  | `@aziontech/ui/select` with an `Input` in `Select.Content`'s `#search` slot, or one above the overlay list — rule 3 | a long list the user has to scroll to scan            |
 
 Overlays (`dialog`, `drawer`, `dropdown-menu`, `panel`) must trap focus and restore it on close — use
 the **shipped focus-trap composable** (discover its exact import via the MCP / catalog); don't rebuild
@@ -89,7 +89,7 @@ Pick the element by where the link sits:
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | Standalone (a domain, a repo, "Learn more") | `Link` with `target="_blank"` — it renders the mark and sets `rel` itself                                                                |
 | Inside running prose                        | `Link` with `inline` and the same `target`: it keeps the sentence's size and the underline, sets `rel` and draws the mark after the text |
-| A resource name in a table cell or panel    | the shared cross-resource link from `/webkit-tables`                                                                                     |
+| A resource name in a table cell or panel    | the shared cross-resource link from `/azion-ui-tables`                                                                                   |
 
 ```vue
 <Link
@@ -111,11 +111,11 @@ Do not:
 
 Any list that can grow past what the space holds uses one anatomy, in one of three containers:
 
-| The moment                                                                                           | Container                                                                                    |
-| ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| **Overflow** — a slot shows more items than it fits (domains on a workload, tags on a row)           | the first item + a **`+N` `Tag`** opening a **`Popover`** with the full list                 |
-| **Picking an existing resource in a create flow** — the application for a workload, its firewall     | an **inline picker** in the band: selectable `Item` rows (see `/webkit-create-surface` § 6)  |
-| **Picking an existing resource in a single field** — a certificate on a domain, a function on a rule | a **`Select`**: search in `Select.Content`'s `#search` slot, Load more in its `#footer` slot |
+| The moment                                                                                           | Container                                                                                     |
+| ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **Overflow** — a slot shows more items than it fits (domains on a workload, tags on a row)           | the first item + a **`+N` `Tag`** opening a **`Popover`** with the full list                  |
+| **Picking an existing resource in a create flow** — the application for a workload, its firewall     | an **inline picker** in the band: selectable `Item` rows (see `/azion-ui-create-surface` § 6) |
+| **Picking an existing resource in a single field** — a certificate on a domain, a function on a rule | a **`Select`**: search in `Select.Content`'s `#search` slot, Load more in its `#footer` slot  |
 
 For overflow, never wrap the items onto extra lines and never render them all inline. For picking,
 never render every resource at once and never hand the user a list they have to scroll to scan.
@@ -192,11 +192,11 @@ search box is only noise.
 ## Three states every fetch/submit surface needs
 
 - **Loading** — reserve content shape while data arrives; show inline busy on the working control.
-- **Empty** — one clear next action (a `@aziontech/webkit/button`) and a one-line reason it's empty.
+- **Empty** — one clear next action (a `@aziontech/ui/button`) and a one-line reason it's empty.
 - **Error** — recoverable, located next to the cause, with a retry/fix affordance.
 
 A surface that fetches or submits but is missing any of these three is **not done** — flag it. How each
-one renders, and how the async sequence behaves, lives in `/webkit-ui-states`.
+one renders, and how the async sequence behaves, lives in `/azion-ui-states`.
 
 ## Hard rules
 
@@ -206,7 +206,7 @@ one renders, and how the async sequence behaves, lives in `/webkit-ui-states`.
 - Field errors sit next to the field (`Field` + `message`); never a global toast for a field-level
   error.
 - Overlays trap and restore focus via the shipped focus-trap composable; never hand-roll focus/escape.
-- Every console screen answers the keys of rule `webkit-keyboard`: focus in the first field of a
+- Every console screen answers the keys of rule `azion-ui-keyboard`: focus in the first field of a
   task and on the `h1` of a browse page, `Esc` closes the top layer only, `⌘ S` saves a `SaveBar`
   page, `/` searches, `?` lists the screen's shortcuts, `Delete` asks first, and no single-key
   shortcut fires while typing. Show each shortcut with `Kbd` where the action is offered.
@@ -216,27 +216,27 @@ one renders, and how the async sequence behaves, lives in `/webkit-ui-states`.
 - A long list — overflow `Popover`, create-flow picker, or `Select` — carries a count, search past 7,
   and Load more; overflow is never a wrapped inline list.
 - More than 7 options → search on; 7 or fewer → no search box.
-- No motion or delight here — this pass is structure only. Defer ornament to `/webkit-motion-polish` /
-  `/webkit-final-polish`.
-- Component discovery is always the webkit MCP `suggest_component` or
-  `node_modules/@aziontech/webkit/catalog.json` (`imports`) — never a source path.
+- No motion or delight here — this pass is structure only. Defer ornament to `/azion-ui-motion-polish` /
+  `/azion-ui-final-polish`.
+- Component discovery is always the Azion UI MCP `suggest_component` or
+  `node_modules/@aziontech/ui/catalog.json` (`imports`) — never a source path.
 
 ## Review output
 
-For `/webkit-ux-heuristics <file>`, list gaps grouped by moment. Each:
+For `/azion-ui-ux-heuristics <file>`, list gaps grouped by moment. Each:
 
 ```
 ✗ <file>:<line>  delete handler fires immediately on click
   moment: destructive action — irreversible, no confirmation.
-  fix: wrap in @aziontech/webkit/dialog confirm; primary action "Delete", default focus on Cancel.
+  fix: wrap in @aziontech/ui/dialog confirm; primary action "Delete", default focus on Cancel.
 ```
 
 End with: `flow sound` or `N gaps — fix before polish`.
 
 ## Definition of Done
 
-- [ ] Every moment uses the correct webkit component (see map).
-- [ ] Every fetch/submit surface has loading + empty + error states (rendered per `/webkit-ui-states`).
+- [ ] Every moment uses the correct Azion UI component (see map).
+- [ ] Every fetch/submit surface has loading + empty + error states (rendered per `/azion-ui-states`).
 - [ ] Destructive actions confirm; field errors sit next to their cause; paste is never blocked.
 - [ ] Overlays trap and restore focus via the shipped focus-trap composable (import resolved via the MCP/catalog).
 - [ ] Every external resource link opens in a new tab with the `az-external-link` mark and a new-tab hint for screen readers.

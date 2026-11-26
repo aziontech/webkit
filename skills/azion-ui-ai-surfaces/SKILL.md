@@ -1,13 +1,13 @@
 ---
-name: webkit-ai-surfaces
-description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, ResponseLoading), wires the message lifecycle (pending → streaming → success or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
+name: azion-ui-ai-surfaces
+description: Generative AI surfaces on @aziontech/ui — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, ResponseLoading), wires the message lifecycle (pending → streaming → success or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
+enforced_by: [azion-ui-accessibility, azion-ui-component-states, ui-verify]
 ---
 
-# Skill: webkit-ai-surfaces
+# Skill: azion-ui-ai-surfaces
 
 ## Purpose
 
@@ -15,23 +15,23 @@ A generative AI surface fails in ways an ordinary form does not: a response that
 screen reader one token at a time, a log that yanks the reader to the bottom while they copy an older
 answer, a loading state that flickers for 200 ms, Markdown from the model injected as HTML, a "Deploy"
 the assistant ran because the reader typed "sure". This pattern builds the conversation, the response
-and the authorization step from `@aziontech/webkit` so each of those is handled once, by the
+and the authorization step from `@aziontech/ui` so each of those is handled once, by the
 component, the same way everywhere. It follows Cloudscape's generative AI patterns (chat, loading
 states, thinking, follow-up questions, artifact previews, user-authorized actions) and the anatomy of
 shadcn's AI Elements.
 
 ## How to use
 
-- [AI chat and actions](../webkit-ai-surfaces/SKILL.md) — apply these rules to the AI surface you are building in this conversation.
-- `/webkit-ai-surfaces <file>` — review the file and report, per gap: the quoted line, the rule it breaks
+- [AI chat and actions](../azion-ui-ai-surfaces/SKILL.md) — apply these rules to the AI surface you are building in this conversation.
+- `/azion-ui-ai-surfaces <file>` — review the file and report, per gap: the quoted line, the rule it breaks
   (from **Hard rules**), and the concrete fix with the component that solves it.
 
 ## How to find the components
 
-Never guess an import path. Ask the **webkit MCP** — `get_block ai/ai-chat` (or
+Never guess an import path. Ask the **Azion UI MCP** — `get_block ai/ai-chat` (or
 `ai-chat-drawer`, `ai-action-approval`) returns the full screen to copy; `suggest_component` with the
 moment in plain words ("streamed answer", "ask before running a command") returns the component. Or
-read the `imports` keys in **`node_modules/@aziontech/webkit/catalog.json`**: a subpath that is not a
+read the `imports` keys in **`node_modules/@aziontech/ui/catalog.json`**: a subpath that is not a
 key there does not exist.
 
 ## Start from a block
@@ -130,7 +130,7 @@ Drive `ChatMessage` from your request, never from timers in the view:
 - Built-in strings (Thinking, Thought for N seconds, Sources, Helpful, Not helpful, Feedback
   submitted, Approved, Denied, Request expired) come in English, Portuguese and Spanish from the
   `ConfigProvider` locale.
-- Follow [Interface text](../webkit-microcopy/SKILL.md) for everything else.
+- Follow [Interface text](../azion-ui-microcopy/SKILL.md) for everything else.
 
 ## Enforcement (honest)
 

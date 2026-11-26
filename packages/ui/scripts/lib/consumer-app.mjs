@@ -16,7 +16,7 @@ export function runLogged(cmd, args, cwd, extraEnv = {}) {
 export function buildWorkspace(root) {
   runLogged('pnpm', ['--filter', '@aziontech/theme', 'run', 'build:tokens'], root)
   runLogged('pnpm', ['--filter', '@aziontech/icons', 'run', 'build'], root)
-  runLogged('pnpm', ['--filter', '@aziontech/webkit', 'run', 'build:catalog'], root)
+  runLogged('pnpm', ['--filter', '@aziontech/ui', 'run', 'build:catalog'], root)
 }
 
 function pack(pkgDir, packDir) {
@@ -33,37 +33,37 @@ export function packWorkspace(root, packDir) {
   mkdirSync(packDir, { recursive: true })
   const themeTgz = pack(join(root, 'packages/theme'), packDir)
   const iconsTgz = pack(join(root, 'packages/icons'), packDir)
-  const webkitDir = join(root, 'packages/webkit')
-  runLogged('node', ['scripts/pack-files.mjs'], webkitDir)
+  const azionUiDir = join(root, 'packages/ui')
+  runLogged('node', ['scripts/pack-files.mjs'], azionUiDir)
   try {
-    return { themeTgz, iconsTgz, webkitTgz: pack(webkitDir, packDir) }
+    return { themeTgz, iconsTgz, azionUiTgz: pack(azionUiDir, packDir) }
   } finally {
-    runLogged('node', ['scripts/pack-files.mjs', '--clean'], webkitDir)
+    runLogged('node', ['scripts/pack-files.mjs', '--clean'], azionUiDir)
   }
 }
 
-export function packWebkitMcp(root, packDir) {
+export function packAzionUiMcp(root, packDir) {
   mkdirSync(packDir, { recursive: true })
-  return pack(join(root, 'packages/webkit-mcp'), packDir)
+  return pack(join(root, 'packages/ui-mcp'), packDir)
 }
 
 export function writeConsumerApp(
   app,
-  { webkitTgz, themeTgz, iconsTgz, webkitMcpTgz = null, appVue = BLANK_APP_VUE }
+  { azionUiTgz, themeTgz, iconsTgz, azionUiMcpTgz = null, appVue = BLANK_APP_VUE }
 ) {
-  const mcpDependency = webkitMcpTgz ? { '@aziontech/webkit-mcp': `file:${webkitMcpTgz}` } : {}
+  const mcpDependency = azionUiMcpTgz ? { '@aziontech/ui-mcp': `file:${azionUiMcpTgz}` } : {}
   mkdirSync(join(app, 'src'), { recursive: true })
   writeFileSync(
     join(app, 'package.json'),
     JSON.stringify(
       {
-        name: 'webkit-smoke-app',
+        name: 'azion-ui-smoke-app',
         private: true,
         type: 'module',
         scripts: { build: 'vite build' },
         dependencies: {
           vue: '^3.5.0',
-          '@aziontech/webkit': `file:${webkitTgz}`,
+          '@aziontech/ui': `file:${azionUiTgz}`,
           '@aziontech/theme': `file:${themeTgz}`,
           '@aziontech/icons': `file:${iconsTgz}`
         },
@@ -78,10 +78,10 @@ export function writeConsumerApp(
     [
       'packages: []',
       'overrides:',
-      `  '@aziontech/webkit': file:${webkitTgz}`,
+      `  '@aziontech/ui': file:${azionUiTgz}`,
       `  '@aziontech/theme': file:${themeTgz}`,
       `  '@aziontech/icons': file:${iconsTgz}`,
-      ...(webkitMcpTgz ? [`  '@aziontech/webkit-mcp': file:${webkitMcpTgz}`] : []),
+      ...(azionUiMcpTgz ? [`  '@aziontech/ui-mcp': file:${azionUiMcpTgz}`] : []),
       'allowBuilds:',
       "  '@parcel/watcher': false",
       "  '@swc/core': false",

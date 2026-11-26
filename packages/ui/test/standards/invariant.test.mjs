@@ -78,10 +78,10 @@ test('every standard is blocking — at least one enforcement surface, nothing a
   }
 })
 
-test('every standard is classified general (ships to projects) or webkit (internal)', () => {
+test('every standard is classified general (ships to projects) or ui (internal)', () => {
   for (const s of STANDARDS) {
     assert.ok(
-      s.scope === 'general' || s.scope === 'webkit',
+      s.scope === 'general' || s.scope === 'ui',
       `standard "${s.id}" has invalid scope: ${JSON.stringify(s.scope)}`
     )
   }
@@ -97,7 +97,7 @@ test('every enforcer reference resolves to a real hook or eslint rule', () => {
         )
       } else if (e.surface === 'lint') {
         assert.ok(
-          existsSync(join(ROOT, `packages/webkit/src/eslint-plugin/rules/${e.by}.js`)),
+          existsSync(join(ROOT, `packages/ui/src/eslint-plugin/rules/${e.by}.js`)),
           `standard "${s.id}": eslint rule not found: ${e.by}`
         )
       }
@@ -124,7 +124,7 @@ test('every mechanized check maps to a standard enforced write-time by validate-
 })
 
 test('hook, CI ratchet, and consumer lint all share the single authoring-checks engine', () => {
-  const ENGINE = 'packages/webkit/src/eslint-plugin/lib/authoring-checks.js'
+  const ENGINE = 'packages/ui/src/eslint-plugin/lib/authoring-checks.js'
   assert.ok(existsSync(join(ROOT, ENGINE)), 'canonical engine missing from the package')
 
   // write-time hook → the lib shim → the package engine
@@ -133,17 +133,17 @@ test('hook, CI ratchet, and consumer lint all share the single authoring-checks 
   const shim = readFileSync(join(ROOT, 'contributing/hooks/lib/authoring-checks.mjs'), 'utf-8')
   assert.match(
     shim,
-    /packages\/webkit\/src\/eslint-plugin\/lib\/authoring-checks\.js/,
+    /packages\/ui\/src\/eslint-plugin\/lib\/authoring-checks\.js/,
     'shim does not re-export the package engine'
   )
 
   // DS CI ratchet → the package engine
-  const ratchet = readFileSync(join(ROOT, 'packages/webkit/scripts/check-authoring.mjs'), 'utf-8')
+  const ratchet = readFileSync(join(ROOT, 'packages/ui/scripts/check-authoring.mjs'), 'utf-8')
   assert.match(ratchet, /authoring-checks\.js/, 'CI ratchet does not import the engine')
 
   // consumer lint rule → the package engine
   const rule = readFileSync(
-    join(ROOT, 'packages/webkit/src/eslint-plugin/rules/require-authoring-standards.js'),
+    join(ROOT, 'packages/ui/src/eslint-plugin/rules/require-authoring-standards.js'),
     'utf-8'
   )
   assert.match(
@@ -154,10 +154,10 @@ test('hook, CI ratchet, and consumer lint all share the single authoring-checks 
 })
 
 test('the token and spec-compliance engines are shared by hook AND ratchet', () => {
-  const ratchet = readFileSync(join(ROOT, 'packages/webkit/scripts/check-authoring.mjs'), 'utf-8')
+  const ratchet = readFileSync(join(ROOT, 'packages/ui/scripts/check-authoring.mjs'), 'utf-8')
 
   // token engine: package canonical, hook via shim, ratchet direct
-  assert.ok(existsSync(join(ROOT, 'packages/webkit/src/eslint-plugin/lib/token-checks.js')))
+  assert.ok(existsSync(join(ROOT, 'packages/ui/src/eslint-plugin/lib/token-checks.js')))
   const tokenShim = readFileSync(join(ROOT, 'contributing/hooks/lib/token-checks.mjs'), 'utf-8')
   assert.match(tokenShim, /eslint-plugin\/lib\/token-checks\.js/, 'token shim does not re-export')
   const tokenHook = readFileSync(join(ROOT, 'contributing/hooks/validate-tokens.mjs'), 'utf-8')
@@ -178,10 +178,7 @@ test('authoring-docs hook AND ratchet share the single lib/authoring-docs-checks
   assert.ok(existsSync(join(ROOT, 'contributing/hooks/lib/authoring-docs-checks.mjs')))
   const hook = readFileSync(join(ROOT, 'contributing/hooks/validate-authoring-docs.mjs'), 'utf-8')
   assert.match(hook, /lib\/authoring-docs-checks\.mjs/, 'hook does not import the engine')
-  const ratchet = readFileSync(
-    join(ROOT, 'packages/webkit/scripts/check-authoring-docs.mjs'),
-    'utf-8'
-  )
+  const ratchet = readFileSync(join(ROOT, 'packages/ui/scripts/check-authoring-docs.mjs'), 'utf-8')
   assert.match(ratchet, /authoring-docs-checks\.mjs/, 'ratchet does not import the engine')
 })
 
@@ -189,7 +186,7 @@ test('spec-integrity hook AND CI gate share the single lib/spec-integrity engine
   assert.ok(existsSync(join(ROOT, 'contributing/hooks/lib/spec-integrity.mjs')))
   const hook = readFileSync(join(ROOT, 'contributing/hooks/enforce-spec-exists.mjs'), 'utf-8')
   assert.match(hook, /lib\/spec-integrity\.mjs/, 'hook does not import the engine')
-  const gate = readFileSync(join(ROOT, 'packages/webkit/scripts/check-spec-integrity.mjs'), 'utf-8')
+  const gate = readFileSync(join(ROOT, 'packages/ui/scripts/check-spec-integrity.mjs'), 'utf-8')
   assert.match(gate, /lib\/spec-integrity\.mjs/, 'CI gate does not import the engine')
 })
 
@@ -264,13 +261,13 @@ test('every shipped eslint rule is claimed by a standard (no orphan gates)', asy
   for (const s of STANDARDS) {
     for (const e of s.enforce || []) if (e.surface === 'lint') claimed.add(e.by)
   }
-  // prefer-webkit-component, require-header-search, no-page-navigation-menu and the value-control
-  // rules steer ADOPTION (use webkit instead of a foreign lib; search in an app header through
-  // SearchTrigger; one navigation per level, rule webkit-navigation-levels; the control made for a
-  // kind of value instead of a text Input, rule webkit-prefer-over-custom and skill webkit-form) —
+  // prefer-azion-ui-component, require-header-search, no-page-navigation-menu and the value-control
+  // rules steer ADOPTION (use Azion UI instead of a foreign lib; search in an app header through
+  // SearchTrigger; one navigation per level, rule azion-ui-navigation-levels; the control made for a
+  // kind of value instead of a text Input, rule azion-ui-prefer-over-custom and skill azion-ui-form) —
   // deliberately not construction standards.
   const ORPHAN_OK = new Set([
-    'prefer-webkit-component',
+    'prefer-azion-ui-component',
     'prefer-value-control',
     'require-header-search',
     'no-page-navigation-menu',
@@ -286,20 +283,20 @@ test('every shipped eslint rule is claimed by a standard (no orphan gates)', asy
 })
 
 test('naming: hook, CI gate and consumer lint share one engine and the migrate maps', () => {
-  const ENGINE = 'packages/webkit/scripts/lib/naming-rules.mjs'
+  const ENGINE = 'packages/ui/scripts/lib/naming-rules.mjs'
   assert.ok(existsSync(join(ROOT, ENGINE)), 'naming engine missing')
   const shim = readFileSync(join(ROOT, 'contributing/hooks/lib/naming-checks.mjs'), 'utf-8')
   assert.match(
     shim,
-    /packages\/webkit\/scripts\/lib\/naming-rules\.mjs/,
+    /packages\/ui\/scripts\/lib\/naming-rules\.mjs/,
     'shim does not re-export the engine'
   )
   const hook = readFileSync(join(ROOT, 'contributing/hooks/validate-naming.mjs'), 'utf-8')
   assert.match(hook, /lib\/naming-checks\.mjs/, 'validate-naming does not import the shim')
-  const gate = readFileSync(join(ROOT, 'packages/webkit/scripts/check-naming.mjs'), 'utf-8')
+  const gate = readFileSync(join(ROOT, 'packages/ui/scripts/check-naming.mjs'), 'utf-8')
   assert.match(gate, /lib\/naming-rules\.mjs/, 'check-naming does not run the engine')
   const gatesFile = ['scripts/gates.mjs', 'scripts/run-gates.mjs']
-    .map((f) => join(ROOT, 'packages/webkit', f))
+    .map((f) => join(ROOT, 'packages/ui', f))
     .find((f) => existsSync(f))
   assert.match(
     readFileSync(gatesFile, 'utf-8'),
@@ -307,10 +304,14 @@ test('naming: hook, CI gate and consumer lint share one engine and the migrate m
     'no CI gate runs check-naming'
   )
   const lint = readFileSync(
-    join(ROOT, 'packages/webkit/src/eslint-plugin/rules/no-deprecated-name.js'),
+    join(ROOT, 'packages/ui/src/eslint-plugin/rules/no-deprecated-name.js'),
     'utf-8'
   )
-  assert.match(lint, /cli\/migrate\.js/, 'no-deprecated-name does not read the webkit migrate maps')
+  assert.match(
+    lint,
+    /cli\/migrate\.js/,
+    'no-deprecated-name does not read the azion-ui migrate maps'
+  )
   const vocab = readFileSync(join(ROOT, ENGINE), 'utf-8')
   assert.match(vocab, /lib\/prop-vocabulary\.mjs/, 'the engine does not check the prop vocabulary')
 })

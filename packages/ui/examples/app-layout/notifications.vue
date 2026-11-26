@@ -1,9 +1,9 @@
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Alert from '@aziontech/ui/alert'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import PageHeader from '@aziontech/ui/page-header'
   import { ref } from 'vue'
 
   const maintenance = ref(true)

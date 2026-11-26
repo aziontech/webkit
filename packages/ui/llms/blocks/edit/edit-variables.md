@@ -1,12 +1,12 @@
 # EditVariables (`edit/edit-variables`)
 
-> A key/value editor, drawn as a variables list page and the Create variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `TableCellTime`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
+> A key/value editor, drawn as a variables list page and the Create variable drawer its heading action opens. The list follows the view-table recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a state-first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of edit-delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsGroup`, `DataTable`, `Card`, `EmptyState`, `TableCellId`, `TableCellLink`, `TableCellActions`, `TableCellTime`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `FieldError` and `Button`; the JSON view is an Azion UI `Textarea`. A page body for ConsoleLayout.
 
 - Surface: app
-- Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/webkit`
+- Source: `blocks/edit/edit-variables/edit-variables.vue` in `@aziontech/ui`
 - MCP: `get_block("edit/edit-variables")`
 - Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellTime`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-file-picker`, `use-shortcuts`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-form`, `azion-ui-create-surface`
 
 ## Asked as
 
@@ -36,11 +36,11 @@ A list of key and value pairs and the drawer that edits them, here environment v
 
 ### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
-The same controls row as `view/view-table`, all bound to one client-mode `useCollection` call: a `PropertyFilter` labeled "Filter variables" (free text over key, ID, author and type, plus Key, Author and Type properties), outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` last. The filter, sort and page live in the URL; page size and columns are saved. See `skills/webkit-lists`.
+The same controls row as `view/view-table`, all bound to one client-mode `useCollection` call: a `PropertyFilter` labeled "Filter variables" (free text over key, ID, author and type, plus Key, Author and Type properties), outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` last. The filter, sort and page live in the URL; page size and columns are saved. See `skills/azion-ui-lists`.
 
 ### C. Variables table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `TableCellTime`, `Tooltip` (required)
 
-`Card :padded="false"` around a borderless data-driven `DataTable` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `TableCellId` ("Copy variable ID") and Value is `TableCellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified is `TableCellTime` with the row's instant (a `Date` or an ISO string, never typed text such as `2 days ago`) and its `author`, so the column sorts by time and the relative text follows the locale. See `skills/webkit-tables`.
+`Card :padded="false"` around a borderless data-driven `DataTable` bound with `v-bind="tableProps"`, with Key as the `principal`, unhideable column, then ID (hidden by default), Value, Scope and Last modified. ID is `TableCellId` ("Copy variable ID") and Value is `TableCellLink` with `copyable`; a secret value shows its mask and loses its copy control (`:copyable="!row.secret"`). Last modified is `TableCellTime` with the row's instant (a `Date` or an ISO string, never typed text such as `2 days ago`) and its `author`, so the column sorts by time and the relative text follows the locale. See `skills/azion-ui-tables`.
 
 ### D. Row actions — `TableCellActions`, `DropdownMenu` (required)
 
@@ -48,7 +48,7 @@ The same controls row as `view/view-table`, all bound to one client-mode `useCol
 
 ### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` whose content is one `form` labeled Create variable or Edit variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
+A right-side `Drawer` whose content is one `form` labeled Create variable or Edit variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/azion-ui-create-surface`.
 
 ### F. Variables section — `SettingsGroup`, `Button`, `ToggleGroup` (required)
 
@@ -96,7 +96,7 @@ A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard short
 
 The block takes its variables through props and emits every action; it fetches nothing and saves nothing. `VariablesVariable`, `VariablesScope`, `VariablesDraft`, `VariablesSavePayload` and `VariablesProps` are exported from `edit-variables.vue`, and `sample.ts` holds the sample variables the block renders when `variables` is left out (and never while `loading` is set).
 
-The block is a folder. `edit-variables.vue` is the wiring: the props, the list rows, the row actions and the save. `parts/` holds its regions: `variables-list.vue` (the controls row and the table, on `useCollection`), `variables-drawer-form.vue` (the drawer form with its header, alert, fieldset and Save), `variables-entries.vue` (the Variables section: rows, JSON view and import tools), `variables-scope-group.vue` (the Scope section), `paste-panel.vue` with `env-paste-panel.vue` (the inline paste panel), and `network-list-fields.vue` (the network list sections). `composables/use-variables-form.ts` owns the drawer form state and validation and provides it to the parts, `composables/use-network-list-form.ts` does the same for the network list, and `lib/` holds the pure helpers (the `.env` and JSON parsing, the scopes, the row updates, the network list rules). The PasteEnv and NetworkList variants render the same parts with their own sample text from `sample.ts`. `webkit add` copies every file listed in `block.json` `files`.
+The block is a folder. `edit-variables.vue` is the wiring: the props, the list rows, the row actions and the save. `parts/` holds its regions: `variables-list.vue` (the controls row and the table, on `useCollection`), `variables-drawer-form.vue` (the drawer form with its header, alert, fieldset and Save), `variables-entries.vue` (the Variables section: rows, JSON view and import tools), `variables-scope-group.vue` (the Scope section), `paste-panel.vue` with `env-paste-panel.vue` (the inline paste panel), and `network-list-fields.vue` (the network list sections). `composables/use-variables-form.ts` owns the drawer form state and validation and provides it to the parts, `composables/use-network-list-form.ts` does the same for the network list, and `lib/` holds the pure helpers (the `.env` and JSON parsing, the scopes, the row updates, the network list rules). The PasteEnv and NetworkList variants render the same parts with their own sample text from `sample.ts`. `azion-ui add` copies every file listed in `block.json` `files`.
 
 | Prop          | Type                  | What it does                                                                                                                 |
 | ------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
@@ -148,7 +148,7 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 - Build the rows on `AttributeEditor` so add, remove, focus and announcements behave the same on every key and value editor.
 - Keep the label of each field inside its `InputGroupAddon`, tied to the field by `for`.
 - Reset the drawer on open so a closed and reopened drawer never shows stale rows.
-- Follow `skills/webkit-form` for required states and `skills/webkit-lists` for the list page.
+- Follow `skills/azion-ui-form` for required states and `skills/azion-ui-lists` for the list page.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
 
 ## Don't
@@ -172,7 +172,7 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 - **Network list:** title "Create network list"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
 - **Paste panel:** label "Paste .env contents"; report "3 variables found. Lines starting with # are ignored.", "Line 5 is not KEY=value with an uppercase key and will be skipped.", "CACHE_TTL is already in the list; its value will be replaced."; buttons "Paste .env", "Add 3 variables", "Cancel".
 - **Buttons:** verb first, three words or fewer, e.g. "Upload", "Add variable", "Save".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -205,7 +205,7 @@ Then delete the sample variables from `sample.ts` and their import. With no `sav
 - `view/view-table` — the controls row and table recipe the list page reuses.
 - `edit/edit-rule-builder` — a drawer for ordered conditions and behaviors instead of free pairs.
 - `state/state-form-validation` — when and how errors appear after Save.
-- `InputGroupRoot` — joins label, field and actions into one row; see `skills/webkit-form`.
+- `InputGroupRoot` — joins label, field and actions into one row; see `skills/azion-ui-form`.
 - `AttributeEditor` and `TagEditor` — the components behind the rows; `TagEditor` for resource tags.
 
 ## Variants
@@ -221,14 +221,14 @@ Each variant is the same screen in another state: `get_block("edit/edit-variable
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { toast } from '@aziontech/webkit/toast'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import { provideVariablesForm, useVariablesForm } from './composables/use-variables-form'
@@ -1064,7 +1064,7 @@ export const listPasteReport = (
 ## `composables/use-variables-form.ts`
 
 ```ts
-import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+import { useFilePicker } from '@aziontech/ui/use-file-picker'
 import {
   computed,
   type ComputedRef,
@@ -1646,22 +1646,22 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellId from '@aziontech/webkit/table-cell-id'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import type { TableColumn, TableExposed } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellId from '@aziontech/ui/table-cell-id'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useCollection } from '@aziontech/ui/use-collection'
   import { computed, ref } from 'vue'
 
   import { SECRET_MASK, type VariablesRow } from '../lib/variables-rows'
@@ -1971,15 +1971,15 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Kbd from '@aziontech/ui/kbd'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { ref } from 'vue'
 
   export interface VariablesDrawerFormProps {
@@ -2091,20 +2091,20 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
 
 ```ts
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Button from '@aziontech/webkit/button'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import FieldError from '@aziontech/webkit/field-error'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
-  import InputGroupInput from '@aziontech/webkit/input-group-input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Textarea from '@aziontech/webkit/textarea'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Button from '@aziontech/ui/button'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import FieldError from '@aziontech/ui/field-error'
+  import IconButton from '@aziontech/ui/icon-button'
+  import InputGroupAddon from '@aziontech/ui/input-group-addon'
+  import InputGroupInput from '@aziontech/ui/input-group-input'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Textarea from '@aziontech/ui/textarea'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import { useVariablesFormContext, type VariablesEntry } from '../composables/use-variables-form'
   import { SECRET_MASK } from '../lib/variables-rows'
@@ -2343,13 +2343,13 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
 
 ```ts
 <script setup lang="ts">
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Switch from '@aziontech/webkit/switch'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import InputGroupAddon from '@aziontech/ui/input-group-addon'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Switch from '@aziontech/ui/switch'
 
   import { useVariablesFormContext } from '../composables/use-variables-form'
   import {
@@ -2454,9 +2454,9 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Textarea from '@aziontech/ui/textarea'
 
   export interface PastePanelProps {
     /** The id of the text field; the panel and its report derive theirs from it. */
@@ -2543,8 +2543,8 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
 
 ```ts
 <script setup lang="ts">
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import FieldError from '@aziontech/webkit/field-error'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import FieldError from '@aziontech/ui/field-error'
   import { computed } from 'vue'
 
   import { useVariablesFormContext } from '../composables/use-variables-form'
@@ -2626,15 +2626,15 @@ export function useNetworkListFormContext(): UseNetworkListFormReturn {
 
 ```ts
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed } from 'vue'
 
   import { useNetworkListFormContext } from '../composables/use-network-list-form'

@@ -1,15 +1,15 @@
 {
  "name": "input-group",
  "binding": "InputGroup",
- "import": "@aziontech/webkit/input-group",
- "treeShakeableImport": "@aziontech/webkit/input-group-root",
+ "import": "@aziontech/ui/input-group",
+ "treeShakeableImport": "@aziontech/ui/input-group-root",
  "category": "input",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/input-group-addon",
-  "@aziontech/webkit/input-group-input"
+  "@aziontech/ui/input-group-addon",
+  "@aziontech/ui/input-group-input"
  ],
  "purpose": "Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field (an input group, as other UI kits call it). The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.",
  "setup": null,

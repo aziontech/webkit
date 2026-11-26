@@ -3,10 +3,10 @@
 > The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying… 2 of 5 done while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Remaining, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeIcon` once it settles. When the run settles the header gains a large `OutcomeIcon` and the outcome reports through one toast with Edit and Redeploy, as every async action does, raised only while the dialog is hidden so it never covers the dialog's footer; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeIcon`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
 
 - Surface: app
-- Source: `blocks/create/create-deploy-progress-dialog/create-deploy-progress-dialog.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-deploy-progress-dialog/create-deploy-progress-dialog.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-deploy-progress-dialog")`
 - Components: [Button](../../components/button.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Item](../../components/item.md), [OutcomeIcon](../../components/outcome-icon.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Progress](../../components/progress.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
-- Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
+- Skills: `azion-ui-states`, `azion-ui-errors`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -55,7 +55,7 @@ Retry failed appears only when the run settled with failures, as a secondary but
 
 ### Outcome toast — through `toast`
 
-One toast id for the run, raised only while the dialog is hidden, so it never covers the dialog's own footer: `toast.loading` with "It keeps running if you leave." while the run goes on, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy** when it settles. Opening the dialog dismisses the toast; a run that settled while the dialog was open already showed its outcome there, so closing it raises no toast. Edit reopens the dialog on the failed rows; Redeploy emits `redeploy` so the page runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+One toast id for the run, raised only while the dialog is hidden, so it never covers the dialog's own footer: `toast.loading` with "It keeps running if you leave." while the run goes on, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy** when it settles. Opening the dialog dismisses the toast; a run that settled while the dialog was open already showed its outcome there, so closing it raises no toast. Edit reopens the dialog on the failed rows; Redeploy emits `redeploy` so the page runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -118,7 +118,7 @@ Then delete `sample.ts` and its import.
 - **Title:** "Deploying… 2 of 5 done", "Deployed 5 Deployment Settings", "Deployed 4 of 5 Deployment Settings".
 - **Tally:** "4 succeeded, 1 failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live."
 - **Tags:** Queued, Deploying, Done, Failed. **Actions:** Retry failed, Hide (while running), Close.
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, the progressive verb with `…`.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, the progressive verb with `…`.
 
 ## Accessibility
 
@@ -155,22 +155,22 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Item from '@aziontech/webkit/item'
-  import OutcomeIcon, { type OutcomeIconSeverity } from '@aziontech/webkit/outcome-icon'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Progress from '@aziontech/webkit/progress'
-  import Spinner from '@aziontech/webkit/spinner'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Item from '@aziontech/ui/item'
+  import OutcomeIcon, { type OutcomeIconSeverity } from '@aziontech/ui/outcome-icon'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Progress from '@aziontech/ui/progress'
+  import Spinner from '@aziontech/ui/spinner'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import { toast } from '@aziontech/ui/toast'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import { sampleRunningItems } from './sample'

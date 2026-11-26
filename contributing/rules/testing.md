@@ -1,6 +1,6 @@
 # Rule: testing — every component ships a functional browser-mode suite
 
-**Scope: `general`.** Shipping a functional test alongside every component is a universal quality practice, not a webkit-only one — this standard travels to consuming projects (it is part of the `general` set the adoption toolkit ships out). The paths and stack below are this repo's instantiation; the invariant — a test exists for every component and moves with it — is the general rule.
+**Scope: `general`.** Shipping a functional test alongside every component is a universal quality practice, not an azion-ui-only one — this standard travels to consuming projects (it is part of the `general` set the adoption toolkit ships out). The paths and stack below are this repo's instantiation; the invariant — a test exists for every component and moves with it — is the general rule.
 
 Every component ships a co-located `*.test.ts` that proves it **works**, exercised in a **real browser**. The spec-compliance hooks prove a `.vue` _declares_ what its `.specs/<name>.md` promises; they do not prove a prop is read, an event is emitted, a focus ring is reachable, or an overlay closes on `Escape`. This rule closes that gap with the smallest per-component cost, and fixes the **floor** (not the ceiling) every component must clear.
 
@@ -8,7 +8,7 @@ Every component ships a co-located `*.test.ts` that proves it **works**, exercis
 
 ## The rule
 
-> Every component under `packages/webkit/src/components/<category>/<name>/` ships one `<name>.test.ts` next to the `.vue`, **created with the component and kept current whenever its behavior changes** (reviewers hold that line; style-only changes need no test touch). It runs in **Vitest browser mode** (Playwright Chromium — never jsdom), renders the component's documented examples (`packages/webkit/examples/<name>/*.vue`, the same files the catalog and the docs use) as fixtures, asserts the functional surface below, and runs `axe-core` against the rendered tree. Composition sub-components are tested **through their root**; only the root gets a `.test.ts` (unless the spec promises behavior the root test cannot reach).
+> Every component under `packages/ui/src/components/<category>/<name>/` ships one `<name>.test.ts` next to the `.vue`, **created with the component and kept current whenever its behavior changes** (reviewers hold that line; style-only changes need no test touch). It runs in **Vitest browser mode** (Playwright Chromium — never jsdom), renders the component's documented examples (`packages/ui/examples/<name>/*.vue`, the same files the catalog and the docs use) as fixtures, asserts the functional surface below, and runs `axe-core` against the rendered tree. Composition sub-components are tested **through their root**; only the root gets a `.test.ts` (unless the spec promises behavior the root test cannot reach).
 
 ## Why browser mode, never jsdom
 
@@ -19,7 +19,7 @@ jsdom returns no-ops for `focus`, `document.activeElement`, layout/`getBoundingC
 
 ### Two modes: unstyled by default, styled when the suite asks for it
 
-`vitest.config.ts` runs the Tailwind Vite plugin, but Tailwind only compiles a stylesheet a suite imports, and [`setup.ts`](../../packages/webkit/src/test/setup.ts) imports none. So a suite runs in one of two modes, chosen by its own first line:
+`vitest.config.ts` runs the Tailwind Vite plugin, but Tailwind only compiles a stylesheet a suite imports, and [`setup.ts`](../../packages/ui/src/test/setup.ts) imports none. So a suite runs in one of two modes, chosen by its own first line:
 
 | Mode                   | How                                                                                                                       | What a computed style reads                          | Used by                                                                                                         |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -39,17 +39,17 @@ The styled stylesheet holds every class Tailwind finds: the `@source` folders, i
 
 ## The stack (already wired — do not reinvent)
 
-- `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. `tailwindcss()` compiles only the stylesheet a suite imports (see the two modes above). Example imports of `@aziontech/webkit/*` resolve through the package's own `exports` (no alias needed).
-- `packages/webkit/src/test/setup.ts` — `cleanup()` + an anchor-navigation guard (a real click on an `<a href>` would navigate and tear down the test iframe). It loads **no** CSS, on purpose — see the two modes above.
-- `packages/webkit/src/test/axe.ts` — `expectNoA11yViolations(container)`; semantics only, no contrast.
-- `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when `packages/webkit` changes; the `toolkit` job runs `check:tests` (existence).
-- Publish-safety: `packages/webkit/package.json#files` negates `*.test.ts` and `src/test/**` (verified with `pnpm --filter @aziontech/webkit check:pack`, which fails when the dry-run pack lists a test file). Test files never ship to npm.
+- `packages/ui/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. `tailwindcss()` compiles only the stylesheet a suite imports (see the two modes above). Example imports of `@aziontech/ui/*` resolve through the package's own `exports` (no alias needed).
+- `packages/ui/src/test/setup.ts` — `cleanup()` + an anchor-navigation guard (a real click on an `<a href>` would navigate and tear down the test iframe). It loads **no** CSS, on purpose — see the two modes above.
+- `packages/ui/src/test/axe.ts` — `expectNoA11yViolations(container)`; semantics only, no contrast.
+- `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when `packages/ui` changes; the `toolkit` job runs `check:tests` (existence).
+- Publish-safety: `packages/ui/package.json#files` negates `*.test.ts` and `src/test/**` (verified with `pnpm --filter @aziontech/ui check:pack`, which fails when the dry-run pack lists a test file). Test files never ship to npm.
 
 ## Conventions
 
-- **Location:** `packages/webkit/src/components/<category>/<name>/<name>.test.ts` (sibling of the `.vue` / `index.ts`).
-- **Blocks:** `packages/webkit/src/test/blocks/<block-id>.test.ts`, named by the block id (`blocks/view/view-table.test.ts`); a suite over several blocks of one group is `src/test/blocks/<group>.test.ts`. A cross-cutting suite is `src/test/<concern>.test.ts` (`rtl`, `reflow`, `screen-reader`, `a11y-*`).
-- **Imports:** `describe`/`it`/`expect` from `vitest` (explicit — no `globals`); `render`/`fireEvent`/`screen` from `@testing-library/vue`; `userEvent` from `@testing-library/user-event` (or `vitest/browser`) for realistic keyboard/pointer; the example SFCs by relative import from `packages/webkit/examples/<name>/` (never from `apps/`); `expectNoA11yViolations` from the relative `test/axe`; the component via relative `./...`.
+- **Location:** `packages/ui/src/components/<category>/<name>/<name>.test.ts` (sibling of the `.vue` / `index.ts`).
+- **Blocks:** `packages/ui/src/test/blocks/<block-id>.test.ts`, named by the block id (`blocks/view/view-table.test.ts`); a suite over several blocks of one group is `src/test/blocks/<group>.test.ts`. A cross-cutting suite is `src/test/<concern>.test.ts` (`rtl`, `reflow`, `screen-reader`, `a11y-*`).
+- **Imports:** `describe`/`it`/`expect` from `vitest` (explicit — no `globals`); `render`/`fireEvent`/`screen` from `@testing-library/vue`; `userEvent` from `@testing-library/user-event` (or `vitest/browser`) for realistic keyboard/pointer; the example SFCs by relative import from `packages/ui/examples/<name>/` (never from `apps/`); `expectNoA11yViolations` from the relative `test/axe`; the component via relative `./...`.
 - **Example import is a RELATIVE path**, never a vite alias — `validate-references.mjs` cannot resolve an alias and will block the write. If a component has no example that fits, test it directly with `render(Component, { props })`.
 - **Local runs** (when node_modules is symlinked into a worktree) set `PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false CI=` so pnpm's deps check doesn't abort against symlinks.
 
@@ -96,13 +96,13 @@ A tiny `it.each` smoke over enum variants ("mounts without throwing") is a **flo
 Existence is blocking — no advisory path:
 
 - **Write-time — existence, on create AND update.** `contributing/hooks/enforce-test-exists.mjs` (PostToolUse on `Write`/`Edit`/`MultiEdit`) blocks (exit 2) when a ROOT component `.vue` is written or edited and its co-located `<name>.test.ts` is missing. Composition sub-components are exempt (tested through their root); `wip/` and the legacy whitelist (`contributing/hooks/lib/legacy-components.json`) are exempt.
-- **CI — existence (mandatory).** `packages/webkit/scripts/check-tests.mjs` (`pnpm --filter @aziontech/webkit run check:tests`, run in the `toolkit` job of `governance.yml`) fails the PR when **any** ROOT component has no co-located `<name>.test.ts`. **Never grandfathered** — a component without a test always fails the build. This is what makes "no untested component" true at merge, not just at save. There is deliberately **no** diff-freshness gate (changed `.vue` ⇒ changed test): it cannot tell a behavior change from a style-only one, so it taxed CSS/token PRs with no-op test edits; keeping the test honest on behavior changes is the reviewer's job (below).
-- **CI — the suite runs.** The sharded Vitest browser job (`vitest`, Playwright Chromium) runs `pnpm test:browser-webkit` on every PR/push touching webkit; a failing assertion fails the PR.
+- **CI — existence (mandatory).** `packages/ui/scripts/check-tests.mjs` (`pnpm --filter @aziontech/ui run check:tests`, run in the `toolkit` job of `governance.yml`) fails the PR when **any** ROOT component has no co-located `<name>.test.ts`. **Never grandfathered** — a component without a test always fails the build. This is what makes "no untested component" true at merge, not just at save. There is deliberately **no** diff-freshness gate (changed `.vue` ⇒ changed test): it cannot tell a behavior change from a style-only one, so it taxed CSS/token PRs with no-op test edits; keeping the test honest on behavior changes is the reviewer's job (below).
+- **CI — the suite runs.** The sharded Vitest browser job (`vitest`, Playwright Chromium) runs `pnpm test:browser-webkit` on every PR/push touching Azion UI; a failing assertion fails the PR.
 - **Write-time — test integrity.** `validate-references.mjs` blocks a test whose imports don't resolve (including a mistaken alias).
-- **Publish safety.** `pnpm --filter @aziontech/webkit check:pack` must pass (the dry-run pack lists **no** `*.test.ts`) — the `files` negation keeps tests out of the published package.
+- **Publish safety.** `pnpm --filter @aziontech/ui check:pack` must pass (the dry-run pack lists **no** `*.test.ts`) — the `files` negation keeps tests out of the published package.
 - **Review.** Reviewers confirm the behavioral surface is actually covered (the machine proves the test exists and moves with the component; the human confirms it asserts the right things).
 
-The registry pairs this rule with those gates in `contributing/hooks/lib/standards.mjs` (`enforce[]`), and `packages/webkit/test/standards/invariant.test.mjs` fails the build if the rule and its gates ever drift apart.
+The registry pairs this rule with those gates in `contributing/hooks/lib/standards.mjs` (`enforce[]`), and `packages/ui/test/standards/invariant.test.mjs` fails the build if the rule and its gates ever drift apart.
 
 ## Why this rule exists
 

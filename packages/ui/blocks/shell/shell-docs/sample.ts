@@ -1,5 +1,5 @@
-import type { DocLayoutNavGroup, DocLayoutSection } from '@aziontech/webkit/doc-layout'
-import type { DocTableOfContentsGroup } from '@aziontech/webkit/doc-table-of-contents'
+import type { DocLayoutNavGroup, DocLayoutSection } from '@aziontech/ui/doc-layout'
+import type { DocTableOfContentsGroup } from '@aziontech/ui/doc-table-of-contents'
 
 import type { ShellDocsFooterColumn, ShellDocsSocial } from './shell-docs.vue'
 

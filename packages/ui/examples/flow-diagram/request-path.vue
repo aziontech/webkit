@@ -1,5 +1,5 @@
 <script setup>
-  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
+  import FlowDiagram from '@aziontech/ui/flow-diagram-root'
 
   const nodes = [
     {

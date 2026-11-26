@@ -1,8 +1,8 @@
 {
  "name": "tool-call",
  "binding": "ToolCall",
- "import": "@aziontech/webkit/tool-call",
- "treeShakeableImport": "@aziontech/webkit/tool-call",
+ "import": "@aziontech/ui/tool-call",
+ "treeShakeableImport": "@aziontech/ui/tool-call",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

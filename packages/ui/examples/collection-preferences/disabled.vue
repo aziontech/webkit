@@ -1,5 +1,5 @@
 <script setup>
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
 
   const columns = [
     { id: 'name', label: 'Name', locked: true },

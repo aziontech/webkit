@@ -1,9 +1,9 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Panel from '@aziontech/webkit/panel-root'
+  import Button from '@aziontech/ui/button'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Panel from '@aziontech/ui/panel-root'
 </script>
 
 <template>

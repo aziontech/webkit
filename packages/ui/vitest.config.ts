@@ -18,11 +18,11 @@ const EXPORTS: Record<string, string | { default: string }> = JSON.parse(
   readFileSync(new URL('./package.json', import.meta.url), 'utf8')
 ).exports
 const selfExports = {
-  name: 'webkit-self-exports',
+  name: 'azion-ui-self-exports',
   enforce: 'pre' as const,
   resolveId(id: string) {
-    if (!id.startsWith('@aziontech/webkit/')) return null
-    const entry = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    if (!id.startsWith('@aziontech/ui/')) return null
+    const entry = EXPORTS[`./${id.slice('@aziontech/ui/'.length)}`]
     const target = typeof entry === 'string' ? entry : entry?.default
     return target ? fileURLToPath(new URL(target, import.meta.url)) : null
   }

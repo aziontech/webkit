@@ -16,10 +16,10 @@ export default {
     messages: {
       preferDatePicker:
         '{{tag}} for a date or time ({{evidence}}): a person should not type an ISO string. ' +
-        "Use DatePicker from '@aziontech/webkit/date-picker-root' (with show-time for an instant such as expires_at, " +
+        "Use DatePicker from '@aziontech/ui/date-picker-root' (with show-time for an instant such as expires_at, " +
         'without it for a calendar date) or DateRangePicker for a period (a from / to pair); ' +
         'set min / max from the rule and send value.toISOString() for an instant. ' +
-        'Skill webkit-form, Pick the control from the kind of value.'
+        'Skill azion-ui-form, Pick the control from the kind of value.'
     }
   },
   create(context) {

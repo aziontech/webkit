@@ -2,7 +2,7 @@
 name: echo-reporter
 description: Isolated sub-agent that re-reads every file written this run, parses props/events/slots/animations independently, and diffs against the spec. Cross-checks against validate-spec-compliance.mjs.
 status: active
-scope: webkit
+scope: ui
 ---
 
 # Agent: echo-reporter
@@ -16,7 +16,7 @@ You are the echo-reporter sub-agent. You execute the echo-report skill verbatim.
 1. Re-read every file the orchestrator listed (root .vue, sub-component .vue files, examples/<name>/*, .figma.ts).
 2. Parse them with your own regex/AST pass — do NOT call into contributing/hooks/lib/spec.mjs. Two independent parsers agreeing is the precision boost.
 3. Diff defineProps / defineEmits / defineSlots / defineOptions / the examples' imports and props / .figma.ts enum keys against the spec. Check examples.json lists at least the spec's ## Examples entries, starting with default.vue.
-4. Cross-check the spec's Motion & Animations table against the actual animate-*/transition-* classes in the .vue files. Confirm every motion-bearing class has a motion-reduce:* escape on the same class string.
+4. Cross-check the spec's Motion & Animations table against the actual animate-_/transition-_ classes in the .vue files. Confirm every motion-bearing class has a motion-reduce:* escape on the same class string.
 5. Compare your verdict with validate-spec-compliance.mjs:
    - Same verdict → run continues.
    - Different verdict → mark the run degraded and surface both verdicts to the user; do not flip silently.

@@ -22,16 +22,16 @@ const baseline = JSON.parse(
   readFileSync(new URL('../../scripts/examples-lint-baseline.json', import.meta.url), 'utf-8')
 )
 
-test('the gate lints with the exact config `webkit init` writes (strict preset)', async () => {
+test('the gate lints with the exact config `azion-ui init` writes (strict preset)', async () => {
   const source = consumerConfigSource()
   assert.equal(source, _internals.eslintFlatConfig('strict'))
   const rewritten = resolveConfigImports(source, (spec) => `resolved:${spec}`)
   assert.equal(rewritten.replace(/'resolved:([^']+)'/g, "'$1'"), source)
-  assert.match(rewritten, /from 'resolved:@aziontech\/webkit\/eslint-plugin'/)
+  assert.match(rewritten, /from 'resolved:@aziontech\/ui\/eslint-plugin'/)
   const config = await loadConsumerConfig()
   const rules = Object.assign({}, ...config.map((c) => c.rules || {}))
-  assert.equal(rules['webkit/prefer-tree-shakeable-root'], 'error')
-  assert.equal(rules['webkit/no-style-override'], 'error')
+  assert.equal(rules['azion-ui/prefer-tree-shakeable-root'], 'error')
+  assert.equal(rules['azion-ui/no-style-override'], 'error')
   assert.equal([rules['vuejs-accessibility/label-has-for']].flat()[0], 'error')
 })
 
@@ -48,13 +48,13 @@ test('countMessages counts every finding per file and rule, never deduplicating'
     [
       {
         filePath: '/x/examples/a/default.vue',
-        messages: [msg('webkit/r'), msg('webkit/r'), msg(null)]
+        messages: [msg('azion-ui/r'), msg('azion-ui/r'), msg(null)]
       },
       { filePath: '/x/examples/b/default.vue', messages: [] }
     ],
     root
   )
-  assert.deepEqual(counts, { 'a/default.vue': { 'webkit/r': 2, 'parse-error': 1 } })
+  assert.deepEqual(counts, { 'a/default.vue': { 'azion-ui/r': 2, 'parse-error': 1 } })
   assert.equal(total(counts), 3)
 })
 
@@ -104,8 +104,8 @@ test('a copied example that breaks the consumer lint is caught', async () => {
       join(dir, 'demo/bad.vue'),
       [
         '<script setup lang="ts">',
-        "  import Button from '@aziontech/webkit/button'",
-        "  import ChatMessage from '@aziontech/webkit/chat-message'",
+        "  import Button from '@aziontech/ui/button'",
+        "  import ChatMessage from '@aziontech/ui/chat-message'",
         '</script>',
         '',
         '<template>',
@@ -119,7 +119,7 @@ test('a copied example that breaks the consumer lint is caught', async () => {
       join(dir, 'demo/good.vue'),
       [
         '<script setup lang="ts">',
-        "  import Button from '@aziontech/webkit/button'",
+        "  import Button from '@aziontech/ui/button'",
         '</script>',
         '',
         '<template>',
@@ -130,8 +130,8 @@ test('a copied example that breaks the consumer lint is caught', async () => {
     )
     const { counts } = await lintExamples({ dir })
     assert.deepEqual(Object.keys(counts), ['demo/bad.vue'])
-    assert.equal(counts['demo/bad.vue']['webkit/prefer-tree-shakeable-root'], 1)
-    assert.equal(counts['demo/bad.vue']['webkit/no-style-override'], 1)
+    assert.equal(counts['demo/bad.vue']['azion-ui/prefer-tree-shakeable-root'], 1)
+    assert.equal(counts['demo/bad.vue']['azion-ui/no-style-override'], 1)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

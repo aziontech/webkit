@@ -1,9 +1,9 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import PaginationRoot from '@aziontech/webkit/pagination-root'
+  import Button from '@aziontech/ui/button'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import { ptBR } from '@aziontech/ui/locales/pt-BR'
+  import PaginationRoot from '@aziontech/ui/pagination-root'
   import { ref } from 'vue'
 
   const page = ref(1)

@@ -2,7 +2,7 @@
 
 > The "Your AI agent, fluent in Azion" card that opens the first section of a documentation home. Two columns in one framed card: on the left the title, one or two sentences on what the prompt gives the agent, and the inline `CopyPromptButton` with the agent marks; on the right, behind a vertical divider, the question "Prefer the guided route?" over an orange `Agent setup` button, set on an orange halftone panel that fades in from the bottom corner. Below the card's `@3xl` container size the columns stack and the divider turns horizontal. All four strings default to the catalog, so `<DocAgentCard :prompt="…" />` is the whole reference card.
 
-- Import: `import DocAgentCard from '@aziontech/webkit/doc-agent-card'`
+- Import: `import DocAgentCard from '@aziontech/ui/doc-agent-card'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-agent-card.json](doc-agent-card.json)
 
@@ -92,7 +92,7 @@
 
 ```vue
 <script setup>
-  import DocAgentCard from '@aziontech/webkit/doc-agent-card'
+  import DocAgentCard from '@aziontech/ui/doc-agent-card'
 
   const prompt =
     'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
@@ -110,7 +110,7 @@
 
 ```vue
 <script setup>
-  import DocAgentCard from '@aziontech/webkit/doc-agent-card'
+  import DocAgentCard from '@aziontech/ui/doc-agent-card'
 
   const prompt = 'Set up the Azion CLI and link this project to my Azion account.'
 </script>
@@ -129,8 +129,8 @@
 
 ```vue
 <script setup>
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
 
   const source = [
     '## Set up with an agent',

@@ -1,9 +1,9 @@
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
   import { ref } from 'vue'
 
   const trail = [{ label: 'Resources', href: '/resources' }, { label: 'acme-store' }]

@@ -3,10 +3,10 @@
 > The full-page generative AI assistant in the chat-app look: a thread history grouped by date (search, a project filter, New thread; each row shows its project, the Azion product it started on with how many it touches or the version it edits, a `HoverCard` of details, and Snooze and Settle) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the title of the open conversation with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), the model picker (`v-model:modelKey`, the only one on the page) and Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `HoverCard`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
 
 - Surface: app
-- Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
+- Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/ui`
 - MCP: `get_block("ai/ai-chat")`
 - Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), `ResizableHandle`, `ResizablePane`, [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
-- Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-ai-surfaces`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -106,7 +106,7 @@ While `hydrating` (`isHydrating` of `useChat`) and no message is in place yet, t
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`, `structured-output`, `ui-resource`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and runs no AI library; `@aziontech/webkit/utils/ai-chat` names TanStack AI's own message types, imported from `@tanstack/ai` as types only (an optional peer, `^1.5.0`), with the helpers that read them (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, `AiChatSendContent`; import the types from there), so the shape follows TanStack when you update it, and any source that produces it works. A part of another type is skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `image`, `audio`, `video`, `document`, `activity`, `subagent`, `structured-output`, `ui-resource`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and runs no AI library; `@aziontech/ui/utils/ai-chat` names TanStack AI's own message types, imported from `@tanstack/ai` as types only (an optional peer, `^1.5.0`), with the helpers that read them (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`, `AiChatSendContent`; import the types from there), so the shape follows TanStack when you update it, and any source that produces it works. A part of another type is skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 An activity step reads, by convention, `content.title` (else its `activityType`), `content.status` (`pending`, `running`, `success` or `complete`, `error`, `canceled` or `cancelled`, `skipped`; left out, running) and `content.detail` as the line under it.
 
@@ -276,7 +276,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
 - **Feedback:** the Feedback menu with Good response and Bad response (built in); the toast says Thanks for your feedback.
-- Follow `skills/webkit-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
+- Follow `skills/azion-ui-microcopy`: sentence case, "select" not "click", "response" not "answer", no "please".
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
 
@@ -315,7 +315,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - `ai/ai-chat-drawer` — the same conversation in a drawer over a resource page.
 - `ai/ai-action-approval` — when a response proposes a change the reader must authorize.
 - `state/state-async-submit` — long-running work outside a conversation.
-- `skills/webkit-ai-surfaces` — the rules this block follows: loading stages, streaming, citations, feedback, authorization.
+- `skills/azion-ui-ai-surfaces` — the rules this block follows: loading stages, streaming, citations, feedback, authorization.
 
 ## Variants
 
@@ -333,25 +333,22 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
-  import ChatMessage from '@aziontech/webkit/chat-message-root'
-  import Conversation from '@aziontech/webkit/conversation'
-  import type { FeedbackReasonDialogPayload } from '@aziontech/webkit/feedback-reason-dialog'
-  import {
-    type McpAppFrameMessage,
-    type McpAppFrameResource
-  } from '@aziontech/webkit/mcp-app-frame'
+  import Alert from '@aziontech/ui/alert'
+  import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/ui/chat-message'
+  import ChatMessage from '@aziontech/ui/chat-message-root'
+  import Conversation from '@aziontech/ui/conversation'
+  import type { FeedbackReasonDialogPayload } from '@aziontech/ui/feedback-reason-dialog'
+  import { type McpAppFrameMessage, type McpAppFrameResource } from '@aziontech/ui/mcp-app-frame'
   import type {
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
-  } from '@aziontech/webkit/prompt-input'
-  import PromptQueue from '@aziontech/webkit/prompt-queue'
-  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-  import { useAiChatTools } from '@aziontech/webkit/use-ai-chat-tools'
-  import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  } from '@aziontech/ui/prompt-input'
+  import PromptQueue from '@aziontech/ui/prompt-queue'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/ui/suggestion-group'
+  import { useAiChatTools } from '@aziontech/ui/use-ai-chat-tools'
+  import { useAiChatVersions } from '@aziontech/ui/use-ai-chat-versions'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import {
     type AiChatConnection,
     type AiChatInterrupt,
@@ -367,7 +364,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     hasAnswer,
     interruptErrorText,
     queueItemOf
-  } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/utils/ai-chat'
   import { computed, ref, useSlots } from 'vue'
 
   import { useComposerFocus } from './composables/use-composer-focus'
@@ -783,10 +780,10 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 ## `sample.ts`
 
 ````ts
-import type { PromptInputMenuOption } from '@aziontech/webkit/prompt-input'
-import type { SourcesItem } from '@aziontech/webkit/sources'
-import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-import type { AiChatInterrupt, AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
+import type { PromptInputMenuOption } from '@aziontech/ui/prompt-input'
+import type { SourcesItem } from '@aziontech/ui/sources'
+import type { SuggestionGroupItem } from '@aziontech/ui/suggestion-group'
+import type { AiChatInterrupt, AiChatMessage } from '@aziontech/ui/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
@@ -1365,7 +1362,7 @@ export const sampleTools: PromptInputMenuOption[] = [
 ## `lib/ai-chat-failure.ts`
 
 ```ts
-import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
+import type { AiChatMessage } from '@aziontech/ui/utils/ai-chat'
 
 export const failureText = (error: unknown): string => {
   if (!error) return ''
@@ -1457,8 +1454,8 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import ArtifactCanvas from '@aziontech/ui/artifact-canvas'
+  import CodeBlock from '@aziontech/ui/code-block'
   import { computed, ref } from 'vue'
 
   const props = defineProps<{ title: string; versions: string[]; downloadable: boolean }>()
@@ -1505,12 +1502,12 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
-  } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
-  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
-  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  } from '@aziontech/ui/prompt-input'
+  import PromptInputAttachButton from '@aziontech/ui/prompt-input-attach-button'
+  import PromptInputContextPicker from '@aziontech/ui/prompt-input-context-picker'
+  import PromptInputDictateButton from '@aziontech/ui/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/ui/prompt-input-model-picker'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
   import { nextTick, ref } from 'vue'
 
   import { sampleContexts, sampleModes, sampleProviders } from '../sample'
@@ -1629,9 +1626,9 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import type { AiChatConnection } from '@aziontech/webkit/utils/ai-chat'
+  import Alert from '@aziontech/ui/alert'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import type { AiChatConnection } from '@aziontech/ui/utils/ai-chat'
   import { computed, ref, watch } from 'vue'
 
   const props = defineProps<{
@@ -1689,12 +1686,12 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Button from '@aziontech/ui/button'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import IconButton from '@aziontech/ui/icon-button'
   import { computed, ref } from 'vue'
 
   import { useWideScreen } from '../composables/use-wide-screen'
@@ -1872,20 +1869,20 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
-  import DrawerBody from '@aziontech/webkit/drawer-body'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerHeader from '@aziontech/webkit/drawer-header'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import Popover from '@aziontech/webkit/popover-root'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
-  import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import type { ConversationHistoryItem } from '@aziontech/ui/conversation-history'
+  import DrawerBody from '@aziontech/ui/drawer-body'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import DrawerHeader from '@aziontech/ui/drawer-header'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import PopoverContent from '@aziontech/ui/popover-content'
+  import Popover from '@aziontech/ui/popover-root'
+  import PopoverTrigger from '@aziontech/ui/popover-trigger'
+  import { toast } from '@aziontech/ui/toast'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, ref, watch } from 'vue'
 
   import { useWideScreen } from '../composables/use-wide-screen'
@@ -2244,7 +2241,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 <script setup lang="ts">
   import ConversationHistory, {
     type ConversationHistoryItem
-  } from '@aziontech/webkit/conversation-history'
+  } from '@aziontech/ui/conversation-history'
 
   import { type AiChatProject, type AiChatThread, sampleHistoryNow } from '../sample'
   import AiChatHistoryActions from './ai-chat-history-actions.vue'
@@ -2297,7 +2294,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
   import { computed } from 'vue'
 
   import { sampleThreads } from '../sample'
@@ -2331,13 +2328,13 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import FilePreview from '@aziontech/webkit/file-preview'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
+  import Alert from '@aziontech/ui/alert'
+  import AudioPlayer from '@aziontech/ui/audio-player'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import FilePreview from '@aziontech/ui/file-preview'
+  import ImageGallery from '@aziontech/ui/image-gallery'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import SubagentCard from '@aziontech/ui/subagent-card'
   import {
     type AiChatSegment,
     documentNameOf,
@@ -2346,8 +2343,8 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
     structuredOf,
     subagentStatusOf,
     subagentTextOf
-  } from '@aziontech/webkit/utils/ai-chat'
-  import VideoPlayer from '@aziontech/webkit/video-player'
+  } from '@aziontech/ui/utils/ai-chat'
+  import VideoPlayer from '@aziontech/ui/video-player'
 
   defineProps<{ segment: AiChatSegment }>()
 </script>
@@ -2421,7 +2418,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Skeleton from '@aziontech/ui/skeleton'
 </script>
 
 <template>
@@ -2453,8 +2450,8 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import ResizablePane from '@aziontech/webkit/resizable-pane'
-  import Resizable from '@aziontech/webkit/resizable-root'
+  import ResizablePane from '@aziontech/ui/resizable-pane'
+  import Resizable from '@aziontech/ui/resizable-root'
 
   defineProps<{ split: boolean }>()
 
@@ -2487,7 +2484,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/ui/suggestion-group'
 
   defineProps<{ starters: SuggestionGroupItem[] }>()
 
@@ -2528,11 +2525,11 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import AgentQuestion from '@aziontech/webkit/agent-question'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import AgentQuestion from '@aziontech/ui/agent-question'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import ImageGallery from '@aziontech/ui/image-gallery'
+  import ToolApproval from '@aziontech/ui/tool-approval'
+  import ToolCall from '@aziontech/ui/tool-call'
   import {
     type AiChatQuestion,
     type AiChatTool,
@@ -2545,7 +2542,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
     parsesAsJson,
     toolContentOf,
     toolStatusOf
-  } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/utils/ai-chat'
 
   defineProps<{
     call: AiChatToolCallPart
@@ -2650,25 +2647,25 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import AgentActivity from '@aziontech/webkit/agent-activity'
-  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import AgentActivity from '@aziontech/ui/agent-activity'
+  import AgentQuestion from '@aziontech/ui/agent-question'
   import ChatMessage, {
     type ChatMessageFeedbackValue,
     type ChatMessageStatus
-  } from '@aziontech/webkit/chat-message'
+  } from '@aziontech/ui/chat-message'
   import FeedbackReasonDialog, {
     type FeedbackReasonDialogPayload
-  } from '@aziontech/webkit/feedback-reason-dialog'
+  } from '@aziontech/ui/feedback-reason-dialog'
   import McpAppFrame, {
     type McpAppFrameMessage,
     type McpAppFrameResource
-  } from '@aziontech/webkit/mcp-app-frame'
-  import Reasoning from '@aziontech/webkit/reasoning'
-  import ResponseBranches from '@aziontech/webkit/response-branches'
-  import Sources from '@aziontech/webkit/sources'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import { toast } from '@aziontech/webkit/toast'
-  import type { UseAiChatVersionsReturn } from '@aziontech/webkit/use-ai-chat-versions'
+  } from '@aziontech/ui/mcp-app-frame'
+  import Reasoning from '@aziontech/ui/reasoning'
+  import ResponseBranches from '@aziontech/ui/response-branches'
+  import Sources from '@aziontech/ui/sources'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import { toast } from '@aziontech/ui/toast'
+  import type { UseAiChatVersionsReturn } from '@aziontech/ui/use-ai-chat-versions'
   import {
     activitiesBefore,
     type AiChatMessage,
@@ -2679,7 +2676,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
     type AiChatUiResourcePart,
     segmentsOf,
     textOf
-  } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/utils/ai-chat'
   import { computed, ref } from 'vue'
 
   import AiChatMediaSegment from './ai-chat-media-segment.vue'
@@ -2945,8 +2942,8 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Button from '@aziontech/ui/button'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { ref } from 'vue'
 
   const emit = defineEmits<{

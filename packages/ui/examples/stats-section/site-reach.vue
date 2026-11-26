@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
-  import StatsSection from '@aziontech/webkit/stats-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
+  import StatsSection from '@aziontech/ui/stats-section'
 
   const items = [
     {

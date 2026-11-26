@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import PageHeader from '@aziontech/ui/page-header'
   import { onScopeDispose, ref } from 'vue'
 
   import SignInFrame from '../parts/sign-in-frame.vue'

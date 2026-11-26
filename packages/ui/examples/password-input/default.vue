@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import PasswordInput from '@aziontech/webkit/password-input'
+  import Field from '@aziontech/ui/field'
+  import PasswordInput from '@aziontech/ui/password-input'
   import { ref } from 'vue'
 
   const password = ref('')

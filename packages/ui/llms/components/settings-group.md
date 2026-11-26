@@ -2,7 +2,7 @@
 
 > A band of a settings page: an h2 with a `Hint` glyph that opens the one-sentence guidance on click, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
 
-- Import: `import SettingsGroup from '@aziontech/webkit/settings-group'`
+- Import: `import SettingsGroup from '@aziontech/ui/settings-group'`
 - Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [settings-group.json](settings-group.json)
 
@@ -108,11 +108,11 @@
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
   import { ref } from 'vue'
 
   const fonts = [
@@ -205,12 +205,12 @@
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const defaultFeatures = [
@@ -299,11 +299,11 @@
 
 ```vue
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const open = ref(false)

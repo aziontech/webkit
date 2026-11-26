@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Progress from '@aziontech/webkit/progress'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Progress from '@aziontech/ui/progress'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type { BreakdownDashboardContributor } from '../dashboard-breakdown.vue'
 

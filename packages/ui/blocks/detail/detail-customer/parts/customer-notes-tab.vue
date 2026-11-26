@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import MessageThread from '@aziontech/webkit/message-thread'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import MessageThread from '@aziontech/ui/message-thread'
+  import Textarea from '@aziontech/ui/textarea'
   import { computed, ref } from 'vue'
 
   import type { DetailCustomerNote } from '../detail-customer.vue'

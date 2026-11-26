@@ -2,8 +2,8 @@
 
 > The content of a help side region: a topic's title, a few sections of short guidance, and the "Learn more" links that leave for the documentation. Guided tutorials belong to `tutorial-panel`. It is the thing that goes **inside** a side region, not the region itself: the consumer places it in a `Drawer` or in the page's side rail, and that host owns opening, closing and the close button. It owns no open state, so it has no `Trigger` / `Content` and no `data-state="open|closed"`. Its anatomy is the anatomy of a help page — `Header`, `Section`, `Links` — composed by hand, so a topic can omit the links or carry one section or five.
 
-- Import: `import HelpPanelRoot from '@aziontech/webkit/help-panel-root'`
-- Compound import (dot notation, not tree-shakeable): `import HelpPanel from '@aziontech/webkit/help-panel'`
+- Import: `import HelpPanelRoot from '@aziontech/ui/help-panel-root'`
+- Compound import (dot notation, not tree-shakeable): `import HelpPanel from '@aziontech/ui/help-panel'`
 - Category: content · Surface: app · Structure: composition
 - API as JSON: [help-panel.json](help-panel.json)
 
@@ -55,9 +55,9 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/help-panel-header`
-- `@aziontech/webkit/help-panel-group`
-- `@aziontech/webkit/help-panel-footer`
+- `@aziontech/ui/help-panel-header`
+- `@aziontech/ui/help-panel-group`
+- `@aziontech/ui/help-panel-footer`
 
 ## Sub-components
 
@@ -79,11 +79,11 @@ tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tut
   - Props: `title?: string` (default `undefined` — the heading over the links; absent uses the locale catalog, `Learn more` in English, and an empty string renders no heading).
   - Slot: `default` — `Link` items, one per destination.
   - `data-testid` fallback: `help-panel-footer`.
-    Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
+    Resulting layout (no per-component `package.json`; the root `packages/ui/package.json#exports`
     resolves every path, and `.d.ts` is generated at publish time):
 
 ```
-packages/webkit/src/components/content/help-panel/
+packages/ui/src/components/content/help-panel/
 ├── help-panel.vue                         (root; aside landmark, loading state)
 ├── help-panel.test.ts
 ├── index.ts                               (compound: attaches the three parts to the root)
@@ -95,7 +95,7 @@ packages/webkit/src/components/content/help-panel/
     └── help-panel-footer.vue
 ```
 
-Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the
+Exports to add to `packages/ui/package.json#exports` (flat public names; category lives in the
 folder only):
 
 ```jsonc
@@ -106,7 +106,7 @@ folder only):
 "./help-panel-footer": "./src/components/content/help-panel/help-panel-footer/help-panel-footer.vue"
 ```
 
-Composed DS components (all present in `packages/webkit/package.json#exports`, imported by relative path
+Composed DS components (all present in `packages/ui/package.json#exports`, imported by relative path
 inside the package): `skeleton` (root, `loading`), `divider` (`Links`).
 `link` is composed by the consumer through slots, never imported by the panel.
 
@@ -139,8 +139,8 @@ name.
 
 ```vue
 <script setup>
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import Link from '@aziontech/webkit/link'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>
@@ -180,8 +180,8 @@ name.
 
 ```vue
 <script setup>
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import Link from '@aziontech/webkit/link'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

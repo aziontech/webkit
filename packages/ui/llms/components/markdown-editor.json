@@ -1,8 +1,8 @@
 {
  "name": "markdown-editor",
  "binding": "MarkdownEditor",
- "import": "@aziontech/webkit/markdown-editor",
- "treeShakeableImport": "@aziontech/webkit/markdown-editor",
+ "import": "@aziontech/ui/markdown-editor",
+ "treeShakeableImport": "@aziontech/ui/markdown-editor",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

@@ -1,8 +1,8 @@
 {
  "name": "progress",
  "binding": "Progress",
- "import": "@aziontech/webkit/progress",
- "treeShakeableImport": "@aziontech/webkit/progress",
+ "import": "@aziontech/ui/progress",
+ "treeShakeableImport": "@aziontech/ui/progress",
  "category": "feedback",
  "surface": "app",
  "structure": "monolithic",

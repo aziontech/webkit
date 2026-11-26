@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import Link from '@aziontech/webkit/link'
-  import Subheader from '@aziontech/webkit/subheader'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Card from '@aziontech/ui/card'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import Link from '@aziontech/ui/link'
+  import Subheader from '@aziontech/ui/subheader'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed } from 'vue'
 
   import { sampleResourceName } from './sample'

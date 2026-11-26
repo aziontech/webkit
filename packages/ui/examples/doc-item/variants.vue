@@ -1,7 +1,7 @@
 <script setup>
-  import DocItem from '@aziontech/webkit/doc-item'
-  import ItemList from '@aziontech/webkit/item-list'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import DocItem from '@aziontech/ui/doc-item'
+  import ItemList from '@aziontech/ui/item-list'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>

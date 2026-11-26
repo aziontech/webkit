@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: 975443459e654aa53cfa0cd23b3893bb6bdc6efe3c4f31afdd910f90dda0b1c3
+checksum: 84718b49d8cf81fbafd4079d0265e3d7a18293b406d245cc488c0f291af254d1
 created: 2026-11-11
 last_updated: 2026-11-23
 ---
@@ -45,7 +45,7 @@ The chat list of an assistant, in a side panel or a `Drawer` on phones: rows gro
 
 ```vue
 <script setup>
-  import ConversationHistory from '@aziontech/webkit/conversation-history'
+  import ConversationHistory from '@aziontech/ui/conversation-history'
   import { ref } from 'vue'
 
   const items = ref([
@@ -269,7 +269,7 @@ Item fields (`ConversationHistoryItem`): `id`, `title`, `updatedAt` (sets the gr
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

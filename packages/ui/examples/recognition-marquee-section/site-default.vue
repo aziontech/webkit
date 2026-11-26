@@ -1,16 +1,16 @@
 <script setup>
-  import forresterExtendedColor from '@aziontech/webkit/assets/forrester-extended-color.svg'
-  import forresterExtendedReversed from '@aziontech/webkit/assets/forrester-extended-reversed.svg'
-  import frostAndSullivanExtendedColor from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
-  import frostAndSullivanExtendedReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
-  import g2SymbolColor from '@aziontech/webkit/assets/g2-symbol-color.svg'
-  import gartnerExtendedColor from '@aziontech/webkit/assets/gartner-extended-color.svg'
-  import gartnerExtendedReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
-  import gigaomExtendedColor from '@aziontech/webkit/assets/gigaom-extended-color.svg'
-  import gigaomExtendedReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
-  import Container from '@aziontech/webkit/container'
-  import RecognitionMarqueeSection from '@aziontech/webkit/recognition-marquee-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import forresterExtendedColor from '@aziontech/ui/assets/forrester-extended-color.svg'
+  import forresterExtendedReversed from '@aziontech/ui/assets/forrester-extended-reversed.svg'
+  import frostAndSullivanExtendedColor from '@aziontech/ui/assets/frost-and-sullivan-extended-color.svg'
+  import frostAndSullivanExtendedReversed from '@aziontech/ui/assets/frost-and-sullivan-extended-reversed.svg'
+  import g2SymbolColor from '@aziontech/ui/assets/g2-symbol-color.svg'
+  import gartnerExtendedColor from '@aziontech/ui/assets/gartner-extended-color.svg'
+  import gartnerExtendedReversed from '@aziontech/ui/assets/gartner-extended-reversed.svg'
+  import gigaomExtendedColor from '@aziontech/ui/assets/gigaom-extended-color.svg'
+  import gigaomExtendedReversed from '@aziontech/ui/assets/gigaom-extended-reversed.svg'
+  import Container from '@aziontech/ui/container'
+  import RecognitionMarqueeSection from '@aziontech/ui/recognition-marquee-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const items = [
     {

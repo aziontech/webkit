@@ -12,7 +12,7 @@ Used by: [DocMarkdown](../components/doc-markdown.md), [FeatureScrollSection](..
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
+  import Illustration from '@aziontech/ui/illustration'
 </script>
 
 <template>

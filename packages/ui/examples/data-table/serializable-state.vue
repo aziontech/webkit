@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DataTable from '@aziontech/webkit/data-table'
+  import Button from '@aziontech/ui/button'
+  import DataTable from '@aziontech/ui/data-table'
   import { ref } from 'vue'
 
   const rows = [

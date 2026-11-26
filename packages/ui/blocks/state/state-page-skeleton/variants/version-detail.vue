@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   const sections = [
     { id: 'general', rows: ['62%', '48%'] },

@@ -1,6 +1,6 @@
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import StatTile from '@aziontech/ui/stat-tile'
 
   const panels = [
     {

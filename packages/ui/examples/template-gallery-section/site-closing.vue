@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
-  import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
+  import TemplateGallerySection from '@aziontech/ui/template-gallery-section'
 
   const primaryAction = {
     label: 'Start for free',

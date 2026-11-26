@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import NumberInput from '@aziontech/webkit/number-input'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import NumberInput from '@aziontech/ui/number-input'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
 
   import {
     type CacheSettingForm,

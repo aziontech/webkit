@@ -1,7 +1,7 @@
 <script setup>
-  import BarList from '@aziontech/webkit/bar-list'
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
+  import BarList from '@aziontech/ui/bar-list'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
 </script>
 
 <template>

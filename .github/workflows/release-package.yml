@@ -10,11 +10,11 @@ on:
   workflow_call:
     inputs:
       package:
-        description: 'npm package name, for example @aziontech/webkit'
+        description: 'npm package name, for example @aziontech/ui'
         required: true
         type: string
       directory:
-        description: 'Package folder, for example packages/webkit'
+        description: 'Package folder, for example packages/ui'
         required: true
         type: string
       tag:

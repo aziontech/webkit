@@ -2,8 +2,8 @@
 
 > The ordered walkthrough from the docs frame: a column of `DocSteps.Step` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.
 
-- Import: `import DocStepsRoot from '@aziontech/webkit/doc-steps-root'`
-- Compound import (dot notation, not tree-shakeable): `import DocSteps from '@aziontech/webkit/doc-steps'`
+- Import: `import DocStepsRoot from '@aziontech/ui/doc-steps-root'`
+- Compound import (dot notation, not tree-shakeable): `import DocSteps from '@aziontech/ui/doc-steps'`
 - Category: docs · Surface: docs · Structure: composition
 - API as JSON: [doc-steps.json](doc-steps.json)
 
@@ -62,7 +62,7 @@
 
 ```vue
 <script setup>
-  import DocSteps from '@aziontech/webkit/doc-steps'
+  import DocSteps from '@aziontech/ui/doc-steps'
 </script>
 
 <template>
@@ -80,7 +80,7 @@
 
 ```vue
 <script setup>
-  import DocSteps from '@aziontech/webkit/doc-steps'
+  import DocSteps from '@aziontech/ui/doc-steps'
 </script>
 
 <template>

@@ -1,10 +1,10 @@
 # useCollection
 
-Composable `@aziontech/webkit/use-collection`. The signatures and option tables below are read from its typed source, [`src/composables/use-collection/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-collection/index.ts).
+Composable `@aziontech/ui/use-collection`. The signatures and option tables below are read from its typed source, [`src/composables/use-collection/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-collection/index.ts).
 
 ```ts
-import { useCollection, matchesQuery, matchesText, parseFilterText, tokenText, historyAdapter, routerAdapter } from '@aziontech/webkit/use-collection'
-import type { UseCollectionOptions, UseCollectionReturn, CollectionColumnPreference, CollectionDensity, CollectionPreferencesValue, PreferencesStorage, FilteringProperty, PropertyFilterOperation, PropertyFilterOperator, PropertyFilterOption, PropertyFilterQuery, PropertyFilterToken, PropertyFilterTokenGroup, CollectionCardListProps, CollectionColumn, CollectionExportParams, CollectionExportScope, CollectionFetchParams, CollectionFetchResult, CollectionPaginationProps, CollectionPreferenceColumn, CollectionPreferencesProps, CollectionPropertyFilterProps, CollectionSelectionMode, CollectionSort, CollectionStatus, CollectionTableProps, CollectionTextFilterProps, CollectionUrlAdapter, RouterLike } from '@aziontech/webkit/use-collection'
+import { useCollection, matchesQuery, matchesText, parseFilterText, tokenText, historyAdapter, routerAdapter } from '@aziontech/ui/use-collection'
+import type { UseCollectionOptions, UseCollectionReturn, CollectionColumnPreference, CollectionDensity, CollectionPreferencesValue, PreferencesStorage, FilteringProperty, PropertyFilterOperation, PropertyFilterOperator, PropertyFilterOption, PropertyFilterQuery, PropertyFilterToken, PropertyFilterTokenGroup, CollectionCardListProps, CollectionColumn, CollectionExportParams, CollectionExportScope, CollectionFetchParams, CollectionFetchResult, CollectionPaginationProps, CollectionPreferenceColumn, CollectionPreferencesProps, CollectionPropertyFilterProps, CollectionSelectionMode, CollectionSort, CollectionStatus, CollectionTableProps, CollectionTextFilterProps, CollectionUrlAdapter, RouterLike } from '@aziontech/ui/use-collection'
 ```
 
 ## `useCollection`

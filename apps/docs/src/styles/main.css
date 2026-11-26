@@ -1,5 +1,5 @@
 @reference "@aziontech/theme";
-@import '@aziontech/webkit/styles';
+@import '@aziontech/ui/styles';
 
 html,
 body {

@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/data/table/table.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/data/table/table.vue
 // component=Table
 import figma from 'figma'
 
@@ -80,7 +80,7 @@ export default {
       : ''
   }
 </DataTable>`,
-  imports: ["import DataTable from '@aziontech/webkit/data-table'"],
+  imports: ["import DataTable from '@aziontech/ui/data-table'"],
   id: 'table',
   metadata: { nestable: false }
 }

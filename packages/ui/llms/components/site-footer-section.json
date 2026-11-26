@@ -1,8 +1,8 @@
 {
  "name": "site-footer-section",
  "binding": "SiteFooterSection",
- "import": "@aziontech/webkit/site-footer-section",
- "treeShakeableImport": "@aziontech/webkit/site-footer-section",
+ "import": "@aziontech/ui/site-footer-section",
+ "treeShakeableImport": "@aziontech/ui/site-footer-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

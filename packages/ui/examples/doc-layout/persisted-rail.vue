@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocHeading from '@aziontech/ui/doc-heading'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/ui/doc-layout'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import DocProse from '@aziontech/ui/doc-prose'
   import { onMounted, ref, watch } from 'vue'
 
   const STORAGE_KEY = 'acme-docs-rail'

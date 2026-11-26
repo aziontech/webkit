@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/input/select/select.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/input/select/select.vue
 // component=Select
 import figma from 'figma'
 
@@ -70,7 +70,7 @@ export default {
     </Select.Item>
   </Select.Content>
 </Select>`,
-  imports: ["import Select from '@aziontech/webkit/select'"],
+  imports: ["import Select from '@aziontech/ui/select'"],
   id: 'select',
   metadata: { nestable: true }
 }

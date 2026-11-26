@@ -1,5 +1,5 @@
 <script setup>
-  import McpAppFrame from '@aziontech/webkit/mcp-app-frame'
+  import McpAppFrame from '@aziontech/ui/mcp-app-frame'
 
   const widgetUrls = {
     'ui://status/overview': 'https://example.com/'

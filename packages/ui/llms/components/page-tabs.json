@@ -1,8 +1,8 @@
 {
  "name": "page-tabs",
  "binding": "PageTabs",
- "import": "@aziontech/webkit/page-tabs",
- "treeShakeableImport": "@aziontech/webkit/page-tabs",
+ "import": "@aziontech/ui/page-tabs",
+ "treeShakeableImport": "@aziontech/ui/page-tabs",
  "category": "navigation",
  "surface": "app",
  "structure": "monolithic",

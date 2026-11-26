@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import MediaSplitStackSection from '@aziontech/ui/media-split-stack-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const bands = [
     {

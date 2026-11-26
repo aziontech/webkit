@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import type { AiChatConnection } from '@aziontech/webkit/utils/ai-chat'
+  import Alert from '@aziontech/ui/alert'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import type { AiChatConnection } from '@aziontech/ui/utils/ai-chat'
   import { computed, ref, watch } from 'vue'
 
   const props = defineProps<{

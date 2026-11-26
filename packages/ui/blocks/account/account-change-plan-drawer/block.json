@@ -36,11 +36,11 @@
     "upgrade plan drawer"
   ],
   "skills": [
-    "webkit-navigation",
-    "webkit-microcopy",
-    "webkit-ux-heuristics",
-    "webkit-form",
-    "webkit-errors"
+    "azion-ui-navigation",
+    "azion-ui-microcopy",
+    "azion-ui-ux-heuristics",
+    "azion-ui-form",
+    "azion-ui-errors"
   ],
   "primary": {
     "name": "Default",

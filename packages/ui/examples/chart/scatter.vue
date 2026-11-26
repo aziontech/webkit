@@ -1,5 +1,5 @@
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
+  import Chart from '@aziontech/ui/chart'
 
   const labels = [4, 12, 18, 26, 31, 45, 52, 64, 70, 88, 96, 120]
   const series = [

@@ -1,6 +1,6 @@
 * @aziontech/team-uxe
 lint-canaries/**/* @robsongajunior
-packages/webkit/eslint.config.js @robsongajunior
+packages/ui/eslint.config.js @robsongajunior
 eslint.config.js @robsongajunior
 
 /.github/ @aziontech/oss-review @aziontech/team-uxe

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import Popover from '@aziontech/webkit/popover-root'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import PopoverContent from '@aziontech/ui/popover-content'
+  import Popover from '@aziontech/ui/popover-root'
+  import PopoverTrigger from '@aziontech/ui/popover-trigger'
   import { computed, ref, watch } from 'vue'
 
   import type { AiChatProject } from '../sample'

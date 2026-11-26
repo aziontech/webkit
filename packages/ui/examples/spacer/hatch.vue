@@ -1,6 +1,6 @@
 <script setup>
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import Spacer from '@aziontech/webkit/spacer'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import Spacer from '@aziontech/ui/spacer'
 </script>
 
 <template>

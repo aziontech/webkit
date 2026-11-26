@@ -1,5 +1,5 @@
 <script setup>
-  import OutcomeIcon from '@aziontech/webkit/outcome-icon'
+  import OutcomeIcon from '@aziontech/ui/outcome-icon'
 </script>
 
 <template>

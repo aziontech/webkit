@@ -1,8 +1,8 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import Input from '@aziontech/webkit/input'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import Input from '@aziontech/ui/input'
+  import { useCollection } from '@aziontech/ui/use-collection'
 
   const all = Array.from({ length: 87 }, (_, i) => ({
     id: String(i + 1),

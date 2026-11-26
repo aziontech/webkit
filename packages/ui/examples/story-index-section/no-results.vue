@@ -1,5 +1,5 @@
 <script setup>
-  import StoryIndexSection from '@aziontech/webkit/story-index-section'
+  import StoryIndexSection from '@aziontech/ui/story-index-section'
 </script>
 
 <template>

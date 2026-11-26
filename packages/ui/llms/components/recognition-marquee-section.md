@@ -2,7 +2,7 @@
 
 > The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame` and `quote`.
 
-- Import: `import RecognitionMarqueeSection from '@aziontech/webkit/recognition-marquee-section'`
+- Import: `import RecognitionMarqueeSection from '@aziontech/ui/recognition-marquee-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [recognition-marquee-section.json](recognition-marquee-section.json)
 
@@ -79,16 +79,16 @@ No built-in strings: every visible and announced text is a prop from the page JS
 
 ```vue
 <script setup>
-  import forresterExtendedColor from '@aziontech/webkit/assets/forrester-extended-color.svg'
-  import forresterExtendedReversed from '@aziontech/webkit/assets/forrester-extended-reversed.svg'
-  import frostAndSullivanExtendedColor from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
-  import frostAndSullivanExtendedReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
-  import g2SymbolColor from '@aziontech/webkit/assets/g2-symbol-color.svg'
-  import gartnerExtendedColor from '@aziontech/webkit/assets/gartner-extended-color.svg'
-  import gartnerExtendedReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
-  import gigaomExtendedColor from '@aziontech/webkit/assets/gigaom-extended-color.svg'
-  import gigaomExtendedReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
-  import RecognitionMarqueeSection from '@aziontech/webkit/recognition-marquee-section'
+  import forresterExtendedColor from '@aziontech/ui/assets/forrester-extended-color.svg'
+  import forresterExtendedReversed from '@aziontech/ui/assets/forrester-extended-reversed.svg'
+  import frostAndSullivanExtendedColor from '@aziontech/ui/assets/frost-and-sullivan-extended-color.svg'
+  import frostAndSullivanExtendedReversed from '@aziontech/ui/assets/frost-and-sullivan-extended-reversed.svg'
+  import g2SymbolColor from '@aziontech/ui/assets/g2-symbol-color.svg'
+  import gartnerExtendedColor from '@aziontech/ui/assets/gartner-extended-color.svg'
+  import gartnerExtendedReversed from '@aziontech/ui/assets/gartner-extended-reversed.svg'
+  import gigaomExtendedColor from '@aziontech/ui/assets/gigaom-extended-color.svg'
+  import gigaomExtendedReversed from '@aziontech/ui/assets/gigaom-extended-reversed.svg'
+  import RecognitionMarqueeSection from '@aziontech/ui/recognition-marquee-section'
 </script>
 
 <template>

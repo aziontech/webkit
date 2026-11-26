@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import Hint from '@aziontech/webkit/hint'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import Hint from '@aziontech/ui/hint'
 
   export interface AlertsCardProps {
     /** Columns of the 12-column grid the card spans. */

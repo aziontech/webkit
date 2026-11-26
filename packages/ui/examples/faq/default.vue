@@ -1,5 +1,5 @@
 <script setup>
-  import Faq from '@aziontech/webkit/faq'
+  import Faq from '@aziontech/ui/faq'
 </script>
 
 <template>

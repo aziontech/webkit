@@ -1,5 +1,5 @@
 {
- "purpose": "Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).",
+ "purpose": "Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Azion UI tokens).",
  "useWhen": [
   "Use Breadcrumb (with `items`, or Breadcrumb.Item parts) for the page trail.",
   "A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).",

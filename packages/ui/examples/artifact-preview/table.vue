@@ -1,6 +1,6 @@
 <script setup>
-  import ArtifactPreview from '@aziontech/webkit/artifact-preview'
-  import Table from '@aziontech/webkit/table'
+  import ArtifactPreview from '@aziontech/ui/artifact-preview'
+  import Table from '@aziontech/ui/table'
 
   const rows = [
     { country: 'United States', requests: '1,204,330', hit: '92%' },

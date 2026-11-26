@@ -4,7 +4,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 
 ## When to use
 
-- The item belongs to a resource that is already open (a domain on a workload, a record in a zone, a rule or an origin on a resource), per the surface rule in `skills/webkit-create-surface`.
+- The item belongs to a resource that is already open (a domain on a workload, a record in a zone, a rule or an origin on a resource), per the surface rule in `skills/azion-ui-create-surface`.
 - Editing that same item from its row menu; the drawer opens on its values and saves them.
 - A first-level tuple normally created in bulk, such as variables, the one exception the surface rule allows.
 - A select needs another item of the same resource that may not exist yet, such as the origin a new rule sends requests to: the NestedDrawer shape creates it in a second drawer and selects it back.
@@ -104,7 +104,7 @@ To go live, render the block from a page that owns the request and pass what it 
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import { ref } from 'vue'
 
   import CreateDrawer, { type CreateDrawerSubmission } from './create-drawer.vue'
@@ -169,7 +169,7 @@ Then delete the `sample.ts` import of `create-drawer.vue`.
 - **Helper text:** states the consequence of the current value, e.g. "Production publishes with the Deployment Settings set to Single."
 - **Required:** "This field is required."
 - **Create option:** `Create <Object>` at the foot of the select, e.g. "Create Environment".
-- Follow `skills/webkit-microcopy` and `skills/webkit-errors`: sentence case, no em dash, no "please", select rather than pick.
+- Follow `skills/azion-ui-microcopy` and `skills/azion-ui-errors`: sentence case, no em dash, no "please", select rather than pick.
 
 ## Accessibility
 
@@ -203,4 +203,4 @@ Then delete the `sample.ts` import of `create-drawer.vue`.
 - `create/create-page` — the page a first-level resource creates on instead.
 - `create/create-deploy-drawer` — the drawer that deploys rather than creates.
 - `state/state-form-validation` — the submit-time validation this drawer follows.
-- `SettingsGroup` — the band each section is built from; see `skills/webkit-form` for fields and validation.
+- `SettingsGroup` — the band each section is built from; see `skills/azion-ui-form` for fields and validation.

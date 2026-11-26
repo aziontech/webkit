@@ -142,7 +142,7 @@ After a send succeeds, clear the draft, append the message and confirm in a toas
 - **Send failure:** `The reply was not sent. Your draft is kept; try again.` with `Retry`. **Solved:** `This ticket is solved. Reopen it to reply to the customer or add a note.` with `Reopen`.
 - **Side column:** `Properties`, `Status`, `Priority`, `Type`, `Group`, `Assignee`, `Unassigned`, `Tags`, `Add tags`; `Requester`, `4 other tickets`, `View customer profile`; `Activity`.
 - **Load failure:** `The ticket could not be loaded. Nothing was changed; try again.` with `Retry`.
-- The components own `Show 5 earlier messages`, `Internal note` on a note, `Paused`, `Due in` and `Overdue by`; do not retype them. Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- The components own `Show 5 earlier messages`, `Internal note` on a note, `Paused`, `Due in` and `Overdue by`; do not retype them. Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 

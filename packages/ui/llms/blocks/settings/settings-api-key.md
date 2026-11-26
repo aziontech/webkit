@@ -3,10 +3,10 @@
 > Integration API key management: the reader picks an external provider or integration (such as GitHub, an AI model provider, or an observability service) in a `Select`, pastes a key in a masked `PasswordInput` (never prefilled, cleared once saved) and saves or replaces it; a status row shows whether a key is saved (only its masked tail) and the result of Test connection, a failure shows in an `Alert`, and Remove key asks in a `ConfirmDialog`. The block stores nothing: it emits save, test and remove for the app's key store (a backend integration store or TanStack AI's `useByok`). Built from `PageHeader`, `Subheader`, `Card`, `Item`, `SettingsRow`, `Select`, `PasswordInput`, `FieldError`, `StatusIndicator`, `Alert`, `Button` and `ConfirmDialog`. A page body for ConsoleLayout.
 
 - Surface: app
-- Source: `blocks/settings/settings-api-key/settings-api-key.vue` in `@aziontech/webkit`
+- Source: `blocks/settings/settings-api-key/settings-api-key.vue` in `@aziontech/ui`
 - MCP: `get_block("settings/settings-api-key")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldError`, [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md)
-- Skills: `webkit-form`, `webkit-ui-states`, `webkit-errors`
+- Skills: `azion-ui-form`, `azion-ui-states`, `azion-ui-errors`
 
 ## Asked as
 
@@ -184,7 +184,7 @@ For browser-only AI bring-your-own-key (BYOK) with TanStack AI, wire the same ev
 - **Field error:** `Enter an API key.`
 - **Failure:** title `The key didn't work.` with the provider's message and the action `Test again` (test); title `The key wasn't saved.` with the message and no action (save).
 - **Remove:** title `Remove the <provider> key?`; description `Features and integrations that use <provider> stop working until you save a new key.`; confirm `Remove key`.
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -212,7 +212,7 @@ For browser-only AI bring-your-own-key (BYOK) with TanStack AI, wire the same ev
 - `account/account-personal-tokens` — the platform's own access tokens for scripts and tools.
 - `edit/edit-variables` — runtime secrets and environment variables attached to a resource.
 - `ai/ai-chat` — an AI surface that can run on a model provider key saved through this block.
-- `skills/webkit-ai-surfaces` — where AI settings sit and what they disclose when used for BYOK.
+- `skills/azion-ui-ai-surfaces` — where AI settings sit and what they disclose when used for BYOK.
 
 ## Variants
 
@@ -230,18 +230,18 @@ Each variant is the same screen in another state: `get_block("settings/settings-
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PasswordInput from '@aziontech/webkit/password-input'
-  import Select from '@aziontech/webkit/select'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import StatusIndicator, { type Severity } from '@aziontech/webkit/status-indicator'
-  import Subheader from '@aziontech/webkit/subheader'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PasswordInput from '@aziontech/ui/password-input'
+  import Select from '@aziontech/ui/select'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import StatusIndicator, { type Severity } from '@aziontech/ui/status-indicator'
+  import Subheader from '@aziontech/ui/subheader'
   import { computed, nextTick, ref, useId, watch } from 'vue'
 
   import { sampleProviders, sampleSavedKeys } from './sample'

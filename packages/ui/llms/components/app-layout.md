@@ -2,7 +2,7 @@
 
 > The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shell/shell-console` block) keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame to `AppLayout`.
 
-- Import: `import AppLayout from '@aziontech/webkit/app-layout'`
+- Import: `import AppLayout from '@aziontech/ui/app-layout'`
 - Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [app-layout.json](app-layout.json)
 
@@ -139,23 +139,23 @@ Unbound, each one keeps its own local state.
 
 ```vue
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
-  import Command from '@aziontech/webkit/command'
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
-  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
-  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
-  import Sidebar from '@aziontech/webkit/sidebar-root'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Alert from '@aziontech/ui/alert'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import Command from '@aziontech/ui/command'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import IconButton from '@aziontech/ui/icon-button'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
+  import SidebarMenuGroup from '@aziontech/ui/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/ui/sidebar-menu-item'
+  import SidebarMenuRoot from '@aziontech/ui/sidebar-menu-root'
+  import Sidebar from '@aziontech/ui/sidebar-root'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { ref } from 'vue'
 
   const toolsOpen = ref(false)
@@ -322,12 +322,12 @@ Unbound, each one keeps its own local state.
 
 ```vue
 <script setup>
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PageHeader from '@aziontech/ui/page-header'
 
   const crumbs = [{ label: 'Workloads', href: '#' }, { label: 'Domains' }]
 </script>
@@ -376,13 +376,13 @@ Unbound, each one keeps its own local state.
 
 ```vue
 <script setup>
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
   import { onMounted, ref } from 'vue'
 
   const toolsOpen = ref(false)

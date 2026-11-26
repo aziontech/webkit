@@ -1,4 +1,4 @@
-import type { ChartRange, ChartSeries } from '@aziontech/webkit/chart'
+import type { ChartRange, ChartSeries } from '@aziontech/ui/chart'
 import { computed, type ComputedRef, type Ref } from 'vue'
 
 import {

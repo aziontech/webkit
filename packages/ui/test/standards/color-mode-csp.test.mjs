@@ -6,7 +6,7 @@ import test from 'node:test'
 import { colorModeScript } from '../../src/composables/use-color-mode/use-color-mode.ts'
 
 const skill = readFileSync(
-  new URL('../../../../skills/webkit-theming-dark-mode/SKILL.md', import.meta.url),
+  new URL('../../../../skills/azion-ui-theming-dark-mode/SKILL.md', import.meta.url),
   'utf8'
 )
 

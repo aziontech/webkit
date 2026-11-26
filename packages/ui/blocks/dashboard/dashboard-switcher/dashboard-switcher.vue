@@ -1,20 +1,17 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import FilterMenu, {
-    type FilterMenuField,
-    type FilterMenuModel
-  } from '@aziontech/webkit/filter-menu'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import BarList, { type BarListItem } from '@aziontech/ui/bar-list'
+  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import FilterMenu, { type FilterMenuField, type FilterMenuModel } from '@aziontech/ui/filter-menu'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import { sampleViewData, sampleViews } from './sample'

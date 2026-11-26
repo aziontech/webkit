@@ -1,8 +1,4 @@
-import type {
-  DateRangeUnit,
-  DateRangeValue,
-  RelativeOption
-} from '@aziontech/webkit/date-range-picker'
+import type { DateRangeUnit, DateRangeValue, RelativeOption } from '@aziontech/ui/date-range-picker'
 import { computed, type ComputedRef, ref, type WritableComputedRef } from 'vue'
 
 import { fullWindowMinutes } from '../lib/event-log'

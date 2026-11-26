@@ -1,8 +1,8 @@
 {
  "name": "settings-row",
  "binding": "SettingsRow",
- "import": "@aziontech/webkit/settings-row",
- "treeShakeableImport": "@aziontech/webkit/settings-row",
+ "import": "@aziontech/ui/settings-row",
+ "treeShakeableImport": "@aziontech/ui/settings-row",
  "category": "layout",
  "surface": "app",
  "structure": "monolithic",

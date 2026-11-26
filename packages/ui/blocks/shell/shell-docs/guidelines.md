@@ -67,7 +67,7 @@ The shell's data comes in through props (`ShellDocsProps`, `ShellDocsFooterColum
 ## Do
 
 - Compose `DocLayout` once in the app's root around `RouterView` (the primary); each route renders only its `<article>`.
-- For a real page, start from a variant (Article, Reference, Landing, AgentSetup, AgentGuide): each is a page body built from the `Doc*` parts only, with no layout of its own. `webkit add shell/shell-docs --variant Article` copies the shell and the page side by side; keep the shell as `App.vue` and route to the page.
+- For a real page, start from a variant (Article, Reference, Landing, AgentSetup, AgentGuide): each is a page body built from the `Doc*` parts only, with no layout of its own. `azion-ui add shell/shell-docs --variant Article` copies the shell and the page side by side; keep the shell as `App.vue` and route to the page.
 - Give every section `DocHeading` an `anchor`; the layout lists those headings as the outline.
 - Put everything under `DocPageHeader` in one `DocProse`.
 - Give every navigation row an `id` and an `href` (an in-app path is followed with the router); keep the rail scoped to the current product; the header section links switch products.

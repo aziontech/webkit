@@ -1,8 +1,8 @@
 {
  "name": "status-indicator",
  "binding": "StatusIndicator",
- "import": "@aziontech/webkit/status-indicator",
- "treeShakeableImport": "@aziontech/webkit/status-indicator",
+ "import": "@aziontech/ui/status-indicator",
+ "treeShakeableImport": "@aziontech/ui/status-indicator",
  "category": "feedback",
  "surface": "app",
  "structure": "monolithic",

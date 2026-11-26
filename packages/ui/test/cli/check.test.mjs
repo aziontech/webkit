@@ -13,8 +13,8 @@ import { planInit } from '../../src/cli/plan.js'
 import { cleanup, cli, cliJson, makeProject, PKG_ROOT } from './lib/cli-project.mjs'
 
 const BAD = `<script setup>
-import Paginator from '@aziontech/webkit/paginator'
-import Ghost from '@aziontech/webkit/not-a-thing'
+import Paginator from '@aziontech/ui/paginator'
+import Ghost from '@aziontech/ui/not-a-thing'
 </script>
 
 <template>
@@ -35,7 +35,7 @@ const BAD_CSS = `.a {
 `
 
 const STYLELINT_RC = JSON.stringify({
-  extends: ['@aziontech/webkit/stylelint-config'],
+  extends: ['@aziontech/ui/stylelint-config'],
   overrides: [{ files: ['**/*.vue'], customSyntax: 'postcss-html' }]
 })
 
@@ -71,7 +71,7 @@ function postcssHtml() {
 }
 
 function withStylelint(files) {
-  const dir = makeProject({ '.stylelintrc.json': STYLELINT_RC, ...files }, { installWebkit: true })
+  const dir = makeProject({ '.stylelintrc.json': STYLELINT_RC, ...files }, { installAzionUi: true })
   for (const [name, target] of [
     ['stylelint', packageDir('stylelint', PKG_ROOT)],
     ['postcss-html', postcssHtml()]
@@ -85,7 +85,7 @@ function withStylelint(files) {
 const hits = (findings) => findings.map((f) => `${f.file}:${f.line} ${f.rule}`).sort()
 
 function initialised(files) {
-  const dir = makeProject(files, { installWebkit: true })
+  const dir = makeProject(files, { installAzionUi: true })
   applyPlan(dir, planInit(dir, { icons: false }))
   return dir
 }
@@ -101,7 +101,7 @@ test('check gathers doctor, v5 names, unknown imports and the built-in style sca
     )
     const migration = by(r.json, 'migration')
     assert.equal(migration.length, 1)
-    assert.match(migration[0].message, /paginator → @aziontech\/webkit\/pagination/)
+    assert.match(migration[0].message, /paginator → @aziontech\/ui\/pagination/)
     const imports = by(r.json, 'imports')
     assert.equal(imports.length, 1)
     assert.equal(imports[0].line, 3)
@@ -165,13 +165,13 @@ test('check passes bound values a migrated app reads from variables, and warns o
   const dir = makeProject({
     'src/views/Status.vue': [
       '<script setup>',
-      "import Tag from '@aziontech/webkit/tag'",
+      "import Tag from '@aziontech/ui/tag'",
       'defineProps({ value: Boolean, level: String })',
       '</script>',
       '<template>',
       `  <Tag :severity="value ? 'success' : 'neutral'" />`,
       '  <Tag :severity="level" />',
-      '  <!-- webkit-migrate-ok -->',
+      '  <!-- azion-ui-migrate-ok -->',
       '  <Tag :severity="level" />',
       '</template>',
       ''
@@ -196,9 +196,9 @@ test('check passes bound values a migrated app reads from variables, and warns o
 
 test('check passes a wired project and enforces --max-warnings', () => {
   const dir = initialised({
-    'src/main.ts': "import './webkit.css'\n",
+    'src/main.ts': "import './azion-ui.css'\n",
     'src/App.vue':
-      '<script setup>\nimport ConfigProvider from \'@aziontech/webkit/config-provider\'\nimport Button from \'@aziontech/webkit/button\'\n</script>\n<template><ConfigProvider><Button label="Go" class="ms-2" /></ConfigProvider></template>\n'
+      '<script setup>\nimport ConfigProvider from \'@aziontech/ui/config-provider\'\nimport Button from \'@aziontech/ui/button\'\n</script>\n<template><ConfigProvider><Button label="Go" class="ms-2" /></ConfigProvider></template>\n'
   })
   try {
     const r = cliJson(dir, 'check', '--no-lint')
@@ -217,10 +217,10 @@ test('check passes a wired project and enforces --max-warnings', () => {
 })
 
 test('check warns when a copied block drifted from the canonical one', () => {
-  const dir = initialised({ 'src/main.ts': "import './webkit.css'\n" })
+  const dir = initialised({ 'src/main.ts': "import './azion-ui.css'\n" })
   try {
     assert.equal(cli(dir, 'add', 'top-bar/top-bar-auth').code, 0)
-    const manifestPath = join(dir, 'webkit.blocks.json')
+    const manifestPath = join(dir, 'azion-ui.blocks.json')
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
     manifest.blocks['top-bar/top-bar-auth'].files[0].checksum = 'sha256:old'
     manifest.blocks['top-bar/top-bar-auth'].files.push({
@@ -250,7 +250,7 @@ test('check warns when a copied block drifted from the canonical one', () => {
   }
 })
 
-test('the built-in CSS scan reports what the webkit stylelint config reports', async (t) => {
+test('the built-in CSS scan reports what the Azion UI stylelint config reports', async (t) => {
   const syntax = postcssHtml()
   if (!syntax) return t.skip('postcss-html is not resolvable in this install')
   const dir = makeProject({
@@ -324,7 +324,7 @@ test('check counts Stylelint warnings against --max-warnings', (t) => {
   if (!postcssHtml()) return t.skip('postcss-html is not resolvable in this install')
   const dir = withStylelint({
     '.stylelintrc.json': JSON.stringify({
-      extends: ['@aziontech/webkit/stylelint-config'],
+      extends: ['@aziontech/ui/stylelint-config'],
       rules: { 'length-zero-no-unit': [true, { severity: 'warning' }] }
     }),
     'src/ok.css': '.a {\n  margin: 0px;\n}\n'

@@ -94,7 +94,7 @@
           if (props.name === name) named.value = loaded.default
         })
         .catch((error: unknown) => {
-          if (dev) console.warn(`[webkit] <Diagram>: could not load "${name}".`, error)
+          if (dev) console.warn(`[azion-ui] <Diagram>: could not load "${name}".`, error)
         })
     },
     { immediate: true }

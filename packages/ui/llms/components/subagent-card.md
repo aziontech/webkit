@@ -2,7 +2,7 @@
 
 > One helper agent the main agent handed part of the work to, shown inside the conversation (TanStack AI `subagent` parts, AG-UI sub-agent runs; benchmarks: Vercel AI Elements Task, Cloudscape generative AI progressive steps). A card names the helper agent, says in plain words what it is doing, shows its status (`Waiting`, `Running`, `Completed`, `Failed`, `Stopped`) and how long it has been working, offers `Stop` while it runs, and opens to the helper's own messages. The component renders no messages itself: the owner puts the child run's messages (a `StreamingResponse`, a `ToolCall`, a nested `SubagentCard`) in the default slot. It is its own component, not new props on `tool-call`: a helper run carries its own message stream (the default slot), a stop action, an elapsed clock, a summary line and a `canceled` status, which would add three props, an event, a slot and a status value that a single tool call never uses.
 
-- Import: `import SubagentCard from '@aziontech/webkit/subagent-card'`
+- Import: `import SubagentCard from '@aziontech/ui/subagent-card'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [subagent-card.json](subagent-card.json)
 
@@ -126,7 +126,7 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 ```vue
 <script setup>
-  import SubagentCard from '@aziontech/webkit/subagent-card'
+  import SubagentCard from '@aziontech/ui/subagent-card'
 </script>
 
 <template>
@@ -174,10 +174,10 @@ _None. Exports: `"./subagent-card"`; type `SubagentCardStatus`. Composed DS comp
 
 ```vue
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import SubagentCard from '@aziontech/ui/subagent-card'
+  import ToolCall from '@aziontech/ui/tool-call'
   import { ref } from 'vue'
 
   const status = ref('running')

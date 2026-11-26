@@ -1,5 +1,5 @@
 <script setup>
-  import MessageThread from '@aziontech/webkit/message-thread'
+  import MessageThread from '@aziontech/ui/message-thread'
   import { ref } from 'vue'
 
   const quotedOpen = ref(false)

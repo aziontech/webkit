@@ -3,10 +3,10 @@
 > The canonical first-level list page: a medium page heading with the resource name and its one-line description, the outlined medium Documentation action and a primary medium Create Resource at the same height (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. The row menu's Delete opens a `ConfirmDialog` (the edit-delete-dialog pattern: a warning `Alert` and its typed confirmation phrase, the resource name). A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then the primary Create Resource, the page's only Create while the heading hides its own), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/view/view-table/view-table.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-table/view-table.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-table")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [StatusIndicator](../../components/status-indicator.md), `TableCellActions`, `TableCellId`, `TableCellLink`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-states`
 
 ## Asked as
 
@@ -37,7 +37,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined medium Documentation button, which opens the docs in a new tab, and the primary `Create <Object>` button at the same `size="medium"`, set apart by its colour, as `skills/webkit-lists` asks; everything on the controls row stays medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears; the breadcrumb starts at the second level.
+`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined medium Documentation button, which opens the docs in a new tab, and the primary `Create <Object>` button at the same `size="medium"`, set apart by its colour, as `skills/azion-ui-lists` asks; everything on the controls row stays medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears; the breadcrumb starts at the second level.
 
 ### B. Property filter — `PropertyFilter` (required)
 
@@ -57,7 +57,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### F. Cell presets — `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime` (optional)
 
-Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `TableCellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `TableCellId` (copy button named after the resource). The domain is `TableCellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `TableCellStatus`. Last modified is `TableCellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
+Every cell is a preset from `@aziontech/ui/table`, so the list reads like every other Azion UI list. Name is `TableCellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `TableCellId` (copy button named after the resource). The domain is `TableCellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `TableCellStatus`. Last modified is `TableCellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
 
 ### G. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
@@ -150,7 +150,7 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 - **No match:** "No matching resources", then "No resource matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No resources yet"; description is one sentence with what to do, e.g. "Create a resource to start serving traffic on your domains."
 - **Copy buttons:** name what they copy, e.g. "Copy resource ID", "Copy domain name".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -181,7 +181,7 @@ Then delete `sampleResources` and its import (keep `sample.ts` only if you copie
 - `detail/detail-resource` — where a row name leads; its Deployments tab renders the Deployments table without the page heading.
 - `edit/edit-delete-dialog` — the dialog behind the row menu's Delete.
 - `state/state-first-use` — the module before its first resource.
-- `DataTable` and `useCollection` — the table this page wraps and the state behind it; see `skills/webkit-tables` and `skills/webkit-lists`.
+- `DataTable` and `useCollection` — the table this page wraps and the state behind it; see `skills/azion-ui-tables` and `skills/azion-ui-lists`.
 
 ## Variants
 
@@ -197,26 +197,26 @@ Each variant is the same screen in another state: `get_block("view/view-table", 
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
   import DataTable, {
     type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
-  } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellId from '@aziontech/webkit/table-cell-id'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PageHeader from '@aziontech/ui/page-header'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellId from '@aziontech/ui/table-cell-id'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import { type FilteringProperty, useCollection } from '@aziontech/ui/use-collection'
   import { computed, ref, watch } from 'vue'
 
   import CollectionControls from './parts/collection-controls.vue'
@@ -723,10 +723,10 @@ export const sampleDeployments: Deployment[] = [
 ## `lib/deployments.ts`
 
 ```ts
-import type { TableColumn } from '@aziontech/webkit/data-table'
-import type { StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-import type { TagSeverity } from '@aziontech/webkit/tag'
-import type { FilteringProperty } from '@aziontech/webkit/use-collection'
+import type { TableColumn } from '@aziontech/ui/data-table'
+import type { StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+import type { TagSeverity } from '@aziontech/ui/tag'
+import type { FilteringProperty } from '@aziontech/ui/use-collection'
 
 /** Where a deployment run stands. */
 export type DeploymentStatus = 'Ready' | 'Building' | 'Failed' | 'Queued' | 'Canceled'
@@ -808,14 +808,14 @@ export const deploymentColumns: TableColumn[] = [
 
 ```ts
 <script setup lang="ts">
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import Tooltip from '@aziontech/ui/tooltip'
   import type {
     CollectionPreferencesProps,
     CollectionPropertyFilterProps
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
 
   withDefaults(
     defineProps<{
@@ -886,14 +886,14 @@ export const deploymentColumns: TableColumn[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/data-table'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { toast } from '@aziontech/ui/toast'
+  import { useCollection } from '@aziontech/ui/use-collection'
   import { ref } from 'vue'
 
   import { type Deployment, deploymentColumns, deploymentProperties } from '../lib/deployments'
@@ -1088,26 +1088,26 @@ export const deploymentColumns: TableColumn[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
   import DataTable, {
     type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
-  } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellId from '@aziontech/webkit/table-cell-id'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag from '@aziontech/webkit/tag'
+  } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellId from '@aziontech/ui/table-cell-id'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tag from '@aziontech/ui/tag'
   import type {
     CollectionPaginationProps,
     CollectionTableProps
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
   import { ref } from 'vue'
 
   import { type Deployment, DEPLOYMENT_STATUS, environmentSeverity } from '../lib/deployments'

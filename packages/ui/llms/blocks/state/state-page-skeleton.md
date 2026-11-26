@@ -3,10 +3,10 @@
 > The skeleton wires an app paints while a page is still arriving: the Home overview (Overview), the first-access Home (Onboarding), the whole shell while an expired session signs out (Session, with one body per family of page it covers: Session for a list, SessionDetail, SessionForm and SessionHome), and the version page (VersionDetail), sectioned cards whose rows end in a switch band. Each one is the real page’s grid drawn with Skeleton bands inside the same Card frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, Card and Item; layout differences between rows switch on `data-*` attributes, never on a class ternary. Overview, Onboarding and VersionDetail are page bodies for the default slot of ConsoleLayout; the Session wires stand in for the whole app, layout included.
 
 - Surface: app
-- Source: `blocks/state/state-page-skeleton/state-page-skeleton.vue` in `@aziontech/webkit`
+- Source: `blocks/state/state-page-skeleton/state-page-skeleton.vue` in `@aziontech/ui`
 - MCP: `get_block("state/state-page-skeleton")`
 - Components: [Card](../../components/card.md), [Item](../../components/item.md), [Skeleton](../../components/skeleton.md)
-- Skills: `webkit-ui-states`
+- Skills: `azion-ui-states`
 
 ## Asked as
 
@@ -139,9 +139,9 @@ Each variant is the same screen in another state: `get_block("state/state-page-s
 
 ```vue
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   export interface PageSkeletonProps {
     /** What is loading, read by screen readers from the status region. */
@@ -298,8 +298,8 @@ Each variant is the same screen in another state: `get_block("state/state-page-s
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   const formRows = ['58%', '44%', '66%']
 </script>
@@ -361,7 +361,7 @@ Each variant is the same screen in another state: `get_block("state/state-page-s
 
 ```ts
 <script setup lang="ts">
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Skeleton from '@aziontech/ui/skeleton'
 </script>
 
 <template>
@@ -418,8 +418,8 @@ Each variant is the same screen in another state: `get_block("state/state-page-s
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import StatePageSkeleton from '../state-page-skeleton.vue'
   import SessionFields from './session-fields.vue'

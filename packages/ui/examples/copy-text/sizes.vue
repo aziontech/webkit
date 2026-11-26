@@ -1,5 +1,5 @@
 <script setup>
-  import CopyText from '@aziontech/webkit/copy-text'
+  import CopyText from '@aziontech/ui/copy-text'
 </script>
 
 <template>

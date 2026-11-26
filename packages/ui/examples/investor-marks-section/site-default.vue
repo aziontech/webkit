@@ -1,11 +1,11 @@
 <script setup>
-  import monasheesExtendedMono from '@aziontech/webkit/assets/monashees-extended-mono.svg'
-  import monasheesExtendedReversed from '@aziontech/webkit/assets/monashees-extended-reversed.svg'
-  import qualcommExtendedMono from '@aziontech/webkit/assets/qualcomm-extended-mono.svg'
-  import qualcommExtendedReversed from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'
-  import Container from '@aziontech/webkit/container'
-  import InvestorMarksSection from '@aziontech/webkit/investor-marks-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import monasheesExtendedMono from '@aziontech/ui/assets/monashees-extended-mono.svg'
+  import monasheesExtendedReversed from '@aziontech/ui/assets/monashees-extended-reversed.svg'
+  import qualcommExtendedMono from '@aziontech/ui/assets/qualcomm-extended-mono.svg'
+  import qualcommExtendedReversed from '@aziontech/ui/assets/qualcomm-extended-reversed.svg'
+  import Container from '@aziontech/ui/container'
+  import InvestorMarksSection from '@aziontech/ui/investor-marks-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const items = [
     {

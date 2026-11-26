@@ -1,4 +1,4 @@
-import type { ChartSeries } from '@aziontech/webkit/chart'
+import type { ChartSeries } from '@aziontech/ui/chart'
 
 import type {
   BreakdownDashboardContributor,

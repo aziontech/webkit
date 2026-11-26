@@ -1,6 +1,6 @@
 <script setup>
-  import DocCard from '@aziontech/webkit/doc-card'
-  import DocCardGroup from '@aziontech/webkit/doc-card-group'
+  import DocCard from '@aziontech/ui/doc-card'
+  import DocCardGroup from '@aziontech/ui/doc-card-group'
 </script>
 
 <template>

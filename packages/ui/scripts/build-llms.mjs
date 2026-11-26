@@ -368,19 +368,19 @@ export function assetPagePath(kind) {
 function assetUsage(kind) {
   if (kind === 'illustrations')
     return code(
-      '<script setup>\n  import Illustration from \'@aziontech/webkit/illustration\'\n</script>\n\n<template>\n  <Illustration name="ddos-protection" />\n</template>'
+      '<script setup>\n  import Illustration from \'@aziontech/ui/illustration\'\n</script>\n\n<template>\n  <Illustration name="ddos-protection" />\n</template>'
     )
   if (kind === 'diagrams')
     return code(
-      '<script setup>\n  import Diagram from \'@aziontech/webkit/diagram\'\n</script>\n\n<template>\n  <Diagram name="cache" />\n</template>'
+      '<script setup>\n  import Diagram from \'@aziontech/ui/diagram\'\n</script>\n\n<template>\n  <Diagram name="cache" />\n</template>'
     )
   if (kind === 'brandMarks')
     return code(
-      "<script setup>\n  import Marquee from '@aziontech/webkit/marquee'\n</script>\n\n<template>\n  <Marquee :marks=\"['itau', 'magalu', 'netshoes']\" />\n</template>"
+      "<script setup>\n  import Marquee from '@aziontech/ui/marquee'\n</script>\n\n<template>\n  <Marquee :marks=\"['itau', 'magalu', 'netshoes']\" />\n</template>"
     )
   if (kind === 'icons')
     return code(
-      '<script setup>\n  import \'@aziontech/icons\'\n  import Button from \'@aziontech/webkit/button\'\n</script>\n\n<template>\n  <i class="az az-firewall" aria-hidden="true"></i>\n  <i class="az az-trash" aria-hidden="true"></i>\n  <i class="az-color az-react" aria-hidden="true"></i>\n  <Button icon="az az-plus">Create</Button>\n</template>'
+      '<script setup>\n  import \'@aziontech/icons\'\n  import Button from \'@aziontech/ui/button\'\n</script>\n\n<template>\n  <i class="az az-firewall" aria-hidden="true"></i>\n  <i class="az az-trash" aria-hidden="true"></i>\n  <i class="az-color az-react" aria-hidden="true"></i>\n  <Button icon="az az-plus">Create</Button>\n</template>'
     )
   return ''
 }
@@ -496,7 +496,7 @@ function componentNames(catalog) {
 export function undocumentedExports(catalog, files) {
   const missing = []
   const page = (n) => files[`components/${n}.md`]
-  const listed = (n, on) => Boolean(page(on)?.includes(`@aziontech/webkit/${n}`))
+  const listed = (n, on) => Boolean(page(on)?.includes(`@aziontech/ui/${n}`))
   for (const [n, e] of Object.entries(catalog.imports)) {
     if (!['component', 'subcomponent', 'root'].includes(e.kind)) continue
     const barrel = /\/index\.(ts|js)$/.test(e.target || '')
@@ -667,7 +667,7 @@ function blockPage(catalog, id, { full = true } = {}) {
   }
   const facts = [
     `Surface: ${p.surface ?? 'app'}`,
-    `Source: \`${p.source}\` in \`@aziontech/webkit\``,
+    `Source: \`${p.source}\` in \`@aziontech/ui\``,
     `MCP: \`get_block("${id}")\``
   ]
   if (p.stability === 'preview') facts.push(PREVIEW_FACT)
@@ -676,7 +676,7 @@ function blockPage(catalog, id, { full = true } = {}) {
       `Components: ${p.components
         .map((c) => {
           const n = c
-            .replace(/^@aziontech\/webkit\//, '')
+            .replace(/^@aziontech\/ui\//, '')
             .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
             .toLowerCase()
           if (!names.has(n)) return `\`${c}\``
@@ -833,7 +833,7 @@ function composablePage(catalog, name) {
   const out = [
     `# ${fn}`,
     '',
-    `Composable \`${entry.import}\`. The signatures and option tables below are read from its typed source, [\`${parsed.file}\`](${REPO_URL}/packages/webkit/${parsed.file}).`,
+    `Composable \`${entry.import}\`. The signatures and option tables below are read from its typed source, [\`${parsed.file}\`](${REPO_URL}/packages/ui/${parsed.file}).`,
     '',
     code(imports.join('\n'), 'ts'),
     ''
@@ -936,10 +936,10 @@ const SPACING_GROUPS = [
 
 function foundations(catalog) {
   const t = catalog.tokens || { groups: {}, typography: [], animations: [], animationGuide: {} }
-  const guidelines = readRepo('packages/webkit/docs/GUIDELINES.md')
-  const styleguide = readRepo('packages/webkit/docs/STYLEGUIDE.md')
-  const layout = readRepo('skills/webkit-layout/SKILL.md')
-  const usage = readRepo('skills/webkit-usage/SKILL.md')
+  const guidelines = readRepo('packages/ui/docs/GUIDELINES.md')
+  const styleguide = readRepo('packages/ui/docs/STYLEGUIDE.md')
+  const layout = readRepo('skills/azion-ui-layout/SKILL.md')
+  const usage = readRepo('skills/azion-ui-usage/SKILL.md')
   const section = (md, re) => demote(headingSection(md, re) ?? '', 0)
   const rule = (name) => withoutTitle(readRepo(`rules/${name}.md`) ?? '')
   const pages = [
@@ -951,7 +951,7 @@ function foundations(catalog) {
       body: [
         withoutTitle(section(styleguide, /^## 1\. Foundations/)),
         '## The rule',
-        rule('webkit-tokens'),
+        rule('azion-ui-tokens'),
         '## Token groups',
         `${(t.cssVars || []).length} CSS custom properties from \`@aziontech/theme\`, grouped by their first segment. The MCP tool \`list_tokens\` returns the same list.`,
         groupsTable(t.groups, Object.keys(t.groups).sort()),
@@ -968,7 +968,7 @@ function foundations(catalog) {
       title: 'Color',
       summary: 'Semantic color roles, light and dark themes, and the color tokens by group.',
       body: [
-        withoutTitle(readRepo('skills/webkit-theming-dark-mode/SKILL.md') ?? ''),
+        withoutTitle(readRepo('skills/azion-ui-theming-dark-mode/SKILL.md') ?? ''),
         '## Color tokens',
         groupsTable(t.groups, COLOR_GROUPS)
       ]
@@ -1019,7 +1019,7 @@ function foundations(catalog) {
       summary:
         'The catalogued animate-* utilities, their timing, when to use each, and reduced motion.',
       body: [
-        rule('webkit-motion'),
+        rule('azion-ui-motion'),
         '## Animation utilities',
         table(
           ['Class', 'Value', 'Use when'],
@@ -1039,9 +1039,9 @@ function foundations(catalog) {
       summary:
         'Built-in strings in en, pt-BR and es, the provider, useLocale and locale-aware formatting.',
       body: [
-        'WebKit ships every built-in string in three catalogs: `en` (built into the provider), `pt-BR` and `es` (opt-in entries `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es`). Wrap the app in `ConfigProvider` with a `locale` and the catalogs it offers (`:catalogs="{ \'pt-BR\': ptBR, es }"`) and every component follows it; `useLocale()` from `@aziontech/webkit/use-locale` gives your own code the same `t`, `dir` and `Intl` formatters.',
+        'Azion UI ships every built-in string in three catalogs: `en` (built into the provider), `pt-BR` and `es` (opt-in entries `@aziontech/ui/locales/pt-BR` and `@aziontech/ui/locales/es`). Wrap the app in `ConfigProvider` with a `locale` and the catalogs it offers (`:catalogs="{ \'pt-BR\': ptBR, es }"`) and every component follows it; `useLocale()` from `@aziontech/ui/use-locale` gives your own code the same `t`, `dir` and `Intl` formatters.',
         section(usage, /^## App-level setup/),
-        rule('webkit-strings')
+        rule('azion-ui-strings')
       ]
     },
     {
@@ -1049,7 +1049,7 @@ function foundations(catalog) {
       title: 'Right-to-left',
       summary:
         'Logical sides only, so every screen mirrors under dir="rtl"; what mirrors and what does not.',
-      body: [rule('webkit-direction')]
+      body: [rule('azion-ui-direction')]
     },
     {
       slug: 'devices',
@@ -1063,16 +1063,16 @@ function foundations(catalog) {
       title: 'Accessibility',
       summary:
         'WCAG 2.1 AA rules every component and screen follows: names, focus, keyboard, contrast, motion.',
-      body: [rule('webkit-accessibility')]
+      body: [rule('azion-ui-accessibility')]
     },
     {
       slug: 'keyboard',
       title: 'Keyboard',
       summary:
         'The console keyboard contract: focus on open, Esc, Enter and Cmd+Enter, Cmd+S, Cmd+K, /, ?, list keys, and no single-key shortcut while typing.',
-      body: [rule('webkit-keyboard')],
+      body: [rule('azion-ui-keyboard')],
       compact: [
-        section(readRepo('rules/webkit-keyboard.md'), /^## The contract/),
+        section(readRepo('rules/azion-ui-keyboard.md'), /^## The contract/),
         "Do, Don't, the Vue samples and what enforces each key, in full: `foundations/keyboard.md`."
       ]
     },
@@ -1081,16 +1081,16 @@ function foundations(catalog) {
       title: 'Site pages (Web Design Guide)',
       summary:
         'The Web Design Guide, SD-01 to SD-25 (SD-07 headline lines, SD-04 action labels): sections, heroes, line budgets and assets of every Azion web page.',
-      body: [rule('webkit-site-pages')],
+      body: [rule('azion-ui-site-pages')],
       compact: [
-        section(readRepo('rules/webkit-site-pages.md'), /^## Index/),
-        section(readRepo('rules/webkit-site-pages.md'), /^## Where the content comes from/),
+        section(readRepo('rules/azion-ui-site-pages.md'), /^## Index/),
+        section(readRepo('rules/azion-ui-site-pages.md'), /^## Where the content comes from/),
         'Each rule in full, with Incorrect, Correct, Why and Exceptions: `foundations/site-pages.md`.'
       ]
     },
     {
       slug: 'usage',
-      title: 'Using WebKit in an app',
+      title: 'Using Azion UI in an app',
       summary:
         'Start from a block, find a component, import it tree-shakeably, app-level setup and the quality checklist.',
       body: [withoutTitle(usage ?? ''), withoutTitle(section(guidelines, /^## Part B/))]
@@ -1111,11 +1111,11 @@ function foundations(catalog) {
 
 function header(catalog) {
   return [
-    `# Azion WebKit`,
+    `# Azion UI`,
     '',
-    `> The Vue 3 design system of Azion (\`${catalog.package}\` ${catalog.webkitVersion}): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.`,
+    `> The Vue 3 design system of Azion (\`${catalog.package}\` ${catalog.azionUiVersion}): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.`,
     '',
-    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.',
+    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/ui/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/ui-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.',
     '',
     `Installed copy: \`node_modules/${catalog.package}/llms/\`. Every component also has a JSON API next to its page (\`components/<name>.json\`).`,
     ''
@@ -1149,8 +1149,8 @@ export function buildLlms(catalog = loadCatalog()) {
   const found = foundations(catalog)
   const slugs = new Set(found.map((f) => f.slug))
   const ruleLinks = (md) =>
-    md?.replace(/\]\(\.\/webkit-([a-z0-9-]+)\.md(#[^)\s]*)?\)/g, (m, name, hash = '') =>
-      slugs.has(name) ? `](./${name}.md${hash})` : `](${REPO_URL}/rules/webkit-${name}.md${hash})`
+    md?.replace(/\]\(\.\/azion-ui-([a-z0-9-]+)\.md(#[^)\s]*)?\)/g, (m, name, hash = '') =>
+      slugs.has(name) ? `](./${name}.md${hash})` : `](${REPO_URL}/rules/azion-ui-${name}.md${hash})`
     )
   for (const f of found) {
     f.md = ruleLinks(f.md)

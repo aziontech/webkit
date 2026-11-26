@@ -1,5 +1,5 @@
 <script setup>
-  import DonutChart from '@aziontech/webkit/donut-chart'
+  import DonutChart from '@aziontech/ui/donut-chart'
 
   const series = [
     {

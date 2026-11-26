@@ -1,14 +1,14 @@
 {
  "name": "card-grid",
  "binding": "CardGrid",
- "import": "@aziontech/webkit/card-grid",
- "treeShakeableImport": "@aziontech/webkit/card-grid-root",
+ "import": "@aziontech/ui/card-grid",
+ "treeShakeableImport": "@aziontech/ui/card-grid-root",
  "category": "layout",
  "surface": "site",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/card-grid-cell"
+  "@aziontech/ui/card-grid-cell"
  ],
  "purpose": "The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `registration-frame` elements. The `frame` register is the one that composes: each `CardGrid.Cell` draws its own rules and corner marks and carries its own fill, so the grid needs no background trick and nests flush inside a column that already owns the outer edges.",
  "setup": null,

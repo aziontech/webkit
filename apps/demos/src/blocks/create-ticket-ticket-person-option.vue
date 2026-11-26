@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Avatar, { type AvatarPresence } from '@aziontech/webkit/avatar'
+  import Avatar, { type AvatarPresence } from '@aziontech/ui/avatar'
 
   export interface TicketPersonOptionProps {
     /** The person's or the team's name. */

@@ -2,8 +2,8 @@
 
 > A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Reference`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.
 
-- Import: `import ChartRoot from '@aziontech/webkit/chart-root'`
-- Compound import (dot notation, not tree-shakeable): `import Chart from '@aziontech/webkit/chart'`
+- Import: `import ChartRoot from '@aziontech/ui/chart-root'`
+- Compound import (dot notation, not tree-shakeable): `import Chart from '@aziontech/ui/chart'`
 - Category: chart · Surface: app · Structure: composition
 - API as JSON: [chart.json](chart.json)
 
@@ -96,17 +96,17 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/chart-area`
-- `@aziontech/webkit/chart-axis`
-- `@aziontech/webkit/chart-bar`
-- `@aziontech/webkit/chart-brush`
-- `@aziontech/webkit/chart-crosshair`
-- `@aziontech/webkit/chart-grid`
-- `@aziontech/webkit/chart-legend`
-- `@aziontech/webkit/chart-line`
-- `@aziontech/webkit/chart-reference`
-- `@aziontech/webkit/chart-scatter`
-- `@aziontech/webkit/chart-tooltip`
+- `@aziontech/ui/chart-area`
+- `@aziontech/ui/chart-axis`
+- `@aziontech/ui/chart-bar`
+- `@aziontech/ui/chart-brush`
+- `@aziontech/ui/chart-crosshair`
+- `@aziontech/ui/chart-grid`
+- `@aziontech/ui/chart-legend`
+- `@aziontech/ui/chart-line`
+- `@aziontech/ui/chart-reference`
+- `@aziontech/ui/chart-scatter`
+- `@aziontech/ui/chart-tooltip`
 
 ## Sub-components
 
@@ -236,7 +236,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ```vue
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
+  import Chart from '@aziontech/ui/chart'
 
   const labels = [
     '13:05',
@@ -293,7 +293,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ```vue
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
+  import Chart from '@aziontech/ui/chart'
 
   const labels = [
     '13:05',
@@ -382,7 +382,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ```vue
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
+  import Chart from '@aziontech/ui/chart'
 
   const labels = [
     '13:05',

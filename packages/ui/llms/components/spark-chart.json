@@ -1,8 +1,8 @@
 {
  "name": "spark-chart",
  "binding": "SparkChart",
- "import": "@aziontech/webkit/spark-chart",
- "treeShakeableImport": "@aziontech/webkit/spark-chart",
+ "import": "@aziontech/ui/spark-chart",
+ "treeShakeableImport": "@aziontech/ui/spark-chart",
  "category": "chart",
  "surface": "app",
  "structure": "monolithic",

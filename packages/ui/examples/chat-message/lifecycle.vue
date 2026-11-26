@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import Button from '@aziontech/ui/button'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
   import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   const full =

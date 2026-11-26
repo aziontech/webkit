@@ -1,5 +1,5 @@
 <script setup>
-  import LogViewer from '@aziontech/webkit/log-viewer'
+  import LogViewer from '@aziontech/ui/log-viewer'
 </script>
 
 <template>

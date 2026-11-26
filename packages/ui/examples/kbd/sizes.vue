@@ -1,5 +1,5 @@
 <script setup>
-  import Kbd from '@aziontech/webkit/kbd'
+  import Kbd from '@aziontech/ui/kbd'
 </script>
 
 <template>

@@ -79,8 +79,8 @@ test('scanVue reports deprecated members, props, models and slots', () => {
 
 test('scanVue stays silent on the replacement names', () => {
   const source = `<script setup>
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Sidebar from '@aziontech/webkit/sidebar'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Sidebar from '@aziontech/ui/sidebar'
 </script>
 
 <template>
@@ -111,7 +111,7 @@ test('scanMarkdown reads fenced snippets and indented ones, and stays silent on 
   )
 })
 
-test('blocks, examples, src, skills, rules and adapters use no deprecated WebKit name', () => {
+test('blocks, examples, src, skills, rules and adapters use no deprecated Azion UI name', () => {
   const findings = scanRepo()
   assert.deepEqual(
     findings.map((f) => `${f.file}:${f.line} ${f.message}`),

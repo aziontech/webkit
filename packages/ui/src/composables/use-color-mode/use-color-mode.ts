@@ -26,7 +26,7 @@ export interface UseColorModeReturn {
   setMode: (next: ColorMode) => void
 }
 
-export const COLOR_MODE_STORAGE_KEY = 'webkit-color-mode'
+export const COLOR_MODE_STORAGE_KEY = 'azion-ui-color-mode'
 
 export const colorModeScript =
   `(function(){var d=document.documentElement,m;` +

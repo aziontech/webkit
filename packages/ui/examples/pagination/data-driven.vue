@@ -1,5 +1,5 @@
 <script setup>
-  import PaginationRoot from '@aziontech/webkit/pagination-root'
+  import PaginationRoot from '@aziontech/ui/pagination-root'
   import { ref } from 'vue'
 
   const page = ref(1)

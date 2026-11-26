@@ -2,8 +2,8 @@
 
 > A configurable dashboard grid: the reader arranges the cards. `DashboardGrid` owns the layout, an array of `{ id, span, height? }` bound with `v-model:layout`, and lays one `DashboardGrid.Item` per entry on a column grid that collapses to one column in a narrow container. While `editing`, the `ChartCard` inside each item shows its drag handle and resize corner, and those handles report to the board instead of to the page: drag a card onto another or press the arrow keys on its handle to reorder, drag its corner or press the arrow keys on it to resize. Every move and resize is clamped, written back to the layout and announced in a polite live region. Taken from Cloudscape's board and board item, on top of the existing `ChartCard` handles.
 
-- Import: `import DashboardGridRoot from '@aziontech/webkit/dashboard-grid-root'`
-- Compound import (dot notation, not tree-shakeable): `import DashboardGrid from '@aziontech/webkit/dashboard-grid'`
+- Import: `import DashboardGridRoot from '@aziontech/ui/dashboard-grid-root'`
+- Compound import (dot notation, not tree-shakeable): `import DashboardGrid from '@aziontech/ui/dashboard-grid'`
 - Category: layout · Surface: app · Structure: composition
 - API as JSON: [dashboard-grid.json](dashboard-grid.json)
 
@@ -64,7 +64,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/dashboard-grid-item`
+- `@aziontech/ui/dashboard-grid-item`
 
 ## Sub-components
 
@@ -82,7 +82,7 @@ drags and resizes go to the board. `ChartCard` keeps working on its own outside 
 Resulting layout:
 
 ```
-packages/webkit/src/components/layout/dashboard-grid/
+packages/ui/src/components/layout/dashboard-grid/
 ├── board.vue
 ├── board.test.ts
 ├── index.ts
@@ -158,8 +158,8 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 
 ```vue
 <script setup>
-  import DashboardGrid from '@aziontech/webkit/dashboard-grid'
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import DashboardGrid from '@aziontech/ui/dashboard-grid'
+  import StatTile from '@aziontech/ui/stat-tile'
   import { ref } from 'vue'
 
   const tiles = {
@@ -232,11 +232,11 @@ Exported types: `DashboardGridLayoutItem = { id: string; span: number; height?: 
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Chart from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DashboardGrid from '@aziontech/webkit/dashboard-grid'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Chart from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DashboardGrid from '@aziontech/ui/dashboard-grid'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref } from 'vue'
 
   const labels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00']

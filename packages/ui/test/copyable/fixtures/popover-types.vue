@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Popover, { type PopoverAlign, type PopoverSide } from '@aziontech/webkit/popover'
+  import Popover, { type PopoverAlign, type PopoverSide } from '@aziontech/ui/popover'
   import { ref } from 'vue'
 
   const side: PopoverSide = 'end'

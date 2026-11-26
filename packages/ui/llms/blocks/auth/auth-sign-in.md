@@ -1,12 +1,12 @@
 # AuthSignIn (`auth/auth-sign-in`)
 
-> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: the error goes on the thing the user has to change, and auth never toasts. Each error story is the primary flow with one endpoint response, on the same two-step card's password step. A 401 goes on the password field (cleared, `invalid`, its `Field.Error` in neutral words, focused), because it is the one field on the step and the one the user retypes; an outcome no field can fix goes in the same small `Alert` under the heading, with Retry when nobody can fix it (503, 500, timeout); and on sign-up a 409 (address already registered) answers exactly like a new address, so the screen never reveals which addresses have an account. In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant="link"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout. The sign-in card's copy ships in English, Portuguese (Brazil) and Spanish and follows the app's WebKit locale (`useLocale`), so the screen translates with WebKit's own strings.
+> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `AppHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). An app that signs in with an Azion personal token instead of an account uses the PersonalToken variant (`token-sign-in.vue`): one masked `PasswordInput` for the token, a link to where tokens are created, a Remember for this tab option, and a `sign-in` event that hands the token to the app, which answers with `loading` and `error`. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `FieldError` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: the error goes on the thing the user has to change, and auth never toasts. Each error story is the primary flow with one endpoint response, on the same two-step card's password step. A 401 goes on the password field (cleared, `invalid`, its `Field.Error` in neutral words, focused), because it is the one field on the step and the one the user retypes; an outcome no field can fix goes in the same small `Alert` under the heading, with Retry when nobody can fix it (503, 500, timeout); and on sign-up a 409 (address already registered) answers exactly like a new address, so the screen never reveals which addresses have an account. In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant="link"`, never an anchor to `#`. Built from `PageHeader`, `AppHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `FieldError` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout. The sign-in card's copy ships in English, Portuguese (Brazil) and Spanish and follows the app's Azion UI locale (`useLocale`), so the screen translates with Azion UI's own strings.
 
 - Surface: app
-- Source: `blocks/auth/auth-sign-in/auth-sign-in.vue` in `@aziontech/webkit`
+- Source: `blocks/auth/auth-sign-in/auth-sign-in.vue` in `@aziontech/ui`
 - MCP: `get_block("auth/auth-sign-in")`
 - Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Skeleton](../../components/skeleton.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-locale`
-- Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
+- Skills: `azion-ui-form`, `azion-ui-errors`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -81,7 +81,7 @@ A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`
 
 ### I. Field message — `FieldError` (conditional)
 
-Shows only after the primary action, under the email input, with a message that says what to enter: `Enter your email address.` when the value is empty, `Enter a valid email address.` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
+Shows only after the primary action, under the email input, with a message that says what to enter: `Enter your email address.` when the value is empty, `Enter a valid email address.` when it is malformed. It is client-side validation (row 1 of `skills/azion-ui-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
 
 ### J. Step hint — `Tooltip` (password and reset steps)
 
@@ -119,7 +119,7 @@ Two bars of the provider buttons' height (`height="2.5rem"`) in a `role="status"
 
 For an app that signs in with an Azion personal token instead of an account. The card is its own file, `token-sign-in.vue`, and the three variants render it with props. One `Field` labelled `Personal token` over a `PasswordInput` with `monospace`, `autocomplete="off"`, `spellcheck="false"` and the show and hide toggle it ships, a `Field.Description` that links to how a token is created (a real Azion documentation link, `target="_blank"`), and a `Field.Error` for the client checks: empty (`Paste your personal token.`) and inner spaces (`A token has no spaces. Copy it again from Personal tokens.`). Under it a `Checkbox` `Remember for this tab`, off by default. The card has no Google or GitHub buttons and no steps.
 
-The card checks nothing against the API itself: it emits `sign-in` with `(event, token)`, the token trimmed, and the app answers with `loading` and then `error`. It stores nothing: the `remember` model only tells the app where to keep the token (on: `sessionStorage`, which lasts while the tab is open; off: memory, gone on reload; never `localStorage` or a cookie the app's server can read). Attaching it to requests is the app's job; see `skills/webkit-azion-api`. `rejected` (401) and `no-access` (403) go on the field: it is cleared, turns `invalid` with the reason in its `Field.Error` and takes focus, with no notice and no action (RejectedToken, NoAccessToken); `rate-limited` (429) and `unreachable` (no answer) are warning notices with Retry and the entry kept; any other text is a danger notice with Retry.
+The card checks nothing against the API itself: it emits `sign-in` with `(event, token)`, the token trimmed, and the app answers with `loading` and then `error`. It stores nothing: the `remember` model only tells the app where to keep the token (on: `sessionStorage`, which lasts while the tab is open; off: memory, gone on reload; never `localStorage` or a cookie the app's server can read). Attaching it to requests is the app's job; see `skills/azion-ui-azion-api`. `rejected` (401) and `no-access` (403) go on the field: it is cleared, turns `invalid` with the reason in its `Field.Error` and takes focus, with no notice and no action (RejectedToken, NoAccessToken); `rate-limited` (429) and `unreachable` (no answer) are warning notices with Retry and the entry kept; any other text is a danger notice with Retry.
 
 ## Data
 
@@ -287,7 +287,7 @@ To go live, render the block from the route that owns the session and pass what 
 - **Device actions:** `Cancel` and `Confirm`. Outcomes: `Device connected. Go back to your terminal; you can close this tab.` / `Request cancelled. The device was not connected.`
 - **Personal token:** heading `Sign in with a personal token`; lead `Paste a personal token from your Azion account. It is sent only to the Azion API.`; rejected `Azion did not accept this token. Check that you copied all of it and that it has not expired or been revoked.`; no access `This token is valid but cannot read what this app needs. Create a token with access to the account and paste it here.`; rate limited `Azion is limiting requests from this token. Wait a moment and retry.`; unreachable `We could not reach Azion to check the token. Your entry is kept.`; option `Remember for this tab` / `Closing the tab signs you out.`
 - **Device code errors:** `Enter the code your terminal shows.`, `Enter all 8 characters of the code.`, `That code is not valid or has expired. Check your terminal, or start the sign-in again there.`
-- **Languages:** the sign-in card (`auth-sign-in.vue`) carries its copy in a `COPY` table keyed by locale (`en`, `pt-BR`, `es`) and reads the active locale with `useLocale`, so a `ConfigProvider` around the page translates the block's copy together with WebKit's own strings (the password show and hide labels, the requirements). An unknown locale falls back to its language, then to English. Add a language by adding one entry to `COPY`; keep the English row as the source and keep the terms sentence split into its link parts.
+- **Languages:** the sign-in card (`auth-sign-in.vue`) carries its copy in a `COPY` table keyed by locale (`en`, `pt-BR`, `es`) and reads the active locale with `useLocale`, so a `ConfigProvider` around the page translates the block's copy together with Azion UI's own strings (the password show and hide labels, the requirements). An unknown locale falls back to its language, then to English. Add a language by adding one entry to `COPY`; keep the English row as the source and keep the terms sentence split into its link parts.
 
 ## Accessibility
 
@@ -370,11 +370,11 @@ Each variant is the same screen in another state: `get_block("auth/auth-sign-in"
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button, { type ButtonVariant } from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import Button, { type ButtonVariant } from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { useCardHeight } from './composables/use-card-height'
@@ -918,14 +918,14 @@ export const recoveryCodes = [
 
 ```ts
 <script setup lang="ts">
-  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PasswordInput from '@aziontech/webkit/password-input'
+  import Alert, { type AlertSeverity } from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PasswordInput from '@aziontech/ui/password-input'
   import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
   import SignInFrame from './parts/sign-in-frame.vue'
@@ -1351,8 +1351,8 @@ export const fillEmail = (template: string, email: string) => template.replace('
 ## `lib/sign-in-rules.ts`
 
 ```ts
-import type { AlertSeverity } from '@aziontech/webkit/alert'
-import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/webkit/password-requirements'
+import type { AlertSeverity } from '@aziontech/ui/alert'
+import { DEFAULT_PASSWORD_REQUIREMENTS } from '@aziontech/ui/password-requirements'
 
 import type { SignInFailure, SignInNoticeKind } from '../auth-sign-in.vue'
 import type { SignInCopy } from './sign-in-copy'
@@ -1564,9 +1564,9 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
 
   export interface SignInFrameProps {
     /** Where the product mark leads. */
@@ -1637,7 +1637,7 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
+  import Card from '@aziontech/ui/card'
 
   defineSlots<{
     /** What the card holds, padding included. */
@@ -1663,9 +1663,9 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Field from '@aziontech/webkit/field'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
 
   export interface EmailFieldProps {
     /** The id of the input, also the stem of its error id. */
@@ -1717,9 +1717,9 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Field from '@aziontech/webkit/field'
-  import PasswordInput, { type PasswordInputAutocomplete } from '@aziontech/webkit/password-input'
-  import PasswordRequirements from '@aziontech/webkit/password-requirements-root'
+  import Field from '@aziontech/ui/field'
+  import PasswordInput, { type PasswordInputAutocomplete } from '@aziontech/ui/password-input'
+  import PasswordRequirements from '@aziontech/ui/password-requirements-root'
 
   export interface PasswordFieldProps {
     /** The id of the input. */
@@ -1769,7 +1769,7 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Tag from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/ui/tag'
 
   export interface LastUsedTagProps {
     /** What the tag says. */
@@ -1794,9 +1794,9 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Separator from '@aziontech/webkit/separator'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Button from '@aziontech/ui/button'
+  import Separator from '@aziontech/ui/separator'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import type { SignInMethod, SignInProvider } from '../auth-sign-in.vue'
   import type { SignInCopy } from '../lib/sign-in-copy'
@@ -1868,9 +1868,9 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   export interface StepBackProps {
     /** The name of the back control, also its tooltip. */
@@ -1923,7 +1923,7 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 
   import type { SignInCopy } from '../lib/sign-in-copy'
 
@@ -1972,7 +1972,7 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Link from '@aziontech/webkit/link'
+  import Link from '@aziontech/ui/link'
 
   export interface SignInFooterProps {
     /** The question before the link. */
@@ -2044,9 +2044,9 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Item from '@aziontech/webkit/item'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Item from '@aziontech/ui/item'
 
   export interface SignedInAsProps {
     /** The account that is signed in. */
@@ -2101,7 +2101,7 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Item from '@aziontech/webkit/item'
+  import Item from '@aziontech/ui/item'
 
   /** One permission the app asks for. */
   export interface AuthScope {
@@ -2162,11 +2162,11 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Separator from '@aziontech/webkit/separator'
+  import Alert, { type AlertSeverity } from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Separator from '@aziontech/ui/separator'
   import { nextTick, onScopeDispose, reactive, ref } from 'vue'
 
   import type { SignInProvider } from '../auth-sign-in.vue'
@@ -2339,12 +2339,12 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Link from '@aziontech/webkit/link'
-  import OtpInput from '@aziontech/webkit/otp-input'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Link from '@aziontech/ui/link'
+  import OtpInput from '@aziontech/ui/otp-input'
+  import PageHeader from '@aziontech/ui/page-header'
   import { computed, nextTick, onMounted, ref } from 'vue'
 
   import { useCodeCheck } from '../composables/use-code-check'
@@ -2493,14 +2493,14 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import Field from '@aziontech/webkit/field'
-  import OtpInput from '@aziontech/webkit/otp-input'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import QrCode from '@aziontech/webkit/qr-code'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import Field from '@aziontech/ui/field'
+  import OtpInput from '@aziontech/ui/otp-input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import QrCode from '@aziontech/ui/qr-code'
   import { computed, nextTick, onMounted, ref } from 'vue'
 
   import { useCodeCheck } from '../composables/use-code-check'
@@ -2748,11 +2748,11 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Alert from '@aziontech/ui/alert'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
   import { computed, onScopeDispose, ref } from 'vue'
 
   import { oauthClient as client, oauthScopes as scopes, signedInAccount } from '../sample'
@@ -2867,12 +2867,12 @@ export function useCodeCheck(options: UseCodeCheckOptions): UseCodeCheckReturn {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import OtpInput from '@aziontech/webkit/otp-input'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import OtpInput from '@aziontech/ui/otp-input'
+  import PageHeader from '@aziontech/ui/page-header'
   import { computed, nextTick, onScopeDispose, ref } from 'vue'
 
   import { useCodeCheck } from '../composables/use-code-check'

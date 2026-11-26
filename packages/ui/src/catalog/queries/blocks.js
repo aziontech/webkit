@@ -16,7 +16,7 @@ const HOW_TO_USE_WITH_GUIDELINES =
   "for, do and don't, the copy rules and the accessibility rules. Then copy this SFC as the " +
   'starting point of the screen and change only the content (copy, data, handlers, routes), ' +
   'following the guidelines. A block with `files` takes its data through typed props and emits ' +
-  'its actions: copy each file next to the SFC (`webkit add` does it and fixes the imports), ' +
+  'its actions: copy each file next to the SFC (`azion-ui add` does it and fixes the imports), ' +
   'pass your records, `loading` and `error` as props, and handle the events; a variant imports ' +
   'the primary SFC and only passes it other props. Keep the components, their order, the props ' +
   'and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of ' +
@@ -99,7 +99,7 @@ function movedBlock(catalog, key, variant) {
 
 function movedNote(moved, p) {
   const state = moved.variant && moved.variant !== p.primary ? `, state "${moved.variant}"` : ''
-  return `Block "${moved.from}" was renamed in WebKit v6: it is now "${moved.id}"${state}. Use the new id.`
+  return `Block "${moved.from}" was renamed in Azion UI v6: it is now "${moved.id}"${state}. Use the new id.`
 }
 
 function blockIdOf(blocks, key) {

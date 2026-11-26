@@ -1,5 +1,5 @@
 <script setup>
-  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
+  import DocCallToAction from '@aziontech/ui/doc-call-to-action'
 </script>
 
 <template>

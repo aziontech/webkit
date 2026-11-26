@@ -3,10 +3,10 @@
 > A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button (named by a `Tooltip`) and clickable rows that open the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Tooltip`, `Drawer`, `PanelHeader`, `PanelBody`, `PanelFooter` and `Button`.
 
 - Surface: app
-- Source: `blocks/detail/detail-production-checklist/detail-production-checklist.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-production-checklist/detail-production-checklist.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-production-checklist")`
 - Components: [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [IconButton](../../components/icon-button.md), [Item](../../components/item.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
-- Skills: `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -111,7 +111,7 @@ Then delete `sample.ts` and its import.
 - **Gate actions (drawer):** `Add <Module>` or a verb and noun, three words or fewer, e.g. "Add Domain", "Attach Policy", "Add Error Page".
 - **Done note:** a muted sentence beside the Done tag naming what the gate now serves, ending with a period, e.g. "Serving shop.example.com."; the tag itself reads "Done".
 - **Drawer description:** one plain sentence on where the service stands, e.g. "This service is live on a generated hostname. These steps take it to production."
-- Follow `skills/webkit-microcopy`: no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -132,7 +132,7 @@ Then delete `sample.ts` and its import.
 - `detail/detail-resource` — the service Overview tab that renders this card under the summary.
 - `detail/detail-get-started` — onboarding before the first deployment, for a resource made from the CLI.
 - `detail/detail-domains-card` — where an attached policy or error page shows up once added.
-- `Item` — the row primitive for each gate; see `skills/webkit-ui-states` for the done and empty states.
+- `Item` — the row primitive for each gate; see `skills/azion-ui-states` for the done and empty states.
 
 ## Variants
 
@@ -146,18 +146,18 @@ Each variant is the same screen in another state: `get_block("detail/detail-prod
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, ref } from 'vue'
 
   import { sampleSteps } from './sample'

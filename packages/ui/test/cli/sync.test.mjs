@@ -19,7 +19,7 @@ import { planSync } from '../../src/cli/sync.js'
 const VERSION = '5.0.0'
 
 function makeProject() {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-sync-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-sync-'))
   writeFileSync(
     join(dir, 'package.json'),
     JSON.stringify({ name: 'demo', version: '1.0.0' }, null, 2)
@@ -30,22 +30,22 @@ function makeProject() {
 // A tiny two-rule fake templates dir — cheap and fast, and lets tests simulate "the
 // template changed" by editing these files directly instead of the real skills/ and rules/.
 function makeTemplatesDir(overrides = {}) {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-templates-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-templates-'))
   mkdirSync(join(dir, 'rules'), { recursive: true })
-  mkdirSync(join(dir, 'skills/webkit-sample'), { recursive: true })
+  mkdirSync(join(dir, 'skills/azion-ui-sample'), { recursive: true })
   mkdirSync(join(dir, 'adapters/claude/agents'), { recursive: true })
   writeFileSync(
-    join(dir, 'rules/webkit-imports.md'),
+    join(dir, 'rules/azion-ui-imports.md'),
     overrides.rule ?? '# Rule: imports\n\nUse the flat path.\n'
   )
   writeFileSync(
-    join(dir, 'skills/webkit-sample/SKILL.md'),
+    join(dir, 'skills/azion-ui-sample/SKILL.md'),
     overrides.skill ??
-      '---\nname: webkit-sample\ndescription: A sample skill.\n---\n\n# Skill: webkit-sample\nBody.\n'
+      '---\nname: azion-ui-sample\ndescription: A sample skill.\n---\n\n# Skill: azion-ui-sample\nBody.\n'
   )
   writeFileSync(
     join(dir, 'adapters/AGENTS_FRAGMENT.md'),
-    overrides.fragment ?? '## @aziontech/webkit design system\n\nFollow the rules.\n'
+    overrides.fragment ?? '## @aziontech/ui design system\n\nFollow the rules.\n'
   )
   return dir
 }
@@ -59,8 +59,8 @@ test('planSync: fresh project — every bundle file + fragment is missing; apply
   const templatesDir = makeTemplatesDir()
   try {
     const plan = planSync(project, { templatesDir, version: VERSION })
-    assert.equal(entryFor(plan, 'rules/webkit-imports.md').state, 'missing')
-    assert.equal(entryFor(plan, 'skills/webkit-sample/SKILL.md').state, 'missing')
+    assert.equal(entryFor(plan, 'rules/azion-ui-imports.md').state, 'missing')
+    assert.equal(entryFor(plan, 'skills/azion-ui-sample/SKILL.md').state, 'missing')
     assert.equal(plan.fragment.state, 'missing')
     assert.equal(plan.drift, true)
 
@@ -87,12 +87,12 @@ test('planSync: editing a synced rule body reports it modified; sync skips it, -
   try {
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
 
-    const rulePath = join(project, '.claude/rules/webkit-imports.md')
+    const rulePath = join(project, '.claude/rules/azion-ui-imports.md')
     const stampedOriginal = readFileSync(rulePath, 'utf8')
     writeFileSync(rulePath, `${stampedOriginal}\nOne more local line.\n`)
 
     const modifiedPlan = planSync(project, { templatesDir, version: VERSION })
-    const entry = entryFor(modifiedPlan, 'rules/webkit-imports.md')
+    const entry = entryFor(modifiedPlan, 'rules/azion-ui-imports.md')
     assert.equal(entry.state, 'modified')
     assert.equal(entry.action.type, 'report')
     // `modified` alone is not drift (the consumer's own choice).
@@ -106,7 +106,7 @@ test('planSync: editing a synced rule body reports it modified; sync skips it, -
     )
 
     const forcedPlan = planSync(project, { templatesDir, version: VERSION, force: true })
-    const forcedEntry = entryFor(forcedPlan, 'rules/webkit-imports.md')
+    const forcedEntry = entryFor(forcedPlan, 'rules/azion-ui-imports.md')
     assert.equal(forcedEntry.action.type, 'copy-stamped')
     assert.equal(forcedEntry.action.forced, true)
     applyPlan(project, forcedPlan.actions)
@@ -117,7 +117,7 @@ test('planSync: editing a synced rule body reports it modified; sync skips it, -
     )
 
     const finalPlan = planSync(project, { templatesDir, version: VERSION })
-    assert.equal(entryFor(finalPlan, 'rules/webkit-imports.md').state, 'current')
+    assert.equal(entryFor(finalPlan, 'rules/azion-ui-imports.md').state, 'current')
     assert.equal(finalPlan.drift, false)
   } finally {
     rmSync(project, { recursive: true, force: true })
@@ -134,12 +134,12 @@ test('planSync: a tampered marker sha with the body otherwise untouched — see 
   const templatesDir = makeTemplatesDir()
   try {
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
-    const rulePath = join(project, '.claude/rules/webkit-imports.md')
+    const rulePath = join(project, '.claude/rules/azion-ui-imports.md')
     const original = readFileSync(rulePath, 'utf8')
     writeFileSync(rulePath, original.replace(/sha256=[0-9a-f]{16}/, 'sha256=0000000000000000'))
 
     const plan = planSync(project, { templatesDir, version: VERSION })
-    assert.equal(entryFor(plan, 'rules/webkit-imports.md').state, 'modified')
+    assert.equal(entryFor(plan, 'rules/azion-ui-imports.md').state, 'modified')
     assert.equal(plan.drift, false)
   } finally {
     rmSync(project, { recursive: true, force: true })
@@ -155,19 +155,19 @@ test('planSync: template body changed since the consumer was stamped → stale �
 
     // Simulate an upstream template update.
     writeFileSync(
-      join(templatesDir, 'rules/webkit-imports.md'),
+      join(templatesDir, 'rules/azion-ui-imports.md'),
       '# Rule: imports\n\nUse the flat path. Now with more detail.\n'
     )
 
     const plan = planSync(project, { templatesDir, version: VERSION })
-    const entry = entryFor(plan, 'rules/webkit-imports.md')
+    const entry = entryFor(plan, 'rules/azion-ui-imports.md')
     assert.equal(entry.state, 'stale')
     assert.equal(entry.action.type, 'copy-stamped')
     assert.equal(plan.drift, true)
 
     applyPlan(project, plan.actions)
     const after = planSync(project, { templatesDir, version: VERSION })
-    assert.equal(entryFor(after, 'rules/webkit-imports.md').state, 'current')
+    assert.equal(entryFor(after, 'rules/azion-ui-imports.md').state, 'current')
   } finally {
     rmSync(project, { recursive: true, force: true })
     rmSync(templatesDir, { recursive: true, force: true })
@@ -178,22 +178,22 @@ test('planSync: an unstamped byte-identical copy (docs-repo case) is stamped wit
   const project = makeProject()
   const templatesDir = makeTemplatesDir()
   try {
-    const templateContent = readFileSync(join(templatesDir, 'rules/webkit-imports.md'), 'utf8')
+    const templateContent = readFileSync(join(templatesDir, 'rules/azion-ui-imports.md'), 'utf8')
     mkdirSync(join(project, '.claude/rules'), { recursive: true })
-    writeFileSync(join(project, '.claude/rules/webkit-imports.md'), templateContent)
+    writeFileSync(join(project, '.claude/rules/azion-ui-imports.md'), templateContent)
 
     const plan = planSync(project, { templatesDir, version: VERSION })
-    const entry = entryFor(plan, 'rules/webkit-imports.md')
+    const entry = entryFor(plan, 'rules/azion-ui-imports.md')
     assert.equal(entry.state, 'unstamped-identical')
     assert.equal(entry.action.type, 'copy-stamped')
 
     applyPlan(project, plan.actions)
-    const written = readFileSync(join(project, '.claude/rules/webkit-imports.md'), 'utf8')
+    const written = readFileSync(join(project, '.claude/rules/azion-ui-imports.md'), 'utf8')
     // Body identical to the template; only a marker line was added.
     assert.equal(stripMarker(written), templateContent)
 
     const after = planSync(project, { templatesDir, version: VERSION })
-    assert.equal(entryFor(after, 'rules/webkit-imports.md').state, 'current')
+    assert.equal(entryFor(after, 'rules/azion-ui-imports.md').state, 'current')
   } finally {
     rmSync(project, { recursive: true, force: true })
     rmSync(templatesDir, { recursive: true, force: true })
@@ -206,17 +206,17 @@ test('planSync: an orphaned bundle file (marker source no longer in the bundle) 
   try {
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
 
-    const orphanPath = join(project, '.claude/rules/webkit-retired.md')
+    const orphanPath = join(project, '.claude/rules/azion-ui-retired.md')
     writeFileSync(
       orphanPath,
       stamp('# Rule: retired\n\nNo longer shipped.\n', {
-        source: 'claude/rules/webkit-retired.md',
+        source: 'claude/rules/azion-ui-retired.md',
         version: VERSION
       })
     )
 
     const plan = planSync(project, { templatesDir, version: VERSION })
-    const orphan = plan.entries.find((e) => e.rel === 'rules/webkit-retired.md')
+    const orphan = plan.entries.find((e) => e.rel === 'rules/azion-ui-retired.md')
     assert.ok(orphan, 'orphan file must be reported as an entry')
     assert.equal(orphan.state, 'orphan')
     assert.equal(orphan.action.type, 'report')
@@ -267,7 +267,7 @@ test('planSync: CLAUDE.md fragment states — missing, legacy (deduped), stale, 
     // stale — the fragment template changed upstream.
     writeFileSync(
       join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'),
-      '## @aziontech/webkit design system\n\nFollow the rules, updated.\n'
+      '## @aziontech/ui design system\n\nFollow the rules, updated.\n'
     )
     plan = planSync(project, { templatesDir, version: VERSION })
     assert.equal(plan.fragment.state, 'stale')
@@ -284,7 +284,7 @@ test('planSync: a CLAUDE.md with a lone start marker is stale and applying leave
   try {
     writeFileSync(
       join(project, 'CLAUDE.md'),
-      `# Project\n\n${FRAGMENT_START}\n## @aziontech/webkit design system\nStale fragment.\n\n## Team notes\nkeep\n`
+      `# Project\n\n${FRAGMENT_START}\n## @aziontech/ui design system\nStale fragment.\n\n## Team notes\nkeep\n`
     )
     let plan = planSync(project, { templatesDir, version: VERSION })
     assert.equal(plan.fragment.state, 'stale')
@@ -308,8 +308,8 @@ test('planSync: skills/agents frontmatter is preserved verbatim; marker lands af
   try {
     const plan = planSync(project, { templatesDir, version: VERSION })
     applyPlan(project, plan.actions)
-    const written = readFileSync(join(project, '.claude/skills/webkit-sample/SKILL.md'), 'utf8')
-    const template = readFileSync(join(templatesDir, 'skills/webkit-sample/SKILL.md'), 'utf8')
+    const written = readFileSync(join(project, '.claude/skills/azion-ui-sample/SKILL.md'), 'utf8')
+    const template = readFileSync(join(templatesDir, 'skills/azion-ui-sample/SKILL.md'), 'utf8')
     const fmEnd = template.indexOf('---\n', 4) + 4
     assert.equal(
       written.slice(0, fmEnd),
@@ -319,7 +319,7 @@ test('planSync: skills/agents frontmatter is preserved verbatim; marker lands af
     const afterFm = written.slice(fmEnd)
     assert.match(
       afterFm.split('\n')[0],
-      /^<!-- webkit-sync source=\S+ version=\S+ sha256=[0-9a-f]{16} -->$/
+      /^<!-- azion-ui-sync source=\S+ version=\S+ sha256=[0-9a-f]{16} -->$/
     )
   } finally {
     rmSync(project, { recursive: true, force: true })
@@ -341,7 +341,7 @@ test('doctor reports the claude bundle status per sync state', () => {
     bundle = report.find((c) => c.check === 'claude bundle')
     assert.equal(bundle.status, 'ok')
 
-    const rulePath = join(project, '.claude/rules/webkit-imports.md')
+    const rulePath = join(project, '.claude/rules/azion-ui-imports.md')
     writeFileSync(rulePath, `${readFileSync(rulePath, 'utf8')}\nedited.\n`)
     report = planDoctor(project)
     bundle = report.find((c) => c.check === 'claude bundle')
@@ -376,10 +376,10 @@ test('planSync reads the adapters layout (adapters/claude/agents, adapters/AGENT
   const templatesDir = makeTemplatesDir()
   try {
     mkdirSync(join(templatesDir, 'adapters/claude/agents'), { recursive: true })
-    writeFileSync(join(templatesDir, 'adapters/claude/agents/webkit-advisor.md'), '# Agent\n')
-    writeFileSync(join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'), '## webkit\n\nNew layout.\n')
+    writeFileSync(join(templatesDir, 'adapters/claude/agents/azion-ui-advisor.md'), '# Agent\n')
+    writeFileSync(join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'), '## ui\n\nNew layout.\n')
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
-    assert.ok(existsSync(join(project, '.claude/agents/webkit-advisor.md')))
+    assert.ok(existsSync(join(project, '.claude/agents/azion-ui-advisor.md')))
     assert.match(readFileSync(join(project, 'AGENTS.md'), 'utf8'), /New layout\./)
   } finally {
     rmSync(project, { recursive: true, force: true })

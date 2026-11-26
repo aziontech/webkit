@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Resizable from '@aziontech/webkit/resizable'
+  import Button from '@aziontech/ui/button'
+  import Resizable from '@aziontech/ui/resizable'
   import { ref } from 'vue'
 
   const open = ref(false)

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Input from '@aziontech/webkit/input'
-  import Popover from '@aziontech/webkit/popover'
-  import Spinner from '@aziontech/webkit/spinner'
+  import Button from '@aziontech/ui/button'
+  import Input from '@aziontech/ui/input'
+  import Popover from '@aziontech/ui/popover'
+  import Spinner from '@aziontech/ui/spinner'
   import { computed, onScopeDispose, reactive, ref, watch } from 'vue'
 
   import type { HomeDashboardDomainAvailability } from '../dashboard-home.vue'

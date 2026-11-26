@@ -1,8 +1,8 @@
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SubagentCard from '@aziontech/webkit/subagent-card'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import SubagentCard from '@aziontech/ui/subagent-card'
+  import ToolCall from '@aziontech/ui/tool-call'
   import { ref } from 'vue'
 
   const status = ref('running')

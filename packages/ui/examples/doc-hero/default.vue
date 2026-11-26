@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
-  import DocHero from '@aziontech/webkit/doc-hero'
+  import Button from '@aziontech/ui/button'
+  import CopyPromptButton from '@aziontech/ui/copy-prompt-button'
+  import DocHero from '@aziontech/ui/doc-hero'
 
   const prompt =
     'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'

@@ -41,7 +41,7 @@ A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCol
 
 ### G. Load failure and outcomes — `Alert` (required)
 
-When the list fails to load, a danger `Alert` with Retry takes the table's place. The page that runs the request ends require, optional, reset and reminder in a success toast; they are not deploys, so no toast carries Edit or Redeploy. The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+When the list fails to load, a danger `Alert` with Retry takes the table's place. The page that runs the request ends require, optional, reset and reminder in a success toast; they are not deploys, so no toast carries Edit or Redeploy. The page calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -107,7 +107,7 @@ Then delete `sample.ts` and its import.
 - **Statuses:** `Enabled`, `Not set up`. **Actions:** `Reset MFA`, `Send setup reminder`.
 - **No match:** `No matching people`, `No person matches these filters.`, `Clear filters`.
 - **Toasts:** `MFA is now required.`, `MFA is optional again.`, `MFA reset for Jordan Reyes.`, `Reminder sent to priya.nair@example.com.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 

@@ -1,5 +1,5 @@
 <script setup>
-  import DocSteps from '@aziontech/webkit/doc-steps'
+  import DocSteps from '@aziontech/ui/doc-steps'
 </script>
 
 <template>

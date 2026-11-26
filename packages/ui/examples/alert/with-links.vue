@@ -1,6 +1,6 @@
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
-  import Link from '@aziontech/webkit/link'
+  import Alert from '@aziontech/ui/alert'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

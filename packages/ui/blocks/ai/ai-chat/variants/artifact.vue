@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import ArtifactPreview from '@aziontech/webkit/artifact-preview'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import ResizableHandle from '@aziontech/webkit/resizable-handle'
-  import ResizablePane from '@aziontech/webkit/resizable-pane'
-  import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
+  import ArtifactPreview from '@aziontech/ui/artifact-preview'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import ResizableHandle from '@aziontech/ui/resizable-handle'
+  import ResizablePane from '@aziontech/ui/resizable-pane'
+  import type { AiChatMessage } from '@aziontech/ui/utils/ai-chat'
   import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
   import AiChat from '../ai-chat.vue'

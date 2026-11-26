@@ -1,8 +1,8 @@
 # Site Header Section
 
-> The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-header-section', props }` entry and binds `props` straight onto it — and it composes `app-header`, `brand`, `navigation-menu`, `icon-button`, `search-trigger`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `sidebar-menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state. Search is the collapsible `search-trigger`, first in the bar's end group (before contact, login and sign-up, so the call to action closes the bar): the section owns no palette, it emits `search` (on a click and on ⌘K / Ctrl K) and the page opens its own `command`, as every header does under `rules/webkit-header-search.md`.
+> The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-header-section', props }` entry and binds `props` straight onto it — and it composes `app-header`, `brand`, `navigation-menu`, `icon-button`, `search-trigger`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `sidebar-menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state. Search is the collapsible `search-trigger`, first in the bar's end group (before contact, login and sign-up, so the call to action closes the bar): the section owns no palette, it emits `search` (on a click and on ⌘K / Ctrl K) and the page opens its own `command`, as every header does under `rules/azion-ui-header-search.md`.
 
-- Import: `import SiteHeaderSection from '@aziontech/webkit/site-header-section'`
+- Import: `import SiteHeaderSection from '@aziontech/ui/site-header-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [site-header-section.json](site-header-section.json)
 
@@ -106,8 +106,8 @@
 
 ```vue
 <script setup>
-  import Command from '@aziontech/webkit/command'
-  import SiteHeaderSection from '@aziontech/webkit/site-header-section'
+  import Command from '@aziontech/ui/command'
+  import SiteHeaderSection from '@aziontech/ui/site-header-section'
   import { ref } from 'vue'
 
   const searchOpen = ref(false)

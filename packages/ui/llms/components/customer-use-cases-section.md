@@ -2,7 +2,7 @@
 
 > The "what teams use it for" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case. It is a page section — the site places it from a `{ _id: 'customer-use-cases-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `card-grid`, `registration-frame`, `eyebrow`, `feature-item` and `button` rather than owning any anatomy of its own.
 
-- Import: `import CustomerUseCasesSection from '@aziontech/webkit/customer-use-cases-section'`
+- Import: `import CustomerUseCasesSection from '@aziontech/ui/customer-use-cases-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [customer-use-cases-section.json](customer-use-cases-section.json)
 
@@ -79,7 +79,7 @@
 
 ```vue
 <script setup>
-  import CustomerUseCasesSection from '@aziontech/webkit/customer-use-cases-section'
+  import CustomerUseCasesSection from '@aziontech/ui/customer-use-cases-section'
 </script>
 
 <template>

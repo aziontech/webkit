@@ -1,12 +1,12 @@
-# WebKit demos
+# Azion UI demos
 
-`@aziontech/webkit-demos` is a routed Vue 3 app that shows WebKit blocks working together as a
+`@aziontech/ui-demos` is a routed Vue 3 app that shows Azion UI blocks working together as a
 product, on mock data. It is assembled the way a consumer would assemble one: every block was
 copied with the CLI from the workspace package into `src/blocks/`, and each route in `src/pages/`
 renders its block, passes it the demo's data (the shared store) and handles the events it emits
-(navigate, update the store, show a toast). `webkit.blocks.json` records where each copied file came
-from, so `npx @aziontech/webkit diff <file>` shows what the demo changed and
-`npx @aziontech/webkit check` warns when a canonical block moved on.
+(navigate, update the store, show a toast). `azion-ui.blocks.json` records where each copied file came
+from, so `npx @aziontech/ui diff <file>` shows what the demo changed and
+`npx @aziontech/ui check` warns when a canonical block moved on.
 
 ```bash
 pnpm dev:demos       # dev server
@@ -50,16 +50,16 @@ outside the layout, with their own header and no rail.
 
 The bar at the bottom corner switches the flow, the theme (light / dark), the direction (left to
 right / right to left) and the language (English / Português, through the opt-in
-`@aziontech/webkit/locales/pt-BR` catalog on `ConfigProvider`). The settings can also be given in
+`@aziontech/ui/locales/pt-BR` catalog on `ConfigProvider`). The settings can also be given in
 the URL: `?theme=light&dir=rtl&lang=pt-BR`.
 
 ## How it was built
 
 ```bash
 cd apps/demos
-node ../../packages/webkit/src/cli/cli.js add shell/shell-console --dest src/app.vue
-node ../../packages/webkit/src/cli/cli.js add view/view-table --dest src/blocks
-node ../../packages/webkit/src/cli/cli.js add account/account-onboarding-form --dest src/blocks
+node ../../packages/ui/src/cli/cli.js add shell/shell-console --dest src/app.vue
+node ../../packages/ui/src/cli/cli.js add view/view-table --dest src/blocks
+node ../../packages/ui/src/cli/cli.js add account/account-onboarding-form --dest src/blocks
 # … one `add` per block in the table above
 ```
 
@@ -67,7 +67,7 @@ node ../../packages/webkit/src/cli/cli.js add account/account-onboarding-form --
 data beside it (`table-view-collection-controls.vue`, `table-view.sample.ts`); parts the demo never
 renders are dropped with `remove <path>`. The blocks take their data as props and report what the
 user did as events, so most copies change only their imports, re-sorted for the app's lint. The
-content changes, which `npx @aziontech/webkit diff <file>` lists:
+content changes, which `npx @aziontech/ui diff <file>` lists:
 
 - `create-page` names the resource flow (breadcrumb, title, copy), takes the signed-in account and
   stops above the demo bar, like `create-ticket` and `onboarding-form` (`h-(--demo-viewport-height)`).
@@ -87,15 +87,15 @@ content changes, which `npx @aziontech/webkit diff <file>` lists:
 The ticket links of the support blocks point at `/tickets` and `/tickets/:id`, which the router
 redirects to `/support`.
 
-To update after a release, run `npx @aziontech/webkit check`; for each block it reports, look at
-`npx @aziontech/webkit diff <file>`, copy it again with `add <block> --dest src/blocks --force`,
+To update after a release, run `npx @aziontech/ui check`; for each block it reports, look at
+`npx @aziontech/ui diff <file>`, copy it again with `add <block> --dest src/blocks --force`,
 and reapply the content changes listed above.
 
-Outside this repository the same commands are `npx @aziontech/webkit add <block>`. The shared
+Outside this repository the same commands are `npx @aziontech/ui add <block>`. The shared
 pieces are small: `src/lib/navigation.ts` (the rail and palette data), `src/lib/store.ts` (the resources), `src/lib/deploy.ts` (the deploy run and its
 toast), `src/lib/assistant.ts` (the assistant's canned answers), `src/lib/assistant-model.ts` (TanStack AI's `fakeText` model behind `useChat`, run in the browser with no server or key, with a deployment tool that asks for approval), `src/lib/settings.ts` (theme, direction, language) and `src/router.ts`. Styles come in through
-`src/webkit.css` (the theme, `@aziontech/webkit/styles` and the `webkit.sources.css` the WebKit Vite plugin writes from the demos' imports, the setup `webkit init` gives an app) and `src/styles/main.css` (the app's own base styles), and the app
-lints with the strict `@aziontech/webkit/eslint-plugin` preset and the webkit Stylelint config. Blocks import their images from `@aziontech/webkit/assets/<file>`, so the demos have no public folder.
+`src/azion-ui.css` (the theme, `@aziontech/ui/styles` and the `azion-ui.sources.css` the Azion UI Vite plugin writes from the demos' imports, the setup `azion-ui init` gives an app) and `src/styles/main.css` (the app's own base styles), and the app
+lints with the strict `@aziontech/ui/eslint-plugin` preset and the Azion UI Stylelint config. Blocks import their images from `@aziontech/ui/assets/<file>`, so the demos have no public folder.
 
 Every route is screenshotted by the styled visual suite (`apps/visual`, `tests/demos.spec.ts`),
 which also runs the flows end to end (create, edit, delete, deploy toast, onboarding, assistant).

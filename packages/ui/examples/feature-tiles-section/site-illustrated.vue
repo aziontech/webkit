@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import FeatureTilesSection from '@aziontech/ui/feature-tiles-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const tiles = [
     {

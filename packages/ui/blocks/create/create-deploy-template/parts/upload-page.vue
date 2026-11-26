@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import { useLocale } from '@aziontech/webkit/use-locale'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import { useLocale } from '@aziontech/ui/use-locale'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
   import { computed, onMounted, ref } from 'vue'
 
   import CreateDeployTemplate from '../create-deploy-template.vue'

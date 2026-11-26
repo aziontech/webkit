@@ -33,7 +33,7 @@ function boundValueKind(expr, values) {
   return dynamic || literals.some(([, , v]) => old(v)) ? 'old' : 'current'
 }
 
-export const MIGRATE_OK = 'webkit-migrate-ok'
+export const MIGRATE_OK = 'azion-ui-migrate-ok'
 
 export function acknowledged(source, index) {
   const lineStart = source.lastIndexOf('\n', index - 1) + 1

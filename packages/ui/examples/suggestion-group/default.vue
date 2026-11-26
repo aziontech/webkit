@@ -1,5 +1,5 @@
 <script setup>
-  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup from '@aziontech/ui/suggestion-group'
   import { ref } from 'vue'
 
   const sent = ref('')

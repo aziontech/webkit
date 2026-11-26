@@ -11,7 +11,7 @@ The screen a create flow ends on. The user has just watched a deploy finish and 
 ## When not to use
 
 - The run is still going or has failed: keep the create-flow card of `detail/detail-deployment-logs` (InCreateFlow) on screen.
-- A resource created from a form that does not deploy: end on the resource's page with a success toast that names it, as `skills/webkit-create-surface` describes; there is no outcome screen.
+- A resource created from a form that does not deploy: end on the resource's page with a success toast that names it, as `skills/azion-ui-create-surface` describes; there is no outcome screen.
 - An item added inside a resource from a drawer: use `create/create-drawer` and close it on save.
 - The onboarding steps for a CLI resource on its Overview tab: use `detail/detail-get-started`.
 
@@ -104,7 +104,7 @@ Then delete `sample.ts` and its import.
 - **Links:** verb first, e.g. "Visit site", "Add custom domain"; tooltips name the target, e.g. "Open acme/web-app in a new tab".
 - **Next steps:** title verb first in two or three words, e.g. "Customize domain", "View analytics"; description one sentence with a period.
 - **Exit:** "Manage service", or "Manage resource" when nothing serves it yet: the verb and its object.
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no ampersand, no "please".
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no ampersand, no "please".
 
 ## Accessibility
 

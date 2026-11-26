@@ -2,7 +2,7 @@
 
 > A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything. With `zoomable`, a minimap under the axis draws the whole run and a window the reader drags or resizes (or moves from the keyboard) to zoom the waterfall into part of it, through `v-model:range`. A span can carry `events` — moments inside it, drawn as markers on its bar and listed in its details — and `highlightSlowest` flags the span that took longest. `highlightCriticalPath` traces the critical path — the chain of work that set the run's end, walked back from the root's end through the child that finished last before each point — and draws a line under each bar along the stretches of that span that lie on it, so the reader sees which work to shorten to make the run faster. The details of a span with children show its self time (its duration less the time its children covered), and of a span on the critical path, its time on that path. The same spans read in three views the reader picks with a `ToggleGroup` in the toolbar, bound to `v-model:view`: `waterfall` (the default: the tree of spans with a bar per row on the run clock), `timeline` (bars only, on one shared time axis: each nesting level is a band, and spans of a level that do not overlap share a lane, so a whole run fits in a few lines) and `tree` (the nesting only, with the start and duration of each span as text instead of a bar). Search, selection and the details are shared by the three views; the zoom applies to the two views with a time axis.
 
-- Import: `import Trace from '@aziontech/webkit/trace'`
+- Import: `import Trace from '@aziontech/ui/trace'`
 - Category: code · Surface: app · Structure: monolithic
 - API as JSON: [trace.json](trace.json)
 
@@ -33,7 +33,7 @@
 - Durations to compare across many items with no parent/child relation → use `bar-list` or `chart`.
 - Status history of a service over days → use `tracker`.
 - A hierarchy without time → use `tree`.
-- In a docs Markdown page or the site's page JSON. Trace is app-only (decision RV-C2-1, rule `webkit-content-channels`): it explores one run (expand, search, select a span for its details), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site explains where the time went with a `FlowDiagram` or a `Chart`.
+- In a docs Markdown page or the site's page JSON. Trace is app-only (decision RV-C2-1, rule `azion-ui-content-channels`): it explores one run (expand, search, select a span for its details), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site explains where the time went with a `FlowDiagram` or a `Chart`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -146,7 +146,7 @@
 
 ```vue
 <script setup>
-  import Trace from '@aziontech/webkit/trace'
+  import Trace from '@aziontech/ui/trace'
   import { ref } from 'vue'
 
   const spans = [
@@ -233,7 +233,7 @@
 
 ```vue
 <script setup>
-  import Trace from '@aziontech/webkit/trace'
+  import Trace from '@aziontech/ui/trace'
   import { ref } from 'vue'
 
   const spans = [
@@ -308,7 +308,7 @@
 
 ```vue
 <script setup>
-  import Trace from '@aziontech/webkit/trace'
+  import Trace from '@aziontech/ui/trace'
   import { ref } from 'vue'
 
   const spans = [

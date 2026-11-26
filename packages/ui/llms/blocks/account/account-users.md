@@ -3,10 +3,10 @@
 > The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over the view-table controls row (`PropertyFilter` over name, email, role and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) and a flush `Card` holding a `DataTable` on one `useCollection`: Name (square `Avatar`, the name or the invited email), Email, Role as a `Tag` (Owner, Admin, Developer, Viewer), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `TableCellStatus` (Active, Invited, Inactive), Last active as `TableCellTime` or `Not signed in yet`, and `TableCellActions` with View profile (a `Dialog` with `KeyValueList`), Edit role (a `Dialog` with a role `Select` and an Undo toast), Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a large `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Card`, `DataTable`, `Avatar`, `Tag`, `MultiSelect`, `DropdownMenu`, `Dialog` and its parts, `KeyValueList`, `Select`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
-- Source: `blocks/account/account-users/account-users.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-users/account-users.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-users")`
 - Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-form`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -62,7 +62,7 @@ With only the owner, a small `EmptyState` under the table invites the first team
 
 ### Outcomes — through `toast`
 
-Invitations, team changes, resends and removals end in a success toast. They are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Invitations, team changes, resends and removals end in a success toast. They are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -137,7 +137,7 @@ Then delete `sample.ts` and its import.
 - **Statuses:** `Active`, `Invited`, `Inactive`; **Last active** for an invitation: `Not signed in yet`.
 - **Errors:** `Enter the email address to invite.`, `Enter an email address like name@example.com.`, `This person is already in the account.`, `Choose at least one team, or they get no access.`
 - **Toasts:** `Invitation sent to sam.okafor@example.com.`, `Teams updated for Priya Nair.`, `Jordan Reyes is now Developer.`, `Invitation sent again to sam.okafor@example.com.`, `Jordan Reyes removed from the account.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -181,19 +181,19 @@ Each variant is the same screen in another state: `get_block("account/account-us
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { type TableColumn } from '@aziontech/webkit/table'
-  import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { type TableColumn } from '@aziontech/ui/table'
+  import { toast } from '@aziontech/ui/toast'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { type FilteringProperty, useCollection } from '@aziontech/ui/use-collection'
   import { computed, ref, watch } from 'vue'
 
   import { displayName, teamsLabelOf } from './account-users-format'
@@ -718,7 +718,7 @@ export const sampleUsers: UsersUser[] = [
 ## `account-users-format.ts`
 
 ```ts
-import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+import type { TagSeverity, TagVariant } from '@aziontech/ui/tag'
 
 import type { UsersRole, UsersStatus, UsersTeam, UsersUser } from './account-users.vue'
 
@@ -751,18 +751,18 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Select from '@aziontech/webkit/select'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import DrawerDescription from '@aziontech/ui/drawer-description'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Select from '@aziontech/ui/select'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   import type { UsersInvitation, UsersRole, UsersTeam } from '../account-users.vue'
@@ -937,18 +937,18 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag from '@aziontech/webkit/tag'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tag from '@aziontech/ui/tag'
 
   import type { UsersTeam, UsersUser } from '../account-users.vue'
   import { displayName, roleSeverity, roleVariant, teamsLabelOf } from '../account-users-format'
@@ -1037,16 +1037,16 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import Field from '@aziontech/webkit/field'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Select from '@aziontech/webkit/select'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import Field from '@aziontech/ui/field'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Select from '@aziontech/ui/select'
   import { computed } from 'vue'
 
   import type { UsersRole, UsersUser } from '../account-users.vue'
@@ -1134,24 +1134,24 @@ export const teamsLabelOf = (teams: UsersTeam[], values: string[]): string =>
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import { type TableColumn, type TableExposed } from '@aziontech/ui/table'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
   import type {
     CollectionPaginationProps,
     CollectionTableProps
-  } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/use-collection'
   import { reactive, ref } from 'vue'
 
   import type { UsersTeam, UsersUser } from '../account-users.vue'

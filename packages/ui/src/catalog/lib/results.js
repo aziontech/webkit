@@ -4,8 +4,8 @@ export const NOT_AVAILABLE = {
   ok: false,
   available: false,
   message:
-    '@aziontech/webkit is not installed in this project (or its catalog.json is not resolvable). ' +
-    'Install @aziontech/webkit, or set WEBKIT_CATALOG_PATH to its catalog.json.'
+    '@aziontech/ui is not installed in this project (or its catalog.json is not resolvable). ' +
+    'Install @aziontech/ui, or set AZION_UI_CATALOG_PATH to its catalog.json.'
 }
 
 export function subpathOf(catalog, importPath) {
@@ -30,7 +30,7 @@ export function deprecationOf(entry) {
 export const PREVIEW_NOTE = [
   'Preview: the API (props, events, slots, parts) may still change in a minor release,',
   'named in the changelog, before the owner marks it GA.',
-  'Tell the user, and pin the WebKit version if they need it frozen.'
+  'Tell the user, and pin the Azion UI version if they need it frozen.'
 ].join(' ')
 
 export function stabilityOf(entry) {
@@ -60,7 +60,7 @@ export function componentCard(catalog, name) {
   }
 }
 
-export function noExport(catalog, key, message = `No webkit export named "${key}".`) {
+export function noExport(catalog, key, message = `No Azion UI export named "${key}".`) {
   return {
     ok: false,
     available: true,

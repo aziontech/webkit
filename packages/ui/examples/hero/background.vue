@@ -1,6 +1,6 @@
 <script setup>
-  import Hero from '@aziontech/webkit/hero'
-  import Texture from '@aziontech/webkit/texture'
+  import Hero from '@aziontech/ui/hero'
+  import Texture from '@aziontech/ui/texture'
 </script>
 
 <template>

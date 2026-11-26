@@ -8,8 +8,7 @@ const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
 const CATALOG_PATH = resolve(SCRIPT_DIR, '../catalog.json')
 const DOC_DIRS = ['skills', 'rules', 'adapters']
-const IMPORT_RE =
-  /(node_modules\/)?@aziontech\/webkit\/([a-z0-9][a-zA-Z0-9./-]*[a-zA-Z0-9])(-\*|\/<)?/g
+const IMPORT_RE = /(node_modules\/)?@aziontech\/ui\/([a-z0-9][a-zA-Z0-9./-]*[a-zA-Z0-9])(-\*|\/<)?/g
 const NOT_A_SUBPATH = new Set(['src'])
 const NEGATION_RE =
   /\b(no|never|not|nonexistent|instead of|wrong|don't|do not|flag|mismatch(es)?)\b|❌|✗/i
@@ -44,7 +43,7 @@ export function unknownCitations(catalog, sources) {
   const problems = []
   for (const { source, text } of sources) {
     for (const sub of citedSubpaths(text)) {
-      if (!known.has(sub)) problems.push({ source, cited: `@aziontech/webkit/${sub}` })
+      if (!known.has(sub)) problems.push({ source, cited: `@aziontech/ui/${sub}` })
     }
   }
   return problems
@@ -66,12 +65,12 @@ function main() {
     for (const p of problems)
       process.stderr.write(`✖ ${p.source}: ${p.cited} is not in catalog.json\n`)
     process.stderr.write(
-      '\nA skill, rule or block names a webkit export that does not exist (renamed, removed or never published). Fix the citation or the export.\n'
+      '\nA skill, rule or block names an Azion UI export that does not exist (renamed, removed or never published). Fix the citation or the export.\n'
     )
     process.exit(1)
   }
   process.stdout.write(
-    `✓ every @aziontech/webkit/* cited in skills/, rules/, adapters/ and blocks exists (${sources.length} sources)\n`
+    `✓ every @aziontech/ui/* cited in skills/, rules/, adapters/ and blocks exists (${sources.length} sources)\n`
   )
 }
 

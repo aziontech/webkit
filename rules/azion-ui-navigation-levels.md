@@ -133,13 +133,13 @@ const navigation = [
 
 ## Enforced
 
-- `webkit/no-page-navigation-menu` (ESLint, warning) flags a `SidebarMenu` rendered in a page body (under
+- `azion-ui/no-page-navigation-menu` (ESLint, warning) flags a `SidebarMenu` rendered in a page body (under
   `views/` or `pages/`, or with a `PageHeader` / `PageTabs` import) outside a navigation host
   (`Sidebar`, `ConsoleLayout`, `DocLayout`, `AppLayout`). It has no exception. It is static and
   approximate, so it warns.
 - `ConsoleLayout` warns in development when a `SidebarMenu` in its default slot has a row whose `href`
   matches a rail row, naming both labels and the route.
-- `npx @aziontech/webkit check --url <url,...>` and `/webkit-ui-verify` fail a visited route with a duplicate
+- `npx @aziontech/ui check --url <url,...>` and `/azion-ui-verify` fail a visited route with a duplicate
   destination, more than one `aria-current="page"` in one control, or two controls whose current rows
   point at different routes.
-- `/webkit-navigation` reviews the levels by hand.
+- `/azion-ui-navigation` reviews the levels by hand.

@@ -112,7 +112,7 @@ export function parseCheckArgs(argv) {
 }
 
 async function consumerLinter() {
-  process.env.WEBKIT_CATALOG_PATH = CATALOG_PATH
+  process.env.AZION_UI_CATALOG_PATH = CATALOG_PATH
   const [{ Linter }, vueParser, tsParser, { default: plugin }] = await Promise.all([
     import('eslint'),
     import('vue-eslint-parser'),
@@ -122,7 +122,7 @@ async function consumerLinter() {
   const rules = Object.fromEntries(
     Object.keys(plugin.rules)
       .filter((rule) => rule !== 'require-authoring-standards')
-      .map((rule) => [`webkit/${rule}`, 'error'])
+      .map((rule) => [`azion-ui/${rule}`, 'error'])
   )
   const config = [
     {
@@ -133,13 +133,13 @@ async function consumerLinter() {
         ecmaVersion: 2022,
         sourceType: 'module'
       },
-      plugins: { webkit: plugin },
+      plugins: { 'azion-ui': plugin },
       rules
     },
     {
       files: ['**/*.{ts,js,mjs}'],
       languageOptions: { parser: tsParser, ecmaVersion: 2022, sourceType: 'module' },
-      plugins: { webkit: plugin },
+      plugins: { 'azion-ui': plugin },
       rules
     }
   ]
@@ -228,7 +228,7 @@ async function main() {
     }
     if (data.fixed.length)
       process.stdout.write(
-        `ℹ ${data.fixed.length} data-contract findings fixed — run \`pnpm --filter @aziontech/webkit run check:blocks --update\` to lock in: ${data.fixed.join(', ')}\n`
+        `ℹ ${data.fixed.length} data-contract findings fixed — run \`pnpm --filter @aziontech/ui run check:blocks --update\` to lock in: ${data.fixed.join(', ')}\n`
       )
   }
 
@@ -254,12 +254,12 @@ async function main() {
   }
   if (fixed.length && !update) {
     process.stdout.write(
-      `ℹ fewer lint findings than the baseline — run \`pnpm --filter @aziontech/webkit run check:blocks --update\` to lock in: ${fixed.join(', ')}\n`
+      `ℹ fewer lint findings than the baseline — run \`pnpm --filter @aziontech/ui run check:blocks --update\` to lock in: ${fixed.join(', ')}\n`
     )
   }
   if (errors.length || regressions.length) {
     process.stderr.write(
-      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, a page, variants and local parts, lib modules and composables that pass the consumer lint, no Toaster outside an app root (blocks/shell), no block code name (AccountBilling) in text a person reads, and a data contract: typed props in, events out, sample records in a separate file, variants that import the primary instead of copying it.\n'
+      '\nEvery block in packages/ui/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, a page, variants and local parts, lib modules and composables that pass the consumer lint, no Toaster outside an app root (blocks/shell), no block code name (AccountBilling) in text a person reads, and a data contract: typed props in, events out, sample records in a separate file, variants that import the primary instead of copying it.\n'
     )
     process.exit(1)
   }

@@ -1,4 +1,4 @@
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 import type { BillingInvoiceStatus, BillingPaymentMethod } from './account-billing.vue'
 

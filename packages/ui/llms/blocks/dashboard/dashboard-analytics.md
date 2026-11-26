@@ -3,10 +3,10 @@
 > The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A StatTileGroup of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation as muted text and the variation Tag, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTileGroup`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-analytics/dashboard-analytics.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-analytics/dashboard-analytics.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-analytics")`
 - Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [Spinner](../../components/spinner.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `utils/clipboard`, `utils/csv`
-- Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-tables`, `azion-ui-states`
 
 ## Asked as
 
@@ -106,7 +106,7 @@ writes the Real-Time Metrics GraphQL query behind the card (dataset `workloadMet
 as `tsRange`, `aggregate: { sum: requests }`, the `groupBy` dimensions, the order and the fields) to
 the clipboard and confirms with a success toast (`Query copied.`), or an
 error toast when the clipboard is not available. Export CSV serializes the card's rows with
-`toCsv` and saves them with `downloadCsv` from `@aziontech/webkit/utils/csv` as
+`toCsv` and saves them with `downloadCsv` from `@aziontech/ui/utils/csv` as
 `<card>-last-24-hours.csv`, then confirms with `CSV exported.` and the file name. Export CSV is
 disabled when the card has no rows (Empty, Loading, Error); Copy query always works. The app
 mounts the toast region; this page body never renders a `Toaster`.
@@ -333,12 +333,12 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
-  import Hint from '@aziontech/webkit/hint'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import type { ChartLabel, ChartSeries } from '@aziontech/ui/chart'
+  import Hint from '@aziontech/ui/hint'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import { type FigureFormat, hostColumns, trafficCards, trafficFigures } from './analytics-cards'
@@ -802,7 +802,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 ## `sample.ts`
 
 ```ts
-import type { ChartSeries } from '@aziontech/webkit/chart'
+import type { ChartSeries } from '@aziontech/ui/chart'
 
 import type {
   AnalyticsDashboardChanges,
@@ -1178,8 +1178,8 @@ export const sampleUsageProjects: UsageProject[] = [
 ## `analytics-cards.ts`
 
 ```ts
-import type { TableColumn } from '@aziontech/webkit/data-table'
-import type { CsvColumn } from '@aziontech/webkit/utils/csv'
+import type { TableColumn } from '@aziontech/ui/data-table'
+import type { CsvColumn } from '@aziontech/ui/utils/csv'
 
 import type { AnalyticsDashboardCardId, AnalyticsDashboardKpiId } from './dashboard-analytics.vue'
 
@@ -1299,10 +1299,10 @@ export const trafficCards: Record<AnalyticsDashboardCardId, TrafficCard> = {
 ## `analytics-report.ts`
 
 ```ts
-import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
-import { toast } from '@aziontech/webkit/toast'
-import { copyText } from '@aziontech/webkit/utils/clipboard'
-import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+import type { ChartLabel, ChartSeries } from '@aziontech/ui/chart'
+import { toast } from '@aziontech/ui/toast'
+import { copyText } from '@aziontech/ui/utils/clipboard'
+import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/ui/utils/csv'
 
 /** The unit a figure is written in. */
 export type MetricFormat = 'count' | 'bytes' | 'percentage' | 'ms' | 'seconds'
@@ -1471,13 +1471,13 @@ export const hiddenForStatusForm = (form: string, series: { id: string }[]): str
 
 ```ts
 <script setup lang="ts">
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
 
   export interface ExpandedDialogProps {
     /** Title of the expanded card. */
@@ -1530,9 +1530,9 @@ export const hiddenForStatusForm = (form: string, series: { id: string }[]): str
 
 ```ts
 <script setup lang="ts">
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
 
   export interface ExpandedTableProps {
     /** The rows; each has an id and a requests count. */
@@ -1584,14 +1584,14 @@ export const hiddenForStatusForm = (form: string, series: { id: string }[]): str
 
 ```ts
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Link from '@aziontech/ui/link'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** The change tag in a card header. */
   export interface MetricCardVariation {
@@ -1758,11 +1758,11 @@ export const hiddenForStatusForm = (form: string, series: { id: string }[]): str
 
 ```ts
 <script setup lang="ts">
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import Spinner from '@aziontech/webkit/spinner'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import Spinner from '@aziontech/ui/spinner'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** One entry of the Period Select. */
   export interface PeriodOption {
@@ -1852,12 +1852,12 @@ export const hiddenForStatusForm = (form: string, series: { id: string }[]): str
 
 ```ts
 <script setup lang="ts">
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
-  import { matchesText } from '@aziontech/webkit/use-collection'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
+  import { matchesText } from '@aziontech/ui/use-collection'
   import { computed } from 'vue'
 
   export interface SearchTableProps {
@@ -1988,7 +1988,7 @@ export const hiddenForStatusForm = (form: string, series: { id: string }[]): str
 
 ```ts
 <script setup lang="ts">
-  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/webkit/chart'
+  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/ui/chart'
 
   /** How the series draw while the chart is not in its bar form. */
   export type SeriesChartShape = 'area' | 'line'

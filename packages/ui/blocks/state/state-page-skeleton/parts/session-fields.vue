@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   const formRows = ['58%', '44%', '66%']
 </script>

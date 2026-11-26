@@ -2,7 +2,7 @@
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS,
     type PasswordRequirementsRule
-  } from '@aziontech/webkit/password-requirements'
+  } from '@aziontech/ui/password-requirements'
   import { computed, ref } from 'vue'
 
   const password = ref<string>('')

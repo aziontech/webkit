@@ -2,8 +2,8 @@
 
 > The conversation of a support ticket, oldest first, as Help Scout, Front, Plain and the Zendesk Agent Workspace show it: each message names its author (avatar, name, customer or agent), the channel it came by, when it was sent and, for email, who received it; then the body, the attachments and the quoted previous messages behind a toggle. Three types of item share the list: a public reply, an internal note (a warning band labelled "Internal note", so it never reads as a reply sent to the customer), and a system event line ("Jane Doe changed status to Pending"). A long middle collapses behind "Show 6 earlier messages". It is not `ChatMessage`, which is the generative AI chat (decision SUP-03).
 
-- Import: `import MessageThreadRoot from '@aziontech/webkit/message-thread-root'`
-- Compound import (dot notation, not tree-shakeable): `import MessageThread from '@aziontech/webkit/message-thread'`
+- Import: `import MessageThreadRoot from '@aziontech/ui/message-thread-root'`
+- Compound import (dot notation, not tree-shakeable): `import MessageThread from '@aziontech/ui/message-thread'`
 - Category: content · Surface: app · Structure: composition
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [message-thread.json](message-thread.json)
@@ -57,8 +57,8 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/message-thread-item`
-- `@aziontech/webkit/message-thread-group`
+- `@aziontech/ui/message-thread-item`
+- `@aziontech/ui/message-thread-group`
 
 ## Sub-components
 
@@ -94,7 +94,7 @@ Exported types: `MessageThreadProps`, `MessageThreadItemProps`, `MessageThreadGr
 `skeleton`.
 
 ```
-packages/webkit/src/components/content/message-thread/
+packages/ui/src/components/content/message-thread/
 ├── message-thread.vue
 ├── message-thread.test.ts
 ├── index.ts
@@ -192,10 +192,10 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 
 ```vue
 <script setup>
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import MessageThread from '@aziontech/webkit/message-thread'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import IconButton from '@aziontech/ui/icon-button'
+  import MessageThread from '@aziontech/ui/message-thread'
 
   const attachments = [{ file: { name: 'invoice-1042.pdf', size: 84000, type: 'application/pdf' } }]
   const body =
@@ -275,7 +275,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 
 ```vue
 <script setup>
-  import MessageThread from '@aziontech/webkit/message-thread'
+  import MessageThread from '@aziontech/ui/message-thread'
 </script>
 
 <template>
@@ -311,7 +311,7 @@ Exports: `./message-thread` → `index.ts`, `./message-thread-root` → `message
 
 ```vue
 <script setup>
-  import MessageThread from '@aziontech/webkit/message-thread'
+  import MessageThread from '@aziontech/ui/message-thread'
 </script>
 
 <template>

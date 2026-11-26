@@ -1,18 +1,18 @@
 {
  "name": "browser-frame",
  "binding": "BrowserFrame",
- "import": "@aziontech/webkit/browser-frame",
- "treeShakeableImport": "@aziontech/webkit/browser-frame",
+ "import": "@aziontech/ui/browser-frame",
+ "treeShakeableImport": "@aziontech/ui/browser-frame",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.",
+ "purpose": "A browser window that renders live Azion UI components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.",
  "setup": null,
  "useWhen": [
   "Use BrowserFrame to run real components inside a resizable device viewport (docs, stories); for a screenshot or clip in documentation use DocFrame, for third-party iframe content use Embed.",
-  "Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.",
+  "Showing a real screen — a site band, a console page, a template — built from Azion UI components, at a device size you choose.",
   "Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.",
   "Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.",
   "Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`."
@@ -23,7 +23,7 @@
   "For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.",
   "For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.",
   "For a framed page section or grid cell → use `registration-frame`.",
-  "In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `webkit-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself."
+  "In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `azion-ui-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself."
  ],
  "related": [
   "`doc-frame` — the documentation figure frame for stills and clips; no live viewport.",

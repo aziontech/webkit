@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Input from '@aziontech/webkit/input'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import Input from '@aziontech/ui/input'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type { DeployDrawerDependency } from '../types'
 

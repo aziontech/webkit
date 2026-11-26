@@ -26,7 +26,7 @@
     "clave de api de integración",
     "usar mi propia clave de api"
   ],
-  "skills": ["webkit-form", "webkit-ui-states", "webkit-errors"],
+  "skills": ["azion-ui-form", "azion-ui-states", "azion-ui-errors"],
   "primary": {
     "name": "Saved",
     "file": "settings-api-key.vue"

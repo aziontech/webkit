@@ -8,9 +8,9 @@ coverage/
 *.min.js
 
 # Generated files, checked by their own drift gates.
-packages/webkit/catalog/
-packages/webkit/catalog.json
-packages/webkit/llms/
+packages/ui/catalog/
+packages/ui/catalog.json
+packages/ui/llms/
 apps/visual/baselines/
 
 # Samples that must stay broken: each one proves a lint rule still fires.

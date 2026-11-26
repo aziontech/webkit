@@ -1,5 +1,5 @@
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import PromptInput from '@aziontech/ui/prompt-input'
   import { onBeforeUnmount, ref } from 'vue'
 
   const prompt = ref('Explain the errors in these logs')

@@ -3,10 +3,10 @@
 > The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with an `href` the layout follows with the app's router, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`HighlightButton`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` whose theme choice is a group of radio items and Upgrade to Pro an item, over a `StatusIndicator`). The body is a stand-in list page (`PageHeader` and a `Card`) for view/view-table, which owns the controls row and the table; a page opens the same palette with useConsoleLayout().openSearch(). The shell mounts the app's one `Toaster`, and the other states render it and fill its slots (the body, `actions`, `sidebar-header`, `header-leading`, `notifications`, `tools`, with `v-model:tools-open`) instead of copying it.
 
 - Surface: app
-- Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/webkit`
+- Source: `blocks/shell/shell-console/shell-console.vue` in `@aziontech/ui`
 - MCP: `get_block("shell/shell-console")`
 - Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), `ConsoleLayoutRoot`, [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [HelpPanel](../../components/help-panel.md), [HighlightButton](../../components/highlight-button.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), `TableCellId`, `TableCellStatus`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-color-mode`
-- Skills: `webkit-navigation`, `webkit-layout`
+- Skills: `azion-ui-navigation`, `azion-ui-layout`
 
 ## Asked as
 
@@ -163,21 +163,21 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Command from '@aziontech/webkit/command'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Command from '@aziontech/ui/command'
   import ConsoleLayoutRoot, {
     type ConsoleLayoutAccount,
     type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import HighlightButton from '@aziontech/webkit/highlight-button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import { Toaster } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useColorMode } from '@aziontech/webkit/use-color-mode'
+  } from '@aziontech/ui/console-layout-root'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import HighlightButton from '@aziontech/ui/highlight-button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import { Toaster } from '@aziontech/ui/toast'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useColorMode } from '@aziontech/ui/use-color-mode'
 
   import { sampleAccount, sampleNavigation, sampleRecents } from './sample'
 
@@ -538,11 +538,8 @@ Each variant is the same screen in another state: `get_block("shell/shell-consol
 ## `sample.ts`
 
 ```ts
-import type {
-  ConsoleLayoutAccount,
-  ConsoleLayoutNavGroup
-} from '@aziontech/webkit/console-layout-root'
-import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+import type { ConsoleLayoutAccount, ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+import type { TagSeverity, TagVariant } from '@aziontech/ui/tag'
 
 import type { ShellConsoleRecent } from './shell-console.vue'
 

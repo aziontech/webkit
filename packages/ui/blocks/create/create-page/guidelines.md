@@ -5,7 +5,7 @@ The page a first-level resource is created on when everything it needs fits on o
 ## When to use
 
 - Use create-page only to create a first-level resource on one page; its settings page is edit-resource (`edit/edit-resource`).
-- The resource is one the sidebar routes to (a domain, a service, a purge) and the user came only to create it (`skills/webkit-create-surface`).
+- The resource is one the sidebar routes to (a domain, a service, a purge) and the user came only to create it (`skills/azion-ui-create-surface`).
 - Its fields fit in a few sections without depending on each other's answers step by step.
 - An action that takes a form and runs once, whose submit names what it does (Save, Purge, Deploy).
 
@@ -79,7 +79,7 @@ To go live, render the block from a page that owns the request:
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import CreatePage, { type CreatePageValues } from './create-page.vue'
 
   const { mutate, pending, error } = useCreateDomain()
@@ -106,7 +106,7 @@ To go live, render the block from a page that owns the request:
 - Give every control an `aria-label` that repeats its row title.
 - Keep Cancel and the submit in the same bar, submit last, and name the submit after what it does (Save, Purge, Deploy).
 - Lock the whole `fieldset` and every control with one `loading` flag while the request is in flight, and put `:loading` on the submit.
-- On success, show a toast that names the resource and opens it; on failure, an error toast with Retry that keeps the values (`skills/webkit-errors`). Every submit in this block models the request: Default, CreateZone, CreatePurge, CreateService and CreateOrganization.
+- On success, show a toast that names the resource and opens it; on failure, an error toast with Retry that keeps the values (`skills/azion-ui-errors`). Every submit in this block models the request: Default, CreateZone, CreatePurge, CreateService and CreateOrganization.
 
 ## Don't
 
@@ -127,7 +127,7 @@ To go live, render the block from a page that owns the request:
 - **Submit:** one verb, e.g. "Save", "Purge", "Deploy". Cancel is always exactly "Cancel".
 - **Required message:** "This field is required."
 - **Invalid message:** what to enter, with an example, e.g. "Enter a valid domain name. Example: example.com."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no parentheses in labels, no "please".
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no parentheses in labels, no "please".
 
 ## Accessibility
 
@@ -157,4 +157,4 @@ To go live, render the block from a page that owns the request:
 - `settings/settings-form` — the edit page that reuses these sections.
 - `state/state-form-validation` — required and invalid states on submit.
 - `view/view-table` — the list whose `Create <Object>` button opens this page.
-- `SettingsRow` — the field row every section is built from; see `skills/webkit-form`.
+- `SettingsRow` — the field row every section is built from; see `skills/azion-ui-form`.

@@ -108,8 +108,8 @@ function warnMissingCatalog(locale: string): void {
   if (!shipped || warnedLocales.has(locale)) return
   warnedLocales.add(locale)
   console.warn(
-    `[webkit] <ConfigProvider>: locale "${locale}" has no registered catalog, so built-in ` +
-      `strings fall back to English. Import it from "@aziontech/webkit/locales/${shipped}" and ` +
+    `[azion-ui] <ConfigProvider>: locale "${locale}" has no registered catalog, so built-in ` +
+      `strings fall back to English. Import it from "@aziontech/ui/locales/${shipped}" and ` +
       `pass it through \`catalogs\`.`
   )
 }

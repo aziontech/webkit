@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: bbd0155b257aee204cf03378e4d89724229964f58775545dbd4c75c5b52822f3
+checksum: cad59b2f52fc71b1ace44013ecd17183b2f3d8e2f94dfaf35c8f91c6352e8bb0
 created: 2026-11-12
 last_updated: 2026-11-24
 ---
@@ -43,15 +43,15 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 - Keep the default agents unless the product supports a different set; pass `:agents="[]"` to draw the label alone.
 - Pass the exact prompt in `value`; the button copies it as it stands.
 - Do not recolour the marks: they are single-colour by design and follow the chip's ink.
-- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `ThirdPartyLogo` flattens it to the chip's ink.
+- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/ui/assets/claude-symbol-color.svg`); `ThirdPartyLogo` flattens it to the chip's ink.
 - Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Bind `v-model:open` to remember or restore the choice (`close` still fires with the click).
 
 ## Usage
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+  import Button from '@aziontech/ui/button'
+  import CopyPromptButton from '@aziontech/ui/copy-prompt-button'
 
   const prompt = 'Set up the Azion CLI, connect the Azion docs over MCP and link this project.'
 </script>
@@ -89,7 +89,7 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 
 | Event   | Payload                              | Notes                                                                                                                                                                                                                                                 |
 | ------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `copy`  | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds (the async clipboard, or the copy-command fallback of `@aziontech/webkit/utils/clipboard` on an insecure origin). When both are refused, the copy fallback popover opens instead. |
+| `copy`  | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds (the async clipboard, or the copy-command fallback of `@aziontech/ui/utils/clipboard` on an insecure origin). When both are refused, the copy fallback popover opens instead. |
 | `close` | `MouseEvent`                         | Fires with the click on the dismiss button (`closable`), after the chip removes itself; whether it stays away is the page's decision.                                                                                                                 |
 
 ## Slots
@@ -187,7 +187,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

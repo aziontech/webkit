@@ -2,7 +2,7 @@
 
 > The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces). The thread is a centred reading column 752 px wide (`--container-2xl`, closest to ChatGPT's 48 rem) inside a 16 px gutter, with one even gap between messages: 36 px from `sm`, 28 px on a phone. The `composer` slot floats the composer over the bottom of the column: the thread scrolls under it behind a fade and is padded by its height; the Scroll to latest button floats just above it.
 
-- Import: `import Conversation from '@aziontech/webkit/conversation'`
+- Import: `import Conversation from '@aziontech/ui/conversation'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [conversation.json](conversation.json)
 
@@ -128,11 +128,11 @@ never read as new.
 
 ````vue
 <script setup>
-  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
-  import Conversation from '@aziontech/webkit/conversation'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import ChatMessageRoot from '@aziontech/ui/chat-message-root'
+  import Conversation from '@aziontech/ui/conversation'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import SuggestionGroup from '@aziontech/ui/suggestion-group'
   import { ref } from 'vue'
 
   const followUps = [
@@ -190,10 +190,10 @@ never read as new.
 
 ````vue
 <script setup>
-  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
-  import Conversation from '@aziontech/webkit/conversation'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import ChatMessageRoot from '@aziontech/ui/chat-message-root'
+  import Conversation from '@aziontech/ui/conversation'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import SuggestionGroup from '@aziontech/ui/suggestion-group'
 
   const followUps = [
     { id: 'wildcard', label: 'How do I purge a whole folder?' },
@@ -241,9 +241,9 @@ never read as new.
 
 ```vue
 <script setup>
-  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
-  import Conversation from '@aziontech/webkit/conversation'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import ChatMessageRoot from '@aziontech/ui/chat-message-root'
+  import Conversation from '@aziontech/ui/conversation'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
   import { ref } from 'vue'
 
   const questions = [

@@ -27,7 +27,7 @@ export function templateFile(templatesDir, rel) {
   return join(templatesDir, rel)
 }
 
-function resolveWebkitVersion() {
+function resolveAzionUiVersion() {
   try {
     const pkg = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf8'))
     return pkg.version || '0.0.0'
@@ -35,7 +35,7 @@ function resolveWebkitVersion() {
     return '0.0.0'
   }
 }
-export const WEBKIT_VERSION = resolveWebkitVersion()
+export const AZION_UI_VERSION = resolveAzionUiVersion()
 
 function toPosix(path) {
   return sep === '/' ? path : path.split(sep).join('/')
@@ -70,9 +70,9 @@ export function listBundle(templatesDir = AI_TEMPLATES) {
   return rels.map(toPosix).sort()
 }
 
-export const FRAGMENT_START = '<!-- @aziontech/webkit:start -->'
-export const FRAGMENT_END = '<!-- @aziontech/webkit:end -->'
-export const LEGACY_MARKER = '<!-- @aziontech/webkit -->'
+export const FRAGMENT_START = '<!-- @aziontech/ui:start -->'
+export const FRAGMENT_END = '<!-- @aziontech/ui:end -->'
+export const LEGACY_MARKER = '<!-- @aziontech/ui -->'
 
 function findFencedBlocks(source, startMarker, endMarker) {
   const blocks = []
@@ -220,7 +220,7 @@ export function spliceFragment(input, body, { start = FRAGMENT_START, end = FRAG
 }
 
 const MARKER_LINE_RE =
-  /^<!-- webkit-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->\r?\n?/m
+  /^<!-- azion-ui-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->\r?\n?/m
 
 function normalizeNewlines(content) {
   return content.replace(/\r\n/g, '\n')
@@ -246,7 +246,7 @@ export function bodyHash(content) {
 
 export function stamp(content, { source, version }) {
   const body = stripMarker(content)
-  const marker = `<!-- webkit-sync source=${source} version=${version} sha256=${sha256Short(body)} -->`
+  const marker = `<!-- azion-ui-sync source=${source} version=${version} sha256=${sha256Short(body)} -->`
   const frontmatter = body.match(/^---\n[\s\S]*?\n---\n/)
   if (frontmatter) {
     const end = frontmatter[0].length

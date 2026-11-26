@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Item from '@aziontech/ui/item'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
 
   import { labelFor, type ServiceWizardForm, type ServiceWizardNames } from '../lib/service-wizard'
   import { errorPages, platformDomainSuffix, tlsVersions } from '../sample'

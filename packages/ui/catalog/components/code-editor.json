@@ -14,7 +14,7 @@
   "Free prose or a description → use `textarea`.",
   "A stream of log lines → use `log-viewer`.",
   "A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both).",
-  "In a docs Markdown page or the site's page JSON. CodeEditor is app-only (decision RV-C2-1, rule `webkit-content-channels`): the person edits code in it, so it has no `DocMarkdown` tag and no page JSON entry. A docs page shows code as a code fence (`DocCodeGroup`); the site uses `CodeBlock`."
+  "In a docs Markdown page or the site's page JSON. CodeEditor is app-only (decision RV-C2-1, rule `azion-ui-content-channels`): the person edits code in it, so it has no `DocMarkdown` tag and no page JSON entry. A docs page shows code as a code fence (`DocCodeGroup`); the site uses `CodeBlock`."
  ],
  "related": [
   "`code-block` — read-only snippets with copy; same syntax colour tokens.",
@@ -25,7 +25,7 @@
  ],
  "bestPractices": [
   "Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.",
-  "Pass `loader` from the app so Monaco is code-split and never part of the WebKit bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.",
+  "Pass `loader` from the app so Monaco is code-split and never part of the Azion UI bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.",
   "Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.",
   "Function calls are coloured for you (JavaScript and TypeScript, with `--code-syntax-function`); do not register your own Monarch grammar for that.",
   "Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.",

@@ -67,17 +67,13 @@ test('invented-brand fires on invented companies, not on Acme', () => {
 })
 
 test('exampleDataApplies skips tests, translated catalogs and the country list', () => {
-  assert.ok(exampleDataApplies('packages/webkit/examples/hero-form-section/default.vue'))
-  assert.ok(
-    exampleDataApplies('packages/webkit/blocks/settings/settings-form/variants/profile.vue')
-  )
-  assert.ok(exampleDataApplies('skills/webkit-forms/SKILL.md'))
-  assert.ok(!exampleDataApplies('packages/webkit/src/components/input/chip/chip.test.ts'))
-  assert.ok(!exampleDataApplies('packages/webkit/src/locales/pt-BR.ts'))
-  assert.ok(!exampleDataApplies('rules/webkit-example-data.md'))
-  assert.ok(
-    !exampleDataApplies('packages/webkit/src/components/input/phone-input/lib/country-data.ts')
-  )
+  assert.ok(exampleDataApplies('packages/ui/examples/hero-form-section/default.vue'))
+  assert.ok(exampleDataApplies('packages/ui/blocks/settings/settings-form/variants/profile.vue'))
+  assert.ok(exampleDataApplies('skills/azion-ui-forms/SKILL.md'))
+  assert.ok(!exampleDataApplies('packages/ui/src/components/input/chip/chip.test.ts'))
+  assert.ok(!exampleDataApplies('packages/ui/src/locales/pt-BR.ts'))
+  assert.ok(!exampleDataApplies('rules/azion-ui-example-data.md'))
+  assert.ok(!exampleDataApplies('packages/ui/src/components/input/phone-input/lib/country-data.ts'))
 })
 
 test('retired-product-name fires on a retired Azion product name', () => {
@@ -118,5 +114,5 @@ test('the retired names match deprecatedNames in the product list', async () => 
 })
 
 test('the microcopy skill may name the retired products it bans', () => {
-  assert.equal(exampleDataApplies('skills/webkit-microcopy/SKILL.md'), false)
+  assert.equal(exampleDataApplies('skills/azion-ui-microcopy/SKILL.md'), false)
 })

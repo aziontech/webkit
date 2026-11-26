@@ -1,8 +1,8 @@
 {
  "name": "agent-question",
  "binding": "AgentQuestion",
- "import": "@aziontech/webkit/agent-question",
- "treeShakeableImport": "@aziontech/webkit/agent-question",
+ "import": "@aziontech/ui/agent-question",
+ "treeShakeableImport": "@aziontech/ui/agent-question",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

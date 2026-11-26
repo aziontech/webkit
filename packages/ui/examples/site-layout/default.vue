@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Container from '@aziontech/webkit/container'
-  import HeroSection from '@aziontech/webkit/hero-section'
-  import Module from '@aziontech/webkit/module'
+  import Container from '@aziontech/ui/container'
+  import HeroSection from '@aziontech/ui/hero-section'
+  import Module from '@aziontech/ui/module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
-  } from '@aziontech/webkit/site-layout'
+  } from '@aziontech/ui/site-layout'
 
   const navigation: SiteLayoutNavigation = {
     home: '/en/',

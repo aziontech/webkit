@@ -3,10 +3,10 @@
 > The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `NumberInput`, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `TableCellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `NumberInput`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `TableCellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/view/view-waf-tuning/view-waf-tuning.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-waf-tuning/view-waf-tuning.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-waf-tuning")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-shortcuts`
-- Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
+- Skills: `azion-ui-tables`, `azion-ui-lists`, `azion-ui-form`, `azion-ui-errors`
 
 ## Asked as
 
@@ -48,7 +48,7 @@ A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says 
 
 ### E. Outcome — `Alert` (required)
 
-Allow rules emits `allow`; the page sets `allowing` while the request runs. Success (`allowing` turns off with no `allowError`) closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure (`allowError` set) keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `state/state-form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Allow rules emits `allow`; the page sets `allowing` while the request runs. Success (`allowing` turns off with no `allowError`) closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure (`allowError` set) keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `state/state-form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -130,7 +130,7 @@ Then delete `sample.ts` and its import.
 - **No match in the range:** "No matches in the last 24 hours", "This rule set matched no request in the last 24 hours. Widen the time range, or come back as traffic arrives.", with an outlined "Show the last 7 days" while a shorter range is set.
 - **Dialog:** title "Allow 2 rules", submit "Allow rules", reason error "Enter why these requests are legitimate."
 - **Outcome:** "6 allowed rules created." and "The allowed rules weren't created. Nothing changed in the rule set; try again."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -171,23 +171,23 @@ Each variant is the same screen in another state: `get_block("view/view-waf-tuni
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import NumberInput from '@aziontech/webkit/number-input'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import TableCellTags from '@aziontech/webkit/table-cell-tags'
-  import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { matchesText } from '@aziontech/webkit/use-collection'
-  import { useLocale } from '@aziontech/webkit/use-locale'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/ui/data-table'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Field from '@aziontech/ui/field'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import NumberInput from '@aziontech/ui/number-input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import TableCellTags from '@aziontech/ui/table-cell-tags'
+  import { toast } from '@aziontech/ui/toast'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { matchesText } from '@aziontech/ui/use-collection'
+  import { useLocale } from '@aziontech/ui/use-locale'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { computed, ref, watch } from 'vue'
 
   import AllowDialog from './parts/allow-dialog.vue'
@@ -617,17 +617,17 @@ export const sampleMatches: WafTuningMatch[] = [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import Field from '@aziontech/webkit/field'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import Field from '@aziontech/ui/field'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Textarea from '@aziontech/ui/textarea'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import type { WafTuningMatch } from '../view-waf-tuning.vue'

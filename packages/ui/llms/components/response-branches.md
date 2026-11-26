@@ -1,8 +1,8 @@
 # Response Branches
 
-> Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a time with a `‹ 2/3 ›` pager under it, or alone in the message's action row when no slot is given. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
+> Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a time with a `‹ 2/3 ›` pager under it, or alone in the message's action row when no slot is given. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on Azion UI's `IconButton` and tokens.
 
-- Import: `import ResponseBranches from '@aziontech/webkit/response-branches'`
+- Import: `import ResponseBranches from '@aziontech/ui/response-branches'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [response-branches.json](response-branches.json)
 
@@ -96,11 +96,11 @@
 
 ```vue
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import ResponseBranches from '@aziontech/webkit/response-branches'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import ResponseBranches from '@aziontech/ui/response-branches'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
   import { ref } from 'vue'
 
   const versions = ref([

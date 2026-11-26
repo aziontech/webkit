@@ -30,9 +30,9 @@ export const BACKDROP_SCENES = [
 const GROUND_COMPONENTS = ['ConsoleMockup', 'ConsoleMockupShell']
 
 export const TEXTURE_BACKDROP_DIRS = [
-  'packages/webkit/src',
-  'packages/webkit/blocks',
-  'packages/webkit/examples'
+  'packages/ui/src',
+  'packages/ui/blocks',
+  'packages/ui/examples'
 ]
 
 export const TEXTURE_BACKDROP_MESSAGES = {

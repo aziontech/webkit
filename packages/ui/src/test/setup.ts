@@ -1,4 +1,4 @@
-// Vitest global setup for @aziontech/webkit (browser mode).
+// Vitest global setup for @aziontech/ui (browser mode).
 //
 // No theme CSS is loaded here on purpose, so a suite runs unstyled by default: utility classes
 // emit no CSS and a computed style reads the UA default. A suite that asserts layout, geometry or

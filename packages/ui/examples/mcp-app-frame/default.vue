@@ -1,5 +1,5 @@
 <script setup>
-  import McpAppFrame from '@aziontech/webkit/mcp-app-frame'
+  import McpAppFrame from '@aziontech/ui/mcp-app-frame'
   import { ref } from 'vue'
 
   const widget = `<style>

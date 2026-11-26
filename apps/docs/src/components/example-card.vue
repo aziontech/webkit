@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocProse from '@aziontech/ui/doc-prose'
   import { type Component, computed, onMounted, onScopeDispose, ref } from 'vue'
 
   import { scheduleMount } from '../lib/mount-queue'

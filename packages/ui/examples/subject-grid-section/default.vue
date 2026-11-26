@@ -1,5 +1,5 @@
 <script setup>
-  import SubjectGridSection from '@aziontech/webkit/subject-grid-section'
+  import SubjectGridSection from '@aziontech/ui/subject-grid-section'
 </script>
 
 <template>

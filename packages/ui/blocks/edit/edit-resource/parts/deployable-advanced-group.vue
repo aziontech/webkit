@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Tag from '@aziontech/webkit/tag'
+  import Alert from '@aziontech/ui/alert'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Tag from '@aziontech/ui/tag'
   import { ref } from 'vue'
 
   import { optionLabel } from '../lib/option-label'

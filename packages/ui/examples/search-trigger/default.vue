@@ -1,6 +1,6 @@
 <script setup>
-  import Command from '@aziontech/webkit/command'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import Command from '@aziontech/ui/command'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
   import { ref } from 'vue'
 
   const open = ref(false)

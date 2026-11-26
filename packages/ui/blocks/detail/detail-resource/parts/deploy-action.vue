@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Tag from '@aziontech/ui/tag'
 
   export interface DeployActionProps {
     /** How many topology changes wait for the next deploy; a warning tag counts them. */

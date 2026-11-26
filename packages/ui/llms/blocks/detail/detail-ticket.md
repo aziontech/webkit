@@ -3,11 +3,11 @@
 > The support agent's view of one ticket, as in Zendesk Agent Workspace, a Freshdesk ticket or a Help Scout conversation. A `PageHeader` carries the subject as the h1, the ticket number, the status `Tag`, a `PriorityTag` and the next SLA as a `Countdown` (paused while Pending or On hold), and its actions: the teammates who have the ticket open (an `Avatar` with presence each and Sam Lee is viewing), Merge and a More menu (Copy link, Print, Mark as spam, Delete ticket). The main column is a `MessageThread` of the conversation (customer emails with attachments and quoted text, agent replies, internal notes, system events, the middle of a long thread collapsed behind Show N earlier messages) over the composer: a `ToggleGroup` of Reply and Internal note, the To line and a Cc `MultiSelect` for a reply, a warning-edged card that says Only your team can see internal notes for a note, a `MarkdownEditor` with @mentions of teammates, and in its footer Attach files, Insert response (saved replies), the attached files and a `SplitButton` Send with Send and set Pending and Send and set Solved (Add note for a note); files dropped on the composer attach through a `FileDropzone`. The side column, under the thread on narrow screens, holds the ticket's properties (`Field` and `Select` for status, priority, type, group and the assignee with their `Avatar`, and a `MultiSelect` of tags), the requester card (avatar, name, email, organization, other tickets and View customer profile) and the ticket's activity as a small `Timeline`. A failed load is a danger `Alert` with Retry; a failed send keeps the draft and shows an `Alert` with Retry in the composer; a solved ticket replaces the composer with Reopen. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
-- Source: `blocks/detail/detail-ticket/detail-ticket.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-ticket/detail-ticket.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-ticket")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfigProvider](../../components/config-provider.md), [Countdown](../../components/countdown.md), `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [MarkdownEditor](../../components/markdown-editor.md), [MessageThread](../../components/message-thread.md), `MessageThreadItem`, [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), [PriorityTag](../../components/priority-tag.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [SplitButton](../../components/split-button.md), [Subheader](../../components/subheader.md), [Tag](../../components/tag.md), [Timeline](../../components/timeline.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-file-picker`
-- Skills: `webkit-layout`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`, `webkit-errors`
+- Skills: `azion-ui-layout`, `azion-ui-form`, `azion-ui-states`, `azion-ui-microcopy`, `azion-ui-errors`
 
 ## Asked as
 
@@ -155,7 +155,7 @@ After a send succeeds, clear the draft, append the message and confirm in a toas
 - **Send failure:** `The reply was not sent. Your draft is kept; try again.` with `Retry`. **Solved:** `This ticket is solved. Reopen it to reply to the customer or add a note.` with `Reopen`.
 - **Side column:** `Properties`, `Status`, `Priority`, `Type`, `Group`, `Assignee`, `Unassigned`, `Tags`, `Add tags`; `Requester`, `4 other tickets`, `View customer profile`; `Activity`.
 - **Load failure:** `The ticket could not be loaded. Nothing was changed; try again.` with `Retry`.
-- The components own `Show 5 earlier messages`, `Internal note` on a note, `Paused`, `Due in` and `Overdue by`; do not retype them. Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- The components own `Show 5 earlier messages`, `Internal note` on a note, `Paused`, `Due in` and `Overdue by`; do not retype them. Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -198,20 +198,20 @@ Each variant is the same screen in another state: `get_block("detail/detail-tick
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { AvatarPresence } from '@aziontech/webkit/avatar'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Countdown from '@aziontech/webkit/countdown'
+  import Alert from '@aziontech/ui/alert'
+  import type { AvatarPresence } from '@aziontech/ui/avatar'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Countdown from '@aziontech/ui/countdown'
   import type {
     MessageThreadChannel,
     MessageThreadFrom,
     MessageThreadItemType
-  } from '@aziontech/webkit/message-thread'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PriorityTag, { type PriorityTagPriority } from '@aziontech/webkit/priority-tag'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
-  import type { TimelineItemSeverity } from '@aziontech/webkit/timeline'
+  } from '@aziontech/ui/message-thread'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PriorityTag, { type PriorityTagPriority } from '@aziontech/ui/priority-tag'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
+  import type { TimelineItemSeverity } from '@aziontech/ui/timeline'
   import { computed } from 'vue'
 
   import { slaPaused, statusSeverity } from './lib/ticket-fields'
@@ -824,7 +824,7 @@ export const sampleTagOptions = ['certificates', 'cache', 'dns', 'domains', 'fir
 ## `lib/ticket-fields.ts`
 
 ```ts
-import type { TagSeverity } from '@aziontech/webkit/tag'
+import type { TagSeverity } from '@aziontech/ui/tag'
 
 import type {
   DetailTicketActivity,
@@ -867,14 +867,14 @@ export const activityDays = (items: DetailTicketActivity[]) => {
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenuRoot from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import IconButton from '@aziontech/ui/icon-button'
   import { computed } from 'vue'
 
   import type { DetailTicketAction, DetailTicketAgent } from '../detail-ticket.vue'
@@ -1003,8 +1003,8 @@ export const activityDays = (items: DetailTicketActivity[]) => {
 
 ```ts
 <script setup lang="ts">
-  import MessageThread from '@aziontech/webkit/message-thread'
-  import Subheader from '@aziontech/webkit/subheader'
+  import MessageThread from '@aziontech/ui/message-thread'
+  import Subheader from '@aziontech/ui/subheader'
   import { computed } from 'vue'
 
   import type { DetailTicketMessage } from '../detail-ticket.vue'
@@ -1075,8 +1075,8 @@ export const activityDays = (items: DetailTicketActivity[]) => {
 
 ```ts
 <script setup lang="ts">
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import MessageThreadItem from '@aziontech/webkit/message-thread-item'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import MessageThreadItem from '@aziontech/ui/message-thread-item'
   import { computed } from 'vue'
 
   import type { DetailTicketMessage } from '../detail-ticket.vue'
@@ -1125,14 +1125,14 @@ export const activityDays = (items: DetailTicketActivity[]) => {
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import MarkdownEditor from '@aziontech/ui/markdown-editor'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { computed, ref, useId } from 'vue'
 
   import type {
@@ -1388,15 +1388,15 @@ export const activityDays = (items: DetailTicketActivity[]) => {
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenuRoot from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import IconButton from '@aziontech/ui/icon-button'
+  import SplitButton, { type SplitButtonItem } from '@aziontech/ui/split-button'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed } from 'vue'
 
   import type {
@@ -1524,12 +1524,12 @@ export const activityDays = (items: DetailTicketActivity[]) => {
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Avatar from '@aziontech/ui/avatar'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import Select from '@aziontech/ui/select'
+  import Skeleton from '@aziontech/ui/skeleton'
   import { computed, ref, watch } from 'vue'
 
   import type {
@@ -1724,10 +1724,10 @@ export const activityDays = (items: DetailTicketActivity[]) => {
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
   import { computed } from 'vue'
 
   import type { DetailTicketRequester } from '../detail-ticket.vue'
@@ -1812,8 +1812,8 @@ export const activityDays = (items: DetailTicketActivity[]) => {
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Timeline from '@aziontech/webkit/timeline'
+  import Card from '@aziontech/ui/card'
+  import Timeline from '@aziontech/ui/timeline'
   import { computed } from 'vue'
 
   import type { DetailTicketActivity } from '../detail-ticket.vue'

@@ -248,7 +248,7 @@ Only useful if you can't precompile and import `globals.css` — production usag
 
 3. Give it a one-line purpose in `tokens/token-purpose.js` (what the token is for, not its value).
 4. Rebuild. The new variable lands in both `:root` and `[data-theme=dark]` blocks.
-5. Run `pnpm --filter @aziontech/webkit build:catalog`: the token export (`tokens/token-export.js`) carries the light and dark value and the purpose into `catalog.json` and the MCP `list_tokens`.
+5. Run `pnpm --filter @aziontech/ui build:catalog`: the token export (`tokens/token-export.js`) carries the light and dark value and the purpose into `catalog.json` and the MCP `list_tokens`.
 
 ### The token export
 

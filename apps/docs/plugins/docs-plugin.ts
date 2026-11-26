@@ -15,7 +15,7 @@ import {
   renderGuidelinesFile,
   renderMarkdownFile
 } from './content.ts'
-import { CATALOG, LLMS, readCatalog, SKILLS, THEME, walk, WEBKIT } from './paths.ts'
+import { CATALOG, LLMS, readCatalog, SKILLS, THEME, walk, AZION_UI } from './paths.ts'
 
 const INDEX = 'virtual:docs-index'
 const NAV = 'virtual:docs-nav'
@@ -28,8 +28,8 @@ const EXAMPLE_LOADERS = 'virtual:docs-example-loaders'
 const EXAMPLES = 'virtual:docs-examples:'
 const BLOCK_LOADERS = 'virtual:docs-block-loaders'
 const BLOCK = 'virtual:docs-block-files:'
-const EXAMPLES_DIR = join(WEBKIT, 'examples')
-const BLOCKS_DIR = join(WEBKIT, 'blocks')
+const EXAMPLES_DIR = join(AZION_UI, 'examples')
+const BLOCKS_DIR = join(AZION_UI, 'blocks')
 const HIGHLIGHT = '\0docs-highlight:'
 const MARKDOWN = '\0docs-markdown:'
 const GUIDELINES = '\0docs-guidelines:'
@@ -42,19 +42,19 @@ const STATIC_DIRS: { prefix: string; dir: string }[] = [
 const PROPOSALS: { route: string; file: string }[] = [
   {
     route: '/proposal/error-pages.html',
-    file: join(WEBKIT, 'docs/reviews/error-page-alternatives.html')
+    file: join(AZION_UI, 'docs/reviews/error-page-alternatives.html')
   },
   {
     route: '/proposal/date-picker.html',
-    file: join(WEBKIT, 'docs/reviews/date-picker-proposal.html')
+    file: join(AZION_UI, 'docs/reviews/date-picker-proposal.html')
   },
   {
     route: '/proposal/diagram.html',
-    file: join(WEBKIT, 'docs/reviews/diagram-proposal.html')
+    file: join(AZION_UI, 'docs/reviews/diagram-proposal.html')
   },
   {
     route: '/proposal/date-picker-compact.html',
-    file: join(WEBKIT, 'docs/reviews/date-picker-compact-proposal.html')
+    file: join(AZION_UI, 'docs/reviews/date-picker-compact-proposal.html')
   }
 ]
 
@@ -118,7 +118,7 @@ function languageOf(file: string): string {
 export function docsPlugin(): Plugin {
   let config: ResolvedConfig
   return {
-    name: 'webkit-docs',
+    name: 'azion-ui-docs',
     enforce: 'pre',
     configResolved(resolved) {
       config = resolved
@@ -164,7 +164,7 @@ export function docsPlugin(): Plugin {
         return `export default ${JSON.stringify(buildTokens())}`
       }
       if (id === `\0${ASSETS}`) {
-        this.addWatchFile(join(WEBKIT, 'catalog/assets/icons.json'))
+        this.addWatchFile(join(AZION_UI, 'catalog/assets/icons.json'))
         return `export default ${JSON.stringify(buildAssets())}`
       }
       if (id === `\0${LOADERS}`) {

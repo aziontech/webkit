@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import { useAnnouncer } from './use-announcer'
 
-const regions = () => document.querySelectorAll<HTMLElement>('[data-webkit-announcer]')
+const regions = () => document.querySelectorAll<HTMLElement>('[data-azion-announcer]')
 
 afterEach(() => {
   regions().forEach((region) => region.remove())

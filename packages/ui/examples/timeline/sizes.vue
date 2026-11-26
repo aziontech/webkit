@@ -1,5 +1,5 @@
 <script setup>
-  import Timeline from '@aziontech/webkit/timeline'
+  import Timeline from '@aziontech/ui/timeline'
 
   const sizes = ['small', 'medium']
 </script>

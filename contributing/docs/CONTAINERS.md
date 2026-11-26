@@ -6,15 +6,15 @@ hairlines. Nothing floats, nothing is rounded, and **no line is ever drawn twice
 the drawn-grid, technical-drawing look — the _industrial_ register of the Azion brand.
 
 Reference implementations live in
-the WebKit shells [`blocks/shell/shell-site`](../../packages/webkit/blocks/shell/shell-site/shell-site.vue) and
-[`blocks/shell/shell-docs`](../../packages/webkit/blocks/shell/shell-docs/shell-docs.vue), and the page sections in
-[`src/components/section/`](../../packages/webkit/src/components/section/); the layout primitives —
+the Azion UI shells [`blocks/shell/shell-site`](../../packages/ui/blocks/shell/shell-site/shell-site.vue) and
+[`blocks/shell/shell-docs`](../../packages/ui/blocks/shell/shell-docs/shell-docs.vue), and the page sections in
+[`src/components/section/`](../../packages/ui/src/components/section/); the layout primitives —
 shared by Site, Hub and Docs — are in
-[`src/components/marketing/`](../../packages/webkit/src/components/marketing/) (`Container`, `Module`, `CardGrid`, `Hero`)
-and [`src/components/layout/`](../../packages/webkit/src/components/layout/) (`RegistrationFrame`, `PageHeader`). The design sample these
+[`src/components/marketing/`](../../packages/ui/src/components/marketing/) (`Container`, `Module`, `CardGrid`, `Hero`)
+and [`src/components/layout/`](../../packages/ui/src/components/layout/) (`RegistrationFrame`, `PageHeader`). The design sample these
 were taken from lives on the `design/sample` branch only.
 
-For the token-level vocabulary (weights, border colors, radii) and how individual **webkit
+For the token-level vocabulary (weights, border colors, radii) and how individual **Azion UI
 components** draw their own edges, see [§ Vocabulary](#vocabulary) below and
 [`TOKENS.md`](./TOKENS.md).
 
@@ -66,15 +66,15 @@ The page renders inside `SiteLayout` (or `DocLayout`), composed once in `App.vue
 <!-- SiteLayout renders SiteFooterSection after the page; it owns border-t -->
 ```
 
-Live: [`website.vue:450-511`](../../packages/webkit/blocks/shell/shell-site/shell-site.vue#L450-L511) (the hero band and the framed
+Live: [`website.vue:450-511`](../../packages/ui/blocks/shell/shell-site/shell-site.vue#L450-L511) (the hero band and the framed
 column inside `SiteLayout`, which adds the footer) and
-[`documentation.vue:154`](../../packages/webkit/blocks/shell/shell-docs/shell-docs.vue#L154) (the docs column inside `DocLayout`).
+[`documentation.vue:154`](../../packages/ui/blocks/shell/shell-docs/shell-docs.vue#L154) (the docs column inside `DocLayout`).
 
 ---
 
 ## 1. The hero rule — `Hero`
 
-[`hero.vue`](../../packages/webkit/src/components/marketing/hero/hero.vue)
+[`hero.vue`](../../packages/ui/src/components/marketing/hero/hero.vue)
 
 A **full-bleed** band. Its bottom hairline runs the entire viewport width; the framed column hangs
 below it. That contrast — one edge-to-edge rule above a narrower framed column — is what makes the
@@ -101,13 +101,13 @@ class="[--hero-banner-offset:calc(var(--bar-height,3.5rem)+var(--page-bar-height
 ```
 
 Unset ⇒ `0`, so a banner that owns the whole viewport needs nothing.
-([`hero.vue:123-126`](../../packages/webkit/src/components/marketing/hero/hero.vue#L123-L126): the `offset` prop sets
+([`hero.vue:123-126`](../../packages/ui/src/components/marketing/hero/hero.vue#L123-L126): the `offset` prop sets
 `--hero-banner-offset`, and `variant="screen"` subtracts it.)
 
 **`#background` is z-0, copy is z-10.** A backdrop is named on the container
 with the `texture` prop (a `Texture` kind) or filled through the `#background` slot
-([`hero.vue:143`](../../packages/webkit/src/components/marketing/hero/hero.vue#L143)); the slot is where an artwork backdrop goes —
-[`Backdrop`](../../packages/webkit/src/components/marketing/backdrop/backdrop.vue) `variant="globe" | "map" | "network"`,
+([`hero.vue:143`](../../packages/ui/src/components/marketing/hero/hero.vue#L143)); the slot is where an artwork backdrop goes —
+[`Backdrop`](../../packages/ui/src/components/marketing/backdrop/backdrop.vue) `variant="globe" | "map" | "network"`,
 the design sample's banner registry — and it wins over the prop when both are given.
 
 **Every Site hero carries `banner="dot-grid"`.** It is azion.com's own hero texture — a crisp 2px
@@ -129,13 +129,13 @@ A flat texture skips all three: `dot-grid` covers ~0.17% of the band, so there i
 headline to compete with, and the ink is a 22% mix of `--text-default` so the field carries the
 same step from the ground on either theme instead of being tuned for the dark one.
 
-([`hero-section.vue`](../../packages/webkit/src/components/section/hero-section/hero-section.vue) — `variant="centered"` paints the dots
-texture with its top fade; [`backdrop.vue`](../../packages/webkit/src/components/marketing/backdrop/backdrop.vue)
+([`hero-section.vue`](../../packages/ui/src/components/section/hero-section/hero-section.vue) — `variant="centered"` paints the dots
+texture with its top fade; [`backdrop.vue`](../../packages/ui/src/components/marketing/backdrop/backdrop.vue)
 carries the mask and scrim recipe for the heavier backdrops.)
 
 **Hero copy anatomy** — left-aligned, always in this order
-([`page-header.vue`](../../packages/webkit/src/components/layout/page-header/page-header.vue); on the Site the opening uses
-[`hero-title.vue`](../../packages/webkit/src/components/marketing/hero/hero-title/hero-title.vue)):
+([`page-header.vue`](../../packages/ui/src/components/layout/page-header/page-header.vue); on the Site the opening uses
+[`hero-title.vue`](../../packages/ui/src/components/marketing/hero/hero-title/hero-title.vue)):
 
 | Part        | Style                                                                                         |
 | ----------- | --------------------------------------------------------------------------------------------- |
@@ -146,14 +146,14 @@ carries the mask and scrim recipe for the heavier backdrops.)
 
 The Site hero closes with a **capability strip** — a 2/3/5-column grid separated from the copy by
 `border-t border-[var(--border-muted)]`, bold lead-in plus one supporting line per cell.
-(the client strip on the band floor: [`hero.vue`](../../packages/webkit/src/components/marketing/hero/hero.vue) `carousel`,
-`carousel-marks`, `carousel-label`; the stat cells are [`stats-section`](../../packages/webkit/src/components/section/stats-section/stats-section.vue))
+(the client strip on the band floor: [`hero.vue`](../../packages/ui/src/components/marketing/hero/hero.vue) `carousel`,
+`carousel-marks`, `carousel-label`; the stat cells are [`stats-section`](../../packages/ui/src/components/section/stats-section/stats-section.vue))
 
 ---
 
 ## 2. The container rule — `Container`
 
-[`container.vue`](../../packages/webkit/src/components/layout/container/container.vue)
+[`container.vue`](../../packages/ui/src/components/layout/container/container.vue)
 
 The framed column. Centered, capped, and carrying **only** `border-x`.
 
@@ -172,7 +172,7 @@ The framed column. Centered, capped, and carrying **only** `border-x`.
 
 ## 3. The module rule — `Module`
 
-[`module.vue`](../../packages/webkit/src/components/layout/module/module.vue)
+[`module.vue`](../../packages/ui/src/components/layout/module/module.vue)
 
 The "lego brick". A `<section>` with a header row divided from its body by a hairline, and divided
 from the module above by a hairline. Stacked in a `Container`, the modules read as bricks in
@@ -198,7 +198,7 @@ one continuous frame.
 
 ## 4. The hairline box grid — `CardGrid variant="divider"`
 
-[`card-grid.vue`](../../packages/webkit/src/components/layout/card-grid/card-grid.vue)
+[`card-grid.vue`](../../packages/ui/src/components/layout/card-grid/card-grid.vue)
 
 The signature industrial module: a grid whose internal rules are **gaps**, not borders.
 
@@ -222,14 +222,14 @@ background, separated by real gutters.
 **Cells are square.** `ComponentGridCell` uses `rounded-[var(--shape-flat)]` — the interactive
 component showcase grid is deliberately unrounded, with a dashed `--primary` ring and a corner label
 pinned at `top-0 left-0` on hover/focus-within.
-([`card-grid-cell.vue`](../../packages/webkit/src/components/layout/card-grid/card-grid-cell/card-grid-cell.vue); the hub's
+([`card-grid-cell.vue`](../../packages/ui/src/components/layout/card-grid/card-grid-cell/card-grid-cell.vue); the hub's
 component showcase grid moves to the docs site, M2.5.)
 
 ---
 
 ## 5. The registration frame — `RegistrationFrame`
 
-[`registration-frame.vue`](../../packages/webkit/src/components/layout/registration-frame/registration-frame.vue)
+[`registration-frame.vue`](../../packages/ui/src/components/layout/registration-frame/registration-frame.vue)
 
 The most literal piece of the industrial language: a thin bordered box with **crosshair registration
 marks** straddling each corner, plus an optional vertical hatch texture. Used for the final CTA
@@ -314,8 +314,8 @@ Both containers key into [`container.js`](../../packages/theme/src/tokens/primit
 
 Found while documenting; **not fixed** — each changes rendered output.
 
-1. **`RegistrationFrame` is used but never imported** (design sample only; fixed in WebKit, where
-   [`closing-call-to-action-section.vue:146`](../../packages/webkit/src/components/section/closing-call-to-action-section/closing-call-to-action-section.vue#L146)
+1. **`RegistrationFrame` is used but never imported** (design sample only; fixed in Azion UI, where
+   [`closing-call-to-action-section.vue:146`](../../packages/ui/src/components/section/closing-call-to-action-section/closing-call-to-action-section.vue#L146)
    imports it) — the sample's `AzionHome.vue:550` wraps the
    final CTA in `<RegistrationFrame hatch>`, but the script block imports only `Button`, `Card`,
    `PricingCard`, `CodeBlock`, `PlatformIllustrations`, `PlatformShowcase`, and
@@ -332,7 +332,7 @@ Found while documenting; **not fixed** — each changes rendered output.
    adds `px-[var(--spacing-xl)]`, so some inset is intended; the two-step shift is systematic across
    all five keys.)
 
-3. **Two hairline weights coexist.** The page layer uses bare `border` (1px); 39 webkit components
+3. **Two hairline weights coexist.** The page layer uses bare `border` (1px); 39 Azion UI components
    request `border-[length:var(--border-width-default)]` (0.8px). The theme sets no
    `--default-border-width`, so the token is opt-in and the two sit side by side on the same screen.
 

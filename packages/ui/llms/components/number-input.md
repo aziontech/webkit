@@ -2,7 +2,7 @@
 
 > Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting). Distinct from `input` because it enforces numeric type, supports `min`/`max`/`step`, and renders chevron-up/chevron-down controls on the trailing edge.
 
-- Import: `import NumberInput from '@aziontech/webkit/number-input'`
+- Import: `import NumberInput from '@aziontech/ui/number-input'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [number-input.json](number-input.json)
 
@@ -98,8 +98,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import NumberInput from '@aziontech/webkit/number-input'
+  import Field from '@aziontech/ui/field'
+  import NumberInput from '@aziontech/ui/number-input'
   import { ref } from 'vue'
 
   const value = ref(1)
@@ -123,7 +123,7 @@
 
 ```vue
 <script setup>
-  import NumberInput from '@aziontech/webkit/number-input'
+  import NumberInput from '@aziontech/ui/number-input'
   import { ref } from 'vue'
 
   const small = ref(1)
@@ -165,7 +165,7 @@
 
 ```vue
 <script setup>
-  import NumberInput from '@aziontech/webkit/number-input'
+  import NumberInput from '@aziontech/ui/number-input'
   import { ref } from 'vue'
 
   const value = ref(42)

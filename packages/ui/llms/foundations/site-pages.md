@@ -6,19 +6,19 @@ The design rules for every Azion web page: the marketing site, campaign landing 
 page an app renders with `SitePage` and the page sections. Each rule has a stable ID, is stated
 once, here, and is cited by that ID in reviews, reports and checks. A retired ID stays in the
 index and is never reused. These rules hold for web pages only: product UI (the console, sign-in
-screens, settings, create flows) follows `/webkit-product-screens` and never takes an SD rule.
+screens, settings, create flows) follows `/azion-ui-product-screens` and never takes an SD rule.
 
-How a section is found, imported and fed is rule `webkit-sections`; how the column is measured
-is rule `webkit-page-layout`. This rule says what a page may put on that column, and why. The
-skill that runs a page task end to end is `/webkit-site-pages`.
+How a section is found, imported and fed is rule `azion-ui-sections`; how the column is measured
+is rule `azion-ui-page-layout`. This rule says what a page may put on that column, and why. The
+skill that runs a page task end to end is `/azion-ui-site-pages`.
 
 Each rule is written the same way: the rule, **Don't**, **Do**, **Why** and
 **Exceptions** (`none` when there are none).
 
 ## Where the content comes from
 
-WebKit owns the design: which sections a page uses, the hero, the frame, the assets, the action
-labels. Marketing owns the content, in its own toolkit, and WebKit only points there:
+Azion UI owns the design: which sections a page uses, the hero, the frame, the assets, the action
+labels. Marketing owns the content, in its own toolkit, and Azion UI only points there:
 
 | Content                                                      | Source (marketing)                                                       |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------ |
@@ -33,7 +33,7 @@ and the other document is fixed.
 
 Four parts are the marketing site's own decisions: the action labels (SD-04), the product and
 Solution page patterns (SD-22, SD-23), the line budgets (SD-24) and Photography and generated
-art. The site's documentation decides them. WebKit keeps them here as the sample its examples,
+art. The site's documentation decides them. Azion UI keeps them here as the sample its examples,
 blocks and demos follow, and updates them when the site's documentation changes; for the site,
 its documentation wins.
 
@@ -41,10 +41,10 @@ its documentation wins.
 
 | ID    | Rule                                                        |
 | ----- | ----------------------------------------------------------- |
-| SD-01 | Sections come only from the WebKit page sections            |
+| SD-01 | Sections come only from the Azion UI page sections          |
 | SD-02 | A page starts from the section's own site JSON              |
 | SD-03 | Section copy is frozen until someone asks                   |
-| SD-04 | Action labels come from the WebKit list                     |
+| SD-04 | Action labels come from the Azion UI list                   |
 | SD-05 | A band hero is followed by no gap                           |
 | SD-06 | The client marquee belongs to the screen hero               |
 | SD-07 | A short headline breaks in two lines, a long one in three   |
@@ -53,7 +53,7 @@ its documentation wins.
 | SD-10 | Section eyebrows are optional and plain                     |
 | SD-11 | A band no section covers becomes a section first            |
 | SD-12 | Creative pages keep the content base                        |
-| SD-13 | Assets come from the WebKit asset bank                      |
+| SD-13 | Assets come from the Azion UI asset bank                    |
 | SD-14 | Brand marks in colour first                                 |
 | SD-15 | The page speaks the project language                        |
 | SD-16 | Marketing facts come from the knowledge base                |
@@ -69,9 +69,9 @@ its documentation wins.
 
 ## Composition and frame
 
-### SD-01 · Sections come only from the WebKit page sections
+### SD-01 · Sections come only from the Azion UI page sections
 
-Every band on a page is a WebKit page section (`list_components` with category `sections`, or
+Every band on a page is an Azion UI page section (`list_components` with category `sections`, or
 `llms/components/*-section.md`), in a `variant` its spec documents.
 
 - **Don't:** a pricing page draws a plan matrix from `Table` and `Card` in the page file; a
@@ -102,11 +102,11 @@ production more often than anyone plans.
 ### SD-11 · A band no section covers becomes a section first
 
 A page is `SitePage` (or the sections in the site column) and nothing else. A band no section
-covers is added to WebKit as a section first (`/webkit-adoption`, "file the gap upstream"), then
+covers is added to Azion UI as a section first (`/azion-ui-adoption`, "file the gap upstream"), then
 placed like any other.
 
 - **Don't:** a page renders `SitePage` and hand-builds one more band in its own markup below.
-- **Do:** the band is specified and built as a WebKit section, released, and listed in the
+- **Do:** the band is specified and built as an Azion UI section, released, and listed in the
   page JSON.
 
 **Why:** a hand-built band skips the review, drifts from the system and cannot be reused on the
@@ -132,7 +132,7 @@ sources.
 
 ### SD-15 · The page speaks the project language
 
-Colours, type, spacing and motion come from `@aziontech/theme` tokens (rule `webkit-tokens`). Each
+Colours, type, spacing and motion come from `@aziontech/theme` tokens (rule `azion-ui-tokens`). Each
 edge of the frame has one owner, the page has one `h1` (the hero's), the hero and the first band
 sit on one vertical, and no rule sits on the window edge.
 
@@ -326,9 +326,9 @@ breaks all three without anyone deciding it.
 
 **Exceptions:** none.
 
-### SD-04 · Action labels come from the WebKit list
+### SD-04 · Action labels come from the Azion UI list
 
-The page actions use these labels, exactly as written (WebKit owns this list; the sections ship
+The page actions use these labels, exactly as written (Azion UI owns this list; the sections ship
 no label of their own):
 
 | Action                                                             | Label            | Goes to                                    |
@@ -417,25 +417,25 @@ A section renders its props as text. Emphasis is the hero's `highlight`; a link 
 
 ## Assets
 
-The bank is what WebKit ships: the client and partner marks, badges and illustrations under
-`@aziontech/webkit/assets/<file>`, the illustration and scene names the sections take
+The bank is what Azion UI ships: the client and partner marks, badges and illustrations under
+`@aziontech/ui/assets/<file>`, the illustration and scene names the sections take
 (`llms/foundations/illustrations.md`, MCP `list_assets`), and the icon classes of
 `@aziontech/icons`.
 
-### SD-13 · Assets come from the WebKit asset bank
+### SD-13 · Assets come from the Azion UI asset bank
 
 Logos, icons, illustrations and diagrams come from the bank in their approved variants. No remote
 image URL and no local copy.
 
 - **Don't:** a logo loaded from an azion.com URL, or an SVG pasted into the page's folder.
-- **Do:** `import zoop from '@aziontech/webkit/assets/zoop-extended-color.svg'` passed as the
+- **Do:** `import zoop from '@aziontech/ui/assets/zoop-extended-color.svg'` passed as the
   item's `logo`; an illustration named from the registry.
 
 **Why:** the bank holds the approved version of each asset with its light and dark variants. A
 copied or remote file goes stale and breaks the dark theme.
 
 **Exceptions:** blog and case-study covers are CMS content, not design assets: the site serves
-them (rule `webkit-sections`).
+them (rule `azion-ui-sections`).
 
 ### SD-14 · Brand marks in colour first
 
@@ -502,15 +502,15 @@ bank follows the same bias: the brand primary and accent scales and the neutrals
 background and surface tokens, never a background that lowers the logo's contrast. Generated art
 enters the bank (SD-19) before any page uses it.
 
-### Defects in the bank go to WebKit
+### Defects in the bank go to Azion UI
 
-A misleading asset name, a typo inside an artwork or a missing scene is a WebKit defect: report it
-on the WebKit repo, never work around it with a local copy or an edited file. Until the fix ships,
+A misleading asset name, a typo inside an artwork or a missing scene is an Azion UI defect: report it
+on the Azion UI repo, never work around it with a local copy or an edited file. Until the fix ships,
 SD-18 and SD-19 cover the page.
 
 ## Verify
 
-Render the page at 390, 768, 1280 and 1440 px in the light and the dark theme (`/webkit-ui-verify`)
+Render the page at 390, 768, 1280 and 1440 px in the light and the dark theme (`/azion-ui-verify`)
 and read the DOM, not a screenshot by eye:
 
 - Hero: SD-04, SD-05, SD-06, SD-07, SD-09.

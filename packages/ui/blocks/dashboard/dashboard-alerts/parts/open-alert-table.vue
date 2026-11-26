@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import SeverityTag from '@aziontech/ui/severity-tag'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import type { TagSeverity } from '@aziontech/ui/tag'
 
   import type { AlertsDashboardAlert, AlertsDashboardAlertStatus } from '../dashboard-alerts.vue'
 

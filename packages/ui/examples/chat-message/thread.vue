@@ -1,7 +1,7 @@
 <script setup>
-  import ArtifactPreview from '@aziontech/webkit/artifact-preview'
-  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ArtifactPreview from '@aziontech/ui/artifact-preview'
+  import ChatMessageRoot from '@aziontech/ui/chat-message-root'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
 </script>
 
 <template>

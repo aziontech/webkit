@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
-  import CopyButton from '@aziontech/webkit/copy-button'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
+  import CopyButton from '@aziontech/ui/copy-button'
   import type {
     FlowDiagramEdgeData,
     FlowDiagramNodeData,
     FlowDiagramSeverity
-  } from '@aziontech/webkit/flow-diagram-root'
-  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import StatusCode from '@aziontech/webkit/status-code'
-  import Timestamp from '@aziontech/webkit/timestamp'
+  } from '@aziontech/ui/flow-diagram-root'
+  import FlowDiagram from '@aziontech/ui/flow-diagram-root'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import StatusCode from '@aziontech/ui/status-code'
+  import Timestamp from '@aziontech/ui/timestamp'
   import { computed, useId } from 'vue'
 
   /** The way back the primary button offers: reload the address, or open the site's home page. */

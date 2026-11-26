@@ -23,7 +23,7 @@ describe('CopyButton', () => {
   describe('rendering & testid', () => {
     it('renders a <button> with the idle aria-label and the default testid', () => {
       const { getByRole, getByTestId } = render(CopyButton, {
-        props: { value: 'npm i @aziontech/webkit' }
+        props: { value: 'npm i @aziontech/ui' }
       })
       const node = getByRole('button', { name: 'Copy' })
       expect(node.tagName).toBe('BUTTON')

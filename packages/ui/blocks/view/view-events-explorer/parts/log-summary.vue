@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Chart, { type ChartRange, type ChartSeries } from '@aziontech/webkit/chart'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Chart, { type ChartRange, type ChartSeries } from '@aziontech/ui/chart'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type { EventsExplorerSummary } from '../view-events-explorer.vue'
 

@@ -1,7 +1,7 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableFilter from '@aziontech/webkit/table-filter'
+  import DataTable from '@aziontech/ui/data-table'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableFilter from '@aziontech/ui/table-filter'
   import { ref } from 'vue'
 
   const rows = [

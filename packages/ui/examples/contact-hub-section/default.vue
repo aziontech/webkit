@@ -1,5 +1,5 @@
 <script setup>
-  import ContactHubSection from '@aziontech/webkit/contact-hub-section'
+  import ContactHubSection from '@aziontech/ui/contact-hub-section'
 </script>
 
 <template>

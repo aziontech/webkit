@@ -3,10 +3,10 @@
 > The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert`, `Button` and `PaymentBrand` (the monochrome card-brand plate in theme tokens).
 
 - Surface: app
-- Source: `blocks/account/account-payment-method-card/account-payment-method-card.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-payment-method-card/account-payment-method-card.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-payment-method-card")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), [Input](../../components/input.md), [PaymentBrand](../../components/payment-brand.md), [Select](../../components/select.md), `use-escape-to-cancel`
-- Skills: `webkit-form`, `webkit-errors`
+- Skills: `azion-ui-form`, `azion-ui-errors`
 
 ## Asked as
 
@@ -150,14 +150,14 @@ Each variant is the same screen in another state: `get_block("account/account-pa
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PaymentBrand from '@aziontech/ui/payment-brand'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import { useEscapeToCancel } from '@aziontech/ui/use-escape-to-cancel'
   import { computed, nextTick, reactive, watch } from 'vue'
 
   import { sampleCard } from './sample'

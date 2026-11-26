@@ -1,16 +1,16 @@
 {
  "name": "help-panel",
  "binding": "HelpPanel",
- "import": "@aziontech/webkit/help-panel",
- "treeShakeableImport": "@aziontech/webkit/help-panel-root",
+ "import": "@aziontech/ui/help-panel",
+ "treeShakeableImport": "@aziontech/ui/help-panel-root",
  "category": "content",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/help-panel-header",
-  "@aziontech/webkit/help-panel-group",
-  "@aziontech/webkit/help-panel-footer"
+  "@aziontech/ui/help-panel-header",
+  "@aziontech/ui/help-panel-group",
+  "@aziontech/ui/help-panel-footer"
  ],
  "purpose": "The content of a help side region: a topic's title, a few sections of short guidance, and the \"Learn more\" links that leave for the documentation. Guided tutorials belong to `tutorial-panel`. It is the thing that goes **inside** a side region, not the region itself: the consumer places it in a `Drawer` or in the page's side rail, and that host owns opening, closing and the close button. It owns no open state, so it has no `Trigger` / `Content` and no `data-state=\"open|closed\"`. Its anatomy is the anatomy of a help page — `Header`, `Section`, `Links` — composed by hand, so a topic can omit the links or carry one section or five.",
  "setup": null,

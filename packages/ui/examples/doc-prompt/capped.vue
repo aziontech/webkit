@@ -1,5 +1,5 @@
 <script setup>
-  import DocPrompt from '@aziontech/webkit/doc-prompt'
+  import DocPrompt from '@aziontech/ui/doc-prompt'
 </script>
 
 <template>

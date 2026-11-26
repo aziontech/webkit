@@ -1,8 +1,8 @@
 <script setup>
-  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
-  import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
+  import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
+  import TemplateGallerySection from '@aziontech/ui/template-gallery-section'
 
   const primaryAction = {
     label: 'Start for free',

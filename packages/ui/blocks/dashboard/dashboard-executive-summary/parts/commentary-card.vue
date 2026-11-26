@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Avatar from '@aziontech/ui/avatar'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import type { ExecutiveSummaryDashboardNote } from '../dashboard-executive-summary.vue'
 

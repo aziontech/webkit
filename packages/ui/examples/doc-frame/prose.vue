@@ -1,7 +1,7 @@
 <script setup>
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import DocFrame from '@aziontech/webkit/doc-frame'
-  import Link from '@aziontech/webkit/link'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import DocFrame from '@aziontech/ui/doc-frame'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

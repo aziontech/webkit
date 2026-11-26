@@ -57,7 +57,7 @@
   })
 
   if (!ctx) {
-    console.warn('[webkit] TableSearch renders outside a Table and filters nothing.')
+    console.warn('[azion-ui] TableSearch renders outside a Table and filters nothing.')
   }
 </script>
 

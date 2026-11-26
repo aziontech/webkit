@@ -2,7 +2,7 @@
 
 > The body of a careers posting page, under the posting's title band: the description in rows, one per section of the posting (a heading, then its paragraphs and bullet lists), beside a sticky rail that restates the posting (its area, its title and its facets such as department, location and contract) with the link to the application; then the application form, and a dialog that confirms a sent application with a way back to the open positions. From the design sample's careers job page. It is a page section — the site places it from a `{ _id: 'job-posting-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `module-header`, `eyebrow`, `button`, `field`, `label`, `input`, `phone-input`, `file-dropzone`, `file-token-group`, `alert`, `dialog` and `panel`. It collects data, so it follows the forms exception of the page-section contract: it validates on submit only and emits `submit`; the site sends the application and hands the outcome back through `loading`, `submitted` and `failed`.
 
-- Import: `import JobPostingSection from '@aziontech/webkit/job-posting-section'`
+- Import: `import JobPostingSection from '@aziontech/ui/job-posting-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [job-posting-section.json](job-posting-section.json)
 
@@ -106,7 +106,7 @@ No built-in strings: every visible string and accessible name comes from the pro
 
 ```vue
 <script setup>
-  import JobPostingSection from '@aziontech/webkit/job-posting-section'
+  import JobPostingSection from '@aziontech/ui/job-posting-section'
   import { nextTick, ref } from 'vue'
 
   const facets = [
@@ -267,8 +267,8 @@ No built-in strings: every visible string and accessible name comes from the pro
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import JobPostingSection from '@aziontech/webkit/job-posting-section'
+  import Button from '@aziontech/ui/button'
+  import JobPostingSection from '@aziontech/ui/job-posting-section'
   import { nextTick, ref } from 'vue'
 
   const form = {

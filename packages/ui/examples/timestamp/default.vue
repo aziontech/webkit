@@ -1,6 +1,6 @@
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Timestamp from '@aziontech/webkit/timestamp'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Timestamp from '@aziontech/ui/timestamp'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
   const VALUE = '2026-11-14T12:04:31Z'

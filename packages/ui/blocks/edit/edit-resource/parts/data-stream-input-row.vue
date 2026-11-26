@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import PasswordInput from '@aziontech/webkit/password-input'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import PasswordInput from '@aziontech/ui/password-input'
+  import SettingsRow from '@aziontech/ui/settings-row'
 
   import { type DataStreamRecord, useDataStreamContext } from '../use-data-stream'
 

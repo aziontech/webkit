@@ -1,8 +1,8 @@
 # Media Split Section
 
-> One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the webkit scene assets. The media is required and is a drawn asset: an illustration (a name of the illustration registry) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
+> One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the Azion UI scene assets. The media is required and is a drawn asset: an illustration (a name of the illustration registry) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
 
-- Import: `import MediaSplitSection from '@aziontech/webkit/media-split-section'`
+- Import: `import MediaSplitSection from '@aziontech/ui/media-split-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [media-split-section.json](media-split-section.json)
 
@@ -47,7 +47,7 @@
 | `orientation` | `MediaSplitSectionOrientation` | `'horizontal'` | false | Axis the band splits on; `vertical` stacks the media under the copy for a wide scene. |
 | `texture` | `TextureVariant` | `'pixelate'` | false | Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`. |
 | `linked` | `boolean` | `true` | false | Links the whole band to a lone action; turn it off when the media holds controls of its own. |
-| `scene` | `MediaSplitSectionScene` | `undefined` | false | Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset other than `Diagram` and the props bound onto it; wins over every other media. |
+| `scene` | `MediaSplitSectionScene` | `undefined` | false | Scene drawn in the media cell, `{ component, props? }` naming an Azion UI scene asset other than `Diagram` and the props bound onto it; wins over every other media. |
 | `widget` | `ConsoleMockupName` | `undefined` | false | Name of the product console widget drawn in the media cell when no scene is set. |
 | `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when neither a scene nor a widget is set. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible name of the illustration; empty keeps it decorative. |
@@ -107,7 +107,7 @@
 
 ```vue
 <script setup>
-  import MediaSplitSection from '@aziontech/webkit/media-split-section'
+  import MediaSplitSection from '@aziontech/ui/media-split-section'
 
   const DESCRIPTION =
     'Quality, Drive, Accountability, and Innovation. They guide how we work every ' +
@@ -130,7 +130,7 @@
 
 ```vue
 <script setup>
-  import MediaSplitSection from '@aziontech/webkit/media-split-section'
+  import MediaSplitSection from '@aziontech/ui/media-split-section'
 </script>
 
 <template>
@@ -159,7 +159,7 @@
 
 ```vue
 <script setup>
-  import MediaSplitSection from '@aziontech/webkit/media-split-section'
+  import MediaSplitSection from '@aziontech/ui/media-split-section'
 </script>
 
 <template>

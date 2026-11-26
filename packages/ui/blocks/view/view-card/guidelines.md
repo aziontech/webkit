@@ -24,7 +24,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined medium Documentation button, which opens the docs in a new tab, and the primary `Create <Object>` button at the same `size="medium"`, set apart by its colour, as `skills/webkit-lists` asks; everything on the controls row stays medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears.
+`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined medium Documentation button, which opens the docs in a new tab, and the primary `Create <Object>` button at the same `size="medium"`, set apart by its colour, as `skills/azion-ui-lists` asks; everything on the controls row stays medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears.
 
 ### B. Property filter — `PropertyFilter` (required)
 
@@ -128,7 +128,7 @@ Then delete `sample.ts` and its import.
 - **Delete dialog:** title `Delete <n> applications`, consequence `The selected applications will be deleted, along with their domains and settings:` followed by the names, prompt `Type <name> to confirm.` for one, `Type delete to confirm.` for several, actions `Cancel` and `Delete applications` (singular for one).
 - **No match:** "No matching applications", then "No application matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No applications yet"; description is one sentence with what to do, e.g. "Create an application to start serving traffic."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -157,4 +157,4 @@ Then delete `sample.ts` and its import.
 - `create/create-page` — where the Create action leads for a short form.
 - `detail/detail-resource` — where a card's name leads.
 - `state/state-first-use` — the module before its first resource.
-- `useCollection`, `CardList` and `Pagination` — see `skills/webkit-lists`.
+- `useCollection`, `CardList` and `Pagination` — see `skills/azion-ui-lists`.

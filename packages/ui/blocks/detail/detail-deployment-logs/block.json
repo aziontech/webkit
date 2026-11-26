@@ -35,7 +35,7 @@
     "página da implantação",
     "implantação na fila"
   ],
-  "skills": ["webkit-ui-states", "webkit-errors", "webkit-layout"],
+  "skills": ["azion-ui-states", "azion-ui-errors", "azion-ui-layout"],
   "primary": {
     "name": "Running",
     "file": "detail-deployment-logs.vue"

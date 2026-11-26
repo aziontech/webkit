@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import StatusCode from '@aziontech/webkit/status-code'
-  import Timestamp from '@aziontech/webkit/timestamp'
+  import Button from '@aziontech/ui/button'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import StatusCode from '@aziontech/ui/status-code'
+  import Timestamp from '@aziontech/ui/timestamp'
 
   export interface StateErrorPageProps {
     /** HTTP status code the page answers with. */

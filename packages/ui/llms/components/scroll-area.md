@@ -2,7 +2,7 @@
 
 > Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it.
 
-- Import: `import ScrollArea from '@aziontech/webkit/scroll-area'`
+- Import: `import ScrollArea from '@aziontech/ui/scroll-area'`
 - Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [scroll-area.json](scroll-area.json)
 
@@ -65,7 +65,7 @@
 
 ```vue
 <script setup>
-  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import ScrollArea from '@aziontech/ui/scroll-area'
 
   const lines = [
     { time: '14:02:11', text: 'Build started for acme-store (commit 4f2a9c1)' },
@@ -110,7 +110,7 @@
 
 ```vue
 <script setup>
-  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import ScrollArea from '@aziontech/ui/scroll-area'
 </script>
 
 <template>
@@ -157,7 +157,7 @@
 
 ```vue
 <script setup>
-  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import ScrollArea from '@aziontech/ui/scroll-area'
 </script>
 
 <template>

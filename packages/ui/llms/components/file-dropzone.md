@@ -2,7 +2,7 @@
 
 > A FileDropzone is the target a user drags files from the operating system onto. It owns the drag lifecycle (only drags carrying `Files` count), the `accept` / `multiple` filtering, and the idle/active look, and it hands the result back as two activation events: `drop` with the accepted files, `reject` with the files it filtered out. It holds no value and renders no file list. The list, upload progress and validation messages belong to the consumer (typically a `Field` around this component, whose `Field.Description` / `Field.Error` carry the messages). `variant` covers the two places a drop target lives: - **`inline`**: a dashed region that is always visible (icon, title, description, plus a default slot for the "Browse files" action the consumer composes). It switches to the active look while files are dragged over it. This is the Cloudscape FileDropzone / Cloudflare Pages "Upload assets" shape. - **`overlay`**: invisible at rest. When files are dragged into the window it fades in over its nearest positioned ancestor (`absolute inset-0`), and it fades out on window drag-leave, drop or `Escape`. This is the Vercel "drag and drop a folder to deploy" shape, and it replaces the sample app's page-level `ProjectDropZone` and the drop target in the project intake block (`Blocks/State/StateProjectIntake`). The drop target itself is pointer-only. It is never a keyboard control. The keyboard (and screen-reader) path to the same outcome is a real button the consumer puts in the default slot (`inline`), or elsewhere on the page (`overlay`).
 
-- Import: `import FileDropzone from '@aziontech/webkit/file-dropzone'`
+- Import: `import FileDropzone from '@aziontech/ui/file-dropzone'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [file-dropzone.json](file-dropzone.json)
 
@@ -96,7 +96,7 @@
 - No `aria-live` in the component. Announcing every drag that crosses the window is noise, and the outcome that matters (files accepted or skipped) is the consumer's to announce from `drop` / `reject` (a `toast`, or a live region on its file list). `aria-dropeffect` / `aria-grabbed` are deprecated in WAI-ARIA 1.1 and are not used.
 - The icon is decorative: `aria-hidden="true"`.
 - `data-disabled` has no ARIA mirror because the root is not a control. The slotted button carries its own `disabled` / `aria-disabled`.
-- Contrast ≥4.5:1 for the title and description in both themes, including `--text-muted` on `--bg-selected` (inline active) and on `--bg-canvas` (overlay). The `webkit-ui-verifier` must confirm the active state in both themes, since the unit suite has no CSS. The dashed border (`--border-strong` idle, `--border-selected` active) must meet 3:1 non-text contrast against the surrounding surface.
+- Contrast ≥4.5:1 for the title and description in both themes, including `--text-muted` on `--bg-selected` (inline active) and on `--bg-canvas` (overlay). The `azion-ui-verifier` must confirm the active state in both themes, since the unit suite has no CSS. The dashed border (`--border-strong` idle, `--border-selected` active) must meet 3:1 non-text contrast against the surrounding surface.
 - `motion-reduce:animate-none` on both overlay fades, `motion-reduce:transition-none` on the inline colour transition.
 - Touch target: not applicable. The region is not a control (touch devices cannot drag OS files into a page), and the slotted Button carries its own ≥40×40 px target.
 
@@ -106,9 +106,9 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Button from '@aziontech/ui/button'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
 
   const picker = useFilePicker({ multiple: true })
 </script>
@@ -131,10 +131,10 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Button from '@aziontech/ui/button'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { ref } from 'vue'
 
   const filePicker = useFilePicker({ multiple: true })
@@ -192,10 +192,10 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { ref } from 'vue'
 
   const picker = useFilePicker({ multiple: true })

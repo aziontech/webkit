@@ -1,6 +1,6 @@
 <script setup>
-  import Command from '@aziontech/webkit/command'
-  import SiteHeaderSection from '@aziontech/webkit/site-header-section'
+  import Command from '@aziontech/ui/command'
+  import SiteHeaderSection from '@aziontech/ui/site-header-section'
   import { ref } from 'vue'
 
   const searchOpen = ref(false)

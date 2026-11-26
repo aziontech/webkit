@@ -7,7 +7,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Forbid `as` / `asChild` props: a component renders its own root and switches anchor vs. button on `href` (see the webkit-root-element rule shipped by `npx @aziontech/webkit init`).'
+        'Forbid `as` / `asChild` props: a component renders its own root and switches anchor vs. button on `href` (see the azion-ui-root-element rule shipped by `npx @aziontech/ui init`).'
     },
     schema: [],
     messages: {
@@ -15,7 +15,7 @@ export default {
         'Prop `{{name}}` makes the root element polymorphic by string or by slot. A component ' +
         'owns its root: switch anchor vs. button on a data prop (`href`) with `<component :is>`, ' +
         'and compose a child component instead of `asChild`. See ' +
-        'contributing/rules/webkit-root-element.md (shipped by `npx @aziontech/webkit init`).'
+        'contributing/rules/azion-ui-root-element.md (shipped by `npx @aziontech/ui init`).'
     }
   },
   create(context) {

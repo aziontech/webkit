@@ -3,10 +3,10 @@
 > The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `DataTable` of events, newest first: Event, Category as a `Tag`, User, IP address with a `CopyButton`, and Date as `TableCellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
-- Source: `blocks/account/account-activity-history/account-activity-history.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-activity-history/account-activity-history.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-activity-history")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfigProvider](../../components/config-provider.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DateRangePicker](../../components/date-range-picker.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [Table](../../components/table.md), `TableCellTime`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -117,7 +117,7 @@ Then delete `sample.ts` and its import.
 - **Categories:** `Sign-in`, `Security`, `Users`, `Billing`, `Deploy`.
 - **Empty period:** `No activity in this period`, then `Nothing happened in the account in the selected period. Select a longer period to see older events.` and `Show the last <next preset>`; at 90 days, `Nothing happened in the account in the last 90 days, the longest period events are kept.` with no action.
 - **No match:** `No matching events`, `No event in this period matches these filters.`, `Clear filters`.
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -153,29 +153,29 @@ Each variant is the same screen in another state: `get_block("account/account-ac
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
   import type {
     DateRangeUnit,
     DateRangeValue,
     RelativeOption
-  } from '@aziontech/webkit/date-range-picker'
-  import DateRangePicker from '@aziontech/webkit/date-range-picker'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  } from '@aziontech/ui/date-range-picker'
+  import DateRangePicker from '@aziontech/ui/date-range-picker'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { type TableColumn, type TableExposed } from '@aziontech/ui/table'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { type FilteringProperty, useCollection } from '@aziontech/ui/use-collection'
   import { computed, ref } from 'vue'
 
   import { sampleEvents, sampleNow } from './sample'

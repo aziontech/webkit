@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** One item of the actions menu. */
   export interface SummaryMenuItem {

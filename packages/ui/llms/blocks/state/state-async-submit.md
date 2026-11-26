@@ -3,10 +3,10 @@
 > The async counterpart of the server rejection in the SectionRejected state of the `state/state-form-validation` block: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card of `detail/detail-deployment-logs` (`Card`, `StatusIndicator`, `LogViewer` with its `LogViewer.Steps` steps and progress bar, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/state/state-async-submit/state-async-submit.vue` in `@aziontech/webkit`
+- Source: `blocks/state/state-async-submit/state-async-submit.vue` in `@aziontech/ui`
 - MCP: `get_block("state/state-async-submit")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [LogViewer](../../components/log-viewer.md), [PageHeader](../../components/page-header.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md)
-- Skills: `webkit-errors`, `webkit-ui-states`, `webkit-form`
+- Skills: `azion-ui-errors`, `azion-ui-states`, `azion-ui-form`
 
 ## Asked as
 
@@ -16,7 +16,7 @@ The async-action pattern, and the standard for every build and deploy screen. A 
 
 This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/shell-console`), which owns the rail, the header and the `main`.
 
-The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-end' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region.
+The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-end' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/ui/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region.
 
 The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast. When the run ends while this page is on screen, the outcome `Alert` is the outcome and the progress toast is dismissed: a toast repeating the Alert would cover the failed step on a phone. When the page is out of view (`document.visibilityState === 'hidden'`), Error raises the permanent failure toast and Success the success toast; in an app, the run store raises them the same way when the user has moved to another page. Leaving the page dismisses the toast so the next story starts clean.
 
@@ -172,19 +172,16 @@ Each variant is the same screen in another state: `get_block("state/state-async-
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import LogViewer, {
-    type LogViewerStep,
-    type LogViewerStepsView
-  } from '@aziontech/webkit/log-viewer'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import LogViewer, { type LogViewerStep, type LogViewerStepsView } from '@aziontech/ui/log-viewer'
+  import PageHeader from '@aziontech/ui/page-header'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import { toast } from '@aziontech/ui/toast'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   /** Where the run stands, read from the props. */

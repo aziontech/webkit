@@ -1,13 +1,13 @@
 ---
-name: webkit-motion-polish
+name: azion-ui-motion-polish
 description: Make motion smooth using only @aziontech/theme animate tokens — animate-* utilities, duration-*/ease-*/curve tokens, compositor-props-only, ≤150ms interaction feedback, and a mandatory motion-reduce escape on every motion class. No external animation library, no inline cubic-bezier, no hardcoded ms.
 status: active
 last_updated: 2026-11-17
 scope: general
-enforced_by: [webkit-motion, webkit-accessibility, ui-verify]
+enforced_by: [azion-ui-motion, azion-ui-accessibility, ui-verify]
 ---
 
-# Skill: webkit-motion-polish
+# Skill: azion-ui-motion-polish
 
 ## Purpose
 
@@ -17,9 +17,9 @@ never decorate.
 
 ## How to use
 
-- `/webkit-motion-polish`
+- `/azion-ui-motion-polish`
   Apply the motion constraints below to any animated UI in this conversation.
-- `/webkit-motion-polish <file>`
+- `/azion-ui-motion-polish <file>`
   Review the file's animations and output, per violation:
   - the exact line / snippet (quoted),
   - why it's wrong (1 short sentence),
@@ -29,14 +29,14 @@ never decorate.
 
 Never guess a duration, curve, or utility name. Resolve them the same way every time:
 
-- Ask the **webkit MCP** — it lists the `animate-*` utilities and the `duration-*` / `ease-*` / `curve`
+- Ask the **Azion UI MCP** — it lists the `animate-*` utilities and the `duration-*` / `ease-*` / `curve`
   tokens that ship in `@aziontech/theme`.
 - If a utility or token name is not one the MCP lists, it does not exist — do not invent a
   `duration-[…]` or an inline `cubic-bezier`.
 
 ## When to invoke
 
-- After structure (`webkit-ux-heuristics`) and baseline (`webkit-quick-cleanup`) are sound.
+- After structure (`azion-ui-ux-heuristics`) and baseline (`azion-ui-quick-cleanup`) are sound.
 - Adding entrances/exits, hover/active feedback, or overlay open/close motion.
 - The user asks to "make it smooth", "add a transition", "animate this".
 
@@ -44,7 +44,7 @@ Never guess a duration, curve, or utility name. Resolve them the same way every 
 
 ### Use only the catalogued utilities
 
-The `animate-*` utilities from the animation token catalog (listed by the webkit MCP) — they ship with
+The `animate-*` utilities from the animation token catalog (listed by the Azion UI MCP) — they ship with
 `motion-safe` / `motion-reduce` variants:
 
 | Utility                                                                                                                      | Behavior                                                                                       |
@@ -365,7 +365,7 @@ them expensive. When motion "doesn't work" and nothing is red, start here.
   `ease-expressive-entrance` / `ease-expressive-exit` (prominent surfaces), and the generic
   `ease-in` / `ease-out` / `ease-in-out`.
 - **NEVER** a hardcoded `duration-[180ms]` / `transition: opacity 200ms`, and **NEVER** an inline
-  `ease-[cubic-bezier(...)]` — use the `duration-*` / `ease-*` tokens (the webkit MCP lists them; they
+  `ease-[cubic-bezier(...)]` — use the `duration-*` / `ease-*` tokens (the Azion UI MCP lists them; they
   ship in `@aziontech/theme`).
 
 ### Property discipline
@@ -384,7 +384,7 @@ them expensive. When motion "doesn't work" and nothing is red, start here.
   three: `transition-[transform,translate,scale,opacity]`.
 - **SHOULD** avoid animating paint props (`background`, `color`) except small, local UI (a single
   icon, a chip). For hover/active surface fills use the `::before`/`::after` ghost-layer pattern from
-  the Interactive states catalog (listed by the webkit MCP) — fade `opacity` on the pseudo-layer, not
+  the Interactive states catalog (listed by the Azion UI MCP) — fade `opacity` on the pseudo-layer, not
   `background` on the root.
 
 ### Feel
@@ -418,7 +418,7 @@ inline; defer unmount until the longest close duration elapses.
 
 ## Review output
 
-For `/webkit-motion-polish <file>`, list violations. Each:
+For `/azion-ui-motion-polish <file>`, list violations. Each:
 
 ```
 ✗ <file>:<line>  transition: all 0.3s cubic-bezier(0.2,0,0,1)
@@ -430,7 +430,7 @@ End with: `motion clean` or `N violations`.
 
 ## References
 
-- Motion catalog (listed by the webkit MCP): Animations, Motion primitives, Interactive states,
+- Motion catalog (listed by the Azion UI MCP): Animations, Motion primitives, Interactive states,
   Reduced motion.
 
 ## Definition of Done

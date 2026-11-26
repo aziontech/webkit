@@ -75,8 +75,8 @@ async function worker() {
     await context.addInitScript(
       ({ theme, dir }) => {
         try {
-          localStorage.setItem('webkit-docs:theme', theme)
-          localStorage.setItem('webkit-docs:dir', dir)
+          localStorage.setItem('azion-ui-docs:theme', theme)
+          localStorage.setItem('azion-ui-docs:dir', dir)
         } catch {}
       },
       { theme, dir: values.dir }
@@ -102,7 +102,9 @@ await Promise.all(Array.from({ length: Number(values.workers) }, worker))
 await browser.close()
 
 let count = 0
-for (const failure of failures.sort((a, b) => a.route.localeCompare(b.route) || a.width - b.width)) {
+for (const failure of failures.sort(
+  (a, b) => a.route.localeCompare(b.route) || a.width - b.width
+)) {
   console.log(`${failure.route} ${failure.theme} ${failure.width}`)
   if (failure.error) console.log(`  error ${failure.error}`)
   for (const line of failure.lines ?? []) {

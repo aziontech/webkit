@@ -2,7 +2,7 @@
 
 > The framed content column: a centered, width-capped block carrying only its two vertical rules, which every section below a hero stacks inside. It is the middle layer of the page language — the hero above it owns the page's top rule, the footer below it owns the bottom, and this column owns the sides — so a page's frame is drawn once, by three components, instead of by every band that happens to need an edge.
 
-- Import: `import Container from '@aziontech/webkit/container'`
+- Import: `import Container from '@aziontech/ui/container'`
 - Category: layout · Surface: site · Structure: monolithic
 - API as JSON: [container.json](container.json)
 
@@ -70,8 +70,8 @@
 
 ```vue
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import Container from '@aziontech/ui/container'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>
@@ -94,8 +94,8 @@
 
 ```vue
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import Container from '@aziontech/ui/container'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>
@@ -129,8 +129,8 @@
 
 ```vue
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import Container from '@aziontech/ui/container'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
 </script>
 
 <template>

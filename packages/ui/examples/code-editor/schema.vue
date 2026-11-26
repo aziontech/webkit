@@ -1,6 +1,6 @@
 <script setup>
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import Field from '@aziontech/webkit/field'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import Field from '@aziontech/ui/field'
   import { computed, ref } from 'vue'
 
   const loadMonaco = async () => {

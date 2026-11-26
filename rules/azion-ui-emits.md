@@ -8,7 +8,7 @@ the activation targets a specific subject, that subject **second**: `(event, ite
 consumer of an event must be able to tell **what happened** (the event) and **which thing
 it happened to** (the item) from the payload alone.
 
-The `webkit/require-authoring-standards` ESLint rule blocks the runtime array form
+The `azion-ui/require-authoring-standards` ESLint rule blocks the runtime array form
 (`defineEmits([...])` must become the typed form) and a hand-rolled `modelValue` prop +
 `update:modelValue` emit (use `defineModel` instead). Event naming and payload order are
 convention, upheld in code review.

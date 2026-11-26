@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import ProcessScrollSection from '@aziontech/webkit/process-scroll-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import ProcessScrollSection from '@aziontech/ui/process-scroll-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const steps = [
     {

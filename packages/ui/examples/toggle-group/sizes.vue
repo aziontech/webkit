@@ -1,5 +1,5 @@
 <script setup>
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   const options = [
     { label: 'Day', value: 'day' },

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Trace, { type TraceSpan, type TraceView } from '@aziontech/webkit/trace'
+  import Trace, { type TraceSpan, type TraceView } from '@aziontech/ui/trace'
   import { ref } from 'vue'
 
   const spans: TraceSpan[] = [

@@ -1,4 +1,4 @@
-import { isWebkitBare, loadCatalog } from '../lib/catalog.js'
+import { isAzionUiBare, loadCatalog } from '../lib/catalog.js'
 import { ctxCwd } from '../lib/rule-utils.js'
 
 function kebab(name) {
@@ -13,15 +13,15 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow barrel imports from the bare @aziontech/webkit entry (defeats tree-shaking).'
+        'Disallow barrel imports from the bare @aziontech/ui entry (defeats tree-shaking).'
     },
     hasSuggestions: true,
     schema: [],
     messages: {
       barrel:
-        'Barrel import from @aziontech/webkit defeats tree-shaking. Import each component from its own subpath (e.g. {{example}}).',
+        'Barrel import from @aziontech/ui defeats tree-shaking. Import each component from its own subpath (e.g. {{example}}).',
       namespace:
-        'Namespace import of @aziontech/webkit pulls in every component. Import only the subpaths you use.',
+        'Namespace import of @aziontech/ui pulls in every component. Import only the subpaths you use.',
       split: 'Split into per-subpath default imports'
     }
   },
@@ -31,7 +31,7 @@ export default {
 
     return {
       ImportDeclaration(node) {
-        if (!isWebkitBare(node.source.value)) return
+        if (!isAzionUiBare(node.source.value)) return
         if (node.importKind === 'type') return
 
         const named = node.specifiers.filter(
@@ -70,12 +70,12 @@ export default {
         })
       },
       ExportAllDeclaration(node) {
-        if (node.source && isWebkitBare(node.source.value)) {
+        if (node.source && isAzionUiBare(node.source.value)) {
           context.report({ node, messageId: 'namespace' })
         }
       },
       ExportNamedDeclaration(node) {
-        if (!node.source || !isWebkitBare(node.source.value)) return
+        if (!node.source || !isAzionUiBare(node.source.value)) return
         const named = node.specifiers.filter((s) => s.type === 'ExportSpecifier')
         if (!named.length) return
         const first = named[0]
@@ -83,7 +83,7 @@ export default {
         context.report({ node, messageId: 'barrel', data: { example } })
       },
       ImportExpression(node) {
-        if (node.source?.type === 'Literal' && isWebkitBare(node.source.value)) {
+        if (node.source?.type === 'Literal' && isAzionUiBare(node.source.value)) {
           context.report({ node, messageId: 'namespace' })
         }
       }

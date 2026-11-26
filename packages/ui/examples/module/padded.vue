@@ -1,5 +1,5 @@
 <script setup>
-  import Module from '@aziontech/webkit/module'
+  import Module from '@aziontech/ui/module'
 </script>
 
 <template>

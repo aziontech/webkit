@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import type { ButtonGroupItem } from '@aziontech/webkit/button-group'
-  import ButtonGroup from '@aziontech/webkit/button-group'
+  import type { ButtonGroupItem } from '@aziontech/ui/button-group'
+  import ButtonGroup from '@aziontech/ui/button-group'
   import { ref } from 'vue'
 
   const surface = ref<string>('Editor')

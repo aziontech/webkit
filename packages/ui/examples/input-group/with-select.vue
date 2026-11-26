@@ -1,7 +1,7 @@
 <script setup>
-  import InputGroupInput from '@aziontech/webkit/input-group-input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import Select from '@aziontech/webkit/select'
+  import InputGroupInput from '@aziontech/ui/input-group-input'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
+  import Select from '@aziontech/ui/select'
   import { ref } from 'vue'
 
   const currency = ref('USD')

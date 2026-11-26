@@ -2,7 +2,7 @@
 
 > The marketing site's chrome, composed once in the app: `SiteHeaderSection` on top, the page's sections in the layout's `<main>`, `SiteFooterSection` at the foot, and the `Command` search palette wired to the bar's search button and to ⌘K / Ctrl K. The navigation and the footer are data (the `SiteHeaderSection` and `SiteFooterSection` props), the canvas is painted with the theme tokens so a dark site never shows an unpainted page below the fold, and the palette lists every destination of the navigation by default. Site pages are only their sections, rendered through the default slot; they never repeat the bar or the footer.
 
-- Import: `import SiteLayout from '@aziontech/webkit/site-layout'`
+- Import: `import SiteLayout from '@aziontech/ui/site-layout'`
 - Category: layout · Surface: site · Structure: monolithic
 - API as JSON: [site-layout.json](site-layout.json)
 
@@ -108,13 +108,13 @@
 
 ```vue
 <script setup lang="ts">
-  import Container from '@aziontech/webkit/container'
-  import HeroSection from '@aziontech/webkit/hero-section'
-  import Module from '@aziontech/webkit/module'
+  import Container from '@aziontech/ui/container'
+  import HeroSection from '@aziontech/ui/hero-section'
+  import Module from '@aziontech/ui/module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
-  } from '@aziontech/webkit/site-layout'
+  } from '@aziontech/ui/site-layout'
 
   const navigation: SiteLayoutNavigation = {
     home: '/en/',
@@ -215,13 +215,13 @@
 
 ```vue
 <script setup lang="ts">
-  import Container from '@aziontech/webkit/container'
-  import HeroSection from '@aziontech/webkit/hero-section'
-  import Module from '@aziontech/webkit/module'
+  import Container from '@aziontech/ui/container'
+  import HeroSection from '@aziontech/ui/hero-section'
+  import Module from '@aziontech/ui/module'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
-  } from '@aziontech/webkit/site-layout'
+  } from '@aziontech/ui/site-layout'
 
   const navigation: SiteLayoutNavigation = {
     home: '/en/',

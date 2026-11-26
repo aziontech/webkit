@@ -2,7 +2,7 @@
 
 > Use UploadProgress for a floating card that tracks a background transfer while the person keeps working; the files picked in a form field are a FileTokenGroup, and one measurable task in place is a Progress. A card that follows a file transfer to its end while the person keeps working: uploading files into a bucket, moving objects between folders or deleting them. Its header says what is happening and how far it got (`Uploading 2 of 5 files`) over one overall bar; below it each file has its own bar, its state and a Cancel or Retry button. When every file has finished the header turns into the outcome (`5 files uploaded`, or `4 files uploaded, 1 failed` with Retry failed) and the card can be closed. It floats at the inline-end bottom corner by default, so it survives route changes in the console shell. Taken from the Console Kit's object storage progress card, extended with the per-file list the design sample's bucket browser needs.
 
-- Import: `import UploadProgress from '@aziontech/webkit/upload-progress'`
+- Import: `import UploadProgress from '@aziontech/ui/upload-progress'`
 - Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [upload-progress.json](upload-progress.json)
 
@@ -124,8 +124,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import Button from '@aziontech/ui/button'
+  import UploadProgress from '@aziontech/ui/upload-progress'
   import { onBeforeUnmount, ref } from 'vue'
 
   const initial = () => [
@@ -196,8 +196,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import Button from '@aziontech/ui/button'
+  import UploadProgress from '@aziontech/ui/upload-progress'
 
   const items = [
     { id: 'logo', name: 'logo.svg', size: 4210, status: 'success' },
@@ -229,7 +229,7 @@
 
 ```vue
 <script setup>
-  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import UploadProgress from '@aziontech/ui/upload-progress'
   import { ref } from 'vue'
 
   const open = ref(false)

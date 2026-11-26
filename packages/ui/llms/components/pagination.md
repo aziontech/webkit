@@ -2,8 +2,8 @@
 
 > Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Pagination renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](table.md) component.
 
-- Import: `import PaginationRoot from '@aziontech/webkit/pagination-root'`
-- Compound import (dot notation, not tree-shakeable): `import Pagination from '@aziontech/webkit/pagination'`
+- Import: `import PaginationRoot from '@aziontech/ui/pagination-root'`
+- Compound import (dot notation, not tree-shakeable): `import Pagination from '@aziontech/ui/pagination'`
 - Category: data · Surface: app · Structure: composition
 - API as JSON: [pagination.json](pagination.json)
 
@@ -55,9 +55,9 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/pagination-button`
-- `@aziontech/webkit/pagination-description`
-- `@aziontech/webkit/pagination-page-size`
+- `@aziontech/ui/pagination-button`
+- `@aziontech/ui/pagination-description`
+- `@aziontech/ui/pagination-page-size`
 
 ## Sub-components
 
@@ -106,7 +106,7 @@
 
 ```vue
 <script setup>
-  import Pagination from '@aziontech/webkit/pagination'
+  import Pagination from '@aziontech/ui/pagination'
 </script>
 
 <template>
@@ -161,7 +161,7 @@
 
 ```vue
 <script setup>
-  import Pagination from '@aziontech/webkit/pagination'
+  import Pagination from '@aziontech/ui/pagination'
 </script>
 
 <template>
@@ -208,7 +208,7 @@
 
 ```vue
 <script setup>
-  import PaginationRoot from '@aziontech/webkit/pagination-root'
+  import PaginationRoot from '@aziontech/ui/pagination-root'
   import { ref } from 'vue'
 
   const page = ref(1)

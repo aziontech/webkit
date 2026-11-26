@@ -2,8 +2,8 @@
 
 > A multi-step create flow in one surface. It puts the step rail on the start side, the current step's header and fields in the content column, and a fixed footer with Cancel, Previous and Next. On the last step, Next becomes the submit action. It owns the order, which steps can be reached and where focus goes. The consumer owns the fields, the validation and the request. It differs from its siblings by owning the **whole flow**. `stepper` is only the rail and leaves layout, actions and gating to the caller. `tabs` switches between peer views that have no order and no completion.
 
-- Import: `import WizardRoot from '@aziontech/webkit/wizard-root'`
-- Compound import (dot notation, not tree-shakeable): `import Wizard from '@aziontech/webkit/wizard'`
+- Import: `import WizardRoot from '@aziontech/ui/wizard-root'`
+- Compound import (dot notation, not tree-shakeable): `import Wizard from '@aziontech/ui/wizard'`
 - Category: navigation · Surface: app · Structure: composition
 - API as JSON: [wizard.json](wizard.json)
 
@@ -69,7 +69,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/wizard-step`
+- `@aziontech/ui/wizard-step`
 
 ## Sub-components
 
@@ -87,7 +87,7 @@ approach `stepper` uses), not by mount order, so a step inserted later still num
 
 The root composes, and does not re-implement:
 
-- `Stepper` + `Stepper.Step` (`@aziontech/webkit/stepper`) for the rail. The root renders one
+- `Stepper` + `Stepper.Step` (`@aziontech/ui/stepper`) for the rail. The root renders one
   `Stepper.Step` per registered `Wizard.Step` and passes:
   - `value` = `String(index)`.
   - `title` = the step's `title`.
@@ -103,7 +103,7 @@ The root composes, and does not re-implement:
   An `optional` step shows the word `Optional` in the `Stepper.Step` default slot. The rail's `v-model`
   is the active index as a string, and a rail activation writes `Number(value)` back to the `v-model` index.
 
-- `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
+- `Button` (`@aziontech/ui/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
   - Cancel is `variant="ghost"`, at the start of the footer.
   - Previous is `variant="outline"`, at the end, so the filled primary action is the only filled button in the footer. It is not rendered (`v-if`, not hidden) on step 1.
@@ -131,11 +131,11 @@ The root composes, and does not re-implement:
   - Slot: `default` — the step's content (fields, review summary).
   - `data-testid` fallback: `wizard-step` (consumer `data-testid` wins).
 
-Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
+Resulting layout (no per-component `package.json`; the root `packages/ui/package.json#exports`
 resolves every path, and `.d.ts` is generated at publish time):
 
 ```
-packages/webkit/src/components/navigation/wizard/
+packages/ui/src/components/navigation/wizard/
 ├── wizard.vue                   (root; owns the model, provides the registry, renders rail + footer)
 ├── wizard.test.ts
 ├── index.ts                     (compound: attaches Step to the root)
@@ -146,7 +146,7 @@ packages/webkit/src/components/navigation/wizard/
     └── wizard-step.vue
 ```
 
-Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the
+Exports to add to `packages/ui/package.json#exports` (flat public names; category lives in the
 folder only):
 
 ```jsonc
@@ -249,11 +249,11 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
-  import Wizard from '@aziontech/webkit/wizard'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Switch from '@aziontech/ui/switch'
+  import Wizard from '@aziontech/ui/wizard'
   import { ref } from 'vue'
 
   const step = ref(0)
@@ -408,11 +408,11 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
-  import Wizard from '@aziontech/webkit/wizard'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Switch from '@aziontech/ui/switch'
+  import Wizard from '@aziontech/ui/wizard'
   import { ref } from 'vue'
 
   const step = ref(0)
@@ -501,11 +501,11 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
-  import Wizard from '@aziontech/webkit/wizard'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Switch from '@aziontech/ui/switch'
+  import Wizard from '@aziontech/ui/wizard'
   import { ref } from 'vue'
 
   const step = ref(3)

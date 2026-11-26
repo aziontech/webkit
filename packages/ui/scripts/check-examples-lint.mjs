@@ -92,7 +92,7 @@ export function total(counts) {
 }
 
 export async function lintExamples({ dir = EXAMPLES_DIR, preset = PRESET } = {}) {
-  process.env.WEBKIT_CATALOG_PATH ||= resolve(PKG, 'catalog.json')
+  process.env.AZION_UI_CATALOG_PATH ||= resolve(PKG, 'catalog.json')
   const { ESLint } = await import('eslint')
   const eslint = new ESLint({
     cwd: dir,
@@ -134,7 +134,7 @@ async function main() {
   }
   if (regressions.length) {
     process.stderr.write(
-      `\nExamples are what AI agents copy, so they must pass the lint \`npx @aziontech/webkit init\` installs (webkit ${PRESET} preset). Fix the example: the baseline only shrinks, and --update refuses to record new findings.\n`
+      `\nExamples are what AI agents copy, so they must pass the lint \`npx @aziontech/ui init\` installs (ui ${PRESET} preset). Fix the example: the baseline only shrinks, and --update refuses to record new findings.\n`
     )
     process.exit(1)
   }

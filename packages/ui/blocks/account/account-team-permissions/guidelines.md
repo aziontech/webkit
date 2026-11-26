@@ -61,7 +61,7 @@ The matrix is the `Table` compound composed by hand, `bordered`: `aria-label="Pe
 
 ### Outcomes — through `toast`
 
-The list emits Duplicate and Delete; the page that runs the request ends it in a success toast (Team changes are not deploys, so the toast has no Edit or Redeploy). The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+The list emits Duplicate and Delete; the page that runs the request ends it in a success toast (Team changes are not deploys, so the toast has no Edit or Redeploy). The page calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -126,7 +126,7 @@ Then delete `sample.ts` and its import.
 - **Edit:** the page title is `Edit Team`, the save button `Save changes`; `Team "Developers" updated.` after saving.
 - **Members:** `Add member`, `Search users of this account`, `Remove <name>`; `Choose a user to add.` when Add is pressed with nothing chosen.
 - **Delete:** `Delete team`; `The 12 members of “Developers” lose the permissions it grants, unless another team grants them.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 

@@ -1,8 +1,8 @@
 {
  "name": "logo-wall",
  "binding": "LogoWall",
- "import": "@aziontech/webkit/logo-wall",
- "treeShakeableImport": "@aziontech/webkit/logo-wall",
+ "import": "@aziontech/ui/logo-wall",
+ "treeShakeableImport": "@aziontech/ui/logo-wall",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

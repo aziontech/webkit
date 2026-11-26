@@ -1,6 +1,6 @@
-import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'
-import type { TableColumn } from '@aziontech/webkit/data-table'
-import type { ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+import type { ChartColor, ChartSeries } from '@aziontech/ui/chart'
+import type { TableColumn } from '@aziontech/ui/data-table'
+import type { ToggleGroupOption } from '@aziontech/ui/toggle-group'
 
 import { type MetricFormat, metricQuery } from './analytics-report'
 

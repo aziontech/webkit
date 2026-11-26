@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Separator from '@aziontech/webkit/separator'
+  import Alert, { type AlertSeverity } from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Separator from '@aziontech/ui/separator'
   import { nextTick, onScopeDispose, reactive, ref } from 'vue'
 
   import type { SignInProvider } from '../auth-sign-in.vue'

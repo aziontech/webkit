@@ -1,7 +1,7 @@
 <script setup>
-  import HoverCard from '@aziontech/webkit/hover-card'
-  import Link from '@aziontech/webkit/link'
-  import Tag from '@aziontech/webkit/tag'
+  import HoverCard from '@aziontech/ui/hover-card'
+  import Link from '@aziontech/ui/link'
+  import Tag from '@aziontech/ui/tag'
 </script>
 
 <template>

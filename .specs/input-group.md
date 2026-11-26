@@ -7,7 +7,7 @@ spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: ceff8a47b19788c408ba1b1af61697eacefb8efbc9641d7e3204e0a3e944218c
+checksum: f66c542a2179b6c2f8a869b5dac7c8945bb715a0574835cd7ae8cc1990d27fa4
 created: 2026-07-01
 last_updated: 2026-11-25
 ---
@@ -48,10 +48,10 @@ Composition container that joins an input primitive with any number of adjacent 
 <script setup>
   import { ref } from 'vue'
   // Compound — leads the docs, dot-notation
-  import InputGroup from '@aziontech/webkit/input-group'
-  import Button from '@aziontech/webkit/button'
-  import Select from '@aziontech/webkit/select'
-  import Field from '@aziontech/webkit/field'
+  import InputGroup from '@aziontech/ui/input-group'
+  import Button from '@aziontech/ui/button'
+  import Select from '@aziontech/ui/select'
+  import Field from '@aziontech/ui/field'
 
   const domain = ref('')
   const url = ref('')
@@ -117,9 +117,9 @@ Standalone (tree-shakeable) imports — for consumers who want only the root or 
 
 ```vue
 <script setup>
-  import InputGroup from '@aziontech/webkit/input-group-root'
-  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
-  import InputGroupInput from '@aziontech/webkit/input-group-input'
+  import InputGroup from '@aziontech/ui/input-group-root'
+  import InputGroupAddon from '@aziontech/ui/input-group-addon'
+  import InputGroupInput from '@aziontech/ui/input-group-input'
 </script>
 ```
 
@@ -128,7 +128,7 @@ Standalone (tree-shakeable) imports — for consumers who want only the root or 
 Folder layout:
 
 ```
-packages/webkit/src/components/input/input-group/
+packages/ui/src/components/input/input-group/
 ├── input-group.vue                      # root
 ├── input-group-addon/
 │   └── input-group-addon.vue            # <InputGroup.Addon>
@@ -141,9 +141,9 @@ Public members of the compound:
 
 | Member               | Attached name           | Standalone export                     | Purpose                                                                                                                            |
 | -------------------- | ----------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                |
-| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.        |
-| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number' | 'password'`, default `'text'`: the restricted set of `Input`, plus `password`to mask a secret value that a reveal control in an addon toggles back to`text`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid`(all`false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled`and`required`from an enclosing`Field` (an explicit prop/attribute wins). |
+| Root                 | — (the compound itself) | `@aziontech/ui/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                |
+| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/ui/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.        |
+| `<InputGroup.Input>` | `Input`                 | `@aziontech/ui/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number' | 'password'`, default `'text'`: the restricted set of `Input`, plus `password`to mask a secret value that a reveal control in an addon toggles back to`text`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid`(all`false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled`and`required`from an enclosing`Field` (an explicit prop/attribute wins). |
 
 The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group. The root then provides the Field context to its children with `invalid` and `disabled` OR-ed with the group's own (the parent Field's id, description, title and `required` pass through), so the group's state reaches the controls inside.
 
@@ -262,7 +262,7 @@ Justification for eleven stories (deviates from Default+Types+Sizes+state patter
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

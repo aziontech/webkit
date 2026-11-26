@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
+  import Button from '@aziontech/ui/button'
+  import IntegrationCard from '@aziontech/ui/integration-card'
 </script>
 
 <template>

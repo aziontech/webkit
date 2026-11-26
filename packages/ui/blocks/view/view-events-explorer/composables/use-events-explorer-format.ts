@@ -1,5 +1,5 @@
-import type { FilterMenuValue } from '@aziontech/webkit/filter-menu'
-import { useLocale } from '@aziontech/webkit/use-locale'
+import type { FilterMenuValue } from '@aziontech/ui/filter-menu'
+import { useLocale } from '@aziontech/ui/use-locale'
 import { type MaybeRefOrGetter, toValue } from 'vue'
 
 import { formatFieldValue, isDate } from '../lib/event-log'

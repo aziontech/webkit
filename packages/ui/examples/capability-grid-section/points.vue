@@ -1,5 +1,5 @@
 <script setup>
-  import CapabilityGridSection from '@aziontech/webkit/capability-grid-section'
+  import CapabilityGridSection from '@aziontech/ui/capability-grid-section'
 
   const items = [
     {

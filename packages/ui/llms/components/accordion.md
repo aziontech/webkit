@@ -2,8 +2,8 @@
 
 > A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel. Use it to condense long content into scannable sections. Unlike `tabs` (mutually-exclusive panels shown in place), an accordion can keep one item open at a time (`type="single"`) or several at once (`type="multiple"`), and its content expands inline below each header.
 
-- Import: `import AccordionRoot from '@aziontech/webkit/accordion-root'`
-- Compound import (dot notation, not tree-shakeable): `import Accordion from '@aziontech/webkit/accordion'`
+- Import: `import AccordionRoot from '@aziontech/ui/accordion-root'`
+- Compound import (dot notation, not tree-shakeable): `import Accordion from '@aziontech/ui/accordion'`
 - Category: content · Surface: app · Structure: composition
 - API as JSON: [accordion.json](accordion.json)
 
@@ -55,9 +55,9 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/accordion-item`
-- `@aziontech/webkit/accordion-trigger`
-- `@aziontech/webkit/accordion-content`
+- `@aziontech/ui/accordion-item`
+- `@aziontech/ui/accordion-trigger`
+- `@aziontech/ui/accordion-content`
 
 ## Sub-components
 
@@ -73,10 +73,10 @@ The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attach
   - Props: `padded?: boolean` (default `true` — pads the body on the trigger's inset, after the chevron when it leads, with `--spacing-xs` above and `--spacing-md` below; set false for edge-to-edge content such as a `LogViewer` or table rows).
   - Slot: `default` — panel body content.
 
-Resulting layout (no per-component `package.json` — dropped repo-wide; the root `packages/webkit/package.json#exports` resolves every path; `.d.ts` is generated at publish time, never committed):
+Resulting layout (no per-component `package.json` — dropped repo-wide; the root `packages/ui/package.json#exports` resolves every path; `.d.ts` is generated at publish time, never committed):
 
 ```
-packages/webkit/src/components/content/accordion/
+packages/ui/src/components/content/accordion/
 ├── accordion.vue                 (root; owns type/modelValue/size/iconPosition, provides context)
 ├── index.ts                      (compound: attaches Item / Trigger / Content to the root)
 ├── injection-key.ts              (shared AccordionContext)
@@ -88,7 +88,7 @@ packages/webkit/src/components/content/accordion/
     └── accordion-content.vue
 ```
 
-Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the folder only):
+Exports to add to `packages/ui/package.json#exports` (flat public names; category lives in the folder only):
 
 ```jsonc
 "./accordion": "./src/components/content/accordion/index.ts",
@@ -128,7 +128,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 ```vue
 <script setup>
-  import Accordion from '@aziontech/webkit/accordion'
+  import Accordion from '@aziontech/ui/accordion'
 </script>
 
 <template>
@@ -160,7 +160,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 ```vue
 <script setup>
-  import Accordion from '@aziontech/webkit/accordion'
+  import Accordion from '@aziontech/ui/accordion'
 </script>
 
 <template>
@@ -203,7 +203,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 ```vue
 <script setup>
-  import Accordion from '@aziontech/webkit/accordion'
+  import Accordion from '@aziontech/ui/accordion'
 </script>
 
 <template>

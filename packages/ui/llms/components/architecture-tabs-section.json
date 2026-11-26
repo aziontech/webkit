@@ -1,8 +1,8 @@
 {
  "name": "architecture-tabs-section",
  "binding": "ArchitectureTabsSection",
- "import": "@aziontech/webkit/architecture-tabs-section",
- "treeShakeableImport": "@aziontech/webkit/architecture-tabs-section",
+ "import": "@aziontech/ui/architecture-tabs-section",
+ "treeShakeableImport": "@aziontech/ui/architecture-tabs-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

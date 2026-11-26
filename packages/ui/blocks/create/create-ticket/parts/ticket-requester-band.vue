@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
   import { computed, ref } from 'vue'
 
   import type { CreateTicketContact } from '../create-ticket.vue'

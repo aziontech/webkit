@@ -1,8 +1,8 @@
 {
  "name": "map-chart",
  "binding": "MapChart",
- "import": "@aziontech/webkit/map-chart",
- "treeShakeableImport": "@aziontech/webkit/map-chart",
+ "import": "@aziontech/ui/map-chart",
+ "treeShakeableImport": "@aziontech/ui/map-chart",
  "category": "chart",
  "surface": "app",
  "structure": "monolithic",

@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/tabs/tabs.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/tabs/tabs.vue
 // component=Tabs
 import figma from 'figma'
 
@@ -37,7 +37,7 @@ export default {
     </Tabs.Content>
   </div>
 </Tabs>`,
-  imports: ["import Tabs from '@aziontech/webkit/tabs'"],
+  imports: ["import Tabs from '@aziontech/ui/tabs'"],
   id: 'tabs',
   metadata: { nestable: true }
 }

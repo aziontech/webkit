@@ -1,4 +1,4 @@
-import type { AvatarPresence } from '@aziontech/webkit/avatar'
+import type { AvatarPresence } from '@aziontech/ui/avatar'
 import { computed, ref } from 'vue'
 
 import {

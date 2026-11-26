@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Link from '@aziontech/webkit/link'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Link from '@aziontech/ui/link'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import { application as APP, applicationFacts as facts } from '../sample'
   import SummarySubjectBand from './summary-subject-band.vue'

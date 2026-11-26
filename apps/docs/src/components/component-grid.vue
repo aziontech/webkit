@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import '../styles/full-utilities.css'
 
-  import Card from '@aziontech/webkit/card'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import Link from '@aziontech/webkit/link'
-  import Tag from '@aziontech/webkit/tag'
+  import Card from '@aziontech/ui/card'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import Link from '@aziontech/ui/link'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref } from 'vue'
 
   import { index } from '../lib/data'

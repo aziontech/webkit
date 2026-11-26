@@ -48,12 +48,12 @@ const DETAILS = new Map()
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
-const SRC = join(ROOT, 'packages/webkit/src')
+const SRC = join(ROOT, 'packages/ui/src')
 const PACKAGES = join(ROOT, 'packages')
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.turbo', 'coverage'])
 const PROSE_COMMENT = CONTENT_CHECKS.find((c) => c.id === 'prose-comment')
 const BASELINE = join(SCRIPT_DIR, 'authoring-baseline.json')
-const WIP_PREFIX = 'packages/webkit/src/components/wip/'
+const WIP_PREFIX = 'packages/ui/src/components/wip/'
 
 function walk(dir) {
   const out = []
@@ -75,18 +75,18 @@ function directionViolations() {
         parser: vueParser,
         parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
       },
-      plugins: { webkit: { rules: { 'no-physical-direction': noPhysicalDirection } } },
-      rules: { 'webkit/no-physical-direction': 'error' }
+      plugins: { 'azion-ui': { rules: { 'no-physical-direction': noPhysicalDirection } } },
+      rules: { 'azion-ui/no-physical-direction': 'error' }
     }
   ]
   const keys = []
   for (const dir of DIRECTION_DIRS) {
-    for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
+    for (const abs of walk(join(ROOT, 'packages/ui', dir))) {
       if (!/\.(vue|ts|js)$/.test(abs) || /\.test\.ts$/.test(abs)) continue
       const rel = relative(ROOT, abs).split('\\').join('/')
       const messages = linter.verify(readFileSync(abs, 'utf-8'), config, { filename: abs })
       for (const m of messages) {
-        if (m.ruleId !== 'webkit/no-physical-direction') continue
+        if (m.ruleId !== 'azion-ui/no-physical-direction') continue
         const key = `${rel}::direction:no-physical-direction`
         keys.push(key)
         DETAILS.set(key, `line ${m.line}: ${m.message}`)
@@ -105,19 +105,19 @@ function clockViolations() {
         parser: vueParser,
         parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
       },
-      plugins: { webkit: { rules: { 'no-clock-in-setup': noClockInSetup } } },
-      rules: { 'webkit/no-clock-in-setup': 'error' }
+      plugins: { 'azion-ui': { rules: { 'no-clock-in-setup': noClockInSetup } } },
+      rules: { 'azion-ui/no-clock-in-setup': 'error' }
     }
   ]
   const keys = []
   for (const dir of CLOCK_DIRS) {
-    for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
+    for (const abs of walk(join(ROOT, 'packages/ui', dir))) {
       if (!/\.(vue|ts|js)$/.test(abs) || /\.test\.ts$/.test(abs)) continue
       const source = readFileSync(abs, 'utf-8')
       if (!/\bDate\b/.test(source)) continue
       const rel = relative(ROOT, abs).split('\\').join('/')
       for (const m of linter.verify(source, config, { filename: abs })) {
-        if (m.ruleId !== 'webkit/no-clock-in-setup') continue
+        if (m.ruleId !== 'azion-ui/no-clock-in-setup') continue
         const key = `${rel}::clock:no-clock-in-setup`
         keys.push(key)
         DETAILS.set(key, `line ${m.line}: ${m.message}`)
@@ -136,19 +136,19 @@ function viewportHeightViolations() {
         parser: vueParser,
         parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
       },
-      plugins: { webkit: { rules: { 'no-viewport-height-calc': noViewportHeightCalc } } },
-      rules: { 'webkit/no-viewport-height-calc': 'error' }
+      plugins: { 'azion-ui': { rules: { 'no-viewport-height-calc': noViewportHeightCalc } } },
+      rules: { 'azion-ui/no-viewport-height-calc': 'error' }
     }
   ]
   const keys = []
   for (const dir of PAGE_BODY_DIRS) {
-    for (const abs of walk(join(ROOT, 'packages/webkit', dir))) {
+    for (const abs of walk(join(ROOT, 'packages/ui', dir))) {
       if (!/\.(vue|ts|js)$/.test(abs) || /\.test\.ts$/.test(abs)) continue
       const source = readFileSync(abs, 'utf-8')
       if (!/100[dsl]?vh/.test(source)) continue
       const rel = relative(ROOT, abs).split('\\').join('/')
       for (const m of linter.verify(source, config, { filename: abs })) {
-        if (m.ruleId !== 'webkit/no-viewport-height-calc') continue
+        if (m.ruleId !== 'azion-ui/no-viewport-height-calc') continue
         const key = `${rel}::layout:no-viewport-height-calc`
         keys.push(key)
         DETAILS.set(key, `line ${m.line}: ${m.message}`)

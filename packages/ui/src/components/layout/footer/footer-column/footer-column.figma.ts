@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1706
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/layout/footer/footer-column/footer-column.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/layout/footer/footer-column/footer-column.vue
 // component=FooterColumn
 import figma from 'figma'
 
@@ -22,7 +22,7 @@ const links = instance
 export default {
   example: figma.code`<Footer.Column title="${title}">${links}
 </Footer.Column>`,
-  imports: ["import Footer from '@aziontech/webkit/footer'"],
+  imports: ["import Footer from '@aziontech/ui/footer'"],
   id: 'footer-column',
   metadata: { nestable: true }
 }

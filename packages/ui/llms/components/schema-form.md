@@ -2,7 +2,7 @@
 
 > A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It also reads the OpenAPI request-body keywords a console generates its create and edit forms from: `oneOf` with a `discriminator`, `format`, `writeOnly` and string maps (`additionalProperties`). Through the `ui` map the app adds what a schema cannot say: fields shown only while a predicate holds (`when`), choices loaded from the app (`options`), arrays of objects edited as repeatable fieldsets (`widget: 'repeat'`) and sections, one of them folded under Advanced settings. It is for forms whose fields are data (a function's arguments, an integration's settings, a resource's request body), not for forms a designer lays out by hand.
 
-- Import: `import SchemaForm from '@aziontech/webkit/schema-form'`
+- Import: `import SchemaForm from '@aziontech/ui/schema-form'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [schema-form.json](schema-form.json)
 
@@ -86,7 +86,7 @@
 - A repeat and a map are `<fieldset>`s named by the property title; each repeat item is a `role="group"` named "Item 2" (or the item schema's `title` and number), its Remove button is named "Remove item 2", and Add and Remove are announced by `AttributeEditor`'s live region, which also moves focus to the new row.
 - A collapsed section is an `Accordion` trigger with `aria-expanded`; a closed section's fields are still validated, and `validate()` opens it before moving focus.
 - A field that appears or disappears through `when` is not announced; keep the controlling field just before it so the change happens where the user is.
-- A `field:<path>` slot control must name itself (the scope gives `invalid`, `required`, `disabled`); WebKit inputs read the Field context and need nothing.
+- A `field:<path>` slot control must name itself (the scope gives `invalid`, `required`, `disabled`); Azion UI inputs read the Field context and need nothing.
 - Visible focus, contrast and touch targets come from the composed controls.
 
 ## Right-to-left
@@ -148,7 +148,7 @@
 
 ```vue
 <script setup>
-  import SchemaForm from '@aziontech/webkit/schema-form'
+  import SchemaForm from '@aziontech/ui/schema-form'
   import { ref } from 'vue'
 
   const schema = {
@@ -207,8 +207,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import SchemaForm from '@aziontech/webkit/schema-form'
+  import Button from '@aziontech/ui/button'
+  import SchemaForm from '@aziontech/ui/schema-form'
   import { ref } from 'vue'
 
   const schema = {
@@ -283,8 +283,8 @@
 
 ```vue
 <script setup>
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
-  import SchemaForm from '@aziontech/webkit/schema-form'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
+  import SchemaForm from '@aziontech/ui/schema-form'
   import { ref } from 'vue'
 
   const schema = {

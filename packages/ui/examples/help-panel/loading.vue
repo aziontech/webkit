@@ -1,6 +1,6 @@
 <script setup>
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import Link from '@aziontech/webkit/link'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>

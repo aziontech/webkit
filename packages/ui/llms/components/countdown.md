@@ -2,7 +2,7 @@
 
 > Countdown shows the time left until a deadline as a compact tag: the SLA badge of a support ticket (`Due in 2h 15m`, `Due tomorrow`, `Overdue by 15m`), or the time before a certificate or a trial expires (`Expires in 30 days`, `Expired yesterday`). It turns from neutral to warning when the time left falls under a threshold and to danger once the deadline has passed, and every step changes the icon and the words as well as the colour. It can show a paused SLA (waiting on the customer). It parses the deadline like `Timestamp`, reads the reference clock from the nearest `ConfigProvider` (`now`) and updates once a minute on the clock every Timestamp shares. It differs from `Timestamp`, which shows a moment without urgency, and from `Tag`, which it renders through: Countdown owns the time phrase and picks the tag's severity from it.
 
-- Import: `import Countdown from '@aziontech/webkit/countdown'`
+- Import: `import Countdown from '@aziontech/ui/countdown'`
 - Category: content · Surface: app · Structure: monolithic
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [countdown.json](countdown.json)
@@ -81,7 +81,7 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 - Keyboard map: none (no interactive element).
 - ARIA: no role and no `aria-label`. The visible phrase with narrow units (`Due in 2h 15m`) is `aria-hidden`, and beside it a visually hidden (`sr-only`) span carries the same phrase with long units (`unitDisplay: 'long'`: `Due in 2 hours 15 minutes`), so a screen reader never reads `m` as meters; a relative phrase (`Due tomorrow`) and `Paused` are the same in both. A screen reader hears `First reply: Due in 2 hours 15 minutes`. The icon is `aria-hidden`. Both spans sit in a `time` element whose `datetime` is the ISO 8601 UTC deadline.
 - Never colour only: each state changes the icon (clock, triangle, circle alert, pause) and the words (`Due in`, `Overdue by`, `Paused`), so it reads in forced colours and for colour-blind people.
-- Contrast ≥4.5:1 (text) / ≥3:1 (icons): `Tag`'s neutral, warning and danger pairs are documented token pairs (`rules/webkit-tokens.md` § Contrast).
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons): `Tag`'s neutral, warning and danger pairs are documented token pairs (`rules/azion-ui-tokens.md` § Contrast).
 - `motion-reduce:*`: no motion.
 - Touch target: not interactive.
 
@@ -121,8 +121,8 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
 ```vue
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Countdown from '@aziontech/webkit/countdown'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Countdown from '@aziontech/ui/countdown'
 
   const NOW = Date.UTC(2026, 10, 24, 14, 45)
   const HOUR = 3_600_000
@@ -152,8 +152,8 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
 ```vue
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Countdown from '@aziontech/webkit/countdown'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Countdown from '@aziontech/ui/countdown'
 
   const NOW = Date.UTC(2026, 10, 24, 14, 45)
 </script>
@@ -179,8 +179,8 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
 ```vue
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Countdown from '@aziontech/webkit/countdown'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Countdown from '@aziontech/ui/countdown'
 
   const NOW = Date.UTC(2026, 10, 24, 9, 0)
 </script>

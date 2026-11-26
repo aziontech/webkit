@@ -1,5 +1,5 @@
 <script setup>
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import ToolCall from '@aziontech/ui/tool-call'
 </script>
 
 <template>

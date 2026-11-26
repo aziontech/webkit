@@ -1,8 +1,8 @@
 <script setup>
-  import Accordion from '@aziontech/webkit/accordion'
-  import LogViewerContent from '@aziontech/webkit/log-viewer-content'
-  import LogViewerHeader from '@aziontech/webkit/log-viewer-header'
-  import LogViewer from '@aziontech/webkit/log-viewer-root'
+  import Accordion from '@aziontech/ui/accordion'
+  import LogViewerContent from '@aziontech/ui/log-viewer-content'
+  import LogViewerHeader from '@aziontech/ui/log-viewer-header'
+  import LogViewer from '@aziontech/ui/log-viewer-root'
   import { ref } from 'vue'
 
   const lines = [

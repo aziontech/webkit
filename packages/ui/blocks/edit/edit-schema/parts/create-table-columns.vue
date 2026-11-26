@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Button from '@aziontech/webkit/button'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Button from '@aziontech/ui/button'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import SettingsGroup from '@aziontech/ui/settings-group'
 
   import { columnDefinition, type DraftColumn } from '../lib/draft-table'
   import ColumnTypeSelect from './column-type-select.vue'

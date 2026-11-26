@@ -1,5 +1,5 @@
 <script setup>
-  import Reasoning from '@aziontech/webkit/reasoning'
+  import Reasoning from '@aziontech/ui/reasoning'
   import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   const steps = [

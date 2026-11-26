@@ -1,13 +1,13 @@
 ---
-name: webkit-data-viz
-description: The token adapter that maps charts onto @aziontech/theme — every series color derived from the --color-* families (never hex), computed tokens re-read on a data-theme change so a canvas re-themes (SVG re-themes for free), and the chart's loading/empty/error surface rendered with webkit components. For chart-form and palette theory, use the generic dataviz skill; this skill covers only mapping that onto theme tokens. Use when building or reviewing a chart, dashboard, or KPI tile in a webkit app.
+name: azion-ui-data-viz
+description: The token adapter that maps charts onto @aziontech/theme — every series color derived from the --color-* families (never hex), computed tokens re-read on a data-theme change so a canvas re-themes (SVG re-themes for free), and the chart's loading/empty/error surface rendered with Azion UI components. For chart-form and palette theory, use the generic dataviz skill; this skill covers only mapping that onto theme tokens. Use when building or reviewing a chart, dashboard, or KPI tile in an Azion UI app.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-tokens, webkit-component-states, ui-verify]
+enforced_by: [azion-ui-tokens, azion-ui-component-states, ui-verify]
 ---
 
-# Skill: webkit-data-viz
+# Skill: azion-ui-data-viz
 
 ## Purpose
 
@@ -20,14 +20,14 @@ theory (categorical / sequential / diverging, contrast math, color-blind pairing
 the shipped chart components first (`Chart`, `DonutChart`, `StatTile`, `ChartCard`), taking every
 color from the validated `--chart-*` role (never hex, never a hand-picked `--color-*` step),
 re-reading computed tokens on a `data-theme` change when a canvas library is unavoidable, and
-rendering the chart's loading / empty / error surface with webkit components.
+rendering the chart's loading / empty / error surface with Azion UI components.
 
 ## How to use
 
-- [Charts and figures](../webkit-data-viz/SKILL.md) — apply the token mapping to any chart, dashboard, or KPI tile you build in this
+- [Charts and figures](../azion-ui-data-viz/SKILL.md) — apply the token mapping to any chart, dashboard, or KPI tile you build in this
   conversation. Pick the form and the palette **kind** with the generic `dataviz` skill first, then map
   it onto tokens here.
-- `/webkit-data-viz <file>` — review the file's charts and report, per gap: the quoted line, the token
+- `/azion-ui-data-viz <file>` — review the file's charts and report, per gap: the quoted line, the token
   problem (off-token color, no theme re-read, missing state, non-tabular figures), and the concrete
   token-mapped fix. Form and palette-kind review belong to the generic `dataviz` skill.
 
@@ -35,20 +35,20 @@ rendering the chart's loading / empty / error surface with webkit components.
 
 Never guess an import path or a hex value. Resolve both from the contract:
 
-- **Chart components first.** `@aziontech/webkit/chart` (lines, areas and bars composed from
+- **Chart components first.** `@aziontech/ui/chart` (lines, areas and bars composed from
   `Chart.Grid`, `Chart.Axis`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Crosshair`,
-  `Chart.Tooltip`, `Chart.Legend`), `@aziontech/webkit/donut-chart`, `@aziontech/webkit/stat-tile`
-  and `@aziontech/webkit/chart-card` already carry the palette, the tooltip, the legend, the keyboard
+  `Chart.Tooltip`, `Chart.Legend`), `@aziontech/ui/donut-chart`, `@aziontech/ui/stat-tile`
+  and `@aziontech/ui/chart-card` already carry the palette, the tooltip, the legend, the keyboard
   model, the table twin and the state surface. Use them before adding a charting library.
   Event volume over time buckets (a log histogram) is `Chart.Bar type="histogram"` (add `stacked`
   for one segment per level): solid columns that touch and end at the busiest bucket. The default
   `Chart.Bar` keeps rounded, gapped bars for separate categories compared one against another.
 - **Other components** (`Skeleton`, `EmptyState`, `Alert`, `Card`, `StatusIndicator`): ask the
-  **webkit MCP** — `suggest_component` in plain words ("empty state", "stat card") — or read the
-  `imports` keys in **`node_modules/@aziontech/webkit/catalog.json`**. A subpath that is not a key
+  **Azion UI MCP** — `suggest_component` in plain words ("empty state", "stat card") — or read the
+  `imports` keys in **`node_modules/@aziontech/ui/catalog.json`**. A subpath that is not a key
   there does not exist.
 - **Tokens**: the `--chart-*` role in the `tokens` tree of the same **`catalog.json`**, or the human
-  catalog in **`node_modules/@aziontech/webkit/docs/STYLEGUIDE.md`**. Derive every chart color from
+  catalog in **`node_modules/@aziontech/ui/docs/STYLEGUIDE.md`**. Derive every chart color from
   it — never a raw hex.
 
 ## Pick the chart for the question
@@ -99,19 +99,19 @@ validated for color-vision separation and 3:1 contrast in both themes:
   `opacity` or `color-mix()` to fake a gridline.
 
 ```ts
-// The webkit components assign these for you. A custom SVG mark passes the var() straight to
+// The Azion UI components assign these for you. A custom SVG mark passes the var() straight to
 // fill / stroke — it re-themes for free.
 const SERIES = [1, 2, 3, 4, 5, 6, 7, 8].map((slot) => `var(--chart-series-${slot})`)
 
 // Canvas libraries can't read CSS vars — resolve computed values, and RE-READ on data-theme
-// change so the canvas repaints in the new theme (see /webkit-theming-dark-mode).
+// change so the canvas repaints in the new theme (see /azion-ui-theming-dark-mode).
 const read = (v: string) => getComputedStyle(document.documentElement).getPropertyValue(v).trim()
 const seriesColors = () => SERIES.map((s) => read(s.slice(4, -1)))
 ```
 
-## Other palettes — the console API sets the variables, WebKit ships one
+## Other palettes — the console API sets the variables, Azion UI ships one
 
-WebKit ships a single chart palette (the `--chart-*` token values) and no alternates. A product that
+Azion UI ships a single chart palette (the `--chart-*` token values) and no alternates. A product that
 lets a customer pick a palette (the Azion console API) re-colours a dashboard by setting the palette
 variables on the dashboard's root element; every chart inside reads them by inheritance. Never add a
 palette to `@aziontech/theme` or hand-pick colours per chart.
@@ -124,13 +124,13 @@ palette to `@aziontech/theme` or hand-pick colours per chart.
   passes the default's checks: 3:1 and APCA Lc 30 on `--bg-surface`, `--bg-canvas` and
   `--chart-tooltip-bg`, eight distinct colours, the same hue family in both themes.
 - At most eight series: a ninth folds into `--chart-series-other`; a palette never adds a slot.
-- On a webkit tag (a chart, a dashboard grid, a page component), set them as a static `style`, an object-literal `:style` or `[--chart-series-1:…]`
-  classes; `webkit/no-style-override` allows exactly these variables and nothing else
-  (`CHART_PALETTE_VARIABLES`). The contract is `webkit-tokens.md` § "Chart palettes".
+- On an Azion UI tag (a chart, a dashboard grid, a page component), set them as a static `style`, an object-literal `:style` or `[--chart-series-1:…]`
+  classes; `azion-ui/no-style-override` allows exactly these variables and nothing else
+  (`CHART_PALETTE_VARIABLES`). The contract is `azion-ui-tokens.md` § "Chart palettes".
 
 ```vue
 <script setup lang="ts">
-  import DonutChart from '@aziontech/webkit/donut-chart'
+  import DonutChart from '@aziontech/ui/donut-chart'
 
   const palette = ['var(--color-violet-600)', 'var(--color-green-700)']
   const series = [
@@ -155,7 +155,7 @@ A chart fetches, so it owns the full state surface, rendered **in the chart's ow
 blank rectangle): **loading** → `Skeleton` sized to the chart area, reserving the layout so it doesn't
 reflow; **empty** → `EmptyState` ("No requests in this window", + a range/filter action); **error** →
 a `Alert severity="danger"` with what failed and a retry. The trigger comes from the consuming app's
-data layer; webkit ships the rendering of each state. Full matrix in [Loading, empty and error states](../webkit-ui-states/SKILL.md).
+data layer; Azion UI ships the rendering of each state. Full matrix in [Loading, empty and error states](../azion-ui-states/SKILL.md).
 
 ## Numbers — tabular figures, deltas read good or bad
 
@@ -166,7 +166,7 @@ a rise is bad.
 
 ```vue
 <script setup lang="ts">
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTile from '@aziontech/ui/stat-tile'
 </script>
 
 <template>
@@ -205,8 +205,8 @@ card, the grid or the `nth-child` dividers.
 
 ```vue
 <script setup lang="ts">
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
 </script>
 
 <template>
@@ -245,14 +245,14 @@ card, the grid or the `nth-child` dividers.
 
 Because every color is a token, the chart works in light **and** dark with no per-theme branch. SVG
 `var()` marks re-theme automatically; canvas marks only re-theme if you re-read the tokens on a
-`data-theme` change (see `/webkit-theming-dark-mode`). Verify both.
+`data-theme` change (see `/azion-ui-theming-dark-mode`). Verify both.
 
 ## Enforcement (honest)
 
 Only the hex ban is machine-checked: the **token lint** blocks any hex / rgb-hsl / Tailwind-palette
 literal in a chart's colors, so an off-token series fails the build. The canvas theme re-read, the
 state surface, and `tabular-nums` are **review**, not a hook — and form choice, palette kind, contrast,
-and anatomy live in the generic `dataviz` skill and are review there. The `/webkit-ui-verify` skill
+and anatomy live in the generic `dataviz` skill and are review there. The `/azion-ui-verify` skill
 screenshots the chart in light and dark as the paired visual check; use it to confirm the theme claim
 above rather than eyeballing one mode.
 
@@ -263,7 +263,7 @@ above rather than eyeballing one mode.
 - Every chart color is a `--chart-*` token — **never** a hex, rgb/hsl, Tailwind-palette literal, or a
   hand-picked `--color-*` step.
 - Another palette only re-sets the palette variables on a dashboard root, in both themes; status,
-  severity, Other and chrome colours stay fixed, and WebKit ships no alternate palette.
+  severity, Other and chrome colours stay fixed, and Azion UI ships no alternate palette.
 - SVG marks take the `var()` string directly; canvas marks resolve computed values and **re-read on a
   `data-theme` change** so the canvas repaints in the new theme.
 - `--chart-status-*` means status only — never a categorical accent; series slots follow
@@ -276,7 +276,7 @@ above rather than eyeballing one mode.
 
 ## Review output
 
-For `/webkit-data-viz <file>`, list gaps grouped by chart. Each:
+For `/azion-ui-data-viz <file>`, list gaps grouped by chart. Each:
 
 ```
 ✗ TrafficChart.vue:42  stroke="#3b82f6" on the requests series
@@ -298,5 +298,5 @@ End with: `charts token-mapped + complete` or `N gaps — fix before ship`.
 - SVG marks pass `var()` directly; canvas marks re-read computed tokens on a `data-theme` change.
 - Loading (`Skeleton`), empty (`EmptyState`), and error (`Alert`) render in the chart's box.
 - `tabular-nums` on every stacked/updating figure.
-- Verified in light and dark (`/webkit-ui-verify` screenshots both).
+- Verified in light and dark (`/azion-ui-verify` screenshots both).
 - Form and palette chosen with the generic `dataviz` skill before token mapping.

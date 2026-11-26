@@ -143,7 +143,7 @@ Then delete `sample.ts` and its import.
 - **Version picker:** search placeholder "Search versions", no-match line `No versions match "<query>".`, footer "Add Version".
 - **Setting rows:** a noun title and one sentence with a period, e.g. "Active" with "When disabled, the resource stops serving traffic."
 - **History:** "Current version", an empty changes line, e.g. "No changes yet. Each change you save shows up here.", description placeholder "What changed in this version?".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -179,4 +179,4 @@ Then delete `sample.ts` and its import.
 - `state/state-page-skeleton` — the skeleton wires Creating draws.
 - `create/create-deploy-drawer` — deploying a version outside this page.
 - `state/state-async-submit` — how the version bar locks while Save and deploy runs.
-- `SettingsRow` — the row primitive of every settings section; see `skills/webkit-form` and `skills/webkit-layout`.
+- `SettingsRow` — the row primitive of every settings section; see `skills/azion-ui-form` and `skills/azion-ui-layout`.

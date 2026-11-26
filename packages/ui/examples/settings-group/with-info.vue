@@ -1,13 +1,13 @@
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import Drawer from '@aziontech/webkit/drawer'
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import Drawer from '@aziontech/ui/drawer'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const open = ref(false)

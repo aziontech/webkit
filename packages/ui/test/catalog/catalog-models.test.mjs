@@ -35,7 +35,7 @@ test('modelProps reads every defineModel of a root, named and default', () => {
   assert.equal(command.find((m) => m.name === 'open')?.default, 'undefined')
 })
 
-test('the catalog lists v-model values as props, so webkit view shows them', async () => {
+test('the catalog lists v-model values as props, so ui view shows them', async () => {
   const { imports } = await build()
   const find = (name) => imports[name]
   for (const [name, model] of [

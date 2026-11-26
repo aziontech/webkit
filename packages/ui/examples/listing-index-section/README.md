@@ -4,7 +4,7 @@ The full listing that a ListingTableSection previews, with the controls to narro
 
 It shares ListingTableSection's anatomy: overline column headers, one link per row named by its first column, and a list of items below `sm`. It adds a group row in the overline face over each group's rows. Careers uses it for its jobs list, grouped by department and narrowed by department and location.
 
-The band is the `ListingIndexSection` component from `@aziontech/webkit/listing-index-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `Input`, `Select`, `Table`, `EmptyState`, `Button` and, on phones, `Item`. Search, facets and order run in the browser over the rows the page carries.
+The band is the `ListingIndexSection` component from `@aziontech/ui/listing-index-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `Input`, `Select`, `Table`, `EmptyState`, `Button` and, on phones, `Item`. Search, facets and order run in the browser over the rows the page carries.
 
 ## Examples
 

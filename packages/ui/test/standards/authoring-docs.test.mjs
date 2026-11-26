@@ -17,26 +17,26 @@ test('docFileKind resolves each population and skips non-governed paths', () => 
   assert.deepEqual(docFileKind('contributing/skills/animation-add/SKILL.md'), {
     kind: 'skill',
     variant: 'internal',
-    scope: 'webkit',
+    scope: 'ui',
     unit: 'animation-add'
   })
   assert.deepEqual(docFileKind('contributing/agents/component-scaffolder.md'), {
     kind: 'agent',
     variant: 'internal',
-    scope: 'webkit',
+    scope: 'ui',
     unit: 'component-scaffolder'
   })
-  assert.deepEqual(docFileKind('skills/webkit-usage/SKILL.md'), {
+  assert.deepEqual(docFileKind('skills/azion-ui-usage/SKILL.md'), {
     kind: 'skill',
     variant: 'consumer',
     scope: 'general',
-    unit: 'webkit-usage'
+    unit: 'azion-ui-usage'
   })
-  assert.deepEqual(docFileKind('adapters/claude/agents/webkit-advisor.md'), {
+  assert.deepEqual(docFileKind('adapters/claude/agents/azion-ui-advisor.md'), {
     kind: 'agent',
     variant: 'consumer',
     scope: 'general',
-    unit: 'webkit-advisor'
+    unit: 'azion-ui-advisor'
   })
   // not governed
   assert.equal(docFileKind('contributing/agents/_README.md'), null)
@@ -50,27 +50,27 @@ test('a conforming internal skill passes clean', () => {
     '---',
     'name: good-skill',
     'description: A perfectly fine internal skill that finds components via the MCP/catalog.',
-    'scope: webkit',
+    'scope: ui',
     'enforced_by: [no-invention]',
     '---',
     '',
     '# Skill: good-skill',
     '',
-    'Discover components through the webkit MCP (get_component). Never hardcode a path.'
+    'Discover components through the Azion UI MCP (get_component). Never hardcode a path.'
   ].join('\n')
   assert.deepEqual(scanDoc(rel, content), [])
 })
 
-test('a conforming consumer skill (webkit- prefix + status + last_updated) passes clean', () => {
-  const rel = 'skills/webkit-good/SKILL.md'
+test('a conforming consumer skill (ui- prefix + status + last_updated) passes clean', () => {
+  const rel = 'skills/azion-ui-good/SKILL.md'
   const content = [
     '---',
-    'name: webkit-good',
+    'name: azion-ui-good',
     'description: A conforming consumer skill.',
     'scope: general',
     'status: active',
     'last_updated: 2026-07-20',
-    'enforced_by: [webkit-tokens, ui-verify]',
+    'enforced_by: [azion-ui-tokens, ui-verify]',
     '---',
     '',
     'Body prose.'
@@ -84,7 +84,7 @@ test('a conforming agent (name + description + scope only) passes clean', () => 
     '---',
     'name: good-agent',
     'description: A conforming agent role doc.',
-    'scope: webkit',
+    'scope: ui',
     '---',
     '',
     'Role prose.'
@@ -102,9 +102,9 @@ test('a bad consumer skill is flagged on every axis', () => {
     '',
     '# Skill: bad fixture',
     '',
-    'Read the exemplar at `packages/webkit/src/components/action/button/button.vue`.',
+    'Read the exemplar at `packages/ui/src/components/action/button/button.vue`.',
     'Use the canonicals (`button.vue`, `pricing-card.vue`) as the shape reference.',
-    'To pick a component, find it in packages/webkit/package.json#exports.',
+    'To pick a component, find it in packages/ui/package.json#exports.',
     'Or climb to ../../../src/components/ to see the source.'
   ].join('\n')
   // distinct axes flagged (the src-path line trips both component-src-path and, via its
@@ -127,7 +127,7 @@ test('a bad consumer skill is flagged on every axis', () => {
 })
 
 test('enforced_by is required on skills and exempt on agents', () => {
-  const skillNoEB = ['---', 'name: x', 'description: d.', 'scope: webkit', '---', 'body'].join('\n')
+  const skillNoEB = ['---', 'name: x', 'description: d.', 'scope: ui', '---', 'body'].join('\n')
   assert.ok(
     ids('contributing/skills/x/SKILL.md', skillNoEB).includes('enforced-by-missing'),
     'a skill with no enforced_by must be flagged'
@@ -136,7 +136,7 @@ test('enforced_by is required on skills and exempt on agents', () => {
     '---',
     'name: x',
     'description: d.',
-    'scope: webkit',
+    'scope: ui',
     'enforced_by: [styling]',
     '---',
     'body'
@@ -145,7 +145,7 @@ test('enforced_by is required on skills and exempt on agents', () => {
     !ids('contributing/skills/x/SKILL.md', skillEB).includes('enforced-by-missing'),
     'a skill WITH enforced_by must not be flagged'
   )
-  const agent = ['---', 'name: x', 'description: d.', 'scope: webkit', '---', 'role'].join('\n')
+  const agent = ['---', 'name: x', 'description: d.', 'scope: ui', '---', 'role'].join('\n')
   assert.ok(
     !ids('contributing/agents/x.md', agent).includes('enforced-by-missing'),
     'agents are not skills — enforced_by is not required'
@@ -153,12 +153,12 @@ test('enforced_by is required on skills and exempt on agents', () => {
 })
 
 test('scope-mismatch fires when scope disagrees with the file location', () => {
-  const rel = 'adapters/claude/agents/webkit-x.md'
+  const rel = 'adapters/claude/agents/azion-ui-x.md'
   const content = [
     '---',
-    'name: webkit-x',
-    'description: consumer agent wrongly claiming webkit scope.',
-    'scope: webkit',
+    'name: azion-ui-x',
+    'description: consumer agent wrongly claiming ui scope.',
+    'scope: ui',
     '---',
     'prose'
   ].join('\n')
@@ -184,9 +184,9 @@ test('agents are not scanned for file-as-example refs', () => {
     '---',
     'name: component-scaffolder',
     'description: writes components.',
-    'scope: webkit',
+    'scope: ui',
     '---',
-    'Reference packages/webkit/src/components/action/button/button.vue as the canonical.'
+    'Reference packages/ui/src/components/action/button/button.vue as the canonical.'
   ].join('\n')
   assert.deepEqual(scanDoc(rel, content), [])
 })

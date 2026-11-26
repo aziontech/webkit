@@ -1,6 +1,6 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import DataTable from '@aziontech/ui/data-table'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
   import { ref } from 'vue'
 
   const rules = ref([

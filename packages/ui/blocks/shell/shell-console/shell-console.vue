@@ -1,19 +1,19 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Command from '@aziontech/webkit/command'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Command from '@aziontech/ui/command'
   import ConsoleLayoutRoot, {
     type ConsoleLayoutAccount,
     type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import HighlightButton from '@aziontech/webkit/highlight-button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import { Toaster } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useColorMode } from '@aziontech/webkit/use-color-mode'
+  } from '@aziontech/ui/console-layout-root'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import HighlightButton from '@aziontech/ui/highlight-button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import { Toaster } from '@aziontech/ui/toast'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useColorMode } from '@aziontech/ui/use-color-mode'
 
   import { sampleAccount, sampleNavigation, sampleRecents } from './sample'
 

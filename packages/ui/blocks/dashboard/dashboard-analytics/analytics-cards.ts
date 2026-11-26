@@ -1,5 +1,5 @@
-import type { TableColumn } from '@aziontech/webkit/data-table'
-import type { CsvColumn } from '@aziontech/webkit/utils/csv'
+import type { TableColumn } from '@aziontech/ui/data-table'
+import type { CsvColumn } from '@aziontech/ui/utils/csv'
 
 import type { AnalyticsDashboardCardId, AnalyticsDashboardKpiId } from './dashboard-analytics.vue'
 

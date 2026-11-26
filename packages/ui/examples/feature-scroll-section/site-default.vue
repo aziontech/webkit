@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import FeatureScrollSection from '@aziontech/webkit/feature-scroll-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import FeatureScrollSection from '@aziontech/ui/feature-scroll-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const items = [
     {

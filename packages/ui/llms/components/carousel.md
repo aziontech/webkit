@@ -2,8 +2,8 @@
 
 > A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote` or a `feature-item`. Two layouts, set on the root with `variant`: `strip` (the default) sets the cards edge to edge with no gutter — each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip; `cards` separates them with a gutter and rounds each one, so the row reads as a set of standalone cards. Each card takes its width from its own `size`, never from a class. The track fades at whichever end still has cards past it. An optional `header` slot shares the row the step controls sit in: the band's title goes at the start and the controls move to the end, so a titled carousel needs no hand-built row around it.
 
-- Import: `import CarouselRoot from '@aziontech/webkit/carousel-root'`
-- Compound import (dot notation, not tree-shakeable): `import Carousel from '@aziontech/webkit/carousel'`
+- Import: `import CarouselRoot from '@aziontech/ui/carousel-root'`
+- Compound import (dot notation, not tree-shakeable): `import Carousel from '@aziontech/ui/carousel'`
 - Category: content · Surface: site · Structure: composition
 - API as JSON: [carousel.json](carousel.json)
 
@@ -58,9 +58,9 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/carousel-item`
-- `@aziontech/webkit/carousel-previous`
-- `@aziontech/webkit/carousel-next`
+- `@aziontech/ui/carousel-item`
+- `@aziontech/ui/carousel-previous`
+- `@aziontech/ui/carousel-next`
 
 ## Sub-components
 
@@ -114,8 +114,8 @@
 
 ```vue
 <script setup>
-  import Carousel from '@aziontech/webkit/carousel'
-  import Quote from '@aziontech/webkit/quote'
+  import Carousel from '@aziontech/ui/carousel'
+  import Quote from '@aziontech/ui/quote'
 </script>
 
 <template>
@@ -167,8 +167,8 @@
 
 ```vue
 <script setup>
-  import Carousel from '@aziontech/webkit/carousel'
-  import Quote from '@aziontech/webkit/quote'
+  import Carousel from '@aziontech/ui/carousel'
+  import Quote from '@aziontech/ui/quote'
 </script>
 
 <template>
@@ -220,9 +220,9 @@
 
 ```vue
 <script setup>
-  import Carousel from '@aziontech/webkit/carousel'
-  import FeatureItem from '@aziontech/webkit/feature-item'
-  import ModuleHeader from '@aziontech/webkit/module-header'
+  import Carousel from '@aziontech/ui/carousel'
+  import FeatureItem from '@aziontech/ui/feature-item'
+  import ModuleHeader from '@aziontech/ui/module-header'
 </script>
 
 <template>

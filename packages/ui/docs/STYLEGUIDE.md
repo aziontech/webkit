@@ -9,7 +9,7 @@ the rest). Nothing here is a suggestion.
 The one-page digest is [`GUIDELINES.md`](./GUIDELINES.md); the machine-readable registry
 pairing each standard with its gate is `contributing/hooks/lib/standards.mjs`, and each
 standard's canonical rule file lives in `contributing/rules/` (shipped to consumer projects as
-`.claude/rules/webkit-*.md` by `npx @aziontech/webkit init`).
+`.claude/rules/azion-ui-*.md` by `npx @aziontech/ui init`).
 
 **How to read each section:** the rule (bold), the decisions that make it concrete,
 ❌/✅ examples, and **Enforced by** — the gate that blocks a violation.
@@ -58,7 +58,7 @@ the answer, and using it is what makes light/dark theming work for free.
 If a design needs a color/size that has no token, that is a **theme gap**: record it and
 propose the token — never inline the raw value "until the theme catches up".
 
-**Enforced by:** `validate-tokens` (write-time + the CI ratchet) · `webkit/no-hardcoded-color` + the
+**Enforced by:** `validate-tokens` (write-time + the CI ratchet) · `azion-ui/no-hardcoded-color` + the
 stylelint config (consumer lint).
 
 ---
@@ -67,14 +67,14 @@ stylelint config (consumer lint).
 
 **A component has one name — the kebab-case name — and every surface derives from it.**
 
-| Surface                      | Form                      | Example (`empty-state`)                                  |
-| ---------------------------- | ------------------------- | -------------------------------------------------------- |
-| spec file + frontmatter      | kebab                     | `.specs/empty-state.md`                                  |
-| folder + `.vue` file         | kebab                     | `content/empty-state/empty-state.vue`                    |
-| export subpath               | kebab                     | `"./empty-state"`                                        |
-| `defineOptions({ name })`    | PascalCase                | `EmptyState`                                             |
-| `data-testid` fallback       | the kebab name itself     | `empty-state`                                            |
-| import binding + example tag | PascalCase of the subpath | `import EmptyState from '@aziontech/webkit/empty-state'` |
+| Surface                      | Form                      | Example (`empty-state`)                              |
+| ---------------------------- | ------------------------- | ---------------------------------------------------- |
+| spec file + frontmatter      | kebab                     | `.specs/empty-state.md`                              |
+| folder + `.vue` file         | kebab                     | `content/empty-state/empty-state.vue`                |
+| export subpath               | kebab                     | `"./empty-state"`                                    |
+| `defineOptions({ name })`    | PascalCase                | `EmptyState`                                         |
+| `data-testid` fallback       | the kebab name itself     | `empty-state`                                        |
+| import binding + example tag | PascalCase of the subpath | `import EmptyState from '@aziontech/ui/empty-state'` |
 
 Plurality is part of the name: a single token is `chip`; a container for many is a
 different component (`chip-group`), never a plural spelling of the same one.
@@ -152,7 +152,7 @@ defineProps({ variant: { type: String }, isDisabled: Boolean })   // runtime for
   compiler in builds that run the Vue plugin twice).
 - A two-way value is **not** a prop — it is `defineModel` (§6).
 
-**Enforced by:** `webkit/require-authoring-standards` (runtime `defineProps({})` → error, commit +
+**Enforced by:** `azion-ui/require-authoring-standards` (runtime `defineProps({})` → error, commit +
 CI) · `validate-tokens` (`any`, `class` in props) · `validate-spec-compliance` (names,
 defaults) · type-coverage ≥ 95%.
 
@@ -212,7 +212,7 @@ const emit = defineEmits<{ 'update:modelValue': [v: string] }>()
 - Renaming a model, adding a required second model, or changing its type is a **breaking
   change** (major).
 
-**Enforced by:** `webkit/require-authoring-standards` + `webkit/prefer-define-model` (error,
+**Enforced by:** `azion-ui/require-authoring-standards` + `azion-ui/prefer-define-model` (error,
 commit + CI) · `validate-authoring` (write-time) · the DS CI ratchet.
 
 ---
@@ -242,7 +242,7 @@ const emit = defineEmits<{
 - No camelCase names, no `on`-prefixed props to fake events, no runtime array form
   (`defineEmits(['click'])`).
 
-**Enforced by:** `webkit/require-authoring-standards` (runtime form) · `validate-spec-compliance`
+**Enforced by:** `azion-ui/require-authoring-standards` (runtime form) · `validate-spec-compliance`
 (camelCase, echo events) — payload order is convention + review in consumer projects.
 
 ---
@@ -278,7 +278,7 @@ defineSlots<{
 - Do not add a prop as a **substitute** for a slot's content (config-array / text-prop
   anti-pattern). A prop whose only role is slot-fallback display text is named `label`.
 
-**Enforced by:** `webkit/require-authoring-standards` (`<slot>` with no `defineSlots` → error) ·
+**Enforced by:** `azion-ui/require-authoring-standards` (`<slot>` with no `defineSlots` → error) ·
 `validate-spec-compliance` — per-slot listing is convention + review.
 
 ---
@@ -334,9 +334,9 @@ export function useCounter() { return reactive({ n: 0 }) }   // reactive return
 Out of scope: data-fetching composables (`useQuery` wrappers, HTTP) are a consuming-app
 concern — the design system ships none and its composables never do I/O.
 
-**Enforced by:** `webkit/require-readonly-composable-return` (`reactive()` or raw `ref()` return, no
-return type → error) · `webkit/require-composable-scope-cleanup` (listener/timer/frame/observer with no
-`onScopeDispose` → error) · `webkit/require-authoring-standards` (`.js` composable → error) ·
+**Enforced by:** `azion-ui/require-readonly-composable-return` (`reactive()` or raw `ref()` return, no
+return type → error) · `azion-ui/require-composable-scope-cleanup` (listener/timer/frame/observer with no
+`onScopeDispose` → error) · `azion-ui/require-authoring-standards` (`.js` composable → error) ·
 `validate-authoring` + the DS ratchet — `toValue` arguments are convention + review.
 
 ---
@@ -380,7 +380,7 @@ const rootClasses = computed(() => [shared, variantClasses[props.variant]])
 
 **Enforced by:** `validate-tokens` (class presets, `<style>`, `@keyframes`, raw values —
 write-time + the CI ratchet —
-write-time) · stylelint config + `webkit/no-hardcoded-color` (consumer).
+write-time) · stylelint config + `azion-ui/no-hardcoded-color` (consumer).
 
 ---
 
@@ -401,7 +401,7 @@ attributes explicitly, and exposes a minimal imperative API.**
 ```vue
 <script setup lang="ts">
 import { computed, useAttrs } from 'vue'
-import { cn } from '@aziontech/webkit/utils/cn'
+import { cn } from '@aziontech/ui/utils/cn'
 
 defineOptions({ name: 'Card', inheritAttrs: false })
 const attrs = useAttrs()
@@ -417,7 +417,7 @@ const testId = computed(() => (attrs['data-testid'] as string) ?? 'card')
 ```
 
 **Enforced by:** `validate-tokens` (`class` in props) · `validate-references` (phantom
-`asChild`) · `webkit/no-polymorphic-as-prop` (`as`/`asChild` prop → error, also in
+`asChild`) · `azion-ui/no-polymorphic-as-prop` (`as`/`asChild` prop → error, also in
 `validate-authoring` + the DS ratchet) — `defineExpose` minimality is review.
 
 ---
@@ -492,7 +492,7 @@ Interactive sub-elements a test must reach get their own derived testid
 `@deprecated` **naming the replacement and the removal version**, ships at least one
 major in that state, and is removed in a subsequent major (`BREAKING CHANGE:`). This cycle
 applies from 6.0 on: 6.0 itself was the clean break that removed every older name outright
-(`MIGRATION_V6.md` + `webkit migrate v6`).
+(`MIGRATION_V6.md` + `azion-ui migrate v6`).
 
 ```ts
 export interface AlertProps {
@@ -507,8 +507,8 @@ export interface AlertProps {
 - The deprecated part keeps working during its cycle — annotate, don't mutate.
 - `catalog.json` carries the deprecation so the MCP steers AI code off it before removal.
 
-**Enforced by:** `webkit/require-authoring-standards` (bare `@deprecated`) ·
-`webkit/no-deprecated-component` (imports of deprecated components, with the suggested
+**Enforced by:** `azion-ui/require-authoring-standards` (bare `@deprecated`) ·
+`azion-ui/no-deprecated-component` (imports of deprecated components, with the suggested
 replacement) · release-please maps removal (`!` / `BREAKING CHANGE:`) to a major.
 
 ---
@@ -520,18 +520,18 @@ folder.**
 
 ```ts
 // ✅
-import Button from '@aziontech/webkit/button'
-import TableRoot from '@aziontech/webkit/table-root'   // root-only, tree-shakeable
+import Button from '@aziontech/ui/button'
+import TableRoot from '@aziontech/ui/table-root'   // root-only, tree-shakeable
 ```
 
 <!-- snippet: partial -->
 
 ```ts
 // ❌ all blocked
-import { Button } from '@aziontech/webkit'             // barrel — retains the catalog
-import X from '@aziontech/webkit/feedback/skeleton'    // category in the path
-import X from '@aziontech/webkit/src/components/x'     // internal path
-import Chip from '@aziontech/webkit/chips'             // binding ≠ subpath
+import { Button } from '@aziontech/ui'             // barrel — retains the catalog
+import X from '@aziontech/ui/feedback/skeleton'    // category in the path
+import X from '@aziontech/ui/src/components/x'     // internal path
+import Chip from '@aziontech/ui/chips'             // binding ≠ subpath
 ```
 
 - PascalCase binding must match the last path segment.
@@ -539,7 +539,7 @@ import Chip from '@aziontech/webkit/chips'             // binding ≠ subpath
   dot-notation — the compound path retains every sub-component.
 - Icons: side-effect import only (`import '@aziontech/icons'`), never a whole-set binding.
 
-**Enforced by:** `webkit/no-unknown-import` (autofixes typos) · `no-barrel-import` ·
+**Enforced by:** `azion-ui/no-unknown-import` (autofixes typos) · `no-barrel-import` ·
 `no-deep-internal-import` · `prefer-tree-shakeable-root` · `no-whole-icon-set-import` —
 all error · `validate-references` (write-time).
 
@@ -609,7 +609,7 @@ export default Object.assign(Table, { Row: TableRow })
 
 ## 19. Design-system authoring (spec-first)
 
-Internal to the webkit repo — how its own components come to exist.
+Internal to the Azion UI repo — how its own components come to exist.
 
 - **The spec is the contract** (`.specs/<name>.md`, checksum-sealed): the `.vue` matches
   it 1-to-1 — no extra props/events/slots/sub-components, no phantom imports, no
@@ -629,9 +629,9 @@ Internal to the webkit repo — how its own components come to exist.
 ## 20. Examples & documentation
 
 - **The example is the code shown:** every component's examples live in
-  `packages/webkit/examples/<name>/` — `examples.json` (`component`, `title`, `examples[]`
+  `packages/ui/examples/<name>/` — `examples.json` (`component`, `title`, `examples[]`
   with `name`, `summary`, `file`) and one copyable `.vue` per example with the real
-  `@aziontech/webkit/*` imports and PascalCase tags. The docs site renders the file and shows
+  `@aziontech/ui/*` imports and PascalCase tags. The docs site renders the file and shows
   the same file as source, so there is nothing to drift.
 - Example set: Default + one composite example per multi-option axis + one example per
   mutually-exclusive state — never one-example-per-variant.
@@ -665,16 +665,16 @@ visual suite (`apps/visual`, CI).
 ## 22. Enforcement map
 
 One definition, three surfaces — the same engine
-(`packages/webkit/src/eslint-plugin/lib/authoring-checks.js`) runs in the design system's
+(`packages/ui/src/eslint-plugin/lib/authoring-checks.js`) runs in the design system's
 write-time hook, its CI ratchet, and the consumer's lint; an invariant test fails CI if a
 standard loses its gate.
 
-| Gate                                                      | Where it runs                                                     | Blocks                                                                                                                                                                                         |
-| --------------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Write-time hooks                                          | the DS authoring pipeline (`exit 2` on save)                      | off-spec code, raw values, phantom imports, off-vocabulary props, authoring anti-patterns                                                                                                      |
-| `webkit/require-authoring-standards` + the 10 usage lints | the consumer's pre-commit (husky) + their CI — every rule `error` | manual v-model, runtime props/emits, undeclared slots, composable anti-patterns, bare `@deprecated`, wrong imports, style overrides, raw colors                                                |
-| DS CI (`governance.yml`)                                  | every PR                                                          | the authoring ratchet (no new violations), lint zero-warnings, `vue-tsc` + 95% type coverage, toolkit tests + catalog drift, security, docs and demos build, styled visual tests, summary gate |
-| Mandatory review                                          | every PR (2 approvals: technical + design)                        | everything a regex cannot verify — script order, `defineExpose` minimality, state-matrix completeness, behavioural a11y                                                                        |
+| Gate                                                        | Where it runs                                                     | Blocks                                                                                                                                                                                         |
+| ----------------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Write-time hooks                                            | the DS authoring pipeline (`exit 2` on save)                      | off-spec code, raw values, phantom imports, off-vocabulary props, authoring anti-patterns                                                                                                      |
+| `azion-ui/require-authoring-standards` + the 10 usage lints | the consumer's pre-commit (husky) + their CI — every rule `error` | manual v-model, runtime props/emits, undeclared slots, composable anti-patterns, bare `@deprecated`, wrong imports, style overrides, raw colors                                                |
+| DS CI (`governance.yml`)                                    | every PR                                                          | the authoring ratchet (no new violations), lint zero-warnings, `vue-tsc` + 95% type coverage, toolkit tests + catalog drift, security, docs and demos build, styled visual tests, summary gate |
+| Mandatory review                                            | every PR (2 approvals: technical + design)                        | everything a regex cannot verify — script order, `defineExpose` minimality, state-matrix completeness, behavioural a11y                                                                        |
 
 Nothing is advisory: every standard on this page blocks a merge through at least one of
 these gates.

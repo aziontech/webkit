@@ -1,5 +1,5 @@
 <script setup>
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>

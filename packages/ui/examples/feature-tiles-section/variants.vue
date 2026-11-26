@@ -1,5 +1,5 @@
 <script setup>
-  import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'
+  import FeatureTilesSection from '@aziontech/ui/feature-tiles-section'
 </script>
 
 <template>

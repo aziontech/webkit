@@ -1,8 +1,8 @@
 {
  "name": "doc-accordion-group",
  "binding": "DocAccordionGroup",
- "import": "@aziontech/webkit/doc-accordion-group",
- "treeShakeableImport": "@aziontech/webkit/doc-accordion-group",
+ "import": "@aziontech/ui/doc-accordion-group",
+ "treeShakeableImport": "@aziontech/ui/doc-accordion-group",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

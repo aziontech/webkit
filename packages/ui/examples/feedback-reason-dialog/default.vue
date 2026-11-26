@@ -1,7 +1,7 @@
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
-  import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ChatMessage from '@aziontech/ui/chat-message'
+  import FeedbackReasonDialog from '@aziontech/ui/feedback-reason-dialog'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
   import { ref } from 'vue'
 
   const answer =

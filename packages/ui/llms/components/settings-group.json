@@ -1,8 +1,8 @@
 {
  "name": "settings-group",
  "binding": "SettingsGroup",
- "import": "@aziontech/webkit/settings-group",
- "treeShakeableImport": "@aziontech/webkit/settings-group",
+ "import": "@aziontech/ui/settings-group",
+ "treeShakeableImport": "@aziontech/ui/settings-group",
  "category": "layout",
  "surface": "app",
  "structure": "monolithic",

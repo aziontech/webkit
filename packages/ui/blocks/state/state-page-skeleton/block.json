@@ -20,7 +20,7 @@
     "whole page loading",
     "shell skeleton"
   ],
-  "skills": ["webkit-ui-states"],
+  "skills": ["azion-ui-states"],
   "files": ["parts/session-fields.vue", "parts/session-header.vue", "parts/session-wire.vue"],
   "primary": {
     "name": "Overview",

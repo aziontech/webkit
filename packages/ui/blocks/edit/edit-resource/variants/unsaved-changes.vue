@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   import PolicyGroups from '../parts/policy-groups.vue'

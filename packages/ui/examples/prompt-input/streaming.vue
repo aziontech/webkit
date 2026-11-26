@@ -1,5 +1,5 @@
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
   import { onBeforeUnmount, ref } from 'vue'
 
   const prompt = ref('Why did my cache hit ratio drop?')

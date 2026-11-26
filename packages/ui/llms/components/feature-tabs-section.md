@@ -1,8 +1,8 @@
 # Feature Tabs Section
 
-> The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
+> The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the Azion UI scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
-- Import: `import FeatureTabsSection from '@aziontech/webkit/feature-tabs-section'`
+- Import: `import FeatureTabsSection from '@aziontech/ui/feature-tabs-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [feature-tabs-section.json](feature-tabs-section.json)
 
@@ -39,7 +39,7 @@
 | `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `tabs` | `FeatureTabsSectionTab[]` | `[]` | false | The features, in order, at most three; each is `{ title, description, value?, code?, illustration?, illustrationLabel? }` where `value` is the stable key handed to the band scene as its `tab`, `code` is the `{ label, value, code, language?, fileName?, fileIcon? }` file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code and the band no scene, and `illustrationLabel` its accessible name. |
-| `scene` | `FeatureTabsSectionScene` | `undefined` | false | Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations. |
+| `scene` | `FeatureTabsSectionScene` | `undefined` | false | Live scene drawn as the media of every tab without code, `{ component, props? }` naming an Azion UI scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations. |
 | `autoplay` | `boolean` | `true` | false | Opens the next tab on a timer, with the composed tabs' visible pause control. |
 | `autoplayInterval` | `number` | `5200` | false | Milliseconds each tab holds before the next one opens. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the copy button on each tab's code file; empty keeps the code block's own. |
@@ -73,7 +73,7 @@
 
 ```vue
 <script setup>
-  import FeatureTabsSection from '@aziontech/webkit/feature-tabs-section'
+  import FeatureTabsSection from '@aziontech/ui/feature-tabs-section'
 
   const tabs = [
     {
@@ -123,7 +123,7 @@
 
 ```vue
 <script setup>
-  import FeatureTabsSection from '@aziontech/webkit/feature-tabs-section'
+  import FeatureTabsSection from '@aziontech/ui/feature-tabs-section'
 
   const file = (value, fileName, code) => ({
     label: fileName,
@@ -219,7 +219,7 @@
 
 ```vue
 <script setup>
-  import FeatureTabsSection from '@aziontech/webkit/feature-tabs-section'
+  import FeatureTabsSection from '@aziontech/ui/feature-tabs-section'
 
   const tabs = [
     {

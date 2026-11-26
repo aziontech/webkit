@@ -2,7 +2,7 @@
 
 > A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans every cell left in the grid's last row so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-grid-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `registration-frame`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
 
-- Import: `import SubjectGridSection from '@aziontech/webkit/subject-grid-section'`
+- Import: `import SubjectGridSection from '@aziontech/ui/subject-grid-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [subject-grid-section.json](subject-grid-section.json)
 
@@ -74,7 +74,7 @@
 
 ```vue
 <script setup>
-  import SubjectGridSection from '@aziontech/webkit/subject-grid-section'
+  import SubjectGridSection from '@aziontech/ui/subject-grid-section'
 </script>
 
 <template>

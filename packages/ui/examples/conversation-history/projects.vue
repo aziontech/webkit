@@ -1,5 +1,5 @@
 <script setup>
-  import ConversationHistory from '@aziontech/webkit/conversation-history'
+  import ConversationHistory from '@aziontech/ui/conversation-history'
   import { ref } from 'vue'
 
   const now = '2026-11-11T15:00:00Z'

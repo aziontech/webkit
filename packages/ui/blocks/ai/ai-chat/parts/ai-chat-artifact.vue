@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import ArtifactCanvas from '@aziontech/ui/artifact-canvas'
+  import CodeBlock from '@aziontech/ui/code-block'
   import { computed, ref } from 'vue'
 
   const props = defineProps<{ title: string; versions: string[]; downloadable: boolean }>()

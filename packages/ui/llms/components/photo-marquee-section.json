@@ -1,8 +1,8 @@
 {
  "name": "photo-marquee-section",
  "binding": "PhotoMarqueeSection",
- "import": "@aziontech/webkit/photo-marquee-section",
- "treeShakeableImport": "@aziontech/webkit/photo-marquee-section",
+ "import": "@aziontech/ui/photo-marquee-section",
+ "treeShakeableImport": "@aziontech/ui/photo-marquee-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

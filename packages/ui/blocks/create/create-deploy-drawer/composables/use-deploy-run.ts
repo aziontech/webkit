@@ -1,4 +1,4 @@
-import { toast } from '@aziontech/webkit/toast'
+import { toast } from '@aziontech/ui/toast'
 import { onScopeDispose, type Ref, ref, watch } from 'vue'
 
 import type { DeployDrawerValues } from '../types'

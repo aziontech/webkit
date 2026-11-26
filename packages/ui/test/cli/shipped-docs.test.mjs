@@ -59,7 +59,7 @@ const pascal = (subpath) =>
     .split('-')
     .map((part) => part[0].toUpperCase() + part.slice(1))
     .join('')
-const WEBKIT_TAGS = new Set(Object.keys(catalog.imports).map(pascal))
+const AZION_UI_TAGS = new Set(Object.keys(catalog.imports).map(pascal))
 const STYLE_SEAM_TAGS = new Set(
   Object.entries(catalog.imports)
     .filter(([, entry]) => entry.styleSeam)
@@ -69,7 +69,7 @@ const STYLE_SEAM_TAGS = new Set(
 const LOOK_CLASS =
   /^(?:[\w-]+:)*-?(?:bg|text|border|ring|outline|fill|stroke|shadow|rounded|font|from|via|to|divide|decoration|accent|caret|opacity)-|\(--|var\(--|#[0-9a-f]{3,8}\b/i
 
-test('no shipped example restyles a webkit component with colour or token classes', () => {
+test('no shipped example restyles an Azion UI component with colour or token classes', () => {
   const offenders = []
   for (const file of SHIPPED_DOCS) {
     for (const block of exampleBlocks(readFileSync(file, 'utf8'))) {
@@ -77,7 +77,7 @@ test('no shipped example restyles a webkit component with colour or token classe
         /<([A-Z][A-Za-z]*)(?:\.[A-Z][A-Za-z]*)?\b([^<>]*?)\/?>/g
       )) {
         const [, tag, attrs] = match
-        if (!WEBKIT_TAGS.has(tag) || STYLE_SEAM_TAGS.has(tag)) continue
+        if (!AZION_UI_TAGS.has(tag) || STYLE_SEAM_TAGS.has(tag)) continue
         const classes = attrs.match(/(?:^|\s)class="([^"]*)"/)?.[1]
         if (!classes) continue
         const look = nonLayoutClasses(classes).filter((cls) => LOOK_CLASS.test(cls))
@@ -91,7 +91,7 @@ test('no shipped example restyles a webkit component with colour or token classe
   assert.deepEqual(
     offenders,
     [],
-    `restyled webkit components in shipped examples:\n${offenders.join('\n')}`
+    `restyled Azion UI components in shipped examples:\n${offenders.join('\n')}`
   )
 })
 
@@ -108,10 +108,10 @@ test('every @aziontech/theme subpath the shipped docs import is a real theme exp
   assert.deepEqual(missing, [])
 })
 
-test('the README and the webkit-usage skill say the theme follows the device and how to pin it', () => {
+test('the README and the azion-ui-usage skill say the theme follows the device and how to pin it', () => {
   for (const file of [
     join(PKG_ROOT, 'README.md'),
-    join(REPO_ROOT, 'skills/webkit-usage/SKILL.md')
+    join(REPO_ROOT, 'skills/azion-ui-usage/SKILL.md')
   ]) {
     const text = readFileSync(file, 'utf8')
     assert.match(
@@ -136,8 +136,8 @@ test('the docs that list the allowed layout classes list all of LAYOUT_CLASS_FAM
   const full = LAYOUT_CLASS_FAMILIES.map((family) => `\`${family}\``).join(', ')
   const stale = []
   for (const rel of [
-    'rules/webkit-style-override.md',
-    'skills/webkit-usage/SKILL.md',
+    'rules/azion-ui-style-override.md',
+    'skills/azion-ui-usage/SKILL.md',
     'adapters/AGENTS_FRAGMENT.md'
   ]) {
     const text = readFileSync(join(REPO_ROOT, rel), 'utf8').replace(/\s*\n\s*/g, ' ')

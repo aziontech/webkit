@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
-  import SubjectGridSection from '@aziontech/webkit/subject-grid-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
+  import SubjectGridSection from '@aziontech/ui/subject-grid-section'
 
   const subjects = [
     {

@@ -1,8 +1,8 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PromptInput from '@aziontech/webkit/prompt-input'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Button from '@aziontech/ui/button'
+  import PromptInput from '@aziontech/ui/prompt-input'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
 
   const prompt = ref('')

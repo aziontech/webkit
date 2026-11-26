@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The band as the careers page places it: the headline and wide description over a strip of six office photographs that scrolls continuously and pauses on hover or focus. A band with no photos renders nothing at all. WebKit ships no editorial media, so the photos here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
+   "summary": "The band as the careers page places it: the headline and wide description over a strip of six office photographs that scrolls continuously and pauses on hover or focus. A band with no photos renders nothing at all. Azion UI ships no editorial media, so the photos here are the neutral `@aziontech/ui/assets/placeholder-image.svg`; pass your own image URLs.",
    "file": "examples/photo-marquee-section/default.vue"
   }
  ]

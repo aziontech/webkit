@@ -49,7 +49,7 @@
     "ajuda da página",
     "painel de ajuda"
   ],
-  "skills": ["webkit-navigation", "webkit-layout"],
+  "skills": ["azion-ui-navigation", "azion-ui-layout"],
   "primary": {
     "name": "ListPage",
     "file": "shell-console.vue"

@@ -1,8 +1,8 @@
 <script setup>
-  import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
-  import openaiMark from '@aziontech/webkit/assets/openai-symbol-mono.svg'
-  import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import codexMark from '@aziontech/ui/assets/codex-symbol-mono.svg'
+  import openaiMark from '@aziontech/ui/assets/openai-symbol-mono.svg'
+  import opencodeMark from '@aziontech/ui/assets/opencode-symbol-mono.svg'
+  import CodeBlock from '@aziontech/ui/code-block'
 
   const agentTabs = [
     {

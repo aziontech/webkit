@@ -1,5 +1,5 @@
 <script setup>
-  import ButtonGroup from '@aziontech/webkit/button-group'
+  import ButtonGroup from '@aziontech/ui/button-group'
   import { computed, ref } from 'vue'
 
   const pinned = ref(true)

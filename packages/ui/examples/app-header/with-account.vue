@@ -1,8 +1,8 @@
 <script setup>
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
-  import Brand from '@aziontech/webkit/brand'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppHeaderAccount from '@aziontech/ui/app-header-account'
+  import Brand from '@aziontech/ui/brand'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
 </script>
 
 <template>

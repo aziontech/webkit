@@ -1,8 +1,8 @@
 # Pagination Button
 
-> PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `type="more"` — an inert, decorative overflow ellipsis (`span`, `aria-hidden`), chosen by `type`. It is the part `pagination` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Pagination.Button` (or imported standalone from `@aziontech/webkit/pagination-button`). It owns the segment's surface, current-page (`active`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `pagination` root and the consumer.
+> PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `type="more"` — an inert, decorative overflow ellipsis (`span`, `aria-hidden`), chosen by `type`. It is the part `pagination` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Pagination.Button` (or imported standalone from `@aziontech/ui/pagination-button`). It owns the segment's surface, current-page (`active`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `pagination` root and the consumer.
 
-- Import: `import PaginationButton from '@aziontech/webkit/pagination-button'`
+- Import: `import PaginationButton from '@aziontech/ui/pagination-button'`
 - Category: data · Surface: app · Structure: monolithic
 - API as JSON: [pagination-button.json](pagination-button.json)
 
@@ -86,8 +86,8 @@
 
 ```vue
 <script setup>
-  import Pagination from '@aziontech/webkit/pagination'
-  import PaginationButton from '@aziontech/webkit/pagination-button'
+  import Pagination from '@aziontech/ui/pagination'
+  import PaginationButton from '@aziontech/ui/pagination-button'
 </script>
 
 <template>

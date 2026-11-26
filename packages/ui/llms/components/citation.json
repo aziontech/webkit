@@ -1,8 +1,8 @@
 {
  "name": "citation",
  "binding": "Citation",
- "import": "@aziontech/webkit/citation",
- "treeShakeableImport": "@aziontech/webkit/citation",
+ "import": "@aziontech/ui/citation",
+ "treeShakeableImport": "@aziontech/ui/citation",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

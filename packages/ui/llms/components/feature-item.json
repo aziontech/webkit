@@ -1,8 +1,8 @@
 {
  "name": "feature-item",
  "binding": "FeatureItem",
- "import": "@aziontech/webkit/feature-item",
- "treeShakeableImport": "@aziontech/webkit/feature-item",
+ "import": "@aziontech/ui/feature-item",
+ "treeShakeableImport": "@aziontech/ui/feature-item",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

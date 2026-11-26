@@ -1,6 +1,6 @@
 # ESLint Dependencies Responsibility Matrix
 
-**Package:** @aziontech/webkit
+**Package:** @aziontech/ui
 **Date:** 2026-04-14
 
 ---
@@ -374,7 +374,7 @@ Commit proceeds or fails
 
 | Package                  | Config Location                       |
 | ------------------------ | ------------------------------------- |
-| **eslint** + all plugins | `/packages/webkit/eslint.config.js`   |
+| **eslint** + all plugins | `/packages/ui/eslint.config.js`       |
 | **lint-staged**          | `/package.json` → `"lint-staged"` key |
 | **Prettier integration** | Handled in ESLint config              |
 
@@ -527,6 +527,6 @@ export default [
 ---
 
 **Document created:** 2026-04-14
-**Package:** @aziontech/webkit
+**Package:** @aziontech/ui
 **Framework:** Vue 3 + TypeScript
 **ESLint Version:** 9.x (Flat Config)

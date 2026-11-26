@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Command from '@aziontech/webkit/command'
-  import CommandEmpty from '@aziontech/webkit/command-empty'
-  import CommandGroup from '@aziontech/webkit/command-group'
-  import CommandInput from '@aziontech/webkit/command-input'
-  import CommandItem from '@aziontech/webkit/command-item'
-  import CommandList from '@aziontech/webkit/command-list'
+  import Command from '@aziontech/ui/command'
+  import CommandEmpty from '@aziontech/ui/command-empty'
+  import CommandGroup from '@aziontech/ui/command-group'
+  import CommandInput from '@aziontech/ui/command-input'
+  import CommandItem from '@aziontech/ui/command-item'
+  import CommandList from '@aziontech/ui/command-list'
   import { computed, shallowRef, watch } from 'vue'
   import { useRouter } from 'vue-router'
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Skeleton from '@aziontech/ui/skeleton'
   import { type Component, onMounted, onScopeDispose, ref, shallowRef } from 'vue'
 
   import { scheduleMount } from '../lib/mount-queue'

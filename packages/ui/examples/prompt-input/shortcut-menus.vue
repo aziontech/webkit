@@ -1,5 +1,5 @@
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
   import { ref } from 'vue'
 
   const prompt = ref('')

@@ -93,7 +93,7 @@ A folder typed in the Combobox that is not in the list arrives as `values.folder
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import { ref } from 'vue'
   import SettingsCannedResponses, {
     type CannedResponsesResponse,
@@ -193,7 +193,7 @@ Delete removes the row at once; when the request fails, the page says so in a to
 - **Delete:** title `Delete response`; description `Agents can no longer insert “<title>”. Replies already sent keep their text. You cannot undo this.`; button `Delete response`.
 - **Toasts (sent by the page):** `Response “<title>” saved.` after a create or an update, `Copy of “<title>” created.` after Duplicate, `Response “<title>” deleted.` after Delete, and `“<title>” wasn't deleted. It is back in the list.` when a delete fails.
 - **Placeholders:** the label says what is filled in (`Requester first name`); the token is code (`{{ticket.requester.first_name}}`) and is never translated.
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 

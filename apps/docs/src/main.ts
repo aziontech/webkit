@@ -3,7 +3,7 @@ import '@aziontech/theme/fonts.css'
 import '../../../assets/fonts/proto-mono/proto-mono-woff2.css'
 import './styles/main.css'
 import '@aziontech/icons'
-import '@aziontech/webkit/styles/country-flags'
+import '@aziontech/ui/styles/country-flags'
 
 import { ViteSSG } from 'vite-ssg'
 
@@ -13,7 +13,7 @@ import { loadMessages } from './lib/i18n'
 import { splitLocalePath } from './lib/locale-path'
 import { preloadRoute } from './lib/route-data'
 import { settings } from './lib/settings'
-import { loadWebkitCatalog } from './lib/webkit-catalogs'
+import { loadAzionUiCatalog } from './lib/azion-ui-catalogs'
 import { routes } from './router'
 
 if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/frame/')) {
@@ -35,7 +35,7 @@ export const createApp = ViteSSG(
       const { locale, path } = splitLocalePath(to.path)
       if (locale) settings.locale = locale
       else if (import.meta.env.SSR) settings.locale = 'en'
-      await Promise.all([loadMessages(settings.locale), loadWebkitCatalog(settings.locale)])
+      await Promise.all([loadMessages(settings.locale), loadAzionUiCatalog(settings.locale)])
       return locale ? { path, query: to.query, hash: to.hash, replace: true } : true
     })
     router.beforeResolve(async (to) => {

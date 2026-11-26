@@ -1,4 +1,4 @@
-import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { TableColumn } from '@aziontech/ui/data-table'
 import { computed, type ComputedRef, ref, watch } from 'vue'
 
 import type { EventsExplorerField } from '../view-events-explorer.vue'

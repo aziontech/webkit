@@ -1,10 +1,10 @@
 # Rule: styles live on the root element's class — never as JS presets or local CSS
 
-When authoring your own components alongside @aziontech/webkit, styles go on the
+When authoring your own components alongside @aziontech/ui, styles go on the
 **template root element's `class` attribute** — not in JavaScript variables, not in
 `<style>` blocks, not in component-local CSS files. Variants are driven by `data-*`
 attributes on the same root, consumed by Tailwind's `data-[attr=value]:` variants.
-Hardcoded colors are blocked mechanically by the `webkit/no-hardcoded-color` ESLint rule
+Hardcoded colors are blocked mechanically by the `azion-ui/no-hardcoded-color` ESLint rule
 and the shipped stylelint config; the inline-class + `data-*` shape itself is convention,
 enforced in code review.
 
@@ -16,7 +16,7 @@ enforced in code review.
   `data-[variant=primary]:bg-(--primary)` is one utility, not a JS branch.
 - Use `v-bind="$attrs"` so a caller-passed `class` merges onto the root (Vue merges
   class strings automatically). When caller classes must **win** over internal ones, use
-  `cn` from `@aziontech/webkit/utils/cn` (clsx + tailwind-merge) — the only acceptable
+  `cn` from `@aziontech/ui/utils/cn` (clsx + tailwind-merge) — the only acceptable
   class-composition helper, and even then pass it a flat literal string.
 - Use design tokens for every value: `var(--primary)`, `var(--bg-surface)`,
   `var(--spacing-xs|sm|md|lg)`, `var(--shape-button)` — never raw hex or pixel guesses.
@@ -47,7 +47,7 @@ container; the parts inside it draw only the dividers between themselves. Two bo
 sit flush side by side or 1px apart: no 2px seam where two parts meet, no frame drawn again
 just inside a container's frame.
 
-- Let the WebKit container draw the edge: an unpadded `Module` body takes its top
+- Let the Azion UI container draw the edge: an unpadded `Module` body takes its top
   from the header's rule and its sides from `Container`, and a `DocCardGroup` or
   `RegistrationFrame` placed in it drops its own top and side rules. The module after a
   band that closes on a rule (`Spacer`, a framed grid) passes `:divided="false"`.
@@ -63,7 +63,7 @@ just inside a container's frame.
 
 ## A texture is a backdrop for text only
 
-A WebKit `Texture` (the orange `pixelate` floor above all) sits behind text: an eyebrow,
+An Azion UI `Texture` (the orange `pixelate` floor above all) sits behind text: an eyebrow,
 a headline, a paragraph, the buttons of a band. Never draw a chart, a diagram, a map, a stat
 tile, or a page-JSON content scene (a card, a list, a code block, an embed) on it: the dots
 run through the axis labels, the legend and the lines, and nobody can read them.
@@ -76,7 +76,7 @@ run through the axis labels, the legend and the lines, and nobody can read them.
 - A hero keeps its dots behind the headline and off a diagram: put the diagram in the
   `HeroSection` (or `Hero`) `bottom` or `top` slot, never in the copy, and the band leaves a
   plain ground under it.
-- WebKit guards it at runtime too: a `Texture` hides itself when the content beside it is a
+- Azion UI guards it at runtime too: a `Texture` hides itself when the content beside it is a
   chart, a diagram or a page-JSON content scene (marked `data-plain-ground`).
 
 ## Two filled rows never touch
@@ -105,7 +105,7 @@ In a list of rows (a select or combobox option, a menu item, a command item, a s
 
 Inline code and any other inline chip (a background plus an outline on text that wraps)
 must fit inside the line box of the text around it, or the chips on two wrapped lines
-overlap. Put WebKit documentation text inside `DocProse` (or `DocCallout`, `DocItem`),
+overlap. Put Azion UI documentation text inside `DocProse` (or `DocCallout`, `DocItem`),
 which already draws the chip this way. When you style your own:
 
 - No vertical padding (`py-*`) on an inline element; inline padding only
@@ -129,7 +129,7 @@ Write a token value with Tailwind v4's **paren shorthand**, not the bracket form
 
 Two cases **stay in brackets** — the paren form silently emits no CSS for them:
 
-- **Custom-property declarations:** `[--row-bg:var(--bg-surface)]` (there is no paren shorthand for declaring a property). On a webkit tag the only custom properties you may declare are the chart palette variables (`webkit-style-override.md`).
+- **Custom-property declarations:** `[--row-bg:var(--bg-surface)]` (there is no paren shorthand for declaring a property). On an Azion UI tag the only custom properties you may declare are the chart palette variables (`azion-ui-style-override.md`).
 - **Expression values:** anything more than a lone var — `w-[calc(var(--a)*2)]`, gradients, box-shadows, or a **var with a fallback** (`bg-[var(--x,var(--y))]`). Leave these bracketed; converting them drops the style with no error.
 
 ## Example

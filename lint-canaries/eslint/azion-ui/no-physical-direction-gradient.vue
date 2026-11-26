@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  // CANARY — must keep failing webkit/no-physical-direction (an unpaired bg-gradient-to-r does not mirror under RTL).
+  // CANARY — must keep failing azion-ui/no-physical-direction (an unpaired bg-gradient-to-r does not mirror under RTL).
 </script>
 
 <template>

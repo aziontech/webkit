@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/overlay/popover/popover.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/overlay/popover/popover.vue
 // component=Popover
 import figma from 'figma'
 
@@ -48,8 +48,8 @@ export default {
   </Popover.Content>
 </Popover>`,
   imports: [
-    "import Popover from '@aziontech/webkit/popover'",
-    "import Button from '@aziontech/webkit/button'"
+    "import Popover from '@aziontech/ui/popover'",
+    "import Button from '@aziontech/ui/button'"
   ],
   id: 'popover',
   metadata: { nestable: false }

@@ -1,7 +1,7 @@
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import Input from '@aziontech/webkit/input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import Input from '@aziontech/ui/input'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
 </script>
 
 <template>

@@ -1,9 +1,9 @@
 # Footer
 
-> Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`. A canvas-colored shell of two bands divided by a hairline rule. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Two bands.** Top to bottom: the link columns, then the bottom bar. The bottom bar is one row, as azion.com draws it: the brand at the start, the social icons after it, and the status indicator with the language select at the end. There is no separate brand band: the brand sits at the start of the bar at every width, at the 18px height `AppHeaderBrand` gives the header's mark. **Three placements, chosen with `variant`.** - `content` is the default: the bands run full bleed across whatever zone holds the footer and the footer draws no rule above itself. Every band carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. - `site` closes a marketing page and mirrors the site header: it spans the full width of the page with no side rules, opens on a plain full-width top rule with no corner marks, the same clean line as the header's, and insets its content to the header's own measure (`--layout-measure-site-header`), so the first column title and the brand line up under the header's brand at every width. The inset is one custom property (`--footer-inset`, `max(0%, (100% - measure) / 2)`) set on the root and added to each band's own padding, so the band rules stay full width. - `console` is the slim bar under a console page: one row with a top rule, the brand (and any social buttons) at the start, the links of each `Footer.Column` inline after it — the column title becomes the visually hidden name of its `nav` — and the status and language at the end. It wraps onto a second row when the zone is narrow. **Responsive.** The column grid folds from four columns to the 2×2 mobile grid below `md` (768px). The bottom bar stacks below `md`: the brand and the social icons on the first line, the status and the language at the two ends of the second. From `md` it is one row, its two clusters at the two ends, and it wraps instead of clipping when the zone is narrower than both together. All of it is CSS, so the server HTML and the hydrated page are the same tree. Content (links, labels, languages, status, brand) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.
+> Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`. A canvas-colored shell of two bands divided by a hairline rule. Matches the Azion UI Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Two bands.** Top to bottom: the link columns, then the bottom bar. The bottom bar is one row, as azion.com draws it: the brand at the start, the social icons after it, and the status indicator with the language select at the end. There is no separate brand band: the brand sits at the start of the bar at every width, at the 18px height `AppHeaderBrand` gives the header's mark. **Three placements, chosen with `variant`.** - `content` is the default: the bands run full bleed across whatever zone holds the footer and the footer draws no rule above itself. Every band carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. - `site` closes a marketing page and mirrors the site header: it spans the full width of the page with no side rules, opens on a plain full-width top rule with no corner marks, the same clean line as the header's, and insets its content to the header's own measure (`--layout-measure-site-header`), so the first column title and the brand line up under the header's brand at every width. The inset is one custom property (`--footer-inset`, `max(0%, (100% - measure) / 2)`) set on the root and added to each band's own padding, so the band rules stay full width. - `console` is the slim bar under a console page: one row with a top rule, the brand (and any social buttons) at the start, the links of each `Footer.Column` inline after it — the column title becomes the visually hidden name of its `nav` — and the status and language at the end. It wraps onto a second row when the zone is narrow. **Responsive.** The column grid folds from four columns to the 2×2 mobile grid below `md` (768px). The bottom bar stacks below `md`: the brand and the social icons on the first line, the status and the language at the two ends of the second. From `md` it is one row, its two clusters at the two ends, and it wraps instead of clipping when the zone is narrower than both together. All of it is CSS, so the server HTML and the hydrated page are the same tree. Content (links, labels, languages, status, brand) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.
 
-- Import: `import FooterRoot from '@aziontech/webkit/footer-root'`
-- Compound import (dot notation, not tree-shakeable): `import Footer from '@aziontech/webkit/footer'`
+- Import: `import FooterRoot from '@aziontech/ui/footer-root'`
+- Compound import (dot notation, not tree-shakeable): `import Footer from '@aziontech/ui/footer'`
 - Category: layout · Surface: app · Structure: composition
 - API as JSON: [footer.json](footer.json)
 
@@ -61,8 +61,8 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/footer-column`
-- `@aziontech/webkit/footer-link`
+- `@aziontech/ui/footer-column`
+- `@aziontech/ui/footer-link`
 
 ## Sub-components
 
@@ -106,11 +106,11 @@
 
 ```vue
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Select from '@aziontech/webkit/select'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Brand from '@aziontech/ui/brand'
+  import Footer from '@aziontech/ui/footer'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Select from '@aziontech/ui/select'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { ref } from 'vue'
 
   const language = ref('en')
@@ -246,11 +246,11 @@
 
 ```vue
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Select from '@aziontech/webkit/select'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Brand from '@aziontech/ui/brand'
+  import Footer from '@aziontech/ui/footer'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Select from '@aziontech/ui/select'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { ref } from 'vue'
 
   const language = ref('en')
@@ -387,10 +387,10 @@
 
 ```vue
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
-  import Footer from '@aziontech/webkit/footer'
-  import Select from '@aziontech/webkit/select'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Brand from '@aziontech/ui/brand'
+  import Footer from '@aziontech/ui/footer'
+  import Select from '@aziontech/ui/select'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { ref } from 'vue'
 
   const language = ref('en')

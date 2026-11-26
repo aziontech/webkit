@@ -1,8 +1,8 @@
 <script setup>
-  import herosparkExtendedColor from '@aziontech/webkit/assets/herospark-extended-color.svg'
-  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import ClientQuotesSection from '@aziontech/webkit/client-quotes-section'
+  import herosparkExtendedColor from '@aziontech/ui/assets/herospark-extended-color.svg'
+  import magaluExtendedColor from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import zoopExtendedColor from '@aziontech/ui/assets/zoop-extended-color.svg'
+  import ClientQuotesSection from '@aziontech/ui/client-quotes-section'
 
   const items = [
     {

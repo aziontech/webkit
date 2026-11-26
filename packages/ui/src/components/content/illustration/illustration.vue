@@ -35,7 +35,7 @@
     )
 
   const warnUnloaded = (error: unknown) => {
-    console.warn(`[webkit] <Illustration>: could not load "${props.name}".`, error)
+    console.warn(`[azion-ui] <Illustration>: could not load "${props.name}".`, error)
   }
 
   watch(
@@ -48,7 +48,7 @@
           const load = name ? resolveIllustrationAsset(name) : null
           if (!load && name) {
             console.warn(
-              `[webkit] <Illustration>: no scene named "${name}". Names: llms/foundations/illustrations.md or the MCP tool list_assets.`
+              `[azion-ui] <Illustration>: no scene named "${name}". Names: llms/foundations/illustrations.md or the MCP tool list_assets.`
             )
           }
           return paint(load ?? loadIllustrationPlaceholder).then((painted) => {

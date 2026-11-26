@@ -1,7 +1,7 @@
 <script setup>
-  import Backdrop from '@aziontech/webkit/backdrop'
-  import Hero from '@aziontech/webkit/hero-root'
-  import HeroTitle from '@aziontech/webkit/hero-title'
+  import Backdrop from '@aziontech/ui/backdrop'
+  import Hero from '@aziontech/ui/hero-root'
+  import HeroTitle from '@aziontech/ui/hero-title'
 </script>
 
 <template>

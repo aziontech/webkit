@@ -1,5 +1,5 @@
 <script setup>
-  import BarList from '@aziontech/webkit/bar-list'
+  import BarList from '@aziontech/ui/bar-list'
 </script>
 
 <template>

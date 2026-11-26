@@ -45,11 +45,11 @@ test('typedEntry is idempotent and exportTarget reads both shapes', () => {
 })
 
 test('package.json#exports is typed, and every target exists', () => {
-  assert.deepEqual(exportsProblems(read('packages/webkit/package.json'), PKG), [])
+  assert.deepEqual(exportsProblems(read('packages/ui/package.json'), PKG), [])
 })
 
 test('typesVersions mirrors every typed export for node10 resolution', () => {
-  const pkg = read('packages/webkit/package.json')
+  const pkg = read('packages/ui/package.json')
   assert.deepEqual(pkg.typesVersions, typesVersionsFor(pkg.exports))
   assert.deepEqual(pkg.typesVersions['*'].button, [
     './types/components/action/button/button.vue.d.ts'
@@ -65,7 +65,7 @@ test('components export their props as <Name>Props and the consumer smoke app us
   assert.match(button, /export type ButtonVariant = /)
   assert.match(
     APP_VUE,
-    /import Button, \{ type ButtonVariant, type ButtonProps \} from '@aziontech\/webkit\/button'/
+    /import Button, \{ type ButtonVariant, type ButtonProps \} from '@aziontech\/ui\/button'/
   )
   assert.match(APP_VUE, /const saveProps: ButtonProps = /)
 })
@@ -86,7 +86,7 @@ test('exportsProblems flags an untyped entry and a missing target', () => {
 })
 
 test('the package ships types/ and builds it at pack time', () => {
-  const pkg = read('packages/webkit/package.json')
+  const pkg = read('packages/ui/package.json')
   assert.ok(pkg.files.includes('types'))
   assert.equal(pkg.scripts.prepack, 'node scripts/pack-files.mjs')
   assert.equal(pkg.scripts.postpack, 'node scripts/pack-files.mjs --clean')
@@ -144,26 +144,26 @@ test('packerToOutlive defers only a pnpm postpack', () => {
   assert.equal(packerToOutlive({ ...pnpm, npm_lifecycle_event: 'test:consume' }, 50, read), null)
 })
 
-test('the consumer check imports every typed export and spots WebKit sources', () => {
+test('the consumer check imports every typed export and spots Azion UI sources', () => {
   const module = allExportsModule({
     './button': typedEntry('./src/components/action/button/button.vue'),
     './catalog.json': './catalog.json'
   })
-  assert.equal(module, "export type * as e0 from '@aziontech/webkit/button'\n")
+  assert.equal(module, "export type * as e0 from '@aziontech/ui/button'\n")
   const sources = sourceFilesInProgram(
     [
-      '/app/node_modules/@aziontech/webkit/types/components/action/button/button.vue.d.ts',
-      '/app/node_modules/@aziontech/webkit/src/components/feedback/toast/index.ts',
+      '/app/node_modules/@aziontech/ui/types/components/action/button/button.vue.d.ts',
+      '/app/node_modules/@aziontech/ui/src/components/feedback/toast/index.ts',
       '/app/src/App.vue'
     ].join('\n')
   )
   assert.deepEqual(sources, [
-    '/app/node_modules/@aziontech/webkit/src/components/feedback/toast/index.ts'
+    '/app/node_modules/@aziontech/ui/src/components/feedback/toast/index.ts'
   ])
 })
 
 test('governance runs the exports check and the consumer types check', () => {
   const workflow = readFileSync(resolve(ROOT, '.github/workflows/governance.yml'), 'utf8')
-  assert.match(workflow, /webkit run check:exports\n/)
-  assert.match(workflow, /webkit run check:consumer-types\n/)
+  assert.match(workflow, /ui run check:exports\n/)
+  assert.match(workflow, /ui run check:consumer-types\n/)
 })

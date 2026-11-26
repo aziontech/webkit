@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// PreToolUse hook: blocks Write of a webkit-layer .vue when the matching spec
+// PreToolUse hook: blocks Write of an azion-ui-layer .vue when the matching spec
 // at .specs/<name>.md is missing, not approved, or its body checksum no longer
 // matches the frontmatter.checksum (tamper detection). The checks live in
-// lib/spec-integrity.mjs, shared with packages/webkit/scripts/check-spec-integrity.mjs (CI).
+// lib/spec-integrity.mjs, shared with packages/ui/scripts/check-spec-integrity.mjs (CI).
 //
 // Bypassed for components on the legacy whitelist
 // (contributing/hooks/lib/legacy-components.json).

@@ -2,10 +2,10 @@ import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 
-const CANDIDATE_PKGS = ['@aziontech/webkit']
+const CANDIDATE_PKGS = ['@aziontech/ui']
 const DEFAULT_PKG = CANDIDATE_PKGS[0]
 
-export function isWebkitBare(src) {
+export function isAzionUiBare(src) {
   return typeof src === 'string' && CANDIDATE_PKGS.includes(src)
 }
 
@@ -13,8 +13,8 @@ let cache = null
 let warned = false
 
 function resolveCatalogPath(cwd) {
-  if (process.env.WEBKIT_CATALOG_PATH) return process.env.WEBKIT_CATALOG_PATH
-  const require = createRequire(join(cwd || process.cwd(), '__webkit_resolve__.js'))
+  if (process.env.AZION_UI_CATALOG_PATH) return process.env.AZION_UI_CATALOG_PATH
+  const require = createRequire(join(cwd || process.cwd(), '__azion_ui_resolve__.js'))
   for (const pkg of CANDIDATE_PKGS) {
     try {
       return require.resolve(`${pkg}/catalog.json`)
@@ -30,7 +30,7 @@ function warnOnce(message) {
   if (warned) return
   warned = true
 
-  console.warn(`[eslint-plugin-webkit] ${message}`)
+  console.warn(`[eslint-plugin-azion-ui] ${message}`)
 }
 
 function levenshtein(a, b) {
@@ -68,7 +68,7 @@ function build(json) {
     package: pkg,
     prefix: `${pkg}/`,
     bare: pkg,
-    version: json.webkitVersion || null,
+    version: json.azionUiVersion || null,
     deniedPrefixes: json.deniedPrefixes || [],
     tokenRules,
     tokens: json.tokens || {},
@@ -121,8 +121,8 @@ export function loadCatalog(cwd) {
   if (!path) {
     value = empty()
     warnOnce(
-      'could not resolve a webkit catalog.json — webkit lint rules are DISABLED for this run. ' +
-        'Install @aziontech/webkit, or set WEBKIT_CATALOG_PATH.'
+      'could not resolve an Azion UI catalog.json — Azion UI lint rules are DISABLED for this run. ' +
+        'Install @aziontech/ui, or set AZION_UI_CATALOG_PATH.'
     )
   } else {
     try {
@@ -130,7 +130,7 @@ export function loadCatalog(cwd) {
     } catch (err) {
       value = empty()
       warnOnce(
-        `failed to read the webkit catalog at ${path} (${err.message}) — webkit lint rules are DISABLED.`
+        `failed to read the Azion UI catalog at ${path} (${err.message}) — Azion UI lint rules are DISABLED.`
       )
     }
   }

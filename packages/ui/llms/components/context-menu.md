@@ -2,8 +2,8 @@
 
 > Menu of actions that opens at the pointer when the user right-clicks an area, presses `Shift+F10` or the context-menu key inside it, or long-presses it on touch. It is the right-click twin of `DropdownMenu`: the root `ContextMenu` owns open state, the pointer anchor, positioning and focus return through the same internal menu core, `ContextMenu.Trigger` marks the area that listens, and the item parts are DropdownMenu's own (`Group`, `Item` with its checkbox and radio variants, `Sub`, `SubTrigger`, `SubContent`), attached to the compound so the two menus look and behave the same.
 
-- Import: `import ContextMenuRoot from '@aziontech/webkit/context-menu-root'`
-- Compound import (dot notation, not tree-shakeable): `import ContextMenu from '@aziontech/webkit/context-menu'`
+- Import: `import ContextMenuRoot from '@aziontech/ui/context-menu-root'`
+- Compound import (dot notation, not tree-shakeable): `import ContextMenu from '@aziontech/ui/context-menu'`
 - Category: navigation · Surface: app · Structure: composition
 - API as JSON: [context-menu.json](context-menu.json)
 
@@ -57,7 +57,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/context-menu-trigger`
+- `@aziontech/ui/context-menu-trigger`
 
 ## Sub-components
 
@@ -119,7 +119,7 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
 
 ```vue
 <script setup>
-  import ContextMenu from '@aziontech/webkit/context-menu'
+  import ContextMenu from '@aziontech/ui/context-menu'
   import { ref } from 'vue'
 
   const resources = ['production', 'staging', 'docs-site']
@@ -199,7 +199,7 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
 
 ```vue
 <script setup>
-  import ContextMenu from '@aziontech/webkit/context-menu'
+  import ContextMenu from '@aziontech/ui/context-menu'
   import { reactive } from 'vue'
 
   const view = reactive({ hidden: false, grid: true })
@@ -279,7 +279,7 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
 
 ```vue
 <script setup>
-  import ContextMenu from '@aziontech/webkit/context-menu'
+  import ContextMenu from '@aziontech/ui/context-menu'
 </script>
 
 <template>

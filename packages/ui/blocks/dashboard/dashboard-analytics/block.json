@@ -52,7 +52,7 @@
     "painel de uso",
     "traffic and usage dashboard"
   ],
-  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "skills": ["azion-ui-data-viz", "azion-ui-tables", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "dashboard-analytics.vue"

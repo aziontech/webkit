@@ -1,5 +1,5 @@
 <script setup>
-  import ContextMenu from '@aziontech/webkit/context-menu'
+  import ContextMenu from '@aziontech/ui/context-menu'
   import { ref } from 'vue'
 
   const resources = ['production', 'staging', 'docs-site']

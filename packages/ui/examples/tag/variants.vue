@@ -1,5 +1,5 @@
 <script setup>
-  import Tag from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/ui/tag'
 </script>
 
 <template>

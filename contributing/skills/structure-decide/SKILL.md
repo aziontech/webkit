@@ -3,7 +3,7 @@ name: structure-decide
 description: Decide `monolithic` vs `composition` using the shadcn-vue criterion. Pure decision; never writes code.
 status: active
 last_updated: 2026-11-23
-scope: webkit
+scope: ui
 enforced_by: [compound-api, component-structure]
 ---
 
@@ -39,7 +39,7 @@ When in doubt, choose `monolithic`. Atoms (Button, IconButton, Tag, Badge, Spinn
    - Composition: Dialog, Tabs, Accordion, composed Card, DropdownMenu, Drawer, Form fields.
    - Monolithic with slots: PricingCard (fixed layout, slot inversions).
    - Atomic: Button, IconButton.
-   - Look each one up through the webkit MCP (`get_component`) rather than by file name.
+   - Look each one up through the Azion UI MCP (`get_component`) rather than by file name.
 3. **Emit** a single line with the verdict and a one-sentence rationale:
    ```
    structure: composition

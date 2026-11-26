@@ -1,5 +1,5 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
   import { useId } from 'vue'
 
   const reason = 'Only an account owner can delete an application.'

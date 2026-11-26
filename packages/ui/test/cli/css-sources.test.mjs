@@ -16,14 +16,14 @@ function put(dir, rel, content) {
 }
 
 function makeApp() {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-css-sources-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-css-sources-'))
   put(dir, 'package.json', JSON.stringify({ name: 'app', version: '1.0.0' }))
-  const pkg = 'node_modules/@aziontech/webkit'
+  const pkg = 'node_modules/@aziontech/ui'
   put(
     dir,
     `${pkg}/package.json`,
     JSON.stringify({
-      name: '@aziontech/webkit',
+      name: '@aziontech/ui',
       exports: {
         './button': {
           types: './types/b.d.ts',
@@ -37,7 +37,7 @@ function makeApp() {
   put(
     dir,
     `${pkg}/src/components/action/button/button.vue`,
-    "<script setup>\nimport Spinner from '../../feedback/spinner/spinner.vue'\nimport { cn } from '@aziontech/webkit/utils/cn'\n</script>\n"
+    "<script setup>\nimport Spinner from '../../feedback/spinner/spinner.vue'\nimport { cn } from '@aziontech/ui/utils/cn'\n</script>\n"
   )
   put(dir, `${pkg}/src/components/feedback/spinner/spinner.vue`, '<template><i /></template>\n')
   put(dir, `${pkg}/src/utils/cn.ts`, 'export const cn = () => 1\n')
@@ -59,7 +59,7 @@ test('the sources list holds the imported components and what they import, nothi
     put(
       dir,
       'src/App.vue',
-      "<script setup>\nimport Button from '@aziontech/webkit/button'\n</script>\n"
+      "<script setup>\nimport Button from '@aziontech/ui/button'\n</script>\n"
     )
     const plan = planSources(dir)
     assert.deepEqual(plan.subpaths, ['button'])
@@ -68,7 +68,7 @@ test('the sources list holds the imported components and what they import, nothi
     const css = sourcesOf(dir)
     assert.match(
       css,
-      /@source "\.\.\/node_modules\/@aziontech\/webkit\/src\/components\/action\/button\/button\.vue";/
+      /@source "\.\.\/node_modules\/@aziontech\/ui\/src\/components\/action\/button\/button\.vue";/
     )
     assert.match(css, /feedback\/spinner\/spinner\.vue/)
     assert.match(css, /src\/utils\/cn\.ts/)
@@ -85,13 +85,13 @@ test('a new import makes the list stale until it is rewritten', () => {
     put(
       dir,
       'src/App.vue',
-      "<script setup>\nimport Button from '@aziontech/webkit/button'\n</script>\n"
+      "<script setup>\nimport Button from '@aziontech/ui/button'\n</script>\n"
     )
     writeSources(planSources(dir))
     put(
       dir,
       'src/pages/Edit.vue',
-      "<script setup>\nconst D = () => import('@aziontech/webkit/dialog')\n</script>\n"
+      "<script setup>\nconst D = () => import('@aziontech/ui/dialog')\n</script>\n"
     )
     const plan = planSources(dir)
     assert.equal(plan.stale, true)
@@ -109,37 +109,37 @@ test('init wires the sources list and doctor fails when it goes stale', () => {
     put(
       dir,
       'src/App.vue',
-      "<script setup>\nimport Button from '@aziontech/webkit/button'\n</script>\n"
+      "<script setup>\nimport Button from '@aziontech/ui/button'\n</script>\n"
     )
     applyPlan(dir, planInit(dir, {}))
     assert.match(
-      readFileSync(join(dir, 'src/webkit.css'), 'utf8'),
-      /@import '\.\/webkit\.sources\.css';/
+      readFileSync(join(dir, 'src/azion-ui.css'), 'utf8'),
+      /@import '\.\/azion-ui\.sources\.css';/
     )
     assert.match(sourcesOf(dir), /button\.vue/)
     const ok = planDoctor(dir)
-    assert.equal(ok.find((c) => c.check === 'webkit.css @source')?.status, 'ok')
-    assert.equal(ok.find((c) => c.check === 'webkit css sources')?.status, 'ok')
+    assert.equal(ok.find((c) => c.check === 'azion-ui.css @source')?.status, 'ok')
+    assert.equal(ok.find((c) => c.check === 'azion-ui css sources')?.status, 'ok')
     put(
       dir,
       'src/Other.vue',
-      "<script setup>\nimport Dialog from '@aziontech/webkit/dialog'\n</script>\n"
+      "<script setup>\nimport Dialog from '@aziontech/ui/dialog'\n</script>\n"
     )
-    const stale = planDoctor(dir).find((c) => c.check === 'webkit css sources')
+    const stale = planDoctor(dir).find((c) => c.check === 'azion-ui css sources')
     assert.equal(stale?.status, 'fail')
-    assert.match(stale.detail, /2 imported WebKit file/)
+    assert.match(stale.detail, /2 imported Azion UI file/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
 
-test('doctor fails the v5 wiring that relied on @aziontech/webkit/styles to scan the package', () => {
+test('doctor fails the v5 wiring that relied on @aziontech/ui/styles to scan the package', () => {
   const dir = makeApp()
   try {
-    put(dir, 'src/webkit.css', "@import '@aziontech/theme';\n@import '@aziontech/webkit/styles';\n")
-    const check = planDoctor(dir).find((c) => c.check === 'webkit.css @source')
+    put(dir, 'src/azion-ui.css', "@import '@aziontech/theme';\n@import '@aziontech/ui/styles';\n")
+    const check = planDoctor(dir).find((c) => c.check === 'azion-ui.css @source')
     assert.equal(check?.status, 'fail')
-    assert.match(check.detail, /webkit\.sources\.css/)
+    assert.match(check.detail, /azion-ui\.sources\.css/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -155,10 +155,10 @@ test('init adds the Vite plugin to an existing config, once', () => {
     )
     applyPlan(dir, planInit(dir, {}))
     const cfg = readFileSync(join(dir, 'vite.config.ts'), 'utf8')
-    assert.match(cfg, /^import webkit from '@aziontech\/webkit\/vite-plugin'$/m)
-    assert.match(cfg, /plugins: \[webkit\(\), vue\(\)\]/)
+    assert.match(cfg, /^import azionUi from '@aziontech\/ui\/vite-plugin'$/m)
+    assert.match(cfg, /plugins: \[azionUi\(\), vue\(\)\]/)
     assert.equal(patchViteConfig(cfg), cfg)
-    assert.equal(planDoctor(dir).find((c) => c.check === 'webkit vite plugin')?.status, 'ok')
+    assert.equal(planDoctor(dir).find((c) => c.check === 'ui vite plugin')?.status, 'ok')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

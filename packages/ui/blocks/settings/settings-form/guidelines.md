@@ -130,7 +130,7 @@ Then delete `sample.ts` and its import.
 - **Errors:** what is wrong plus what to do, e.g. "Enter a valid email address."
 - **Docs link:** names the topic, e.g. "Learn more about the Preview Toolbar".
 - **Profile:** section hints are one sentence on what the group affects ("The company that owns the account, as it appears on every invoice."); optional fields say it in the description ("Optional. Apartment, suite or floor."); the destructive row uses one verb for the title and the button ("Delete personal account" with "Delete account", never "Remove"); the save bar reads "You have unsaved changes."; the load failure reads "The profile could not be loaded. Nothing was changed; try again." with "Retry"; the app confirms the deletion itself once `deleting` ends
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -162,4 +162,4 @@ Then delete `sample.ts` and its import.
 - `state/state-form-validation` — every outcome of a submit.
 - `state/state-async-submit` — a save that runs long and reports back later.
 - `edit/edit-delete-dialog` — the delete row a settings page can end with.
-- `SettingsRow` — the row this form is made of; see `skills/webkit-form` for the ItemGroup settings and Card with independent saves types.
+- `SettingsRow` — the row this form is made of; see `skills/azion-ui-form` for the ItemGroup settings and Card with independent saves types.

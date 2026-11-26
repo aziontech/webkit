@@ -2,7 +2,7 @@
 
 > The FAQ and "expand for detail" block of a documentation page. It reads the `title` of each `DocAccordion` child to build the triggers and renders the child body in the panel, so an author writes only titles and prose. It always ships as a card (surface, outer rule, radius) so a run of rows reads as one closed group in an open prose column. Built on `Accordion` at `size="large"`.
 
-- Import: `import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'`
+- Import: `import DocAccordionGroup from '@aziontech/ui/doc-accordion-group'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-accordion-group.json](doc-accordion-group.json)
 
@@ -77,8 +77,8 @@
 
 ```vue
 <script setup>
-  import DocAccordion from '@aziontech/webkit/doc-accordion'
-  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
+  import DocAccordion from '@aziontech/ui/doc-accordion'
+  import DocAccordionGroup from '@aziontech/ui/doc-accordion-group'
 </script>
 
 <template>
@@ -103,8 +103,8 @@
 
 ```vue
 <script setup>
-  import DocAccordion from '@aziontech/webkit/doc-accordion'
-  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
+  import DocAccordion from '@aziontech/ui/doc-accordion'
+  import DocAccordionGroup from '@aziontech/ui/doc-accordion-group'
 </script>
 
 <template>
@@ -129,7 +129,7 @@
 
 ```vue
 <script setup>
-  import DocMarkdown from '@aziontech/webkit/doc-markdown'
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
 
   const source = [
     '<AccordionGroup>',

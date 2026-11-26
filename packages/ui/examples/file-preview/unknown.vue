@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import FilePreview from '@aziontech/webkit/file-preview'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import FilePreview from '@aziontech/ui/file-preview'
 </script>
 
 <template>

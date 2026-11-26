@@ -1,6 +1,6 @@
 <script setup>
-  import Tracker from '@aziontech/webkit/tracker'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Tracker from '@aziontech/ui/tracker'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   const DAYS = 90
   const DEGRADED_DAY = 52

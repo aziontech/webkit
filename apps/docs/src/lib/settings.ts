@@ -8,7 +8,7 @@ export const settings = reactive({
   dir: 'ltr' as 'ltr' | 'rtl'
 })
 
-const KEY = 'webkit-docs:'
+const KEY = 'azion-ui-docs:'
 
 function read(name: string): string | null {
   try {

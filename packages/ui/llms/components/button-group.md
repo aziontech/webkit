@@ -2,7 +2,7 @@
 
 > A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group. Each item is an icon button that names itself in a tooltip: a plain action, an on / off toggle, or a menu of options. Items past `visibleCount` collapse into one More actions menu. The toolbar is one tab stop with roving focus, so a row of six icons costs the keyboard user one Tab, not six.
 
-- Import: `import ButtonGroup from '@aziontech/webkit/button-group'`
+- Import: `import ButtonGroup from '@aziontech/ui/button-group'`
 - Category: action · Surface: app · Structure: monolithic
 - API as JSON: [button-group.json](button-group.json)
 
@@ -17,7 +17,7 @@
 ## Do
 
 - Give the toolbar an `aria-label` that names the surface ("Editor actions"), and every item a `label` that says what it does ("Copy code", not "Copy"). Write the kebab attribute (`aria-label`, `:aria-label` when the name changes, `aria-labelledby` when a visible heading already names the surface), never the camelCase `ariaLabel` attribute.
-- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/require-accessible-name` keeps the name required instead: it flags a `ButtonGroup` with neither `aria-label` nor `aria-labelledby`.
+- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `azion-ui/require-accessible-name` keeps the name required instead: it flags a `ButtonGroup` with neither `aria-label` nor `aria-labelledby`.
 - Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.
 - Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.
 - Set `loading` on an action while its request runs instead of disabling the whole group.
@@ -72,7 +72,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Accessibility
 
-- `role="toolbar"` with `aria-orientation="horizontal"` and a mandatory accessible name: `aria-label` (static or bound) or `aria-labelledby`. `webkit/require-accessible-name` flags a ButtonGroup with neither, and an empty name renders no `aria-label` attribute.
+- `role="toolbar"` with `aria-orientation="horizontal"` and a mandatory accessible name: `aria-label` (static or bound) or `aria-labelledby`. `azion-ui/require-accessible-name` flags a ButtonGroup with neither, and an empty name renders no `aria-label` attribute.
 - Keyboard map: one tab stop (the last focused item, else the first enabled); `ArrowRight` / `ArrowLeft` move and wrap (swapped under `dir="rtl"` through `logicalArrowKey`); `Home` / `End` jump to the ends; `Enter` / `Space` activate; on a menu item `Enter`, `Space` or `ArrowDown` open the menu, `Escape` closes it and returns focus to its button.
 - Each icon button's accessible name is its `label`; the tooltip shows the same text on hover and focus.
 - Toggles expose `aria-pressed`; the pressed fill is backed by an outline in forced colors.
@@ -106,7 +106,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ```vue
 <script setup>
-  import ButtonGroup from '@aziontech/webkit/button-group'
+  import ButtonGroup from '@aziontech/ui/button-group'
   import { computed, ref } from 'vue'
 
   const wrap = ref(false)
@@ -160,7 +160,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ```vue
 <script setup>
-  import ButtonGroup from '@aziontech/webkit/button-group'
+  import ButtonGroup from '@aziontech/ui/button-group'
   import { computed, ref } from 'vue'
 
   const pinned = ref(true)

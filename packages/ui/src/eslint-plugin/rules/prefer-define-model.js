@@ -5,14 +5,14 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Prefer defineModel() over a hand-written modelValue prop + update:modelValue emit (see the webkit-v-model rule shipped by `npx @aziontech/webkit init`).'
+        'Prefer defineModel() over a hand-written modelValue prop + update:modelValue emit (see the azion-ui-v-model rule shipped by `npx @aziontech/ui init`).'
     },
     schema: [],
     messages: {
       preferModel:
         'This component declares a `modelValue` prop and an `update:modelValue` emit by hand. ' +
         'Use `defineModel()` — it expresses the two-way value (controlled + uncontrolled) in one ' +
-        'macro. See contributing/rules/webkit-v-model.md (shipped by `npx @aziontech/webkit init`).'
+        'macro. See contributing/rules/azion-ui-v-model.md (shipped by `npx @aziontech/ui init`).'
     }
   },
   create(context) {

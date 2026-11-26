@@ -1,10 +1,10 @@
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import DataTable from '@aziontech/webkit/data-table'
-  import Switch from '@aziontech/webkit/switch'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import TableRefreshButton from '@aziontech/webkit/table-refresh-button'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import DataTable from '@aziontech/ui/data-table'
+  import Switch from '@aziontech/ui/switch'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import TableRefreshButton from '@aziontech/ui/table-refresh-button'
   import { onBeforeUnmount, ref, watch } from 'vue'
 
   const AUTO_REFRESH_MS = 30_000

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Button from '@aziontech/ui/button'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import { type StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed } from 'vue'
 
   import ResourceGetStarted from './parts/resource-get-started.vue'

@@ -111,7 +111,7 @@ function marketingPageSearch(catalog, q, wantedSurface, page) {
     hint:
       'A marketing page is the shell/shell-site block (get_block("shell/shell-site")) filled with ' +
       'page sections: import each from its flat subpath, bind it with v-bind="section.props" and ' +
-      'place it inside Container and Spacer (rule webkit-sections).'
+      'place it inside Container and Spacer (rule azion-ui-sections).'
   }
 }
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import SeverityTag from '@aziontech/ui/severity-tag'
+  import Skeleton from '@aziontech/ui/skeleton'
   import { computed } from 'vue'
 
   import type { AlertsDashboardLevelCount } from '../dashboard-alerts.vue'

@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/avatar/avatar.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/avatar/avatar.vue
 // component=Avatar
 import figma from 'figma'
 
@@ -47,7 +47,7 @@ export default {
   size="${size}"`
   }
 />`,
-  imports: ["import Avatar from '@aziontech/webkit/avatar'"],
+  imports: ["import Avatar from '@aziontech/ui/avatar'"],
   id: 'avatar',
   metadata: { nestable: true }
 }

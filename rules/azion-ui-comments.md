@@ -1,7 +1,7 @@
 # Rule: comments are API docs or directives, never prose
 
 The code is the document. Names, types and structure carry the intent; when a block needs
-a comment to be understood, rename or restructure it. The `webkit/require-authoring-standards`
+a comment to be understood, rename or restructure it. The `azion-ui/require-authoring-standards`
 ESLint rule reports every other comment (`prose-comment`) at its line.
 
 ## Allowed

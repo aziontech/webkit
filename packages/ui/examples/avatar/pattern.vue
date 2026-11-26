@@ -1,5 +1,5 @@
 <script setup>
-  import Avatar from '@aziontech/webkit/avatar'
+  import Avatar from '@aziontech/ui/avatar'
 
   const organizations = ['Acme Inc.', 'Acme Labs', 'Acme Store']
   const blue = ['var(--accent)', 'var(--info)', 'var(--success)']

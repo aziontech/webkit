@@ -2,7 +2,7 @@
 
 > The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right. Below `md` the actions drop under the copy.
 
-- Import: `import Subheader from '@aziontech/webkit/subheader'`
+- Import: `import Subheader from '@aziontech/ui/subheader'`
 - Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [subheader.json](subheader.json)
 
@@ -94,8 +94,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Subheader from '@aziontech/webkit/subheader'
+  import Button from '@aziontech/ui/button'
+  import Subheader from '@aziontech/ui/subheader'
 </script>
 
 <template>
@@ -119,8 +119,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Subheader from '@aziontech/webkit/subheader'
+  import Button from '@aziontech/ui/button'
+  import Subheader from '@aziontech/ui/subheader'
 </script>
 
 <template>
@@ -145,7 +145,7 @@
 
 ```vue
 <script setup>
-  import Subheader from '@aziontech/webkit/subheader'
+  import Subheader from '@aziontech/ui/subheader'
 </script>
 
 <template>

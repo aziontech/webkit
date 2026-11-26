@@ -1,6 +1,6 @@
 <script setup>
-  import Marquee from '@aziontech/webkit/marquee'
-  import Texture from '@aziontech/webkit/texture'
+  import Marquee from '@aziontech/ui/marquee'
+  import Texture from '@aziontech/ui/texture'
 </script>
 
 <template>

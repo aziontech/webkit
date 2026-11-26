@@ -1,6 +1,6 @@
 <script setup>
-  import ArticleBodySection from '@aziontech/webkit/article-body-section'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import ArticleBodySection from '@aziontech/ui/article-body-section'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
 
   const BODY =
     '## Challenge\n\n' +

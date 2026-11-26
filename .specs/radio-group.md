@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: df461f9aa3646f35e25e2982b9f58dfac2424000a850cb390f815809ef02f3bb
+checksum: 62e8e093a48034979b793d036f3b6c91e09fc673b3d958ab50454f2e715518c5
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -53,7 +53,7 @@ RadioGroup is the one "pick one of a few" component: it picks exactly one value 
 ```vue
 <script setup lang="ts">
   import { ref } from 'vue'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import RadioGroup from '@aziontech/ui/radio-group'
 
   const cycle = ref('monthly')
 </script>
@@ -81,7 +81,7 @@ Card options from data:
 ```vue
 <script setup lang="ts">
   import { ref } from 'vue'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import RadioGroup from '@aziontech/ui/radio-group'
 
   const plan = ref('pro')
   const plans = [
@@ -105,8 +105,8 @@ Tree-shaking alternative — the standalone root and the item from their own ent
 
 ```vue
 <script setup lang="ts">
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
-  import RadioGroupItem from '@aziontech/webkit/radio-group-item'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
+  import RadioGroupItem from '@aziontech/ui/radio-group-item'
 </script>
 ```
 
@@ -117,7 +117,7 @@ Tree-shaking alternative — the standalone root and the item from their own ent
 Layout:
 
 ```
-packages/webkit/src/components/input/radio-group/
+packages/ui/src/components/input/radio-group/
 ├── radio-group.vue
 ├── index.ts
 ├── injection-key.ts
@@ -246,7 +246,7 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

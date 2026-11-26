@@ -1,6 +1,6 @@
 <script setup>
-  import Hero from '@aziontech/webkit/hero'
-  import Illustration from '@aziontech/webkit/illustration'
+  import Hero from '@aziontech/ui/hero'
+  import Illustration from '@aziontech/ui/illustration'
 </script>
 
 <template>

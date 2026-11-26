@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Combobox from '@aziontech/webkit/combobox'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Combobox from '@aziontech/ui/combobox'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
 
   import {
     type Condition,

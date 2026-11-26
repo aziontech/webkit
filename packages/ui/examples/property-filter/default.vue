@@ -1,5 +1,5 @@
 <script setup>
-  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import PropertyFilter from '@aziontech/ui/property-filter'
   import { ref } from 'vue'
 
   const properties = [

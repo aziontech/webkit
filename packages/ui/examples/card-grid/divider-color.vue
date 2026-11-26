@@ -1,5 +1,5 @@
 <script setup>
-  import CardGridRoot from '@aziontech/webkit/card-grid-root'
+  import CardGridRoot from '@aziontech/ui/card-grid-root'
 </script>
 
 <template>

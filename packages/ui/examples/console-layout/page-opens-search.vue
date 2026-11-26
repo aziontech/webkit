@@ -1,10 +1,8 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConsoleLayoutRoot, {
-    type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
+  import Button from '@aziontech/ui/button'
+  import ConsoleLayoutRoot, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { useConsoleLayout } from '@aziontech/ui/use-console-layout'
   import { defineComponent, h } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [

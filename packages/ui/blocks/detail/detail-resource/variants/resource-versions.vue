@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Button from '@aziontech/ui/button'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import PageHeader from '@aziontech/ui/page-header'
   import { computed, ref } from 'vue'
 
   import ResourceTabBar from '../parts/resource-tab-bar.vue'

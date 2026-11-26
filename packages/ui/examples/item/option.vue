@@ -1,6 +1,6 @@
 <script setup>
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
   import { computed, ref } from 'vue'
 
   const workloads = ['workload_01', 'workload_02', 'workload_03', 'workload_04']

@@ -51,10 +51,10 @@ const pending = JSON.parse(
 
 const SFC = [
   '<script setup>',
-  "import PageHeader from '@aziontech/webkit/page-header'",
-  "import Button from '@aziontech/webkit/button'",
-  "import { toast } from '@aziontech/webkit/toast'",
-  "import useLocale from '@aziontech/webkit/use-locale'",
+  "import PageHeader from '@aziontech/ui/page-header'",
+  "import Button from '@aziontech/ui/button'",
+  "import { toast } from '@aziontech/ui/toast'",
+  "import useLocale from '@aziontech/ui/use-locale'",
   '</script>',
   '<template>',
   '  <PageHeader title="Workloads" />',
@@ -103,12 +103,12 @@ test('block ids come from the block title, kebab-cased, without "Blocks/"', () =
   assert.equal(kebab('SQLDatabase'), 'sql-database')
 })
 
-test('importsOf keeps only @aziontech/webkit imports with their bindings', () => {
+test('importsOf keeps only @aziontech/ui imports with their bindings', () => {
   const sfc = [
     '<script setup>',
-    "import Button from '@aziontech/webkit/button'",
+    "import Button from '@aziontech/ui/button'",
     "import { ref } from 'vue'",
-    "import Field from '@aziontech/webkit/field'",
+    "import Field from '@aziontech/ui/field'",
     '</script>'
   ].join('\n')
   assert.deepEqual(importsOf(sfc), [
@@ -120,9 +120,9 @@ test('importsOf keeps only @aziontech/webkit imports with their bindings', () =>
 test('importsOf leaves out type-only imports, which render nothing', () => {
   const sfc = [
     '<script setup lang="ts">',
-    "import type { TableColumn } from '@aziontech/webkit/table-root'",
-    "import TableRoot from '@aziontech/webkit/table-root'",
-    "import Tag, { type TagSeverity } from '@aziontech/webkit/tag'",
+    "import type { TableColumn } from '@aziontech/ui/table-root'",
+    "import TableRoot from '@aziontech/ui/table-root'",
+    "import Tag, { type TagSeverity } from '@aziontech/ui/tag'",
     '</script>'
   ].join('\n')
   assert.deepEqual(importsOf(sfc), [
@@ -137,7 +137,7 @@ test('readBlocks builds a block from block.json, the primary SFC and every varia
     const dir = join(pkg, 'blocks/auth/auth-sign-in')
     mkdirSync(join(dir, 'variants'), { recursive: true })
     const sfc = (tag) =>
-      `<script setup>\nimport ${tag} from '@aziontech/webkit/${tag.toLowerCase()}'\n</script>\n<template>\n  <${tag} />\n</template>\n`
+      `<script setup>\nimport ${tag} from '@aziontech/ui/${tag.toLowerCase()}'\n</script>\n<template>\n  <${tag} />\n</template>\n`
     writeFileSync(join(dir, 'auth-sign-in.vue'), sfc('Button'))
     writeFileSync(join(dir, 'variants/password.vue'), sfc('Separator'))
     writeFileSync(
@@ -148,7 +148,7 @@ test('readBlocks builds a block from block.json, the primary SFC and every varia
         title: 'Blocks/Auth/AuthSignIn',
         summary: 'Sign in.',
         intents: ['login'],
-        skills: ['webkit-form'],
+        skills: ['azion-ui-form'],
         steps: ['email', 'password'],
         primary: { name: 'Email', file: 'auth-sign-in.vue' },
         variants: [{ name: 'Password', summary: '', file: 'variants/password.vue' }]
@@ -270,8 +270,8 @@ test('checkBlockMetadata reports a block without a catalog entry, empty intents 
 test('checkSummaryComponents flags a backticked component the primary and variant SFCs do not import', () => {
   const variant = [
     '<script setup>',
-    "import { toast, Toaster } from '@aziontech/webkit/toast'",
-    "import TableRoot from '@aziontech/webkit/table-root'",
+    "import { toast, Toaster } from '@aziontech/ui/toast'",
+    "import TableRoot from '@aziontech/ui/table-root'",
     '</script>',
     '<template><TableRoot /><Toaster /></template>'
   ].join('\n')
@@ -298,13 +298,13 @@ test('checkSummaryComponents flags a backticked component the primary and varian
 test('checkSummaryComponents and checkGuidelines count a component only a part listed in files imports', () => {
   const part = [
     '<script setup>',
-    "import PropertyFilter from '@aziontech/webkit/property-filter'",
+    "import PropertyFilter from '@aziontech/ui/property-filter'",
     '</script>',
     '<template><PropertyFilter /></template>'
   ].join('\n')
   const files = {
     'parts/x-filters.vue': part,
-    'sample.ts': "import Hint from '@aziontech/webkit/hint'"
+    'sample.ts': "import Hint from '@aziontech/ui/hint'"
   }
   const summary = 'A `PageHeader` over `PropertyFilter` and `Hint`.'
   assert.deepEqual(checkSummaryComponents({ 'platform/x': { summary, sfc: SFC, files } }), [
@@ -335,27 +335,25 @@ const toastSfc = (imports, template) =>
   )
 
 test('rendersToastRegion finds a Toaster under any binding, and ignores toast calls and other parts', () => {
-  const named = "import { toast, Toaster } from '@aziontech/webkit/toast'"
+  const named = "import { toast, Toaster } from '@aziontech/ui/toast'"
   assert.equal(rendersToastRegion(toastSfc([named], '<Toaster position="bottom-end" />')), true)
   assert.equal(rendersToastRegion(toastSfc([named], '<Toaster>\n</Toaster>')), true)
   assert.equal(
     rendersToastRegion(
-      toastSfc(["import { Toaster as Region } from '@aziontech/webkit/toast'"], '<Region />')
+      toastSfc(["import { Toaster as Region } from '@aziontech/ui/toast'"], '<Region />')
     ),
     true
   )
   assert.equal(
-    rendersToastRegion(toastSfc(["import Toast from '@aziontech/webkit/toast'"], '<Toast />')),
+    rendersToastRegion(toastSfc(["import Toast from '@aziontech/ui/toast'"], '<Toast />')),
     true
   )
   assert.equal(
-    rendersToastRegion(toastSfc(["import Toast from '@aziontech/webkit/toast'"], '<Toast />')),
+    rendersToastRegion(toastSfc(["import Toast from '@aziontech/ui/toast'"], '<Toast />')),
     true
   )
   assert.equal(
-    rendersToastRegion(
-      toastSfc(["import Region from '@aziontech/webkit/toast-root'"], '<Region/>')
-    ),
+    rendersToastRegion(toastSfc(["import Region from '@aziontech/ui/toast-root'"], '<Region/>')),
     true
   )
   assert.equal(rendersToastRegion(toastSfc([], '<toaster />')), true)
@@ -363,7 +361,7 @@ test('rendersToastRegion finds a Toaster under any binding, and ignores toast ca
   assert.equal(
     rendersToastRegion(
       toastSfc(
-        ["import { toast } from '@aziontech/webkit/toast'"],
+        ["import { toast } from '@aziontech/ui/toast'"],
         '<Button @click="toast.success(\'Saved.\')">Save</Button>'
       )
     ),
@@ -371,7 +369,7 @@ test('rendersToastRegion finds a Toaster under any binding, and ignores toast ca
   )
   assert.equal(
     rendersToastRegion(
-      toastSfc(["import Toast from '@aziontech/webkit/toast'"], '<Toast.Item /><ToasterHint />')
+      toastSfc(["import Toast from '@aziontech/ui/toast'"], '<Toast.Item /><ToasterHint />')
     ),
     false
   )
@@ -389,8 +387,8 @@ test('rendersToastRegion finds a Toaster under any binding, and ignores toast ca
 })
 
 test('checkToastRegion flags a page body that renders a Toaster and allows an app root in shell/', () => {
-  const page = toastSfc(["import { toast } from '@aziontech/webkit/toast'"], '<p />')
-  const own = toastSfc(["import { toast, Toaster } from '@aziontech/webkit/toast'"], '<Toaster />')
+  const page = toastSfc(["import { toast } from '@aziontech/ui/toast'"], '<p />')
+  const own = toastSfc(["import { toast, Toaster } from '@aziontech/ui/toast'"], '<Toaster />')
   const toastBlock = { primary: 'Default', sfc: page, variants: [{ name: 'Saved', sfc: own }] }
   const errors = checkToastRegion('platform/view/x', toastBlock)
   assert.equal(errors.length, 1)
@@ -433,19 +431,19 @@ test('lintBlocks reports a finding in a local part and a lib module, not only in
       localSources: {
         'parts/row.vue': '<template><button type="button">Open</button></template>',
         'lib/data.ts':
-          "import { rows } from '@aziontech/webkit/no-such-export'\nexport const all = rows"
+          "import { rows } from '@aziontech/ui/no-such-export'\nexport const all = rows"
       }
     }
   })
-  assert.equal(counts['view/view-list']['webkit/no-unowned-element'], 1)
-  assert.equal(counts['view/view-list']['webkit/no-unknown-import'], 1)
+  assert.equal(counts['view/view-list']['azion-ui/no-unowned-element'], 1)
+  assert.equal(counts['view/view-list']['azion-ui/no-unknown-import'], 1)
 })
 
 test('compareToBaseline only reports counts above the baseline', () => {
-  const counts = { a: { 'webkit/no-style-override': 3 }, b: { 'webkit/no-style-override': 1 } }
-  const baseline = { a: { 'webkit/no-style-override': 3 } }
+  const counts = { a: { 'azion-ui/no-style-override': 3 }, b: { 'azion-ui/no-style-override': 1 } }
+  const baseline = { a: { 'azion-ui/no-style-override': 3 } }
   assert.deepEqual(compareToBaseline(counts, baseline), [
-    { id: 'b', rule: 'webkit/no-style-override', count: 1, allowed: 0 }
+    { id: 'b', rule: 'azion-ui/no-style-override', count: 1, allowed: 0 }
   ])
 })
 
@@ -488,17 +486,17 @@ test('parseGuidelines reads the purpose, sections, lettered building blocks and 
   assert.deepEqual(multi.buildingBlocks[0].components, ['DropdownMenu', 'Tag'])
 })
 
-test('primaryComponents keeps the component bindings the SFC imports from webkit', () => {
+test('primaryComponents keeps the component bindings the SFC imports from Azion UI', () => {
   assert.deepEqual(primaryComponents(SFC), ['PageHeader', 'Button'])
 })
 
 test('primaryComponents leaves out type-only imports, which are no building block', () => {
   const sfc = [
     '<script setup lang="ts">',
-    "  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'",
-    "  import type { TableColumn } from '@aziontech/webkit/table-root'",
-    "  import type { StepperStepStatus } from '@aziontech/webkit/stepper-step'",
-    "  import { toast, Toaster } from '@aziontech/webkit/toast'",
+    "  import Tag, { type TagSeverity } from '@aziontech/ui/tag'",
+    "  import type { TableColumn } from '@aziontech/ui/table-root'",
+    "  import type { StepperStepStatus } from '@aziontech/ui/stepper-step'",
+    "  import { toast, Toaster } from '@aziontech/ui/toast'",
     '</script>'
   ].join('\n')
   assert.deepEqual(primaryComponents(sfc), ['Tag', 'Toaster'])
@@ -507,22 +505,22 @@ test('primaryComponents leaves out type-only imports, which are no building bloc
 test('primaryComponents leaves out type-only imports', () => {
   const sfc = [
     '<script setup lang="ts">',
-    "import Tag, { type TagSeverity } from '@aziontech/webkit/tag'",
-    "import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'",
-    "import TableRoot, { type TableColumn, TableCell } from '@aziontech/webkit/table-root'",
+    "import Tag, { type TagSeverity } from '@aziontech/ui/tag'",
+    "import type { ChartColor, ChartSeries } from '@aziontech/ui/chart'",
+    "import TableRoot, { type TableColumn, TableCell } from '@aziontech/ui/table-root'",
     '</script>'
   ].join('\n')
   assert.deepEqual(primaryComponents(sfc), ['Tag', 'TableRoot', 'TableCell'])
 })
 
-test('primaryComponents leaves out the types a TypeScript SFC imports from webkit', () => {
+test('primaryComponents leaves out the types a TypeScript SFC imports from Azion UI', () => {
   const typed = SFC.replace(
     '<script setup>',
     [
       '<script setup lang="ts">',
-      "  import type { TableColumn } from '@aziontech/webkit/table-root'",
-      "  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'",
-      "  import { toast, Toaster } from '@aziontech/webkit/toast'"
+      "  import type { TableColumn } from '@aziontech/ui/table-root'",
+      "  import Tag, { type TagSeverity } from '@aziontech/ui/tag'",
+      "  import { toast, Toaster } from '@aziontech/ui/toast'"
     ].join('\n')
   )
   assert.deepEqual(primaryComponents(typed), ['Tag', 'PageHeader', 'Button', 'Toaster'])
@@ -648,7 +646,7 @@ test('checkGuidelines counts named component imports, ignores lowercase tokens a
       '- e'
     ].join('\n')
   const sfc =
-    "<script setup>\nimport Drawer from '@aziontech/webkit/drawer'\nimport { toast, Toaster, DEFAULT_THING } from '@aziontech/webkit/toast'\n</script>"
+    "<script setup>\nimport Drawer from '@aziontech/ui/drawer'\nimport { toast, Toaster, DEFAULT_THING } from '@aziontech/ui/toast'\n</script>"
   const ok = checkGuidelines('x/y', {
     guidelines: md([
       '### A. Panel — `Drawer` (below `md`)',

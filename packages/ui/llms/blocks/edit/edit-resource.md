@@ -3,10 +3,10 @@
 > The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsGroup` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `RadioGroup` choice cards (`variant="card"`), `DataTable`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `FieldDescription` and `Button`, with `useUnsavedChanges`.
 
 - Surface: app
-- Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
+- Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/ui`
 - MCP: `get_block("edit/edit-resource")`
 - Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`, `use-unsaved-changes`, `utils/focus-invalid`
-- Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
+- Skills: `azion-ui-form`, `azion-ui-errors`, `azion-ui-layout`, `azion-ui-ux-heuristics`
 
 ## Asked as
 
@@ -41,7 +41,7 @@ A small `PageHeader` titled Settings with one sentence about what these settings
 
 ### C. Settings sections — `SettingsGroup`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
 
-One `form` with a `fieldset` and a visually hidden legend; while saving, every field turns read-only. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/webkit-form`.
+One `form` with a `fieldset` and a visually hidden legend; while saving, every field turns read-only. Each `SettingsGroup` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. Every state with a save bar runs through it (`useSettingsDraft` builds on `useUnsavedChanges`), and `SettingsSaveBar` renders the leave dialog when it is handed the guard, so no copy hand-rolls its own dirty check. See `skills/azion-ui-form`.
 
 ### D. Locked settings — `Tooltip`, `Switch`, `Link` (optional)
 
@@ -65,7 +65,7 @@ A setting with a side effect beyond this resource carries a warning `Alert` abov
 
 ### I. Leave guard — `Tabs`, `SaveBar` (optional)
 
-`useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Trigger` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
+`useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Trigger` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/azion-ui-form`.
 
 ### J. Changed elsewhere — `Alert`, `ConfirmDialog`, `Button`, `SaveBar` (optional)
 
@@ -132,7 +132,7 @@ Then delete `sample.ts` and its import.
 - Give every section a short hint that says what it controls, and an anchor so a link can land on it.
 - Keep locked settings visible, disabled, with the reason and the way to unlock them.
 - Put destructive actions in a Danger zone section at the end, never in the save bar.
-- Check every field when Save is pressed and show errors only then; see `skills/webkit-errors`.
+- Check every field when Save is pressed and show errors only then; see `skills/azion-ui-errors`.
 - Put the choice that decides other fields first, and show only the fields that choice needs.
 - Show a preset document read-only, with Copy, beside the way to make it editable.
 - Mark the tab that holds unsaved changes with `dirty`, and ask before leaving it while dirty.
@@ -167,7 +167,7 @@ Then delete `sample.ts` and its import.
 - **Leave dialog:** "Unsaved changes", "This page has changes you haven't saved. If you leave now, they're discarded." (with Save: "Save them before you leave, or discard them and continue."); buttons "Keep editing", "Discard changes", "Save changes". These are the built-in `unsavedChanges` messages in en, pt-BR and es.
 - **Changed elsewhere:** "Changed elsewhere." + "This project was saved by someone else after you opened it. …"; button "Reload"; dialog "Overwrite changes made elsewhere?" with "Go back" and "Overwrite and save"; after a reload "Edits discarded." with "Undo".
 - **Danger zone:** section "Danger zone" with "Actions that cannot be undone."; row "Delete this project"; dialog "Delete project", "Once confirmed, this action can't be reversed.", "Type <name> to confirm."; buttons "Cancel" and "Delete project".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -217,7 +217,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 - `detail/detail-domains-card` — the Domains section body in DeployableSettings.
 - `edit/edit-delete-dialog` — the dialog behind the Danger zone action.
 - `settings/settings-form` — account settings that end with the same save band.
-- `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
+- `SaveBar` — the unsaved-changes band; see `skills/azion-ui-form`.
 - `state/state-form-validation` (SectionRejected) — the section-scoped server error DataStream and the changed-elsewhere notice follow.
 - `dashboard/dashboard-analytics` (Metrics) — where the records a stream sends are counted.
 - `useUnsavedChanges` — the dirty baseline and leave guard behind the save bar, the tab mark and the leave dialog.
@@ -243,22 +243,22 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import Tabs from '@aziontech/webkit/tabs'
-  import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import Tabs from '@aziontech/ui/tabs'
+  import { toast } from '@aziontech/ui/toast'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import SettingsSaveBar from './parts/settings-save-bar.vue'
@@ -670,7 +670,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
 ## `sample.ts`
 
 ```ts
-import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { TableColumn } from '@aziontech/ui/data-table'
 
 import type { EditResourceProject } from './edit-resource.vue'
 import type { PolicyModuleField, PolicySettingsRecord } from './parts/policy-groups.vue'
@@ -1192,10 +1192,7 @@ export const sampleDataStream = {
 ## `use-settings-draft.ts`
 
 ```ts
-import {
-  useUnsavedChanges,
-  type UseUnsavedChangesReturn
-} from '@aziontech/webkit/use-unsaved-changes'
+import { useUnsavedChanges, type UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
 import { type ComputedRef, onScopeDispose, reactive, readonly, type Ref, ref, watch } from 'vue'
 
 export interface UseSettingsDraftOptions<T> {
@@ -1287,7 +1284,7 @@ export function useSettingsDraft<T extends object>(
 ## `use-deploy-on-save.ts`
 
 ```ts
-import { toast } from '@aziontech/webkit/toast'
+import { toast } from '@aziontech/ui/toast'
 import { type ComputedRef, nextTick, onScopeDispose, reactive, type Ref } from 'vue'
 
 import { useSettingsDraft, type UseSettingsDraftReturn } from './use-settings-draft'
@@ -1417,9 +1414,9 @@ export function useDeployOnSave<T extends object>(
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import SaveBar from '@aziontech/webkit/save-bar'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import SaveBar from '@aziontech/ui/save-bar'
 
   import SettingsLeaveDialog, { type SettingsLeaveDialogProps } from './settings-leave-dialog.vue'
 
@@ -1511,10 +1508,10 @@ export function useDeployOnSave<T extends object>(
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
+  import Button from '@aziontech/ui/button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
   import { computed } from 'vue'
 
   import type { SettingsLeaveDialogProps } from './settings-leave-dialog.vue'
@@ -1637,14 +1634,14 @@ export function useDeployOnSave<T extends object>(
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** The saved settings of a security policy. */
   export interface PolicySettingsRecord {
@@ -2032,7 +2029,7 @@ export function checkDataStream(form: DataStreamRecord, errors: FieldProblems): 
 ## `lib/option-label.ts`
 
 ```ts
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 export const optionLabel =
   (options: SelectOptionItem<string | number>[]) => (value: string | number) =>
@@ -2074,14 +2071,14 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
 
   import {
     sampleCacheMethods as methods,
@@ -2246,17 +2243,17 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import NumberInput from '@aziontech/webkit/number-input'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import NumberInput from '@aziontech/ui/number-input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import { ttlDuration } from '../lib/ttl-duration'
   import {
@@ -2581,18 +2578,18 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import AttributeEditor, { type AttributeEditorColumn } from '@aziontech/webkit/attribute-editor'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import PasswordInput from '@aziontech/webkit/password-input'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Alert from '@aziontech/ui/alert'
+  import AttributeEditor, { type AttributeEditorColumn } from '@aziontech/ui/attribute-editor'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import PasswordInput from '@aziontech/ui/password-input'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Textarea from '@aziontech/ui/textarea'
   import { computed } from 'vue'
 
   import { headerProblem, isCredentialHeader } from '../lib/data-stream-checks'
@@ -2870,10 +2867,10 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import PasswordInput from '@aziontech/webkit/password-input'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import PasswordInput from '@aziontech/ui/password-input'
+  import SettingsRow from '@aziontech/ui/settings-row'
 
   import { type DataStreamRecord, useDataStreamContext } from '../use-data-stream'
 
@@ -2961,12 +2958,12 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
 
   import { provideDataStream } from '../use-data-stream'
   import DataStreamDestinationGroup from './data-stream-destination-group.vue'
@@ -3061,14 +3058,14 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import NumberInput from '@aziontech/webkit/number-input'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Alert from '@aziontech/ui/alert'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import NumberInput from '@aziontech/ui/number-input'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
 
   import { useDataStreamContext } from '../use-data-stream'
 
@@ -3148,14 +3145,14 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Textarea from '@aziontech/ui/textarea'
 
   import {
     sampleDataStreamScopes as scopeOptions,
@@ -3264,14 +3261,14 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/ui/code-editor'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
   import { computed } from 'vue'
 
   import {
@@ -3417,13 +3414,13 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Tag from '@aziontech/webkit/tag'
+  import Alert from '@aziontech/ui/alert'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Tag from '@aziontech/ui/tag'
   import { ref } from 'vue'
 
   import { optionLabel } from '../lib/option-label'
@@ -3535,14 +3532,14 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DataTable from '@aziontech/ui/data-table'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import {
     type DeployableDomainRow,
@@ -3670,10 +3667,10 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Tag from '@aziontech/webkit/tag'
+  import ConsoleLayout from '@aziontech/ui/console-layout'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref } from 'vue'
 
   import {
@@ -3776,15 +3773,15 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
 
   import { optionLabel } from '../lib/option-label'
   import {
@@ -3915,14 +3912,14 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
 
   import { optionLabel } from '../lib/option-label'
   import {
@@ -4133,20 +4130,20 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import Tabs from '@aziontech/webkit/tabs'
-  import { toast } from '@aziontech/webkit/toast'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import Tabs from '@aziontech/ui/tabs'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, ref } from 'vue'
 
   import {
@@ -4377,17 +4374,17 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { computed, ref } from 'vue'
 
   import { sampleMtlsModes as mtlsModes, sampleRevocationLists as revocationLists } from '../sample'
@@ -4591,15 +4588,15 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   import {
@@ -4885,18 +4882,18 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Field from '@aziontech/webkit/field'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Button from '@aziontech/ui/button'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import DrawerDescription from '@aziontech/ui/drawer-description'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Field from '@aziontech/ui/field'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import Textarea from '@aziontech/ui/textarea'
   import { reactive } from 'vue'
 
   import type { FieldProblems } from '../use-deploy-on-save'
@@ -5024,15 +5021,15 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import PageHeader from '@aziontech/ui/page-header'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Textarea from '@aziontech/ui/textarea'
   import { reactive } from 'vue'
 
   import { useSettingsDraft } from '../use-settings-draft'
@@ -5297,15 +5294,15 @@ export const ttlDuration = (
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import { toast } from '@aziontech/webkit/toast'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import { useSettingsDraft } from '../use-settings-draft'
@@ -5663,11 +5660,8 @@ export function useCacheSettingsContext(): CacheSettingsContext {
 ## `use-data-stream.ts`
 
 ```ts
-import {
-  useUnsavedChanges,
-  type UseUnsavedChangesReturn
-} from '@aziontech/webkit/use-unsaved-changes'
-import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
+import { useUnsavedChanges, type UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
+import { focusFirstInvalid } from '@aziontech/ui/utils/focus-invalid'
 import {
   type ComputedRef,
   inject,

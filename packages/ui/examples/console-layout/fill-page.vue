@@ -1,8 +1,6 @@
 <script setup lang="ts">
-  import ConsoleLayoutRoot, {
-    type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import Resizable from '@aziontech/webkit/resizable'
+  import ConsoleLayoutRoot, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+  import Resizable from '@aziontech/ui/resizable'
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [

@@ -1,8 +1,8 @@
 <script setup>
-  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
-  import Conversation from '@aziontech/webkit/conversation'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import ChatMessageRoot from '@aziontech/ui/chat-message-root'
+  import Conversation from '@aziontech/ui/conversation'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import SuggestionGroup from '@aziontech/ui/suggestion-group'
 
   const followUps = [
     { id: 'wildcard', label: 'How do I purge a whole folder?' },

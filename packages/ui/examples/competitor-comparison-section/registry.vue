@@ -1,5 +1,5 @@
 <script setup>
-  import CompetitorComparisonSection from '@aziontech/webkit/competitor-comparison-section'
+  import CompetitorComparisonSection from '@aziontech/ui/competitor-comparison-section'
 
   const groups = [
     {

@@ -1,10 +1,10 @@
 # useAnnouncer
 
-Composable `@aziontech/webkit/use-announcer`. The signatures and option tables below are read from its typed source, [`src/composables/use-announcer/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-announcer/index.ts).
+Composable `@aziontech/ui/use-announcer`. The signatures and option tables below are read from its typed source, [`src/composables/use-announcer/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-announcer/index.ts).
 
 ```ts
-import { useAnnouncer } from '@aziontech/webkit/use-announcer'
-import type { UseAnnouncerReturn } from '@aziontech/webkit/use-announcer'
+import { useAnnouncer } from '@aziontech/ui/use-announcer'
+import type { UseAnnouncerReturn } from '@aziontech/ui/use-announcer'
 ```
 
 ## `useAnnouncer`

@@ -2,8 +2,8 @@
 
 > One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`, `RadioGroup`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. One anatomy serves every control, so there is no per-control field wrapper.
 
-- Import: `import FieldRoot from '@aziontech/webkit/field-root'`
-- Compound import (dot notation, not tree-shakeable): `import Field from '@aziontech/webkit/field'`
+- Import: `import FieldRoot from '@aziontech/ui/field-root'`
+- Compound import (dot notation, not tree-shakeable): `import Field from '@aziontech/ui/field'`
 - Category: input · Surface: app · Structure: composition
 - API as JSON: [field.json](field.json)
 
@@ -53,15 +53,15 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/field-label`
-- `@aziontech/webkit/field-description`
-- `@aziontech/webkit/field-error`
-- `@aziontech/webkit/field-group`
-- `@aziontech/webkit/field-set`
-- `@aziontech/webkit/field-legend`
-- `@aziontech/webkit/field-content`
-- `@aziontech/webkit/field-title`
-- `@aziontech/webkit/field-separator`
+- `@aziontech/ui/field-label`
+- `@aziontech/ui/field-description`
+- `@aziontech/ui/field-error`
+- `@aziontech/ui/field-group`
+- `@aziontech/ui/field-set`
+- `@aziontech/ui/field-legend`
+- `@aziontech/ui/field-content`
+- `@aziontech/ui/field-title`
+- `@aziontech/ui/field-separator`
 
 ## Sub-components
 
@@ -112,8 +112,8 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   const email = ref('')
@@ -137,8 +137,8 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
   import { computed, ref } from 'vue'
 
   const slug = ref('My Project')
@@ -167,9 +167,9 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 ```vue
 <script setup>
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import Switch from '@aziontech/webkit/switch'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const terms = ref(false)

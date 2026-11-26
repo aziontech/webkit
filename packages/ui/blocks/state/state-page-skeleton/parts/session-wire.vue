@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import StatePageSkeleton from '../state-page-skeleton.vue'
   import SessionFields from './session-fields.vue'

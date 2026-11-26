@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import EmptyState from '@aziontech/webkit/empty-state'
+  import Button from '@aziontech/ui/button'
+  import ConsoleLayout from '@aziontech/ui/console-layout'
+  import EmptyState from '@aziontech/ui/empty-state'
 
   const versionId = 'AQ3M9TZK'
 </script>

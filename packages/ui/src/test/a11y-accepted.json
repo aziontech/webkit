@@ -1,4 +1,4 @@
 {
-  "about": "Owner-accepted contrast exceptions, and nothing else. Each entry is a row of rules/webkit-tokens.md, section 'Contrast: APCA and WCAG 2'. The a11y harness (a11y-harness.ts) and the docs site smoke test (test:docs:smoke) drop only the named axe rule, only in the named themes, only on elements inside the selector. Findings go in a11y-known.json, never here.",
+  "about": "Owner-accepted contrast exceptions, and nothing else. Each entry is a row of rules/azion-ui-tokens.md, section 'Contrast: APCA and WCAG 2'. The a11y harness (a11y-harness.ts) and the docs site smoke test (test:docs:smoke) drop only the named axe rule, only in the named themes, only on elements inside the selector. Findings go in a11y-known.json, never here.",
   "exceptions": []
 }

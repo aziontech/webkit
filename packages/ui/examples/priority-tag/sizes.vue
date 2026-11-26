@@ -1,5 +1,5 @@
 <script setup>
-  import PriorityTag from '@aziontech/webkit/priority-tag'
+  import PriorityTag from '@aziontech/ui/priority-tag'
 </script>
 
 <template>

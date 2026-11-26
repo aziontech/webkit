@@ -2,14 +2,14 @@
 
 > Use Toast for a short confirmation after an action that disappears on its own; a persistent message on a page or section (a banner, a notice) is an Alert. A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.progress`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`contributing/rules/migration.md`](https://github.com/aziontech/webkit/blob/main/contributing/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-foreground)` / `var(--warning-foreground)` / `var(--danger-foreground)` / `var(--info-foreground)`) over the shared `var(--bg-surface-raised)` surface.
 
-- Import: `import ToastRoot from '@aziontech/webkit/toast-root'`
-- Compound import (dot notation, not tree-shakeable): `import Toast from '@aziontech/webkit/toast'`
+- Import: `import ToastRoot from '@aziontech/ui/toast-root'`
+- Compound import (dot notation, not tree-shakeable): `import Toast from '@aziontech/ui/toast'`
 - Category: feedback · Surface: app · Structure: composition
 - API as JSON: [toast.json](toast.json)
 
 ## Setup
 
-One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region.
+One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/ui/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `azion-ui doctor` flags toast usage with no wired region.
 
 ## When to use
 
@@ -61,11 +61,11 @@ One-time app-level wiring before the first toast() call — service (recommended
 
 ## Sub-component imports
 
-- `@aziontech/webkit/toast-item`
-- `@aziontech/webkit/toast-title`
-- `@aziontech/webkit/toast-description`
-- `@aziontech/webkit/toast-action`
-- `@aziontech/webkit/toast-close`
+- `@aziontech/ui/toast-item`
+- `@aziontech/ui/toast-title`
+- `@aziontech/ui/toast-description`
+- `@aziontech/ui/toast-action`
+- `@aziontech/ui/toast-close`
 
 ## Sub-components
 
@@ -73,8 +73,8 @@ One-time app-level wiring before the first toast() call — service (recommended
 - `toast-item/toast-item.vue` — a single notification card (outer flex row, `items-center` so the content and its `trailing` action/close share one centered line; the leading icon and the content column sit in an inner `items-start` group so the typed icon aligns to the title's line — its single line on a one-line toast, the first line on a multi-line one — instead of to the outer row, which the 28px action/close control would otherwise stretch; the `loading` `Spinner` keeps `self-center`. The `trailing` region carries a negative block margin (`-my-(--spacing-2xs)`) so that 28px control does not inflate a one-line card, and a negative inline-end margin (`-mr-(--spacing-xs)`) so the text action's label ends optically flush with the card's padding instead of inset by the button's own padding; height adapts to content). All typography and spacing come from tokens (`text-title-sm` / `text-body-xs`, `var(--spacing-*)`) — no raw sizes or line-heights. An optional leading severity icon — an Azion glyph by `severity` sized with the `text-label-md` token (14px, the title's size) (`az az-check` / `az az-circle-info` / `az az-triangle-alert` / `az az-circle-alert`); the `neutral` severity has **no** icon, and a `loading` toast renders a `Spinner` in its place. Followed by a content column (`Title` + optional `Description`) in the `default` slot, and a right-aligned `trailing` slot for the optional `Action` and the `Close` control. `role="status"` (or `role="alert"` for `danger`). Props `severity?: ToastSeverity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`, default `'neutral'`) and `loading?: boolean` (default `false`; a spinner replaces the leading icon, `aria-busy`). Slots: `default` (title/description) and `trailing` (action/close); the `Toaster` fills both, standalone it renders just the shell. Reflects `data-severity` and `data-loading`.
 - `toast-title/toast-title.vue` — the primary line of a toast (`text-body-xs` `var(--text-default)`). Renders its default slot as the title text; standalone markup + testId justify the part.
 - `toast-description/toast-description.vue` — the supporting line below the title (`text-body-xs` `var(--text-muted)`). Renders its default slot; standalone markup + testId justify the part.
-- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`variant="ghost"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
-- `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`az az-x`, `variant="ghost"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
+- `toast-action/toast-action.vue` — the inline action control, rendered as the Azion UI `Button` (`variant="ghost"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
+- `toast-close/toast-close.vue` — the dismiss control, rendered as the Azion UI `IconButton` (`az az-x`, `variant="ghost"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
 
@@ -135,8 +135,8 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import { toast, Toaster } from '@aziontech/ui/toast'
 
   const show = () =>
     toast('Application deleted', {
@@ -159,8 +159,8 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import { toast, Toaster } from '@aziontech/ui/toast'
 
   const showNeutral = () =>
     toast('Settings saved', { description: 'Changes apply to new requests.' })
@@ -216,8 +216,8 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import { toast, Toaster } from '@aziontech/ui/toast'
 
   const show = () =>
     toast('Cache purge started', {

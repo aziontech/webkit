@@ -21,9 +21,9 @@ another's.
 </template>
 ```
 
-- **The heading** is `PageHeader` (`@aziontech/webkit/page-header`): the page's only h1, its
+- **The heading** is `PageHeader` (`@aziontech/ui/page-header`): the page's only h1, its
   description, and the page's own actions. A band inside the page is titled by a `Subheader`
-  (`@aziontech/webkit/subheader`), or by a `SettingsGroup` (`@aziontech/webkit/settings-group`)
+  (`@aziontech/ui/subheader`), or by a `SettingsGroup` (`@aziontech/ui/settings-group`)
   on a settings page — never by a second hand-written header block.
 - **The boundary** (`layout-boundary`) sets the page's inset from the app chrome — sides, top and
   bottom — and its top inset is the space above the heading.
@@ -135,7 +135,7 @@ This is automatic, and it is the reason a sticky bar works:
 ```
 
 Same column class, same inline boundary, on both — so the bar's buttons land inside the form's own
-right edge by construction. `SaveBar variant="plain"` (`@aziontech/webkit/save-bar`) is this footer,
+right edge by construction. `SaveBar variant="plain"` (`@aziontech/ui/save-bar`) is this footer,
 already carrying `layout-column-form layout-boundary-inline`; reach for it instead of writing the bar. Naming the inline half is what lets the measure rule see a self-inset
 band and treat it exactly like the scrolling body it sits under.
 

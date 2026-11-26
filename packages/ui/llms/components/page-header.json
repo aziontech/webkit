@@ -1,8 +1,8 @@
 {
  "name": "page-header",
  "binding": "PageHeader",
- "import": "@aziontech/webkit/page-header",
- "treeShakeableImport": "@aziontech/webkit/page-header",
+ "import": "@aziontech/ui/page-header",
+ "treeShakeableImport": "@aziontech/ui/page-header",
  "category": "layout",
  "surface": "app",
  "structure": "monolithic",
@@ -31,7 +31,7 @@
  ],
  "bestPractices": [
   "One PageHeader per page; it renders the page's only h1.",
-  "Put the Documentation link first and the create action on the outer edge. Every action is `size=\"medium\"`, so the row keeps one height; the create action is `variant=\"primary\"`, Documentation and the others `variant=\"outline\"` (`webkit/consistent-header-action-size`).",
+  "Put the Documentation link first and the create action on the outer edge. Every action is `size=\"medium\"`, so the row keeps one height; the create action is `variant=\"primary\"`, Documentation and the others `variant=\"outline\"` (`azion-ui/consistent-header-action-size`).",
   "Do not set `class=\"w-full\"` on the action buttons; the header makes them full width on a phone.",
   "Set `titleId` when a form or landmark names itself with `aria-labelledby`.",
   "`breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.",

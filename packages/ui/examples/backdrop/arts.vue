@@ -1,5 +1,5 @@
 <script setup>
-  import Backdrop from '@aziontech/webkit/backdrop'
+  import Backdrop from '@aziontech/ui/backdrop'
 
   const arts = [
     { variant: 'globe', label: 'Globe' },

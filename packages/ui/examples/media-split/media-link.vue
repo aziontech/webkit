@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
+  import Button from '@aziontech/ui/button'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaSplit from '@aziontech/ui/media-split'
 </script>
 
 <template>

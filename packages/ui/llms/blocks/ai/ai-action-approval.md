@@ -3,10 +3,10 @@
 > A user-authorized action inside a generative AI conversation, from the messages of TanStack AI's `useChat`: the read-only call shows as a completed `ToolCall`, the explanation in `StreamingResponse`, and the call that needs approval as a `ToolApproval` card with its input in a `CodeBlock`. Deploy or Deny resolves the `useChat` interrupt; approved, the call runs under the card and the assistant reports what changed, with Copy and Retry after a failure. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `Button` and `PromptInput`. A page body for ConsoleLayout that fills its content region.
 
 - Surface: app
-- Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
+- Source: `blocks/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/ui`
 - MCP: `get_block("ai/ai-action-approval")`
 - Components: [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), [ImageGallery](../../components/image-gallery.md), `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [StreamingResponse](../../components/streaming-response.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-locale`, `utils/ai-chat`
-- Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-errors`
+- Skills: `azion-ui-ai-surfaces`, `azion-ui-states`, `azion-ui-errors`
 
 ## Asked as
 
@@ -64,7 +64,7 @@ A `structured-output` part draws as a JSON `CodeBlock`: the progressive `partial
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `structured-output`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and runs no AI library; `@aziontech/webkit/utils/ai-chat` names TanStack AI's own message types, imported from `@tanstack/ai` as types only (an optional peer, `^1.5.0`), with the helpers that read them (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`; import the types from there), so the shape follows TanStack when you update it, and any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `structured-output`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and runs no AI library; `@aziontech/ui/utils/ai-chat` names TanStack AI's own message types, imported from `@tanstack/ai` as types only (an optional peer, `^1.5.0`), with the helpers that read them (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`; import the types from there), so the shape follows TanStack when you update it, and any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
@@ -166,7 +166,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Outcomes:** Approved, Denied (built in).
 - **Decision not sent:** `Your decision was not sent` with the reason and Retry.
 - **Assistant after a denial:** "Got it, nothing was deployed."
-- Follow `skills/webkit-microcopy`: sentence case, no "please", present tense.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", present tense.
 
 ## Accessibility
 
@@ -191,7 +191,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - `ai/ai-chat` — the conversation this card lives in.
 - `ai/ai-chat-drawer` — the same flow in a drawer over a resource page.
 - `edit/edit-delete-dialog` — confirming a destructive action the reader started.
-- `skills/webkit-ai-surfaces` — when to ask, what to show and how to record the outcome.
+- `skills/azion-ui-ai-surfaces` — when to ask, what to show and how to record the outcome.
 
 ## Variants
 
@@ -208,18 +208,18 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
 
 ```vue
 <script setup lang="ts">
-  import AgentQuestion from '@aziontech/webkit/agent-question'
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import ChatMessage, { type ChatMessageStatus } from '@aziontech/webkit/chat-message'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import Conversation from '@aziontech/webkit/conversation'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import type { PromptInputStatus } from '@aziontech/webkit/prompt-input'
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import ToolCall from '@aziontech/webkit/tool-call'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import AgentQuestion from '@aziontech/ui/agent-question'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import ChatMessage, { type ChatMessageStatus } from '@aziontech/ui/chat-message'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import Conversation from '@aziontech/ui/conversation'
+  import ImageGallery from '@aziontech/ui/image-gallery'
+  import type { PromptInputStatus } from '@aziontech/ui/prompt-input'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import ToolApproval from '@aziontech/ui/tool-approval'
+  import ToolCall from '@aziontech/ui/tool-call'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import {
     type AiChatInterrupt,
     type AiChatInterruptError,
@@ -247,7 +247,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     textOf,
     toolContentOf,
     toolStatusOf
-  } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/utils/ai-chat'
   import { computed, ref } from 'vue'
 
   import AiActionApprovalComposer from './parts/ai-action-approval-composer.vue'
@@ -620,7 +620,7 @@ import type {
   AiChatPart,
   AiChatTool,
   AiChatToolCallPart
-} from '@aziontech/webkit/utils/ai-chat'
+} from '@aziontech/ui/utils/ai-chat'
 
 const at = (time: string): Date => new Date(`2026-11-19T${time}:00`)
 
@@ -791,13 +791,13 @@ export const sampleDeleteMessages: AiChatMessage[] = [
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
-  } from '@aziontech/webkit/prompt-input'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
-  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
-  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import { type AiChatSendContent, contentOf } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/prompt-input'
+  import PromptInputAttachButton from '@aziontech/ui/prompt-input-attach-button'
+  import PromptInputContextPicker from '@aziontech/ui/prompt-input-context-picker'
+  import PromptInputDictateButton from '@aziontech/ui/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/ui/prompt-input-model-picker'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
+  import { type AiChatSendContent, contentOf } from '@aziontech/ui/utils/ai-chat'
   import { ref } from 'vue'
 
   const props = defineProps<{

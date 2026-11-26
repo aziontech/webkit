@@ -1,6 +1,6 @@
 <script setup>
-  import PricingCard from '@aziontech/webkit/pricing-card'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import PricingCard from '@aziontech/ui/pricing-card'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, ref } from 'vue'
 
   const period = ref('monthly')

@@ -4,14 +4,14 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Magalu success story. The headings of the `body` markdown feed the outline; drop `share`, `community` and `copyPage` and the left rail goes away. WebKit ships no editorial media, so the banner here is the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
+      "summary": "The Magalu success story. The headings of the `body` markdown feed the outline; drop `share`, `community` and `copyPage` and the left rail goes away. Azion UI ships no editorial media, so the banner here is the neutral `@aziontech/ui/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "default.vue"
     }
   ],
   "site": [
     {
       "name": "SuccessStory",
-      "summary": "The Magalu success story under Success cases › Retail: the byline is the date and read time, and the outline lists the three sections of the prose. WebKit ships no editorial media, so the banner here is the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
+      "summary": "The Magalu success story under Success cases › Retail: the byline is the date and read time, and the outline lists the three sections of the prose. Azion UI ships no editorial media, so the banner here is the neutral `@aziontech/ui/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "site-success-story.vue",
       "json": "site-success-story.json"
     }

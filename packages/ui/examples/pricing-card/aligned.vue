@@ -1,5 +1,5 @@
 <script setup>
-  import PricingCard from '@aziontech/webkit/pricing-card'
+  import PricingCard from '@aziontech/ui/pricing-card'
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup>
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, ref } from 'vue'
 
   const state = ref('loading')

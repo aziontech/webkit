@@ -98,7 +98,7 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 - Offer the other mode in the no-match line, so an empty search leads to creating one.
 - Keep the chosen value when the user switches to New and back.
 - Keep an optional binding off by default, and prefill the new resource's name from the resource being created.
-- Build the band once and pass the noun, icon and options; every flow that binds a resource reads the same (see `skills/webkit-create-surface`).
+- Build the band once and pass the noun, icon and options; every flow that binds a resource reads the same (see `skills/azion-ui-create-surface`).
 
 ## Don't
 
@@ -120,7 +120,7 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 - **Required:** what to do, as a sentence, e.g. "Select the project this service serves, or create a new one."
 - **Name guidance:** the allowed characters, e.g. "Lowercase letters, numbers, and hyphens."
 - **Opt-in row:** the action as the title, e.g. "Protect with a firewall", and what it does and that it is off by default as the description. A locked module's description ends with the fact, e.g. "Always on."
-- Follow `skills/webkit-microcopy`: "Select", never "Pick" or "Choose"; sentence case; no em dash.
+- Follow `skills/azion-ui-microcopy`: "Select", never "Pick" or "Choose"; sentence case; no em dash.
 
 ## Accessibility
 
@@ -146,5 +146,5 @@ Then delete `sample.ts` and its import. Set `error` when Next is pressed with no
 - `create/create-wizard` — its CreateAndDeploy variant binds its project with this band on the first step and reuses the list for the deployment.
 - `create/create-wizard` — the step wizard whose Where it runs chooser follows the same list rules.
 - `state/state-form-validation` — how required and invalid messages appear on submit.
-- `Item` — the selectable row the list is built from; see `skills/webkit-form`.
-- `ToggleGroup` — the Existing / New segment; see `skills/webkit-create-surface`.
+- `Item` — the selectable row the list is built from; see `skills/azion-ui-form`.
+- `ToggleGroup` — the Existing / New segment; see `skills/azion-ui-create-surface`.

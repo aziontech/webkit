@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Input from '@aziontech/webkit/input'
-  import PasswordInput from '@aziontech/webkit/password-input'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Input from '@aziontech/ui/input'
+  import PasswordInput from '@aziontech/ui/password-input'
+  import Textarea from '@aziontech/ui/textarea'
   import { onMounted, ref } from 'vue'
 
   const name = ref<string>('')

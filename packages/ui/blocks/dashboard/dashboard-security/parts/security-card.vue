@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/ui/toggle-group'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** The change tag beside the Sum tag. */
   export interface SecurityCardChange {

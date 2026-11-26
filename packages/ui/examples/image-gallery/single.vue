@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import aiGateway from '@aziontech/webkit/assets/ai-gateway.svg'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import aiGateway from '@aziontech/ui/assets/ai-gateway.svg'
+  import ImageGallery from '@aziontech/ui/image-gallery'
 
   const items = [
     {

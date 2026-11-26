@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import Button from '@aziontech/ui/button'
+  import UploadProgress from '@aziontech/ui/upload-progress'
   import { computed, ref } from 'vue'
 
   import type { FileBrowserTransfer, FileBrowserTransferOperation } from '../view-file-browser.vue'

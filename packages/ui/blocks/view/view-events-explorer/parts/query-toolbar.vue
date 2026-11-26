@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import DateRangePicker from '@aziontech/webkit/date-range-picker'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Select from '@aziontech/webkit/select'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DateRangePicker from '@aziontech/ui/date-range-picker'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import Select from '@aziontech/ui/select'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { UseEventQueryReturn } from '../composables/use-event-query'
   import type { UseEventQueryRangeReturn } from '../composables/use-event-query-range'

@@ -3,10 +3,10 @@
 > The file browser a storage resource opens on: one flush `Card` holding a borderless `DataTable` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh and download IconButtons and the `CollectionPreferences` (columns section), then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders stay first under any sort with a link-coloured folder glyph and a link-button name that opens them, a .. row leads back up once inside a folder, Size sorts on bytes and Last modified on the timestamp, the rows page at 50, files take a glyph by extension, Size is muted and Last modified is `TableCellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and its typed confirmation phrase, the name). An empty folder renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button, and a search that matches nothing shows No matching files with Clear search; inside a folder the .. row always remains. Built from `Card`, `DataTable` with `TableSearch`, `IconButton`, `Tooltip`, `CollectionPreferences` (columns section), `Breadcrumb`, `SplitButton`, `TableCellTime`, `TableCellActions` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-file-browser/view-file-browser.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-file-browser")`
 - Components: [Alert](../../components/alert.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SplitButton](../../components/split-button.md), `TableCellActions`, `TableCellTime`, `TableSearch`, [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`, `use-locale`
-- Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
+- Skills: `azion-ui-tables`, `azion-ui-lists`, `azion-ui-states`
 
 ## Asked as
 
@@ -210,7 +210,7 @@ A file's object key is `path + entry.name`. To go live on Azion Object Storage, 
 - **Drop overlay:** `Drop files to upload them to <folder>`, description `Up to 300 MB per file.`
 - **Move dialog:** title `Move <name>` or `Move 2 files`, field `Destination folder`, placeholder `/ (storage root)`, errors `Use letters, numbers, dots, hyphens and slashes only.`, `A destination cannot go up with "..". Type the full path.`, `The files are already in this folder. Pick another one.`
 - **Toasts:** `5 files uploaded to acme-assets.` with Open folder; `1 of 5 files weren't uploaded.` with Retry failed; `2 files moved to logs/.` with Open folder.
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -244,7 +244,7 @@ A file's object key is `path + entry.name`. To go live on Azion Object Storage, 
 - `detail/detail-dns-zone` — records of a resource, not files.
 - `FileTokenGroup`, `FileDropzone` and `UploadProgress` — the upload pieces; see their component docs.
 - `state/state-async-submit` — the rule for long actions; storage transfers follow it with item actions instead of Edit and Redeploy.
-- `DataTable` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.
+- `DataTable` — the data-driven table this page wraps; see `skills/azion-ui-tables` and `skills/azion-ui-lists`.
 
 ## Variants
 
@@ -261,19 +261,19 @@ Each variant is the same screen in another state: `get_block("view/view-file-bro
 
 ```vue
 <script setup lang="ts">
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Card from '@aziontech/webkit/card'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Card from '@aziontech/ui/card'
   import DataTable, {
     type DropdownMenuItemValue,
     type TableExposed
-  } from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import { toast } from '@aziontech/webkit/toast'
-  import type { UploadProgressItem } from '@aziontech/webkit/upload-progress'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  } from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import SplitButton, { type SplitButtonItem } from '@aziontech/ui/split-button'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import { toast } from '@aziontech/ui/toast'
+  import type { UploadProgressItem } from '@aziontech/ui/upload-progress'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import {
@@ -865,7 +865,7 @@ export const toFileBrowserEntries = (
 ## `lib/file-rows.ts`
 
 ```ts
-import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { TableColumn } from '@aziontech/ui/data-table'
 
 import type { FileBrowserEntry, FileBrowserEntryKind } from '../view-file-browser.vue'
 
@@ -1033,8 +1033,8 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Alert from '@aziontech/ui/alert'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
 
   import type { FileRow } from '../lib/file-rows'
 
@@ -1077,7 +1077,7 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 
   import type { FileRow } from '../lib/file-rows'
 
@@ -1138,10 +1138,10 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/data-table'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/data-table'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
 
   import type { FileRow } from '../lib/file-rows'
 
@@ -1217,9 +1217,9 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import SplitButton, { type SplitButtonItem } from '@aziontech/ui/split-button'
 
   import { addToFilesActions } from '../lib/file-rows'
 
@@ -1276,10 +1276,10 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Card from '@aziontech/webkit/card'
-  import SplitButton from '@aziontech/webkit/split-button'
+  import Alert from '@aziontech/ui/alert'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Card from '@aziontech/ui/card'
+  import SplitButton from '@aziontech/ui/split-button'
 
   import { addToFilesActions } from '../lib/file-rows'
   import FolderSearchRow from './folder-search-row.vue'
@@ -1344,11 +1344,11 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import TableSearch from '@aziontech/webkit/table-search'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import TableSearch from '@aziontech/ui/table-search'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   withDefaults(defineProps<{ loading: boolean; exportable: boolean; disabled?: boolean }>(), {
     disabled: false
@@ -1427,17 +1427,17 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Combobox from '@aziontech/webkit/combobox'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import Field from '@aziontech/webkit/field'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Button from '@aziontech/ui/button'
+  import Combobox from '@aziontech/ui/combobox'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import Field from '@aziontech/ui/field'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import { destinationProblem, type FileRow, normalizeDestination } from '../lib/file-rows'
@@ -1563,7 +1563,7 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 
   defineProps<{ selectedCount: number; movableSelection: boolean }>()
 
@@ -1622,8 +1622,8 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import Button from '@aziontech/ui/button'
+  import UploadProgress from '@aziontech/ui/upload-progress'
   import { computed, ref } from 'vue'
 
   import type { FileBrowserTransfer, FileBrowserTransferOperation } from '../view-file-browser.vue'
@@ -1676,17 +1676,17 @@ export const destinationOptionsOf = (paths: string[]) => [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/webkit/file-token-group'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import Button from '@aziontech/ui/button'
+  import DialogContent from '@aziontech/ui/dialog-content'
+  import DialogDescription from '@aziontech/ui/dialog-description'
+  import Dialog from '@aziontech/ui/dialog-root'
+  import DialogTitle from '@aziontech/ui/dialog-title'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/ui/file-token-group'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { computed, ref, watch } from 'vue'
 
   import { UPLOAD_LIMIT } from '../lib/file-rows'

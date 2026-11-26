@@ -2,7 +2,7 @@
 
 > The preview of one stored file in a storage or object browser, or of a document in an AI conversation (a PDF the reader attaches or a model returns): a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read. An image renders as the image, a PDF in the browser's own PDF viewer, text as wrapped monospace text, JSON pretty-printed, and any other type a no-preview state that points at Download. Audio and video files are recognized (their glyph and type) and show the file card with Download; this component plays nothing. Long text is cut at `maxLength` characters with a note that says so. The file comes as a URL (`src`), as text (`content`) or as base64 bytes (`base64`, the shape a chat message carries); it renders what the app hands it and fetches nothing.
 
-- Import: `import FilePreview from '@aziontech/webkit/file-preview'`
+- Import: `import FilePreview from '@aziontech/ui/file-preview'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [file-preview.json](file-preview.json)
 
@@ -127,7 +127,7 @@
 
 ```vue
 <script setup lang="ts">
-  import FilePreview from '@aziontech/webkit/file-preview'
+  import FilePreview from '@aziontech/ui/file-preview'
 
   const settings = JSON.stringify({
     name: 'acme-store',
@@ -157,8 +157,8 @@
 
 ```vue
 <script setup lang="ts">
-  import illustration from '@aziontech/webkit/assets/ai-gateway.svg'
-  import FilePreview from '@aziontech/webkit/file-preview'
+  import illustration from '@aziontech/ui/assets/ai-gateway.svg'
+  import FilePreview from '@aziontech/ui/file-preview'
 </script>
 
 <template>
@@ -176,7 +176,7 @@
 
 ```vue
 <script setup lang="ts">
-  import FilePreview from '@aziontech/webkit/file-preview'
+  import FilePreview from '@aziontech/ui/file-preview'
 
   const invoice =
     'JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2JqCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAvUmVzb3VyY2VzIDw8IC9Gb250IDw8IC9GMSA1IDAgUiA+PiA+PiAvQ29udGVudHMgNCAwIFIgPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0xlbmd0aCAyMjMgPj4Kc3RyZWFtCkJUIC9GMSAxOCBUZiA1NiA3NjAgVGQgKEFjbWUgSW5jLiAtIEludm9pY2UgMTA0MikgVGogMCAtMjggVGQgL0YxIDExIFRmIChCaWxsIHRvOiBKYW5lIERvZSwgMTAwIE1hcmtldCBTdHJlZXQsIFNhbiBGcmFuY2lzY28sIENBIDk0MTA1KSBUaiAwIC0xOCBUZCAoRWRnZSBTdG9yYWdlLCBOb3ZlbWJlciAyMDI2OiAkNDkuMDApIFRqIDAgLTE4IFRkIChUb3RhbCBkdWU6ICQ0OS4wMCkgVGogRVQKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvQmFzZUZvbnQgL0hlbHZldGljYSA+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDA1MTUgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo1ODUKJSVFT0YK'

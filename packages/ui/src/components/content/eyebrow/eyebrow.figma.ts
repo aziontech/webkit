@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/eyebrow/eyebrow.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/eyebrow/eyebrow.vue
 // component=Overline
 import figma from 'figma'
 
@@ -13,7 +13,7 @@ const showCursor = instance.getBoolean('showCursor')
 
 export default {
   example: figma.code`<Eyebrow${prefix ? figma.code` prefix="${prefix}"` : ''}${showCursor ? figma.code` cursor` : ''}>${label}</Eyebrow>`,
-  imports: ["import Eyebrow from '@aziontech/webkit/eyebrow'"],
+  imports: ["import Eyebrow from '@aziontech/ui/eyebrow'"],
   id: 'overline',
   metadata: { nestable: true }
 }

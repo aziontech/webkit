@@ -125,7 +125,7 @@ Then delete the sample imports. Pass `templates` from the template catalog, or k
 - **Buttons:** verb first, three words or fewer, e.g. "Continue with GitHub", "Import", "Load more", "Clear search".
 - **Search:** placeholder and `aria-label` name what it takes, e.g. "Search repositories or paste a repository URL".
 - **Template cards:** title is the template name; description one sentence, e.g. "Compile Rust to WebAssembly and run it."
-- Follow `skills/webkit-microcopy`: sentence case, select rather than choose or pick, no em dash.
+- Follow `skills/azion-ui-microcopy`: sentence case, select rather than choose or pick, no em dash.
 
 ## Accessibility
 

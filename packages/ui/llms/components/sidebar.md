@@ -2,8 +2,8 @@
 
 > Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. `collapsible="icon"` collapses to an **icon rail** instead of leaving the layout, and `shortcut` adds the Ctrl+B / Cmd+B toggle. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected.
 
-- Import: `import SidebarRoot from '@aziontech/webkit/sidebar-root'`
-- Compound import (dot notation, not tree-shakeable): `import Sidebar from '@aziontech/webkit/sidebar'`
+- Import: `import SidebarRoot from '@aziontech/ui/sidebar-root'`
+- Compound import (dot notation, not tree-shakeable): `import Sidebar from '@aziontech/ui/sidebar'`
 - Category: layout · Surface: app · Structure: composition
 - API as JSON: [sidebar.json](sidebar.json)
 
@@ -65,13 +65,13 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/sidebar-header`
-- `@aziontech/webkit/sidebar-footer`
+- `@aziontech/ui/sidebar-header`
+- `@aziontech/ui/sidebar-footer`
 
 ## Sub-components
 
-The compound `@aziontech/webkit/sidebar` (its `index.ts`) attaches every part for dot-notation —
-`Sidebar.Header`, `Sidebar.Footer` — and `@aziontech/webkit/sidebar-root` is the
+The compound `@aziontech/ui/sidebar` (its `index.ts`) attaches every part for dot-notation —
+`Sidebar.Header`, `Sidebar.Footer` — and `@aziontech/ui/sidebar-root` is the
 standalone, tree-shakeable root with nothing attached. The flat sub-component paths below keep
 working.
 
@@ -205,30 +205,30 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 ```vue
 <script setup>
-  import Avatar from '@aziontech/webkit/avatar'
-  import CommandEmpty from '@aziontech/webkit/command-empty'
-  import CommandGroup from '@aziontech/webkit/command-group'
-  import CommandInput from '@aziontech/webkit/command-input'
-  import CommandItem from '@aziontech/webkit/command-item'
-  import CommandList from '@aziontech/webkit/command-list'
-  import Command from '@aziontech/webkit/command-root'
-  import CommandSeparator from '@aziontech/webkit/command-separator'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
-  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import SidebarFooter from '@aziontech/webkit/sidebar-footer'
-  import SidebarHeader from '@aziontech/webkit/sidebar-header'
-  import SidebarMenuBack from '@aziontech/webkit/sidebar-menu-back'
-  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
-  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
-  import SidebarMenu from '@aziontech/webkit/sidebar-menu-root'
-  import SidebarMenuSub from '@aziontech/webkit/sidebar-menu-sub'
-  import SidebarMenuSubContent from '@aziontech/webkit/sidebar-menu-sub-content'
-  import SidebarMenuSubTrigger from '@aziontech/webkit/sidebar-menu-sub-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar-root'
+  import Avatar from '@aziontech/ui/avatar'
+  import CommandEmpty from '@aziontech/ui/command-empty'
+  import CommandGroup from '@aziontech/ui/command-group'
+  import CommandInput from '@aziontech/ui/command-input'
+  import CommandItem from '@aziontech/ui/command-item'
+  import CommandList from '@aziontech/ui/command-list'
+  import Command from '@aziontech/ui/command-root'
+  import CommandSeparator from '@aziontech/ui/command-separator'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'
+  import IconButton from '@aziontech/ui/icon-button'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
+  import SidebarFooter from '@aziontech/ui/sidebar-footer'
+  import SidebarHeader from '@aziontech/ui/sidebar-header'
+  import SidebarMenuBack from '@aziontech/ui/sidebar-menu-back'
+  import SidebarMenuGroup from '@aziontech/ui/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/ui/sidebar-menu-item'
+  import SidebarMenu from '@aziontech/ui/sidebar-menu-root'
+  import SidebarMenuSub from '@aziontech/ui/sidebar-menu-sub'
+  import SidebarMenuSubContent from '@aziontech/ui/sidebar-menu-sub-content'
+  import SidebarMenuSubTrigger from '@aziontech/ui/sidebar-menu-sub-trigger'
+  import Sidebar from '@aziontech/ui/sidebar-root'
   import { ref } from 'vue'
 
   const accountMenuOpen = ref(false)
@@ -436,18 +436,18 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 ```vue
 <script setup>
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Avatar from '@aziontech/webkit/avatar'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import SidebarFooter from '@aziontech/webkit/sidebar-footer'
-  import SidebarMenuBack from '@aziontech/webkit/sidebar-menu-back'
-  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
-  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
-  import SidebarMenu from '@aziontech/webkit/sidebar-menu-root'
-  import SidebarMenuSub from '@aziontech/webkit/sidebar-menu-sub'
-  import SidebarMenuSubContent from '@aziontech/webkit/sidebar-menu-sub-content'
-  import SidebarMenuSubTrigger from '@aziontech/webkit/sidebar-menu-sub-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar-root'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Avatar from '@aziontech/ui/avatar'
+  import IconButton from '@aziontech/ui/icon-button'
+  import SidebarFooter from '@aziontech/ui/sidebar-footer'
+  import SidebarMenuBack from '@aziontech/ui/sidebar-menu-back'
+  import SidebarMenuGroup from '@aziontech/ui/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/ui/sidebar-menu-item'
+  import SidebarMenu from '@aziontech/ui/sidebar-menu-root'
+  import SidebarMenuSub from '@aziontech/ui/sidebar-menu-sub'
+  import SidebarMenuSubContent from '@aziontech/ui/sidebar-menu-sub-content'
+  import SidebarMenuSubTrigger from '@aziontech/ui/sidebar-menu-sub-trigger'
+  import Sidebar from '@aziontech/ui/sidebar-root'
   import { ref } from 'vue'
 
   const open = ref(false)

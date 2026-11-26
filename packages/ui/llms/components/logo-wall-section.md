@@ -2,7 +2,7 @@
 
 > The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `logo-wall`, `quote` and `button`.
 
-- Import: `import LogoWallSection from '@aziontech/webkit/logo-wall-section'`
+- Import: `import LogoWallSection from '@aziontech/ui/logo-wall-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [logo-wall-section.json](logo-wall-section.json)
 
@@ -14,7 +14,7 @@
 ## Do
 
 - Eight or nine logos fill the rectangle wall beside the aside.
-- Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `ThirdPartyLogo`.
+- Pass client registry entries (`@aziontech/ui/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `ThirdPartyLogo`.
 - Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `knockout` for a black mark on a coloured fill, `color` for a colour mark, and `artwork: 'light'` for a reversed mark that must flip on the light theme; give a `logoLight` file instead when the light theme needs a different drawing.
 - Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.
 - Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`.
@@ -87,17 +87,17 @@ No built-in strings: the title, the quote, the client names and the action label
 
 ```vue
 <script setup>
-  import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'
-  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
-  import bancoDeLaNacionExtendedMono from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
-  import crefisaExtendedReversed from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import marisaExtendedColor from '@aziontech/webkit/assets/marisa-extended-color.svg'
-  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-  import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import LogoWallSection from '@aziontech/webkit/logo-wall-section'
+  import agibankExtendedColor from '@aziontech/ui/assets/agibank-extended-color.svg'
+  import agibankExtendedReversed from '@aziontech/ui/assets/agibank-extended-reversed.svg'
+  import bancoDeLaNacionExtendedMono from '@aziontech/ui/assets/banco-de-la-nacion-extended-mono.svg'
+  import crefisaExtendedReversed from '@aziontech/ui/assets/crefisa-extended-reversed.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import magaluExtendedColor from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import marisaExtendedColor from '@aziontech/ui/assets/marisa-extended-color.svg'
+  import netshoesExtendedColor from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
+  import zoopExtendedColor from '@aziontech/ui/assets/zoop-extended-color.svg'
+  import LogoWallSection from '@aziontech/ui/logo-wall-section'
 </script>
 
 <template>
@@ -177,9 +177,9 @@ No built-in strings: the title, the quote, the client names and the action label
 
 ```vue
 <script setup>
-  import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'
-  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import LogoWallSection from '@aziontech/webkit/logo-wall-section'
+  import agibankExtendedColor from '@aziontech/ui/assets/agibank-extended-color.svg'
+  import netshoesExtendedColor from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import LogoWallSection from '@aziontech/ui/logo-wall-section'
 </script>
 
 <template>
@@ -214,8 +214,8 @@ No built-in strings: the title, the quote, the client names and the action label
 
 ```vue
 <script setup>
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import LogoWallSection from '@aziontech/webkit/logo-wall-section'
+  import { CLIENTS } from '@aziontech/ui/assets/client-registry'
+  import LogoWallSection from '@aziontech/ui/logo-wall-section'
 
   const WALL = [
     'Agibank',

@@ -2,7 +2,7 @@
 
 > The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal on the pixelate texture that runs off the frame's bottom rule. The terminal is either a recorded Azion CLI session typed live by a `console-mockup` (`script`), in a fixed-height stage that rises in when it scrolls into view, or a static session whose lines enter one after another (`session`). It is a page section — the site places it from a `{ _id: 'cli-terminal-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `texture`, `console-mockup` and `code-block`.
 
-- Import: `import CliTerminalSection from '@aziontech/webkit/cli-terminal-section'`
+- Import: `import CliTerminalSection from '@aziontech/ui/cli-terminal-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [cli-terminal-section.json](cli-terminal-section.json)
 
@@ -65,7 +65,7 @@
 
 ```vue
 <script setup>
-  import CliTerminalSection from '@aziontech/webkit/cli-terminal-section'
+  import CliTerminalSection from '@aziontech/ui/cli-terminal-section'
 
   const session =
     'azion link --preset javascript --name auth-handler --auto\n# Project successfully configured\n\nazion deploy --auto\n# Upload completed successfully!\n# Your Application was deployed successfully\n# Domain: https://k7q2fmx4ze.map.azionedge.net\n\ncurl https://k7q2fmx4ze.map.azionedge.net/\n# Hello World'
@@ -93,7 +93,7 @@
 
 ```vue
 <script setup>
-  import CliTerminalSection from '@aziontech/webkit/cli-terminal-section'
+  import CliTerminalSection from '@aziontech/ui/cli-terminal-section'
 
   const primaryAction = {
     label: 'Install the CLI',

@@ -147,9 +147,9 @@ export function diffApi(before, after, migrations) {
 function readBaseApi(against) {
   if (process.argv.includes('--snapshot')) return null
   const base = resolveBase({ against })
-  const raw = base ? showAtBase(base, 'packages/webkit/catalog.json') : null
+  const raw = base ? showAtBase(base, 'packages/ui/catalog.json') : null
   if (!raw) {
-    if (against) throw new Error(`cannot read packages/webkit/catalog.json at ${against}`)
+    if (against) throw new Error(`cannot read packages/ui/catalog.json at ${against}`)
     return null
   }
   return {

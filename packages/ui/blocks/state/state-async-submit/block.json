@@ -20,7 +20,7 @@
     "status da operação",
     "result reaches me later"
   ],
-  "skills": ["webkit-errors", "webkit-ui-states", "webkit-form"],
+  "skills": ["azion-ui-errors", "azion-ui-states", "azion-ui-form"],
   "primary": {
     "name": "Idle",
     "file": "state-async-submit.vue"

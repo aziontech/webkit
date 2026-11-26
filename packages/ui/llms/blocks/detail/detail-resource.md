@@ -3,10 +3,10 @@
 > The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the `detail/detail-deployment-logs` block and one function run is the `detail/detail-invocations` block. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `FlowDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the `detail/detail-version` block and the deploy drawers opened from these pages are the `create/create-deploy-drawer` block. The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of `edit/edit-resource`. Built from `PageHeader`, `PageTabs`, `Subheader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `PasswordInput`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `FlowDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.
 
 - Surface: app
-- Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-resource/detail-resource.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-resource")`
 - Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfigProvider](../../components/config-provider.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), `FlowDiagramBind`, [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Subheader](../../components/subheader.md), `TableCellLink`, `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`, `use-unsaved-changes`
-- Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
+- Skills: `azion-ui-layout`, `azion-ui-navigation`, `azion-ui-states`
 
 ## Asked as
 
@@ -135,7 +135,7 @@ Then delete `sample.ts` and its import.
 - **Link tooltips:** say where the link goes, e.g. "Open analytics-app-z1x2c3.example.com in a new tab".
 - **State band:** one sentence on the next step, e.g. "To deploy to Production, drop your project anywhere on this page, connect Git, or run platform deploy via the CLI."
 - **Failure banner:** what failed and what still serves, without an em dash, e.g. "A rule with the same behavior is already bound to this service, so the manifest was refused."
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -186,7 +186,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 - `state/state-project-intake` — the drop target an application page raises while files hover over it.
 - `detail/detail-invocations` — the page an invocation summary opens, with its request path, trace and logs; it owns the invocation summary card.
 - `edit/edit-resource` — the service Settings tab.
-- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-navigation` and `skills/webkit-layout`.
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/azion-ui-navigation` and `skills/azion-ui-layout`.
 
 ## Variants
 
@@ -209,10 +209,10 @@ Each variant is the same screen in another state: `get_block("detail/detail-reso
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Button from '@aziontech/ui/button'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import { type StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed } from 'vue'
 
   import ResourceGetStarted from './parts/resource-get-started.vue'
@@ -346,9 +346,9 @@ Each variant is the same screen in another state: `get_block("detail/detail-reso
 ## `sample.ts`
 
 ```ts
-import type { FlowDiagramEdgeData, FlowDiagramNodeData } from '@aziontech/webkit/flow-diagram-root'
-import type { StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+import type { FlowDiagramEdgeData, FlowDiagramNodeData } from '@aziontech/ui/flow-diagram-root'
+import type { StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+import type { TagSeverity, TagVariant } from '@aziontech/ui/tag'
 
 import type { ResourceDetailResource, ResourceDetailTab } from './detail-resource.vue'
 import type { ApplicationDeploymentRow } from './parts/application-deployments-tab.vue'
@@ -941,8 +941,8 @@ import type {
   FlowDiagramBindOption,
   FlowDiagramNodeData,
   FlowDiagramNodeField
-} from '@aziontech/webkit/flow-diagram-root'
-import { toast } from '@aziontech/webkit/toast'
+} from '@aziontech/ui/flow-diagram-root'
+import { toast } from '@aziontech/ui/toast'
 import { computed, type ComputedRef, onScopeDispose, reactive, readonly, type Ref, ref } from 'vue'
 
 /** A slot of the topology that a resource can be bound to. */
@@ -1167,14 +1167,14 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import Subheader from '@aziontech/webkit/subheader'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import Card from '@aziontech/ui/card'
+  import type { TableColumn } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+  import Subheader from '@aziontech/ui/subheader'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
 
   /** One deployment row of the Deployments tab. */
   export interface ApplicationDeploymentRow {
@@ -1256,15 +1256,15 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Subheader from '@aziontech/webkit/subheader'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import type { TableColumn } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Subheader from '@aziontech/ui/subheader'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
 
   /** One version row of the Versions tab. */
   export interface ApplicationVersionRow {
@@ -1370,11 +1370,11 @@ export function useTopologyStaging(options: UseTopologyStagingOptions): UseTopol
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import Link from '@aziontech/webkit/link'
-  import Subheader from '@aziontech/webkit/subheader'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Card from '@aziontech/ui/card'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import Link from '@aziontech/ui/link'
+  import Subheader from '@aziontech/ui/subheader'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, ref } from 'vue'
 
   export interface ResourceGetStartedProps {
@@ -1574,14 +1574,14 @@ jobs:
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Card from '@aziontech/webkit/card'
-  import { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import Link from '@aziontech/webkit/link'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Avatar from '@aziontech/ui/avatar'
+  import Card from '@aziontech/ui/card'
+  import { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import Link from '@aziontech/ui/link'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed } from 'vue'
 
   import type { ResourceDetailResource } from '../detail-resource.vue'
@@ -1749,8 +1749,8 @@ jobs:
 
 ```ts
 <script setup lang="ts">
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
 
   defineProps<{
     /** The tabs, in order. */
@@ -1857,7 +1857,7 @@ jobs:
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 
   export interface SummaryStateBandProps {
     /** The documentation the band links to. */
@@ -1897,11 +1897,11 @@ jobs:
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** One item of the actions menu. */
   export interface SummaryMenuItem {
@@ -2040,8 +2040,8 @@ jobs:
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
 
   export interface TabRouteEmptyProps {
     /** The tab label. */

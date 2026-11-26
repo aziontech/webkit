@@ -2,7 +2,7 @@
 
 > The last ask at the end of a landing page, followed by a hatched closing frame with no rules of its own, because the site footer under it opens with one. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-section', props }` entry and binds `props` straight onto it — and it composes `module`, `call-to-action`, `button`, `registration-frame` and `texture`. `variant` picks the layout only: `panel` (the default) sets the copy and its actions on one surface, over a short closing frame; `primary` is the loud close, one centred ask on the canvas under a pixelated texture whose waves keep travelling, over a tall closing frame. Both take the same copy, the same two actions and an optional copyable shell `command` set before the actions. `frame` draws the closing frame alone, with no ask: the close of a page whose last band already carries its own action. `hatch` turns the closing frame off when another closing band stacks directly below and draws the shared one (`site-page` sets it for stacked closings). In `primary`, `audiences` turns the ask into a switch between ways in (a person or an agent): each audience swaps in its own copyable line and actions, and a typed line (`typedLead` + `typedWords`) loops under them; the switch block loads on demand, only when `audiences` is set.
 
-- Import: `import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'`
+- Import: `import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [closing-call-to-action-section.json](closing-call-to-action-section.json)
 
@@ -15,7 +15,7 @@
 
 ## Do
 
-- Place it last on the page, right above `site-footer-section`, after a hatched `spacer`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `Spacer` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
+- Place it last on the page, right above `site-footer-section`, after a hatched `spacer`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `Spacer` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `azion-ui/no-gap-after-closing-section` flags the doubled close.
 - Set `anchor: 'contact'` so the page's contact links scroll to the close.
 - Use `variant: 'frame'` (no copy) to close a page that ends on a band with its own actions (a listing, a legal page); `site-page` draws no gap before it.
 - Turn `hatch` off only on a closing band that another closing band follows directly; the last one keeps the frame.
@@ -104,7 +104,7 @@ One built-in string pair: the typed line's pause control reads `common.pauseAnim
 
 ```vue
 <script setup>
-  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
+  import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
 
   const primaryAction = {
     label: 'Start for free',
@@ -135,7 +135,7 @@ One built-in string pair: the typed line's pause control reads `common.pauseAnim
 
 ```vue
 <script setup>
-  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
+  import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
 </script>
 
 <template>
@@ -177,9 +177,9 @@ One built-in string pair: the typed line's pause control reads `common.pauseAnim
 
 ```vue
 <script setup>
-  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 </script>
 
 <template>

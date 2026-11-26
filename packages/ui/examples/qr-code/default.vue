@@ -1,6 +1,6 @@
 <script setup>
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import QrCode from '@aziontech/webkit/qr-code'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import QrCode from '@aziontech/ui/qr-code'
 
   const account = 'jane.doe@example.com'
   const secret = 'JBSWY3DPEHPK3PXP'

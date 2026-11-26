@@ -2,7 +2,7 @@
 
 > A framed grid of claims or links under an optional section title: each cell is a `FeatureItem` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGridSection`. Use CapabilityGridSection for any grid of claims or links on a marketing page. It has three layouts, set by the items rather than a prop: benefits (every item has an `icon`), resources (every item has an `href` and no icon) and text columns (no icon, no link). Per-item links are optional; icons are all or none.
 
-- Import: `import CapabilityGridSection from '@aziontech/webkit/capability-grid-section'`
+- Import: `import CapabilityGridSection from '@aziontech/ui/capability-grid-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [capability-grid-section.json](capability-grid-section.json)
 
@@ -83,7 +83,7 @@
 
 ```vue
 <script setup>
-  import CapabilityGridSection from '@aziontech/webkit/capability-grid-section'
+  import CapabilityGridSection from '@aziontech/ui/capability-grid-section'
 
   const items = [
     {
@@ -119,7 +119,7 @@
 
 ```vue
 <script setup>
-  import CapabilityGridSection from '@aziontech/webkit/capability-grid-section'
+  import CapabilityGridSection from '@aziontech/ui/capability-grid-section'
 
   const items = [
     {
@@ -162,7 +162,7 @@
 
 ```vue
 <script setup>
-  import CapabilityGridSection from '@aziontech/webkit/capability-grid-section'
+  import CapabilityGridSection from '@aziontech/ui/capability-grid-section'
 
   const items = [
     {

@@ -181,8 +181,8 @@ export default {
     docs: {
       description:
         'An exported composable returns read-only state: no reactive() object, no raw ref(), and ' +
-        'an explicit return type in TypeScript (see the webkit-composables rule shipped by `npx ' +
-        '@aziontech/webkit init`).'
+        'an explicit return type in TypeScript (see the azion-ui-composables rule shipped by `npx ' +
+        '@aziontech/ui init`).'
     },
     schema: [],
     messages: {

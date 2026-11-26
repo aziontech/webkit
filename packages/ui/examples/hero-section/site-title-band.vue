@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import HeroSection from '@aziontech/webkit/hero-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import HeroSection from '@aziontech/ui/hero-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const primaryAction = {
     label: 'Start for free',

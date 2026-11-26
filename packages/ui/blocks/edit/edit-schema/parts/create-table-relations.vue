@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
 
   import type { SchemaEditorRelation, SchemaEditorTable } from '../edit-schema.vue'
   import { ON_DELETE } from '../lib/column-types'

@@ -159,7 +159,7 @@ describe('ChartCard', () => {
     const handle = view.getByTestId('card-a').querySelector<HTMLElement>('button')!
     await fireEvent.keyDown(handle, { key: 'ArrowRight' })
     await vi.waitFor(() =>
-      expect(document.querySelector('[data-webkit-announcer]')?.textContent).toBe(
+      expect(document.querySelector('[data-azion-announcer]')?.textContent).toBe(
         'Moved to position 3 of 3'
       )
     )

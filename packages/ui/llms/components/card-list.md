@@ -2,7 +2,7 @@
 
 > Use CardList to show a collection of records as selectable cards instead of table rows; for one bordered box use Card, and for the frame of a dashboard chart use ChartCard. A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `itemKey`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardListProps`, and selection (single or multiple, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
 
-- Import: `import CardList from '@aziontech/webkit/card-list'`
+- Import: `import CardList from '@aziontech/ui/card-list'`
 - Category: data · Surface: app · Structure: monolithic
 - API as JSON: [card-list.json](card-list.json)
 
@@ -100,8 +100,8 @@
 
 ```vue
 <script setup>
-  import CardList from '@aziontech/webkit/card-list'
-  import Tag from '@aziontech/webkit/tag'
+  import CardList from '@aziontech/ui/card-list'
+  import Tag from '@aziontech/ui/tag'
 
   const applications = [
     {
@@ -152,9 +152,9 @@
 
 ```vue
 <script setup>
-  import CardList from '@aziontech/webkit/card-list'
-  import Pagination from '@aziontech/webkit/pagination-root'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import CardList from '@aziontech/ui/card-list'
+  import Pagination from '@aziontech/ui/pagination-root'
+  import { useCollection } from '@aziontech/ui/use-collection'
 
   const edges = Array.from({ length: 14 }, (_, i) => ({
     id: `edge-${i + 1}`,
@@ -192,7 +192,7 @@
 
 ```vue
 <script setup>
-  import CardList from '@aziontech/webkit/card-list'
+  import CardList from '@aziontech/ui/card-list'
   import { ref } from 'vue'
 
   const plans = [

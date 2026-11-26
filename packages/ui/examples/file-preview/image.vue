@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import illustration from '@aziontech/webkit/assets/ai-gateway.svg'
-  import FilePreview from '@aziontech/webkit/file-preview'
+  import illustration from '@aziontech/ui/assets/ai-gateway.svg'
+  import FilePreview from '@aziontech/ui/file-preview'
 </script>
 
 <template>

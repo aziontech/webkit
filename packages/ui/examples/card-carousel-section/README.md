@@ -2,7 +2,7 @@
 
 A row of use-case cards that scrolls sideways, each card an eyebrow, a title, a sentence and a link.
 
-The band is the `CardCarouselSection` component from `@aziontech/webkit/card-carousel-section`; it composes `Carousel` and `Card`.
+The band is the `CardCarouselSection` component from `@aziontech/ui/card-carousel-section`; it composes `Carousel` and `Card`.
 
 ## Examples
 

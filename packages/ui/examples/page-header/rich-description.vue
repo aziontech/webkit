@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Button from '@aziontech/ui/button'
+  import PageHeader from '@aziontech/ui/page-header'
 </script>
 
 <template>

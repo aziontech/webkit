@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import CopyText from '@aziontech/webkit/copy-text'
-  import Table from '@aziontech/webkit/table'
-  import Tag from '@aziontech/webkit/tag'
+  import CopyText from '@aziontech/ui/copy-text'
+  import Table from '@aziontech/ui/table'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import { useBreakpoint } from '../../composables/use-breakpoint'

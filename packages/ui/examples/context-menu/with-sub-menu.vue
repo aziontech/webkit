@@ -1,5 +1,5 @@
 <script setup>
-  import ContextMenu from '@aziontech/webkit/context-menu'
+  import ContextMenu from '@aziontech/ui/context-menu'
   import { reactive } from 'vue'
 
   const view = reactive({ hidden: false, grid: true })

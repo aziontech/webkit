@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import Subheader from '@aziontech/webkit/subheader'
-  import Tag from '@aziontech/webkit/tag'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import Subheader from '@aziontech/ui/subheader'
+  import Tag from '@aziontech/ui/tag'
 
   import { consumers, PREVIEW } from '../lib/access-list'
 

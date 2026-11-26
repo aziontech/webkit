@@ -1,8 +1,8 @@
 {
  "name": "media-tile",
  "binding": "MediaTile",
- "import": "@aziontech/webkit/media-tile",
- "treeShakeableImport": "@aziontech/webkit/media-tile",
+ "import": "@aziontech/ui/media-tile",
+ "treeShakeableImport": "@aziontech/ui/media-tile",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

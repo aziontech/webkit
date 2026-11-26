@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3605-2260
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/pricing-card/pricing-card.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/pricing-card/pricing-card.vue
 // component=PricingCard
 import figma from 'figma'
 
@@ -87,7 +87,7 @@ export default {
     ${actions}
   </template>
 </PricingCard>`,
-  imports: ["import PricingCard from '@aziontech/webkit/pricing-card'"],
+  imports: ["import PricingCard from '@aziontech/ui/pricing-card'"],
   id: 'pricing-card',
   metadata: { nestable: true }
 }

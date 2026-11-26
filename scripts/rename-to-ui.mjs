@@ -36,7 +36,8 @@ export const PROTECT = [
   /\bwebkit2\b/g,
   /github\.com\/aziontech\/webkit(?:\.git)?/g,
   /aziontech\.github\.io\/webkit/g,
-  /(?<![@\w/-])aziontech\/webkit\b(?!-)/g,
+  /(?<![@\w-])aziontech\/webkit\b(?!-)/g,
+  /(?<![@\w-])aziontech\\\/webkit\b(?!-)/g,
   /\b(?:feat|fix|refactor|docs|chore|test|ci|integrate|review|proposal|demo)\/webkit-[\w.-]*/g,
   /\bwebkit-ai-ready\b/g,
   /worktrees[-/]webkit[\w./-]*/g,
@@ -53,7 +54,6 @@ export const PROTECT = [
   /firefox\|webkit/g,
   /pnpm test:webkit(?=` through)/g
 ]
-
 
 export const REPLACE = [
   [/\bAzion WebKit\b/g, 'Azion UI'],
@@ -75,6 +75,8 @@ export const REPLACE = [
   [/\b(lint|typecheck|test|check|format|build|dev):webkit\b/g, '$1:ui'],
   [/\bwebkit-mcp\b/g, 'azion-ui-mcp'],
   [/\b(eslint-plugin|stylelint-config)-webkit\b/g, '$1-azion-ui'],
+  [/\bwebkit-(?=(?:announcer|toaster)\b)/g, 'azion-'],
+  [/(?<=\.\.\/)webkit(?=\/)/g, 'ui'],
   [/\bwebkit-ui-(?=[a-z])/g, 'azion-ui-'],
   [/\bwebkit-(?=[a-z0-9$*<{[(\\'"\x60])/g, 'azion-ui-'],
   [/(?<=[a-z0-9]-)webkit\b/g, 'azion-ui'],
@@ -90,7 +92,10 @@ export const REPLACE = [
   [/\bWebkit(?=[A-Z])/g, 'AzionUi'],
   [/\bwebkit\.(?=(css|sources\.css|blocks\.json|config)\b)/g, 'azion-ui.'],
   [/'@aziontech', 'webkit'/g, "'@aziontech', 'ui'"],
-  [/\b(?:npx )?webkit(?= (?:add|doctor|init|migrate|check|diff|search|sync|css|report|canary|query|plan|bundle|blocks|fix)\b)/g, (m) => m.replace('webkit', 'azion-ui')],
+  [
+    /\b(?:npx )?webkit(?= (?:add|doctor|init|migrate|check|diff|search|sync|css|report|canary|query|plan|bundle|blocks|fix)\b)/g,
+    (m) => m.replace('webkit', 'azion-ui')
+  ],
   [/\bwebkit's\b/g, "Azion UI's"],
   [/(?<=scope: ?)'webkit'/g, "'ui'"],
   [/(?<=scope !== )'webkit'/g, "'ui'"],
@@ -113,17 +118,29 @@ export const REPLACE = [
   [/\bwebkit(?=\\\/)/g, 'azion-ui'],
   [/\bwebkit\/(?=['"\x60]|$)/g, 'azion-ui/'],
   [/\[webkit\]/g, '[azion-ui]'],
-  [/(?<=\b(?:feat|fix|feature|chore|docs|refactor|test|ci|perf|style|revert)\()webkit(?=\))/g, 'ui'],
+  [
+    /(?<=\b(?:feat|fix|feature|chore|docs|refactor|test|ci|perf|style|revert)\()webkit(?=\))/g,
+    'ui'
+  ],
   [/\bscope: webkit\b/g, 'scope: ui'],
   [/"webkit"(?=: )/g, '"azion-ui"'],
   [/\bwebkit\.azion\.app\b/g, 'design.azion.com'],
-  [/\bwebkit(?=\.(?:version|root|installed|fromInstalled|exports|configs|dir|name|path|pkg)\b)/g, 'ui'],
+  [
+    /\bwebkit(?=\.(?:version|root|installed|fromInstalled|exports|configs|dir|name|path|pkg)\b)/g,
+    'ui'
+  ],
   [/(?<=[(,{] ?)webkit(?=[,)}])/g, 'ui'],
   [/(?<=\bconst )webkit(?= =)/g, 'ui'],
   [/(?<=\bimport )webkit(?= from)/g, 'azionUi'],
-  [/(?<=\b(?:mirror of the|the|a|an|uses|of|on|from|in|with|when|into|something|than|over|by|for|whole|top of|adopting|ask the) )webkit\b/g, 'Azion UI'],
+  [
+    /(?<=\b(?:mirror of the|the|a|an|uses|of|on|from|in|with|when|into|something|than|over|by|for|whole|top of|adopting|ask the) )webkit\b/g,
+    'Azion UI'
+  ],
   [/\*\*webkit MCP\*\*/g, '**Azion UI MCP**'],
-  [/\bwebkit(?= (?:component|MCP|scene|token|control|catalog|anatomy|asset|tag|import|surface|version|package|source|lint|rule|preset|block|primitive|equivalent|layer|instead|ships|already|provides|genuinely|lacks|does|needs|re-imports|tarball|Stylelint|construction|instance|config|export|root|install|update|release|styles?|theme))/g, 'Azion UI'],
+  [
+    /\bwebkit(?= (?:component|MCP|scene|token|control|catalog|anatomy|asset|tag|import|surface|version|package|source|lint|rule|preset|block|primitive|equivalent|layer|instead|ships|already|provides|genuinely|lacks|does|needs|re-imports|tarball|Stylelint|construction|instance|config|export|root|install|update|release|styles?|theme))/g,
+    'Azion UI'
+  ],
   [/^(\s*)webkit(?= ships)/g, '$1Azion UI'],
   [/\bWebKit's\b/g, "Azion UI's"],
   [/\bWebKit\b/g, 'Azion UI'],
@@ -199,7 +216,9 @@ function moves() {
   const files = git('ls-files').split('\n').filter(Boolean)
   const seen = new Set()
   for (const f of files) {
-    const m = f.match(/^(skills\/webkit-[^/]+|rules\/webkit-[^/]+\.md|adapters\/claude\/agents\/webkit-[^/]+\.md|packages\/ui\/src\/eslint-plugin\/rules\/prefer-webkit-component\.js)/)
+    const m = f.match(
+      /^(skills\/webkit-[^/]+|rules\/webkit-[^/]+\.md|adapters\/claude\/agents\/webkit-[^/]+\.md|packages\/ui\/src\/eslint-plugin\/rules\/prefer-webkit-component\.js)/
+    )
     if (!m || seen.has(m[1])) continue
     seen.add(m[1])
     const to = m[1].replace(/webkit-(?:ui-)?/, 'azion-ui-')
@@ -231,4 +250,5 @@ function content() {
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]
 if (isMain && doMoves) moves()
 if (isMain && doContent) content()
-if (isMain && !doMoves && !doContent) console.log('usage: node scripts/rename-to-ui.mjs [--moves] [--content] [--dry-run]')
+if (isMain && !doMoves && !doContent)
+  console.log('usage: node scripts/rename-to-ui.mjs [--moves] [--content] [--dry-run]')

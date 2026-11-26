@@ -1,4 +1,4 @@
-import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+import type { TagSeverity, TagVariant } from '@aziontech/ui/tag'
 
 import type {
   AccountHierarchyResource,

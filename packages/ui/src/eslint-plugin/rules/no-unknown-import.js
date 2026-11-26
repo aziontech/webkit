@@ -6,13 +6,13 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow importing a @aziontech/webkit path that is not a published export of the installed version.'
+        'Disallow importing a @aziontech/ui path that is not a published export of the installed version.'
     },
     fixable: 'code',
     hasSuggestions: true,
     schema: [],
     messages: {
-      unknown: "'{{source}}' is not a published export of @aziontech/webkit{{version}}.{{hint}}",
+      unknown: "'{{source}}' is not a published export of @aziontech/ui{{version}}.{{hint}}",
       replace: "Replace with '{{replacement}}'"
     }
   },

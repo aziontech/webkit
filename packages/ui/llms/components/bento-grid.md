@@ -2,8 +2,8 @@
 
 > A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface. It is the layout a marketing page uses when several claims deserve different amounts of room — the alternative to a row of identical tiles.
 
-- Import: `import BentoGridRoot from '@aziontech/webkit/bento-grid-root'`
-- Compound import (dot notation, not tree-shakeable): `import BentoGrid from '@aziontech/webkit/bento-grid'`
+- Import: `import BentoGridRoot from '@aziontech/ui/bento-grid-root'`
+- Compound import (dot notation, not tree-shakeable): `import BentoGrid from '@aziontech/ui/bento-grid'`
 - Category: layout · Surface: site · Structure: composition
 - API as JSON: [bento-grid.json](bento-grid.json)
 
@@ -56,7 +56,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/bento-grid-cell`
+- `@aziontech/ui/bento-grid-cell`
 
 ## Sub-components
 
@@ -93,8 +93,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
-  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
+  import BentoGridCell from '@aziontech/ui/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/ui/bento-grid-root'
 </script>
 
 <template>
@@ -135,8 +135,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
-  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
+  import BentoGridCell from '@aziontech/ui/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/ui/bento-grid-root'
 </script>
 
 <template>
@@ -180,8 +180,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
-  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
+  import BentoGridCell from '@aziontech/ui/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/ui/bento-grid-root'
 
   const TILE_CLASS =
     'flex h-full flex-col justify-between gap-(--spacing-lg) bg-(--bg-contrast) p-(--spacing-xl) text-(--bg-canvas)'

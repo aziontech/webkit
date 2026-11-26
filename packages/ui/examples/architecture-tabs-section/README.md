@@ -4,13 +4,13 @@ A band that plots several architectures of one product, one at a time. Up to fiv
 
 The tabs advance on a timer. It pauses under the pointer or keyboard focus, and never runs under reduced motion.
 
-The band is the `ArchitectureTabsSection` component from `@aziontech/webkit/architecture-tabs-section`; it composes `Module`, `ModuleHeader`, `Button`, `RegistrationFrame`, `MediaTabs` and `Diagram`.
+The band is the `ArchitectureTabsSection` component from `@aziontech/ui/architecture-tabs-section`; it composes `Module`, `ModuleHeader`, `Button`, `RegistrationFrame`, `MediaTabs` and `Diagram`.
 
 ## Examples
 
 ### Default
 
-The routing band from AI Gateway: Request path, Provider failover, Cost routing, Latency routing and Response cache, each held for 6 seconds. Each tab draws one of webkit's named diagrams (`ai-gateway`, `ai-gateway-provider-failover`, `ai-gateway-model-routing`, `ai-gateway-latency-routing`, `ai-gateway-response-cache`), named by each tab's `diagram`.
+The routing band from AI Gateway: Request path, Provider failover, Cost routing, Latency routing and Response cache, each held for 6 seconds. Each tab draws one of Azion UI's named diagrams (`ai-gateway`, `ai-gateway-provider-failover`, `ai-gateway-model-routing`, `ai-gateway-latency-routing`, `ai-gateway-response-cache`), named by each tab's `diagram`.
 
 Example: [`site-default.vue`](./site-default.vue)
 
@@ -31,7 +31,7 @@ Site JSON: [`site-default.json`](./site-default.json)
 
 ### Platform
 
-The base Azion architecture the website bundle plots: Request path, Security first, Code at the edge, Data close by and Every request seen. Each tab draws one product's starter diagram from webkit by name (`workloads`, `firewall`, `functions`, `sql-database`, `real-time-events`), so the band reads as one request crossing the platform.
+The base Azion architecture the website bundle plots: Request path, Security first, Code at the edge, Data close by and Every request seen. Each tab draws one product's starter diagram from Azion UI by name (`workloads`, `firewall`, `functions`, `sql-database`, `real-time-events`), so the band reads as one request crossing the platform.
 
 Example: [`site-platform.vue`](./site-platform.vue)
 

@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import Hero from '@aziontech/webkit/hero'
-  import Module from '@aziontech/webkit/module'
+  import Container from '@aziontech/ui/container'
+  import Hero from '@aziontech/ui/hero'
+  import Module from '@aziontech/ui/module'
 </script>
 
 <template>

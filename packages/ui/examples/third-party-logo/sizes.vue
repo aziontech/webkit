@@ -1,6 +1,6 @@
 <script setup>
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import { CLIENTS } from '@aziontech/ui/assets/client-registry'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 
   const client = CLIENTS.find((entry) => entry.name === 'Agibank')
   const sizes = ['small', 'medium', 'large']

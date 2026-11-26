@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: ecae1123e1cf5e15353e1e67fbcdab3774d082a2b332f3e35549f7de94bd3a9b
+checksum: f4bbe49cb4f32bf6da9220c38fda46dbb7bf2641e9cee9976ad3f2019301e2bf
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -49,7 +49,7 @@ PriorityTag labels a work item with how soon it should be handled: urgent, high,
 
 ```vue
 <script setup>
-  import PriorityTag from '@aziontech/webkit/priority-tag'
+  import PriorityTag from '@aziontech/ui/priority-tag'
 </script>
 
 <template>
@@ -107,7 +107,7 @@ _none_
 | glyph dots (none)       | `var(--text-muted)`                                               |
 | urgent mark             | `var(--danger-mark)` (a status icon standing on a surface, OI-02) |
 
-The border width is the theme's default border width, the same utility SeverityTag uses. The `--severity-*` ramp is not used: it belongs to the severity scale only (`rules/webkit-tokens.md`).
+The border width is the theme's default border width, the same utility SeverityTag uses. The `--severity-*` ramp is not used: it belongs to the severity scale only (`rules/azion-ui-tokens.md`).
 
 ## Theme gaps
 
@@ -118,7 +118,7 @@ _none_
 - Visible focus: not focusable; the tag is static text and takes no `tabindex`.
 - Keyboard map: none; the tag has no interaction.
 - ARIA: the glyph is `aria-hidden="true"`; a visually hidden prefix (`sr-only`, locale key `priorityTag.prefix`, `Priority:`) sits before the label, so the text a screen reader reads is "Priority: High". No `role` or `aria-label` on the root (a generic element takes no name); the hidden prefix stays when the default slot replaces the label.
-- Contrast: label `var(--text-default)` on `var(--bg-canvas)` ≥4.5:1; filled bars `var(--text-default)` and the urgent mark `var(--danger-mark)` meet the mark and icon targets (Lc 30 / Lc 45, WCAG ≥3:1) in both themes; only documented token pairs (`rules/webkit-tokens.md` § Contrast).
+- Contrast: label `var(--text-default)` on `var(--bg-canvas)` ≥4.5:1; filled bars `var(--text-default)` and the urgent mark `var(--danger-mark)` meet the mark and icon targets (Lc 30 / Lc 45, WCAG ≥3:1) in both themes; only documented token pairs (`rules/azion-ui-tokens.md` § Contrast).
 - Never colour only: every level differs by glyph shape and by text.
 - No motion, so no `motion-reduce:*` fallback is needed.
 - Touch target: not applicable; the tag is not interactive.
@@ -170,7 +170,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/primitives/animations/animate.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

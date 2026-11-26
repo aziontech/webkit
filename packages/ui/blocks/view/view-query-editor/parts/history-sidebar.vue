@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item-root'
-  import Sidebar from '@aziontech/webkit/sidebar-root'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item-root'
+  import Sidebar from '@aziontech/ui/sidebar-root'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, ref } from 'vue'
 
   import { SIDEBAR_FRAME_CLASS } from '../lib/sidebar-frame'

@@ -1,6 +1,6 @@
 <script setup>
-  import ConsoleTraceScene from '@aziontech/webkit/assets/console-trace-scene'
-  import MediaTabs from '@aziontech/webkit/media-tabs'
+  import ConsoleTraceScene from '@aziontech/ui/assets/console-trace-scene'
+  import MediaTabs from '@aziontech/ui/media-tabs'
 
   const documents = [
     {

@@ -7,7 +7,7 @@ spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 18017512284496e719145a7a12679cb5b573fcc24ba8caf68654b580b66a44a0
+checksum: 0c86cfbf6a08da6cf9931e0f236452748d46cb76d543e47a59c99d6631b3c581
 created: 2026-08-03
 last_updated: 2026-11-19
 ---
@@ -47,7 +47,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - A single collapsible content region that is not navigation → use `accordion` instead.
 - Mutually exclusive in-page view switching → use `tabs` (or `toggle-group` for a compact control) instead.
 - The surrounding shell itself (brand header, scroll region, user footer) → that is `Sidebar`; this menu goes inside it.
-- Navigation inside a page body → never a `SidebarMenu`. Page navigation lives in the rail, two levels at most, and a page has only its `page-tabs` (rule `webkit-navigation-levels`). A resource's own pages are its tabs, at most 7; more pages become sections of one tab's page.
+- Navigation inside a page body → never a `SidebarMenu`. Page navigation lives in the rail, two levels at most, and a page has only its `page-tabs` (rule `azion-ui-navigation-levels`). A resource's own pages are its tabs, at most 7; more pages become sections of one tab's page.
 
 ## Related
 
@@ -62,7 +62,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - Put every `SidebarMenu.Item` and `SidebarMenu.Sub` inside a `SidebarMenu.Group` or an **inline** `SidebarMenu.SubContent`. Those own the `<ul>`; a row outside one is a `<li>` with no list, which is invalid HTML. A group with no `label` is the correct way to express an unlabeled block — including inside a **drill** `SidebarMenu.SubContent`, which is a level container rather than a list precisely so it can hold groups.
 - Treat a drilled level as a whole menu, because it is one: give it groups and labels the way the root has them. A second-level nav that is only flat rows is a missed opportunity, not a constraint of the component.
 - Let the host own width, padding and scrolling. The menu fills the width it is given and adds no outer margin, so it drops into `Sidebar`, a drawer or the `ConsoleLayout` / `DocLayout` rail unchanged.
-- Do not render a `SidebarMenu` inside a page body. Page navigation lives in the rail, two levels at most, and a page has only its tabs; a route appears once per screen. The lint `webkit/no-page-navigation-menu` warns on a `SidebarMenu` in a page body, and `ConsoleLayout` warns in development when one repeats a rail row.
+- Do not render a `SidebarMenu` inside a page body. Page navigation lives in the rail, two levels at most, and a page has only its tabs; a route appears once per screen. The lint `azion-ui/no-page-navigation-menu` warns on a `SidebarMenu` in a page body, and `ConsoleLayout` warns in development when one repeats a rail row.
 - Keep padding **inside the row**, never on the list. Every list (`Group`'s `<ul>`, `SubContent`'s `<ul>`) is a bare `m-0 list-none p-0 flex flex-col`; the row owns `px-(--spacing-sm)` and `min-h-8`. That is what lets a row's hover surface span the full menu width instead of stopping short of a list inset.
 - **The rail means parentage, not membership.** It is drawn only by an inline `SidebarMenu.SubContent`, where it ties children to the row above them. A `SidebarMenu.Group` draws none and indents nothing: its label already marks the section, so a rail there would spend the same ink saying something the label has said and dilute what the rail means everywhere else. A grouped row therefore sits flush with an ungrouped one.
 - Indentation is the nested list's `padding-left`, not a margin on each row — so the rail, which is drawn relative to that padding box, stays aligned no matter what a row contains.
@@ -90,8 +90,8 @@ is the shape every story below uses.
 
 ```vue
 <script setup>
-  import SidebarMenu from '@aziontech/webkit/sidebar-menu'
-  import Sidebar from '@aziontech/webkit/sidebar'
+  import SidebarMenu from '@aziontech/ui/sidebar-menu'
+  import Sidebar from '@aziontech/ui/sidebar'
 </script>
 
 <template>
@@ -152,9 +152,9 @@ Tree-shaking alternative — the standalone root plus each sub-component from it
 
 ```vue
 <script setup>
-  import SidebarMenu from '@aziontech/webkit/sidebar-menu-root'
-  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
-  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
+  import SidebarMenu from '@aziontech/ui/sidebar-menu-root'
+  import SidebarMenuGroup from '@aziontech/ui/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/ui/sidebar-menu-item'
 </script>
 ```
 
@@ -222,11 +222,11 @@ element instead of three.
 
 **Test ids.** The root derives `data-testid="sidebar-menu"` (its own name) and each part its own name (`sidebar-menu-item`, …). The 6.0 rename from `menu` to `sidebar-menu` also ended the old clash with the horizontal `navigation-menu`, whose root used the same `navigation-menu` string.
 
-Resulting layout (no per-component `package.json` — the root `packages/webkit/package.json#exports`
+Resulting layout (no per-component `package.json` — the root `packages/ui/package.json#exports`
 resolves every path; `.d.ts` is generated at publish time, never committed):
 
 ```
-packages/webkit/src/components/navigation/
+packages/ui/src/components/navigation/
 └── sidebar-menu/
     ├── sidebar-menu.vue                    (root; owns the drill stack + data mode, provides root context)
     ├── sidebar-menu-item/                  (a real sub-component)
@@ -252,14 +252,14 @@ packages/webkit/src/components/navigation/
 ```
 
 **Scope — additive only.** Every file in the `sidebar-menu/` tree above is **new**. Two existing files are
-touched, neither in a way a consumer can observe as a break: `packages/webkit/package.json#exports`
+touched, neither in a way a consumer can observe as a break: `packages/ui/package.json#exports`
 by **adding** keys (no existing key changes target), and `sidebar.vue` by **adding one CSS variable**
 to its `<nav>` (`--sidebar-menu-ring-offset`, beside the `--sidebar-menu-item-ring-offset` it already sets) so a menu
 hosted there rings against the sidebar's surface. No existing prop, default, event, slot or
 `data-testid` anywhere in the package is altered, and nothing is deprecated or removed. The release
 is a `feat` (minor), never a `feat!`.
 
-Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the
+Exports to add to `packages/ui/package.json#exports` (flat public names; category lives in the
 folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no alias:
 
 ```jsonc
@@ -458,7 +458,7 @@ both are load-bearing:
 | surface while sliding                                                         | `var(--sidebar-menu-slide-surface, var(--bg-surface))` |
 
 Geometry — the Kumo box model re-expressed in our tokens. Every Kumo value in the middle column is
-something the token rules forbid in a webkit component (arbitrary `p-*`/`gap-*` where a
+something the token rules forbid in an Azion UI component (arbitrary `p-*`/`gap-*` where a
 `spacing.js` token applies, `rounded-lg`, Tailwind default durations, `cubic-bezier`
 literals), so the right column is the contract:
 
@@ -551,7 +551,7 @@ frame's 32 px.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

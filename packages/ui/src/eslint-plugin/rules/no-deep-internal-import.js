@@ -4,12 +4,12 @@ import { ctxCwd } from '../lib/rule-utils.js'
 export default {
   meta: {
     type: 'problem',
-    docs: { description: 'Disallow importing @aziontech/webkit internals (deep paths / src).' },
+    docs: { description: 'Disallow importing @aziontech/ui internals (deep paths / src).' },
     fixable: 'code',
     hasSuggestions: true,
     schema: [],
     messages: {
-      deep: "'{{source}}' reaches into @aziontech/webkit internals. Import the published entry point{{hint}}.",
+      deep: "'{{source}}' reaches into @aziontech/ui internals. Import the published entry point{{hint}}.",
       replace: "Import from '{{replacement}}'"
     }
   },

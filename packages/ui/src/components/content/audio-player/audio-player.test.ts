@@ -1,4 +1,4 @@
-import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
+import placeholderClip from '@aziontech/ui/assets/placeholder-clip.webm'
 import userEvent from '@testing-library/user-event'
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'

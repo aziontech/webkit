@@ -88,7 +88,7 @@ Dark-mode selectors: `[data-theme='dark']`, `.dark`, and, on a dark device,
 
 Each theme also sets `color-scheme`, so native scrollbars and form controls match, and Tailwind's
 `dark:` variant follows the same rules. In a Vue app, `useColorMode()` from
-`@aziontech/webkit/use-color-mode` stores the choice (`system` by default) and drives a
+`@aziontech/ui/use-color-mode` stores the choice (`system` by default) and drives a
 `ThemeSwitcher`.
 
 Derived tokens reference their source (`--border-selected: var(--primary)`), so overriding `--primary`
@@ -198,7 +198,7 @@ Utility equivalents are generated in the same stylesheet (e.g. `@utility text-de
 Every documented colour pair passes WCAG 2.1 AA and APCA (0.0.98G-4g): Lc 75 for body text, Lc 60
 for other text, Lc 45 for icons, Lc 30 for solid marks and Lc 15 for borders. `test/apca-contrast.test.mjs`
 checks the pairs in both themes; the accepted exceptions and their reasons are listed in the consumer
-rule `rules/webkit-tokens.md` (§ "Contrast: APCA and WCAG 2").
+rule `rules/azion-ui-tokens.md` (§ "Contrast: APCA and WCAG 2").
 
 ### Chart palettes
 
@@ -209,11 +209,11 @@ dashboard root, with a light and a dark value each: `--chart-series-1`…`--char
 `-negative-3` / `-neutral` / `-positive-3` / `-positive-2` / `-positive`. Status, severity, Other, grid, axis, label, crosshair and tooltip variables are fixed.
 Every value must pass the checks `test/chart-role.test.mjs` and `test/apca-contrast.test.mjs` run on the default (3:1 and APCA Lc 30
 on the chart surfaces, eight distinct series, the same hue family in both themes); a ninth series
-folds into `--chart-series-other`. The full contract is in `rules/webkit-tokens.md` § "Chart palettes".
+folds into `--chart-series-other`. The full contract is in `rules/azion-ui-tokens.md` § "Chart palettes".
 
 ### Variables removed in 6.0
 
-Nothing in WebKit read these, so 6.0 removes them. Replace any use in your own CSS:
+Nothing in Azion UI read these, so 6.0 removes them. Replace any use in your own CSS:
 
 | Removed                                                                                                                              | Use instead                                                                                                                         |
 | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
@@ -229,7 +229,7 @@ Nothing in WebKit read these, so 6.0 removes them. Replace any use in your own C
 
 ### Variables renamed in 6.0
 
-Same values, new names. `npx @aziontech/webkit migrate` rewrites them in `.vue`, `.css`, `.ts` and `.js` files:
+Same values, new names. `npx @aziontech/ui migrate` rewrites them in `.vue`, `.css`, `.ts` and `.js` files:
 
 | Old                                                                                | New                                                                                                                 |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -276,7 +276,7 @@ for that box, not for the window. The variants read the same `--container-*` sca
 the theme declares the scale in `@theme`, which replaces Tailwind's default container scale (where
 `@md` would be 448 px and `@2xl` 672 px), so `@md:` means "my container is at least 472 px" and
 `@2xl:` 752 px. Write the variant, never a raw `@min-[47rem]:` for a size the scale already has.
-`test/standards/container-scale.test.mjs` in `@aziontech/webkit` compiles every variant against
+`test/standards/container-scale.test.mjs` in `@aziontech/ui` compiles every variant against
 this stylesheet and fails if one drifts from the table below.
 
 | Variant | Token             | Width  | Variant | Token             | Width   |
@@ -358,7 +358,7 @@ This package follows [Semantic Versioning](https://semver.org/). Versions are ma
 
 ## Contributing
 
-This package is part of the Azion WebKit monorepo. Please see the main repository for contribution guidelines.
+This package is part of the Azion UI monorepo. Please see the main repository for contribution guidelines.
 
 ## License
 

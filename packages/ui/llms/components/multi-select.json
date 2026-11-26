@@ -1,19 +1,19 @@
 {
  "name": "multi-select",
  "binding": "MultiSelect",
- "import": "@aziontech/webkit/multi-select",
- "treeShakeableImport": "@aziontech/webkit/multi-select-root",
+ "import": "@aziontech/ui/multi-select",
+ "treeShakeableImport": "@aziontech/ui/multi-select-root",
  "category": "input",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/multi-select-trigger",
-  "@aziontech/webkit/multi-select-content",
-  "@aziontech/webkit/multi-select-group",
-  "@aziontech/webkit/multi-select-item"
+  "@aziontech/ui/multi-select-trigger",
+  "@aziontech/ui/multi-select-content",
+  "@aziontech/ui/multi-select-group",
+  "@aziontech/ui/multi-select-item"
  ],
- "purpose": "Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<MultiSelectContent>`. Since spec v4 the trigger can also show the selection as removable chips (`variant=\"chips\"`, capped by `chipLimit` with a `+N more` chip), take typed text to filter the options in place (`searchable`), offer an `Add \"…\"` row for a typed value that matches no option (`allowCustom`, emits `create`), and render its own loading, error and empty list states (`loading`, `error`, `emptyTitle`) — the same vocabulary as `combobox`. MultiSelect is the one multi-pick field (`Select` picks exactly one): `modelValue` is always an array and the indicator is always a checkbox. Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `Input`/`Select` trigger visuals.",
+ "purpose": "Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` Azion UI component), optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<MultiSelectContent>`. Since spec v4 the trigger can also show the selection as removable chips (`variant=\"chips\"`, capped by `chipLimit` with a `+N more` chip), take typed text to filter the options in place (`searchable`), offer an `Add \"…\"` row for a typed value that matches no option (`allowCustom`, emits `create`), and render its own loading, error and empty list states (`loading`, `error`, `emptyTitle`) — the same vocabulary as `combobox`. MultiSelect is the one multi-pick field (`Select` picks exactly one): `modelValue` is always an array and the indicator is always a checkbox. Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `Input`/`Select` trigger visuals.",
  "setup": null,
  "useWhen": [
   "Use MultiSelect whenever the person picks several values from a list in a form field; the chosen ones show as a count or chips in the trigger. For two to five options that fit on screen use a Checkbox per option; to build a large subset with both sides visible use TransferList.",

@@ -1,12 +1,12 @@
 # DashboardHome (`dashboard/dashboard-home`)
 
-> The whole Home page body, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles joined in one StatTileGroup card (each label explained by a `Hint` in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card (one whole-card `Item` link), and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a whole-row `Item` link to the resource, each panel heading a `Link` to its list, and an empty panel an `EmptyState`. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the layout’s palette (useConsoleLayout({ optional: true }), then layout?.openSearch()) on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). While either screen arrives, the PageWires Overview and Onboarding wires (`state/state-page-skeleton`) hold the page. Built from `StatTileGroup`, `StatTile`, `Hint`, `Card`, `Link`, `EmptyState`, `Alert`, `Tooltip`, `IconButton`, `Item`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. The populated root carries data-layout-fill and scrolls itself: from xl each resource panel scrolls its rows; below xl the page scrolls as one. The first-access screen does not fill.
+> The whole Home page body, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles joined in one StatTileGroup card (each label explained by a `Hint` in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card (one whole-card `Item` link), and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a whole-row `Item` link to the resource, each panel heading a `Link` to its list, and an empty panel an `EmptyState`. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the layout’s palette (useConsoleLayout({ optional: true }), then layout?.openSearch()) on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). While either screen arrives, the PageWires Overview and Onboarding wires (`state/state-page-skeleton`) hold the page. Built from `StatTileGroup`, `StatTile`, `Hint`, `Card`, `Link`, `EmptyState`, `Alert`, `Tooltip`, `IconButton`, `Item`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the Azion UI assets. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. The populated root carries data-layout-fill and scrolls itself: from xl each resource panel scrolls its rows; below xl the page scrolls as one. The first-access screen does not fill.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-home/dashboard-home.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-home/dashboard-home.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-home")`
 - Components: [Alert](../../components/alert.md), `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Illustration](../../components/illustration.md), [Input](../../components/input.md), [Item](../../components/item.md), [Item](../../components/item.md), [Link](../../components/link.md), [Popover](../../components/popover.md), [SearchTrigger](../../components/search-trigger.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [StatTile](../../components/stat-tile.md), [StatTileGroup](../../components/stat-tile-group.md), `TableCellActions`, `TableCellLink`, `TableCellTime`, [Tag](../../components/tag.md), [ThirdPartyLogo](../../components/third-party-logo.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-console-layout`
-- Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-layout`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -237,7 +237,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
+  import Alert from '@aziontech/ui/alert'
   import { computed } from 'vue'
 
   import { homeMetricDefinitions } from './home-metrics'
@@ -731,10 +731,10 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Input from '@aziontech/webkit/input'
-  import Popover from '@aziontech/webkit/popover'
-  import Spinner from '@aziontech/webkit/spinner'
+  import Button from '@aziontech/ui/button'
+  import Input from '@aziontech/ui/input'
+  import Popover from '@aziontech/ui/popover'
+  import Spinner from '@aziontech/ui/spinner'
   import { computed, onScopeDispose, reactive, ref, watch } from 'vue'
 
   import type { HomeDashboardDomainAvailability } from '../dashboard-home.vue'
@@ -876,11 +876,11 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Illustration from '@aziontech/webkit/illustration'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Illustration from '@aziontech/ui/illustration'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
+  import { useConsoleLayout } from '@aziontech/ui/use-console-layout'
 
   import type { HomeDashboardDomainAvailability } from '../dashboard-home.vue'
   import HomeDomainCheck from './home-domain-check.vue'
@@ -1036,10 +1036,10 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
 
 ```ts
 <script setup lang="ts">
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Item from '@aziontech/webkit/item'
-  import Link from '@aziontech/webkit/link'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Item from '@aziontech/ui/item'
+  import Link from '@aziontech/ui/link'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import type { HomeDashboardResource } from '../dashboard-home.vue'
 
@@ -1197,18 +1197,18 @@ export const homeMetricDefinitions: HomeMetricDefinition[] = [
 
 ```ts
 <script setup lang="ts">
-  import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
-  import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
-  import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
-  import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
-  import Card from '@aziontech/webkit/card'
-  import Hint from '@aziontech/webkit/hint'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item-root'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import claudeMark from '@aziontech/ui/assets/claude-symbol-color.svg'
+  import codexMark from '@aziontech/ui/assets/codex-symbol-mono.svg'
+  import cursorMark from '@aziontech/ui/assets/cursor-symbol-mono.svg'
+  import geminiMark from '@aziontech/ui/assets/gemini-symbol-color.svg'
+  import Card from '@aziontech/ui/card'
+  import Hint from '@aziontech/ui/hint'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item-root'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { HomeMetricDefinition } from '../home-metrics'
 

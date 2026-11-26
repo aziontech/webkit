@@ -1,9 +1,9 @@
 # Tutorial Panel
 
-> The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `TutorialPanelHotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every hotspot read. A tutorial starts on a reader's action (the panel's Start); only one step is open on a page at a time. It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws each tutorial with its own internal task list (6.0 moved the former `HelpPanel.TutorialPanelTutorial` and `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts. Design call (2026-11-18): the hotspot is a part of this component, not a component of its own. It renders nothing without the provider's running tutorial and reads only this component's context, so it belongs to this family the way Atlassian's `SpotlightTarget` belongs to its onboarding `SpotlightManager`; Shepherd.js and Driver.js have no separate target component at all (a step names its element), and the standalone hotspots of Appcues and Pendo work without a tour, which ours never does. Cloudscape ships `Hotspot` as its own export, but it too only works inside its annotation context. It is a companion part (it composes `Popover`), so it is imported on its own and not attached to the compound.
+> The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `TutorialPanelHotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every hotspot read. A tutorial starts on a reader's action (the panel's Start); only one step is open on a page at a time. It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws each tutorial with its own internal task list (6.0 moved the former `HelpPanel.TutorialPanelTutorial` and `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on Azion UI parts. Design call (2026-11-18): the hotspot is a part of this component, not a component of its own. It renders nothing without the provider's running tutorial and reads only this component's context, so it belongs to this family the way Atlassian's `SpotlightTarget` belongs to its onboarding `SpotlightManager`; Shepherd.js and Driver.js have no separate target component at all (a step names its element), and the standalone hotspots of Appcues and Pendo work without a tour, which ours never does. Cloudscape ships `Hotspot` as its own export, but it too only works inside its annotation context. It is a companion part (it composes `Popover`), so it is imported on its own and not attached to the compound.
 
-- Import: `import TutorialPanelRoot from '@aziontech/webkit/tutorial-panel-root'`
-- Compound import (dot notation, not tree-shakeable): `import TutorialPanel from '@aziontech/webkit/tutorial-panel'`
+- Import: `import TutorialPanelRoot from '@aziontech/ui/tutorial-panel-root'`
+- Compound import (dot notation, not tree-shakeable): `import TutorialPanel from '@aziontech/ui/tutorial-panel'`
 - Category: content · Surface: app · Structure: composition
 - API as JSON: [tutorial-panel.json](tutorial-panel.json)
 
@@ -58,8 +58,8 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/tutorial-panel-provider`
-- `@aziontech/webkit/tutorial-panel-hotspot`
+- `@aziontech/ui/tutorial-panel-provider`
+- `@aziontech/ui/tutorial-panel-hotspot`
 
 ## Sub-components
 
@@ -95,7 +95,7 @@ not hold it reports its step as dismissed, so its popover is closed and its mark
 Exported types: `TutorialPanelTutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialPanelTaskData` (`title`, `steps`), `TutorialPanelStep` (`title`, `content`, `hotspotId`), `TutorialPanelHotspotSide`.
 
 ```
-packages/webkit/src/components/content/tutorial-panel/
+packages/ui/src/components/content/tutorial-panel/
 ├── tutorial-panel.vue                    (root; the panel views)
 ├── tutorial-panel.test.ts
 ├── index.ts                              (compound: attaches Provider)
@@ -187,11 +187,11 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Input from '@aziontech/webkit/input'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import TutorialPanel from '@aziontech/webkit/tutorial-panel'
-  import TutorialPanelHotspot from '@aziontech/webkit/tutorial-panel-hotspot'
+  import Button from '@aziontech/ui/button'
+  import Input from '@aziontech/ui/input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import TutorialPanel from '@aziontech/ui/tutorial-panel'
+  import TutorialPanelHotspot from '@aziontech/ui/tutorial-panel-hotspot'
   import { ref } from 'vue'
 
   const tutorials = [
@@ -332,8 +332,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ```vue
 <script setup>
-  import Link from '@aziontech/webkit/link'
-  import TutorialPanel from '@aziontech/webkit/tutorial-panel'
+  import Link from '@aziontech/ui/link'
+  import TutorialPanel from '@aziontech/ui/tutorial-panel'
   import { ref } from 'vue'
 
   const tutorials = [
@@ -394,7 +394,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ```vue
 <script setup>
-  import TutorialPanel from '@aziontech/webkit/tutorial-panel'
+  import TutorialPanel from '@aziontech/ui/tutorial-panel'
 </script>
 
 <template>

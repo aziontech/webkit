@@ -1,8 +1,8 @@
 {
  "name": "faq",
  "binding": "Faq",
- "import": "@aziontech/webkit/faq",
- "treeShakeableImport": "@aziontech/webkit/faq",
+ "import": "@aziontech/ui/faq",
+ "treeShakeableImport": "@aziontech/ui/faq",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

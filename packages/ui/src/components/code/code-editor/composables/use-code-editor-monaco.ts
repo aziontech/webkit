@@ -91,7 +91,7 @@ function startSession(
     original: options.original(),
     language: options.language(),
     diff: options.diff(),
-    uri: file && Uri ? Uri.parse(`inmemory://webkit/${options.uid}/${file}`) : undefined,
+    uri: file && Uri ? Uri.parse(`inmemory://azion-ui/${options.uid}/${file}`) : undefined,
     options: { ...options.options(), ...fontFromTokens(root), theme: CODE_EDITOR_THEME }
   })
   labelSides(current, options.labels())

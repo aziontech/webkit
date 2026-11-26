@@ -23,7 +23,7 @@
     "tableros",
     "selector de tablero"
   ],
-  "skills": ["webkit-data-viz", "webkit-ui-states", "webkit-navigation"],
+  "skills": ["azion-ui-data-viz", "azion-ui-states", "azion-ui-navigation"],
   "primary": {
     "name": "Default",
     "file": "dashboard-switcher.vue"

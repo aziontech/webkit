@@ -2,7 +2,7 @@
 
 > The labelled control that triggers an action. `variant` ranks the action in its view (one `primary`, the rest `secondary`, `outline`, `ghost`, `danger` for a destructive one, or `link` for an action that reads as a link), `size` fits it to its context, and `loading` and `disabled` cover the states in between. With `href` it renders an anchor that looks the same, so a call to action that navigates needs no second component.
 
-- Import: `import Button from '@aziontech/webkit/button'`
+- Import: `import Button from '@aziontech/ui/button'`
 - Category: action · Surface: app · Structure: monolithic
 - API as JSON: [button.json](button.json)
 
@@ -127,7 +127,7 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
@@ -143,7 +143,7 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
@@ -180,7 +180,7 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>

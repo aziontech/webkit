@@ -2,7 +2,7 @@
 
 > One collapsible entry inside a `DocAccordionGroup`. It carries its title and its body only; the group owns the open-state model, the trigger and the panel. Rendered on its own it is a `display: contents` wrapper around its body.
 
-- Import: `import DocAccordion from '@aziontech/webkit/doc-accordion'`
+- Import: `import DocAccordion from '@aziontech/ui/doc-accordion'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-accordion.json](doc-accordion.json)
 
@@ -64,8 +64,8 @@
 
 ```vue
 <script setup>
-  import DocAccordion from '@aziontech/webkit/doc-accordion'
-  import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
+  import DocAccordion from '@aziontech/ui/doc-accordion'
+  import DocAccordionGroup from '@aziontech/ui/doc-accordion-group'
 </script>
 
 <template>

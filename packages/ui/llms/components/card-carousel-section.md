@@ -2,7 +2,7 @@
 
 > The titled card-carousel-section band of a product or solution page: a section title on the start of the row with the previous/next controls at its end, over a horizontally scrolling track of standalone cards. Each card is an optional overline (the category), a heading, a sentence and, when it links somewhere, a mono link label closed by an arrow ("See example", "See solution"). The band answers "see how to use", "industries", "orchestration with control" on azion.com product pages, where the cases outnumber the row. It is a page section — the site places it from a `{ _id: 'card-carousel-section', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`variant="cards"`, its `header` slot, `size="medium"` items and its step controls), `module-header` and `eyebrow`, and owns only the card's inner layout.
 
-- Import: `import CardCarouselSection from '@aziontech/webkit/card-carousel-section'`
+- Import: `import CardCarouselSection from '@aziontech/ui/card-carousel-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [card-carousel-section.json](card-carousel-section.json)
 
@@ -90,7 +90,7 @@
 
 ```vue
 <script setup>
-  import CardCarouselSection from '@aziontech/webkit/card-carousel-section'
+  import CardCarouselSection from '@aziontech/ui/card-carousel-section'
 
   const items = [
     {
@@ -156,7 +156,7 @@
 
 ```vue
 <script setup>
-  import CardCarouselSection from '@aziontech/webkit/card-carousel-section'
+  import CardCarouselSection from '@aziontech/ui/card-carousel-section'
 
   const items = [
     {

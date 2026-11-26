@@ -2,7 +2,7 @@
 
 > A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `split-stack`, `media-split`, `illustration`, `console-mockup` and `button`. Every band has a picture, and it is a drawn asset: a registered `scene`, a `ConsoleMockup` console mock (`widget`, itself a registered scene), or a registry `illustration`. The band type is a union that requires one of them; request-flow diagrams and code do not go in a media band. Every band sets its picture at the closing end, so the run reads down one edge.
 
-- Import: `import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'`
+- Import: `import MediaSplitStackSection from '@aziontech/ui/media-split-stack-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [media-split-stack-section.json](media-split-stack-section.json)
 
@@ -36,7 +36,7 @@
 | `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the run, rendered by the medium centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`. |
 | `description` | `string` | `''` | false | Supporting sentence under the section title. |
-| `bands` | `MediaSplitStackSectionBand[]` | `[]` | false | The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button. |
+| `bands` | `MediaSplitStackSectionBand[]` | `[]` | false | The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` an Azion UI scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button. |
 
 ## Assets
 
@@ -87,7 +87,7 @@
 
 ```vue
 <script setup>
-  import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
+  import MediaSplitStackSection from '@aziontech/ui/media-split-stack-section'
 
   const bands = [
     {
@@ -163,7 +163,7 @@
 
 ```vue
 <script setup>
-  import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
+  import MediaSplitStackSection from '@aziontech/ui/media-split-stack-section'
 
   const bands = [
     {

@@ -2,7 +2,7 @@
 
 > A compact player for one audio clip: play and pause, a seek bar between the current time and the duration, mute and volume, and, when asked for, a playback speed control, a download link and a transcript. It plays what the app hands it (a URL, an object URL or a `data:` URL built from base64 audio) on the browser's own audio element; it fetches and decodes nothing. It owns the generating, buffering and error states, so an AI reply that speaks, or a stored recording, looks the same everywhere.
 
-- Import: `import AudioPlayer from '@aziontech/webkit/audio-player'`
+- Import: `import AudioPlayer from '@aziontech/ui/audio-player'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [audio-player.json](audio-player.json)
 
@@ -136,8 +136,8 @@
 
 ```vue
 <script setup>
-  import speech from '@aziontech/webkit/assets/placeholder-clip.webm'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
+  import speech from '@aziontech/ui/assets/placeholder-clip.webm'
+  import AudioPlayer from '@aziontech/ui/audio-player'
 </script>
 
 <template>
@@ -154,8 +154,8 @@
 
 ```vue
 <script setup>
-  import speech from '@aziontech/webkit/assets/placeholder-clip.webm'
-  import AudioPlayer from '@aziontech/webkit/audio-player'
+  import speech from '@aziontech/ui/assets/placeholder-clip.webm'
+  import AudioPlayer from '@aziontech/ui/audio-player'
 </script>
 
 <template>
@@ -173,7 +173,7 @@
 
 ```vue
 <script setup>
-  import AudioPlayer from '@aziontech/webkit/audio-player'
+  import AudioPlayer from '@aziontech/ui/audio-player'
 </script>
 
 <template>

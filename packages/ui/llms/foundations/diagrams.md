@@ -12,7 +12,7 @@ Used by: [ArchitectureTabsSection](../components/architecture-tabs-section.md), 
 
 ```vue
 <script setup>
-  import Diagram from '@aziontech/webkit/diagram'
+  import Diagram from '@aziontech/ui/diagram'
 </script>
 
 <template>

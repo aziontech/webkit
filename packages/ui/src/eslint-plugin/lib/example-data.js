@@ -35,9 +35,9 @@ const EXAMPLE_DATA_ALLOWED_HOSTS = [
 ]
 
 export const EXAMPLE_DATA_DIRS = [
-  'packages/webkit/src',
-  'packages/webkit/blocks',
-  'packages/webkit/examples',
+  'packages/ui/src',
+  'packages/ui/blocks',
+  'packages/ui/examples',
   'skills',
   'rules'
 ]
@@ -47,8 +47,8 @@ export function exampleDataApplies(rel) {
   if (/\.(test|spec)\.|\/(test|__tests__|fixtures)\//.test(rel)) return false
   if (/\/locales\/(pt-BR|es)\b/.test(rel)) return false
   if (rel.endsWith('/eslint-plugin/lib/example-data.js')) return false
-  if (rel === 'rules/webkit-example-data.md') return false
-  if (rel === 'skills/webkit-microcopy/SKILL.md') return false
+  if (rel === 'rules/azion-ui-example-data.md') return false
+  if (rel === 'skills/azion-ui-microcopy/SKILL.md') return false
   if (rel.endsWith('/phone-input/lib/country-data.ts')) return false
   return !rel.endsWith('/assets/logos/SOURCES.md')
 }
@@ -93,19 +93,19 @@ export const EXAMPLE_DATA_MESSAGES = {
   'retired-product-name':
     'Retired Azion product name in sample data. Use the official name (Functions, SQL Database, ' +
     'Cache, Applications, Firewall, Object Storage, KV Store...): the map is deprecatedNames in ' +
-    'test/catalog/azion-products.json (rules/webkit-example-data.md).',
+    'test/catalog/azion-products.json (rules/azion-ui-example-data.md).',
   'invented-brand':
     "Invented company brand in sample data. The one sample company is Acme (shadcn's " +
     'placeholder), on example.com domains; resources are named for what they are (production, ' +
-    'site-assets) (rules/webkit-example-data.md).',
+    'site-assets) (rules/azion-ui-example-data.md).',
   domain:
     'Sample data uses a reserved domain: example.com, example.org or example.net and their ' +
     'subdomains (RFC 2606), e.g. m@example.com. Real hosts are allowed only as links to the real ' +
-    'resource (rules/webkit-example-data.md).',
+    'resource (rules/azion-ui-example-data.md).',
   'regional-format':
     'Sample data in a national format (CPF, CNPJ, CEP, +55, R$, a Brazilian street). Use the ' +
     'neutral house format: fictional US data (+1 555-01xx, a US address, USD) and no national ID ' +
-    'masks (rules/webkit-example-data.md).'
+    'masks (rules/azion-ui-example-data.md).'
 }
 
 export function scanExampleData(content) {

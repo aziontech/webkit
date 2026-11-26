@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { read } from './project-files.js'
 
 function entryAction(projectDir, entry, { icons, wireEntry }) {
-  const entryImports = ["import './webkit.css'"]
+  const entryImports = ["import './azion-ui.css'"]
   if (icons) entryImports.push("import '@aziontech/icons'")
   if (!entry) {
     return {
@@ -13,7 +13,7 @@ function entryAction(projectDir, entry, { icons, wireEntry }) {
   }
   if (wireEntry) return { type: 'patch-entry', path: entry, imports: entryImports }
   const src = read(join(projectDir, entry)) || ''
-  if (src.includes('webkit.css') || src.includes('@aziontech/theme')) return null
+  if (src.includes('azion-ui.css') || src.includes('@aziontech/theme')) return null
   return {
     type: 'advise',
     message: `Add the design-system imports to ${entry} (once, near the top):\n${entryImports.join('\n')}`

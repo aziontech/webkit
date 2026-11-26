@@ -2,7 +2,7 @@
 
 > The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-section', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow-diagram` and `tag` for the topology and `container`, `module`, `registration-frame`, `card-grid`, `feature-item` and `spacer` for the argument grid. `variant` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `FlowDiagram` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `FeatureItem`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
 
-- Import: `import HeroSection from '@aziontech/webkit/hero-section'`
+- Import: `import HeroSection from '@aziontech/ui/hero-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [hero-section.json](hero-section.json)
 
@@ -129,7 +129,7 @@
 
 ```vue
 <script setup>
-  import HeroSection from '@aziontech/webkit/hero-section'
+  import HeroSection from '@aziontech/ui/hero-section'
 </script>
 
 <template>
@@ -153,8 +153,8 @@
 
 ```vue
 <script setup>
-  import CopyCommandSection from '@aziontech/webkit/copy-command-section'
-  import HeroSection from '@aziontech/webkit/hero-section'
+  import CopyCommandSection from '@aziontech/ui/copy-command-section'
+  import HeroSection from '@aziontech/ui/hero-section'
 </script>
 
 <template>
@@ -208,8 +208,8 @@
 
 ```vue
 <script setup>
-  import CopyCommandSection from '@aziontech/webkit/copy-command-section'
-  import HeroSection from '@aziontech/webkit/hero-section'
+  import CopyCommandSection from '@aziontech/ui/copy-command-section'
+  import HeroSection from '@aziontech/ui/hero-section'
 </script>
 
 <template>

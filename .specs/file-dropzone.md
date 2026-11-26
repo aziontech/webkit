@@ -3,7 +3,7 @@ name: file-dropzone
 category: input
 structure: monolithic
 status: implemented
-checksum: d6de920f3bd09e8661b7fe921f3695bd18131ce4e54396110cffbf0e9f534c4c
+checksum: 43d3785b1c591620a0d46fc349e38775d03669c6e0ca5185891800b23cc9837b
 spec_version: 9
 created: 2026-11-10
 last_updated: 2026-11-22
@@ -59,9 +59,9 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import Button from '@aziontech/webkit/button'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import Button from '@aziontech/ui/button'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
 
   const picker = useFilePicker({ accept: 'image/png,image/jpeg', multiple: true })
   const files = ref([])
@@ -219,7 +219,7 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 - No `aria-live` in the component. Announcing every drag that crosses the window is noise, and the outcome that matters (files accepted or skipped) is the consumer's to announce from `drop` / `reject` (a `toast`, or a live region on its file list). `aria-dropeffect` / `aria-grabbed` are deprecated in WAI-ARIA 1.1 and are not used.
 - The icon is decorative: `aria-hidden="true"`.
 - `data-disabled` has no ARIA mirror because the root is not a control. The slotted button carries its own `disabled` / `aria-disabled`.
-- Contrast ≥4.5:1 for the title and description in both themes, including `--text-muted` on `--bg-selected` (inline active) and on `--bg-canvas` (overlay). The `webkit-ui-verifier` must confirm the active state in both themes, since the unit suite has no CSS. The dashed border (`--border-strong` idle, `--border-selected` active) must meet 3:1 non-text contrast against the surrounding surface.
+- Contrast ≥4.5:1 for the title and description in both themes, including `--text-muted` on `--bg-selected` (inline active) and on `--bg-canvas` (overlay). The `azion-ui-verifier` must confirm the active state in both themes, since the unit suite has no CSS. The dashed border (`--border-strong` idle, `--border-selected` active) must meet 3:1 non-text contrast against the surrounding surface.
 - `motion-reduce:animate-none` on both overlay fades, `motion-reduce:transition-none` on the inline colour transition.
 - Touch target: not applicable. The region is not a control (touch devices cannot drag OS files into a page), and the slotted Button carries its own ≥40×40 px target.
 
@@ -251,7 +251,7 @@ Canonical layout, with two justified deviations: there is no `size` prop (no Siz
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

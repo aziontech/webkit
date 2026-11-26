@@ -1,8 +1,8 @@
 @import 'tailwindcss/utilities' source(none);
 @reference "@aziontech/theme";
-@import '@aziontech/webkit/styles/all';
+@import '@aziontech/ui/styles/all';
 @import '../../.build/css/docs.css';
 @source '../';
-@source '../../../../packages/webkit/blocks';
-@source '../../../../packages/webkit/examples';
-@source '../../../../packages/webkit/catalog.json';
+@source '../../../../packages/ui/blocks';
+@source '../../../../packages/ui/examples';
+@source '../../../../packages/ui/catalog.json';

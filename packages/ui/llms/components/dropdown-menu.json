@@ -1,19 +1,19 @@
 {
  "name": "dropdown-menu",
  "binding": "DropdownMenu",
- "import": "@aziontech/webkit/dropdown-menu",
- "treeShakeableImport": "@aziontech/webkit/dropdown-menu-root",
+ "import": "@aziontech/ui/dropdown-menu",
+ "treeShakeableImport": "@aziontech/ui/dropdown-menu-root",
  "category": "navigation",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/dropdown-menu-trigger",
-  "@aziontech/webkit/dropdown-menu-group",
-  "@aziontech/webkit/dropdown-menu-item",
-  "@aziontech/webkit/dropdown-menu-sub",
-  "@aziontech/webkit/dropdown-menu-sub-content",
-  "@aziontech/webkit/dropdown-menu-sub-trigger"
+  "@aziontech/ui/dropdown-menu-trigger",
+  "@aziontech/ui/dropdown-menu-group",
+  "@aziontech/ui/dropdown-menu-item",
+  "@aziontech/ui/dropdown-menu-sub",
+  "@aziontech/ui/dropdown-menu-sub-content",
+  "@aziontech/ui/dropdown-menu-sub-trigger"
  ],
  "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Item` (the shadcn / Radix name) is the selectable row with leading/trailing/command affordances, and with `type=\"checkbox\"` or `type=\"radio\"` it becomes a checkable item (`menuitemcheckbox` / `menuitemradio`). `DropdownMenu.Sub`, `DropdownMenu.SubTrigger` and `DropdownMenu.SubContent` nest a sub-menu that opens on hover or with `ArrowRight` and nests to any depth. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.",
  "setup": null,

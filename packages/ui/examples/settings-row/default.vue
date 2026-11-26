@@ -1,9 +1,9 @@
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Card from '@aziontech/ui/card'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Textarea from '@aziontech/ui/textarea'
   import { reactive } from 'vue'
 
   const form = reactive({ companyName: '', taxId: '', billingEmails: '' })

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { ref, watch } from 'vue'
 
   import type { UseBehaviorDragReturn } from '../composables/use-behavior-drag'

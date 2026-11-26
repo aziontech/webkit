@@ -3,10 +3,10 @@
 > Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingsRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, the `view/view-table` controls row (`PropertyFilter` over name, email, MFA status and method, Refresh and Download CSV as `IconButton`s in a `Tooltip`, `CollectionPreferences`) and a paginated `DataTable` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `TableCellStatus` (Enabled, Not set up), Method, Set up as `TableCellTime`, and `TableCellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder; a filter with no match shows a small `EmptyState` with Clear filters. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingsRow`, `Switch`, `Alert`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `DataTable`, `EmptyState`, `Avatar`, `DropdownMenu`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
-- Source: `blocks/account/account-mfa-settings/account-mfa-settings.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-mfa-settings/account-mfa-settings.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-mfa-settings")`
 - Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellStatus`, `TableCellTime`, [Tooltip](../../components/tooltip.md), `use-collection`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -53,7 +53,7 @@ A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCol
 
 ### G. Load failure and outcomes — `Alert` (required)
 
-When the list fails to load, a danger `Alert` with Retry takes the table's place. The page that runs the request ends require, optional, reset and reminder in a success toast; they are not deploys, so no toast carries Edit or Redeploy. The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+When the list fails to load, a danger `Alert` with Retry takes the table's place. The page that runs the request ends require, optional, reset and reminder in a success toast; they are not deploys, so no toast carries Edit or Redeploy. The page calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -119,7 +119,7 @@ Then delete `sample.ts` and its import.
 - **Statuses:** `Enabled`, `Not set up`. **Actions:** `Reset MFA`, `Send setup reminder`.
 - **No match:** `No matching people`, `No person matches these filters.`, `Clear filters`.
 - **Toasts:** `MFA is now required.`, `MFA is optional again.`, `MFA reset for Jordan Reyes.`, `Reminder sent to priya.nair@example.com.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -154,28 +154,28 @@ Each variant is the same screen in another state: `get_block("account/account-mf
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import Alert from '@aziontech/ui/alert'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import { type TableColumn, type TableExposed } from '@aziontech/ui/table'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { type FilteringProperty, useCollection } from '@aziontech/ui/use-collection'
   import { computed, ref, watch } from 'vue'
 
   import { sampleMembers } from './sample'

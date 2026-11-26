@@ -1,7 +1,7 @@
 import { loadCatalog } from '../lib/catalog.js'
 import { ctxCwd, templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
-const WEBKIT_TAG_KINDS = new Set(['component', 'root', 'subcomponent'])
+const AZION_UI_TAG_KINDS = new Set(['component', 'root', 'subcomponent'])
 const TEXT_PROPS = ['label', 'title', 'text']
 
 function kebab(name) {
@@ -129,7 +129,7 @@ function importVisitor(catalog, bindings) {
       if (typeof src !== 'string' || !src.startsWith(catalog.prefix)) return
       const sub = src.slice(catalog.prefix.length)
       const entry = catalog.getEntry(sub)
-      if (!entry || !WEBKIT_TAG_KINDS.has(entry.kind)) return
+      if (!entry || !AZION_UI_TAG_KINDS.has(entry.kind)) return
       const def = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier')
       if (def) bindings.set(def.local.name, sub)
     }
@@ -141,7 +141,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow content between the tags of a webkit component that has no default slot: Vue drops it without a warning, so the text never renders.'
+        'Disallow content between the tags of an Azion UI component that has no default slot: Vue drops it without a warning, so the text never renders.'
     },
     hasSuggestions: true,
     schema: [],

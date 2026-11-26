@@ -1,5 +1,5 @@
 <script setup>
-  import GaugeChart from '@aziontech/webkit/gauge-chart'
+  import GaugeChart from '@aziontech/ui/gauge-chart'
 
   const thresholds = [
     { value: 0, severity: 'success', label: 'Healthy' },

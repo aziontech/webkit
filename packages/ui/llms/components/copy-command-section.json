@@ -1,8 +1,8 @@
 {
  "name": "copy-command-section",
  "binding": "CopyCommandSection",
- "import": "@aziontech/webkit/copy-command-section",
- "treeShakeableImport": "@aziontech/webkit/copy-command-section",
+ "import": "@aziontech/ui/copy-command-section",
+ "treeShakeableImport": "@aziontech/ui/copy-command-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

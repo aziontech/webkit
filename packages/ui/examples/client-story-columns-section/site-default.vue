@@ -1,10 +1,10 @@
 <script setup>
-  import dafitiExtendedReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
-  import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
-  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import ClientStoryColumnsSection from '@aziontech/webkit/client-story-columns-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import dafitiExtendedReversed from '@aziontech/ui/assets/dafiti-extended-reversed.svg'
+  import madeiramadeiraExtendedReversed from '@aziontech/ui/assets/madeiramadeira-extended-reversed.svg'
+  import magaluExtendedColor from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import ClientStoryColumnsSection from '@aziontech/ui/client-story-columns-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const cells = [
     {

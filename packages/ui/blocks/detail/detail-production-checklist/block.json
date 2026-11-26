@@ -20,7 +20,7 @@
     "lista de verificação",
     "passos para produção"
   ],
-  "skills": ["webkit-ui-states", "webkit-microcopy"],
+  "skills": ["azion-ui-states", "azion-ui-microcopy"],
   "primary": {
     "name": "Card",
     "file": "detail-production-checklist.vue"

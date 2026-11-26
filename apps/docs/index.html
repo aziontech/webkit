@@ -21,14 +21,14 @@
       ;(function () {
         try {
           var params = new URLSearchParams(location.search)
-          var stored = params.get('theme') || localStorage.getItem('webkit-docs:theme') || 'system'
+          var stored = params.get('theme') || localStorage.getItem('azion-ui-docs:theme') || 'system'
           var dark =
             stored === 'dark' ||
             (stored === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
           var root = document.documentElement
           root.dataset.theme = dark ? 'dark' : 'light'
           var path = location.pathname
-          var saved = localStorage.getItem('webkit-docs:locale')
+          var saved = localStorage.getItem('azion-ui-docs:locale')
           var match = path.match(/^\/(pt-BR|es)(?=\/|$)/)
           var current = match ? match[1] : 'en'
           if (

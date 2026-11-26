@@ -124,7 +124,7 @@
   const { t } = useTranslate({ codeEditor: en.codeEditor })
   const uid = useId()
   const summaryId = `${uid}-problems`
-  const schemaUri = `inmemory://webkit/${uid}/schema.json`
+  const schemaUri = `inmemory://azion-ui/${uid}/schema.json`
   const hintId = `${uid}-hint`
 
   const {

@@ -1,4 +1,4 @@
-import type { ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+import type { ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
 import { reactive } from 'vue'
 
 export const navigation: ConsoleLayoutNavGroup[] = [

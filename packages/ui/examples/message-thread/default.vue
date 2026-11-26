@@ -1,8 +1,8 @@
 <script setup>
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import MessageThread from '@aziontech/webkit/message-thread'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import IconButton from '@aziontech/ui/icon-button'
+  import MessageThread from '@aziontech/ui/message-thread'
 
   const attachments = [{ file: { name: 'invoice-1042.pdf', size: 84000, type: 'application/pdf' } }]
   const body =

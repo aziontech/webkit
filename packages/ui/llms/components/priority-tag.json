@@ -1,8 +1,8 @@
 {
  "name": "priority-tag",
  "binding": "PriorityTag",
- "import": "@aziontech/webkit/priority-tag",
- "treeShakeableImport": "@aziontech/webkit/priority-tag",
+ "import": "@aziontech/ui/priority-tag",
+ "treeShakeableImport": "@aziontech/ui/priority-tag",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

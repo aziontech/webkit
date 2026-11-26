@@ -1,8 +1,8 @@
 {
  "name": "suggestion-group",
  "binding": "SuggestionGroup",
- "import": "@aziontech/webkit/suggestion-group",
- "treeShakeableImport": "@aziontech/webkit/suggestion-group",
+ "import": "@aziontech/ui/suggestion-group",
+ "treeShakeableImport": "@aziontech/ui/suggestion-group",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

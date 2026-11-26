@@ -1,5 +1,5 @@
 {
- "purpose": "A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the language named in itself (`English`, `Português (Brasil)`, `Español`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant=\"outline\"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant=\"ghost\"`, round flag and the tag in capitals such as `EN` or `PT-BR`, no border until hover) for a header, a toolbar or a footer. It offers the languages WebKit ships catalogs for and takes the consumer's own list through `options`.",
+ "purpose": "A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the language named in itself (`English`, `Português (Brasil)`, `Español`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant=\"outline\"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant=\"ghost\"`, round flag and the tag in capitals such as `EN` or `PT-BR`, no border until hover) for a header, a toolbar or a footer. It offers the languages Azion UI ships catalogs for and takes the consumer's own list through `options`.",
  "useWhen": [
   "A language switch in a header, a toolbar or a footer: `variant=\"ghost\"`, the compact round flag and short code, beside the search and the icon buttons.",
   "A language setting on a settings page or a form field that asks which language a user, a page or a notification is written in: the default `variant=\"outline\"` inside a `Field` or a `SettingsRow`."
@@ -7,7 +7,7 @@
  "avoidWhen": [
   "Two or three languages that must stay visible side by side on a toolbar → use `toggle-group`.",
   "Picking a country (for a phone number, an address) → use `phone-input` or `select`.",
-  "Setting the language of WebKit's own strings → that is `config-provider`'s `locale`; bind this picker's `v-model` to it."
+  "Setting the language of Azion UI's own strings → that is `config-provider`'s `locale`; bind this picker's `v-model` to it."
  ],
  "related": [
   "`config-provider` — takes the picked tag as `locale` and translates everything below it.",

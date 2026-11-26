@@ -3,10 +3,10 @@
 > An executive summary dashboard: one page a lead reads to see how the quarter went. A page heading with the quarter Select and Export sits over a scorecard row of six StatTiles (revenue, monthly active users, net revenue retention, NPS, uptime and cost per request), each with its delta against last quarter and a Hint that defines it. Below, a trend grid of small multiples, one ChartCard per metric with a compact Chart (Area or Line) over the last 12 months and a Tag with the twelve-month change, shares one active index so hovering a month moves the crosshair on every card. A side column holds the goals, a Card of goal bars where each goal shows its label, a status Tag (On track, At risk, Off track), a Progress of current against target and both figures, and the commentary, a Card of Item rows with the author Avatar, role, date and the note itself. Built from `Avatar`, `Button`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `Item`, `PageHeader`, `Progress`, `Select`, `Skeleton`, `StatTile`, `Tag` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/dashboard/dashboard-executive-summary/dashboard-executive-summary.vue` in `@aziontech/webkit`
+- Source: `blocks/dashboard/dashboard-executive-summary/dashboard-executive-summary.vue` in `@aziontech/ui`
 - MCP: `get_block("dashboard/dashboard-executive-summary")`
 - Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Progress](../../components/progress.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), `use-locale`, `utils/csv`
-- Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
+- Skills: `azion-ui-data-viz`, `azion-ui-tables`, `azion-ui-states`
 
 ## Asked as
 
@@ -210,19 +210,19 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Hint from '@aziontech/webkit/hint'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useLocale } from '@aziontech/webkit/use-locale'
-  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Chart, { type ChartSeries } from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Hint from '@aziontech/ui/hint'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import { toast } from '@aziontech/ui/toast'
+  import { useLocale } from '@aziontech/ui/use-locale'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/ui/utils/csv'
   import { computed, ref } from 'vue'
 
   import { scorecardTiles, trendCharts } from './executive-summary-metrics'
@@ -942,11 +942,11 @@ export const trendCharts: {
 
 ```ts
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Item from '@aziontech/webkit/item'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Avatar from '@aziontech/ui/avatar'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Item from '@aziontech/ui/item'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   import type { ExecutiveSummaryDashboardNote } from '../dashboard-executive-summary.vue'
 
@@ -1048,11 +1048,11 @@ export const trendCharts: {
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Progress from '@aziontech/webkit/progress'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Progress from '@aziontech/ui/progress'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
 
   import type {
     ExecutiveSummaryDashboardFormat,

@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3601-2693
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/sidebar-menu/sidebar-menu-item/sidebar-menu-item.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/sidebar-menu/sidebar-menu-item/sidebar-menu-item.vue
 // component=SidebarMenuItem
 import figma from 'figma'
 
@@ -31,7 +31,7 @@ export default {
     type === 'group'
       ? figma.code`<SidebarMenu.Group label="${label}" />`
       : figma.code`<SidebarMenu.Item${labelAttr}${showIcon ? '' : ' icon=""'}${selected ? ' active' : ''}${tagValueAttr} />`,
-  imports: ["import SidebarMenu from '@aziontech/webkit/sidebar-menu'"],
+  imports: ["import SidebarMenu from '@aziontech/ui/sidebar-menu'"],
   id: 'sidebar-menu-item',
   metadata: { nestable: true }
 }

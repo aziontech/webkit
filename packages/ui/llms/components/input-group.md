@@ -2,8 +2,8 @@
 
 > Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field (an input group, as other UI kits call it). The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
 
-- Import: `import InputGroupRoot from '@aziontech/webkit/input-group-root'`
-- Compound import (dot notation, not tree-shakeable): `import InputGroup from '@aziontech/webkit/input-group'`
+- Import: `import InputGroupRoot from '@aziontech/ui/input-group-root'`
+- Compound import (dot notation, not tree-shakeable): `import InputGroup from '@aziontech/ui/input-group'`
 - Category: input · Surface: app · Structure: composition
 - API as JSON: [input-group.json](input-group.json)
 
@@ -49,15 +49,15 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/input-group-addon`
-- `@aziontech/webkit/input-group-input`
+- `@aziontech/ui/input-group-addon`
+- `@aziontech/ui/input-group-input`
 
 ## Sub-components
 
 Folder layout:
 
 ```
-packages/webkit/src/components/input/input-group/
+packages/ui/src/components/input/input-group/
 ├── input-group.vue                      # root
 ├── input-group-addon/
 │   └── input-group-addon.vue            # <InputGroup.Addon>
@@ -70,9 +70,9 @@ Public members of the compound:
 
 | Member               | Attached name           | Standalone export                     | Purpose                                                                                                                            |
 | -------------------- | ----------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                |
-| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.        |
-| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number' | 'password'`, default `'text'`: the restricted set of `Input`, plus `password`to mask a secret value that a reveal control in an addon toggles back to`text`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid`(all`false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled`and`required`from an enclosing`Field` (an explicit prop/attribute wins). |
+| Root                 | — (the compound itself) | `@aziontech/ui/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                |
+| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/ui/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.        |
+| `<InputGroup.Input>` | `Input`                 | `@aziontech/ui/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number' | 'password'`, default `'text'`: the restricted set of `Input`, plus `password`to mask a secret value that a reveal control in an addon toggles back to`text`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid`(all`false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled`and`required`from an enclosing`Field` (an explicit prop/attribute wins). |
 
 The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group. The root then provides the Field context to its children with `invalid` and `disabled` OR-ed with the group's own (the parent Field's id, description, title and `required` pass through), so the group's state reaches the controls inside.
 
@@ -116,8 +116,8 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ```vue
 <script setup>
-  import InputGroupInput from '@aziontech/webkit/input-group-input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
+  import InputGroupInput from '@aziontech/ui/input-group-input'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
 </script>
 
 <template>
@@ -134,7 +134,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ```vue
 <script setup>
-  import InputGroup from '@aziontech/webkit/input-group'
+  import InputGroup from '@aziontech/ui/input-group'
 </script>
 
 <template>
@@ -180,7 +180,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ```vue
 <script setup>
-  import InputGroup from '@aziontech/webkit/input-group'
+  import InputGroup from '@aziontech/ui/input-group'
 </script>
 
 <template>

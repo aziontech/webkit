@@ -1,1 +1,1 @@
-[ -n "$WEBKIT_GATES_DONE" ] || pnpm --filter @aziontech/webkit run gates -- --bail
+[ -n "$AZION_UI_GATES_DONE" ] || pnpm --filter @aziontech/ui run gates -- --bail

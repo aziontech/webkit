@@ -29,7 +29,7 @@
     "tanstack ai",
     "usechat"
   ],
-  "skills": ["webkit-ai-surfaces", "webkit-ui-states", "webkit-microcopy"],
+  "skills": ["azion-ui-ai-surfaces", "azion-ui-states", "azion-ui-microcopy"],
   "primary": {
     "name": "Empty",
     "file": "ai-chat-drawer.vue"

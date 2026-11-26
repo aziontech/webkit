@@ -1,8 +1,8 @@
 {
  "name": "compliance-logos-section",
  "binding": "ComplianceLogosSection",
- "import": "@aziontech/webkit/compliance-logos-section",
- "treeShakeableImport": "@aziontech/webkit/compliance-logos-section",
+ "import": "@aziontech/ui/compliance-logos-section",
+ "treeShakeableImport": "@aziontech/ui/compliance-logos-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

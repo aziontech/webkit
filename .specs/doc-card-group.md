@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 35f813854322f90ec115cd90d9854dc7522b140436f78df5e4caac396a76d7c6
+checksum: f60431ebc79ac1f96c8a4ca2e944eeafafcb5c84599786874ed8dd24eda9c8d7
 created: 2026-08-22
 last_updated: 2026-11-17
 ---
@@ -42,8 +42,8 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 
 ```vue
 <script setup>
-  import DocCard from '@aziontech/webkit/doc-card'
-  import DocCardGroup from '@aziontech/webkit/doc-card-group'
+  import DocCard from '@aziontech/ui/doc-card'
+  import DocCardGroup from '@aziontech/ui/doc-card-group'
 </script>
 
 <template>
@@ -125,7 +125,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

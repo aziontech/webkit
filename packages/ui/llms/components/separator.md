@@ -2,7 +2,7 @@
 
 > Thin separator line that visually splits content into groups. Renders as a full-width hairline (`horizontal`) or full-height hairline (`vertical`), and can carry centered content (an "Or"-style label) when the default slot or `label` prop is set. Unlike `ScrollArea` it adds no scrolling behaviour; it is a purely decorative-yet-semantic boundary exposing `role="separator"`.
 
-- Import: `import Separator from '@aziontech/webkit/separator'`
+- Import: `import Separator from '@aziontech/ui/separator'`
 - Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [separator.json](separator.json)
 
@@ -63,7 +63,7 @@
 
 ```vue
 <script setup>
-  import Separator from '@aziontech/webkit/separator'
+  import Separator from '@aziontech/ui/separator'
 </script>
 
 <template>
@@ -75,7 +75,7 @@
 
 ```vue
 <script setup>
-  import Separator from '@aziontech/webkit/separator'
+  import Separator from '@aziontech/ui/separator'
 </script>
 
 <template>
@@ -90,7 +90,7 @@
 
 ```vue
 <script setup>
-  import Separator from '@aziontech/webkit/separator'
+  import Separator from '@aziontech/ui/separator'
 </script>
 
 <template>

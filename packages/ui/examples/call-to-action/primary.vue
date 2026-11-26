@@ -1,8 +1,8 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
-  import Marquee from '@aziontech/webkit/marquee'
-  import Texture from '@aziontech/webkit/texture'
+  import Button from '@aziontech/ui/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import Marquee from '@aziontech/ui/marquee'
+  import Texture from '@aziontech/ui/texture'
 </script>
 
 <template>

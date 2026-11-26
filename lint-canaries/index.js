@@ -118,14 +118,14 @@ const ESLINT_CANARIES = [
   { file: 'eslint/clean-code/no-console.ts', rule: 'no-console' },
   { file: 'eslint/clean-code/no-debugger.ts', rule: 'no-debugger' },
   { file: 'eslint/clean-code/prefer-const.ts', rule: 'prefer-const' },
-  // ESLint — webkit plugin
+  // ESLint — ui plugin
   {
-    file: 'eslint/webkit/no-physical-direction.vue',
-    rule: 'webkit/no-physical-direction'
+    file: 'eslint/azion-ui/no-physical-direction.vue',
+    rule: 'azion-ui/no-physical-direction'
   },
   {
-    file: 'eslint/webkit/no-physical-direction-gradient.vue',
-    rule: 'webkit/no-physical-direction'
+    file: 'eslint/azion-ui/no-physical-direction-gradient.vue',
+    rule: 'azion-ui/no-physical-direction'
   }
 ]
 

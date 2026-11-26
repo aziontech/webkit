@@ -1,4 +1,4 @@
-export const NAVIGATION_RULE = 'webkit-navigation-levels'
+export const NAVIGATION_RULE = 'azion-ui-navigation-levels'
 
 function navHidden(el) {
   return el.closest('[hidden],[inert],[aria-hidden="true"]') !== null

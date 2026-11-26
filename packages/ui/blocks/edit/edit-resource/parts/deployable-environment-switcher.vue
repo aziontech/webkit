@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Tag from '@aziontech/webkit/tag'
+  import ConsoleLayout from '@aziontech/ui/console-layout'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref } from 'vue'
 
   import {

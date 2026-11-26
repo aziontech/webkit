@@ -1,9 +1,9 @@
 <script setup>
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import FlowDiagramBind from '@aziontech/webkit/flow-diagram-bind'
-  import FlowDiagram from '@aziontech/webkit/flow-diagram-root'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import FlowDiagramBind from '@aziontech/ui/flow-diagram-bind'
+  import FlowDiagram from '@aziontech/ui/flow-diagram-root'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, reactive, ref } from 'vue'
 
   const options = {

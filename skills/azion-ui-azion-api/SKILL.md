@@ -1,17 +1,17 @@
 ---
-name: webkit-azion-api
-description: Calling the Azion API from a browser app built on @aziontech/webkit — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin edge function proxy for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to a webkit state. Use when an app signs in with a personal token (auth/auth-sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
+name: azion-ui-azion-api
+description: Calling the Azion API from a browser app built on @aziontech/ui — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin edge function proxy for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to an Azion UI state. Use when an app signs in with a personal token (auth/auth-sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-example-data, webkit-component-states, review]
+enforced_by: [azion-ui-example-data, azion-ui-component-states, review]
 ---
 
-# Skill: webkit-azion-api
+# Skill: azion-ui-azion-api
 
 ## Purpose
 
-A console app on WebKit (a dashboard, a storage browser, an events explorer) calls the Azion API with the signed-in person's **personal token**. Three things go wrong the first time: the browser blocks the call, the token ends up somewhere it should not, and API errors surface as a blank screen. The sections below fix all three. The query explorer recipe built on top of it is [Query explorer](../webkit-query-explorer/SKILL.md).
+A console app on Azion UI (a dashboard, a storage browser, an events explorer) calls the Azion API with the signed-in person's **personal token**. Three things go wrong the first time: the browser blocks the call, the token ends up somewhere it should not, and API errors surface as a blank screen. The sections below fix all three. The query explorer recipe built on top of it is [Query explorer](../azion-ui-query-explorer/SKILL.md).
 
 ## Why a direct call fails
 
@@ -123,16 +123,16 @@ Sign-out clears it (`token.value = ''` and `sessionStorage.removeItem`). Tell th
 | `200` with GraphQL `errors[]` | the query ran but a field failed                                                                              | Show the messages where the result would be.                                                                                                                                                                                                                                        |
 | `5xx`, network failure        | the API or the network is down                                                                                | The component's `error` state (`Chart`, `FilePreview` and `DataTable` take one) with Retry; keep what the person typed.                                                                                                                                                             |
 
-[Errors](../webkit-errors/SKILL.md) decides where each message goes (field, section, toast); this table only says which answer is which.
+[Errors](../azion-ui-errors/SKILL.md) decides where each message goes (field, section, toast); this table only says which answer is which.
 
 ## Hard rules
 
-- What the screen does with the answer (names instead of IDs, pickers, freshness, typed records) is [Showing API data](../webkit-api-data/SKILL.md).
+- What the screen does with the answer (names instead of IDs, pickers, freshness, typed records) is [Showing API data](../azion-ui-api-data/SKILL.md).
 - Every browser call goes to your own origin; never `fetch('https://api.azion.com/…')` from the page.
 - The token comes from the person, at sign-in, and stays in memory or `sessionStorage`.
 - Proxies forward the person's `Authorization` header and allowlist paths; they hold no token.
 - A 401 or 403 signs the person out with a reason; it is not a toast and not a retry.
-- Sample hosts in code and docs are `example.com` (`webkit-example-data`); never paste a real token, even an expired one.
+- Sample hosts in code and docs are `example.com` (`azion-ui-example-data`); never paste a real token, even an expired one.
 
 ## How to check it works
 

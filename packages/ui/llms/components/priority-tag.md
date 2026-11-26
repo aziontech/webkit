@@ -2,7 +2,7 @@
 
 > Use PriorityTag only for the priority of a ticket, task or request on the urgent → low scale, or for "no priority"; the severity of a finding or alert is a SeverityTag, and the state of a ticket is a StatusIndicator or a Tag. PriorityTag labels a work item with how soon it should be handled: urgent, high, medium, low or none. The level reads from a three-bar signal glyph (the filled bars count the level), from a distinct alert mark for urgent, from three flat dots for none, and from the label, so no level depends on colour alone. Its accessible name always says the axis ("Priority: High"), which is why it is its own component and not a SeverityTag (decision SUP-05).
 
-- Import: `import PriorityTag from '@aziontech/webkit/priority-tag'`
+- Import: `import PriorityTag from '@aziontech/ui/priority-tag'`
 - Category: content · Surface: app · Structure: monolithic
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [priority-tag.json](priority-tag.json)
@@ -62,7 +62,7 @@
 - Visible focus: not focusable; the tag is static text and takes no `tabindex`.
 - Keyboard map: none; the tag has no interaction.
 - ARIA: the glyph is `aria-hidden="true"`; a visually hidden prefix (`sr-only`, locale key `priorityTag.prefix`, `Priority:`) sits before the label, so the text a screen reader reads is "Priority: High". No `role` or `aria-label` on the root (a generic element takes no name); the hidden prefix stays when the default slot replaces the label.
-- Contrast: label `var(--text-default)` on `var(--bg-canvas)` ≥4.5:1; filled bars `var(--text-default)` and the urgent mark `var(--danger-mark)` meet the mark and icon targets (Lc 30 / Lc 45, WCAG ≥3:1) in both themes; only documented token pairs (`rules/webkit-tokens.md` § Contrast).
+- Contrast: label `var(--text-default)` on `var(--bg-canvas)` ≥4.5:1; filled bars `var(--text-default)` and the urgent mark `var(--danger-mark)` meet the mark and icon targets (Lc 30 / Lc 45, WCAG ≥3:1) in both themes; only documented token pairs (`rules/azion-ui-tokens.md` § Contrast).
 - Never colour only: every level differs by glyph shape and by text.
 - No motion, so no `motion-reduce:*` fallback is needed.
 - Touch target: not applicable; the tag is not interactive.
@@ -101,7 +101,7 @@
 
 ```vue
 <script setup>
-  import PriorityTag from '@aziontech/webkit/priority-tag'
+  import PriorityTag from '@aziontech/ui/priority-tag'
 </script>
 
 <template>
@@ -116,7 +116,7 @@
 
 ```vue
 <script setup>
-  import PriorityTag from '@aziontech/webkit/priority-tag'
+  import PriorityTag from '@aziontech/ui/priority-tag'
 </script>
 
 <template>
@@ -134,7 +134,7 @@
 
 ```vue
 <script setup>
-  import PriorityTag from '@aziontech/webkit/priority-tag'
+  import PriorityTag from '@aziontech/ui/priority-tag'
 </script>
 
 <template>

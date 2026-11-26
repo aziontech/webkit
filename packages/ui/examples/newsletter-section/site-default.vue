@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import NewsletterSection from '@aziontech/webkit/newsletter-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import NewsletterSection from '@aziontech/ui/newsletter-section'
+  import Spacer from '@aziontech/ui/spacer'
   import { ref } from 'vue'
 
   const form = {

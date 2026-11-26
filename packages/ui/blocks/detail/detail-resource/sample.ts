@@ -1,6 +1,6 @@
-import type { FlowDiagramEdgeData, FlowDiagramNodeData } from '@aziontech/webkit/flow-diagram-root'
-import type { StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-import type { TagSeverity, TagVariant } from '@aziontech/webkit/tag'
+import type { FlowDiagramEdgeData, FlowDiagramNodeData } from '@aziontech/ui/flow-diagram-root'
+import type { StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+import type { TagSeverity, TagVariant } from '@aziontech/ui/tag'
 
 import type { ResourceDetailResource, ResourceDetailTab } from './detail-resource.vue'
 import type { ApplicationDeploymentRow } from './parts/application-deployments-tab.vue'

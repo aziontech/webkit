@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Textarea from '@aziontech/webkit/textarea'
-  import { toast } from '@aziontech/webkit/toast'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Textarea from '@aziontech/ui/textarea'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   /** A field of the Create Variable form. */

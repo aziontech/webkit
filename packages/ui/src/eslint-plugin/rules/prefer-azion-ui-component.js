@@ -1,13 +1,13 @@
 const DEFAULT_PACKAGES = {
   primevue:
-    'Use the @aziontech/webkit equivalent: ask the webkit MCP (suggest_component, search_components) or read catalog.json.'
+    'Use the @aziontech/ui equivalent: ask the Azion UI MCP (suggest_component, search_components) or read catalog.json.'
 }
 
 export default {
   meta: {
     type: 'suggestion',
     docs: {
-      description: 'Prefer @aziontech/webkit components over third-party UI libraries.'
+      description: 'Prefer @aziontech/ui components over third-party UI libraries.'
     },
     schema: [
       {

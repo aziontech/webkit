@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PaymentBrand from '@aziontech/ui/payment-brand'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
 
   import type { ChangePlanDrawerCard } from '../account-change-plan-drawer.vue'
   import { type CardField, cardFieldIds } from '../change-plan-card'

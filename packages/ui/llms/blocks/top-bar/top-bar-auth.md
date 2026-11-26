@@ -3,10 +3,10 @@
 > The console bar for the signed-out and onboarding screens: sign in, sign up, password recovery and the first-run steps. A `AppHeader` in its default `content` placement with the brand at the start and one outlined Documentation button at the end. There is no navigation, no search and no account control, because there is no session to act on yet. Built from `AppHeader`, `Button` and `Brand`.
 
 - Surface: app
-- Source: `blocks/top-bar/top-bar-auth/top-bar-auth.vue` in `@aziontech/webkit`
+- Source: `blocks/top-bar/top-bar-auth/top-bar-auth.vue` in `@aziontech/ui`
 - MCP: `get_block("top-bar/top-bar-auth")`
 - Components: [AppHeader](../../components/app-header.md), [Brand](../../components/brand.md), [Button](../../components/button.md)
-- Skills: `webkit-navigation`, `webkit-layout`
+- Skills: `azion-ui-navigation`, `azion-ui-layout`
 
 ## Asked as
 
@@ -109,9 +109,9 @@ Each variant is the same screen in another state: `get_block("top-bar/top-bar-au
 
 ```vue
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
 
   export interface AuthBarProps {
     /** Where the brand goes. */

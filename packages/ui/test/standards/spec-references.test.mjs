@@ -6,9 +6,7 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..')
 const SPECS = join(ROOT, '.specs')
-const exportsMap = JSON.parse(
-  readFileSync(join(ROOT, 'packages/webkit/package.json'), 'utf8')
-).exports
+const exportsMap = JSON.parse(readFileSync(join(ROOT, 'packages/ui/package.json'), 'utf8')).exports
 const files = readdirSync(SPECS).filter((name) => /^[a-z].*\.md$/.test(name))
 const known = new Set([
   ...Object.keys(exportsMap).map((key) => key.slice(2)),
@@ -34,7 +32,7 @@ test('a spec sends the reader only to components that exist', () => {
 
 test('every Purpose says what the component is for, not where its file lives', () => {
   const stubs = files.filter((name) =>
-    /## Purpose\n\n[^\n]*Lives at `packages\/webkit\/src\//.test(read(name))
+    /## Purpose\n\n[^\n]*Lives at `packages\/ui\/src\//.test(read(name))
   )
   assert.deepEqual(stubs, [])
 })

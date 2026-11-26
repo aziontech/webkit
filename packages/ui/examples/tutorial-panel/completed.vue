@@ -1,6 +1,6 @@
 <script setup>
-  import Link from '@aziontech/webkit/link'
-  import TutorialPanel from '@aziontech/webkit/tutorial-panel'
+  import Link from '@aziontech/ui/link'
+  import TutorialPanel from '@aziontech/ui/tutorial-panel'
   import { ref } from 'vue'
 
   const tutorials = [

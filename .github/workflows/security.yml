@@ -251,7 +251,7 @@ jobs:
             esac
           }
           {
-            echo "<!-- webkit-security-report -->"
+            echo "<!-- azion-ui-security-report -->"
             echo "### Security report"
             echo ""
             echo "| Scan | Result | Details |"
@@ -275,7 +275,7 @@ jobs:
         run: |
           body="$RUNNER_TEMP/security-report.md"
           existing=$(gh api "repos/$GH_REPO/issues/$PR_NUMBER/comments" --paginate \
-            --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- webkit-security-report -->"))) | .id' | head -n 1)
+            --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- azion-ui-security-report -->"))) | .id' | head -n 1)
           if [ -n "$existing" ]; then
             gh api --method PATCH "repos/$GH_REPO/issues/comments/$existing" -F "body=@$body" > /dev/null
           else

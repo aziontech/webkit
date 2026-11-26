@@ -2,8 +2,8 @@
 
 > A group of adjacent regions whose shared edges the reader can drag. It is the layout primitive behind a workspace — an editor with a terminal under it and a preview beside it — where every region is content the reader is working in and the split between them is theirs to set. It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's NAVIGATION rail: it collapses to icons, it hides, it is the thing you leave to go somewhere. A terminal, a preview and a code editor are not places you navigate to — they are the work — and dressing two of them as navigation rails made a screen with three "sidebars" and one document, on an axis `Sidebar` does not even have (it has no horizontal edge, so a terminal under an editor had to hand-roll its own splitter). This component owns the EDGE; `Sidebar` goes back to owning navigation.
 
-- Import: `import ResizableRoot from '@aziontech/webkit/resizable-root'`
-- Compound import (dot notation, not tree-shakeable): `import Resizable from '@aziontech/webkit/resizable'`
+- Import: `import ResizableRoot from '@aziontech/ui/resizable-root'`
+- Compound import (dot notation, not tree-shakeable): `import Resizable from '@aziontech/ui/resizable'`
 - Category: layout · Surface: app · Structure: composition
 - API as JSON: [resizable.json](resizable.json)
 
@@ -51,8 +51,8 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/resizable-handle`
-- `@aziontech/webkit/resizable-pane`
+- `@aziontech/ui/resizable-handle`
+- `@aziontech/ui/resizable-pane`
 
 ## Sub-components
 
@@ -121,7 +121,7 @@ context, so a consumer never wires one part to the other.
 
 ```vue
 <script setup>
-  import Resizable from '@aziontech/webkit/resizable'
+  import Resizable from '@aziontech/ui/resizable'
   import { ref } from 'vue'
 
   const basis = ref(240)
@@ -165,7 +165,7 @@ context, so a consumer never wires one part to the other.
 
 ```vue
 <script setup>
-  import Resizable from '@aziontech/webkit/resizable'
+  import Resizable from '@aziontech/ui/resizable'
 </script>
 
 <template>
@@ -212,8 +212,8 @@ context, so a consumer never wires one part to the other.
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Resizable from '@aziontech/webkit/resizable'
+  import Button from '@aziontech/ui/button'
+  import Resizable from '@aziontech/ui/resizable'
   import { ref } from 'vue'
 
   const open = ref(false)

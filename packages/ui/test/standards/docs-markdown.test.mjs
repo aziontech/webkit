@@ -51,7 +51,7 @@ test('the rendered set includes every rule and the block guidelines', () => {
   const rendered = docsSources(REPO)
     .filter((source) => source.rendered)
     .map((source) => source.path)
-  for (const path of ['rules/webkit-tokens.md', 'rules/webkit-accessibility.md'])
+  for (const path of ['rules/azion-ui-tokens.md', 'rules/azion-ui-accessibility.md'])
     assert.ok(rendered.includes(path), path)
   assert.ok(rendered.some((path) => path.endsWith('/guidelines.md')))
 })

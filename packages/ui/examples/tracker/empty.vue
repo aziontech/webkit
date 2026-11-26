@@ -1,5 +1,5 @@
 <script setup>
-  import Tracker from '@aziontech/webkit/tracker'
+  import Tracker from '@aziontech/ui/tracker'
 </script>
 
 <template>

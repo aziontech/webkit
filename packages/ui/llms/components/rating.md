@@ -2,7 +2,7 @@
 
 > Rating is a row of stars that picks a whole score from 1 to `max` (5 by default), the way a customer rates a support conversation (CSAT) or a product review. It renders as a native radio group, one radio per star named "1 star" … "5 stars", so it is one tab stop, the arrow keys move the score and the value posts with a form. With `readonly` it becomes a display of a score, including a fractional average rounded to the nearest half star (4.5 shows four and a half stars), announced as one image ("Rated 4.5 out of 5").
 
-- Import: `import Rating from '@aziontech/webkit/rating'`
+- Import: `import Rating from '@aziontech/ui/rating'`
 - Category: input · Surface: app · Structure: monolithic
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [rating.json](rating.json)
@@ -117,7 +117,7 @@
 
 ```vue
 <script setup>
-  import Rating from '@aziontech/webkit/rating'
+  import Rating from '@aziontech/ui/rating'
   import { ref } from 'vue'
 
   const score = ref(0)
@@ -144,7 +144,7 @@
 
 ```vue
 <script setup>
-  import Rating from '@aziontech/webkit/rating'
+  import Rating from '@aziontech/ui/rating'
 </script>
 
 <template>
@@ -172,7 +172,7 @@
 
 ```vue
 <script setup>
-  import Rating from '@aziontech/webkit/rating'
+  import Rating from '@aziontech/ui/rating'
 
   const products = [
     { name: 'Acme Storage', average: 4.5, reviews: 128 },

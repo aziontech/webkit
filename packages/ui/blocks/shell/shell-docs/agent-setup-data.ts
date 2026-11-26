@@ -1,9 +1,9 @@
-import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
-import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
-import copilotMark from '@aziontech/webkit/assets/copilot-symbol-color.svg'
-import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
-import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
-import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
+import claudeMark from '@aziontech/ui/assets/claude-symbol-color.svg'
+import codexMark from '@aziontech/ui/assets/codex-symbol-mono.svg'
+import copilotMark from '@aziontech/ui/assets/copilot-symbol-color.svg'
+import cursorMark from '@aziontech/ui/assets/cursor-symbol-mono.svg'
+import geminiMark from '@aziontech/ui/assets/gemini-symbol-color.svg'
+import opencodeMark from '@aziontech/ui/assets/opencode-symbol-mono.svg'
 
 type Workflow = 'Terminal' | 'IDE' | 'Extension'
 

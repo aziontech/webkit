@@ -1,6 +1,6 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import InputGroup from '@aziontech/webkit/input-group'
+  import Field from '@aziontech/ui/field'
+  import InputGroup from '@aziontech/ui/input-group'
   import { ref } from 'vue'
 
   const value = ref('shop example')

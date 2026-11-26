@@ -67,6 +67,6 @@ test('an error never carries a primary button', () => {
   assert.deepEqual(
     offenders,
     [],
-    'use variant="secondary" for the recovery action of an error (skills/webkit-errors, ERR-2)'
+    'use variant="secondary" for the recovery action of an error (skills/azion-ui-errors, ERR-2)'
   )
 })

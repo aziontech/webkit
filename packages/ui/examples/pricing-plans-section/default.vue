@@ -1,5 +1,5 @@
 <script setup>
-  import PricingPlansSection from '@aziontech/webkit/pricing-plans-section'
+  import PricingPlansSection from '@aziontech/ui/pricing-plans-section'
 
   const periods = [
     {

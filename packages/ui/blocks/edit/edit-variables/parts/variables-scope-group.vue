@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Switch from '@aziontech/webkit/switch'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import InputGroupAddon from '@aziontech/ui/input-group-addon'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Switch from '@aziontech/ui/switch'
 
   import { useVariablesFormContext } from '../composables/use-variables-form'
   import {

@@ -39,14 +39,14 @@ test('the packed source stays under its unpacked size budget', () => {
   const unpacked = sum(shipped)
   assert.ok(
     unpacked <= budget.unpackedBytes,
-    `@aziontech/webkit unpacks to ${unpacked} bytes, over the ${budget.unpackedBytes} budget in scripts/package-size-budget.json. Largest folders:\n  ${largest(shipped)}`
+    `@aziontech/ui unpacks to ${unpacked} bytes, over the ${budget.unpackedBytes} budget in scripts/package-size-budget.json. Largest folders:\n  ${largest(shipped)}`
   )
 })
 
 test('the tarball stays under its packed size budget', { skip: generatedPresent }, () => {
   assert.ok(
     pack.size <= budget.packedBytes,
-    `@aziontech/webkit packs to ${pack.size} bytes, over the ${budget.packedBytes} budget in scripts/package-size-budget.json`
+    `@aziontech/ui packs to ${pack.size} bytes, over the ${budget.packedBytes} budget in scripts/package-size-budget.json`
   )
 })
 

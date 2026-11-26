@@ -15,7 +15,7 @@ import MessageThread, {
   useMessageThreadContext
 } from './index'
 
-const announcer = (): string => document.querySelector('[data-webkit-announcer]')?.textContent ?? ''
+const announcer = (): string => document.querySelector('[data-azion-announcer]')?.textContent ?? ''
 
 describe('MessageThread', () => {
   describe('compound API', () => {

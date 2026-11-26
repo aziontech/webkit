@@ -3,9 +3,9 @@
 A composable (`useXxx`) is a public building block: imported, typed, and relied on across
 the app, so it follows one contract — a predictable surface, a predictable lifetime, and
 no surprises on destructure. ESLint blocks the mechanical violations:
-`webkit/require-readonly-composable-return` (a `reactive()` or raw `ref()` returned, or no explicit
-return type), `webkit/require-composable-scope-cleanup` (a listener, timer, animation frame or
-observer with no `onScopeDispose` in the file) and `webkit/require-authoring-standards` (a `.js`
+`azion-ui/require-readonly-composable-return` (a `reactive()` or raw `ref()` returned, or no explicit
+return type), `azion-ui/require-composable-scope-cleanup` (a listener, timer, animation frame or
+observer with no `onScopeDispose` in the file) and `azion-ui/require-authoring-standards` (a `.js`
 composable). The rest of the contract is convention, enforced in review.
 
 ## Do

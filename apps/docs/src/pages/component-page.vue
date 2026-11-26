@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import '../styles/full-utilities.css'
 
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import CopyText from '@aziontech/webkit/copy-text'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import Tag from '@aziontech/webkit/tag'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import CopyText from '@aziontech/ui/copy-text'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import Tag from '@aziontech/ui/tag'
   import { useHead } from '@unhead/vue'
   import { computed, defineAsyncComponent, hydrateOnIdle } from 'vue'
   import { useRoute } from 'vue-router'
@@ -46,7 +46,7 @@
   const doc = computed(() => cached<ComponentDoc>(keys.component(name.value)))
 
   useHead({
-    title: computed(() => (item.value ? `${item.value.title} — WebKit` : 'WebKit')),
+    title: computed(() => (item.value ? `${item.value.title} — Azion UI` : 'Azion UI')),
     meta: [{ name: 'description', content: computed(() => item.value?.purpose ?? '') }]
   })
 

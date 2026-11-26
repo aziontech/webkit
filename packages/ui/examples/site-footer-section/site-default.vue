@@ -1,5 +1,5 @@
 <script setup>
-  import SiteFooterSection from '@aziontech/webkit/site-footer-section'
+  import SiteFooterSection from '@aziontech/ui/site-footer-section'
 
   const columns = [
     {

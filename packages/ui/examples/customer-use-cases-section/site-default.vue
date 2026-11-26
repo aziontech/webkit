@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import CustomerUseCasesSection from '@aziontech/webkit/customer-use-cases-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import CustomerUseCasesSection from '@aziontech/ui/customer-use-cases-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const primaryAction = {
     label: 'Docs',

@@ -1,5 +1,5 @@
 <script setup>
-  import NetworkMap from '@aziontech/webkit/network-map'
+  import NetworkMap from '@aziontech/ui/network-map'
 </script>
 
 <template>

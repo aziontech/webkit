@@ -20,7 +20,7 @@
     "criar regra",
     "regras condicionais"
   ],
-  "skills": ["webkit-form", "webkit-errors", "webkit-create-surface"],
+  "skills": ["azion-ui-form", "azion-ui-errors", "azion-ui-create-surface"],
   "primary": {
     "name": "Default",
     "file": "edit-rule-builder.vue"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import FilePreview from '@aziontech/webkit/file-preview'
+  import FilePreview from '@aziontech/ui/file-preview'
 
   const settings = JSON.stringify({
     name: 'acme-store',

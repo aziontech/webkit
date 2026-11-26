@@ -1,8 +1,8 @@
 <script setup>
-  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
-  import Container from '@aziontech/webkit/container'
-  import NewsletterSection from '@aziontech/webkit/newsletter-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
+  import Container from '@aziontech/ui/container'
+  import NewsletterSection from '@aziontech/ui/newsletter-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const form = {
     placeholder: 'Your email',

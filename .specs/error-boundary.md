@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 5054a03d6531de8685e7c7821d5f96c738630df62d0e7cbde6dacca76ef4f73a
+checksum: 07a35b42219b5d6f3a6b418ea6eeebc510cba20964b4cc20134a761232702c35
 created: 2026-11-11
 last_updated: 2026-11-25
 ---
@@ -30,7 +30,7 @@ example).
 
 ## When NOT to use
 
-- A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/state-form-validation` (SectionRejected) and `skills/webkit-ui-states` describe.
+- A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/state-form-validation` (SectionRejected) and `skills/azion-ui-states` describe.
 - A whole page that cannot be shown (missing route, no access, server failure) → use the `state/state-error-page` block.
 - A field that failed validation → use `field` with its error message.
 - Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`.
@@ -54,8 +54,8 @@ example).
 
 ```vue
 <script setup>
-  import ErrorBoundary from '@aziontech/webkit/error-boundary'
-  import BarList from '@aziontech/webkit/bar-list'
+  import ErrorBoundary from '@aziontech/ui/error-boundary'
+  import BarList from '@aziontech/ui/bar-list'
 
   const report = ({ error, info }) => console.error(info, error)
 </script>
@@ -170,7 +170,7 @@ _none_ — the swap between region and fallback is instant. The built-in `Alert`
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

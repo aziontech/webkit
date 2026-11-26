@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import test from 'node:test'
 
-process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
+process.env.AZION_UI_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
 
 const { loadCatalog, _resetCatalogCache } = await import('../../src/catalog/catalog.js')
 const { searchComponents, suggestComponent } = await import('../../src/catalog/queries.js')
@@ -46,6 +46,6 @@ test('a need no component covers answers "not found" and says to build from toke
   const r = suggestComponent(catalog, 'color picker')
   assert.equal(r.found, false)
   assert.equal(r.best, null)
-  assert.match(r.message, /No WebKit component is made for/)
+  assert.match(r.message, /No Azion UI component is made for/)
   assert.ok(r.weakMatches.length > 0)
 })

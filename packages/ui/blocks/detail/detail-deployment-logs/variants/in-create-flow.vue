@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Card from '@aziontech/ui/card'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
 </script>
 
 <template>

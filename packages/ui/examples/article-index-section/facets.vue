@@ -1,5 +1,5 @@
 <script setup>
-  import ArticleIndexSection from '@aziontech/webkit/article-index-section'
+  import ArticleIndexSection from '@aziontech/ui/article-index-section'
 </script>
 
 <template>

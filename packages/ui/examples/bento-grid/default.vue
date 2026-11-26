@@ -1,6 +1,6 @@
 <script setup>
-  import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
-  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
+  import BentoGridCell from '@aziontech/ui/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/ui/bento-grid-root'
 </script>
 
 <template>

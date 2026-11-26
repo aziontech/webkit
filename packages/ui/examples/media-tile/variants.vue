@@ -1,7 +1,7 @@
 <script setup>
-  import CardGridRoot from '@aziontech/webkit/card-grid-root'
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaTile from '@aziontech/webkit/media-tile'
+  import CardGridRoot from '@aziontech/ui/card-grid-root'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaTile from '@aziontech/ui/media-tile'
 </script>
 
 <template>

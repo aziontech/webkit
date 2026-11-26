@@ -3,10 +3,10 @@
 > The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsGroup` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsGroup`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field` (with `InputGroup`), `RadioGroup` (`variant="card"`), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingsRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.
 
 - Surface: app
-- Source: `blocks/create/create-drawer/create-drawer.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-drawer/create-drawer.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-drawer")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuItem`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [InputGroup](../../components/input-group.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [SchemaForm](../../components/schema-form.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-file-picker`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
-- Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-errors`
+- Skills: `azion-ui-create-surface`, `azion-ui-navigation`, `azion-ui-form`, `azion-ui-errors`
 
 ## Asked as
 
@@ -16,7 +16,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 
 ## When to use
 
-- The item belongs to a resource that is already open (a domain on a workload, a record in a zone, a rule or an origin on a resource), per the surface rule in `skills/webkit-create-surface`.
+- The item belongs to a resource that is already open (a domain on a workload, a record in a zone, a rule or an origin on a resource), per the surface rule in `skills/azion-ui-create-surface`.
 - Editing that same item from its row menu; the drawer opens on its values and saves them.
 - A first-level tuple normally created in bulk, such as variables, the one exception the surface rule allows.
 - A select needs another item of the same resource that may not exist yet, such as the origin a new rule sends requests to: the NestedDrawer shape creates it in a second drawer and selects it back.
@@ -116,7 +116,7 @@ To go live, render the block from a page that owns the request and pass what it 
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import { ref } from 'vue'
 
   import CreateDrawer, { type CreateDrawerSubmission } from './create-drawer.vue'
@@ -181,7 +181,7 @@ Then delete the `sample.ts` import of `create-drawer.vue`.
 - **Helper text:** states the consequence of the current value, e.g. "Production publishes with the Deployment Settings set to Single."
 - **Required:** "This field is required."
 - **Create option:** `Create <Object>` at the foot of the select, e.g. "Create Environment".
-- Follow `skills/webkit-microcopy` and `skills/webkit-errors`: sentence case, no em dash, no "please", select rather than pick.
+- Follow `skills/azion-ui-microcopy` and `skills/azion-ui-errors`: sentence case, no em dash, no "please", select rather than pick.
 
 ## Accessibility
 
@@ -215,7 +215,7 @@ Then delete the `sample.ts` import of `create-drawer.vue`.
 - `create/create-page` — the page a first-level resource creates on instead.
 - `create/create-deploy-drawer` — the drawer that deploys rather than creates.
 - `state/state-form-validation` — the submit-time validation this drawer follows.
-- `SettingsGroup` — the band each section is built from; see `skills/webkit-form` for fields and validation.
+- `SettingsGroup` — the band each section is built from; see `skills/azion-ui-form` for fields and validation.
 
 ## Variants
 
@@ -237,14 +237,14 @@ Each variant is the same screen in another state: `get_block("create/create-draw
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import InputGroup from '@aziontech/webkit/input-group'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import InputGroup from '@aziontech/ui/input-group'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   import { useDrawerGuard } from './composables/use-drawer-guard'
@@ -666,7 +666,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
 ## `sample.ts`
 
 ```ts
-import type { SchemaFormSchema } from '@aziontech/webkit/schema-form'
+import type { SchemaFormSchema } from '@aziontech/ui/schema-form'
 
 import type { CreateDrawerCertificate, CreateDrawerEnvironment } from './create-drawer.vue'
 
@@ -824,10 +824,7 @@ export const sampleFunctionInstances: FunctionInstanceRecord[] = [
 ## `composables/use-drawer-guard.ts`
 
 ```ts
-import {
-  useUnsavedChanges,
-  type UseUnsavedChangesReturn
-} from '@aziontech/webkit/use-unsaved-changes'
+import { useUnsavedChanges, type UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
 import type { Ref } from 'vue'
 
 export interface UseDrawerGuardOptions<T> {
@@ -900,14 +897,14 @@ export function certificateForDomain(certificates: CertificateSubject[], host: s
 
 ```ts
 <script setup lang="ts">
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
+  import { focusFirstInvalid } from '@aziontech/ui/utils/focus-invalid'
   import { ref } from 'vue'
 
   import SubmitButton from './submit-button.vue'
@@ -1027,9 +1024,9 @@ export function certificateForDomain(certificates: CertificateSubject[], host: s
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import { toAriaKeyshortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import { toAriaKeyshortcuts } from '@aziontech/ui/use-shortcuts'
 
   export interface SubmitButtonProps {
     /** The save is in flight: the button spins. */
@@ -1067,9 +1064,9 @@ export function certificateForDomain(certificates: CertificateSubject[], host: s
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import type { UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
 
   export interface UnsavedChangesDialogProps {
     /** The unsaved-changes guard whose leave dialog this renders. */

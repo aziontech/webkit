@@ -2,7 +2,7 @@
 
 A row of client columns, each painted in the client's colours with its logo and a one-line story linking to the case.
 
-The band is the `ClientStoryColumnsSection` component from `@aziontech/webkit/client-story-columns-section`; it composes `Module` and `RegistrationFrame`.
+The band is the `ClientStoryColumnsSection` component from `@aziontech/ui/client-story-columns-section`; it composes `Module` and `RegistrationFrame`.
 
 ## Examples
 

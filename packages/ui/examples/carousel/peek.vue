@@ -1,6 +1,6 @@
 <script setup>
-  import Carousel from '@aziontech/webkit/carousel'
-  import Quote from '@aziontech/webkit/quote'
+  import Carousel from '@aziontech/ui/carousel'
+  import Quote from '@aziontech/ui/quote'
 </script>
 
 <template>

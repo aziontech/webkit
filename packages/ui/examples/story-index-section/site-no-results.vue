@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
-  import StoryIndexSection from '@aziontech/webkit/story-index-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
+  import StoryIndexSection from '@aziontech/ui/story-index-section'
 
   const items = []
 

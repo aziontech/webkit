@@ -1,11 +1,9 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import ConsoleLayoutRoot, {
-    type ConsoleLayoutNavGroup
-  } from '@aziontech/webkit/console-layout-root'
-  import Item from '@aziontech/webkit/item'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import ConsoleLayoutRoot, { type ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout-root'
+  import Item from '@aziontech/ui/item'
+  import PageHeader from '@aziontech/ui/page-header'
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {

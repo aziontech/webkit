@@ -1,6 +1,6 @@
 # Lint & Static Quality — Overview
 
-> **@aziontech/webkit monorepo** · snapshot of July 2026
+> **@aziontech/ui monorepo** · snapshot of July 2026
 > Companion doc: [`OVERVIEW_TESTS.md`](./OVERVIEW_TESTS.md) (runtime test layers)
 
 ## TL;DR
@@ -51,7 +51,7 @@ Each layer catches what the previous one missed: hooks stop AI-generated drift a
 
 ## 2. ESLint — correctness linting
 
-**Config:** single **flat config** (ESLint 9) at the repo root, [`eslint.config.js`](../../eslint.config.js). `packages/webkit/eslint.config.js` just re-exports it — one ruleset, no per-package drift.
+**Config:** single **flat config** (ESLint 9) at the repo root, [`eslint.config.js`](../../eslint.config.js). `packages/ui/eslint.config.js` just re-exports it — one ruleset, no per-package drift.
 
 ### 2.1 Parser chain
 
@@ -138,15 +138,15 @@ Every ESLint invocation — script, lint-staged, CI — runs with **`--max-warni
 | `singleAttributePerLine`  | `true`   | one attribute per line in templates — long `data-[variant=…]` class/attribute stacks stay readable and diff line-by-line |
 | `vueIndentScriptAndStyle` | `true`   | `<script>`/`<style>` content indented inside SFC blocks                                                                  |
 
-`packages/webkit/.prettierignore` skips generated output: `dist`, `*.min.css`, `*.d.ts`, `coverage`, `node_modules`.
+`packages/ui/.prettierignore` skips generated output: `dist`, `*.min.css`, `*.d.ts`, `coverage`, `node_modules`.
 
 ---
 
 ## 4. Stylelint — CSS/SCSS linting
 
-**Config:** [`.stylelintrc.json`](../../.stylelintrc.json), scanning `packages/webkit/**/*.{css,scss,vue}`.
+**Config:** [`.stylelintrc.json`](../../.stylelintrc.json), scanning `packages/ui/**/*.{css,scss,vue}`.
 
-Context: the styling rule forbids `<style>` blocks and component-local CSS inside webkit components — so Stylelint is the **backstop** for the few legitimate stylesheets (e.g. `styles/country-flags.css`, legacy components) and any `<style>` block that would sneak in.
+Context: the styling rule forbids `<style>` blocks and component-local CSS inside Azion UI components — so Stylelint is the **backstop** for the few legitimate stylesheets (e.g. `styles/country-flags.css`, legacy components) and any `<style>` block that would sneak in.
 
 | Piece                                                                  | Value                                                                 | Meaning                                                         |
 | ---------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------- |
@@ -166,7 +166,7 @@ Context: the styling rule forbids `<style>` blocks and component-local CSS insid
 
 Two complementary gates:
 
-1. **`vue-tsc --noEmit`** (`pnpm typecheck:webkit`) — full TypeScript program check across `.ts` **and** `.vue` files. Backed by a strict base config (`tsconfig.base.json`):
+1. **`vue-tsc --noEmit`** (`pnpm typecheck:ui`) — full TypeScript program check across `.ts` **and** `.vue` files. Backed by a strict base config (`tsconfig.base.json`):
 
    | Flag                                       | Effect                                                 |
    | ------------------------------------------ | ------------------------------------------------------ |
@@ -175,9 +175,9 @@ Two complementary gates:
    | `noImplicitReturns` / `noImplicitOverride` | every code path returns; overrides are explicit        |
    | `moduleResolution: bundler`                | resolution matches Vite's                              |
 
-   `packages/webkit/tsconfig.json` adds `noPropertyAccessFromIndexSignature` and declaration emit (`declaration` + `emitDeclarationOnly`) — the same compiler that gates PRs also generates the published `.d.ts` at release time. Tests, `.figma.ts`, and `src/test/` are excluded from emit.
+   `packages/ui/tsconfig.json` adds `noPropertyAccessFromIndexSignature` and declaration emit (`declaration` + `emitDeclarationOnly`) — the same compiler that gates PRs also generates the published `.d.ts` at release time. Tests, `.figma.ts`, and `src/test/` are excluded from emit.
 
-2. **`type-coverage -p . --at-least 95`** (`pnpm check:webkit:type-coverage`) — measures how many expressions have a real (non-`any`) type and **fails below 95%**. This closes the gap `no-explicit-any` can't see: _implicit_ `any` leaking through inference.
+2. **`type-coverage -p . --at-least 95`** (`pnpm check:ui:type-coverage`) — measures how many expressions have a real (non-`any`) type and **fails below 95%**. This closes the gap `no-explicit-any` can't see: _implicit_ `any` leaking through inference.
 
 ---
 
@@ -190,10 +190,10 @@ Commits aren't just style here — they **drive releases**. release-please reads
 **Header shape** (custom `headerPattern`; release-please's stock parser is not configurable, so the header must **start with the bare type** — a ticket tag goes in the subject, after the colon, and only when a real ticket exists):
 
 ```
-feat(webkit): [ENG-1231] add table export     ← optional ticket tag, after the colon
-fix(webkit): correct pagination focus ring
+feat(ui): [ENG-1231] add table export     ← optional ticket tag, after the colon
+fix(ui): correct pagination focus ring
 chore: bump tooling
-feat(webkit)!: drop tone prop                 ← “!” = breaking = major
+feat(ui)!: drop tone prop                 ← “!” = breaking = major
 ```
 
 **Types and the release each produces (stock release-please):**
@@ -219,9 +219,9 @@ flowchart LR
     A --> CM["husky: commit-msg"]
 
     PC --> LS["lint-staged<br/>(staged files only)"]
-    LS --> M1["packages/webkit/**/*.{js,ts,vue}<br/>eslint --fix --max-warnings=0 → prettier --write"]
-    LS --> M2["packages/webkit/**/*.{css,scss}<br/>stylelint --fix → prettier --write"]
-    LS --> M3["packages/webkit/**/*.{json,md}<br/>prettier --write"]
+    LS --> M1["packages/ui/**/*.{js,ts,vue}<br/>eslint --fix --max-warnings=0 → prettier --write"]
+    LS --> M2["packages/ui/**/*.{css,scss}<br/>stylelint --fix → prettier --write"]
+    LS --> M3["packages/ui/**/*.{json,md}<br/>prettier --write"]
 
     CM --> CL["commitlint --edit<br/>(header contract, §6)"]
 
@@ -233,18 +233,18 @@ flowchart LR
 
 - `.husky/pre-commit` → `pnpm lint-staged`; `.husky/commit-msg` → `pnpm exec commitlint --edit "$1"` (config lives in the root `package.json` → `lint-staged`).
 - Only **staged** files are processed, and fixers run first (`--fix`, `--write`) — the hook heals what it can and blocks only on what it can't.
-- Scope is `packages/webkit/**` — the published library is what pre-commit protects.
+- Scope is `packages/ui/**` — the published library is what pre-commit protects.
 - Never bypassed: the git-workflow rule forbids `--no-verify`.
 
 ---
 
 ## 8. CI — the governance pipeline
 
-**Workflow:** [`.github/workflows/governance.yml`](../../.github/workflows/governance.yml) · PRs and pushes to `main` and `dev` · path-filtered to `packages/webkit/**` (jobs short-circuit as "skipped" when nothing relevant changed, so required checks stay green).
+**Workflow:** [`.github/workflows/governance.yml`](../../.github/workflows/governance.yml) · PRs and pushes to `main` and `dev` · path-filtered to `packages/ui/**` (jobs short-circuit as "skipped" when nothing relevant changed, so required checks stay green).
 
 ```mermaid
 flowchart TB
-    T["PR / push → main, dev"] --> CH["changes<br/>dorny/paths-filter: packages/webkit/**"]
+    T["PR / push → main, dev"] --> CH["changes<br/>dorny/paths-filter: packages/ui/**"]
 
     CH --> LINT["lint<br/>• eslint --ext .js,.ts,.vue --max-warnings 0<br/>• stylelint '**/*.{css,scss,vue}'<br/>• prettier --check"]
     CH --> TY["types<br/>• vue-tsc --noEmit<br/>• type-coverage ≥ 95%"]
@@ -279,14 +279,14 @@ The functional and visual test workflows (the `tests` and `visual` jobs of `gove
 
 A layer conventional linters don't have: this repo is developed AI-assisted, and **Claude Code hooks lint the writes themselves** — every `Write`/`Edit` to the repo is intercepted and validated _before or right after it lands_, enforcing the design-system rules that ESLint can't express. They only flag **newly introduced** violations (legacy components are whitelisted), so the codebase migrates as it's touched.
 
-| Hook                           | Fires      | Blocks                                                                                                                                                         |
-| ------------------------------ | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `validate-tokens.mjs`          | Pre-write  | hardcoded hex colors, raw Tailwind palette, raw typography — anything outside the TOKENS.md token catalog; also `any` and `@ts-ignore`                         |
-| `validate-references.mjs`      | Pre-write  | phantom imports: any `@aziontech/webkit/*` path missing from the exports map, unresolvable relative imports, uninstalled packages (kills import hallucination) |
-| `enforce-component-create.mjs` | Pre-write  | new component `.vue` created outside the spec-driven pipeline (`/spec-create` → `/component-create`)                                                           |
-| `enforce-spec-exists.mjs`      | Pre-write  | component code written without an **approved** spec — including checksum tamper-detection on the spec body                                                     |
-| `validate-spec-compliance.mjs` | Post-write | a `.vue` whose props / events / slots / name / testid / animations diverge from its `.specs/<name>.md`                                                         |
-| `enforce-test-exists.mjs`      | Post-write | (warning) a root `.vue` without its co-located `<name>.test.ts`                                                                                                |
+| Hook                           | Fires      | Blocks                                                                                                                                                     |
+| ------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `validate-tokens.mjs`          | Pre-write  | hardcoded hex colors, raw Tailwind palette, raw typography — anything outside the TOKENS.md token catalog; also `any` and `@ts-ignore`                     |
+| `validate-references.mjs`      | Pre-write  | phantom imports: any `@aziontech/ui/*` path missing from the exports map, unresolvable relative imports, uninstalled packages (kills import hallucination) |
+| `enforce-component-create.mjs` | Pre-write  | new component `.vue` created outside the spec-driven pipeline (`/spec-create` → `/component-create`)                                                       |
+| `enforce-spec-exists.mjs`      | Pre-write  | component code written without an **approved** spec — including checksum tamper-detection on the spec body                                                 |
+| `validate-spec-compliance.mjs` | Post-write | a `.vue` whose props / events / slots / name / testid / animations diverge from its `.specs/<name>.md`                                                     |
+| `enforce-test-exists.mjs`      | Post-write | (warning) a root `.vue` without its co-located `<name>.test.ts`                                                                                            |
 
 Together these encode the repo's core invariants — _spec is the contract, tokens are the palette, imports must exist, examples must run_ — as machine-enforced checks rather than review comments.
 
@@ -296,7 +296,7 @@ Together these encode the repo's core invariants — _spec is the contract, toke
 
 Honest footnotes worth a slide (all low-risk, none affect CI):
 
-1. **`packages/webkit` `lint` script has a typo** — `eslint src --ext .js,.js,.vue` (`.js` twice, `.ts` missing). Plain `.ts` files are skipped by the _local convenience script only_; they **are** linted by lint-staged (explicit file paths) and by CI (`--ext .js,.ts,.vue`). One-character fix.
+1. **`packages/ui` `lint` script has a typo** — `eslint src --ext .js,.js,.vue` (`.js` twice, `.ts` missing). Plain `.ts` files are skipped by the _local convenience script only_; they **are** linted by lint-staged (explicit file paths) and by CI (`--ext .js,.ts,.vue`). One-character fix.
 2. **`eslint-plugin-unused-imports` is registered but no rule of it is enabled** — unused _imports_ are currently caught indirectly via `@typescript-eslint/no-unused-vars`. Either enable `unused-imports/no-unused-imports` (auto-fixable) or drop the plugin.
 3. **Legacy devDependencies not wired into the flat config** — `@vue/eslint-config-prettier`, `@vue/eslint-config-typescript`, `@rushstack/eslint-patch` are installed but unreferenced (left over from the pre-flat-config era). Removable.
 
@@ -323,12 +323,12 @@ Honest footnotes worth a slide (all low-risk, none affect CI):
 
 ## 12. Command cheat sheet
 
-| Command (repo root)                                | What it does                                                            |
-| -------------------------------------------------- | ----------------------------------------------------------------------- |
-| `pnpm lint:webkit` / `lint:webkit:fix`             | ESLint over webkit source (zero warnings) / with auto-fix               |
-| `pnpm lint:webkit:style` / `lint:webkit:style:fix` | Stylelint / with auto-fix                                               |
-| `pnpm format:webkit` / `check:webkit:format`       | Prettier write / check                                                  |
-| `pnpm typecheck:webkit`                            | `vue-tsc --noEmit`                                                      |
-| `pnpm check:webkit:type-coverage`                        | type-coverage, fails < 95%                                              |
-| `pnpm audit`                                       | `pnpm audit --audit-level=high`                                         |
-| `pnpm gates`                                       | lint + typecheck + format check + audit — the local mirror of CI's gate |
+| Command (repo root)                        | What it does                                                            |
+| ------------------------------------------ | ----------------------------------------------------------------------- |
+| `pnpm lint:ui` / `lint:ui:fix`             | ESLint over Azion UI source (zero warnings) / with auto-fix             |
+| `pnpm lint:ui:style` / `lint:ui:style:fix` | Stylelint / with auto-fix                                               |
+| `pnpm format:ui` / `check:ui:format`       | Prettier write / check                                                  |
+| `pnpm typecheck:ui`                        | `vue-tsc --noEmit`                                                      |
+| `pnpm check:ui:type-coverage`              | type-coverage, fails < 95%                                              |
+| `pnpm audit`                               | `pnpm audit --audit-level=high`                                         |
+| `pnpm gates`                               | lint + typecheck + format check + audit — the local mirror of CI's gate |

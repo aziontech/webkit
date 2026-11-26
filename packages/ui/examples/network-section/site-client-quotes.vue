@@ -1,11 +1,11 @@
 <script setup>
-  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
-  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-  import Container from '@aziontech/webkit/container'
-  import NetworkSection from '@aziontech/webkit/network-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import dafitiExtendedMono from '@aziontech/ui/assets/dafiti-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import madeiramadeiraExtendedReversed from '@aziontech/ui/assets/madeiramadeira-extended-reversed.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
+  import Container from '@aziontech/ui/container'
+  import NetworkSection from '@aziontech/ui/network-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const claims = [
     '100+ data centers',

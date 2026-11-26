@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Field from '@aziontech/webkit/field'
-  import FieldError from '@aziontech/webkit/field-error'
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
-  import Switch from '@aziontech/webkit/switch'
+  import Field from '@aziontech/ui/field'
+  import FieldError from '@aziontech/ui/field-error'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
+  import Switch from '@aziontech/ui/switch'
 
   import { roleOptions, usageOptions } from '../onboarding-form-data'
 

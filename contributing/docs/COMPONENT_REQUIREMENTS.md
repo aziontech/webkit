@@ -1,6 +1,6 @@
-# Component Development Requirements for @aziontech/webkit
+# Component Development Requirements for @aziontech/ui
 
-This document outlines the requirements and best practices for building components in the webkit package (v6). Use it when creating new components or changing existing ones. The binding, hook-enforced versions of these rules live in [`contributing/rules/`](../rules/README.md); where this document and a rule disagree, the rule wins.
+This document outlines the requirements and best practices for building components in the Azion UI package (v6). Use it when creating new components or changing existing ones. The binding, hook-enforced versions of these rules live in [`contributing/rules/`](../rules/README.md); where this document and a rule disagree, the rule wins.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ This document outlines the requirements and best practices for building componen
 
 ## Names (v6)
 
-v6 uses the names of shadcn/ui and Radix. Never write a retired name in new code, docs or examples; `npx @aziontech/webkit migrate v6` rewrites them in consumer code ([`src/cli/migrations/v6.json`](../../packages/webkit/src/cli/migrations/v6.json)).
+v6 uses the names of shadcn/ui and Radix. Never write a retired name in new code, docs or examples; `npx @aziontech/ui migrate v6` rewrites them in consumer code ([`src/cli/migrations/v6.json`](../../packages/ui/src/cli/migrations/v6.json)).
 
 | Retired (v5)                                            | v6                                                                       |
 | ------------------------------------------------------- | ------------------------------------------------------------------------ |
@@ -57,7 +57,7 @@ Page fragments are components, not copied markup: `PageHeader`, `Subheader`, `Pa
 Every component lives in one folder under its category:
 
 ```
-packages/webkit/src/components/<category>/<name>/
+packages/ui/src/components/<category>/<name>/
 ├── <name>.vue        # root component (or <name>-root.vue for a compound root)
 ├── index.ts          # compound components: attaches the parts (Tabs.List, Field.Label, …)
 ├── <part>/<part>.vue # compound parts, or <name>-<part>.vue next to the root
@@ -65,12 +65,12 @@ packages/webkit/src/components/<category>/<name>/
 └── <name>.test.ts    # browser test (rules/testing.md)
 ```
 
-Categories: `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `provider`, `section`. The spec is `.specs/<name>.md`, and runnable examples are `packages/webkit/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
+Categories: `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `provider`, `section`. The spec is `.specs/<name>.md`, and runnable examples are `packages/ui/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
 
 **Example:**
 
 ```
-packages/webkit/src/components/input/field/
+packages/ui/src/components/input/field/
 ├── field.vue
 ├── index.ts
 ├── field-label/field-label.vue
@@ -144,7 +144,7 @@ Props are typed with an exported `interface <Component>Props`, `defineProps<Exam
 </script>
 ```
 
-Webkit components merge consumer classes from fallthrough attributes, not from a `class` prop:
+Azion UI components merge consumer classes from fallthrough attributes, not from a `class` prop:
 
 ```vue
 <script setup lang="ts">
@@ -185,8 +185,8 @@ There are no `field-*` wrappers in v6. A labelled control is `Field` around the 
 ```vue
 <script setup lang="ts">
   import { ref } from 'vue'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
 
   const name = ref('')
 </script>
@@ -256,13 +256,13 @@ Organize the template logically and compose existing components instead of re-dr
 
 ## Package Configuration
 
-Components do **not** have a per-folder `package.json`. Module resolution goes through the root [`packages/webkit/package.json#exports`](../../packages/webkit/package.json) map, which points every public path directly at a source file (`.vue`/`.ts`/`.js`). The root `package.json` also declares `"sideEffects": ["**/*.vue", "**/*.css"]` once for the whole package. To publish a component, add its export entry (see [Export Configuration](#export-configuration) below).
+Components do **not** have a per-folder `package.json`. Module resolution goes through the root [`packages/ui/package.json#exports`](../../packages/ui/package.json) map, which points every public path directly at a source file (`.vue`/`.ts`/`.js`). The root `package.json` also declares `"sideEffects": ["**/*.vue", "**/*.css"]` once for the whole package. To publish a component, add its export entry (see [Export Configuration](#export-configuration) below).
 
 ---
 
 ## TypeScript Declarations
 
-TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. They are emitted at publish time by the publish workflow (`.github/workflows/publish-webkit.yml` runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`) and ship to npm consumers; declaration-emit is validated in CI by `type-check` (`vue-tsc --noEmit`).
+TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. They are emitted at publish time by the publish workflow (`.github/workflows/publish-ui.yml` runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`) and ship to npm consumers; declaration-emit is validated in CI by `type-check` (`vue-tsc --noEmit`).
 
 **DO NOT manually edit `.d.ts` or `.d.ts.map` files.**
 
@@ -294,10 +294,10 @@ Every component has its browser test next to it ([`rules/testing.md`](../rules/t
 
 After creating a component, add it to the package exports. Keys are flat (`./<name>`, never
 `./<category>/<name>`) and each entry has the typed shape; write the key and its `default` target,
-then run `pnpm --filter @aziontech/webkit build:exports`, which fills in `types` and `typesVersions`
+then run `pnpm --filter @aziontech/ui build:exports`, which fills in `types` and `typesVersions`
 (the `exports` gate checks both):
 
-### Location: `/packages/webkit/package.json`
+### Location: `/packages/ui/package.json`
 
 ```json
 {
@@ -415,7 +415,7 @@ Some components may require Vue Router for navigation or routing features.
 
 ### 3. Styling
 
-- ✅ **DO:** Use the webkit token + `data-*` styling conventions
+- ✅ **DO:** Use the Azion UI token + `data-*` styling conventions
 - ✅ **DO:** Support custom classes via `attrs.class` (`useAttrs()` with `inheritAttrs: false`; do not declare `class` as a prop)
 - ✅ **DO:** Use Tailwind CSS utility classes with logical directions (`ms-`, `pe-`, `start-`, `text-end`)
 - ❌ **DON'T:** Hardcode colors or spacing
@@ -458,12 +458,12 @@ Some components may require Vue Router for navigation or routing features.
 - [ ] Create Vue component: `<name>.vue` with `<script setup lang="ts">`
 - [ ] Type props (with JSDoc) and events; primary value through `defineModel`
 - [ ] Add the `data-testid` fallback: the component's own name
-- [ ] Add the export to `package.json`, then `pnpm --filter @aziontech/webkit build:exports`
+- [ ] Add the export to `package.json`, then `pnpm --filter @aziontech/ui build:exports`
 - [ ] Add the `.size-limit.json` entry with the spec's `## Performance` budget
 - [ ] Add the browser test `<name>.test.ts`
 - [ ] Add `examples/<name>/` (at least the examples the spec lists, the first `default.vue`)
 - [ ] Add every built-in string to `src/locales/en.ts`, `pt-BR.ts` and `es.ts`
-- [ ] Rebuild the catalog and the llms pages: `pnpm --filter @aziontech/webkit build:catalog`
+- [ ] Rebuild the catalog and the llms pages: `pnpm --filter @aziontech/ui build:catalog`
 - [ ] Regenerate the visual baseline of the first example: `/baselines-regenerate`
 
 ### Vue Router Components (Additional)
@@ -482,11 +482,11 @@ Some components may require Vue Router for navigation or routing features.
 ```vue
 <script setup lang="ts">
   import { ref } from 'vue'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Switch from '@aziontech/webkit/switch'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Switch from '@aziontech/ui/switch'
 
   const name = ref('')
   const active = ref(true)
@@ -522,7 +522,7 @@ Some components may require Vue Router for navigation or routing features.
 ```vue
 <script setup lang="ts">
   import { useRouter } from 'vue-router'
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 
   const props = defineProps<{
     /** Route to open. */
@@ -555,7 +555,7 @@ Some components may require Vue Router for navigation or routing features.
 
 **Problem:** `.d.ts` files are missing or outdated
 
-**Solution:** Declarations are generated at publish time by the publish workflow (`.github/workflows/publish-webkit.yml`, `vue-tsc --declaration --emitDeclarationOnly`); declaration-emit is validated locally and in CI by `type-check` (`vue-tsc --noEmit`). Run `pnpm typecheck:webkit` to surface declaration errors.
+**Solution:** Declarations are generated at publish time by the publish workflow (`.github/workflows/publish-ui.yml`, `vue-tsc --declaration --emitDeclarationOnly`); declaration-emit is validated locally and in CI by `type-check` (`vue-tsc --noEmit`). Run `pnpm typecheck:ui` to surface declaration errors.
 
 ### Export Not Found
 
@@ -597,15 +597,15 @@ Some components may require Vue Router for navigation or routing features.
 - [Vue 3 Composition API](https://vuejs.org/api/composition-api-setup.html)
 - [Vue Router Documentation](https://router.vuejs.org/)
 - [shadcn/ui Field](https://ui.shadcn.com/docs/components/field)
-- [`MIGRATION_V6.md`](../../packages/webkit/MIGRATION_V6.md)
+- [`MIGRATION_V6.md`](../../packages/ui/MIGRATION_V6.md)
 
 ---
 
-## Webkit Layer Pattern (in-depth)
+## Azion UI Layer Pattern (in-depth)
 
-This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../../packages/webkit/src/components/action/button/button.vue), [icon-button.vue](../../packages/webkit/src/components/action/icon-button/icon-button.vue), [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue).
+This section describes the canonical pattern enforced for components living under `packages/ui/src/components/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../../packages/ui/src/components/action/button/button.vue), [icon-button.vue](../../packages/ui/src/components/action/icon-button/icon-button.vue), [pricing-card.vue](../../packages/ui/src/components/content/pricing-card/pricing-card.vue).
 
-> **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/webkit/<subpath>` must appear in [`package.json#exports`](../../packages/webkit/package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
+> **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/ui/<subpath>` must appear in [`package.json#exports`](../../packages/ui/package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
 
 ### 1. Source of truth: `TOKENS.md`
 
@@ -620,7 +620,7 @@ All visual rules (typography classes, spacing, max-width, shape, semantic colors
 
 ### 2. Typed TypeScript, mandatory
 
-Every new component in the webkit layer uses `<script setup lang="ts">` with:
+Every new component in the Azion UI layer uses `<script setup lang="ts">` with:
 
 - An exported `interface <Component>Props` with `withDefaults(defineProps<ButtonProps>(), {...})` ([`rules/props.md`](../rules/props.md)).
 - `defineEmits<{...}>()`.
@@ -674,7 +674,7 @@ defineSlots<{
 
 ### 2.5. No `asChild` / `as` — the component owns its root
 
-WebKit has no `asChild` prop, no `as` / `is` string prop and no Slot helper, and it will not add one (see [`contributing/rules/root-element.md`](../rules/root-element.md)). `webkit/no-polymorphic-as-prop` blocks a `defineProps` that declares `as` or `asChild`, and `validate-references.mjs` blocks a phantom Slot import.
+Azion UI has no `asChild` prop, no `as` / `is` string prop and no Slot helper, and it will not add one (see [`contributing/rules/root-element.md`](../rules/root-element.md)). `azion-ui/no-polymorphic-as-prop` blocks a `defineProps` that declares `as` or `asChild`, and `validate-references.mjs` blocks a phantom Slot import.
 
 - **Link or button:** the component switches its own root on a data prop — `href` renders an anchor, no `href` a button (`<component :is="href ? 'a' : 'button'">`). A row or card that is clickable takes `href` or `clickable`.
 - **Overlay triggers** (`Dialog.Trigger`, `Drawer.Trigger`, `Popover.Trigger`, `DropdownMenu.Trigger`, …) wrap the consumer's control: when the slot holds one control (a `Button`, an `IconButton`, a native button or link) the trigger forwards its ARIA, click and keyboard handlers onto that control; otherwise it renders its own button around the content. The consumer writes `<Dialog.Trigger><Button label="Open" /></Dialog.Trigger>` and never an `asChild`.
@@ -707,14 +707,14 @@ This unlocks state-driven styling without computed class strings:
 
 ### 2.7. `cn` helper (tailwind-merge)
 
-> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/webkit/package.json`](../../packages/webkit/package.json). The helper lives at [`src/utils/cn.ts`](../../packages/webkit/src/utils/cn.ts) and is exported as `@aziontech/webkit/utils/cn`.
+> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/ui/package.json`](../../packages/ui/package.json). The helper lives at [`src/utils/cn.ts`](../../packages/ui/src/utils/cn.ts) and is exported as `@aziontech/ui/utils/cn`.
 
 The naive `[base, attrs.class]` array works for additive cases but fails when consumer classes need to **override** internal ones (e.g. consumer passes `px-6` while the component sets `px-4` — both end up applied; the later one wins by source order, not intent). `cn(...)` (built on `clsx` + `tailwind-merge`) makes consumer classes win predictably.
 
 Usage:
 
 ```ts
-import { cn } from '@aziontech/webkit/utils/cn'
+import { cn } from '@aziontech/ui/utils/cn'
 
 const ROOT_CLASS =
   'relative inline-flex items-center justify-center rounded-(--shape-button) ' +
@@ -740,7 +740,7 @@ export type ButtonSize = 'small' | 'medium' | 'large'
 Consumer usage:
 
 ```ts
-import type { ButtonVariant } from '@aziontech/webkit/button'
+import type { ButtonVariant } from '@aziontech/ui/button'
 
 interface MyCardActionProps {
   variant: ButtonVariant
@@ -764,7 +764,7 @@ When the component justifies Composition Pattern, ship the **complete anatomy** 
 One folder per sub-component, file name preserves the full prefix, and the shared `injection-key.ts` lives at the root of the component (sibling of the root `.vue`).
 
 ```
-packages/webkit/src/components/overlay/dialog/
+packages/ui/src/components/overlay/dialog/
 ├── dialog.vue
 ├── index.ts
 ├── injection-key.ts
@@ -780,12 +780,12 @@ packages/webkit/src/components/overlay/dialog/
     └── dialog-close.vue
 ```
 
-> Existing composition components (`dialog`, `drawer`, `navigation-menu`, `dropdown-menu`, `breadcrumb`) still use the legacy **flat** layout, where every sub-component `.vue` sits directly under the component root. They are not migrated as part of new-component work — migration would require moving files and updating every `packages/webkit/package.json#exports` right-hand path, which is out of scope. The new layout above applies only to components scaffolded going forward.
+> Existing composition components (`dialog`, `drawer`, `navigation-menu`, `dropdown-menu`, `breadcrumb`) still use the legacy **flat** layout, where every sub-component `.vue` sits directly under the component root. They are not migrated as part of new-component work — migration would require moving files and updating every `packages/ui/package.json#exports` right-hand path, which is out of scope. The new layout above applies only to components scaffolded going forward.
 
 Conventions:
 
 - **Folder per sub-component, file keeps the full prefix** (`dialog-trigger/dialog-trigger.vue`, never `dialog-trigger/index.vue`). Reasons: (a) unambiguous error traces — stack frames show `dialog-trigger.vue`, not 27 different `index.vue` lines; (b) easier grep by file name; (c) editor breadcrumbs stay legible.
-- **Public export path stays flat.** `packages/webkit/package.json#exports` keeps `./dialog-trigger` as the consumer-facing path; only the right-hand value reflects the folder nesting (`./src/components/overlay/dialog/dialog-trigger/dialog-trigger.vue`). Consumers see no churn.
+- **Public export path stays flat.** `packages/ui/package.json#exports` keeps `./dialog-trigger` as the consumer-facing path; only the right-hand value reflects the folder nesting (`./src/components/overlay/dialog/dialog-trigger/dialog-trigger.vue`). Consumers see no churn.
 - **Shared `InjectionKey<T>` and TypeScript types in a sibling `injection-key.ts`** at the root level (sibling of `<name>.vue`, **not** inside any sub-component folder). Root imports `./injection-key`; sub-components import `../injection-key`.
 - **`Trigger`** forwards its behaviour onto the slotted control and **`Close`** renders its own button (§ 2.5); no `asChild`.
 - **`data-state`** exposed on Root + Content for state-driven styling.
@@ -793,8 +793,8 @@ Conventions:
 
 ### 3. Composition Pattern — only when it pays off
 
-- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogContent` (renders the overlay and teleports) + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `Tabs.List` + `Tabs.Trigger` + `Tabs.Content`; Accordion; DropdownMenu; Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/webkit/package.json#exports`.
-- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue) — props such as `showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
+- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogContent` (renders the overlay and teleports) + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `Tabs.List` + `Tabs.Trigger` + `Tabs.Content`; Accordion; DropdownMenu; Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/ui/package.json#exports`.
+- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [pricing-card.vue](../../packages/ui/src/components/content/pricing-card/pricing-card.vue) — props such as `showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
 - **Atomic** (Button, IconButton, Tag, Spinner, Badge, CurrencyAmount) — always monolithic, no slots.
 - **Decision rule:** "does the consumer need to change the ORDER or OMIT parts exposed by the root?" If yes, use Composition Pattern. If no, stay monolithic. When in doubt, **start monolithic** and refactor only when a real use case appears.
 
@@ -840,8 +840,8 @@ Before creating or updating a component, invoke the `/component-create` skill wh
 
 Reusable utilities never live inline:
 
-- **Logic:** composables in [packages/webkit/src/composables/](../../packages/webkit/src/composables/) (`use-controllable`, `use-locale`, `use-direction`).
-- **Utility sub-components:** [packages/webkit/src/components/feedback/spinner/](../../packages/webkit/src/components/feedback/spinner/) (`spinner`, reused in button and icon-button).
+- **Logic:** composables in [packages/ui/src/composables/](../../packages/ui/src/composables/) (`use-controllable`, `use-locale`, `use-direction`).
+- **Utility sub-components:** [packages/ui/src/components/feedback/spinner/](../../packages/ui/src/components/feedback/spinner/) (`spinner`, reused in button and icon-button).
 - **Global CSS / animations:** `packages/theme/src/`.
 
 Sweep these locations before implementing. Create a new utility only when nothing existing fits, and always in a shared location.
@@ -874,36 +874,36 @@ Every token used must work in both modes of `@aziontech/theme`. The styled visua
 
 ### 12. Figma Code Connect
 
-> **Status: available today.** `@figma/code-connect` is installed in [`packages/webkit/package.json`](../../packages/webkit/package.json) and the project config lives at [`packages/webkit/figma.config.json`](../../packages/webkit/figma.config.json) (`parser: "html"`, `include: ["src/**/*.figma.ts"]`).
+> **Status: available today.** `@figma/code-connect` is installed in [`packages/ui/package.json`](../../packages/ui/package.json) and the project config lives at [`packages/ui/figma.config.json`](../../packages/ui/figma.config.json) (`parser: "html"`, `include: ["src/**/*.figma.ts"]`).
 
 For every new component, generate `<name>.figma.ts` next to the `.vue` mapping Figma variants (`variant`, `size`, `state`) → Vue props, Figma slots → Vue children, and the code snippet shown in the Dev Mode inspection panel. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`.
 
-CLI scripts (in `packages/webkit/package.json`):
+CLI scripts (in `packages/ui/package.json`):
 
-- `pnpm --filter @aziontech/webkit run check:figma` — verify all `.figma.ts` files parse.
-- `pnpm --filter @aziontech/webkit run publish:figma` — publish mappings to Figma. **Requires `FIGMA_ACCESS_TOKEN`** in the environment.
-- `pnpm --filter @aziontech/webkit run clean:figma` — remove published mappings.
+- `pnpm --filter @aziontech/ui run check:figma` — verify all `.figma.ts` files parse.
+- `pnpm --filter @aziontech/ui run publish:figma` — publish mappings to Figma. **Requires `FIGMA_ACCESS_TOKEN`** in the environment.
+- `pnpm --filter @aziontech/ui run clean:figma` — remove published mappings.
 
 Authoring the `.figma.ts` file works without the token; only publishing needs it.
 
 **Where to put `FIGMA_ACCESS_TOKEN`:**
 
-- **Locally:** copy [`packages/webkit/.env.example`](../../packages/webkit/.env.example) to `packages/webkit/.env` (gitignored) and fill `FIGMA_ACCESS_TOKEN=...`. Alternatively, `export FIGMA_ACCESS_TOKEN=...` in your shell or pass it inline: `FIGMA_ACCESS_TOKEN=... pnpm --filter @aziontech/webkit run publish:figma`. Generate the token at <https://www.figma.com/developers/api#access-tokens> (requires a Dev Mode seat with Code Connect enabled on the Figma org).
+- **Locally:** copy [`packages/ui/.env.example`](../../packages/ui/.env.example) to `packages/ui/.env` (gitignored) and fill `FIGMA_ACCESS_TOKEN=...`. Alternatively, `export FIGMA_ACCESS_TOKEN=...` in your shell or pass it inline: `FIGMA_ACCESS_TOKEN=... pnpm --filter @aziontech/ui run publish:figma`. Generate the token at <https://www.figma.com/developers/api#access-tokens> (requires a Dev Mode seat with Code Connect enabled on the Figma org).
 - **CI (GitHub Actions):** add `FIGMA_ACCESS_TOKEN` as a repository secret (`Settings → Secrets and variables → Actions`) and reference it via `env: { FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }} }` in the workflow step that calls `publish:figma`.
-- **Never** commit the token. `.env` and `.env.*` are gitignored at the repo root; only [`.env.example`](../../packages/webkit/.env.example) is versioned.
+- **Never** commit the token. `.env` and `.env.*` are gitignored at the repo root; only [`.env.example`](../../packages/ui/.env.example) is versioned.
 
 ### 13. Examples — canonical pattern
 
-Every component documents itself through copyable SFCs in `packages/webkit/examples/<name>/`:
+Every component documents itself through copyable SFCs in `packages/ui/examples/<name>/`:
 
 - `examples.json`: `{ "component": "<name>", "title": "Components/<Category>/<PascalName>", "examples": [{ "name", "summary", "file" }] }`. The first example is the default view and is the one the styled visual suite screenshots.
-- One `.vue` per example: `<script setup>` with the real `@aziontech/webkit/<subpath>` imports (binding = `PascalCase` of the subpath), a `<template>` with PascalCase tags and concrete props. It stands alone: copy the file and it runs.
+- One `.vue` per example: `<script setup>` with the real `@aziontech/ui/<subpath>` imports (binding = `PascalCase` of the subpath), a `<template>` with PascalCase tags and concrete props. It stands alone: copy the file and it runs.
 - Set: `default.vue` + one composite example per multi-option axis (`variants.vue` for `variant`, `sizes.vue` for `size`; `types.vue` only for a real `type` prop, [`rules/naming.md`](../rules/naming.md) § 4) + one example per mutually-exclusive state the component declares (`loading.vue`, `disabled.vue`). Nothing else unless the spec's `## Examples` section lists and justifies it.
 - The docs site renders each example on `/components/<name>` beside its source and alone at `/frame/example/<name>/<file>`; the catalog (`catalog.json`), the MCP (`get_component`) and the harnesses (copyable, hydration, server render, a11y) read the same files.
 
 ### 13.w Styling discipline (mandatory for new components)
 
-The webkit layer applies styles **inline on the template root element's `class` attribute**, switches variants via `data-*` attributes, and reads them with Tailwind's `data-[attr=value]:` prefix. This supersedes any older example in this document that still shows the `variantClasses` / `sizeClasses` / `sharedClasses` Record-of-strings pattern. Legacy components on the whitelist still use the old pattern; **every new component starts here**.
+The Azion UI layer applies styles **inline on the template root element's `class` attribute**, switches variants via `data-*` attributes, and reads them with Tailwind's `data-[attr=value]:` prefix. This supersedes any older example in this document that still shows the `variantClasses` / `sizeClasses` / `sharedClasses` Record-of-strings pattern. Legacy components on the whitelist still use the old pattern; **every new component starts here**.
 
 #### Forbidden
 
@@ -920,7 +920,7 @@ The webkit layer applies styles **inline on the template root element's `class` 
 - Root element binds `v-bind="$attrs"` so consumer-passed `class` merges into the root's `class` automatically.
 - Variants are mirrored as `data-*` attributes on the root (`data-variant`, `data-size`, `data-disabled`, `data-state`, `data-orientation`).
 - Static utility classes are listed inline on the root's `class` attribute, with Tailwind `data-[attr=value]:utility` prefixes switching styles by variant. Over 200 characters, the string becomes one `ROOT_CLASS` constant of `+`-joined literals bound with `cn` ([`CODE_QUALITY.md`](./CODE_QUALITY.md) § 3.3, CQ-04), as in the example below.
-- When the consumer must override an internal token choice, wrap the static class string with `cn` from `@aziontech/webkit/utils/cn`:
+- When the consumer must override an internal token choice, wrap the static class string with `cn` from `@aziontech/ui/utils/cn`:
 
   ```vue
   :class="cn('rounded-(--shape-card) bg-(--bg-surface)', attrs.class)"
@@ -931,7 +931,7 @@ The webkit layer applies styles **inline on the template root element's `class` 
 ```vue
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
-  import { cn } from '@aziontech/webkit/utils/cn'
+  import { cn } from '@aziontech/ui/utils/cn'
 
   defineOptions({ name: 'Button', inheritAttrs: false })
 
@@ -1013,7 +1013,7 @@ The same rule applies. Each sub-component renders its own root with its own inli
 ### 13.x Example discipline (mandatory)
 
 - No Figma URLs or node IDs in examples or `examples.json`; the Figma ↔ code link is owned by `<name>.figma.ts` (Code Connect).
-- No helpers that only exist for documentation: an example imports only `@aziontech/webkit/*`, `@aziontech/icons` and `vue`.
+- No helpers that only exist for documentation: an example imports only `@aziontech/ui/*`, `@aziontech/icons` and `vue`.
 
 #### Components with open/close state must default to **closed**
 
@@ -1022,13 +1022,13 @@ For any component that exposes an open/close state (Dialog, Drawer, Popover, Too
 - The `default.vue` example renders the component in its **closed** state — the trigger is visible; the overlay is not.
 - The viewer activates the overlay by interacting with the trigger (click, hover, keyboard) on the docs page — exactly as a real consumer would.
 - Per-variant examples (one per `variant`, one per `size`) also default to closed unless the variant cannot exist closed.
-- Every other example starts closed too: a floating overlay (popover, tooltip, menu, hover card, list popup, dialog, drawer) never opens on page load, even to show its open state; it opens on the reader's action ([`rules/webkit-overlays-closed-on-load.md`](../../rules/webkit-overlays-closed-on-load.md), owner 2026-11-18). Inline disclosures (accordion, sidebar groups) may start open.
+- Every other example starts closed too: a floating overlay (popover, tooltip, menu, hover card, list popup, dialog, drawer) never opens on page load, even to show its open state; it opens on the reader's action ([`rules/azion-ui-overlays-closed-on-load.md`](../../rules/azion-ui-overlays-closed-on-load.md), owner 2026-11-18). Inline disclosures (accordion, sidebar groups) may start open.
 
 ```vue
 <!-- examples/dialog/default.vue: the trigger renders, the dialog opens on click -->
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Dialog from '@aziontech/webkit/dialog'
+  import Button from '@aziontech/ui/button'
+  import Dialog from '@aziontech/ui/dialog'
 </script>
 ```
 
@@ -1100,10 +1100,10 @@ The spec lists which `variant` / `size` examples exist. Do **not** add visual pe
 #### Validation
 
 - [ ] `<name>.figma.ts` created next to the `.vue` (Code Connect available — see § 12).
-- [ ] `pnpm lint:webkit && pnpm typecheck:webkit && pnpm check:webkit:type-coverage && pnpm --filter @aziontech/webkit test:ssr` all pass, and so does `pnpm --filter @aziontech/webkit run gates`.
+- [ ] `pnpm lint:ui && pnpm typecheck:ui && pnpm check:ui:type-coverage && pnpm --filter @aziontech/ui test:ssr` all pass, and so does `pnpm --filter @aziontech/ui run gates`.
 
 ---
 
 **Last Updated:** 2026-11-23
 **Version:** 1.0.0
-**Maintainer:** Azion WebKit Team
+**Maintainer:** Azion UI Team

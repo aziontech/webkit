@@ -24,23 +24,23 @@ test('view shows a component API with an example, and a block with guidelines an
   try {
     const comp = cliJson(dir, 'view', 'button')
     assert.equal(comp.json.kind, 'component')
-    assert.equal(comp.json.treeShakeableImport, '@aziontech/webkit/button')
+    assert.equal(comp.json.treeShakeableImport, '@aziontech/ui/button')
     assert.ok(comp.json.example.sfc.includes('<template>'))
     const text = cli(dir, 'view', 'button')
-    assert.match(text.stdout, /import Button from '@aziontech\/webkit\/button'/)
+    assert.match(text.stdout, /import Button from '@aziontech\/ui\/button'/)
     assert.doesNotMatch(text.stdout, /Root only/)
 
     const compound = cli(dir, 'view', 'select')
-    assert.match(compound.stdout, /^import Select from '@aziontech\/webkit\/select'$/m)
+    assert.match(compound.stdout, /^import Select from '@aziontech\/ui\/select'$/m)
     assert.match(
       compound.stdout,
-      /Root only, no dot-notation parts: import SelectRoot from '@aziontech\/webkit\/select-root'/
+      /Root only, no dot-notation parts: import SelectRoot from '@aziontech\/ui\/select-root'/
     )
-    assert.doesNotMatch(compound.stdout, /import Select from '@aziontech\/webkit\/select-root'/)
+    assert.doesNotMatch(compound.stdout, /import Select from '@aziontech\/ui\/select-root'/)
 
     const block = cli(dir, 'view', 'create/create-hub', '--variant', 'Connected')
     assert.equal(block.code, 0, block.stderr)
-    assert.match(block.stdout, /npx @aziontech\/webkit add create\/create-hub --variant Connected/)
+    assert.match(block.stdout, /npx @aziontech\/ui add create\/create-hub --variant Connected/)
     assert.match(block.stdout, /--- guidelines ---/)
     assert.match(block.stdout, /--- Connected\.vue ---\n<script setup/)
 

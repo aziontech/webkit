@@ -2,7 +2,7 @@
 
 > Client, analyst and framework marks drawn as theme-aware SVG.
 
-Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name. A `wordmark` entry is a brand whose terms do not let WebKit ship its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in a one-ink row): it renders as its label in plain text, in WebKit type and colour, until its owner grants the logo.
+Pass the name where a component asks for a mark (`Marquee` `marks`, `QuoteTabs` `mark`, `ClientQuotesSection` `mark`); the label is the accessible name. A `wordmark` entry is a brand whose terms do not let Azion UI ship its logo (Splunk, Google BigQuery, Amazon S3 and Kinesis, Zoop, G2 badges, Rust, Datadog in a one-ink row): it renders as its label in plain text, in Azion UI type and colour, until its owner grants the logo.
 
 69 names. These are the only values the components accept. An unknown name is not drawn as a mark: `Marquee` prints it as a typographic wordmark, the quote components show no mark. The MCP tool `list_assets({ kind: "brandMarks" })` returns the same list (with a `query` to filter), and `catalog.json#assets.brandMarks` points at it as data.
 
@@ -12,7 +12,7 @@ Used by: [ClientQuotesSection](../components/client-quotes-section.md), [Hero](.
 
 ```vue
 <script setup>
-  import Marquee from '@aziontech/webkit/marquee'
+  import Marquee from '@aziontech/ui/marquee'
 </script>
 
 <template>

@@ -58,7 +58,7 @@ To go live, render the block from a page that owns the request and the route:
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import { ref } from 'vue'
 
   import DetailInvocations, { type InvocationsInvocation } from './detail-invocations.vue'
@@ -109,7 +109,7 @@ Then delete `sample.ts` and its import.
 - **Outcome:** the status code and one sentence, e.g. "502, the origin did not answer within the 1 s budget."
 - **Node actions:** "Show <name> in the trace".
 - **Menu:** "Open in Real-Time Events", "Function settings"; switcher "Recent", group "Recent invocations".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -130,4 +130,4 @@ Then delete `sample.ts` and its import.
 - `edit/edit-function` — its TestRun variant runs the function before it ships, with the same trace and logs.
 - `detail/detail-resource` — the overview of the function; this page owns the invocation summary card.
 - `detail/detail-deployment-logs` — the step logs of a deployment.
-- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-layout`.
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/azion-ui-layout`.

@@ -1,5 +1,5 @@
-import type { LogViewerLine } from '@aziontech/webkit/log-viewer-root'
-import type { TraceSpan } from '@aziontech/webkit/trace'
+import type { LogViewerLine } from '@aziontech/ui/log-viewer-root'
+import type { TraceSpan } from '@aziontech/ui/trace'
 
 import type { FunctionEditorField, FunctionEditorService } from './edit-function.vue'
 

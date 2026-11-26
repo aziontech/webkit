@@ -7,7 +7,7 @@ spec_version: 10
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 3647c76d97a79c16dc719202142a0f993685381f4f8fcd2f364e5bb07419ca2d
+checksum: a12b4beecdd0bc89bcedbbf0969f6ba62922fc639fa43552310e5f7c6e346e4c
 ---
 
 # MediaSplitStackSection — Component Spec
@@ -41,7 +41,7 @@ A run of large media-split bands that pile up under the site header as the page 
 
 ```vue
 <script setup>
-  import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'
+  import MediaSplitStackSection from '@aziontech/ui/media-split-stack-section'
 </script>
 
 <template>
@@ -69,7 +69,7 @@ A run of large media-split bands that pile up under the site header as the page 
 | `eyebrow`     | `string`                       | `''`    | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `title`       | `string`                       | `''`    | false    | Headline of the run, rendered by the medium centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`.                                                                                                                                                                                                                                                                                                                |
 | `description` | `string`                       | `''`    | false    | Supporting sentence under the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `bands`       | `MediaSplitStackSectionBand[]` | `[]`    | false    | The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button. |
+| `bands`       | `MediaSplitStackSectionBand[]` | `[]`    | false    | The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` an Azion UI scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button. |
 
 ## Events
 
@@ -152,7 +152,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

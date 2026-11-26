@@ -1,5 +1,5 @@
 <script setup>
-  import Switch from '@aziontech/webkit/switch'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const lockedOff = ref(false)

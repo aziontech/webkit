@@ -2,7 +2,7 @@
 
 > Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag. A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant="primary"`, Blocked in `severity="danger"`). It takes an optional leading icon and two sizes, and has one shape; it is never interactive and never counts.
 
-- Import: `import Tag from '@aziontech/webkit/tag'`
+- Import: `import Tag from '@aziontech/ui/tag'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [tag.json](tag.json)
 
@@ -77,7 +77,7 @@
 
 ```vue
 <script setup>
-  import Tag from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/ui/tag'
 </script>
 
 <template>
@@ -93,7 +93,7 @@
 
 ```vue
 <script setup>
-  import Tag from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/ui/tag'
 </script>
 
 <template>
@@ -126,7 +126,7 @@
 
 ```vue
 <script setup>
-  import Tag from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/ui/tag'
 </script>
 
 <template>

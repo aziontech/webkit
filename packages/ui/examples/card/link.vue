@@ -1,5 +1,5 @@
 <script setup>
-  import Card from '@aziontech/webkit/card'
+  import Card from '@aziontech/ui/card'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup>
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
 </script>
 
 <template>

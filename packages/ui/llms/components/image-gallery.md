@@ -2,7 +2,7 @@
 
 > The images of one response: a responsive grid of thumbnails that opens one image larger in a `Dialog`, with previous, next and Download. It takes each image as a URL or as base64 data with its media type, so a chat can show the images a model returned in a message or a generation finished with. While images are generating it holds one `Skeleton` per expected image, and when the request fails it shows the error in place of the grid. It draws what the app hands it; it generates and fetches nothing.
 
-- Import: `import ImageGallery from '@aziontech/webkit/image-gallery'`
+- Import: `import ImageGallery from '@aziontech/ui/image-gallery'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [image-gallery.json](image-gallery.json)
 
@@ -115,11 +115,11 @@
 
 ```vue
 <script setup lang="ts">
-  import aiGateway from '@aziontech/webkit/assets/ai-gateway.svg'
-  import branches from '@aziontech/webkit/assets/branches.svg'
-  import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
-  import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import aiGateway from '@aziontech/ui/assets/ai-gateway.svg'
+  import branches from '@aziontech/ui/assets/branches.svg'
+  import ddosProtection from '@aziontech/ui/assets/ddos-protection.svg'
+  import usageChart from '@aziontech/ui/assets/usage-chart.svg'
+  import ImageGallery from '@aziontech/ui/image-gallery'
 
   const items = [
     { key: 'gateway', src: aiGateway, alt: 'AI gateway illustration' },
@@ -141,8 +141,8 @@
 
 ```vue
 <script setup lang="ts">
-  import aiGateway from '@aziontech/webkit/assets/ai-gateway.svg'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import aiGateway from '@aziontech/ui/assets/ai-gateway.svg'
+  import ImageGallery from '@aziontech/ui/image-gallery'
 
   const items = [
     {
@@ -163,8 +163,8 @@
 
 ```vue
 <script setup lang="ts">
-  import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import ddosProtection from '@aziontech/ui/assets/ddos-protection.svg'
+  import ImageGallery from '@aziontech/ui/image-gallery'
 
   const items = [{ key: 'ddos', src: ddosProtection, alt: 'DDoS protection illustration' }]
 </script>

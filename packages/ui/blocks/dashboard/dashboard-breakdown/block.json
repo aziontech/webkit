@@ -22,7 +22,7 @@
     "total by category over time",
     "spend by category"
   ],
-  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "skills": ["azion-ui-data-viz", "azion-ui-tables", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "dashboard-breakdown.vue"

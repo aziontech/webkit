@@ -1,7 +1,7 @@
 <script setup>
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import Eyebrow from '@aziontech/webkit/eyebrow'
-  import Tag from '@aziontech/webkit/tag'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import Eyebrow from '@aziontech/ui/eyebrow'
+  import Tag from '@aziontech/ui/tag'
 
   const onActionClick = (event, action) => action
 </script>

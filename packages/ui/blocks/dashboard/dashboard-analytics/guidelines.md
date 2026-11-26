@@ -94,7 +94,7 @@ writes the Real-Time Metrics GraphQL query behind the card (dataset `workloadMet
 as `tsRange`, `aggregate: { sum: requests }`, the `groupBy` dimensions, the order and the fields) to
 the clipboard and confirms with a success toast (`Query copied.`), or an
 error toast when the clipboard is not available. Export CSV serializes the card's rows with
-`toCsv` and saves them with `downloadCsv` from `@aziontech/webkit/utils/csv` as
+`toCsv` and saves them with `downloadCsv` from `@aziontech/ui/utils/csv` as
 `<card>-last-24-hours.csv`, then confirms with `CSV exported.` and the file name. Export CSV is
 disabled when the card has no rows (Empty, Loading, Error); Copy query always works. The app
 mounts the toast region; this page body never renders a `Toaster`.

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import type { FilterMenuField } from '@aziontech/webkit/filter-menu'
-  import FilterMenu from '@aziontech/webkit/filter-menu-root'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import type { FilterMenuField } from '@aziontech/ui/filter-menu'
+  import FilterMenu from '@aziontech/ui/filter-menu-root'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { ref } from 'vue'
 
   import type { EventsExplorerFilters } from '../view-events-explorer.vue'

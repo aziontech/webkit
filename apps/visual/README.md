@@ -1,8 +1,8 @@
-# WebKit visual suite
+# Azion UI visual suite
 
-`@aziontech/webkit-visual` is the styled visual regression of WebKit: Playwright screenshots, with
+`@aziontech/ui-visual` is the styled visual regression of Azion UI: Playwright screenshots, with
 the real theme CSS, of the docs site's examples and blocks and of the demos. The browser unit
-suite (`packages/webkit`, Vitest) runs without CSS and owns behavior, structure and ARIA; this
+suite (`packages/ui`, Vitest) runs without CSS and owns behavior, structure and ARIA; this
 suite owns pixels: layout, color, contrast in context, focus rings, overflow.
 
 ```bash
@@ -61,12 +61,12 @@ node scripts/keyboard.mjs --write-baseline   # drop entries that pass now
 ```
 
 New examples, blocks and demo routes are picked up from the files: add an example to
-`packages/webkit/examples/<name>/` and the docs page and its visual test exist; the only manual
+`packages/ui/examples/<name>/` and the docs page and its visual test exist; the only manual
 step is the baseline.
 
 Each test fixes the clock (2026-11-10 12:00 UTC), the time zone (UTC) and the locale, reduces
 motion, waits for fonts, and blocks every request that is not to `localhost` (remote avatars and
-fonts render their fallback), so a screenshot changes only when WebKit does. States that
+fonts render their fallback), so a screenshot changes only when Azion UI does. States that
 animate on timers (the `streaming` states of the AI blocks) run on Playwright's fake clock,
 advanced a fixed 1.5 s. A comparison fails above 100 differing pixels (`maxDiffPixels`), small
 enough to catch a legend swatch.

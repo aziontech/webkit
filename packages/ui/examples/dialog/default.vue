@@ -1,8 +1,8 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Dialog from '@aziontech/webkit/dialog'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import Button from '@aziontech/ui/button'
+  import Dialog from '@aziontech/ui/dialog'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   const open = ref(false)

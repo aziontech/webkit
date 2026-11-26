@@ -68,9 +68,9 @@ export function guidelinesSummary(md) {
   return parseGuidelines(md).purpose
 }
 
-function namedWebkitImports(sfc) {
+function namedAzionUiImports(sfc) {
   const names = []
-  const re = /import\s+(type\s+)?[^'"]*?\{([^}]*)\}\s*from\s+['"]@aziontech\/webkit\/[^'"]+['"]/g
+  const re = /import\s+(type\s+)?[^'"]*?\{([^}]*)\}\s*from\s+['"]@aziontech\/ui\/[^'"]+['"]/g
   for (const m of String(sfc).matchAll(re)) {
     if (m[1]) continue
     for (const part of m[2].split(',')) {
@@ -92,7 +92,7 @@ export function primaryComponents(sfc) {
       ...importsOf(sfc)
         .map((i) => i.binding)
         .filter((b) => b && /^[A-Z]/.test(b)),
-      ...namedWebkitImports(sfc)
+      ...namedAzionUiImports(sfc)
     ])
   ]
 }
@@ -147,7 +147,7 @@ export function checkGuidelines(id, block) {
   return errors
 }
 
-const TOAST_SOURCE = /^@aziontech\/webkit\/toast(?:-root)?$/
+const TOAST_SOURCE = /^@aziontech\/ui\/toast(?:-root)?$/
 const APP_ROOT_BLOCKS = /^shell\//
 
 function toastRegionNames(sfc) {

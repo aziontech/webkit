@@ -59,7 +59,7 @@
     "lista de deploys",
     "histórico de deploys"
   ],
-  "skills": ["webkit-lists", "webkit-tables", "webkit-ui-states"],
+  "skills": ["azion-ui-lists", "azion-ui-tables", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "view-table.vue"

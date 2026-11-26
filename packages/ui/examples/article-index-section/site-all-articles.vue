@@ -1,8 +1,8 @@
 <script setup>
-  import ArticleIndexSection from '@aziontech/webkit/article-index-section'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ArticleIndexSection from '@aziontech/ui/article-index-section'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const items = [
     {

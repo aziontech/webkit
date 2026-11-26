@@ -1,6 +1,6 @@
 <script setup>
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import Item from '@aziontech/webkit/item'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import Item from '@aziontech/ui/item'
 </script>
 
 <template>

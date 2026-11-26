@@ -36,7 +36,7 @@ function printSourceRoot(bundleRoot, json) {
   out(
     json
       ? `${JSON.stringify({ drift: false, source: bundleRoot.dir, entries: [] }, null, 2)}\n`
-      : `\n@aziontech/webkit sync\n${bundleRoot.dir} holds the bundle sources (skills/, rules/, adapters/) — nothing to sync.\n`
+      : `\n@aziontech/ui sync\n${bundleRoot.dir} holds the bundle sources (skills/, rules/, adapters/) — nothing to sync.\n`
   )
 }
 
@@ -57,7 +57,7 @@ function printSyncText(plan, bundleRoot, applyNothing) {
   const owner =
     bundleRoot.kind === 'ancestor' ? ' (the repository root that owns the agent files)' : ''
   out(
-    `\n@aziontech/webkit sync${applyNothing ? ' (no changes applied)' : ''}\nproject: ${bundleRoot.dir}${owner}\n\n`
+    `\n@aziontech/ui sync${applyNothing ? ' (no changes applied)' : ''}\nproject: ${bundleRoot.dir}${owner}\n\n`
   )
   printSyncTable(plan)
 }

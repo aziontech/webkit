@@ -33,7 +33,7 @@
     "focused top bar",
     "barra de criação"
   ],
-  "skills": ["webkit-navigation", "webkit-layout"],
+  "skills": ["azion-ui-navigation", "azion-ui-layout"],
   "primary": {
     "name": "Default",
     "file": "top-bar-creation.vue"

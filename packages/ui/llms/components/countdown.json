@@ -1,8 +1,8 @@
 {
  "name": "countdown",
  "binding": "Countdown",
- "import": "@aziontech/webkit/countdown",
- "treeShakeableImport": "@aziontech/webkit/countdown",
+ "import": "@aziontech/ui/countdown",
+ "treeShakeableImport": "@aziontech/ui/countdown",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

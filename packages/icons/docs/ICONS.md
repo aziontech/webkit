@@ -7,7 +7,7 @@
 ## How the icons are organised
 
 - **Azion** (66) — Everything that is Azion's own: its products, the parts inside them, the platform, its solutions and its services.
-  - Products (35) — One icon per Azion product, named after the product as WebKit and the console name it.
+  - Products (35) — One icon per Azion product, named after the product as Azion UI and the console name it.
   - Product features (6) — A part that lives inside a product, such as Domains in Workloads or Edge Nodes in Orchestrator. The entry names its product.
   - Platform (9) — The Azion brand, its tools (CLI, API, Ask Azion) and the platform pillars.
   - Solutions (8) — The Azion Solutions, one icon each: the five By Need Solutions and the three By Industry Solutions, named after the Solution's short name.
@@ -47,7 +47,7 @@ Everything that is Azion's own: its products, the parts inside them, the platfor
 
 ### Azion · Products
 
-One icon per Azion product, named after the product as WebKit and the console name it.
+One icon per Azion product, named after the product as Azion UI and the console name it.
 
 | Class | Product | Stands for | Shows | Notes |
 | --- | --- | --- | --- | --- |
@@ -818,7 +818,7 @@ Social networks, video and community sites, and online APIs such as payments and
 
 ## Old names
 
-Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi pi-<name>`. They are gone in 6.0: `npx @aziontech/webkit migrate` rewrites every one. Where only the prefix changed, `ai` became `az` and `ai-cor` became `az-color`. These icons also changed their name:
+Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi pi-<name>`. They are gone in 6.0: `npx @aziontech/ui migrate` rewrites every one. Where only the prefix changed, `ai` became `az` and `ai-cor` became `az-color`. These icons also changed their name:
 
 | Old class | New class | Why |
 | --- | --- | --- |

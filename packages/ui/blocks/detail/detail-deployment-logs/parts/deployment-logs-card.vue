@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
   import LogViewer, {
     type LogViewerStep,
     type LogViewerStepStatus,
     type LogViewerStepsView
-  } from '@aziontech/webkit/log-viewer'
-  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  } from '@aziontech/ui/log-viewer'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/ui/status-indicator'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { computed, ref } from 'vue'
 
   export interface DeploymentLogsCardProps {

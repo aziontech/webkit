@@ -3,10 +3,10 @@
 > The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider bordered EmptyState; once one is connected it is the Deploy your project form, with the scope and the repository name side by side, a Public repository switch with its own label and description under them, over the template settings and two collapsible groups, Build and output settings and Environment variables (a locked key, a value with a show control and a locked Secret checkbox), and a Deploy that checks the form and shows each missing value under its field. While the settings load they are Skeleton bands. Deploying hands the same column to the build logs (the InCreateFlow state of the `detail/detail-deployment-logs` block) and then to the success screen (the `create/create-deploy-success` block). Import from Git reaches the same page with the form trimmed to the repository and its build settings, and Upload a Project with the project name, a build preset and the uploaded files with a Root (/) pick for a static project without an index. WhereItRuns opens the flow on the service the project deploys to: a search over the services, six at a time, an inline Create Service row and a way to continue without one, before the Git step. InstallIntegration is the same page for an integration template (Origin Proxy): no Git and no build, its settings with the required origin, What gets added previewing the origin record, the request-phase rule and its behaviors on the service, and Add to the service. Built from `AppHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input`, `Accordion`, `Checkbox`, `Tooltip`, `Skeleton`, `Item`, `Tag` and `Button`.
 
 - Surface: app
-- Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-deploy-template/create-deploy-template.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-deploy-template")`
 - Components: [Accordion](../../components/accordion.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Item](../../components/item.md), [Kbd](../../components/kbd.md), [Link](../../components/link.md), [Select](../../components/select.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-escape-to-cancel`, `use-locale`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`, `utils/radio-list`
-- Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
+- Skills: `azion-ui-create-surface`, `azion-ui-form`, `azion-ui-errors`
 
 ## Asked as
 
@@ -127,7 +127,7 @@ Then delete `sample.ts` and its import.
 - **Upload:** breadcrumb "Upload a project"; "Project files"; "Root (/)" with "Select a file".
 - **Import:** breadcrumb "Import from Git"; preview "Import and deploy the acme-web repository from GitHub."
 - **Commit:** "Deploy", the same verb on the button and in the run that follows.
-- Follow `skills/webkit-microcopy`: sentence case, no em dash in labels or `aria-label`s, no parentheses in labels.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash in labels or `aria-label`s, no parentheses in labels.
 
 ## Accessibility
 
@@ -185,16 +185,16 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 
 ```vue
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppHeaderAccount from '@aziontech/ui/app-header-account'
+  import Brand from '@aziontech/ui/brand'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Link from '@aziontech/ui/link'
+  import { useEscapeToCancel } from '@aziontech/ui/use-escape-to-cancel'
   import { computed } from 'vue'
 
   import { sampleAccount, sampleTemplate } from './sample'
@@ -447,7 +447,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 ## `sample.ts`
 
 ```ts
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 import type { DeployTemplateTemplate } from './create-deploy-template.vue'
 

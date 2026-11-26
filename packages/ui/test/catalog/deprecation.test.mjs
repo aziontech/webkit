@@ -7,17 +7,17 @@ import test from 'node:test'
 import { loadCatalogFrom } from '../../src/catalog/catalog.js'
 import { getComponent, listComponents, searchComponents } from '../../src/catalog/queries.js'
 
-const dir = mkdtempSync(join(tmpdir(), 'webkit-catalog-deprecation-'))
+const dir = mkdtempSync(join(tmpdir(), 'azion-ui-catalog-deprecation-'))
 const file = join(dir, 'catalog.json')
 writeFileSync(
   file,
   JSON.stringify({
-    package: '@aziontech/webkit',
+    package: '@aziontech/ui',
     imports: {
       'old-panel': {
         kind: 'component',
         category: 'layout',
-        import: "import OldPanel from '@aziontech/webkit/old-panel'",
+        import: "import OldPanel from '@aziontech/ui/old-panel'",
         deprecated: true,
         deprecation: 'Use Panel.',
         replacedBy: 'panel'
@@ -26,13 +26,13 @@ writeFileSync(
         kind: 'subcomponent',
         parent: 'old-panel',
         attached: false,
-        import: "import OldPanelHeader from '@aziontech/webkit/old-panel-header'",
+        import: "import OldPanelHeader from '@aziontech/ui/old-panel-header'",
         deprecated: true
       },
       panel: {
         kind: 'component',
         category: 'layout',
-        import: "import Panel from '@aziontech/webkit/panel'"
+        import: "import Panel from '@aziontech/ui/panel'"
       }
     }
   })

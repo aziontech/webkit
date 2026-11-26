@@ -1,5 +1,5 @@
 <script setup>
-  import TransferList from '@aziontech/webkit/transfer-list'
+  import TransferList from '@aziontech/ui/transfer-list'
   import { ref } from 'vue'
 
   const model = ref([

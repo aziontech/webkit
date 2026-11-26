@@ -1,8 +1,8 @@
 {
  "name": "checkbox",
  "binding": "Checkbox",
- "import": "@aziontech/webkit/checkbox",
- "treeShakeableImport": "@aziontech/webkit/checkbox",
+ "import": "@aziontech/ui/checkbox",
+ "treeShakeableImport": "@aziontech/ui/checkbox",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

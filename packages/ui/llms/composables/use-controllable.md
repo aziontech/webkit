@@ -1,10 +1,10 @@
 # useControllable
 
-Composable `@aziontech/webkit/use-controllable`. The signatures and option tables below are read from its typed source, [`src/composables/use-controllable/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-controllable/index.ts).
+Composable `@aziontech/ui/use-controllable`. The signatures and option tables below are read from its typed source, [`src/composables/use-controllable/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-controllable/index.ts).
 
 ```ts
-import { useControllable } from '@aziontech/webkit/use-controllable'
-import type { UseControllableOptions, UseControllableReturn } from '@aziontech/webkit/use-controllable'
+import { useControllable } from '@aziontech/ui/use-controllable'
+import type { UseControllableOptions, UseControllableReturn } from '@aziontech/ui/use-controllable'
 ```
 
 ## `useControllable`

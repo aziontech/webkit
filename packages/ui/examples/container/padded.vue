@@ -1,5 +1,5 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
+  import Container from '@aziontech/ui/container'
 </script>
 
 <template>

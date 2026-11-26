@@ -2,7 +2,7 @@
 
 > The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header` and `registration-frame`.
 
-- Import: `import PhotoMarqueeSection from '@aziontech/webkit/photo-marquee-section'`
+- Import: `import PhotoMarqueeSection from '@aziontech/ui/photo-marquee-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [photo-marquee-section.json](photo-marquee-section.json)
 
@@ -78,8 +78,8 @@ No built-in strings: every visible and announced text is a prop from the page JS
 
 ```vue
 <script setup>
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import PhotoMarqueeSection from '@aziontech/webkit/photo-marquee-section'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import PhotoMarqueeSection from '@aziontech/ui/photo-marquee-section'
 
   const DESCRIPTION =
     'The Azion Way of Life pairs high performance with autonomy, authenticity, and enjoyment. You manage your own routine and answer for outcomes, working with teammates across ' +

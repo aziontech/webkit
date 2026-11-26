@@ -1,6 +1,6 @@
 <script setup>
-  import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocHeading from '@aziontech/ui/doc-heading'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>

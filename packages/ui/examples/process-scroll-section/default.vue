@@ -1,5 +1,5 @@
 <script setup>
-  import ProcessScrollSection from '@aziontech/webkit/process-scroll-section'
+  import ProcessScrollSection from '@aziontech/ui/process-scroll-section'
 
   const steps = [
     { title: 'Push', description: 'Every push to the main branch builds a new version.' },

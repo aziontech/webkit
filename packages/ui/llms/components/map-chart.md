@@ -2,7 +2,7 @@
 
 > Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value. One tab stop walks every place from the highest value down, with a tooltip, a polite announcement and a table twin, so nothing on the map needs a pointer. The country shapes are a lazy chunk; the map itself adds no dependency.
 
-- Import: `import MapChart from '@aziontech/webkit/map-chart'`
+- Import: `import MapChart from '@aziontech/ui/map-chart'`
 - Category: chart · Surface: app · Structure: monolithic
 - API as JSON: [map-chart.json](map-chart.json)
 
@@ -124,7 +124,7 @@
 
 ```vue
 <script setup>
-  import MapChart from '@aziontech/webkit/map-chart'
+  import MapChart from '@aziontech/ui/map-chart'
 
   const regions = [
     { id: 'BR', value: 48200 },
@@ -150,7 +150,7 @@
 
 ```vue
 <script setup>
-  import MapChart from '@aziontech/webkit/map-chart'
+  import MapChart from '@aziontech/ui/map-chart'
 
   const points = [
     { id: 'new-york', name: 'New York', lat: 40.71, lon: -74.01, value: 18400 },
@@ -174,7 +174,7 @@
 
 ```vue
 <script setup>
-  import MapChart from '@aziontech/webkit/map-chart'
+  import MapChart from '@aziontech/ui/map-chart'
 
   const regions = [
     { id: 'BR', value: 48200 },

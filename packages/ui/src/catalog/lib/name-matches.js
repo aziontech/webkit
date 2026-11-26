@@ -13,17 +13,17 @@ export function retiredNote(catalog, key) {
   if (to && catalog.getEntry(to)) {
     return {
       to,
-      note: `"${name}" was renamed in WebKit v6: import ${catalog.prefix}${to}. Run \`npx @aziontech/webkit migrate v6\` to rewrite old imports.`
+      note: `"${name}" was renamed in Azion UI v6: import ${catalog.prefix}${to}. Run \`npx @aziontech/ui migrate v6\` to rewrite old imports.`
     }
   }
   const replacement = catalog.removed?.[name]
   return replacement
-    ? { to: null, note: `"${name}" was removed in WebKit v6. Use ${replacement} instead.` }
+    ? { to: null, note: `"${name}" was removed in Azion UI v6. Use ${replacement} instead.` }
     : null
 }
 
 export function aliasNote(alias, to) {
-  return `"${alias}" is not a webkit export: it is another name for "${to}". Import @aziontech/webkit/${to}.`
+  return `"${alias}" is not an Azion UI export: it is another name for "${to}". Import @aziontech/ui/${to}.`
 }
 
 function addAliasPhraseHits(catalog, nq, hits) {

@@ -266,7 +266,7 @@ const Nothing: Component = { name: 'SitePageSectionUnavailable', render: () => n
 export function warnOnce(key: string, message: string) {
   if (!dev || warned.has(key)) return
   warned.add(key)
-  console.warn(`[webkit] <SitePage>: ${message}`)
+  console.warn(`[azion-ui] <SitePage>: ${message}`)
 }
 
 export function resolveSection(id: string): Component | null {
@@ -282,7 +282,7 @@ export function resolveSection(id: string): Component | null {
       timeout: 10000,
       errorComponent: Nothing,
       onError: (error, _retry, fail) => {
-        if (dev) console.warn(`[webkit] <SitePage>: section "${id}" could not load.`, error)
+        if (dev) console.warn(`[azion-ui] <SitePage>: section "${id}" could not load.`, error)
         fail()
       }
     })

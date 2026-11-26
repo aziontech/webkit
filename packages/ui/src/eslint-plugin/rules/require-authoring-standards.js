@@ -5,7 +5,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Enforce the webkit construction standards (defineModel, typed props/emits/slots, composable contract) on your own components.'
+        'Enforce the Azion UI construction standards (defineModel, typed props/emits/slots, composable contract) on your own components.'
     },
     schema: [],
     messages: Object.fromEntries(Object.entries(MESSAGES))

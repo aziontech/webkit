@@ -1,6 +1,6 @@
 <script setup>
-  import CardGridRoot from '@aziontech/webkit/card-grid-root'
-  import FeatureItem from '@aziontech/webkit/feature-item'
+  import CardGridRoot from '@aziontech/ui/card-grid-root'
+  import FeatureItem from '@aziontech/ui/feature-item'
 </script>
 
 <template>

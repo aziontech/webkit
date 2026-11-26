@@ -2,7 +2,7 @@
 
 > Shows what an agent is doing while it works (Cloudscape progressive steps, AI Elements Chain of Thought): the current step with a running indicator (`Searching the docs`, `Reading 3 files`) and, behind a disclosure, the list of every step with its status from the shared status set. It is the display of the short progress updates an agent streams (TanStack AI `activity` parts and `role: 'activity'` messages), filled from plain props so it stays library-neutral. Screen readers hear a step only when it has been the current one for a second, and the outcome once, never every tick.
 
-- Import: `import AgentActivity from '@aziontech/webkit/agent-activity'`
+- Import: `import AgentActivity from '@aziontech/ui/agent-activity'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [agent-activity.json](agent-activity.json)
 
@@ -111,7 +111,7 @@
 
 ```vue
 <script setup>
-  import AgentActivity from '@aziontech/webkit/agent-activity'
+  import AgentActivity from '@aziontech/ui/agent-activity'
 
   const steps = [
     { key: 'search', title: 'Searching the docs', status: 'success' },
@@ -137,7 +137,7 @@
 
 ```vue
 <script setup>
-  import AgentActivity from '@aziontech/webkit/agent-activity'
+  import AgentActivity from '@aziontech/ui/agent-activity'
 
   const steps = [
     { key: 'search', title: 'Searching the docs', status: 'success' },
@@ -168,8 +168,8 @@
 
 ```vue
 <script setup>
-  import AgentActivity from '@aziontech/webkit/agent-activity'
-  import Button from '@aziontech/webkit/button'
+  import AgentActivity from '@aziontech/ui/agent-activity'
+  import Button from '@aziontech/ui/button'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
   const titles = [

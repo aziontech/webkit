@@ -1,14 +1,14 @@
 {
  "name": "breadcrumb-item",
  "binding": "BreadcrumbItem",
- "import": "@aziontech/webkit/breadcrumb-item",
- "treeShakeableImport": "@aziontech/webkit/breadcrumb-item",
+ "import": "@aziontech/ui/breadcrumb-item",
+ "treeShakeableImport": "@aziontech/ui/breadcrumb-item",
  "category": "navigation",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Webkit navigation pattern (ghost overlay + focus ring).",
+ "purpose": "Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Azion UI navigation pattern (ghost overlay + focus ring).",
  "setup": null,
  "useWhen": [
   "Use Breadcrumb.Item only as a part of Breadcrumb; for the page trail itself use Breadcrumb.",

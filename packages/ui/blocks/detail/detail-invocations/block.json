@@ -26,7 +26,7 @@
     "function invocation",
     "invocação de função"
   ],
-  "skills": ["webkit-layout", "webkit-ui-states", "webkit-data-viz"],
+  "skills": ["azion-ui-layout", "azion-ui-states", "azion-ui-data-viz"],
   "primary": {
     "name": "Completed",
     "file": "detail-invocations.vue"

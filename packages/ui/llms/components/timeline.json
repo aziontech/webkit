@@ -1,15 +1,15 @@
 {
  "name": "timeline",
  "binding": "Timeline",
- "import": "@aziontech/webkit/timeline",
- "treeShakeableImport": "@aziontech/webkit/timeline-root",
+ "import": "@aziontech/ui/timeline",
+ "treeShakeableImport": "@aziontech/ui/timeline-root",
  "category": "content",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/timeline-item",
-  "@aziontech/webkit/timeline-group"
+  "@aziontech/ui/timeline-item",
+  "@aziontech/ui/timeline-group"
  ],
  "purpose": "Use Timeline for the history of one record: a vertical list of dated events joined by a line, newest or oldest first, such as the activity of a ticket (status changed, assigned, SLA breached, merged), the audit trail of one resource or the deployment history of an application. Each event is a `Timeline.Item`: a marker (a dot or an icon in its severity's `-mark` colour, or any small component the app puts in its `marker` slot), a title that says what happened, an optional description, who did it, when it happened (a `Timestamp`) and any content the app adds under it (a quoted comment, a diff summary, a link). `Timeline.Group` gathers the events of one day (or any period) under a label. It is read-only and has no current position: unlike `Stepper` it does not move anyone through steps, unlike `Trace` it does not place spans on a clock, and unlike `LogViewer` it does not stream lines.",
  "setup": null,

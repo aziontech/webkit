@@ -1,5 +1,5 @@
 <script setup>
-  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
+  import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
 
   const typedWords = ['Console', 'CLI', 'MCP server']
 

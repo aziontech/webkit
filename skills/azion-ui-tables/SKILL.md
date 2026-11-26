@@ -1,13 +1,13 @@
 ---
-name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, type:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.ChipGroup and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — TableCellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), TableCellId, TableCellStatus (one chip per row), TableCellTags, TableCellTime (avatar + relative time) and TableCellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
+name: azion-ui-tables
+description: Data tables on @aziontech/ui — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, type:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.ChipGroup and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — TableCellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), TableCellId, TableCellStatus (one chip per row), TableCellTags, TableCellTime (avatar + relative time) and TableCellActions (row menu named after the row). The tabular companion to /azion-ui-form and /azion-ui-states.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens, ui-verify]
+enforced_by: [azion-ui-prefer-over-custom, azion-ui-component-states, azion-ui-tokens, ui-verify]
 ---
 
-# Skill: webkit-tables
+# Skill: azion-ui-tables
 
 ## In short
 
@@ -24,22 +24,22 @@ enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens,
 A table is where a product shows the most data in the least room, so it is where inconsistency shows
 most: one table right-pins its actions and another left-floats them, one domain cell puts a copy button
 flush against the text so it lands at a different x on every row, one table overflows the page instead of
-scrolling its own body. This pattern fixes the **structure** of a data table built on the webkit `Table`
-(`@aziontech/webkit/table`) and the **cell recipes** it composes, so every table in the app reads the
+scrolling its own body. This pattern fixes the **structure** of a data table built on the Azion UI `Table`
+(`@aziontech/ui/table`) and the **cell recipes** it composes, so every table in the app reads the
 same and every recurring cell type (name, status, domain, actions, copy) looks identical across screens.
 
-It is the tabular companion to [Forms](../webkit-form/SKILL.md) (form layout) and [Loading, empty and error states](../webkit-ui-states/SKILL.md) (the loading / empty /
+It is the tabular companion to [Forms](../azion-ui-form/SKILL.md) (form layout) and [Loading, empty and error states](../azion-ui-states/SKILL.md) (the loading / empty /
 error states a table must render). This pattern owns **the Table setup, the column model, the toolbar,
 internal scroll, and the cell recipes** — including the aligned domain cell.
 
-Find the `Table` and its sub-components through the `webkit` MCP (`suggest_component` / `get_component`)
-or `node_modules/@aziontech/webkit/catalog.json` — never by reading a component source path.
+Find the `Table` and its sub-components through the `azion-ui` MCP (`suggest_component` / `get_component`)
+or `node_modules/@aziontech/ui/catalog.json` — never by reading a component source path.
 
 ## How to use
 
-- [Tables](../webkit-tables/SKILL.md) — apply the structure + cell recipes below to any table you build in this conversation.
-- `/webkit-tables <file>` — review the file's table against the patterns; per gap report the exact
-  line/element (quoted), which pattern it breaks (one sentence), and the concrete fix naming the webkit
+- [Tables](../azion-ui-tables/SKILL.md) — apply the structure + cell recipes below to any table you build in this conversation.
+- `/azion-ui-tables <file>` — review the file's table against the patterns; per gap report the exact
+  line/element (quoted), which pattern it breaks (one sentence), and the concrete fix naming the Azion UI
   component to use.
 
 ## When to invoke
@@ -47,7 +47,7 @@ or `node_modules/@aziontech/webkit/catalog.json` — never by reading a componen
 - Building or reviewing any list/index page, resource table, or any `<Table>` with cell slots.
 - The user asks "the copy button is misaligned", "how do I lay out this cell", "the table overflows the
   page", "which toolbar controls", "how do actions/status/domain cells look".
-- After [Loading, empty and error states](../webkit-ui-states/SKILL.md) establishes the empty/loading/error states, and before `/webkit-final-polish`.
+- After [Loading, empty and error states](../azion-ui-states/SKILL.md) establishes the empty/loading/error states, and before `/azion-ui-final-polish`.
 
 ## The Table — data-driven, one shape
 
@@ -55,12 +55,12 @@ Tables are **data-driven**, not hand-authored rows: pass `:data` + `:columns` an
 through a `#cell-<accessorKey>` slot. Never build `<tr>`/`<td>` by hand, and never restyle the Table's
 internals — compose inside its slots.
 
-`DataTable` (`@aziontech/webkit/data-table`) is the data-driven table: `DataTable :data :columns`
+`DataTable` (`@aziontech/ui/data-table`) is the data-driven table: `DataTable :data :columns`
 renders the header, rows, selection, paging and states, and carries the `@tanstack/vue-table` engine.
 The toolbar controls (`TableSearch`, `TableExportButton`) and the cell presets (`TableCellStatus`) you
-put in DataTable's slots are each their own import (`@aziontech/webkit/table-search`,
-`@aziontech/webkit/table-cell-status`), so a screen pays only for the ones it renders. `Table`
-(`@aziontech/webkit/table`) is the compound of structural parts DataTable renders through; composing rows by hand from the parts
+put in DataTable's slots are each their own import (`@aziontech/ui/table-search`,
+`@aziontech/ui/table-cell-status`), so a screen pays only for the ones it renders. `Table`
+(`@aziontech/ui/table`) is the compound of structural parts DataTable renders through; composing rows by hand from the parts
 (`Table.Header`, `Table.Row`, `Table.Cell`) is for a component author building a new table primitive.
 A screen or block never composes rows from them, even a short static list: a hand-composed table loses
 the column model, the cell slots and the opt-in stacked layout.
@@ -68,15 +68,15 @@ the column model, the cell slots and the opt-in stacked layout.
 ### Bind it to `useCollection` — the default for any list
 
 A table that lists records is a collection: bind it to `useCollection`
-(`@aziontech/webkit/use-collection`, see [List pages](../webkit-lists/SKILL.md)) and let the composable own the filter, the
+(`@aziontech/ui/use-collection`, see [List pages](../azion-ui-lists/SKILL.md)) and let the composable own the filter, the
 sort, the page, the selection and the saved preferences. One `v-bind` carries all of it:
 
 ```vue
 <script setup>
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import DataTable from '@aziontech/webkit/data-table'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import DataTable from '@aziontech/ui/data-table'
+  import { useCollection } from '@aziontech/ui/use-collection'
 
   const { tableProps, propertyFilterProps } = useCollection({
     items: applications, // or fetch: ({ filter, sort, page, pageSize, signal }) => api(…)
@@ -121,9 +121,9 @@ sub-list).
 
 ```vue
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
 </script>
 
 <template>
@@ -152,18 +152,18 @@ sub-list).
 
 - Each column renders through its `#cell-<accessorKey>` slot with a cell preset (`TableCellStatus`
   here; see Cell recipes). Every cell preset and toolbar control is its own import
-  (`@aziontech/webkit/table-cell-status`, `@aziontech/webkit/table-search`, …): the `table` compound
+  (`@aziontech/ui/table-cell-status`, `@aziontech/ui/table-search`, …): the `table` compound
   carries only the structural parts, so a DataTable never needs it.
 - In a `lang="ts"` component DataTable is generic over its rows: type the data
   (`ref<Application[]>([])`, `useCollection<Application>(…)`) and every slot scope follows —
   `#cell-status="{ row, value }"` gives `row: Application` and `value: Application['status']`, the
   toolbar's `selectedRows` and the `@row-click` row are `Application` too. A column whose id is not a
   row field (`actions`) gets `value: unknown`. Keep `id` equal to `accessorKey` (or omit it); never
-  cast `row as …` or annotate the scope by hand. `TableColumn` comes from `@aziontech/webkit/data-table`.
+  cast `row as …` or annotate the scope by hand. `TableColumn` comes from `@aziontech/ui/data-table`.
 - A template ref on the Table is `ref<TableExposed<Application> | null>(null)` (`TableExposed` from
-  `@aziontech/webkit/data-table`, typed by the row), which gives `exportCsv`, `reload`, `clearFilters`,
+  `@aziontech/ui/data-table`, typed by the row), which gives `exportCsv`, `reload`, `clearFilters`,
   `getSnapshot` and `setSnapshot`; never declare a local `{ exportCsv(…) }` shape for it.
-- `class="h-full"` is a layout utility (allowed on a webkit tag): with `max-height="100%"` it lets the
+- `class="h-full"` is a layout utility (allowed on an Azion UI tag): with `max-height="100%"` it lets the
   body scroll inside the table. See "Scroll the body internally".
 - `row-key` is the stable id accessor; `@row-click` opens the detail view (see the `@click.stop`
   discipline below so cell controls don't trigger it).
@@ -199,7 +199,7 @@ const columns = [
 ### Toolbar + applied filters
 
 A list page puts its `PropertyFilter` and `CollectionPreferences` **above** the card, bound to
-`useCollection` ([List pages](../webkit-lists/SKILL.md)). The in-table toolbar below is for a table that is its own small
+`useCollection` ([List pages](../azion-ui-lists/SKILL.md)). The in-table toolbar below is for a table that is its own small
 surface (a drawer, a panel) and does not page through a collection.
 
 The toolbar is a fixed, ordered set of context-aware controls in the `#toolbar` slot; the
@@ -367,7 +367,7 @@ save call.
 Render each column with `#cell-<accessorKey>` (`#cell-actions` for the action column). The recurring
 cells are **presets** (`TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTags`,
 `TableCellTime`, `TableCellActions`), each imported from its own entry
-(`@aziontech/webkit/table-cell-<name>`, not attached to the `Table` compound): use them instead of re-typing the markup, so a cell type looks
+(`@aziontech/ui/table-cell-<name>`, not attached to the `Table` compound): use them instead of re-typing the markup, so a cell type looks
 identical across every table. `examples/table/cell-presets.vue` shows all of them in one table.
 
 ### Principal / name cell — icon + truncate + hover-underline
@@ -501,8 +501,8 @@ that shows a domain; four lists each with their own copy is how one ends up with
 ### "+N" overflow — `OverflowCount`, not a wrapped list
 
 When a cell holds a primary value plus more of the same kind, show the primary and an
-`OverflowCount` (`@aziontech/webkit/overflow-count`) with the hidden ones. It is the overflow rule of
-`/webkit-ux-heuristics` built once: a chip named `Show all <n> <noun>`, a popover with the summary
+`OverflowCount` (`@aziontech/ui/overflow-count`) with the hidden ones. It is the overflow rule of
+`/azion-ui-ux-heuristics` built once: a chip named `Show all <n> <noun>`, a popover with the summary
 (`12 domains`, `10 of 34 domains`), a search box past 7 items, Load more in batches of 10, a no-match
 line quoting the query, a polite status region, and a reset when it closes. Pass only the hidden items
 and a `noun`; an item with `href` opens in a new tab, and the `item` slot takes a router link.
@@ -609,7 +609,7 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 </template>
 ```
 
-`@select` follows the webkit event contract `(event, value)`. Any interactive control in a
+`@select` follows the Azion UI event contract `(event, value)`. Any interactive control in a
 **non-action** cell of a row-clickable table needs `@click.stop`; the presets already stop theirs.
 
 ## How to check it works
@@ -641,8 +641,8 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 
 ## Related
 
-- [Showing API data](../webkit-api-data/SKILL.md) — a cell that holds another resource's ID shows its name (`TableCellLink`),
+- [Showing API data](../azion-ui-api-data/SKILL.md) — a cell that holds another resource's ID shows its name (`TableCellLink`),
   and every shape the API sends has one typed formatter.
-- [Forms](../webkit-form/SKILL.md) — form layout & accessibility (the create/edit view a table's "New" button opens).
-- [Loading, empty and error states](../webkit-ui-states/SKILL.md) — the loading / empty / error states a table must render.
-- `/webkit-final-polish` — final rhythm/alignment pass over the assembled table.
+- [Forms](../azion-ui-form/SKILL.md) — form layout & accessibility (the create/edit view a table's "New" button opens).
+- [Loading, empty and error states](../azion-ui-states/SKILL.md) — the loading / empty / error states a table must render.
+- `/azion-ui-final-polish` — final rhythm/alignment pass over the assembled table.

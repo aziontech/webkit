@@ -1,7 +1,4 @@
-import {
-  useUnsavedChanges,
-  type UseUnsavedChangesReturn
-} from '@aziontech/webkit/use-unsaved-changes'
+import { useUnsavedChanges, type UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
 import type { Ref } from 'vue'
 
 export interface UseDrawerGuardOptions<T> {

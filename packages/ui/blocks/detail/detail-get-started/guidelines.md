@@ -88,7 +88,7 @@ Then delete `sample.ts` and its import.
 - **Step titles:** verb first, sentence case, no period, e.g. "Install the CLI", "Link your project", "Push to deploy".
 - **Step descriptions:** one or two sentences that say what the step does and why, e.g. "Authenticate, then link the local project to this resource so every deploy lands on it."
 - **Copy button label:** names the step, e.g. "Copy the commands for Install the CLI".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 

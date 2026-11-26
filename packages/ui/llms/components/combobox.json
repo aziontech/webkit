@@ -1,8 +1,8 @@
 {
  "name": "combobox",
  "binding": "Combobox",
- "import": "@aziontech/webkit/combobox",
- "treeShakeableImport": "@aziontech/webkit/combobox",
+ "import": "@aziontech/ui/combobox",
+ "treeShakeableImport": "@aziontech/ui/combobox",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

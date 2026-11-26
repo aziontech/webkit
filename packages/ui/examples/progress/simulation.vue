@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Progress from '@aziontech/webkit/progress'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Progress from '@aziontech/ui/progress'
   import { ref } from 'vue'
 
   const value = ref(0)

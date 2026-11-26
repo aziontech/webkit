@@ -1,8 +1,8 @@
 <script setup>
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import ConversationHistory from '@aziontech/webkit/conversation-history'
-  import Drawer from '@aziontech/webkit/drawer'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import ConversationHistory from '@aziontech/ui/conversation-history'
+  import Drawer from '@aziontech/ui/drawer'
+  import IconButton from '@aziontech/ui/icon-button'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   const now = '2026-11-11T15:00:00Z'

@@ -2,7 +2,7 @@
 name: spec-reviewer
 description: Second-agent review of a draft `.specs/<name>.md` (step 4 of `/component-new`). Runs a fixed checklist — naming, reuse, prop vocabulary, states, internationalization, right-to-left, responsive, accessibility, tokens, performance, code quality, events and slots, examples — and either approves (hands off to `spec-validate`, which writes the checksum) or returns findings. Never edits the spec body.
 status: active
-scope: webkit
+scope: ui
 ---
 
 # Agent: spec-reviewer
@@ -34,7 +34,7 @@ not apply is `pass` with the reason (e.g. "no built-in strings").
      (`dialog`, not `modal`; `separator`, not `divider`; `drawer`, never `sheet`; `popover`,
      `combobox`), modifier first and noun last (`icon-button`), `doc-` first for a `docs/` piece and
      `-section` last for a page section (`contributing/rules/naming.md` § 1, § 24).
-   - It passes the rules `scripts/check-naming.mjs` applies (`packages/webkit/scripts/lib/naming-rules.mjs`):
+   - It passes the rules `scripts/check-naming.mjs` applies (`packages/ui/scripts/lib/naming-rules.mjs`):
      not a market alias, not a retired v6 name (`src/cli/migrations/`), not a synonym of an existing
      export. Check `catalog.json#aliases`: if the name or an alias points at an existing export,
      fail and name it.
@@ -49,7 +49,7 @@ not apply is `pass` with the reason (e.g. "no built-in strings").
    exports: a pair that would score 35 % or more in `check:look-alikes` without one importing the
    other fails (`contributing/docs/CODE_QUALITY.md` § 3.3).
 3. **Prop vocabulary.** Every prop follows `contributing/rules/prop-vocabulary.md` (the consumer copy is
-   `rules/webkit-prop-vocabulary.md`): `variant`, `size` (`small | medium | large`), `disabled`,
+   `rules/azion-ui-prop-vocabulary.md`): `variant`, `size` (`small | medium | large`), `disabled`,
    `readonly`, `loading`, `invalid`, `modelValue`/`v-model:<x>`, no `is`/`has` prefix, no synonym of
    a vocabulary name. Defaults follow the template's Props rules. An action control has
    `disabledReason` (`CODE_QUALITY.md` § 3.9); a component that picks from a list takes it as
@@ -79,7 +79,7 @@ not apply is `pass` with the reason (e.g. "no built-in strings").
    the native element is used when one exists (§ 3.10).
 9. **Tokens only.** Every `## Tokens` row resolves in `contributing/docs/TOKENS.md`; no hex/RGB/HSL,
    no Tailwind palette, no raw typography, no primitive spacing (`--spacing-1` … `--spacing-96`);
-   colour pairs are documented passing pairs (`rules/webkit-tokens.md` § Contrast): a status icon on
+   colour pairs are documented passing pairs (`rules/azion-ui-tokens.md` § Contrast): a status icon on
    a surface takes its `-mark` token, a status fill is never text, the logo orange is never text;
    gaps are in `## Theme gaps` as `TODO: tokenize`.
 10. **Performance budget.** `## Performance` declares a gzip budget for the tree-shakeable entry
@@ -101,7 +101,7 @@ not apply is `pass` with the reason (e.g. "no built-in strings").
     show (`naming.md` § 4: `variants`, `sizes`, `disabled`, never `types`, `basic`, `playground`),
     and lists only the examples the template allows unless one is justified there. A content
     component states how it renders in the app, the docs and the site
-    (`rules/webkit-content-channels.md`).
+    (`rules/azion-ui-content-channels.md`).
 
 Also confirm, without scoring: the frontmatter has `template: 2` and `status: draft`; the
 acceptance criteria of the issue are each traceable to a spec section.
@@ -109,7 +109,7 @@ acceptance criteria of the issue are each traceable to a spec section.
 ## Block mode
 
 For `/block-new` you review a **block brief** (the draft `block.json` plus the section plan:
-which WebKit components render each region, the variants, the sample content, and the draft
+which Azion UI components render each region, the variants, the sample content, and the draft
 `guidelines.md`) instead of a spec. A brief without `guidelines.md` is returned before the
 checklist. Run the same thirteen items, read as:
 
@@ -122,12 +122,12 @@ checklist. Run the same thirteen items, read as:
 - states → `variants` cover the states the issue lists (empty, loading, error, no permission,
   success, ...);
 - internationalization → no built-in string is re-typed when the component owns it; sample
-  content is realistic and short and follows `rules/webkit-example-data.md`; `intents` include en
+  content is realistic and short and follows `rules/azion-ui-example-data.md`; `intents` include en
   and pt-BR; the block's PascalCase name never appears in text a person reads;
 - right-to-left, responsive, accessibility, tokens, performance → as for a component, at screen
   level (page landmarks and heading order, reflow at 320 px, the layout container system of
-  `webkit-layout`, no oversized data in the sample; floating overlays start closed,
-  `rules/webkit-overlays-closed-on-load.md`; a task screen declares `keyboard.entry`);
+  `azion-ui-layout`, no oversized data in the sample; floating overlays start closed,
+  `rules/azion-ui-overlays-closed-on-load.md`; a task screen declares `keyboard.entry`);
 - code quality → the page stays under 400 lines and each variant under 120, a variant wraps the
   primary through props and slots, and data comes in through typed props with `sample.ts` beside
   it (`CODE_QUALITY.md` § 3.12, `/block-new` "The data contract");
@@ -142,12 +142,12 @@ Read `guidelines.md` against the section plan in the same pass, and fail the ite
   follow the plan's order, and every component of the plan appears in one building block;
 - states → `## States` has one line per variant of the draft `block.json`, saying when it shows;
 - internationalization → `## Copy` gives a rule and an example string for every element that
-  carries text, following `skills/webkit-microcopy`;
+  carries text, following `skills/azion-ui-microcopy`;
 - accessibility → `## Accessibility` names the heading order, the landmarks, the focus order and
   the announcements the screen makes.
 
-The guidelines must agree with the skills the block lists (`webkit-form`, `webkit-lists`,
-`webkit-tables`, …): a rule that contradicts a skill fails the item it belongs to.
+The guidelines must agree with the skills the block lists (`azion-ui-form`, `azion-ui-lists`,
+`azion-ui-tables`, …): a rule that contradicts a skill fails the item it belongs to.
 
 ## Verdict
 

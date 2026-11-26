@@ -1,10 +1,10 @@
 # useColorMode
 
-Composable `@aziontech/webkit/use-color-mode`. The signatures and option tables below are read from its typed source, [`src/composables/use-color-mode/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-color-mode/index.ts).
+Composable `@aziontech/ui/use-color-mode`. The signatures and option tables below are read from its typed source, [`src/composables/use-color-mode/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-color-mode/index.ts).
 
 ```ts
-import { useColorMode, setColorMode, COLOR_MODE_STORAGE_KEY, colorModeScript } from '@aziontech/webkit/use-color-mode'
-import type { UseColorModeReturn, ColorMode, ResolvedColorMode } from '@aziontech/webkit/use-color-mode'
+import { useColorMode, setColorMode, COLOR_MODE_STORAGE_KEY, colorModeScript } from '@aziontech/ui/use-color-mode'
+import type { UseColorModeReturn, ColorMode, ResolvedColorMode } from '@aziontech/ui/use-color-mode'
 ```
 
 ## `useColorMode`

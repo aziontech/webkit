@@ -38,7 +38,7 @@ const catalog = (entry, extra = {}) => ({
 })
 
 const ctx = (overrides = {}) => ({
-  prTitle: 'feat(webkit): badge',
+  prTitle: 'feat(ui): badge',
   migrations: none,
   migrationLines: [],
   parents: {},
@@ -71,7 +71,7 @@ test('a changed default is breaking and fails without a migration', () => {
     changes.map((c) => [c.name, c.kind, c.breaking, c.detail]),
     [['kind', 'default changed', true, "'neutral' → 'danger'"]]
   )
-  const failures = evaluate(changes, ctx({ prTitle: 'feat(webkit)!: badge defaults to danger' }))
+  const failures = evaluate(changes, ctx({ prTitle: 'feat(ui)!: badge defaults to danger' }))
   assert.equal(failures.length, 1)
   assert.match(failures[0], /badge: prop kind default changed has no migration/)
 })
@@ -110,7 +110,7 @@ test('"!" in the title plus a migration covers a breaking change', () => {
     ]
   )
   const docOnly = ctx({
-    prTitle: 'feat(webkit)!: badge drops remove',
+    prTitle: 'feat(ui)!: badge drops remove',
     migrationLines: ['- `Badge`: listen to the close button instead of `remove`.']
   })
   assert.deepEqual(evaluate(changes, docOnly), [])
@@ -163,14 +163,14 @@ test('models and sub-components are diffed; model props stay out of the prop dif
     {
       models: ['open'],
       props: [...catalog({}).imports.badge.props, modelProp],
-      subcomponents: ['@aziontech/webkit/badge-icon']
+      subcomponents: ['@aziontech/ui/badge-icon']
     },
     { models: [], subcomponents: [] }
   )
   assert.deepEqual(
     changes.map((c) => [c.area, c.name, c.kind]),
     [
-      ['sub-component', '@aziontech/webkit/badge-icon', 'removed'],
+      ['sub-component', '@aziontech/ui/badge-icon', 'removed'],
       ['model', 'open', 'removed']
     ]
   )
@@ -185,9 +185,9 @@ test('a base catalog without models never reports model changes', () => {
 })
 
 test('the breaking marker is "!" right before the colon', () => {
-  assert.equal(isBreakingTitle('feat(webkit)!: drop remove'), true)
+  assert.equal(isBreakingTitle('feat(ui)!: drop remove'), true)
   assert.equal(isBreakingTitle('fix!: x'), true)
-  assert.equal(isBreakingTitle('feat(webkit): drop remove!'), false)
+  assert.equal(isBreakingTitle('feat(ui): drop remove!'), false)
   assert.equal(isBreakingTitle(''), false)
 })
 
@@ -196,7 +196,7 @@ test('a migration mention must be a new line naming the component', () => {
   assert.deepEqual(lines, ['- `Badge` drops remove'])
   assert.equal(mentionsComponent(lines, 'badge'), true)
   assert.equal(mentionsComponent(lines, 'tag'), false)
-  assert.equal(mentionsComponent(['import from @aziontech/webkit/badge-icon'], 'badge'), false)
+  assert.equal(mentionsComponent(['import from @aziontech/ui/badge-icon'], 'badge'), false)
 })
 
 test('specVersion reads the frontmatter only', () => {
@@ -317,7 +317,7 @@ test('demoting GA to preview fails, and a GA part stays breaking', () => {
   )
   const failures = evaluate(
     changes,
-    ctx({ prTitle: 'feat(webkit)!: badge', migrationLines: ['`Badge`'] })
+    ctx({ prTitle: 'feat(ui)!: badge', migrationLines: ['`Badge`'] })
   )
   assert.equal(failures.length, 1)
   assert.match(failures[0], /GA → preview is not allowed/)

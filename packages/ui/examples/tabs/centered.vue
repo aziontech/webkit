@@ -1,5 +1,5 @@
 <script setup>
-  import Tabs from '@aziontech/webkit/tabs'
+  import Tabs from '@aziontech/ui/tabs'
   import { ref } from 'vue'
 
   const active = ref('templates')

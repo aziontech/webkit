@@ -7,7 +7,7 @@ spec_version: 16
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: f9e12f8b8a9e4680f9a2bda6d722f57e6719084caddb4232e3c9db9a9cc14cb1
+checksum: 1400ccd7e312890618153ccf80ebefd015bb32ca46be6a2ab1a6fb9d7d45806d
 created: 2026-06-15
 last_updated: 2026-11-21
 ---
@@ -54,7 +54,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 ```vue
 <script setup>
-  import Select from '@aziontech/webkit/select'
+  import Select from '@aziontech/ui/select'
 
   const value = defineModel({ default: '' })
 </script>
@@ -108,7 +108,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 **Generic.** Props stay an inline literal in `defineProps` because the root is generic (a named `interface Props` fails declaration emit, TS4025). The root is generic over `TValue extends SelectValue` (`string | number | undefined`, the default), inferred from the bound `modelValue`: with a `string` model, `displayValue` takes `(value: string) => string` and `update:modelValue` sends a `string`, so a handler needs no narrowing.
 
-**Types.** `@aziontech/webkit/select` (and `-root`) export `SelectValue`, `SelectVariant`, `SelectSize` and `SelectOptionItem<TValue = string>` (`{ value: TValue; label: string; icon?: string; disabled?: boolean }`), the shape of an options list rendered as `Select.Item` rows, so a list with disabled entries needs no local type.
+**Types.** `@aziontech/ui/select` (and `-root`) export `SelectValue`, `SelectVariant`, `SelectSize` and `SelectOptionItem<TValue = string>` (`{ value: TValue; label: string; icon?: string; disabled?: boolean }`), the shape of an options list rendered as `Select.Item` rows, so a list with disabled entries needs no local type.
 
 ## v-model
 
@@ -230,7 +230,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

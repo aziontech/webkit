@@ -25,7 +25,7 @@
     "monitoramento de usuário real",
     "banded score"
   ],
-  "skills": ["webkit-data-viz", "webkit-ui-states"],
+  "skills": ["azion-ui-data-viz", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "dashboard-health-score.vue"

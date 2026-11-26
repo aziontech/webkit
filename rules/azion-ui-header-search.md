@@ -1,7 +1,7 @@
 # Rule: every app header has a SearchTrigger
 
 Every header that navigates — the console and demo top bar, the docs header, the site header —
-offers search the same way: one `SearchTrigger` (`@aziontech/webkit/search-trigger`) first in
+offers search the same way: one `SearchTrigger` (`@aziontech/ui/search-trigger`) first in
 `AppHeader.End`, opening a `Command` palette, with `⌘K` on macOS and `Ctrl K` elsewhere.
 A header without it is incomplete, even when nobody asked for search.
 
@@ -16,9 +16,9 @@ groups go in their `search` slot; a page opens the console palette with
 
   ```vue
   <script setup>
-    import Command from '@aziontech/webkit/command'
-    import AppHeader from '@aziontech/webkit/app-header'
-    import SearchTrigger from '@aziontech/webkit/search-trigger'
+    import Command from '@aziontech/ui/command'
+    import AppHeader from '@aziontech/ui/app-header'
+    import SearchTrigger from '@aziontech/ui/search-trigger'
     import { ref } from 'vue'
 
     const searchOpen = ref(false)
@@ -71,7 +71,7 @@ groups go in their `search` slot; a page opens the console palette with
   do not put a bare magnifier `IconButton` in a header.
 - Do not bind `⌘K` yourself with a `keydown` listener: `Command` (or the trigger) owns it.
   The other console shortcuts (`/`, `?`, `⌘ S`, `Esc`) are in rule
-  [`webkit-keyboard`](./webkit-keyboard.md).
+  [`azion-ui-keyboard`](./azion-ui-keyboard.md).
 - Do not mount a second `SearchTrigger` or `Command` inside a page rendered by an app layout: the
   layout's palette is the one palette.
 - Do not add search to a focused task header (sign-in, a create flow: back, brand, breadcrumb,
@@ -79,7 +79,7 @@ groups go in their `search` slot; a page opens the console palette with
 
 ## Enforced
 
-`webkit/require-header-search` (ESLint, in the recommended preset and in `webkit check`) flags a
+`azion-ui/require-header-search` (ESLint, in the recommended preset and in `azion-ui check`) flags a
 `AppHeader` with navigation (`AppHeader.Center`, `NavigationMenu`, or a `Sidebar` in the same
 template) and no `SearchTrigger`, any `aria-keyshortcuts="Meta+K"` / `Control+K` outside
 `SearchTrigger`, and a `az-search` button inside a `AppHeader`.

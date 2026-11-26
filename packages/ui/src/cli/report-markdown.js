@@ -15,10 +15,10 @@ const RULE_PURPOSE = {
   'no-physical-direction': 'physical left/right utility that does not mirror under RTL',
   'prefer-tree-shakeable-root': 'compound entry imported where the root would do',
   'no-deprecated-component': 'component marked deprecated in the catalog',
-  'no-deprecated-name': 'component, prop, value or icon name WebKit 6.0 renamed or removed',
-  'prefer-webkit-component': 'foreign UI library where a webkit component exists',
+  'no-deprecated-name': 'component, prop, value or icon name Azion UI 6.0 renamed or removed',
+  'prefer-azion-ui-component': 'foreign UI library where an Azion UI component exists',
   'prefer-define-model': 'hand-rolled modelValue + update:modelValue pair',
-  'no-style-override': 'class/style on a webkit component — restyling it',
+  'no-style-override': 'class/style on an Azion UI component — restyling it',
   'require-authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)',
   'require-container-width': 'Card, StatTile or ChartCard as a flex item with no width',
   'require-header-search': 'app header without SearchTrigger, or a hand-rolled ⌘K field',
@@ -33,7 +33,8 @@ const RULE_PURPOSE = {
     'text Input used for a number, a date, a phone number or a secret (native type or a date format)',
   'prefer-date-picker': 'date or time typed as text instead of DatePicker or DateRangePicker',
   'no-raw-id-input': 'resource ID typed as text instead of a searchable picker',
-  'no-dropped-children': 'content inside a webkit component with no default slot, never rendered',
+  'no-dropped-children':
+    'content inside an Azion UI component with no default slot, never rendered',
   'prefer-hint': 'hand-made help (a typed ?, an info icon in a Tooltip) or a paragraph in a Tooltip'
 }
 
@@ -52,16 +53,16 @@ const TEMPLATE_ONLY_RULES = [
 ]
 
 function bare(rule) {
-  return rule.replace(/^webkit\//, '')
+  return rule.replace(/^azion-ui\//, '')
 }
 
 function headerSection(report, catalog) {
-  const out = ['## Webkit adoption', '']
+  const out = ['## Azion UI adoption', '']
   if (!catalog.available) {
     out.push(
-      '> **The webkit catalog could not be resolved, so the catalog-backed rules did nothing.** ' +
-        'This is not a clean bill of health — install `@aziontech/webkit`, or set ' +
-        '`WEBKIT_CATALOG_PATH`, and run it again.',
+      '> **The Azion UI catalog could not be resolved, so the catalog-backed rules did nothing.** ' +
+        'This is not a clean bill of health — install `@aziontech/ui`, or set ' +
+        '`AZION_UI_CATALOG_PATH`, and run it again.',
       ''
     )
   }
@@ -114,7 +115,7 @@ function byFileSection(report) {
 
 function violationSections(report) {
   if (report.total === 0) {
-    return ['No `webkit/*` violations. Read the coverage note before celebrating.', '']
+    return ['No `azion-ui/*` violations. Read the coverage note before celebrating.', '']
   }
   return [...byRuleSection(report), ...byFileSection(report)]
 }
@@ -132,8 +133,8 @@ function coverageSection(report) {
     `- ${TEMPLATE_ONLY_RULES.map((r) => `\`${r}\``).join(', ')} cannot run on \`.astro\`: it needs ` +
       "vue-eslint-parser's template visitor, which astro-eslint-parser does not provide. Restyled " +
       'components inside Astro files are invisible here.',
-    '- Raw HTML where a webkit component exists (`<button>`, `<input>`, a hand-rolled modal) is ' +
-      'caught by no rule yet — `prefer-webkit-component` matches imports from a foreign package, ' +
+    '- Raw HTML where an Azion UI component exists (`<button>`, `<input>`, a hand-rolled modal) is ' +
+      'caught by no rule yet — `prefer-azion-ui-component` matches imports from a foreign package, ' +
       'not markup.'
   ]
   if (report.fatalFiles.length) {

@@ -1,5 +1,5 @@
 <script setup>
-  import NumberInput from '@aziontech/webkit/number-input'
+  import NumberInput from '@aziontech/ui/number-input'
   import { ref } from 'vue'
 
   const small = ref(1)

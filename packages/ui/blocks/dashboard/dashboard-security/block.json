@@ -31,7 +31,7 @@
     "waf traffic",
     "firewall traffic"
   ],
-  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "skills": ["azion-ui-data-viz", "azion-ui-tables", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "dashboard-security.vue"

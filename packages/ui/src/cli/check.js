@@ -22,7 +22,7 @@ const SKIP_DIRS = new Set([
   'coverage',
   'public'
 ])
-const SUBPATH = /['"`]@aziontech\/webkit\/([^'"`\s]+)['"`]/g
+const SUBPATH = /['"`]@aziontech\/ui\/([^'"`\s]+)['"`]/g
 const CLASS_ATTR = /\bclass\s*=\s*"([^"]*)"/g
 const HEX = /#[0-9a-fA-F]{3,8}\b/
 const PALETTE =
@@ -141,7 +141,7 @@ function lintFindings(projectDir) {
   for (const result of lint.results) {
     const rel = toPosix(relative(projectDir, result.filePath))
     for (const message of result.messages) {
-      if (!message.ruleId?.startsWith('webkit/')) continue
+      if (!message.ruleId?.startsWith('azion-ui/')) continue
       findings.push({
         source: 'lint',
         severity: 'error',
@@ -166,16 +166,16 @@ function doctorFindings(projectDir) {
     }))
 }
 
-function fileFindings(projectDir, files, webkit, linted) {
+function fileFindings(projectDir, files, ui, linted) {
   const migration = loadMigration(MIGRATION_MAJOR)
   const renamed = new Set([...Object.keys(migration.components), ...Object.keys(migration.removed)])
   const findings = []
   for (const file of files) {
     const rel = toPosix(relative(projectDir, file))
     const source = readFileSync(file, 'utf8')
-    if (!source.includes('@aziontech/webkit') && !rel.endsWith('.vue')) continue
+    if (!source.includes('@aziontech/ui') && !rel.endsWith('.vue')) continue
     findings.push(...migrationFindings(rel, source, migration))
-    findings.push(...importFindings(rel, source, webkit.exports, renamed))
+    findings.push(...importFindings(rel, source, ui.exports, renamed))
     if (!linted.ran) findings.push(...styleFindings(rel, source))
   }
   return findings
@@ -211,23 +211,23 @@ function stylelintOutcome(projectDir, styled) {
 
 const NOT_LINTED = { ran: false, reason: '--no-lint', findings: [] }
 
-export function runCheck(projectDir, webkit, { lint = true } = {}) {
+export function runCheck(projectDir, ui, { lint = true } = {}) {
   const doctor = doctorFindings(projectDir)
   const files = sourceFiles(projectDir)
   const linted = lint ? lintFindings(projectDir) : NOT_LINTED
   const styled = lint ? stylelintFindings(projectDir) : NOT_LINTED
   const findings = [
     ...doctor,
-    ...fileFindings(projectDir, files, webkit, linted),
+    ...fileFindings(projectDir, files, ui, linted),
     ...eslintOutcome(linted),
     ...stylelintOutcome(projectDir, styled),
-    ...blockDrift(projectDir, webkit).map((f) => ({ source: 'blocks', ...f }))
+    ...blockDrift(projectDir, ui).map((f) => ({ source: 'blocks', ...f }))
   ]
   const errors = findings.filter((f) => f.severity === 'error').length
   return {
     package: PACKAGE_NAME,
-    version: webkit.version,
-    installed: webkit.installed,
+    version: ui.version,
+    installed: ui.installed,
     eslint: linted.ran,
     stylelint: styled.ran,
     scanned: files.length,
@@ -288,7 +288,7 @@ function hasLimit(maxWarnings) {
 }
 
 export function formatCheck(result, maxWarnings) {
-  const out = [`@aziontech/webkit check — ${PACKAGE_NAME}@${result.version}`, '']
+  const out = [`@aziontech/ui check — ${PACKAGE_NAME}@${result.version}`, '']
   for (const source of SOURCE_ORDER) {
     const group = result.findings.filter((f) => f.source === source)
     if (!group.length) continue

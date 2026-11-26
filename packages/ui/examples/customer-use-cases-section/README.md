@@ -4,7 +4,7 @@ The band a product page closes its argument with: one framed cell that names the
 
 The title cell is the simplest variant of the media-and-title split: an overline, a headline, a one-line lead and a single "View docs" button pinned to the foot of the cell. The use cases sit in `CardGrid` frame cells that draw their own rules and corner marks, each a short title over one sentence.
 
-The band is the `CustomerUseCasesSection` component from `@aziontech/webkit/customer-use-cases-section`; it composes `Module`, `RegistrationFrame`, `CardGrid`, `FeatureItem`, `Eyebrow` and `Button`.
+The band is the `CustomerUseCasesSection` component from `@aziontech/ui/customer-use-cases-section`; it composes `Module`, `RegistrationFrame`, `CardGrid`, `FeatureItem`, `Eyebrow` and `Button`.
 
 ## Examples
 

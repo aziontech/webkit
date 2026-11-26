@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import ModuleHeader from '@aziontech/webkit/module-header'
+  import Button from '@aziontech/ui/button'
+  import ModuleHeader from '@aziontech/ui/module-header'
 </script>
 
 <template>

@@ -106,7 +106,7 @@ export function resolveScene(name: string): Component | null {
       timeout: 10000,
       errorComponent: Nothing,
       onError: (error, _retry, fail) => {
-        if (dev) console.warn(`[webkit] scene "${name}" could not load.`, error)
+        if (dev) console.warn(`[azion-ui] scene "${name}" could not load.`, error)
         fail()
       }
     })

@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/layout/app-header/app-header.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/layout/app-header/app-header.vue
 // component=AppHeader
 import figma from 'figma'
 
@@ -40,7 +40,7 @@ export default {
       : ''
   }
 </AppHeader>`,
-  imports: ["import AppHeader from '@aziontech/webkit/app-header'"],
+  imports: ["import AppHeader from '@aziontech/ui/app-header'"],
   id: 'app-header',
   metadata: { nestable: false }
 }

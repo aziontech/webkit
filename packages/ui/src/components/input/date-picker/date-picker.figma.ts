@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17541
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/input/date-picker/date-picker.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/input/date-picker/date-picker.vue
 // component=DatePicker
 import figma from 'figma'
 
@@ -12,7 +12,7 @@ const horizontal = instance.getEnum('horizontal', {
 
 export default {
   example: figma.code`<DatePicker v-model="date"${horizontal ? figma.code` orientation="horizontal"` : ''} />`,
-  imports: ["import DatePicker from '@aziontech/webkit/date-picker'"],
+  imports: ["import DatePicker from '@aziontech/ui/date-picker'"],
   id: 'date-picker',
   metadata: { nestable: true }
 }

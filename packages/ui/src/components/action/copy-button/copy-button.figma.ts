@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=403-882
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/action/copy-button/copy-button.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/action/copy-button/copy-button.vue
 // component=CopyButton
 import figma from 'figma'
 
@@ -26,7 +26,7 @@ export default {
       : ''
   }
 />`,
-  imports: ["import CopyButton from '@aziontech/webkit/copy-button'"],
+  imports: ["import CopyButton from '@aziontech/ui/copy-button'"],
   id: 'copy-button',
   metadata: { nestable: true }
 }

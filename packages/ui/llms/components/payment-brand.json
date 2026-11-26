@@ -1,8 +1,8 @@
 {
  "name": "payment-brand",
  "binding": "PaymentBrand",
- "import": "@aziontech/webkit/payment-brand",
- "treeShakeableImport": "@aziontech/webkit/payment-brand",
+ "import": "@aziontech/ui/payment-brand",
+ "treeShakeableImport": "@aziontech/ui/payment-brand",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

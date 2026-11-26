@@ -1,8 +1,8 @@
 {
  "name": "article-body-section",
  "binding": "ArticleBodySection",
- "import": "@aziontech/webkit/article-body-section",
- "treeShakeableImport": "@aziontech/webkit/article-body-section",
+ "import": "@aziontech/ui/article-body-section",
+ "treeShakeableImport": "@aziontech/ui/article-body-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

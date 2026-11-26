@@ -1,5 +1,5 @@
 <script setup>
-  import CustomerUseCasesSection from '@aziontech/webkit/customer-use-cases-section'
+  import CustomerUseCasesSection from '@aziontech/ui/customer-use-cases-section'
 </script>
 
 <template>

@@ -2,7 +2,7 @@
 
 > International phone-number control: an `InputGroup` with a searchable country `Select` on the left (the closed trigger shows the selected country's flag, its name and, at the end, its dial code, like a row of the list) and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
 
-- Import: `import PhoneInput from '@aziontech/webkit/phone-input'`
+- Import: `import PhoneInput from '@aziontech/ui/phone-input'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [phone-input.json](phone-input.json)
 
@@ -94,8 +94,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import PhoneInput from '@aziontech/webkit/phone-input'
+  import Field from '@aziontech/ui/field'
+  import PhoneInput from '@aziontech/ui/phone-input'
   import { ref } from 'vue'
 
   const digits = ref('')
@@ -124,8 +124,8 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import PhoneInput from '@aziontech/webkit/phone-input'
+  import Field from '@aziontech/ui/field'
+  import PhoneInput from '@aziontech/ui/phone-input'
   import { ref } from 'vue'
 
   const digits = ref('')
@@ -150,9 +150,9 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import PhoneInput from '@aziontech/webkit/phone-input'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import PhoneInput from '@aziontech/ui/phone-input'
   import { computed, ref } from 'vue'
 
   const digits = ref('')

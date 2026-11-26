@@ -12,7 +12,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const CLI_PATH = join(__dirname, '../../src/cli/cli.js')
 
 function makeProject() {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-report-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-report-'))
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'demo', version: '1.0.0' }))
   return dir
 }
@@ -38,18 +38,18 @@ function eslintResult(filePath, messages) {
 // collect()
 // ---------------------------------------------------------------------------
 
-test('collect keeps only webkit/* rule findings', () => {
+test('collect keeps only azion-ui/* rule findings', () => {
   const cwd = '/proj'
   const results = [
     eslintResult('/proj/src/a.vue', [
-      { ruleId: 'webkit/no-hardcoded-color', message: 'x' },
+      { ruleId: 'azion-ui/no-hardcoded-color', message: 'x' },
       { ruleId: 'vue/no-unused-vars', message: 'y' }
     ]),
     eslintResult('/proj/src/b.vue', [])
   ]
   const report = collect(results, cwd)
   assert.equal(report.total, 1)
-  assert.equal(report.byRule[0][0], 'webkit/no-hardcoded-color')
+  assert.equal(report.byRule[0][0], 'azion-ui/no-hardcoded-color')
   assert.equal(report.uiFilesTotal, 2)
   assert.equal(report.uiFilesClean, 1)
   assert.equal(report.score, 50)
@@ -76,9 +76,9 @@ test('collect scores by clean file, not by finding count', () => {
     // One file with 20 findings weighs the same as a file with 1.
     eslintResult(
       '/proj/src/messy.vue',
-      Array.from({ length: 20 }, () => ({ ruleId: 'webkit/no-hardcoded-color', message: 'x' }))
+      Array.from({ length: 20 }, () => ({ ruleId: 'azion-ui/no-hardcoded-color', message: 'x' }))
     ),
-    eslintResult('/proj/src/oneoff.vue', [{ ruleId: 'webkit/no-hardcoded-color', message: 'x' }]),
+    eslintResult('/proj/src/oneoff.vue', [{ ruleId: 'azion-ui/no-hardcoded-color', message: 'x' }]),
     eslintResult('/proj/src/clean-a.vue', []),
     eslintResult('/proj/src/clean-b.vue', [])
   ]
@@ -94,7 +94,9 @@ test('collect ignores non-UI extensions for the score denominator but still coun
   const cwd = '/proj'
   const results = [
     eslintResult('/proj/src/a.vue', []),
-    eslintResult('/proj/src/util.ts', [{ ruleId: 'webkit/no-deprecated-component', message: 'x' }])
+    eslintResult('/proj/src/util.ts', [
+      { ruleId: 'azion-ui/no-deprecated-component', message: 'x' }
+    ])
   ]
   const report = collect(results, cwd)
   assert.equal(report.uiFilesTotal, 1)
@@ -113,11 +115,11 @@ test('collect throws when no .vue/.astro file reached ESLint', () => {
 
 test('renderMarkdown includes the summary row and the coverage section', () => {
   const report = collect(
-    [eslintResult('/proj/a.vue', [{ ruleId: 'webkit/no-hardcoded-color', message: 'x' }])],
+    [eslintResult('/proj/a.vue', [{ ruleId: 'azion-ui/no-hardcoded-color', message: 'x' }])],
     '/proj'
   )
   const md = renderMarkdown(report, {
-    catalog: { available: true, package: '@aziontech/webkit', version: '1.0.0' }
+    catalog: { available: true, package: '@aziontech/ui', version: '1.0.0' }
   })
   assert.match(md, /\| Violations \| \*\*1\*\* \|/)
   assert.match(md, /### Coverage — what this did and did not look at/)
@@ -127,7 +129,7 @@ test('renderMarkdown includes the summary row and the coverage section', () => {
 test('renderMarkdown warns when the catalog is unavailable', () => {
   const report = collect([eslintResult('/proj/a.vue', [])], '/proj')
   const md = renderMarkdown(report, {
-    catalog: { available: false, package: '@aziontech/webkit', version: null }
+    catalog: { available: false, package: '@aziontech/ui', version: null }
   })
   assert.match(md, /catalog could not be resolved/)
 })
@@ -146,12 +148,12 @@ test('cli report --fail-on never exits 0 even with violations', () => {
     installFakeEslint(dir, [
       {
         filePath: join(dir, 'a.vue'),
-        messages: [{ ruleId: 'webkit/no-hardcoded-color', message: 'x' }]
+        messages: [{ ruleId: 'azion-ui/no-hardcoded-color', message: 'x' }]
       }
     ])
     const proc = runCli(dir, ['--fail-on', 'never'])
     assert.equal(proc.status, 0)
-    assert.match(proc.stdout, /Webkit adoption/)
+    assert.match(proc.stdout, /Azion UI adoption/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -163,7 +165,7 @@ test('cli report --fail-on any exits 1 when there are violations', () => {
     installFakeEslint(dir, [
       {
         filePath: join(dir, 'a.vue'),
-        messages: [{ ruleId: 'webkit/no-hardcoded-color', message: 'x' }]
+        messages: [{ ruleId: 'azion-ui/no-hardcoded-color', message: 'x' }]
       }
     ])
     const proc = runCli(dir, ['--fail-on', 'any'])

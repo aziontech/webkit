@@ -4,7 +4,7 @@ A mosaic of client stories, each tile linking to that client's success case. Hom
 
 Two tiles tell a story: a headline over the client's photo, with a "Learn more" link. The other tiles show a client logo, and the whole tile is the link. Logos on the canvas follow the theme; on the white and orange tiles they turn black.
 
-The band is the `ClientMosaicSection` component from `@aziontech/webkit/client-mosaic-section`; it composes `Module`, `RegistrationFrame`, `BentoGrid` (`BentoGrid.Cell`) and `Link`.
+The band is the `ClientMosaicSection` component from `@aziontech/ui/client-mosaic-section`; it composes `Module`, `RegistrationFrame`, `BentoGrid` (`BentoGrid.Cell`) and `Link`.
 
 ## Examples
 

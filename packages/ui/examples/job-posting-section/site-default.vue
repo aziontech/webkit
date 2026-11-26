@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import JobPostingSection from '@aziontech/webkit/job-posting-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import JobPostingSection from '@aziontech/ui/job-posting-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const posting = {
     area: 'Engineering',

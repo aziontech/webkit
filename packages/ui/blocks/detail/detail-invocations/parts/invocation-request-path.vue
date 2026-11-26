@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import FlowDiagram from '@aziontech/webkit/flow-diagram'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Subheader from '@aziontech/webkit/subheader'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import FlowDiagram from '@aziontech/ui/flow-diagram'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Subheader from '@aziontech/ui/subheader'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   /** One resource on the request path. */
   export interface InvocationPathNode {

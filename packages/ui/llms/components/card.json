@@ -1,8 +1,8 @@
 {
  "name": "card",
  "binding": "Card",
- "import": "@aziontech/webkit/card",
- "treeShakeableImport": "@aziontech/webkit/card",
+ "import": "@aziontech/ui/card",
+ "treeShakeableImport": "@aziontech/ui/card",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

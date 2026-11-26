@@ -20,13 +20,13 @@ import noUnownedElement from './rules/no-unowned-element.js'
 import noViewportHeightCalc from './rules/no-viewport-height-calc.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import noWrappedPageChrome from './rules/no-wrapped-page-chrome.js'
+import preferAzionUiComponent from './rules/prefer-azion-ui-component.js'
 import preferDatePicker from './rules/prefer-date-picker.js'
 import preferDefineModel from './rules/prefer-define-model.js'
 import preferHint from './rules/prefer-hint.js'
 import preferHrefInMenuNode from './rules/prefer-href-in-menu-node.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
 import preferValueControl from './rules/prefer-value-control.js'
-import preferWebkitComponent from './rules/prefer-webkit-component.js'
 import requireAccessibleName from './rules/require-accessible-name.js'
 import requireAuthoringStandards from './rules/require-authoring-standards.js'
 import requireComposableScopeCleanup from './rules/require-composable-scope-cleanup.js'
@@ -45,7 +45,7 @@ const rules = {
   'prefer-tree-shakeable-root': preferTreeShakeableRoot,
   'no-deprecated-component': noDeprecatedComponent,
   'no-deprecated-name': noDeprecatedName,
-  'prefer-webkit-component': preferWebkitComponent,
+  'prefer-azion-ui-component': preferAzionUiComponent,
   'prefer-define-model': preferDefineModel,
   'no-style-override': noStyleOverride,
   'require-authoring-standards': requireAuthoringStandards,
@@ -84,18 +84,18 @@ const FILES = [
 ]
 
 const plugin = {
-  meta: { name: '@aziontech/eslint-plugin-webkit', version: '0.0.0' },
+  meta: { name: '@aziontech/eslint-plugin-azion-ui', version: '0.0.0' },
   rules
 }
 
 function preset(name, severities) {
   return [
     {
-      name: `webkit/${name}`,
+      name: `azion-ui/${name}`,
       files: FILES,
-      plugins: { webkit: plugin },
+      plugins: { 'azion-ui': plugin },
       rules: Object.fromEntries(
-        Object.entries(severities).map(([rule, sev]) => [`webkit/${rule}`, sev])
+        Object.entries(severities).map(([rule, sev]) => [`azion-ui/${rule}`, sev])
       )
     }
   ]
@@ -112,7 +112,7 @@ const RECOMMENDED = {
   'no-physical-direction': 'error',
   'prefer-tree-shakeable-root': 'error',
   'no-whole-icon-set-import': 'error',
-  'prefer-webkit-component': 'error',
+  'prefer-azion-ui-component': 'error',
   'prefer-define-model': 'error',
   'no-style-override': 'error',
   'require-authoring-standards': 'error',

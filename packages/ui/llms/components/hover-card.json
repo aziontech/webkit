@@ -1,15 +1,15 @@
 {
  "name": "hover-card",
  "binding": "HoverCard",
- "import": "@aziontech/webkit/hover-card",
- "treeShakeableImport": "@aziontech/webkit/hover-card-root",
+ "import": "@aziontech/ui/hover-card",
+ "treeShakeableImport": "@aziontech/ui/hover-card-root",
  "category": "overlay",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/hover-card-trigger",
-  "@aziontech/webkit/hover-card-content"
+  "@aziontech/ui/hover-card-trigger",
+  "@aziontech/ui/hover-card-content"
  ],
  "purpose": "Rich preview that appears beside a link or name when the pointer rests on it or keyboard focus reaches it, and goes away when both leave. The root `HoverCard` owns the open state, the open and close delays and positioning (the shared `usePlacement`, the same engine as `Popover`); `HoverCard.Trigger` wraps the element being previewed; `HoverCard.Content` is the floating card. It sits between `Tooltip` (one line of plain text) and `Popover` (opened by a click, holds interactive content): the card shows a few lines of supplementary context, such as a person, a resource or a commit, without asking for a click.",
  "setup": null,

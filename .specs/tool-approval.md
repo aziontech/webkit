@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 6277d61dfdb237f0e201508cbca305ebc6c0d1523c4b241f9e75d08fd25f44e1
+checksum: badd0fba9e31af4aef35dbfe40d9d639fe28a66060f2525204eeb674a60e4003
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -62,8 +62,8 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import ToolApproval from '@aziontech/ui/tool-approval'
+  import CodeBlock from '@aziontech/ui/code-block'
 
   const status = ref('pending')
 </script>
@@ -92,7 +92,7 @@ With editable arguments:
 ```vue
 <script setup>
   import { computed, ref } from 'vue'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import ToolApproval from '@aziontech/ui/tool-approval'
 
   const status = ref('pending')
   const args = ref(JSON.stringify({ urls: ['https://www.example.com/app.js'] }, null, 2))
@@ -242,7 +242,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/tool-approval/`: Default (pending), Irreversible (typed phrase), Editable (the reader corrects the arguments before approving; `invalid` while they do not parse; once approved the field stays read-only as the record — a state example for the `editable` and `invalid` props), Resolved (approved, denied, expired)._
+_Examples in `packages/ui/examples/tool-approval/`: Default (pending), Irreversible (typed phrase), Editable (the reader corrects the arguments before approving; `invalid` while they do not parse; once approved the field stays read-only as the record — a state example for the `editable` and `invalid` props), Resolved (approved, denied, expired)._
 
 ## Constraints — DO NOT
 
@@ -251,7 +251,7 @@ _Examples in `packages/webkit/examples/tool-approval/`: Default (pending), Irrev
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

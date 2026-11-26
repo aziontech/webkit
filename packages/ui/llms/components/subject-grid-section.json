@@ -1,8 +1,8 @@
 {
  "name": "subject-grid-section",
  "binding": "SubjectGridSection",
- "import": "@aziontech/webkit/subject-grid-section",
- "treeShakeableImport": "@aziontech/webkit/subject-grid-section",
+ "import": "@aziontech/ui/subject-grid-section",
+ "treeShakeableImport": "@aziontech/ui/subject-grid-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

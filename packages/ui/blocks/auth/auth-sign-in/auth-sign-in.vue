@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button, { type ButtonVariant } from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import Button, { type ButtonVariant } from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { useCardHeight } from './composables/use-card-height'

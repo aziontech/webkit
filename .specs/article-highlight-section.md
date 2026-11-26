@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 280521a2c84c2f2674bcbe4ad6e3aa07c01e645749eed24ea952f0b295e9ccc7
+checksum: 14f69d1273ed9f8f70e0ce847df1ce56e1f96c64487dcf50bf68b323448dc1af
 ---
 
 # ArticleHighlightSection — Component Spec
@@ -40,7 +40,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 
 ```vue
 <script setup>
-  import ArticleHighlightSection from '@aziontech/webkit/article-highlight-section'
+  import ArticleHighlightSection from '@aziontech/ui/article-highlight-section'
 </script>
 
 <template>
@@ -189,7 +189,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

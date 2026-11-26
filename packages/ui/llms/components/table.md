@@ -1,9 +1,9 @@
 # Table
 
-> The table's parts and its markup-only root. Compose the anatomy by hand (`Table.Header` / `Table.Body` / `Table.Row` / `Table.HeadCell` / `Table.Cell`): the component owns markup, tokens, accessibility, column sizing (an emphasized principal column), sortable headers, selectable rows and a **freeze system** for sticky columns (an actions column) and a sticky header. The root is light: it frames the scroll viewport, the toolbar band (`title` / `toolbar` slots) and the `footer`, and loads no table engine. For repeated records pass `data` + `columns` to [`data-table`](data-table.md) instead: DataTable renders through these same parts, and the context-aware toolbar parts (`TableSearch`, `TableFilter`, `TableExportButton`, `TableRefreshButton`, `TableLiveButton`) and the cell presets (`TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, `TableCellActions`) go in its slots. Inside a hand-composed `Table` the toolbar parts have no rows to act on. **What the compound carries.** `@aziontech/webkit/table` attaches only the structural parts (`Header`, `Body`, `Footer`, `Caption`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar`), so a hand-composed table costs what its parts cost. The toolbar controls and the cell presets compose `Tooltip`, `DropdownMenu`, `Popover`, `Input` and `CopyButton`; each is imported from its own entry (`@aziontech/webkit/table-search`, `@aziontech/webkit/table-cell-status`, …) and is not attached to the compound, so a screen pays only for the ones it renders. **Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark on an address outside the app only (never on an in-app route), a tooltip naming the destination, underline on hover; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers; with no provider `now`, a server render prints the UTC date and the cell switches to the relative time once mounted, so hydration never mismatches) and `TableCellActions` (the row menu named after the row). **Types** (declared in `injection-key.ts`, re-exported by `./table`): the column and slot types DataTable takes (`TableColumn`, `TableCellSlotProps`, `TableHeaderSlotProps`, `TableToolbarSlotProps`, `TableStateSnapshot`, `TableExposed`, `TableAppliedFilter`, `TableFilterField`, `TableDensity`), so a page can type its columns from the compound it already imports. Their shapes are documented in [`data-table`](data-table.md).
+> The table's parts and its markup-only root. Compose the anatomy by hand (`Table.Header` / `Table.Body` / `Table.Row` / `Table.HeadCell` / `Table.Cell`): the component owns markup, tokens, accessibility, column sizing (an emphasized principal column), sortable headers, selectable rows and a **freeze system** for sticky columns (an actions column) and a sticky header. The root is light: it frames the scroll viewport, the toolbar band (`title` / `toolbar` slots) and the `footer`, and loads no table engine. For repeated records pass `data` + `columns` to [`data-table`](data-table.md) instead: DataTable renders through these same parts, and the context-aware toolbar parts (`TableSearch`, `TableFilter`, `TableExportButton`, `TableRefreshButton`, `TableLiveButton`) and the cell presets (`TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTags`, `TableCellTime`, `TableCellActions`) go in its slots. Inside a hand-composed `Table` the toolbar parts have no rows to act on. **What the compound carries.** `@aziontech/ui/table` attaches only the structural parts (`Header`, `Body`, `Footer`, `Caption`, `Row`, `HeadCell`, `Cell`, `SortButton`, `Toolbar`), so a hand-composed table costs what its parts cost. The toolbar controls and the cell presets compose `Tooltip`, `DropdownMenu`, `Popover`, `Input` and `CopyButton`; each is imported from its own entry (`@aziontech/ui/table-search`, `@aziontech/ui/table-cell-status`, …) and is not attached to the compound, so a screen pays only for the ones it renders. **Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `TableCellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark on an address outside the app only (never on an in-app route), a tooltip naming the destination, underline on hover; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `TableCellId` (an identifier with its copy button), `TableCellStatus` (one semantic `Tag`), `TableCellTags` (as many tags as fit, the rest behind `+N`), `TableCellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `ConfigProvider`'s `now`, the absolute time on the tooltip and for screen readers; with no provider `now`, a server render prints the UTC date and the cell switches to the relative time once mounted, so hydration never mismatches) and `TableCellActions` (the row menu named after the row). **Types** (declared in `injection-key.ts`, re-exported by `./table`): the column and slot types DataTable takes (`TableColumn`, `TableCellSlotProps`, `TableHeaderSlotProps`, `TableToolbarSlotProps`, `TableStateSnapshot`, `TableExposed`, `TableAppliedFilter`, `TableFilterField`, `TableDensity`), so a page can type its columns from the compound it already imports. Their shapes are documented in [`data-table`](data-table.md).
 
-- Import: `import TableRoot from '@aziontech/webkit/table-root'`
-- Compound import (dot notation, not tree-shakeable): `import Table from '@aziontech/webkit/table'`
+- Import: `import TableRoot from '@aziontech/ui/table-root'`
+- Compound import (dot notation, not tree-shakeable): `import Table from '@aziontech/ui/table'`
 - Category: data · Surface: app · Structure: composition
 - API as JSON: [table.json](table.json)
 
@@ -11,7 +11,7 @@
 
 - Use Table for records that share columns when you compose the rows by hand; for any console list of resources people scan, sort and act on, pass `data` + `columns` to DataTable, which renders through these parts.
 - A small, static table, or one whose cells need a layout the column model cannot express: compose `Table.Header` / `Table.Row` / `Table.Cell` by hand. The root loads no engine.
-- The parts of a DataTable: the toolbar controls and cell presets go in its slots, each imported from its own entry (`@aziontech/webkit/table-search`, `@aziontech/webkit/table-cell-status`).
+- The parts of a DataTable: the toolbar controls and cell presets go in its slots, each imported from its own entry (`@aziontech/ui/table-search`, `@aziontech/ui/table-cell-status`).
 - Use Table for read-and-act content; for repeated records pass `data` + `columns` to `data-table`, and when people edit cells in place use `data-grid`.
 
 ## Do
@@ -63,26 +63,26 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/table-header`
-- `@aziontech/webkit/table-body`
-- `@aziontech/webkit/table-footer`
-- `@aziontech/webkit/table-caption`
-- `@aziontech/webkit/table-row`
-- `@aziontech/webkit/table-head-cell`
-- `@aziontech/webkit/table-cell`
-- `@aziontech/webkit/table-cell-status`
-- `@aziontech/webkit/table-cell-link`
-- `@aziontech/webkit/table-cell-id`
-- `@aziontech/webkit/table-cell-time`
-- `@aziontech/webkit/table-cell-tags`
-- `@aziontech/webkit/table-cell-actions`
-- `@aziontech/webkit/table-sort-button`
-- `@aziontech/webkit/table-toolbar`
-- `@aziontech/webkit/table-search`
-- `@aziontech/webkit/table-filter`
-- `@aziontech/webkit/table-export-button`
-- `@aziontech/webkit/table-refresh-button`
-- `@aziontech/webkit/table-live-button`
+- `@aziontech/ui/table-header`
+- `@aziontech/ui/table-body`
+- `@aziontech/ui/table-footer`
+- `@aziontech/ui/table-caption`
+- `@aziontech/ui/table-row`
+- `@aziontech/ui/table-head-cell`
+- `@aziontech/ui/table-cell`
+- `@aziontech/ui/table-cell-status`
+- `@aziontech/ui/table-cell-link`
+- `@aziontech/ui/table-cell-id`
+- `@aziontech/ui/table-cell-time`
+- `@aziontech/ui/table-cell-tags`
+- `@aziontech/ui/table-cell-actions`
+- `@aziontech/ui/table-sort-button`
+- `@aziontech/ui/table-toolbar`
+- `@aziontech/ui/table-search`
+- `@aziontech/ui/table-filter`
+- `@aziontech/ui/table-export-button`
+- `@aziontech/ui/table-refresh-button`
+- `@aziontech/ui/table-live-button`
 
 ## Sub-components
 
@@ -93,7 +93,7 @@
 - `table-row/table-row.vue` — `role="row"`, flex container. Props `selected?: boolean`, `frozen?: boolean`. Forwards native listeners (e.g. `@click`) to its root via attribute fallthrough. Bottom divider `var(--border-width-default)` / `var(--border-default)`; hover `var(--bg-canvas)`; selected `var(--bg-selected)`. The row publishes its resolved background as the `--table-row-bg` custom property so frozen cells (and their edge fade) track the row hover/selected color instead of drifting against it.
 - `table-head-cell/table-head-cell.vue` — `role="columnheader"`, height 44px. Props `type?: 'default' | 'checkbox' | 'action' | 'slot'` (`checkbox`/`action` are 40px fixed-width so the header aligns with the body's checkbox/action cells), `sortable?: boolean`, `sortDirection?: 'none' | 'ascending' | 'descending'`, `align?: 'start' | 'center' | 'end'`, `grow?: 1 | 2 | 3` (flex weight), `principal?: boolean` (defaults the weight to `grow: 2` when `grow` is unset — the principal/emphasized column), `frozen?: 'start' | 'end'`. Emits `sort: [direction: 'ascending' | 'descending']`. Renders `table-sort-button` when `sortable`; the header cell itself is not a tab stop (a pointer click anywhere on it still toggles the sort), and the button is named with the column through `aria-labelledby` (`tableHeadCell.sortBy` + the header text: `Sort by Name`), so the direction is read from the header's `aria-sort`. When `resizable`, renders a drag-to-resize handle on the right edge (`resizing` reflects the active drag; `resizeHandler` is the pointer handler DataTable supplies). `resizing` and `resizeHandler` are internal plumbing DataTable passes to its own head cells; they are not part of the composition API (a composed table resizes nothing).
 - `table-cell/table-cell.vue` — `role="cell"`, min height 48px. Props `type?: 'default' | 'checkbox' | 'action'`, `align?: 'start' | 'center' | 'end'`, `grow?: 1 | 2 | 3`, `principal?: boolean` (defaults the weight to `grow: 2` when `grow` is unset — the principal/emphasized column), `frozen?: 'start' | 'end'`, `clickable?: boolean` (underlines the cell text). Cell text stays on one line and truncates, unless the root sets `wrapLines`. A cell is never wider than the table itself (`max-w-[100cqi]` against the `@container/table` root), so one value longer than the visible table ends in an ellipsis inside the frame instead of widening the table past it; the cap never binds while the value fits, so other columns keep their widths. A principal cell (and its header cell, which carry `data-principal`) is capped tighter, at `max(var(--size-48), 50cqi)`: a long name, event or host truncates there instead of widening every row, so the columns after it stay in view when they would otherwise fit; a short principal value keeps its own width. The consumer keeps the full value available on the truncated element (a `title`, as the version-detail tables do). A `grow` column carries a fixed, content-independent flex basis (`flex: <grow> 0 5rem`) identical to its header cell, so the column resolves to the same width in the header and in every body row; when the table overflows it shrinks to that minimum and the viewport scrolls horizontally — instead of each row sizing the column to its own content, which misaligned the header from the body. A `width` column overrides the basis with a fixed pixel width; a `minWidth` column is measured and pinned to one resolved width (the larger of that floor and the widest of its header and rendered cells), so it reserves nothing it is not using and never truncates the chip inside it. Content (avatar, tag, icon, description, copy, "+99") is composed by the consumer via the default slot using existing primitives.
-- `table-sort-button/table-sort-button.vue` — sort control used inside `table-head-cell`, rendered as the webkit `IconButton` (`variant="ghost"`, `size="small"` → 28×28) so size, padding, and alignment match the design system. Prop `sortDirection?: 'none' | 'ascending' | 'descending'` (the same name as `table-head-cell`). Emits `sort: [direction: 'ascending' | 'descending']` (the same event as `table-head-cell`). To hide it while keeping its space, pass `class="invisible"`. Glyphs via `az az-sort` (none) / `az az-arrow-up-wide-narrow` (ascending) / `az az-arrow-down-wide-narrow` (descending). Attributes (`aria-labelledby`, `class`) are forwarded to the `IconButton`; its own label (`Sort column`, `Sorted ascending`, `Sorted descending`) applies only when nothing names it.
+- `table-sort-button/table-sort-button.vue` — sort control used inside `table-head-cell`, rendered as the Azion UI `IconButton` (`variant="ghost"`, `size="small"` → 28×28) so size, padding, and alignment match the design system. Prop `sortDirection?: 'none' | 'ascending' | 'descending'` (the same name as `table-head-cell`). Emits `sort: [direction: 'ascending' | 'descending']` (the same event as `table-head-cell`). To hide it while keeping its space, pass `class="invisible"`. Glyphs via `az az-sort` (none) / `az az-arrow-up-wide-narrow` (ascending) / `az az-arrow-down-wide-narrow` (descending). Attributes (`aria-labelledby`, `class`) are forwarded to the `IconButton`; its own label (`Sort column`, `Sorted ascending`, `Sorted descending`) applies only when nothing names it.
 - `table-toolbar/table-toolbar.vue` — flex container (end-aligned) for toolbar actions placed in the `toolbar` slot; injects the table context for its testId.
 - `table-search/table-search.vue` — Use TableSearch for one free-text search over the table's rows. A context-aware search input. Reads and drives the TanStack `globalFilter` of the enclosing DataTable through the injected context, so it needs no wiring. `v-model` (`string`, default `undefined`, emits `update:modelValue`) holds the search text: a bound value filters the rows from the first render and every change the field or `clearFilters()` makes is written back. Props `placeholder?: string` (default `''`; empty uses the locale catalog, `Search` in English) and `ariaLabel?: string` (default `''`; empty uses `tableSearch.label`, `Search the table`), so the field is never named only by its placeholder. While mounted it registers `/` with `useShortcuts` (listed as `tableSearch.focusShortcut`, Focus search): the key focuses the field from anywhere on the page except while typing in another field, with a modifier held, or from inside a modal layer that does not hold the search (the console keyboard standard). Rendered outside a DataTable it has no rows to search and warns once in the console.
 - `table-filter/table-filter.vue` — Use TableFilter only as the toolbar slot that hosts FilterMenu (`type="menu"`) or PropertyFilter (`type="property"`) wired to the table; it is not a third filter. `type?: 'menu' | 'property'` (default `'menu'`) picks the host by data shape: `menu` renders [`FilterMenu`](filter-menu.md) (facets picked from known values; `select`, `multi-select` and `date` fields) and `property` renders [`PropertyFilter`](property-filter.md) (typed conditions with operators, `free-text` off and `hide-operations` on, so its tokens combine with AND like the table's `filters`). Both read and write the enclosing DataTable's structured filters through the context (`filter-apply` on the table with the event first), mapped by `filter-menu-bridge.ts`. `v-model` (`TableAppliedFilter[]`, default `undefined`, emits `update:modelValue`) holds the committed filters: a bound value filters the rows from the first render (client side; under `manualFiltering` it is only reported) and every commit or chip removal is written back. Props `fields?: TableFilterField[]` (default `[]`; the fields to filter on, registered with the table so `FilterMenu.ChipGroup` labels its chips with them) and `title?: string` (default `''`; the menu trigger text, the property filter's accessible name; empty uses each one's catalog). Emits `apply: [event: Event, filters: TableAppliedFilter[]]`. No slots. The applied-filters row of the menu type is `FilterMenu.ChipGroup` with no `fields` in the DataTable `filters` slot; the property type shows its own tokens. Columns are chosen in `CollectionPreferences`, which reads the table's columns from context.
@@ -141,7 +141,7 @@
 
 ```vue
 <script setup>
-  import Table from '@aziontech/webkit/table'
+  import Table from '@aziontech/ui/table'
 
   const items = [
     { id: '1001', name: 'Workload Alpha', status: 'Active', editor: 'user1@example.com' },
@@ -185,15 +185,15 @@
 
 ```vue
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellId from '@aziontech/webkit/table-cell-id'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTags from '@aziontech/webkit/table-cell-tags'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import DataTable from '@aziontech/ui/data-table'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellId from '@aziontech/ui/table-cell-id'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTags from '@aziontech/ui/table-cell-tags'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
 
   const HOUR = 3_600_000
   const NOW = Date.UTC(2026, 10, 10, 12)

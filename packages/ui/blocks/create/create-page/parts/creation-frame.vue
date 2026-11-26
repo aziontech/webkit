@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { BreadcrumbItemData } from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import type { UseUnsavedChangesReturn } from '@aziontech/webkit/use-unsaved-changes'
+  import Alert from '@aziontech/ui/alert'
+  import type { BreadcrumbItemData } from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import type { UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
 
   import CreationHeader from './creation-header.vue'
   import DiscardDialog from './discard-dialog.vue'

@@ -1,8 +1,8 @@
 {
  "name": "confirm-dialog",
  "binding": "ConfirmDialog",
- "import": "@aziontech/webkit/confirm-dialog",
- "treeShakeableImport": "@aziontech/webkit/confirm-dialog",
+ "import": "@aziontech/ui/confirm-dialog",
+ "treeShakeableImport": "@aziontech/ui/confirm-dialog",
  "category": "overlay",
  "surface": "app",
  "structure": "monolithic",

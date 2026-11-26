@@ -2,7 +2,7 @@
 
 > The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor logo) stays pinned while the page scrolls. Each category opens with a heading row; each cell is a support glyph — full, partial or none — named by a tooltip and by screen-reader text and keyed in a one-line legend above the table (each glyph with its label, for touch and keyboard readers who never see the tooltip), and a capability with a definition carries a `hint` glyph that opens it as a short note. It is a page section — the site places it from a `{ _id: 'competitor-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `brand`, `hint` and `tooltip`.
 
-- Import: `import CompetitorComparisonSection from '@aziontech/webkit/competitor-comparison-section'`
+- Import: `import CompetitorComparisonSection from '@aziontech/ui/competitor-comparison-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [competitor-comparison-section.json](competitor-comparison-section.json)
 
@@ -13,7 +13,7 @@
 ## Do
 
 - Give every row a `definition`; the hint note is where a reader learns what the capability means.
-- Pass the competitor's entry from `@aziontech/webkit/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.
+- Pass the competitor's entry from `@aziontech/ui/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.
 - With only a `name`, the band looks the name up in the competitor registry once the page is interactive (the registry loads on demand, outside the band's bundle) and shows the name as text until then, or for a platform the registry does not hold.
 - For a platform outside the registry, ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme), or one file with its `artwork`.
 - Set `anchor` when a page links to the table (`#compare`).
@@ -102,9 +102,9 @@
 
 ```vue
 <script setup>
-  import cloudflareExtendedColor from '@aziontech/webkit/assets/cloudflare-extended-color.svg'
-  import cloudflareExtendedReversed from '@aziontech/webkit/assets/cloudflare-extended-reversed.svg'
-  import CompetitorComparisonSection from '@aziontech/webkit/competitor-comparison-section'
+  import cloudflareExtendedColor from '@aziontech/ui/assets/cloudflare-extended-color.svg'
+  import cloudflareExtendedReversed from '@aziontech/ui/assets/cloudflare-extended-reversed.svg'
+  import CompetitorComparisonSection from '@aziontech/ui/competitor-comparison-section'
 
   const competitor = {
     name: 'Cloudflare',
@@ -303,7 +303,7 @@
 
 ```vue
 <script setup>
-  import CompetitorComparisonSection from '@aziontech/webkit/competitor-comparison-section'
+  import CompetitorComparisonSection from '@aziontech/ui/competitor-comparison-section'
 
   const groups = [
     {

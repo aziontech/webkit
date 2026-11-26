@@ -1,13 +1,13 @@
 ---
-name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one AppHeader with back + brand + breadcrumb + avatar — the `top-bar/top-bar-creation` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE AppHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action primary, medium like every heading action) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: page navigation lives in the rail, two levels at most (a product's resources on level 1 when it has 3 or fewer, a drill level when it has more), a page has only its PageTabs (at most 7) and no in-page menu, a destination offered once per screen, no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
+name: azion-ui-navigation
+description: Two navigation shells for UI on @aziontech/ui — the persistent console shell is `ConsoleLayout` (@aziontech/ui/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one AppHeader with back + brand + breadcrumb + avatar — the `top-bar/top-bar-creation` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE AppHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action primary, medium like every heading action) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: page navigation lives in the rail, two levels at most (a product's resources on level 1 when it has 3 or fewer, a drill level when it has more), a page has only its PageTabs (at most 7) and no in-page menu, a destination offered once per screen, no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-navigation-levels, webkit-accessibility, webkit-prefer-over-custom, ui-verify]
+enforced_by: [azion-ui-navigation-levels, azion-ui-accessibility, azion-ui-prefer-over-custom, ui-verify]
 ---
 
-# Skill: webkit-navigation
+# Skill: azion-ui-navigation
 
 ## In short
 
@@ -24,19 +24,19 @@ Every screen in a console lives in one of **two** navigation shells, and picking
 worse, blending them — is where a prototype stops feeling like one product. A browse page with no way
 back to the rest of the console strands the user; a focused create flow that keeps the full sidebar
 lets the user wander off mid-task and lose their work. This pattern fixes which shell a page uses, how
-each is composed on `@aziontech/webkit`, and the one invariant they share: **the signed-in user is
-always visible.** It is the layout-shell companion to [Forms](../webkit-form/SKILL.md) (what goes _inside_ a focused
-flow) and `webkit-ux-heuristics` (states + feedback).
+each is composed on `@aziontech/ui`, and the one invariant they share: **the signed-in user is
+always visible.** It is the layout-shell companion to [Forms](../azion-ui-form/SKILL.md) (what goes _inside_ a focused
+flow) and `azion-ui-ux-heuristics` (states + feedback).
 
 ## How to use
 
-- `/webkit-navigation`
+- `/azion-ui-navigation`
   Apply the shell rules below to any page or flow you build in this conversation.
-- `/webkit-navigation <file>`
+- `/azion-ui-navigation <file>`
   Review the file against the rules and output, per gap:
   - the exact line / element (quoted),
   - which rule it breaks (1 short sentence),
-  - the concrete fix, naming the shell or webkit primitive to use.
+  - the concrete fix, naming the shell or Azion UI primitive to use.
 
 ## When to invoke
 
@@ -48,29 +48,29 @@ flow) and `webkit-ux-heuristics` (states + feedback).
 ## How to find the components
 
 Never guess an import path, and never copy one from another repo or sample app — files move. Resolve
-every webkit primitive the same way:
+every Azion UI primitive the same way:
 
-- Ask the **webkit MCP** — `suggest_component` in plain words ("console layout", "breadcrumb", "page tabs").
-- Or read **`node_modules/@aziontech/webkit/catalog.json`** — every key under `imports` is a real
+- Ask the **Azion UI MCP** — `suggest_component` in plain words ("console layout", "breadcrumb", "page tabs").
+- Or read **`node_modules/@aziontech/ui/catalog.json`** — every key under `imports` is a real
   published subpath. If a subpath is not a key there, it does not exist.
 
-**The persistent console shell is one webkit component:** `ConsoleLayout`
-(`@aziontech/webkit/console-layout`), plus `useConsoleLayout` (`@aziontech/webkit/use-console-layout`)
+**The persistent console shell is one Azion UI component:** `ConsoleLayout`
+(`@aziontech/ui/console-layout`), plus `useConsoleLayout` (`@aziontech/ui/use-console-layout`)
 for a page that opens its search palette. It already composes `AppLayout`, `Sidebar`, `SidebarMenu`,
 `AppHeader`, `Breadcrumb`, `SearchTrigger` and `Command`, so you never assemble those into a shell
-of your own. Start it from the `shell/shell-console` block (`npx @aziontech/webkit add shell/shell-console`, or
+of your own. Start it from the `shell/shell-console` block (`npx @aziontech/ui add shell/shell-console`, or
 `get_block`): the block is your `App.vue`, with the real console navigation. `add` copies it into
 your views folder and prints the path it wrote (`src/views/console.vue`); make that file your
 `src/App.vue` instead of adding it as a route.
 
 **The focused creation shell is a block, not a component:** `top-bar/top-bar-creation`
-(`npx @aziontech/webkit view top-bar/top-bar-creation`), built from `app-header`, `icon-button`,
+(`npx @aziontech/ui view top-bar/top-bar-creation`), built from `app-header`, `icon-button`,
 `brand`, `breadcrumb` and `avatar`. Every `create/*` block already renders it above its own
 `<main>`.
 
 The page bodies use `page-header`, `page-tabs`, `tabs`, `card`, `table` — all resolved the same way.
-For spacing / color / typography use the **@aziontech/theme tokens (the webkit MCP lists them)** and
-the `layout-*` utilities ([Page layout](../webkit-layout/SKILL.md)) — never raw px.
+For spacing / color / typography use the **@aziontech/theme tokens (the Azion UI MCP lists them)** and
+the `layout-*` utilities ([Page layout](../azion-ui-layout/SKILL.md)) — never raw px.
 
 ## The two shells
 
@@ -98,11 +98,11 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
 <!-- App.vue — the console chrome, composed once. Focused create routes
      (meta.shell === 'focused') render outside it, with no rail. -->
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConsoleLayout, { type BreadcrumbItemData } from '@aziontech/webkit/console-layout'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import ConsoleLayout, { type BreadcrumbItemData } from '@aziontech/ui/console-layout'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed } from 'vue'
   import { RouterView, useRoute } from 'vue-router'
 
@@ -165,7 +165,7 @@ The navigation is **data**, kept in one file the rail and the palette both read:
 
 ```ts
 // navigation.ts
-import type { ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
+import type { ConsoleLayoutNavGroup } from '@aziontech/ui/console-layout'
 
 export const navigation: ConsoleLayoutNavGroup[] = [
   { items: [{ id: 'home', label: 'Home', icon: 'az az-home', href: '/' }] },
@@ -230,7 +230,7 @@ What each part of the layout takes:
   external URL loads normally. `type: 'drill'` with `groups` opens level 2 in place (Settings): use it for a product with more than
   3 resources, list 3 or fewer right on level 1, and never nest a third level (see "Navigation levels");
   `tagValue` adds a badge (`Preview`). Never `to`, `path` or `route` on a row (lint
-  `webkit/prefer-href-in-menu-node`). Leave `active-id` empty: the active row follows the route.
+  `azion-ui/prefer-href-in-menu-node`). Leave `active-id` empty: the active row follows the route.
 - **`breadcrumbs`** — the trail, `{ label, href? }[]`, derived from the route meta; empty on a
   first-level page (see "Breadcrumb" below). Hidden while compact. The `breadcrumbs` slot replaces it
   only when a crumb is a control (an environment `Select`).
@@ -248,7 +248,7 @@ What each part of the layout takes:
   `useConsoleLayout().openSearch()`:
 
 ```ts
-import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
+import { useConsoleLayout } from '@aziontech/ui/use-console-layout'
 
 const { openSearch } = useConsoleLayout()
 ```
@@ -267,12 +267,12 @@ Ctrl K `Command` palette that lists every navigation page; it shows the field on
 magnifier on a narrow one. Add what the palette should also offer through the `search` slot. Never add
 a second `SearchTrigger`, a second `Command` or a ⌘K binding of your own. `SiteLayout` and `DocLayout`
 carry the same search. The focused creation shell has no search: it stays on the task. Any header you
-do compose yourself follows rule `webkit-header-search` (lint `webkit/require-header-search`).
+do compose yourself follows rule `azion-ui-header-search` (lint `azion-ui/require-header-search`).
 
 #### A language switch in a header is the compact `LanguageSelect`
 
 When a header, a toolbar or a footer offers a language switch, it is
-`<LanguageSelect v-model="locale" variant="ghost" />` (`@aziontech/webkit/language-select`): a round
+`<LanguageSelect v-model="locale" variant="ghost" />` (`@aziontech/ui/language-select`): a round
 flag and the language tag (`EN`, `PT-BR`), no border until hover, bound to the `locale` your `ConfigProvider`
 reads. Never a field-sized `Select`, a globe `Select` or a `ToggleGroup` of codes: a field outline
 next to the header's outlined buttons draws two border colours in one row. A language setting on an
@@ -326,18 +326,18 @@ const routes = [
 ```
 
 When several flows share the bar, lift it once into your own shell, copied from the block
-(`npx @aziontech/webkit add top-bar/top-bar-creation`):
+(`npx @aziontech/ui add top-bar/top-bar-creation`):
 
 ```vue
 <!-- components/CreationShell.vue — the creation-header block, lifted once for
-     every focused route. Not a webkit import. -->
+     every focused route. Not an Azion UI import. -->
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Avatar from '@aziontech/ui/avatar'
+  import Brand from '@aziontech/ui/brand'
+  import Breadcrumb from '@aziontech/ui/breadcrumb'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
 
   interface Props {
     /** The flow's trail: the module with an href, then the current page. */
@@ -462,7 +462,7 @@ feels like a different app.
 ### The page body owns its boundary; the layout pads nothing
 
 `ConsoleLayout` renders the `<main>` and adds no padding, so the page body names its own inset and
-measure with the `layout-*` utilities ([Page layout](../webkit-layout/SKILL.md)):
+measure with the `layout-*` utilities ([Page layout](../azion-ui-layout/SKILL.md)):
 
 - **List, dashboard, settings, form:** `layout-boundary` + a column class (`layout-column` for data,
   `layout-column-form` for a settings form) on the body's outer blocks.
@@ -470,7 +470,7 @@ measure with the `layout-*` utilities ([Page layout](../webkit-layout/SKILL.md))
   layout's scrolling region; each tab's view then carries `layout-boundary` + its own column.
 - **Workspace (an editor, pinned panes):** `data-layout-fill` on the body's root makes the `<main>` a
   fixed-height region that does not scroll, and the body's own panes scroll. Never size a body with
-  `calc(100dvh - …)` (lint `webkit/no-viewport-height-calc`).
+  `calc(100dvh - …)` (lint `azion-ui/no-viewport-height-calc`).
 
 Never a bespoke `p-(--spacing-*)` page inset, never a `max-w-*` of your own, and never a `<main>`.
 
@@ -559,7 +559,7 @@ narrow the list and the table they narrow.
   already inside the module, so it carries only the action that level can perform; reference material
   a band needs is a `documentation` link on that band's own section heading instead.
 - The full list page — `useCollection`, the property filter, the preferences, the empty and no-match
-  states — is [List pages](../webkit-lists/SKILL.md) and the `view/view-table` block.
+  states — is [List pages](../azion-ui-lists/SKILL.md) and the `view/view-table` block.
 
 ## Second-level navigation — tabs, and where the primary button goes
 
@@ -622,7 +622,7 @@ opens flush on the tab bar:
 </template>
 ```
 
-- **Use `PageTabs` (`@aziontech/webkit/page-tabs`), not a hand-built bar.** It is `Tabs` plus the
+- **Use `PageTabs` (`@aziontech/ui/page-tabs`), not a hand-built bar.** It is `Tabs` plus the
   strip: full-bleed with the page inset, ruled at the bottom, the row `items-center` so a 32px
   `size="medium"` button centres against the 30px tab items, the tab list free to shrink and scroll
   instead of pushing the action off the row, and the `#actions` region holding a medium button's
@@ -660,7 +660,7 @@ Each tab renders one of two bodies:
   action **on the tab row**.
 - **A settings tab** → the `ItemGroup` form: `SettingsGroup` bands each over a flush `Card` +
   `Item.List` of `SettingsRow` rows, committed as **one block** by a single `SaveBar` pinned below the
-  scroll region (see [Forms](../webkit-form/SKILL.md) and [Loading, empty and error states](../webkit-ui-states/SKILL.md)).
+  scroll region (see [Forms](../azion-ui-form/SKILL.md) and [Loading, empty and error states](../azion-ui-states/SKILL.md)).
 
 ## Navigation levels: the rail navigates, the page has only tabs
 
@@ -704,9 +704,9 @@ The fix: the rail drills into Security and lists its resources (Policies, Certif
 lists…), Policies opens the policy list, and a policy shows its pages as at most 7 tabs, with related
 pages as sections of one tab, and no menu in the page.
 
-Rule `webkit-navigation-levels` states the invariant. The lint `webkit/no-page-navigation-menu` warns
+Rule `azion-ui-navigation-levels` states the invariant. The lint `azion-ui/no-page-navigation-menu` warns
 on a `SidebarMenu` in a page body, `ConsoleLayout` warns in development when an in-page `SidebarMenu`
-repeats a rail row, and `npx @aziontech/webkit check` with `/webkit-ui-verify` fail a duplicate route
+repeats a rail row, and `npx @aziontech/ui check` with `/azion-ui-verify` fail a duplicate route
 or disagreeing active rows at runtime.
 
 ## Drawers — opened from inside a screen, never the way in
@@ -733,21 +733,21 @@ they were.
 
 ### What a click opens
 
-| The reader clicks…                                                                           | It opens                                               | Why                                                                    |
-| -------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------- |
-| A product or module in the rail                                                              | its page (the list or the overview)                    | navigation, level 1                                                    |
-| A resource in a list (its row or its name)                                                   | the resource's page, on its tabs                       | navigation, level 2                                                    |
-| **Configure, Settings or Edit** on a product or a resource                                   | **the resource's page**, on its settings tab (`?tab=`) | configuring is a destination: reload, link, back, more tabs            |
-| Create a first-level resource                                                                | the create page, in the focused shell                  | [Create flows](../webkit-create-surface/SKILL.md)                      |
-| Add or edit an item that lives inside the resource (a rule, an origin, a record), from a tab | a **`large` drawer** over that tab                     | the tab behind it is the context                                       |
-| On a page, a field needs a resource that does not exist yet (a certificate for a workload)   | a **`large` drawer** that creates it, over that page   | create the missing piece where it is missing (below)                   |
-| Inside a drawer, a field needs a resource or an item that does not exist yet                 | a **`medium` drawer** stacked on the first             | the same, without losing typed work ([Forms](../webkit-form/SKILL.md)) |
-| A yes-or-no guard (remove, discard)                                                          | `ConfirmDialog`, over the page or over any drawer      | a decision, not a surface                                              |
+| The reader clicks…                                                                           | It opens                                               | Why                                                                      |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------ |
+| A product or module in the rail                                                              | its page (the list or the overview)                    | navigation, level 1                                                      |
+| A resource in a list (its row or its name)                                                   | the resource's page, on its tabs                       | navigation, level 2                                                      |
+| **Configure, Settings or Edit** on a product or a resource                                   | **the resource's page**, on its settings tab (`?tab=`) | configuring is a destination: reload, link, back, more tabs              |
+| Create a first-level resource                                                                | the create page, in the focused shell                  | [Create flows](../azion-ui-create-surface/SKILL.md)                      |
+| Add or edit an item that lives inside the resource (a rule, an origin, a record), from a tab | a **`large` drawer** over that tab                     | the tab behind it is the context                                         |
+| On a page, a field needs a resource that does not exist yet (a certificate for a workload)   | a **`large` drawer** that creates it, over that page   | create the missing piece where it is missing (below)                     |
+| Inside a drawer, a field needs a resource or an item that does not exist yet                 | a **`medium` drawer** stacked on the first             | the same, without losing typed work ([Forms](../azion-ui-form/SKILL.md)) |
+| A yes-or-no guard (remove, discard)                                                          | `ConfirmDialog`, over the page or over any drawer      | a decision, not a surface                                                |
 
 **The test:** _is the screen this thing belongs to already open behind the click?_ If yes, a drawer.
 If the drawer would open over some other screen (configuring a product from the product list, from a
 dashboard, from the rail), it is the wrong surface: navigate to the resource's page and let the
-drawers start there. Variables are the one first-level drawer ([Create flows](../webkit-create-surface/SKILL.md)), and they
+drawers start there. Variables are the one first-level drawer ([Create flows](../azion-ui-create-surface/SKILL.md)), and they
 still pass the test: the drawer opens over the variables list, the screen that owns them.
 
 ### Create what is missing, where it is missing
@@ -827,7 +827,7 @@ column, and the page it talks about must stay visible. It never opens a nested d
   content.
 - **Each drawer is its own form.** Its own Save, its own `submitting` flag; saving the child appends
   and selects the new item in the parent's field and closes the child, and the parent keeps what was
-  typed ([Forms](../webkit-form/SKILL.md), the nested drawer).
+  typed ([Forms](../azion-ui-form/SKILL.md), the nested drawer).
 - **Focus returns down the stack.** Closing the child returns focus to the control that opened it in
   the parent; closing the parent returns it to the trigger on the page. `Escape` closes the top
   layer only.
@@ -895,7 +895,7 @@ These rules hold across every row:
 
 1. **A first-level page passes no trail.** Its `PageHeader` already names the module; a lone crumb
    repeating it is a duplicate.
-2. **The second-level crumb is the resource's own name**, not the page type: `webkit-sample-vue`, not
+2. **The second-level crumb is the resource's own name**, not the page type: `azion-ui-sample-vue`, not
    `Application detail`. That name is the page's identity, which is exactly why a tabbed detail page
    needs no heading repeating it.
 3. **Every non-last crumb links; the last crumb is the current page and never links.** In a focused
@@ -920,16 +920,16 @@ section is for a `SidebarMenu` or `Breadcrumb` you render yourself inside a page
 
 `SidebarMenu` (and its `SidebarMenuNode` data), `Breadcrumb` items and `SidebarMenu.Item` take their destination in
 **`href`**, and only there. There is no `to`, and a `path`, `to`, `url` or `route` key on a nav node
-is not read: the row renders as a button with nowhere to go (lint `webkit/prefer-href-in-menu-node`). Do not
+is not read: the row renders as a button with nowhere to go (lint `azion-ui/prefer-href-in-menu-node`). Do not
 confuse it with `v-model:path` on `SidebarMenu`, which is the drill stack (ancestor node ids), not a URL.
 
 With Vue Router, keep the rows real links and let the router do the navigation:
 
 ```vue
 <script setup lang="ts">
-  import BreadcrumbRoot from '@aziontech/webkit/breadcrumb-root'
-  import type { SidebarMenuNode } from '@aziontech/webkit/sidebar-menu'
-  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
+  import BreadcrumbRoot from '@aziontech/ui/breadcrumb-root'
+  import type { SidebarMenuNode } from '@aziontech/ui/sidebar-menu'
+  import SidebarMenuRoot from '@aziontech/ui/sidebar-menu-root'
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -1019,7 +1019,7 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 - **The rail navigates; the page has only tabs.** The rail holds two levels at most (a product's
   resources on level 1 when it has 3 or fewer, in a drill level when it has more); a page has only
   its `PageTabs`, at most 7, and no menu or other navigation. A destination appears once per screen,
-  and the rail never routes into a resource (rule `webkit-navigation-levels`).
+  and the rail never routes into a resource (rule `azion-ui-navigation-levels`).
 - **A drawer is never the way in.** Opening, configuring or editing a product or a resource navigates
   to its page; a drawer opens only over the screen that owns its item (a tab of the resource, the list
   that holds it). The first drawer is `large`, at most one `medium` drawer stacks on it, never a
@@ -1031,7 +1031,7 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 
 ## Review output
 
-For `/webkit-navigation <file>`, list gaps. Each:
+For `/azion-ui-navigation <file>`, list gaps. Each:
 
 ```
 ✗ AppShell.vue:1  composes Sidebar + AppHeader + Command into a shell of its own
@@ -1091,23 +1091,23 @@ End with: `navigation sound` or `N gaps — fix before polish`.
 
 ## References
 
-- **Persistent console shell** — `ConsoleLayout` (`@aziontech/webkit/console-layout`): the rail, the
+- **Persistent console shell** — `ConsoleLayout` (`@aziontech/ui/console-layout`): the rail, the
   header, the ⌘K palette, the account and the single `<main>`, composed once in `App.vue`; its spec
-  lists every prop, slot and event. `useConsoleLayout` (`@aziontech/webkit/use-console-layout`) opens
+  lists every prop, slot and event. `useConsoleLayout` (`@aziontech/ui/use-console-layout`) opens
   its palette from a page. Start from the `shell/shell-console` block (states `ListPage`, `DetailPage`,
   `Notifications`, `AccountSwitch`).
 - **Focused creation shell** — the `top-bar/top-bar-creation` block (one `AppHeader` with back,
   brand, flow breadcrumb and avatar, no rail), carried by every `create/*` block; lift it into
   your own `CreationShell` when several flows share it.
-- **The other app layouts** — `SiteLayout` (`@aziontech/webkit/site-layout`) for the marketing site and
-  `DocLayout` (`@aziontech/webkit/doc-layout`) for documentation: same story, composed once around
+- **The other app layouts** — `SiteLayout` (`@aziontech/ui/site-layout`) for the marketing site and
+  `DocLayout` (`@aziontech/ui/doc-layout`) for documentation: same story, composed once around
   `RouterView`.
-- **Page bodies** — `@aziontech/webkit/page-header`, `@aziontech/webkit/page-tabs`,
-  `@aziontech/webkit/breadcrumb` (resolve each via the MCP / catalog).
-- **Companion skills:** [Page layout](../webkit-layout/SKILL.md) (the boundary and column of the body), [List pages](../webkit-lists/SKILL.md) (the
-  index page around the table), [Forms](../webkit-form/SKILL.md) (what fills a focused flow), [Errors](../webkit-errors/SKILL.md) (where a
-  failure on the page goes), `webkit-ux-heuristics` (states + feedback), [Loading, empty and error states](../webkit-ui-states/SKILL.md) (locking +
-  toast), `webkit-quick-cleanup` (components + tokens).
+- **Page bodies** — `@aziontech/ui/page-header`, `@aziontech/ui/page-tabs`,
+  `@aziontech/ui/breadcrumb` (resolve each via the MCP / catalog).
+- **Companion skills:** [Page layout](../azion-ui-layout/SKILL.md) (the boundary and column of the body), [List pages](../azion-ui-lists/SKILL.md) (the
+  index page around the table), [Forms](../azion-ui-form/SKILL.md) (what fills a focused flow), [Errors](../azion-ui-errors/SKILL.md) (where a
+  failure on the page goes), `azion-ui-ux-heuristics` (states + feedback), [Loading, empty and error states](../azion-ui-states/SKILL.md) (locking +
+  toast), `azion-ui-quick-cleanup` (components + tokens).
 
 ## How to check it works
 

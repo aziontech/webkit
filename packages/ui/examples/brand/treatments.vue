@@ -1,5 +1,5 @@
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
+  import Brand from '@aziontech/ui/brand'
 </script>
 
 <template>

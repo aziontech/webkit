@@ -3,11 +3,11 @@
 > The profile of one customer a support agent opens from a ticket or a search, as a page body for ConsoleLayout. A `PageHeader` names the customer with a square `Avatar`, their organization as the description, and the actions Edit, More actions (an `IconButton` with a `Tooltip` opening a `DropdownMenu`: Merge customer, Export data, Delete customer) and New ticket. Below it a details column (a `Card` with a `KeyValueList`: email and phone with a `CopyButton`, local time, language, the organization `Link`, the tags as `Tag`s and customer since, then a Satisfaction `Card` with a read-only `Rating` and the survey count) sits beside `Tabs`, and stacks above them in a narrow container. Tickets is a `DataTable` of the customer's tickets (subject `Link`, `TableCellStatus`, `PriorityTag`, the next-reply `Countdown`, `TableCellTime`) with an `EmptyState` for a customer with none; Activity is a `Timeline` grouped by day; Notes is a `MessageThread` of internal notes over a `Field` with a `Textarea` and Add note. Loading draws `Skeleton`s, the table's skeleton rows and the timeline and thread placeholders; a failed load shows a danger `Alert` with Retry. The sample renders under a `ConfigProvider` with a fixed clock.
 
 - Surface: app
-- Source: `blocks/detail/detail-customer/detail-customer.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-customer/detail-customer.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-customer")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfigProvider](../../components/config-provider.md), [CopyButton](../../components/copy-button.md), [Countdown](../../components/countdown.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [MessageThread](../../components/message-thread.md), [PageHeader](../../components/page-header.md), [PriorityTag](../../components/priority-tag.md), [Rating](../../components/rating.md), [Skeleton](../../components/skeleton.md), `TableCellStatus`, `TableCellTime`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Timeline](../../components/timeline.md), [Tooltip](../../components/tooltip.md), `use-locale`
-- Skills: `webkit-layout`, `webkit-ui-states`, `webkit-tables`, `webkit-form`, `webkit-lists`, `webkit-microcopy`
+- Skills: `azion-ui-layout`, `azion-ui-states`, `azion-ui-tables`, `azion-ui-form`, `azion-ui-lists`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -167,7 +167,7 @@ Then delete `sample.ts`, its import, and `parts/customer-clock.vue` if the app n
 - **Activity:** day labels as the long date ("November 24, 2026"); titles that name the ticket ("Opened ticket #4812", "Replied on ticket #4790", "Ticket #4793 merged into #4790", "Rated ticket #4755 with 5 out of 5", "Ticket #4755 solved", "Customer created"); empty "No activity yet".
 - **Notes:** "Add a note", "Only agents can read notes.", "Add note"; error "Write the note first."
 - **Error:** title "Couldn't load this customer", message "Check your connection and retry.", action "Retry".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash in copy, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash in copy, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -193,7 +193,7 @@ Then delete `sample.ts`, its import, and `parts/customer-clock.vue` if the app n
 - `view/view-table` — the list a customer is opened from.
 - `detail/detail-resource` — the same page shape for a resource.
 - `settings/settings-form` — the edit page Edit leads to.
-- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-layout`.
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/azion-ui-layout`.
 
 ## Variants
 
@@ -210,16 +210,16 @@ Each variant is the same screen in another state: `get_block("detail/detail-cust
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { type PriorityTagPriority } from '@aziontech/webkit/priority-tag'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Alert from '@aziontech/ui/alert'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { type PriorityTagPriority } from '@aziontech/ui/priority-tag'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed } from 'vue'
 
   import CustomerActivityTab from './parts/customer-activity-tab.vue'
@@ -715,7 +715,7 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
 
 ```ts
 <script setup lang="ts">
-  import ConfigProvider from '@aziontech/webkit/config-provider'
+  import ConfigProvider from '@aziontech/ui/config-provider'
 
   export interface CustomerClockProps {
     /** A fixed reference time for every countdown and relative time inside; the sample also reads its dates in UTC; left out, the page reads the real clock and zone or the app provider's. */
@@ -745,14 +745,14 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
 
 ```ts
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import Link from '@aziontech/webkit/link'
-  import Rating from '@aziontech/webkit/rating'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Card from '@aziontech/ui/card'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Link from '@aziontech/ui/link'
+  import Rating from '@aziontech/ui/rating'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
   import type { DetailCustomerCustomer, DetailCustomerSatisfaction } from '../detail-customer.vue'
@@ -914,15 +914,15 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Countdown from '@aziontech/webkit/countdown'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Link from '@aziontech/webkit/link'
-  import PriorityTag from '@aziontech/webkit/priority-tag'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Countdown from '@aziontech/ui/countdown'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Link from '@aziontech/ui/link'
+  import PriorityTag from '@aziontech/ui/priority-tag'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import type { TagSeverity } from '@aziontech/ui/tag'
 
   import type { DetailCustomerTicket, DetailCustomerTicketStatus } from '../detail-customer.vue'
 
@@ -1042,9 +1042,9 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
 
 ```ts
 <script setup lang="ts">
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Timeline, { type TimelineItemSeverity } from '@aziontech/webkit/timeline'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Timeline, { type TimelineItemSeverity } from '@aziontech/ui/timeline'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, onMounted, ref } from 'vue'
 
   import type { DetailCustomerEvent, DetailCustomerEventType } from '../detail-customer.vue'
@@ -1131,10 +1131,10 @@ export const sampleNewCustomerActivity: DetailCustomerEvent[] = [
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import MessageThread from '@aziontech/webkit/message-thread'
-  import Textarea from '@aziontech/webkit/textarea'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import MessageThread from '@aziontech/ui/message-thread'
+  import Textarea from '@aziontech/ui/textarea'
   import { computed, ref } from 'vue'
 
   import type { DetailCustomerNote } from '../detail-customer.vue'

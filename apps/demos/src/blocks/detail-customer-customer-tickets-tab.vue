@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Countdown from '@aziontech/webkit/countdown'
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Link from '@aziontech/webkit/link'
-  import PriorityTag from '@aziontech/webkit/priority-tag'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Countdown from '@aziontech/ui/countdown'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Link from '@aziontech/ui/link'
+  import PriorityTag from '@aziontech/ui/priority-tag'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import type { TagSeverity } from '@aziontech/ui/tag'
 
   import type { DetailCustomerTicket, DetailCustomerTicketStatus } from './detail-customer.vue'
 

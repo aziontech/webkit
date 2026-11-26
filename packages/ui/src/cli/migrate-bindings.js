@@ -1,10 +1,10 @@
 import { addStandaloneImports } from './migrate-compound.js'
 import {
+  azionUiImports,
   escapeRe,
   kebab,
   pascalCase,
-  replaceOutsideComments,
-  webkitImports
+  replaceOutsideComments
 } from './migrate-syntax.js'
 
 function renameBinding(name, rule) {
@@ -37,7 +37,7 @@ function addNamedRenames(imp, migration, renames) {
 
 export function collectRenames(source, plan, migration) {
   const renames = { bindings: new Map(), identifiers: new Map(), types: [] }
-  for (const imp of webkitImports(source)) {
+  for (const imp of azionUiImports(source)) {
     const resolved = plan.get(imp.subpath)
     if (resolved.manual) continue
     const { next, match } = resolved

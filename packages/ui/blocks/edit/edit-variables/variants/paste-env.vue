@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import { toast } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/ui/button'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTrigger from '@aziontech/ui/drawer-trigger'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { toast } from '@aziontech/ui/toast'
   import { ref, useId, watch } from 'vue'
 
   import { provideVariablesForm, useVariablesForm } from '../composables/use-variables-form'

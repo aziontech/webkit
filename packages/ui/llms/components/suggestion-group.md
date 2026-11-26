@@ -2,7 +2,7 @@
 
 > A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the click event and the item, and the owner either sends it or places it in the prompt input to edit.
 
-- Import: `import SuggestionGroup from '@aziontech/webkit/suggestion-group'`
+- Import: `import SuggestionGroup from '@aziontech/ui/suggestion-group'`
 - Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [suggestion-group.json](suggestion-group.json)
 
@@ -92,7 +92,7 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 
 ```vue
 <script setup>
-  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup from '@aziontech/ui/suggestion-group'
   import { ref } from 'vue'
 
   const sent = ref('')
@@ -124,7 +124,7 @@ types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 
 ```vue
 <script setup>
-  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup from '@aziontech/ui/suggestion-group'
 
   const items = [
     { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'az az-github' },

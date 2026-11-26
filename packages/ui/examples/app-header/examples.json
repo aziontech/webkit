@@ -24,7 +24,7 @@
     },
     {
       "name": "WithAccount",
-      "summary": "The signed-in account at the end of the bar: `AppHeaderAccount` (a companion part, imported on its own from `@aziontech/webkit/app-header-account`) draws the account as a square avatar with its own focus ring and hover, and inside `DropdownMenu.Trigger` it opens the account menu. The control is named `Account menu` from the locale catalog.",
+      "summary": "The signed-in account at the end of the bar: `AppHeaderAccount` (a companion part, imported on its own from `@aziontech/ui/app-header-account`) draws the account as a square avatar with its own focus ring and hover, and inside `DropdownMenu.Trigger` it opens the account menu. The control is named `Account menu` from the locale catalog.",
       "file": "with-account.vue"
     }
   ]

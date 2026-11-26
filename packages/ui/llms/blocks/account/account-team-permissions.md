@@ -3,10 +3,10 @@
 > Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, the view-table controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `Table` of teams (name as `TableCellLink` with a square `Avatar` and the description, permissions as `TableCellTags` with `+N`, members, `TableCellStatus`, and `TableCellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team. The list and its states are a page body for ConsoleLayout, rendered in its default slot; CreateTeam and EditTeam are full pages in the creation frame of `create/create-page` (a `AppHeader` with Back to Teams and permissions, no rail).
 
 - Surface: app
-- Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/webkit`
+- Source: `blocks/account/account-team-permissions/account-team-permissions.vue` in `@aziontech/ui`
 - MCP: `get_block("account/account-team-permissions")`
 - Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [Combobox](../../components/combobox.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DataTablePagination`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), [Table](../../components/table.md), `TableCellActions`, `TableCellLink`, `TableCellStatus`, `TableCellTags`, [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-shortcuts`, `use-unsaved-changes`, `utils/leave-link`
-- Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
+- Skills: `azion-ui-lists`, `azion-ui-tables`, `azion-ui-form`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -73,7 +73,7 @@ The matrix is the `Table` compound composed by hand, `bordered`: `aria-label="Pe
 
 ### Outcomes — through `toast`
 
-The list emits Duplicate and Delete; the page that runs the request ends it in a success toast (Team changes are not deploys, so the toast has no Edit or Redeploy). The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+The list emits Duplicate and Delete; the page that runs the request ends it in a success toast (Team changes are not deploys, so the toast has no Edit or Redeploy). The page calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -138,7 +138,7 @@ Then delete `sample.ts` and its import.
 - **Edit:** the page title is `Edit Team`, the save button `Save changes`; `Team "Developers" updated.` after saving.
 - **Members:** `Add member`, `Search users of this account`, `Remove <name>`; `Choose a user to add.` when Add is pressed with nothing chosen.
 - **Delete:** `Delete team`; `The 12 members of “Developers” lose the permissions it grants, unless another team grants them.`
-- Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -187,27 +187,27 @@ Each variant is the same screen in another state: `get_block("account/account-te
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
-  import TableCellTags from '@aziontech/webkit/table-cell-tags'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import Alert from '@aziontech/ui/alert'
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { type TableColumn, type TableExposed } from '@aziontech/ui/table'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
+  import TableCellTags from '@aziontech/ui/table-cell-tags'
+  import type { TagSeverity } from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { type FilteringProperty, useCollection } from '@aziontech/ui/use-collection'
   import { computed, ref, watch } from 'vue'
 
   import { sampleTeams } from './sample'

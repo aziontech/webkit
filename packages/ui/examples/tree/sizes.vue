@@ -1,5 +1,5 @@
 <script setup>
-  import Tree from '@aziontech/webkit/tree'
+  import Tree from '@aziontech/ui/tree'
   import { ref } from 'vue'
 
   const items = [

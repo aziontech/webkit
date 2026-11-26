@@ -3,7 +3,7 @@ name: echo-report
 description: Re-read every file written this run and diff its content against the spec. Independent parser (cross-check with `validate-spec-compliance.mjs`). Final defensive line.
 status: active
 last_updated: 2026-11-23
-scope: webkit
+scope: ui
 enforced_by: [no-invention, props, emits, slots]
 ---
 

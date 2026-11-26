@@ -1,4 +1,4 @@
-import { toast } from '@aziontech/webkit/toast'
+import { toast } from '@aziontech/ui/toast'
 import { type ComputedRef, nextTick, onScopeDispose, reactive, type Ref } from 'vue'
 
 import { useSettingsDraft, type UseSettingsDraftReturn } from './use-settings-draft'

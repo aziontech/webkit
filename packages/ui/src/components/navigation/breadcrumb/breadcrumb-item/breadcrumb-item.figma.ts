@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/breadcrumb/breadcrumb-item/breadcrumb-item.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/navigation/breadcrumb/breadcrumb-item/breadcrumb-item.vue
 // component=BreadcrumbItem
 import figma from 'figma'
 
@@ -14,7 +14,7 @@ const current = instance.getEnum('current', {
 
 export default {
   example: figma.code`<BreadcrumbItem${label === 'Page Name' ? '' : figma.code` label="${label}"`}${current ? ' active' : ''}${showIcon ? ' show-icon' : ''} />`,
-  imports: ["import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'"],
+  imports: ["import BreadcrumbItem from '@aziontech/ui/breadcrumb-item'"],
   id: 'breadcrumb-item',
   metadata: { nestable: true }
 }

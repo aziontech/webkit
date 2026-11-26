@@ -1,8 +1,8 @@
 {
  "name": "doc-page-header",
  "binding": "DocPageHeader",
- "import": "@aziontech/webkit/doc-page-header",
- "treeShakeableImport": "@aziontech/webkit/doc-page-header",
+ "import": "@aziontech/ui/doc-page-header",
+ "treeShakeableImport": "@aziontech/ui/doc-page-header",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

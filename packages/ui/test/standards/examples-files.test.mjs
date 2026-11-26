@@ -32,7 +32,7 @@ test('a site entry imports the component its examples folder documents', () => {
   for (const group of groups) {
     for (const entry of read(group).site ?? []) {
       const source = readFileSync(join(EXAMPLES, group, entry.file), 'utf8')
-      if (!source.includes(`'@aziontech/webkit/${group}'`)) foreign.push(`${group}/${entry.file}`)
+      if (!source.includes(`'@aziontech/ui/${group}'`)) foreign.push(`${group}/${entry.file}`)
       if (!entry.json) continue
       const json = JSON.parse(readFileSync(join(EXAMPLES, group, entry.json), 'utf8'))
       const ids = [json, ...(Array.isArray(json.sections) ? json.sections : [])]

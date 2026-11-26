@@ -2,7 +2,7 @@
 
 > One field that filters a collection by properties and free text, after Cloudscape's property filter. Typing suggests a property, then an operator, then a value, and each choice becomes a removable token (`Status = Active`); text typed without a property becomes a free-text token. Two or more tokens combine with Match all (and) or Match any (or). With `mode="query"` the same field edits one query string instead (`level = Error AND method = GET`), after the Console Kit events query bar: suggestions follow the word at the caret (a field, an operator, a value, then AND or OR), a check explains what is wrong under the field, and Enter submits the text with its flat token list. Since spec v4, tokens mode also builds one level of nested conditions (`grouped`: each group has its own Match all / Match any, and the groups combine with the query's operation — `(Status = Active or Status = Paused) and (Region = US East or Region = EU West)`), fetches the values of a property as the person types (`loadValues`, with a loading and an error row and a count per value), groups the operator suggestions (Equality, Comparison, Text match), and hands the value of a property marked `customValue` to the `value` slot (a date picker, a number range). It edits a `PropertyFilterQuery` and never filters anything itself: `useCollection` (or the server) applies the query, and `propertyFilterProps` binds the query, the properties and the match count in one `v-bind`.
 
-- Import: `import PropertyFilter from '@aziontech/webkit/property-filter'`
+- Import: `import PropertyFilter from '@aziontech/ui/property-filter'`
 - Category: data · Surface: app · Structure: monolithic
 - API as JSON: [property-filter.json](property-filter.json)
 
@@ -92,7 +92,7 @@
 ## Accessibility
 
 - Visible focus: the field's own `focus-within` ring (from `input`); tokens and buttons keep theirs.
-- Page search key: while mounted and not `disabled`, the filter registers `/` with `useShortcuts` (listed in `ShortcutsDialog` as `propertyFilter.focusShortcut`, Focus search), so `/` focuses the field from anywhere on the page, never while typing in another field, with `⌘`, `Ctrl` or `Alt` held, or from inside a modal layer that does not hold the filter (the console keyboard standard, `rules/webkit-keyboard.md`). Tests: `property-filter.test.ts` › page search key.
+- Page search key: while mounted and not `disabled`, the filter registers `/` with `useShortcuts` (listed in `ShortcutsDialog` as `propertyFilter.focusShortcut`, Focus search), so `/` focuses the field from anywhere on the page, never while typing in another field, with `⌘`, `Ctrl` or `Alt` held, or from inside a modal layer that does not hold the filter (the console keyboard standard, `rules/azion-ui-keyboard.md`). Tests: `property-filter.test.ts` › page search key.
 - Keyboard map (query mode): typing opens the suggestions for the word at the caret; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option (it replaces the word and moves the caret after it) or submits the query; `Escape` closes the suggestions, then clears the text; `ArrowLeft`/`ArrowRight`, `Home`/`End` and clicks move the caret and the suggestions follow it; `Backspace` only edits text.
 - In query mode an invalid query sets `aria-invalid` on the field and `aria-describedby` to the message, which sits in a polite live region under the field; the token group is not rendered.
 - Keyboard map (tokens mode): typing opens the suggestions; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option or commits the typed text; `Escape` closes the suggestions, then clears the text; `Backspace` in an empty field removes the last token (with `grouped`: cancels a pending new group first, then removes the last token of the last group).
@@ -157,7 +157,7 @@
 
 ```vue
 <script setup>
-  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import PropertyFilter from '@aziontech/ui/property-filter'
   import { ref } from 'vue'
 
   const properties = [
@@ -194,10 +194,10 @@
 
 ```vue
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { useCollection } from '@aziontech/ui/use-collection'
 
   const workloads = Array.from({ length: 36 }, (_, i) => ({
     id: String(1001 + i),
@@ -255,8 +255,8 @@
 
 ```vue
 <script setup>
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { matchesQuery } from '@aziontech/webkit/use-collection'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import { matchesQuery } from '@aziontech/ui/use-collection'
   import { computed, ref } from 'vue'
 
   const events = Array.from({ length: 40 }, (_, i) => ({

@@ -143,7 +143,7 @@ export const brandWordmarks = {
   zoop: 'Zoop'
 } satisfies Record<string, string>
 
-/** A brand whose terms do not let WebKit ship its logo; it renders as its name in plain text. */
+/** A brand whose terms do not let Azion UI ship its logo; it renders as its name in plain text. */
 export type BrandWordmarkName = keyof typeof brandWordmarks
 
 export function resolveBrandMark(name: string): BrandMarkLoader | null {

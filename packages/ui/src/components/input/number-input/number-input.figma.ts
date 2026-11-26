@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/input/number-input/number-input.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/input/number-input/number-input.vue
 // component=NumberInput
 import figma from 'figma'
 
@@ -53,7 +53,7 @@ export default {
       : ''
   }
 />`,
-  imports: ["import NumberInput from '@aziontech/webkit/number-input'"],
+  imports: ["import NumberInput from '@aziontech/ui/number-input'"],
   id: 'number-input',
   metadata: { nestable: true }
 }

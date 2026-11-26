@@ -1,11 +1,11 @@
-import { escapeRe, kebab, pascalCase, PREFIX, scanTag, webkitImports } from './migrate-syntax.js'
+import { azionUiImports, escapeRe, kebab, pascalCase, PREFIX, scanTag } from './migrate-syntax.js'
 
 export function addStandaloneImports(source, moved) {
   if (!moved.length) return source
   let out = source
-  const imported = new Set(webkitImports(out).flatMap((imp) => imp.names))
+  const imported = new Set(azionUiImports(out).flatMap((imp) => imp.names))
   for (const binding of new Set(moved.map((m) => m.binding))) {
-    const own = webkitImports(out).find((imp) => imp.names.includes(binding))
+    const own = azionUiImports(out).find((imp) => imp.names.includes(binding))
     if (!own) continue
     const lines = moved
       .filter((m) => m.binding === binding && !imported.has(m.local))
@@ -82,7 +82,7 @@ const usedAsIdentifier = (text, name) =>
   new RegExp(`(?<![\\w$.-])${escapeRe(name)}(?![\\w$])`).test(text)
 
 function attachPlan(source, subpath, root) {
-  const imports = webkitImports(source)
+  const imports = azionUiImports(source)
   const own = imports.find((imp) => imp.subpath === subpath)
   if (!own || own.named.length || own.names.length !== 1) return null
   const rootImport = imports.find(

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Select from '@aziontech/webkit/select'
+  import Select from '@aziontech/ui/select'
 
   import type { ScanFilterOption } from '../scan-results-config'
 

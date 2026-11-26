@@ -1,8 +1,8 @@
 {
  "name": "split-button",
  "binding": "SplitButton",
- "import": "@aziontech/webkit/split-button",
- "treeShakeableImport": "@aziontech/webkit/split-button",
+ "import": "@aziontech/ui/split-button",
+ "treeShakeableImport": "@aziontech/ui/split-button",
  "category": "action",
  "surface": "app",
  "structure": "monolithic",

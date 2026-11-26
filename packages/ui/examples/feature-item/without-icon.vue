@@ -1,5 +1,5 @@
 <script setup>
-  import FeatureItem from '@aziontech/webkit/feature-item'
+  import FeatureItem from '@aziontech/ui/feature-item'
 </script>
 
 <template>

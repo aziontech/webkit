@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Item from '@aziontech/webkit/item'
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Subheader from '@aziontech/webkit/subheader'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Item from '@aziontech/ui/item'
+  import MultiSelect from '@aziontech/ui/multi-select'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Subheader from '@aziontech/ui/subheader'
 
   import type { FormValidationService } from '../types'
 

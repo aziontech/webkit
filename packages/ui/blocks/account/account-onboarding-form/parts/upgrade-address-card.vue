@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import Card from '@aziontech/ui/card'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
 
   import type { OnboardingFormAddress } from '../account-onboarding-form.vue'
   import { cityOptions, countryOptions, stateOptions } from '../sample'

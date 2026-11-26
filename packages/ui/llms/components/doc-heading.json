@@ -1,8 +1,8 @@
 {
  "name": "doc-heading",
  "binding": "DocHeading",
- "import": "@aziontech/webkit/doc-heading",
- "treeShakeableImport": "@aziontech/webkit/doc-heading",
+ "import": "@aziontech/ui/doc-heading",
+ "treeShakeableImport": "@aziontech/ui/doc-heading",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

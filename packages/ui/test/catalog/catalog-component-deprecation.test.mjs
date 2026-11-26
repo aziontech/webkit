@@ -66,10 +66,10 @@ test('a component the catalog marks deprecated trips no-deprecated-component', a
     deprecation: componentDeprecation(source)
   }
 
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-catalog-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-catalog-'))
   const path = join(dir, 'catalog.json')
   writeFileSync(path, JSON.stringify(catalog))
-  process.env.WEBKIT_CATALOG_PATH = path
+  process.env.AZION_UI_CATALOG_PATH = path
   const { _resetCatalogCache } = await import('../../src/eslint-plugin/lib/catalog.js')
   _resetCatalogCache()
   const rule = (await import('../../src/eslint-plugin/rules/no-deprecated-component.js')).default
@@ -77,17 +77,17 @@ test('a component the catalog marks deprecated trips no-deprecated-component', a
   const lint = (code) =>
     linter.verify(code, {
       languageOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-      plugins: { webkit: { rules: { 'no-deprecated-component': rule } } },
-      rules: { 'webkit/no-deprecated-component': 'error' }
+      plugins: { 'azion-ui': { rules: { 'no-deprecated-component': rule } } },
+      rules: { 'azion-ui/no-deprecated-component': 'error' }
     })
 
-  const replaced = lint("import OldButton from '@aziontech/webkit/old-button'\n")
+  const replaced = lint("import OldButton from '@aziontech/ui/old-button'\n")
   assert.equal(replaced.length, 1)
-  assert.match(replaced[0].message, /@aziontech\/webkit\/button/)
+  assert.match(replaced[0].message, /@aziontech\/ui\/button/)
 
-  const noted = lint("import OldLink from '@aziontech/webkit/old-link'\n")
+  const noted = lint("import OldLink from '@aziontech/ui/old-link'\n")
   assert.equal(noted.length, 1)
   assert.match(noted[0].message, /Since 6\.1 — use `Button`/)
 
-  assert.equal(lint("import Button from '@aziontech/webkit/button'\n").length, 0)
+  assert.equal(lint("import Button from '@aziontech/ui/button'\n").length, 0)
 })

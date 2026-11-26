@@ -1,8 +1,8 @@
 # Diagram
 
-> A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer names one of the official diagrams with `name` — the closed library of 28 drawings in webkit's assets, one starter architecture per Azion product plus the page diagrams the product pages tab through — or passes a one-off `spec`: the nodes, how they are arranged, and the edges between them. The component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked column — centred on one axis, or an indented tree where the row branches — and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.
+> A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer names one of the official diagrams with `name` — the closed library of 28 drawings in Azion UI's assets, one starter architecture per Azion product plus the page diagrams the product pages tab through — or passes a one-off `spec`: the nodes, how they are arranged, and the edges between them. The component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked column — centred on one axis, or an indented tree where the row branches — and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.
 
-- Import: `import Diagram from '@aziontech/webkit/diagram'`
+- Import: `import Diagram from '@aziontech/ui/diagram'`
 - Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [diagram.json](diagram.json)
 
@@ -79,7 +79,7 @@
 
 ```vue
 <script setup>
-  import Diagram from '@aziontech/webkit/diagram'
+  import Diagram from '@aziontech/ui/diagram'
 </script>
 
 <template>
@@ -91,7 +91,7 @@
 
 ```vue
 <script setup>
-  import Diagram from '@aziontech/webkit/diagram'
+  import Diagram from '@aziontech/ui/diagram'
 
   const spec = {
     nodes: [
@@ -201,7 +201,7 @@
 
 ```vue
 <script setup>
-  import Diagram from '@aziontech/webkit/diagram'
+  import Diagram from '@aziontech/ui/diagram'
 
   const spec = {
     nodes: [

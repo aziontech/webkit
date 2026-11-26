@@ -209,7 +209,7 @@ describe('ConfigProvider', () => {
         expect(view.getByLabelText('Next page')).toBeTruthy()
         expect(view.getByTestId('config-provider').getAttribute('lang')).toBe('pt-BR')
         expect(warn.mock.calls.map((c) => String(c[0])).join('\n')).toContain(
-          '@aziontech/webkit/locales/pt-BR'
+          '@aziontech/ui/locales/pt-BR'
         )
       } finally {
         warn.mockRestore()

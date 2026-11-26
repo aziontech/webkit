@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/tag/tag.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/tag/tag.vue
 // component=Tag
 import figma from 'figma'
 
@@ -44,7 +44,7 @@ export default {
       : ''
   }
 />`,
-  imports: ["import Tag from '@aziontech/webkit/tag'"],
+  imports: ["import Tag from '@aziontech/ui/tag'"],
   id: 'tag',
   metadata: { nestable: true }
 }

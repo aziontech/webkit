@@ -1,8 +1,8 @@
 {
  "name": "empty-state",
  "binding": "EmptyState",
- "import": "@aziontech/webkit/empty-state",
- "treeShakeableImport": "@aziontech/webkit/empty-state",
+ "import": "@aziontech/ui/empty-state",
+ "treeShakeableImport": "@aziontech/ui/empty-state",
  "category": "feedback",
  "surface": "app",
  "structure": "monolithic",

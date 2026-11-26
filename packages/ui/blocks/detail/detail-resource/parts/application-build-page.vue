@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Tag from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Tag from '@aziontech/ui/tag'
+  import { toast } from '@aziontech/ui/toast'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
   import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
   import {

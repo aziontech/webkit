@@ -1,6 +1,6 @@
 <script setup>
-  import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
-  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
+  import BentoGridCell from '@aziontech/ui/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/ui/bento-grid-root'
 
   const TILE_CLASS =
     'flex h-full flex-col justify-between gap-(--spacing-lg) bg-(--bg-contrast) p-(--spacing-xl) text-(--bg-canvas)'

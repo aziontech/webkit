@@ -27,11 +27,11 @@
     "cobrança"
   ],
   "skills": [
-    "webkit-lists",
-    "webkit-tables",
-    "webkit-ui-states",
-    "webkit-navigation",
-    "webkit-microcopy"
+    "azion-ui-lists",
+    "azion-ui-tables",
+    "azion-ui-states",
+    "azion-ui-navigation",
+    "azion-ui-microcopy"
   ],
   "primary": {
     "name": "Default",

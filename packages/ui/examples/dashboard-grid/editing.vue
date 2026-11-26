@@ -1,9 +1,9 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Chart from '@aziontech/webkit/chart'
-  import ChartCard from '@aziontech/webkit/chart-card'
-  import DashboardGrid from '@aziontech/webkit/dashboard-grid'
-  import Tag from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Chart from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DashboardGrid from '@aziontech/ui/dashboard-grid'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref } from 'vue'
 
   const labels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00']

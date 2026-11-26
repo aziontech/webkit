@@ -71,7 +71,7 @@ While `loading` is set, the Featured row and the heading of All integrations giv
 
 ### Install toast — through `toast`
 
-Raised through `toast` with one id for the install, so progress turns into the outcome in place, and only while the drawer is closed: with the drawer open, the inline `Alert` and the Install button carry the run, so no toast covers the form; closing the drawer raises the toast for the run (an outcome once). Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running while you work elsewhere."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Raised through `toast` with one id for the install, so progress turns into the outcome in place, and only while the drawer is closed: with the drawer open, the inline `Alert` and the Install button carry the run, so no toast covers the form; closing the drawer raises the toast for the run (an outcome once). Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running while you work elsewhere."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -169,7 +169,7 @@ Then delete `sample.ts` and its import.
 - **Success:** toast "<name> is installed on <application>." / "It runs from the next request to the application.", actions "Configure" and "Open application"; the inline `Alert` says the same in one line.
 - **Failure:** toast "<name> wasn't installed on <application>." with the reason as a full sentence, actions "Edit" and "Reinstall"; the inline `Alert` carries the reason and "Choose another application", and the footer submit reads "Reinstall".
 - **No match:** "No matching integrations", "No integration matches this search. Remove a filter to widen the results.", "Clear filters".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -200,4 +200,4 @@ Then delete `sample.ts` and its import.
 - `create/create-deploy-template` — where a template's Deploy leads.
 - `state/state-async-submit` — the toast and inline outcome every install follows.
 - `state/state-form-validation` (SectionRejected) — the field, section and toast placement of a form error.
-- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/azion-ui-lists`.

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Card from '@aziontech/ui/card'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Link from '@aziontech/ui/link'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed, ref } from 'vue'
 
   import { sampleSummaryTemplates } from '../sample'

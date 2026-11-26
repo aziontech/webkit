@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import DataTable from '@aziontech/webkit/data-table'
-  import DocCallout from '@aziontech/webkit/doc-callout'
-  import DocCard from '@aziontech/webkit/doc-card'
-  import DocCardGroup from '@aziontech/webkit/doc-card-group'
-  import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import Item from '@aziontech/webkit/item-root'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import DataTable from '@aziontech/ui/data-table'
+  import DocCallout from '@aziontech/ui/doc-callout'
+  import DocCard from '@aziontech/ui/doc-card'
+  import DocCardGroup from '@aziontech/ui/doc-card-group'
+  import DocHeading from '@aziontech/ui/doc-heading'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import DocPreviousNext from '@aziontech/ui/doc-previous-next'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import Item from '@aziontech/ui/item-root'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 
   import {
     agentHref,

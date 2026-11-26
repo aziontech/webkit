@@ -1,11 +1,11 @@
 <script setup>
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
   import { onMounted, ref } from 'vue'
 
   const toolsOpen = ref(false)

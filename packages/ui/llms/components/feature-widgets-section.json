@@ -1,14 +1,14 @@
 {
  "name": "feature-widgets-section",
  "binding": "FeatureWidgetsSection",
- "import": "@aziontech/webkit/feature-widgets-section",
- "treeShakeableImport": "@aziontech/webkit/feature-widgets-section",
+ "import": "@aziontech/ui/feature-widgets-section",
+ "treeShakeableImport": "@aziontech/ui/feature-widgets-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The \"three ways to start\" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with \"Copied\" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the webkit scene assets.",
+ "purpose": "The \"three ways to start\" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with \"Copied\" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the Azion UI scene assets.",
  "setup": null,
  "useWhen": [
   "Use FeatureWidgetsSection when each cell has its own action or copy button.",
@@ -97,7 +97,7 @@
    "type": "FeatureWidgetsSectionItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as the `text` itself, shown in full in a code box, over a copy button that puts it on the clipboard; a cell may carry both."
+   "doc": "The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming an Azion UI scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as the `text` itself, shown in full in a code box, over a copy button that puts it on the clipboard; a cell may carry both."
   }
  ],
  "events": [],

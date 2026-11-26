@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Item from '@aziontech/webkit/item'
+  import Card from '@aziontech/ui/card'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Item from '@aziontech/ui/item'
   import { computed } from 'vue'
 
   import ProductionProgressTag, { type ProductionStep } from './production-progress-tag.vue'

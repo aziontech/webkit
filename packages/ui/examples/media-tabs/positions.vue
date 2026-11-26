@@ -1,6 +1,6 @@
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaTabs from '@aziontech/webkit/media-tabs'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaTabs from '@aziontech/ui/media-tabs'
 
   const scenes = [
     'ai-applications',

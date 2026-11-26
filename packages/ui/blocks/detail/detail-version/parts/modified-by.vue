@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Avatar from '@aziontech/ui/avatar'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed } from 'vue'
 
   export interface ModifiedByProps {

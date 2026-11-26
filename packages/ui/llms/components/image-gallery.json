@@ -1,8 +1,8 @@
 {
  "name": "image-gallery",
  "binding": "ImageGallery",
- "import": "@aziontech/webkit/image-gallery",
- "treeShakeableImport": "@aziontech/webkit/image-gallery",
+ "import": "@aziontech/ui/image-gallery",
+ "treeShakeableImport": "@aziontech/ui/image-gallery",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/ui/data-table'
   import { ref } from 'vue'
 
   interface Domain {

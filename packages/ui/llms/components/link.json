@@ -1,14 +1,14 @@
 {
  "name": "link",
  "binding": "Link",
- "import": "@aziontech/webkit/link",
- "treeShakeableImport": "@aziontech/webkit/link",
+ "import": "@aziontech/ui/link",
+ "treeShakeableImport": "@aziontech/ui/link",
  "category": "navigation",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS).",
+ "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/ui/src/components/navigation/link/`. Design source: [Azion UI — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS).",
  "setup": null,
  "useWhen": [
   "Use Link when the text takes the person to another page, resource or URL.",

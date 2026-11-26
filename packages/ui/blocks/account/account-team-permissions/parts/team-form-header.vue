@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import AppHeader from '@aziontech/webkit/app-header'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import AppHeader from '@aziontech/ui/app-header'
+  import Brand from '@aziontech/ui/brand'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import IconButton from '@aziontech/ui/icon-button'
   import { computed } from 'vue'
 
   export interface TeamFormHeaderProps {

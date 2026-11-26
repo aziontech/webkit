@@ -86,7 +86,7 @@ describe('navigation levels collector', () => {
     await waitFor(() => expect(document.querySelectorAll('a[aria-current="page"]').length).toBe(2))
     const findings = navigationFindings(collectNavigation())
     expect(findings).toHaveLength(1)
-    expect(findings[0]?.rule).toBe('webkit-navigation-levels/duplicate-route')
+    expect(findings[0]?.rule).toBe('azion-ui-navigation-levels/duplicate-route')
     expect(findings[0]?.route).toBe(ACCESS_RULES)
     expect(findings[0]?.controls).toContain('Private access')
     expect(findings[0]?.controls).toHaveLength(2)

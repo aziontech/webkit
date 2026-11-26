@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: 5247c63efd57034dabca55bcd9f85f120b17fcf28648baf3cea0005b14327686
+checksum: 736f48176964d8aa56d6f802e98f482b196f4996a8bf2a33a1d869f229575061
 created: 2026-11-10
 last_updated: 2026-11-25
 ---
@@ -47,8 +47,8 @@ International phone-number control: an `InputGroup` with a searchable country `S
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Field from '@aziontech/webkit/field'
-  import PhoneInput from '@aziontech/webkit/phone-input'
+  import Field from '@aziontech/ui/field'
+  import PhoneInput from '@aziontech/ui/phone-input'
 
   const digits = ref('')
   const country = ref('US')
@@ -84,7 +84,7 @@ International phone-number control: an `InputGroup` with a searchable country `S
 | `searchPlaceholder` | `string`                         | `''`                        | false    | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`).                                                                                                                                            |
 | `noMatch`           | `string`                         | `''`                        | false    | Shown in the dial-code list, and announced, when no country matches the search. Empty uses the locale catalog (`No country found.`).                                                                                                                        |
 
-Notes on the built-in `countries` list: it offers every country and territory with a calling code — the 245 regions of Google's libphonenumber metadata (libphonenumber-js 1.13.16) — with the dial code each one uses (several share one: `+1` for the United States, Canada and the Caribbean numbering plan, `+44` for the United Kingdom, Guernsey, Jersey and the Isle of Man, `+7` for Russia and Kazakhstan). Every region, Brazil and the United States included, sits in English alphabetical order of its name; there is no pinned shortlist, so a scan from the top always reads A to Z. Names are plain English (`and`, never `&`; `Saint`, never `St.`; `Congo (DRC)` and `Congo`). The masks of the 34 countries the list had before 6.0 are kept as reviewed; every other region takes its national number lengths for mobile and fixed-line numbers from libphonenumber, formatted like its example mobile number where libphonenumber gives one and in groups of three or four digits otherwise. Consumers who need a different set pass a custom `countries` array. The list lives in a co-located `countries.ts` inside the component folder; it is data, not a public export. Every region has a flag in the sprite (`src/images/country-flags.webp`, drawn from the MIT-licensed `country-flag-icons` 3x2 set), which also backs `@aziontech/webkit/styles/country-flags`.
+Notes on the built-in `countries` list: it offers every country and territory with a calling code — the 245 regions of Google's libphonenumber metadata (libphonenumber-js 1.13.16) — with the dial code each one uses (several share one: `+1` for the United States, Canada and the Caribbean numbering plan, `+44` for the United Kingdom, Guernsey, Jersey and the Isle of Man, `+7` for Russia and Kazakhstan). Every region, Brazil and the United States included, sits in English alphabetical order of its name; there is no pinned shortlist, so a scan from the top always reads A to Z. Names are plain English (`and`, never `&`; `Saint`, never `St.`; `Congo (DRC)` and `Congo`). The masks of the 34 countries the list had before 6.0 are kept as reviewed; every other region takes its national number lengths for mobile and fixed-line numbers from libphonenumber, formatted like its example mobile number where libphonenumber gives one and in groups of three or four digits otherwise. Consumers who need a different set pass a custom `countries` array. The list lives in a co-located `countries.ts` inside the component folder; it is data, not a public export. Every region has a flag in the sprite (`src/images/country-flags.webp`, drawn from the MIT-licensed `country-flag-icons` 3x2 set), which also backs `@aziontech/ui/styles/country-flags`.
 
 Masks: `#` is a digit slot and every other character is a literal. Digits are always the **national significant number** — no dial code, no trunk prefix (`0`) — so `dialCode + digits` is the E.164 number. With several masks, the field formats with the shortest mask whose slot count covers the digits typed so far, caps input at the longest mask's slot count, and treats the number as complete when its digit count equals one of the masks' slot counts. The mask formats the number as it is typed; it is never shown as a placeholder.
 
@@ -153,7 +153,7 @@ _none_ — motion is owned by `InputGroup` (colour transitions) and `Select` (dr
 
 ## Examples
 
-The examples in `packages/webkit/examples/phone-input/` render on the docs site (`/components/<name>`):
+The examples in `packages/ui/examples/phone-input/` render on the docs site (`/components/<name>`):
 
 - Default — inside a `Field` with a label and description.
 - DefaultCountry — the field starting on another country with `default-country`; justified because `defaultCountry` changes which country and mask the field opens with.
@@ -165,7 +165,7 @@ The examples in `packages/webkit/examples/phone-input/` render on the docs site 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

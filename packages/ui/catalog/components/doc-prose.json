@@ -6,7 +6,7 @@
  ],
  "avoidWhen": [
   "To cap the whole column — `DocProse` caps only running text (see the reading measure under Tokens). The consumer sets the column width with `.layout-column-content` (`--layout-measure-content`, 876px).",
-  "To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.",
+  "To style an Azion UI component's internals. Those are chrome and are excluded by design; restyle nothing from here.",
   "For a single run of body copy in an application screen — use the `text-body-*` tokens directly."
  ],
  "related": [

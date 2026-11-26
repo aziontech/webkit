@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2808-5163
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/feedback/alert/alert.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/feedback/alert/alert.vue
 // component=Alert
 import figma from 'figma'
 
@@ -23,7 +23,7 @@ export default {
   size="small"
   label="${title}"
 />`,
-  imports: ["import Alert from '@aziontech/webkit/alert'"],
+  imports: ["import Alert from '@aziontech/ui/alert'"],
   id: 'message-flag',
   metadata: { nestable: true }
 }

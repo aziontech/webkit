@@ -2,7 +2,7 @@
 
 > Use Progress when the work has a measurable amount (value/max), or for a long task with no layout to reserve (indeterminate). A region with a known shape loads with Skeleton, an inline busy mark is a Spinner, and a background file transfer is an UploadProgress. Communicates the progress of an ongoing task as a horizontal bar. Use it for a determinate value within a range (`value` / `max`) or, when progress can't be measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder geometry) or `status-indicator` (discrete state), it expresses a continuous quantity.
 
-- Import: `import Progress from '@aziontech/webkit/progress'`
+- Import: `import Progress from '@aziontech/ui/progress'`
 - Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [progress.json](progress.json)
 
@@ -65,7 +65,7 @@
 
 ```vue
 <script setup>
-  import Progress from '@aziontech/webkit/progress'
+  import Progress from '@aziontech/ui/progress'
 </script>
 
 <template>
@@ -80,7 +80,7 @@
 
 ```vue
 <script setup>
-  import Progress from '@aziontech/webkit/progress'
+  import Progress from '@aziontech/ui/progress'
 </script>
 
 <template>
@@ -103,7 +103,7 @@
 
 ```vue
 <script setup>
-  import Progress from '@aziontech/webkit/progress'
+  import Progress from '@aziontech/ui/progress'
 </script>
 
 <template>

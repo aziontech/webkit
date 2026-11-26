@@ -1,8 +1,8 @@
 # Feature Scroll Section
 
-> The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `media-scroll`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).
+> The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `media-scroll`, `texture`, `button` and the Azion UI scene assets (a `ConsoleMockup` console fragment, most often).
 
-- Import: `import FeatureScrollSection from '@aziontech/webkit/feature-scroll-section'`
+- Import: `import FeatureScrollSection from '@aziontech/ui/feature-scroll-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [feature-scroll-section.json](feature-scroll-section.json)
 
@@ -38,7 +38,7 @@
 | `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `FeatureScrollSectionItem[]` | `[]` | false | The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise. |
+| `items` | `FeatureScrollSectionItem[]` | `[]` | false | The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming an Azion UI scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise. |
 
 ## Assets
 
@@ -69,7 +69,7 @@
 
 ```vue
 <script setup>
-  import FeatureScrollSection from '@aziontech/webkit/feature-scroll-section'
+  import FeatureScrollSection from '@aziontech/ui/feature-scroll-section'
 </script>
 
 <template>
@@ -142,7 +142,7 @@
 
 ```vue
 <script setup>
-  import FeatureScrollSection from '@aziontech/webkit/feature-scroll-section'
+  import FeatureScrollSection from '@aziontech/ui/feature-scroll-section'
 </script>
 
 <template>
@@ -215,7 +215,7 @@
 
 ```vue
 <script setup>
-  import FeatureScrollSection from '@aziontech/webkit/feature-scroll-section'
+  import FeatureScrollSection from '@aziontech/ui/feature-scroll-section'
 
   const items = [
     {

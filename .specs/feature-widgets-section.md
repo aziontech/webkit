@@ -6,14 +6,14 @@ status: implemented
 spec_version: 8
 created: 2026-11-04
 last_updated: 2026-11-24
-checksum: 91410072a613327534a03d205d370cfb7f37eb3e26cd831c6b3e9705692a0fc1
+checksum: d9e1be3ce931f01a057d3783b7c79fe270b74bbc584a9a416c3024f5ecbe74ce
 ---
 
 # FeatureWidgetsSection — Component Spec
 
 ## Purpose
 
-The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the webkit scene assets.
+The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the Azion UI scene assets.
 
 ## When to use
 
@@ -41,7 +41,7 @@ The "three ways to start" band of a product page: a centered section title with 
 
 ```vue
 <script setup>
-  import FeatureWidgetsSection from '@aziontech/webkit/feature-widgets-section'
+  import FeatureWidgetsSection from '@aziontech/ui/feature-widgets-section'
 </script>
 
 <template>
@@ -86,7 +86,7 @@ The "three ways to start" band of a product page: a centered section title with 
 | `titleAlign`      | `ModuleHeaderAlign`            | `'center'`  | false    | Alignment of the section title over the grid: `center`, `start` or `split`.                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `columns`         | `FeatureWidgetsSectionColumns` | `2`         | false    | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`.                                                                                                                                                                                                                                                                                                                                                                                                             |
 | `copiedLabel`     | `string`                       | `''`        | false    | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`.                                                                                                                                                                                                                                                                                                                                                                                    |
-| `items`           | `FeatureWidgetsSectionItem[]`  | `[]`        | false    | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as the `text` itself, shown in full in a code box, over a copy button that puts it on the clipboard; a cell may carry both. |
+| `items`           | `FeatureWidgetsSectionItem[]`  | `[]`        | false    | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming an Azion UI scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as the `text` itself, shown in full in a code box, over a copy button that puts it on the clipboard; a cell may carry both. |
 
 ## Events
 
@@ -150,7 +150,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

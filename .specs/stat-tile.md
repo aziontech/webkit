@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 733d249aa9323214330c3a656ea745d4528ecfdea05f208dc519534fe271f27d
+checksum: ef4498c680681a92600eceaee3cd43e8c0db41651ae60ed9a0ff79a70a709c0d
 spec_version: 10
 created: 2026-10-20
 last_updated: 2026-11-25
@@ -53,7 +53,7 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
 
 ```vue
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTile from '@aziontech/ui/stat-tile'
 </script>
 
 <template>
@@ -68,7 +68,7 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
 </template>
 ```
 
-**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `StatTile` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+**Three ways in** (decision RV-C2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `StatTile` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
 
 ```mdx
 <StatTile label="Blocked threats" value={48210} delta={12.4} />
@@ -178,7 +178,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

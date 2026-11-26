@@ -1,5 +1,5 @@
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTile from '@aziontech/ui/stat-tile'
 </script>
 
 <template>

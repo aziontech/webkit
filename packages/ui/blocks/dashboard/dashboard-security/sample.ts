@@ -1,8 +1,8 @@
-import type { BarListItem } from '@aziontech/webkit/bar-list'
-import type { ChartSeries } from '@aziontech/webkit/chart'
-import type { FilterMenuField } from '@aziontech/webkit/filter-menu'
-import type { SelectOptionItem } from '@aziontech/webkit/select'
-import type { SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
+import type { BarListItem } from '@aziontech/ui/bar-list'
+import type { ChartSeries } from '@aziontech/ui/chart'
+import type { FilterMenuField } from '@aziontech/ui/filter-menu'
+import type { SelectOptionItem } from '@aziontech/ui/select'
+import type { SeverityTagSeverity } from '@aziontech/ui/severity-tag'
 
 import type {
   SecurityAttentionEntry,

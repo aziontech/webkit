@@ -7,7 +7,7 @@
  "avoidWhen": [
   "A third-party page an author places on purpose (a demo, a player, a form) → `embed`.",
   "A remote multi-page site: the frame blocks a widget that navigates.",
-  "Live WebKit components shown in the documentation → `browser-frame`.",
+  "Live Azion UI components shown in the documentation → `browser-frame`.",
   "A generated file the reader may copy, download or open → `artifact-preview`.",
   "The record of what the tool did (name, input, output, status) → `tool-call`; the app frame sits after it in the same message."
  ],

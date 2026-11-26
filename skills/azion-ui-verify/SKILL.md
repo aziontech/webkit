@@ -1,14 +1,14 @@
 ---
-name: webkit-ui-verify
-description: Drive a finished @aziontech/webkit screen in a real browser (Playwright, headless Chromium) and OBSERVE before declaring it done — screenshot both themes at multiple widths, assert zero console errors, run axe-core against the live tree, check the navigation levels (no route offered twice, one agreeing current row per level), and exercise the loading/empty/error states and the primary interaction. The runtime a11y gate the accessibility rule defers to: axe on the rendered tree, focus trap/restore observed, live-region announcements. Use as the runtime gate that verifies what the other skills prescribe, before you call any route finished.
+name: azion-ui-verify
+description: Drive a finished @aziontech/ui screen in a real browser (Playwright, headless Chromium) and OBSERVE before declaring it done — screenshot both themes at multiple widths, assert zero console errors, run axe-core against the live tree, check the navigation levels (no route offered twice, one agreeing current row per level), and exercise the loading/empty/error states and the primary interaction. The runtime a11y gate the accessibility rule defers to: axe on the rendered tree, focus trap/restore observed, live-region announcements. Use as the runtime gate that verifies what the other skills prescribe, before you call any route finished.
 status: active
 last_updated: 2026-11-20
 scope: general
 # prettier-ignore
-enforced_by: [ui-verify, webkit-accessibility, webkit-component-states, webkit-navigation-levels, webkit-keyboard]
+enforced_by: [ui-verify, azion-ui-accessibility, azion-ui-component-states, azion-ui-navigation-levels, azion-ui-keyboard]
 ---
 
-# Skill: webkit-ui-verify
+# Skill: azion-ui-verify
 
 ## Purpose
 
@@ -26,12 +26,12 @@ against selectors or state you _expect_ to exist; find them, then act.
 
 ## How to use
 
-- `/webkit-ui-verify` — run the full pass against the route you just built in this conversation.
-- `/webkit-ui-verify <route-or-file>` — verify a specific route (`/workloads`) or the view a `.vue`
+- `/azion-ui-verify` — run the full pass against the route you just built in this conversation.
+- `/azion-ui-verify <route-or-file>` — verify a specific route (`/workloads`) or the view a `.vue`
   file renders; report per finding: what failed, the evidence (console line, axe rule, screenshot),
   and the fix.
 
-The agent form is **webkit-ui-verifier** — hand it a route and it runs this loop end to end and reports
+The agent form is **azion-ui-verifier** — hand it a route and it runs this loop end to end and reports
 back. Either way the loop is the same; only who drives it changes.
 
 ## Before you run
@@ -47,7 +47,7 @@ Run every route through all of them, in both themes and at 2–3 widths. A pass 
 width, or a state did not verify the screen.
 
 - **Visual, both themes × widths.** Screenshot in **light** and in `data-theme="dark"`, at **375**,
-  **768**, and **1280** px. This is the check `webkit-theming-dark-mode` and `webkit-quick-cleanup`
+  **768**, and **1280** px. This is the check `azion-ui-theming-dark-mode` and `azion-ui-quick-cleanup`
   (responsive widths) defer to — two-theme screenshots catch the dark-only regression; multi-width catches the layout that
   only breaks on a phone. Look at every shot; a saved file is not a passed check.
 - **Console, zero tolerance.** Collect `console` errors, `pageerror`, and `requestfailed` on load
@@ -58,11 +58,11 @@ width, or a state did not verify the screen.
   the two things axe cannot assert on its own: **focus trap/restore** on overlays (focus moves in on
   open, stays trapped while open, returns to the trigger on close — see Interaction + focus below), and
   **live-region announcements** — a status that changes asynchronously (loading, saved, error) must
-  reach an `aria-live` region / webkit status surface, not be conveyed by colour or a silent spinner
+  reach an `aria-live` region / Azion UI status surface, not be conveyed by colour or a silent spinner
   alone.
 - **States, forced.** Do not wait for the happy path to be the only path. Force **loading** (throttle
   or delay the request), **empty** (make it return no data), and **error** (make the request fail), and
-  confirm each renders per `webkit-ui-states` — a `Skeleton`, an `EmptyState`, a `Alert` — never a
+  confirm each renders per `azion-ui-states` — a `Skeleton`, an `EmptyState`, a `Alert` — never a
   blank or broken screen. Intercept with `page.route()` to force empty/error without touching the app:
 
 ```js
@@ -70,8 +70,8 @@ await page.route('**/api/workloads', (r) => r.fulfill({ status: 500 })) // error
 await page.route('**/api/workloads', (r) => r.fulfill({ json: [] })) // empty
 ```
 
-- **Navigation levels.** Every visited route passes `npx @aziontech/webkit check --url <url,...>`
-  (rule `webkit-navigation-levels`). It opens each route in Chromium through the project's own
+- **Navigation levels.** Every visited route passes `npx @aziontech/ui check --url <url,...>`
+  (rule `azion-ui-navigation-levels`). It opens each route in Chromium through the project's own
   Playwright, collects the links of every visible navigation control (each `nav` /
   `role="navigation"`: the rail and its current drill level, an in-page menu; each
   `role="tablist"`; the breadcrumb, pagination, hidden or inert levels and `#anchor` links are left
@@ -87,7 +87,7 @@ await page.route('**/api/workloads', (r) => r.fulfill({ json: [] })) // empty
   `PageTabs`, never rail rows and never a menu inside the page.
 
 ```bash
-npx @aziontech/webkit check --no-lint --url http://localhost:5173/policies/acme/access-rules,http://localhost:5173/workloads
+npx @aziontech/ui check --no-lint --url http://localhost:5173/policies/acme/access-rules,http://localhost:5173/workloads
 ```
 
 - **Interaction + focus.** Drive the primary flow — submit the form, open the overlay, paginate — and
@@ -95,7 +95,7 @@ npx @aziontech/webkit check --no-lint --url http://localhost:5173/policies/acme/
   **traps** focus while open and **restores** it to the trigger on close (compare
   `document.activeElement` before open and after close).
 
-- **Keyboard.** Drive the route with the keyboard alone, against rule `webkit-keyboard`:
+- **Keyboard.** Drive the route with the keyboard alone, against rule `azion-ui-keyboard`:
   - on load, focus is in the first field of a task (create page, form drawer or dialog) and on the
     `h1` of a browse page (`document.activeElement`), with no ring drawn on the heading;
   - `Esc` closes only the top layer (menu, then dialog, then drawer), means Cancel on a full-page
@@ -155,7 +155,7 @@ for (const theme of themes) {
     page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`))
     page.on('requestfailed', (r) => problems.push(`request: ${r.url()} ${r.failure()?.errorText}`))
 
-    // Set the theme BEFORE the app paints, the way webkit-theming-dark-mode prescribes.
+    // Set the theme BEFORE the app paints, the way azion-ui-theming-dark-mode prescribes.
     await page.addInitScript((t) => {
       document.documentElement.dataset.theme = t
     }, theme)
@@ -193,22 +193,22 @@ Extend it per route: add `page.route()` calls to force empty/error, and a `userE
 - **Zero** console errors on load and on the primary interaction — a Vue warning or a failed request
   fails the route.
 - Run **axe-core** against the rendered tree; any violation is a finding to fix, not to note.
-- Force loading, empty, and error, and confirm each renders a webkit state component — never a blank or
+- Force loading, empty, and error, and confirm each renders an Azion UI state component — never a blank or
   broken screen.
 - Overlays trap focus while open and restore it to the trigger on close; the action's feedback appears.
-- Async status (loading, saved, error) is announced via an `aria-live` region / webkit status surface —
+- Async status (loading, saved, error) is announced via an `aria-live` region / Azion UI status surface —
   not colour or a silent spinner alone.
 - The keyboard alone reaches and completes the primary flow, and the screen holds the
-  `webkit-keyboard` contract: focus on open, `Esc` one layer, `⌘ S`, `/`, `?`, list keys, no
+  `azion-ui-keyboard` contract: focus on open, `Esc` one layer, `⌘ S`, `/`, `?`, list keys, no
   single-key shortcut inside a field.
-- Every visited route passes `webkit check --url`: no route offered by two navigation controls, one
+- Every visited route passes `azion-ui check --url`: no route offered by two navigation controls, one
   current row per control, and the current rows of all levels agree.
 - Assert **behavior, console, a11y, and visual snapshots** — never class strings, pixel positions, or
   animation timing.
 
 ## Review output
 
-For `/webkit-ui-verify <route-or-file>`, report the pass as a checklist with the evidence for each:
+For `/azion-ui-verify <route-or-file>`, report the pass as a checklist with the evidence for each:
 
 ```
 Route: /workloads
@@ -233,10 +233,10 @@ End with: `verified — ship` or `N findings — fix before ship`.
 - [ ] Both themes and 2–3 widths captured; no dark-only or narrow-width regression.
 - [ ] Zero console errors / failed requests on load and on the primary interaction.
 - [ ] axe-core run against the live tree with no violations; async status announced via a live region.
-- [ ] `webkit check --url` passes on every visited route: one owner per navigation level, no
+- [ ] `azion-ui check --url` passes on every visited route: one owner per navigation level, no
       duplicate destination, current rows that agree.
-- [ ] Loading, empty, and error each forced and each renders its webkit state component.
+- [ ] Loading, empty, and error each forced and each renders its Azion UI state component.
 - [ ] Primary flow driven; focus traps + restores; the action's feedback appears.
-- [ ] Keyboard pass done against `webkit-keyboard`: focus on open, `Esc`, `⌘ S`, `/`, `?`, list
+- [ ] Keyboard pass done against `azion-ui-keyboard`: focus on open, `Esc`, `⌘ S`, `/`, `?`, list
       keys, and no single-key shortcut while typing.
 - [ ] Wired into CI as a smoke/visual job — this runtime gate runs on every PR, not just locally.

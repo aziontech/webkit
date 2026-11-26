@@ -3,10 +3,10 @@
 > The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create table, Truncate table). Create table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the state-form-validation rule. Add column is a large drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a large drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.
 
 - Surface: app
-- Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/webkit`
+- Source: `blocks/edit/edit-schema/edit-schema.vue` in `@aziontech/ui`
 - MCP: `get_block("edit/edit-schema")`
 - Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [Switch](../../components/switch.md), `TableCellActions`, [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-file-picker`, `utils/csv`
-- Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
+- Skills: `azion-ui-form`, `azion-ui-create-surface`, `azion-ui-tables`, `azion-ui-errors`, `azion-ui-states`
 
 ## Asked as
 
@@ -63,7 +63,7 @@ A medium `ConfirmDialog` titled `Truncate <table>`, following `edit/edit-delete-
 
 ### Outcome toasts — through `toast`
 
-Raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. The toasts show when `loading` turns off with no `error`. A failed Add column, Insert row, Change type or Truncate is a danger toast with the `error` text and Retry that keeps the form; a refused Create table is the General `Alert` and the Name field error. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. The toasts show when `loading` turns off with no `error`. A failed Add column, Insert row, Change type or Truncate is a danger toast with the `error` text and Retry that keeps the form; a refused Create table is the General `Alert` and the Name field error. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -146,7 +146,7 @@ Then delete `sample.ts` and its import.
 - **Errors:** `This field is required.`, `Start with a letter or an underscore; use letters, numbers and underscores.`, `Another column is also named email.`, `Add at least one named column.`, `customers already has a column named email.`, `email cannot be NULL. Enter a value.`
 - **Server rejection:** `The table wasn't created. A table named customers already exists in acme-store. Your columns are kept; pick another name and create it again.`
 - **Toasts:** as in building block H.
-- Follow `skills/webkit-microcopy`: sentence case except the product's object names (`Create table`), no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case except the product's object names (`Create table`), no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -174,7 +174,7 @@ Then delete `sample.ts` and its import.
 - `edit/edit-delete-dialog` — the typed confirmation Truncate table follows.
 - `state/state-form-validation` (SectionRejected) — the rule for the server's name conflict.
 - `state/state-async-submit` — the long-action rule; schema changes use item actions, not Edit and Redeploy.
-- `CodeEditor`, `Select`, `Field` — see `skills/webkit-form` and `skills/webkit-create-surface`.
+- `CodeEditor`, `Select`, `Field` — see `skills/azion-ui-form` and `skills/azion-ui-create-surface`.
 
 ## Variants
 
@@ -192,8 +192,8 @@ Each variant is the same screen in another state: `get_block("edit/edit-schema",
 
 ```vue
 <script setup lang="ts">
-  import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import { toast } from '@aziontech/webkit/toast'
+  import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
   import { createdDescription } from './lib/draft-table'
@@ -693,7 +693,7 @@ export const sampleRelations: SchemaEditorRelation[] = [
 ## `composables/use-csv-import.ts`
 
 ```ts
-import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+import { useFilePicker } from '@aziontech/ui/use-file-picker'
 import { computed, type ComputedRef, type DeepReadonly, readonly, type Ref, ref } from 'vue'
 
 import type { SchemaEditorCsvFile } from '../edit-schema.vue'
@@ -825,7 +825,7 @@ export const filterTypes = (query: string) => {
 ## `lib/csv.ts`
 
 ```ts
-import { splitCsvLine } from '@aziontech/webkit/utils/csv'
+import { splitCsvLine } from '@aziontech/ui/utils/csv'
 
 export type CsvRow = Record<string, string>
 
@@ -958,15 +958,15 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Switch from '@aziontech/webkit/switch'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Switch from '@aziontech/ui/switch'
   import { computed, reactive, ref, watch } from 'vue'
 
   import type {
@@ -1151,11 +1151,11 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Field from '@aziontech/webkit/field'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Field from '@aziontech/ui/field'
   import { computed } from 'vue'
 
   import type { SchemaEditorColumn, SchemaEditorTable } from '../edit-schema.vue'
@@ -1245,8 +1245,8 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
   import { computed } from 'vue'
 
   import { filterTypes, glyphOf, TYPES } from '../lib/column-types'
@@ -1313,12 +1313,12 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Button from '@aziontech/webkit/button'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Button from '@aziontech/ui/button'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import SettingsGroup from '@aziontech/ui/settings-group'
 
   import { columnDefinition, type DraftColumn } from '../lib/draft-table'
   import ColumnTypeSelect from './column-type-select.vue'
@@ -1403,15 +1403,15 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Alert from '@aziontech/ui/alert'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { computed, reactive, ref, watch } from 'vue'
 
   import { useCsvImport } from '../composables/use-csv-import'
@@ -1640,9 +1640,9 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
 
   import type { SchemaEditorRelation, SchemaEditorTable } from '../edit-schema.vue'
   import { ON_DELETE } from '../lib/column-types'
@@ -1766,12 +1766,12 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
+  import Button from '@aziontech/ui/button'
+  import type { TableColumn } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import SettingsGroup from '@aziontech/ui/settings-group'
   import { computed } from 'vue'
 
   import type { SchemaEditorCsvFile } from '../edit-schema.vue'
@@ -1845,13 +1845,13 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelHeader from '@aziontech/webkit/panel-header'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelHeader from '@aziontech/ui/panel-header'
   import { reactive, ref, watch } from 'vue'
 
   import type { SchemaEditorColumn, SchemaEditorTable } from '../edit-schema.vue'
@@ -1974,15 +1974,15 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import type { TableColumn } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
   import { computed } from 'vue'
 
   import type { SchemaEditorTable } from '../edit-schema.vue'
@@ -2142,9 +2142,9 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Alert from '@aziontech/ui/alert'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
 
   import type { SchemaEditorTable } from '../edit-schema.vue'
 
@@ -2193,8 +2193,8 @@ export const createdDescription = (rows: number, relations: number) =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import Button from '@aziontech/ui/button'
+  import PanelFooter from '@aziontech/ui/panel-footer'
 
   defineProps<{ submitLabel: string; submitting: boolean }>()
 

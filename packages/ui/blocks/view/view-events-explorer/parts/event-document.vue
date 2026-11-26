@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import CodeBlock, { type CodeBlockTab } from '@aziontech/webkit/code-block'
-  import Tag from '@aziontech/webkit/tag'
-  import Trace, { type TraceView } from '@aziontech/webkit/trace'
+  import CodeBlock, { type CodeBlockTab } from '@aziontech/ui/code-block'
+  import Tag from '@aziontech/ui/tag'
+  import Trace, { type TraceView } from '@aziontech/ui/trace'
 
   import type { EventsExplorerDocumentRow } from '../composables/use-events-explorer-document'
   import { eventLevelSeverity, type EventRow } from '../lib/event-log'

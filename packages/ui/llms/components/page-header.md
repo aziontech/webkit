@@ -2,7 +2,7 @@
 
 > The heading that opens a console page: an h1 in the console type set: 16px medium on a top-level page, 14px semibold on a deeper page (one with `breadcrumbs`, or `size="small"`), a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumbs` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
 
-- Import: `import PageHeader from '@aziontech/webkit/page-header'`
+- Import: `import PageHeader from '@aziontech/ui/page-header'`
 - Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [page-header.json](page-header.json)
 
@@ -16,7 +16,7 @@
 ## Do
 
 - One PageHeader per page; it renders the page's only h1.
-- Put the Documentation link first and the create action on the outer edge. Every action is `size="medium"`, so the row keeps one height; the create action is `variant="primary"`, Documentation and the others `variant="outline"` (`webkit/consistent-header-action-size`).
+- Put the Documentation link first and the create action on the outer edge. Every action is `size="medium"`, so the row keeps one height; the create action is `variant="primary"`, Documentation and the others `variant="outline"` (`azion-ui/consistent-header-action-size`).
 - Do not set `class="w-full"` on the action buttons; the header makes them full width on a phone.
 - Set `titleId` when a form or landmark names itself with `aria-labelledby`.
 - `breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
@@ -73,7 +73,7 @@
 
 - Visible focus: owned by the controls in the `actions` slot.
 - Keyboard map: `Tab` moves through the actions in DOM order; the header itself is not interactive.
-- ARIA: the root is a `header` element and the title is the page's only `h1`. The `h1` carries `tabindex="-1"` and no focus ring (`outline-none`): it is not a tab stop, but a router or a page can move focus to it on navigation so a screen reader announces the page (the console keyboard standard, `rules/webkit-keyboard.md`); it is a heading, not a control, so it draws no ring; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
+- ARIA: the root is a `header` element and the title is the page's only `h1`. The `h1` carries `tabindex="-1"` and no focus ring (`outline-none`): it is not a tab stop, but a router or a page can move focus to it on navigation so a screen reader announces the page (the console keyboard standard, `rules/azion-ui-keyboard.md`); it is a heading, not a control, so it draws no ring; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
 - Keyboard map with regions: `Tab` reaches the breadcrumb links, then the actions, then the tabs (which own their arrow-key model).
 - Contrast ≥4.5:1 for the title and the muted description.
 - Touch target: the actions keep the Button sizes; on a phone they stretch to full width.
@@ -104,8 +104,8 @@ No built-in strings: the title, description and every region come from the consu
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PageHeader from '@aziontech/webkit/page-header'
+  import Button from '@aziontech/ui/button'
+  import PageHeader from '@aziontech/ui/page-header'
 </script>
 
 <template>
@@ -137,7 +137,7 @@ No built-in strings: the title, description and every region come from the consu
 
 ```vue
 <script setup>
-  import PageHeader from '@aziontech/webkit/page-header'
+  import PageHeader from '@aziontech/ui/page-header'
 </script>
 
 <template>
@@ -153,7 +153,7 @@ No built-in strings: the title, description and every region come from the consu
 
 ```vue
 <script setup>
-  import PageHeader from '@aziontech/webkit/page-header'
+  import PageHeader from '@aziontech/ui/page-header'
 </script>
 
 <template>

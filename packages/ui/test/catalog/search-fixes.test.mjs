@@ -8,7 +8,7 @@ const { loadCatalogFrom } = await import('../../src/catalog/catalog.js')
 const { getComponent, getBlock, searchComponents, searchBlocks, suggestComponent } =
   await import('../../src/catalog/queries.js')
 
-const P = '@aziontech/webkit/'
+const P = '@aziontech/ui/'
 const component = (name, extra = {}) => ({
   import: `${P}${name}`,
   kind: 'component',
@@ -18,7 +18,7 @@ const component = (name, extra = {}) => ({
 
 function fixture() {
   const json = {
-    package: '@aziontech/webkit',
+    package: '@aziontech/ui',
     aliases: { modal: 'dialog' },
     renamed: { paginator: 'pagination' },
     removed: { 'field-text': 'Field + FieldLabel + Input' },
@@ -61,7 +61,7 @@ function fixture() {
       }
     }
   }
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-search-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-search-'))
   const path = join(dir, 'catalog.json')
   writeFileSync(path, JSON.stringify(json))
   return loadCatalogFrom(path)
@@ -99,7 +99,7 @@ test('a part the compound does not attach is offered as its own import, never as
   assert.equal(best.compoundBinding, undefined)
   assert.match(
     best.hint,
-    /not attached to the Table compound: import it from '@aziontech\/webkit\/table-search'/
+    /not attached to the Table compound: import it from '@aziontech\/ui\/table-search'/
   )
 })
 
@@ -114,10 +114,10 @@ test('a v6 rename answers with the new export, a v6 removal with its replacement
   assert.equal(renamed.found, true)
   assert.equal(renamed.name, 'pagination')
   assert.equal(renamed.renamedFrom, 'paginator')
-  assert.match(renamed.note, /renamed in WebKit v6/)
+  assert.match(renamed.note, /renamed in Azion UI v6/)
   const removed = getComponent(catalog, 'field-text')
   assert.equal(removed.found, false)
-  assert.match(removed.message, /removed in WebKit v6\. Use Field \+ FieldLabel \+ Input/)
+  assert.match(removed.message, /removed in Azion UI v6\. Use Field \+ FieldLabel \+ Input/)
   assert.equal(getComponent(catalog, 'modal').aliasOf, 'dialog')
 })
 

@@ -1,15 +1,15 @@
 # DOC_LINTS — every lint in the stack, wrong ❌ vs. correct ✅
 
-> **@aziontech/webkit monorepo** · snapshot of July 2026
+> **@aziontech/ui monorepo** · snapshot of July 2026
 > Companion doc: [`PROCESS.md`](./PROCESS.md) explains the **architecture** (what runs, when, where — the full creation + implementation flow).
 > This doc is the **practical guide**: every lint rule configured in the stack, one by one, with the code that fails it and the code to write instead.
 
-All examples follow the repo's own conventions (PascalCase components, `<script setup lang="ts">`, design tokens, no `<style>` blocks in webkit components). Remember the zero-warnings policy: ESLint always runs with `--max-warnings 0` — a rule either blocks or doesn't exist.
+All examples follow the repo's own conventions (PascalCase components, `<script setup lang="ts">`, design tokens, no `<style>` blocks in Azion UI components). Remember the zero-warnings policy: ESLint always runs with `--max-warnings 0` — a rule either blocks or doesn't exist.
 
 ## Contents
 
 1. [How to run](#1-how-to-run)
-2. [ESLint — Vue correctness](#2-eslint--vue-correctness) · [`eslint.config.js`](../../packages/webkit/eslint.config.js)
+2. [ESLint — Vue correctness](#2-eslint--vue-correctness) · [`eslint.config.js`](../../packages/ui/eslint.config.js)
 3. [ESLint — Accessibility](#3-eslint--accessibility)
 4. [ESLint — TypeScript](#4-eslint--typescript)
 5. [ESLint — Import hygiene](#5-eslint--import-hygiene)
@@ -25,14 +25,14 @@ All examples follow the repo's own conventions (PascalCase components, `<script 
 
 ## 1. How to run
 
-| Command (repo root)                                | What it checks                                               |
-| -------------------------------------------------- | ------------------------------------------------------------ |
-| `pnpm lint:webkit` / `lint:webkit:fix`             | ESLint (§2–§6), zero warnings / with auto-fix                |
-| `pnpm lint:webkit:style` / `lint:webkit:style:fix` | Stylelint (§7) / with auto-fix                               |
-| `pnpm check:webkit:format` / `format:webkit`       | Prettier (§8) check / write                                  |
-| `pnpm typecheck:webkit`                            | `vue-tsc --noEmit` (§9)                                      |
-| `pnpm check:webkit:type-coverage`                  | type-coverage ≥ 95% (§9)                                     |
-| `pnpm gates`                                       | lint + typecheck + format check + audit — local mirror of CI |
+| Command (repo root)                        | What it checks                                               |
+| ------------------------------------------ | ------------------------------------------------------------ |
+| `pnpm lint:ui` / `lint:ui:fix`             | ESLint (§2–§6), zero warnings / with auto-fix                |
+| `pnpm lint:ui:style` / `lint:ui:style:fix` | Stylelint (§7) / with auto-fix                               |
+| `pnpm check:ui:format` / `format:ui`       | Prettier (§8) check / write                                  |
+| `pnpm typecheck:ui`                        | `vue-tsc --noEmit` (§9)                                      |
+| `pnpm check:ui:type-coverage`              | type-coverage ≥ 95% (§9)                                     |
+| `pnpm gates`                               | lint + typecheck + format check + audit — local mirror of CI |
 
 On `git commit`, husky runs lint-staged (ESLint/Stylelint/Prettier with auto-fix on staged files) and commitlint (§10). Never bypass with `--no-verify` — forbidden by [`git-workflow.md`](../rules/git-workflow.md).
 
@@ -111,7 +111,7 @@ Every SFC reads in the same order.
 </template>
 ```
 
-> webkit components never reach the third slot: `<style>` blocks are forbidden entirely by [`styling.md`](../rules/styling.md).
+> Azion UI components never reach the third slot: `<style>` blocks are forbidden entirely by [`styling.md`](../rules/styling.md).
 
 ### `vue/multi-word-component-names` — **off, deliberately**
 
@@ -279,7 +279,7 @@ The same attribute twice on one element is a bug — one silently wins. Exceptio
 
 ### `vue/no-export-in-script-setup`
 
-`<script setup>` compiles to the component's `setup()` body — runtime `export`s don't work there. **Type-only exports are allowed** (they're erased at compile time), and webkit components use them for their prop types.
+`<script setup>` compiles to the component's `setup()` body — runtime `export`s don't work there. **Type-only exports are allowed** (they're erased at compile time), and Azion UI components use them for their prop types.
 
 **❌ Wrong**
 
@@ -857,7 +857,7 @@ function labelOf(option: Option) {
 
 ### `simple-import-sort/imports`
 
-Deterministic, auto-fixable order: packages first (alphabetical — `@`-scoped before plain names), then relative imports, groups separated by a blank line. Kills "import shuffle" diff noise. `pnpm lint:webkit:fix` sorts for you.
+Deterministic, auto-fixable order: packages first (alphabetical — `@`-scoped before plain names), then relative imports, groups separated by a blank line. Kills "import shuffle" diff noise. `pnpm lint:ui:fix` sorts for you.
 
 **❌ Wrong**
 
@@ -996,7 +996,7 @@ function onSubmit(payload: FormPayload) {
 }
 
 function onError(err: unknown) {
-  console.error('[webkit] form submission failed', err) // deliberate diagnostic — allowed
+  console.error('[azion-ui] form submission failed', err) // deliberate diagnostic — allowed
 }
 ```
 
@@ -1039,7 +1039,7 @@ const testId = attrs['data-testid'] ?? 'button'
 
 ## 7. Stylelint — CSS/SCSS
 
-Scans `packages/webkit/**/*.{css,scss,vue}`. Context: [`styling.md`](../rules/styling.md) forbids `<style>` blocks and component-local CSS in webkit components — Stylelint is the **backstop** for the few legitimate stylesheets (theme CSS, `styles/country-flags.css`, legacy components).
+Scans `packages/ui/**/*.{css,scss,vue}`. Context: [`styling.md`](../rules/styling.md) forbids `<style>` blocks and component-local CSS in Azion UI components — Stylelint is the **backstop** for the few legitimate stylesheets (theme CSS, `styles/country-flags.css`, legacy components).
 
 ### `selector-class-pattern` — kebab-case
 
@@ -1169,7 +1169,7 @@ The same selector twice in one sheet is a merge waiting to happen.
 
 ### `order/properties-alphabetical-order`
 
-Properties always alphabetical — declaration diffs stay minimal. Auto-fixable (`pnpm lint:webkit:style:fix`).
+Properties always alphabetical — declaration diffs stay minimal. Auto-fixable (`pnpm lint:ui:style:fix`).
 
 **❌ Wrong**
 
@@ -1261,7 +1261,7 @@ Tailwind's at-rules are valid input here; do not "fix" them away.
 
 ## 8. Prettier — formatting
 
-Formatting is Prettier's job alone — never hand-fight it; run `pnpm format:webkit`. The options and what they produce:
+Formatting is Prettier's job alone — never hand-fight it; run `pnpm format:ui`. The options and what they produce:
 
 | Option                    | Value                   |
 | ------------------------- | ----------------------- |
@@ -1424,7 +1424,7 @@ class FancyEmitter extends BaseEmitter {
 }
 ```
 
-### `noPropertyAccessFromIndexSignature` (webkit package)
+### `noPropertyAccessFromIndexSignature` (Azion UI package)
 
 Index-signature types (`Record<string, unknown>` — e.g. `useAttrs()`) must be accessed with brackets, making the "this key may not exist" explicit.
 
@@ -1465,7 +1465,7 @@ const config = JSON.parse(raw) as ThemeConfig
 config.theme.colors.primary // fully typed
 ```
 
-Run `pnpm check:webkit:type-coverage` — `--detail` lists every offending expression.
+Run `pnpm check:ui:type-coverage` — `--detail` lists every offending expression.
 
 ---
 
@@ -1474,7 +1474,7 @@ Run `pnpm check:webkit:type-coverage` — `--detail` lists every offending expre
 Commits **drive releases**: release-please parses the same header — on `main`, the squashed **PR title** — to compute version bumps ([`release-types.md`](../rules/release-types.md)). Its parser is **not configurable**: the header must start with the bare type, so a ticket tag lives at the start of the **subject** — and only when a real ticket exists (no ticket → no tag). Header anatomy:
 
 ```
-feat(webkit)!: [ENG-1231] add table export
+feat(ui)!: [ENG-1231] add table export
 └─┬┘└──┬───┘│  └───┬────┘ └──────┬───────┘
 type  scope breaking ticket      subject
       (opt.) (opt.)  (optional)
@@ -1484,32 +1484,32 @@ type  scope breaking ticket      subject
 
 ```text
 Update button styles                      → no type
-[NO-ISSUE] fix(webkit): focus ring        → leading ticket tag releases NOTHING (header-no-leading-ticket)
-fix(webkit): [NO-ISSUE] focus ring        → no ticket → omit the tag entirely (subject-ticket-tag)
-ENG-1231 fix(webkit): focus ring          → header must start with the type: fix(webkit): [ENG-1231] focus ring
-fix(webkit): [eng-123] focus ring         → malformed tag; use [ABC-123] (subject-ticket-tag)
-Feat(webkit): add table export            → type must be lower-case
-feature(webkit): add table export         → "feature" is not in the enum; use feat
-feat(Webkit): add table export            → scope must be lower-case
-fix(webkit):                              → subject is required
-fix(webkit): correct the pagination focus ring so that it stays visible in dark mode and in high-contrast themes
+[NO-ISSUE] fix(ui): focus ring        → leading ticket tag releases NOTHING (header-no-leading-ticket)
+fix(ui): [NO-ISSUE] focus ring        → no ticket → omit the tag entirely (subject-ticket-tag)
+ENG-1231 fix(ui): focus ring          → header must start with the type: fix(ui): [ENG-1231] focus ring
+fix(ui): [eng-123] focus ring         → malformed tag; use [ABC-123] (subject-ticket-tag)
+Feat(ui): add table export            → type must be lower-case
+feature(ui): add table export         → "feature" is not in the enum; use feat
+feat(Azion UI): add table export            → scope must be lower-case
+fix(ui):                              → subject is required
+fix(ui): correct the pagination focus ring so that it stays visible in dark mode and in high-contrast themes
                                           → header over 100 chars (111)
 ```
 
 **✅ Correct**
 
 ```text
-fix(webkit): correct pagination focus ring
-feat(webkit): [ENG-1231] add table export
+fix(ui): correct pagination focus ring
+feat(ui): [ENG-1231] add table export
 chore: bump tooling
 docs: describe compound API exports
-feat(webkit)!: drop tone prop
+feat(ui)!: drop tone prop
 ```
 
 Breaking change via footer (equivalent to `!`):
 
 ```text
-feat(webkit): rework button size scale
+feat(ui): rework button size scale
 
 BREAKING CHANGE: size "xlarge" was removed; use "large".
 ```
@@ -1529,7 +1529,7 @@ Also enforced: never `Co-Authored-By` / attribution footers, never `--no-verify`
 
 ## 11. Write-time guardrail hooks (Layer 0)
 
-This repo is developed AI-assisted; `contributing/hooks/` lint the **writes themselves** — every `Write`/`Edit` is validated before (or right after) it lands, enforcing design-system invariants ESLint can't express. Most hooks flag only **newly introduced** violations. Pre-existing debt is not grandfathered by a whitelist — it is frozen in [`scripts/authoring-baseline.json`](../../packages/webkit/scripts/authoring-baseline.json), and the CI ratchet ([`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs the same engines repo-wide, failing the PR on any **new** violation even from an editor push that never ran the hooks. Full rationale per rule lives in [`contributing/rules/`](../rules/).
+This repo is developed AI-assisted; `contributing/hooks/` lint the **writes themselves** — every `Write`/`Edit` is validated before (or right after) it lands, enforcing design-system invariants ESLint can't express. Most hooks flag only **newly introduced** violations. Pre-existing debt is not grandfathered by a whitelist — it is frozen in [`scripts/authoring-baseline.json`](../../packages/ui/scripts/authoring-baseline.json), and the CI ratchet ([`check-authoring.mjs`](../../packages/ui/scripts/check-authoring.mjs)) re-runs the same engines repo-wide, failing the PR on any **new** violation even from an editor push that never ran the hooks. Full rationale per rule lives in [`contributing/rules/`](../rules/).
 
 ### `validate-tokens.mjs` — tokens are the palette
 
@@ -1539,25 +1539,25 @@ Blocks hex/rgb/hsl colors, raw Tailwind palette, raw typography, `any`, `@ts-ign
 <!-- ❌ blocked -->
 <button class="bg-[#f3652b] text-orange-500 text-sm font-['Inter']" />
 
-<!-- ✅ tokens + generated typography classes (list_tokens in the webkit MCP) -->
+<!-- ✅ tokens + generated typography classes (list_tokens in the Azion UI MCP) -->
 <button class="bg-(--primary) text-(--primary-foreground) text-button-lg" />
 ```
 
 ### `validate-references.mjs` — imports must exist
 
-Blocks phantom `@aziontech/webkit/*` paths (not in `packages/webkit/package.json#exports`), unresolvable relative imports, uninstalled packages.
+Blocks phantom `@aziontech/ui/*` paths (not in `packages/ui/package.json#exports`), unresolvable relative imports, uninstalled packages.
 
 ```ts
 // ❌ blocked — path not in the exports map
-import Slot from '@aziontech/webkit/utils/slot'
+import Slot from '@aziontech/ui/utils/slot'
 
-// ✅ exists in packages/webkit/package.json#exports
-import { cn } from '@aziontech/webkit/utils/cn'
+// ✅ exists in packages/ui/package.json#exports
+import { cn } from '@aziontech/ui/utils/cn'
 ```
 
 ### `validate-authoring.mjs` — construction standards at write time
 
-Blocks introduced construction anti-patterns ([`props`](../rules/props.md) / [`v-model`](../rules/v-model.md) / [`emits`](../rules/emits.md) / [`slots`](../rules/slots.md) / [`composables`](../rules/composables.md) / [`deprecation`](../rules/deprecation.md)). Engine: [`src/eslint-plugin/lib/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/lib/authoring-checks.js) — the same module the CI ratchet and the consumer `require-authoring-standards` ESLint rule run.
+Blocks introduced construction anti-patterns ([`props`](../rules/props.md) / [`v-model`](../rules/v-model.md) / [`emits`](../rules/emits.md) / [`slots`](../rules/slots.md) / [`composables`](../rules/composables.md) / [`deprecation`](../rules/deprecation.md)). Engine: [`src/eslint-plugin/lib/authoring-checks.js`](../../packages/ui/src/eslint-plugin/lib/authoring-checks.js) — the same module the CI ratchet and the consumer `require-authoring-standards` ESLint rule run.
 
 ```vue
 <!-- ❌ blocked — hand-rolled v-model + runtime props -->

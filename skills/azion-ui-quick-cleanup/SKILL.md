@@ -1,25 +1,25 @@
 ---
-name: webkit-quick-cleanup
-description: Fast deslop pass for UI built on @aziontech/webkit — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
+name: azion-ui-quick-cleanup
+description: Fast deslop pass for UI built on @aziontech/ui — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
 status: active
 last_updated: 2026-11-21
 scope: general
-enforced_by: [webkit-tokens, webkit-prefer-over-custom, webkit-styling]
+enforced_by: [azion-ui-tokens, azion-ui-prefer-over-custom, azion-ui-styling]
 ---
 
-# Skill: webkit-quick-cleanup
+# Skill: azion-ui-quick-cleanup
 
 ## Purpose
 
-Remove AI-generated UI slop from product code built on `@aziontech/webkit`. This is the opinionated
+Remove AI-generated UI slop from product code built on `@aziontech/ui`. This is the opinionated
 baseline: real components, real tokens, real typography hierarchy, real spacing rhythm — nothing
 hand-rolled, nothing hardcoded.
 
 ## How to use
 
-- `/webkit-quick-cleanup`
+- `/azion-ui-quick-cleanup`
   Apply the constraints below to any UI work in this conversation.
-- `/webkit-quick-cleanup <file>`
+- `/azion-ui-quick-cleanup <file>`
   Review the file against every constraint and output, per violation:
   - the exact line / snippet (quoted),
   - why it matters (1 short sentence),
@@ -28,31 +28,31 @@ hand-rolled, nothing hardcoded.
 ## When to invoke
 
 - The user asks to "clean up", "deslop", "polish", or "review" a screen / prototype.
-- Before shipping any UI composed on top of webkit.
+- Before shipping any UI composed on top of Azion UI.
 - After scaffolding a screen quickly and wanting a correctness sweep.
 
 ## Constraints
 
 ### Components
 
-- **MUST** compose from `@aziontech/webkit` whenever a primitive exists. To find a component and its
-  flat import path, ask the webkit MCP `suggest_component`, or read
-  `node_modules/@aziontech/webkit/catalog.json` (`imports`) — every key is a real subpath (e.g.
-  `@aziontech/webkit/button`, `@aziontech/webkit/input`, `@aziontech/webkit/dialog`,
-  `@aziontech/webkit/dropdown-menu`).
-- **NEVER** hand-roll a `<button>`, input, modal, tooltip, dropdown, tabs, **or divider** that webkit
-  ships — this includes a separator. A horizontal/vertical rule is **`@aziontech/webkit/separator`**
+- **MUST** compose from `@aziontech/ui` whenever a primitive exists. To find a component and its
+  flat import path, ask the Azion UI MCP `suggest_component`, or read
+  `node_modules/@aziontech/ui/catalog.json` (`imports`) — every key is a real subpath (e.g.
+  `@aziontech/ui/button`, `@aziontech/ui/input`, `@aziontech/ui/dialog`,
+  `@aziontech/ui/dropdown-menu`).
+- **NEVER** hand-roll a `<button>`, input, modal, tooltip, dropdown, tabs, **or divider** that Azion UI
+  ships — this includes a separator. A horizontal/vertical rule is **`@aziontech/ui/separator`**
   (`<Separator />` / `<Separator orientation="vertical" />`), **never** a hand-rolled `<hr>` or a
   `<div class="border-t …">` / `<div class="h-px bg-…">`. If you're reaching for a border utility to draw
   a line between sections, that's the Separator component. (A real, observed failure: a `<div>` with border
   classes standing in for the Separator — do not.)
 - **NEVER** hand-roll an `<a>` or a hidden `<input type="file">`. A standalone link is `Link`; a link
   inside a sentence is `Link` with `inline` (it renders the `text-link` style); a "Browse files" button
-  opens the system picker with `useFilePicker` from `@aziontech/webkit/use-file-picker`. A raw one
-  outside its owner is flagged by `webkit/no-unowned-element`.
+  opens the system picker with `useFilePicker` from `@aziontech/ui/use-file-picker`. A raw one
+  outside its owner is flagged by `azion-ui/no-unowned-element`.
 - **NEVER** mix another component library's primitives onto the same surface.
-- **MUST** use `@aziontech/webkit/icon-button` with an `aria-label` for icon-only actions.
-- **MUST** use `@aziontech/webkit/utils/cn` (clsx + tailwind-merge) for any class composition.
+- **MUST** use `@aziontech/ui/icon-button` with an `aria-label` for icon-only actions.
+- **MUST** use `@aziontech/ui/utils/cn` (clsx + tailwind-merge) for any class composition.
 
 ### Color — tokens only
 
@@ -64,7 +64,7 @@ hand-rolled, nothing hardcoded.
 
 ### Typography — tokens + hierarchy (non-negotiable)
 
-- **MUST** use only the `text-*` typography tokens (the webkit MCP lists them; they ship in
+- **MUST** use only the `text-*` typography tokens (the Azion UI MCP lists them; they ship in
   `@aziontech/theme`): `text-heading-2xl … text-heading-sm`, `text-body-lg … text-body-2xs`,
   `text-label-sm/md/lg`, `text-overline-xs/sm/md`, `text-button-md/lg`, `text-link` (what `Link inline` renders),
   `text-big-number-*`.
@@ -124,7 +124,7 @@ This is the canonical module-header treatment. A section title written as
 
 ### Width & containers — the page names its container, fields cap their own
 
-**Page-level containment is `/webkit-layout`'s** — the measure a page column takes, the boundary
+**Page-level containment is `/azion-ui-layout`'s** — the measure a page column takes, the boundary
 between content and app chrome, and the vertical rhythm between sections. Go there for any of it.
 Two rules from that system are worth repeating here because they are the ones a deslop pass catches:
 
@@ -140,7 +140,7 @@ Two rules from that system are worth repeating here because they are the ones a 
 - **MUST** cap **field / input width** with `max-w-(--container-2xs … xl)`. Pick the tight end
   (`2xs … sm`) for compact settings rows and the loose end (up to `xl`, 576px) for a control column
   that must fit a longer value. A form input spanning a 2560px screen is a legibility bug. In an
-  item-group field row use `layout-field-control` instead of a hand-set width — see `/webkit-layout`.
+  item-group field row use `layout-field-control` instead of a hand-set width — see `/azion-ui-layout`.
 - **SHOULD** keep **data-dense surfaces fluid** within their column — tables, dashboards, log and
   grid views breathe to the full content width; don't box them into a narrower container.
 - **MUST** express every cap as `max-w-(--container-<size>)` — the `@aziontech/theme` container
@@ -150,7 +150,7 @@ Two rules from that system are worth repeating here because they are the ones a 
 ### Control size rhythm — same size on a horizontal line
 
 - **MUST** give buttons and fields sitting on the **same horizontal line** the **same `size`**. When a
-  `@aziontech/webkit/button` sits beside an `@aziontech/webkit/input` (search bar + submit, filter
+  `@aziontech/ui/button` sits beside an `@aziontech/ui/input` (search bar + submit, filter
   row, toolbar, inline form), both take the same size token so their heights match and the row shares one
   baseline. A `medium` input next to a `large` button breaks the rhythm.
 - **MUST** keep that one size consistent across every control in the group — inputs, selects, buttons,
@@ -168,7 +168,7 @@ Two rules from that system are worth repeating here because they are the ones a 
 
 ## Review output
 
-For `/webkit-quick-cleanup <file>`, group findings by constraint section. Each finding:
+For `/azion-ui-quick-cleanup <file>`, group findings by constraint section. Each finding:
 
 ```
 ✗ <file>:<line>  `bg-[#0a0a0a] text-blue-500`
@@ -180,22 +180,22 @@ End with a one-line verdict: `clean` or `N violations across <sections>`.
 
 ## References
 
-- Token catalog: the `@aziontech/theme` tokens (typography, spacing, color, shape, shadow); the webkit
+- Token catalog: the `@aziontech/theme` tokens (typography, spacing, color, shape, shadow); the Azion UI
   MCP lists the `text-*` typography tokens.
-- Component discovery: ask the webkit MCP `suggest_component`, or read
-  `node_modules/@aziontech/webkit/catalog.json` (`imports`) — every key is a real subpath.
+- Component discovery: ask the Azion UI MCP `suggest_component`, or read
+  `node_modules/@aziontech/ui/catalog.json` (`imports`) — every key is a real subpath.
 - Variant / styling discipline: drive variants from `data-*` attributes, and compose classes with
-  `@aziontech/webkit/utils/cn` — never a JS class-preset object.
-- For deeper UX (states, heuristics) → `/webkit-ux-heuristics`; for motion → `/webkit-motion-polish`;
-  for final sign-off → `/webkit-final-polish`.
+  `@aziontech/ui/utils/cn` — never a JS class-preset object.
+- For deeper UX (states, heuristics) → `/azion-ui-ux-heuristics`; for motion → `/azion-ui-motion-polish`;
+  for final sign-off → `/azion-ui-final-polish`.
 
 ## Definition of Done
 
-- [ ] Every interactive primitive is a `@aziontech/webkit` component.
+- [ ] Every interactive primitive is a `@aziontech/ui` component.
 - [ ] No HEX / rgb / Tailwind palette / arbitrary spacing / `rounded-md|lg` / raw `text-*` size remains.
 - [ ] Typography uses `text-*` tokens with correct hierarchy; spacing uses only `--spacing-*`.
 - [ ] Section titles use `text-heading-2xs text-(--text-default)` with a `px-(--spacing-xs)` optical inset (and `--spacing-sm` above the card) — not `text-overline-*`, which is reserved for menu/popover group labels.
 - [ ] `h-dvh` not `h-screen`; one accent per view; empty states have an action.
-- [ ] The app layout (`ConsoleLayout`'s rail, header and content region) is fluid; the page carries a column class from `/webkit-layout` rather than a hand-rolled cap; field and reading widths are capped via `max-w-(--container-*)`.
+- [ ] The app layout (`ConsoleLayout`'s rail, header and content region) is fluid; the page carries a column class from `/azion-ui-layout` rather than a hand-rolled cap; field and reading widths are capped via `max-w-(--container-*)`.
 - [ ] Buttons and fields on the same horizontal line share one `size` token and a common baseline.
 - [ ] (File mode) Every violation has a quoted line, a why, and a concrete fix.

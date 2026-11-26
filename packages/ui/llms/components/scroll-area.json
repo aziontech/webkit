@@ -1,8 +1,8 @@
 {
  "name": "scroll-area",
  "binding": "ScrollArea",
- "import": "@aziontech/webkit/scroll-area",
- "treeShakeableImport": "@aziontech/webkit/scroll-area",
+ "import": "@aziontech/ui/scroll-area",
+ "treeShakeableImport": "@aziontech/ui/scroll-area",
  "category": "layout",
  "surface": "app",
  "structure": "monolithic",

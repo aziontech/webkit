@@ -2,7 +2,7 @@
 
 > The previous / next pair that closes a documentation page. Each side is a link carrying an eyebrow and the destination's title; a side with no neighbour leaves its half of the row empty, so the remaining link stays anchored to its own edge rather than drifting to the centre.
 
-- Import: `import DocPreviousNext from '@aziontech/webkit/doc-previous-next'`
+- Import: `import DocPreviousNext from '@aziontech/ui/doc-previous-next'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-previous-next.json](doc-previous-next.json)
 
@@ -70,7 +70,7 @@
 
 ```vue
 <script setup>
-  import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
+  import DocPreviousNext from '@aziontech/ui/doc-previous-next'
 </script>
 
 <template>
@@ -86,7 +86,7 @@
 
 ```vue
 <script setup>
-  import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
+  import DocPreviousNext from '@aziontech/ui/doc-previous-next'
 </script>
 
 <template>

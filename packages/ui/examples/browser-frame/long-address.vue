@@ -1,14 +1,14 @@
 <script setup>
-  import BrowserFrame from '@aziontech/webkit/browser-frame'
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
-  import CardGrid from '@aziontech/webkit/card-grid'
-  import Container from '@aziontech/webkit/container'
-  import FeatureItem from '@aziontech/webkit/feature-item'
-  import Module from '@aziontech/webkit/module'
-  import ModuleHeader from '@aziontech/webkit/module-header'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import Spacer from '@aziontech/webkit/spacer'
+  import BrowserFrame from '@aziontech/ui/browser-frame'
+  import Button from '@aziontech/ui/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import CardGrid from '@aziontech/ui/card-grid'
+  import Container from '@aziontech/ui/container'
+  import FeatureItem from '@aziontech/ui/feature-item'
+  import Module from '@aziontech/ui/module'
+  import ModuleHeader from '@aziontech/ui/module-header'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import Spacer from '@aziontech/ui/spacer'
 </script>
 
 <template>

@@ -2,7 +2,7 @@
 
 > Shows the people behind one thing as a row of overlapping avatars: the members of a team, the owners of a resource, who is viewing a page now. It shows up to `max` avatars, each named by its person, and counts the rest in a `+N` button that opens a list of their names. It draws its avatars with the same tokens as `avatar` but without importing it, and opens the list with the native popover, so the whole group stays under 5 KB gzip.
 
-- Import: `import AvatarGroup from '@aziontech/webkit/avatar-group'`
+- Import: `import AvatarGroup from '@aziontech/ui/avatar-group'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [avatar-group.json](avatar-group.json)
 
@@ -91,7 +91,7 @@
 
 ```vue
 <script setup>
-  import AvatarGroup from '@aziontech/webkit/avatar-group'
+  import AvatarGroup from '@aziontech/ui/avatar-group'
 
   const team = [
     { name: 'Jane Doe' },
@@ -115,7 +115,7 @@
 
 ```vue
 <script setup>
-  import AvatarGroup from '@aziontech/webkit/avatar-group'
+  import AvatarGroup from '@aziontech/ui/avatar-group'
 
   const owners = [
     { name: 'Jane Doe' },
@@ -153,7 +153,7 @@
 
 ```vue
 <script setup>
-  import AvatarGroup from '@aziontech/webkit/avatar-group'
+  import AvatarGroup from '@aziontech/ui/avatar-group'
 
   const first = ['Jane', 'John', 'Alex', 'Sam', 'Priya', 'Maria', 'Chen', 'Omar']
   const last = ['Doe', 'Smith', 'Morgan', 'Lee', 'Patel']

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import { toAriaKeyshortcuts } from '@aziontech/webkit/use-shortcuts'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import { toAriaKeyshortcuts } from '@aziontech/ui/use-shortcuts'
 
   export interface SubmitButtonProps {
     /** The save is in flight: the button spins. */

@@ -1,5 +1,5 @@
 <script setup>
-  import Accordion from '@aziontech/webkit/accordion'
+  import Accordion from '@aziontech/ui/accordion'
 </script>
 
 <template>

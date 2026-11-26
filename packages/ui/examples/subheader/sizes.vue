@@ -1,5 +1,5 @@
 <script setup>
-  import Subheader from '@aziontech/webkit/subheader'
+  import Subheader from '@aziontech/ui/subheader'
 </script>
 
 <template>

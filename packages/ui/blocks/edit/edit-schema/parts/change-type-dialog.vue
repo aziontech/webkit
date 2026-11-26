@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Field from '@aziontech/webkit/field'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Field from '@aziontech/ui/field'
   import { computed } from 'vue'
 
   import type { SchemaEditorColumn, SchemaEditorTable } from '../edit-schema.vue'

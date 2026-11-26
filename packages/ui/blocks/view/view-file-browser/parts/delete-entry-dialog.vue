@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Alert from '@aziontech/ui/alert'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
 
   import type { FileRow } from '../lib/file-rows'
 

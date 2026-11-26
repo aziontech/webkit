@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/input/chip/chip.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/input/chip/chip.vue
 // component=Chip
 import figma from 'figma'
 
@@ -21,7 +21,7 @@ const clickable = instance.getEnum('clickable', {
 
 export default {
   example: figma.code`<Chip label="${label}"${size === 'medium' ? '' : figma.code` size="${size}"`}${removable ? figma.code` removable` : ''}${clickable ? figma.code` clickable` : ''} />`,
-  imports: ["import Chip from '@aziontech/webkit/chip'"],
+  imports: ["import Chip from '@aziontech/ui/chip'"],
   id: 'chip',
   metadata: { nestable: true }
 }

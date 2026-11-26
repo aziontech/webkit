@@ -1,8 +1,8 @@
 {
  "name": "video-player",
  "binding": "VideoPlayer",
- "import": "@aziontech/webkit/video-player",
- "treeShakeableImport": "@aziontech/webkit/video-player",
+ "import": "@aziontech/ui/video-player",
+ "treeShakeableImport": "@aziontech/ui/video-player",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

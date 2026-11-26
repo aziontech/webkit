@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import GaugeChart from '@aziontech/webkit/gauge-chart'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import GaugeChart from '@aziontech/ui/gauge-chart'
   import { ref } from 'vue'
 
   const failed = ref(true)

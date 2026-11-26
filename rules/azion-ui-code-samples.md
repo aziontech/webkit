@@ -25,7 +25,7 @@ it. Two kinds of block exist, and they never mix:
 
 - Do not put output in a command block, as a comment or as plain lines: never
   `curl -I https://example.com\n# HTTP/2 200`, never `$ azion version\nAzion CLI 4.23.0`. The reader
-  copies the comment into the terminal. The `webkit/no-output-in-command` lint warns on it.
+  copies the comment into the terminal. The `azion-ui/no-output-in-command` lint warns on it.
 - Do not hide the label header (`:show-label="false"`) on a docs sample: the reader scans for the
   language before reading the code.
 - Do not label a sample "Example" or "Code"; label what differs, or let the language name it.
@@ -36,7 +36,7 @@ it. Two kinds of block exist, and they never mix:
 
 ```vue
 <script setup>
-  import DocCodeGroup from '@aziontech/webkit/doc-code-group'
+  import DocCodeGroup from '@aziontech/ui/doc-code-group'
 </script>
 
 <template>

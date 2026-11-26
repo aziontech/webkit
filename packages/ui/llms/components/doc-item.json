@@ -1,8 +1,8 @@
 {
  "name": "doc-item",
  "binding": "DocItem",
- "import": "@aziontech/webkit/doc-item",
- "treeShakeableImport": "@aziontech/webkit/doc-item",
+ "import": "@aziontech/ui/doc-item",
+ "treeShakeableImport": "@aziontech/ui/doc-item",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
@@ -21,7 +21,7 @@
  ],
  "related": [
   "`DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.",
-  "`Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.",
+  "`Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the Azion UI anatomy this row composes.",
   "`RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition."
  ],
  "bestPractices": [

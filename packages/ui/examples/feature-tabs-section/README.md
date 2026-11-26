@@ -4,7 +4,7 @@ A band that walks through the features behind one claim, one at a time. Up to th
 
 The tabs advance on a timer. It pauses under the pointer or keyboard focus, and never runs under reduced motion.
 
-The band is the `FeatureTabsSection` component from `@aziontech/webkit/feature-tabs-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `MediaTabs`, `CodeBlock`, `Illustration`, `Button` and `Link`.
+The band is the `FeatureTabsSection` component from `@aziontech/ui/feature-tabs-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame`, `MediaTabs`, `CodeBlock`, `Illustration`, `Button` and `Link`.
 
 ## Examples
 

@@ -4,7 +4,7 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 4
-checksum: 4eab85aaf3df3a27eb0a561e8e1c19620a353fc36d8d66b58fb00a6a178ae9c9
+checksum: 7c0ee733c16706531ca9ae5f203bddb887ef502313c66b8a5f32cd8d40d6f1a4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
@@ -52,7 +52,7 @@ It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Resizable from '@aziontech/webkit/resizable'
+  import Resizable from '@aziontech/ui/resizable'
 
   const previewWidth = ref(480)
   const previewOpen = ref(true)
@@ -83,9 +83,9 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 ```vue
 <script setup>
-  import Resizable from '@aziontech/webkit/resizable-root'
-  import ResizableHandle from '@aziontech/webkit/resizable-handle'
-  import ResizablePane from '@aziontech/webkit/resizable-pane'
+  import Resizable from '@aziontech/ui/resizable-root'
+  import ResizableHandle from '@aziontech/ui/resizable-handle'
+  import ResizablePane from '@aziontech/ui/resizable-pane'
 </script>
 ```
 
@@ -210,7 +210,7 @@ There is no `Sizes` story: the component has no `size` prop, because a pane's le
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

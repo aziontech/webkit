@@ -10,7 +10,7 @@ const versions = (text) =>
   [...text.matchAll(/^## \[(\d+)\.(\d+)\.(\d+)\]/gm)].map((match) => match.slice(1, 4).map(Number))
 const newer = (a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]
 
-for (const name of ['webkit', 'theme', 'icons']) {
+for (const name of ['ui', 'theme', 'icons']) {
   test(`the ${name} changelog lists its 4.x and later releases newest first`, () => {
     const text = readFileSync(join(PACKAGES, name, 'CHANGELOG.md'), 'utf8')
     assert.ok(

@@ -1,4 +1,4 @@
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 import type { OnboardingFormAccount, OnboardingFormPlan } from './account-onboarding-form.vue'
 

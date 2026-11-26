@@ -1,14 +1,14 @@
 {
  "name": "hero",
  "binding": "Hero",
- "import": "@aziontech/webkit/hero",
- "treeShakeableImport": "@aziontech/webkit/hero-root",
+ "import": "@aziontech/ui/hero",
+ "treeShakeableImport": "@aziontech/ui/hero-root",
  "category": "marketing",
  "surface": "site",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/hero-title"
+  "@aziontech/ui/hero-title"
  ],
  "purpose": "The opening band of a page: a full-bleed section spanning the whole viewport width whose copy is centered in a capped column, optionally filling one screen and optionally carrying a decorative backdrop behind it. It is the top layer of the page language and the owner of the page's first rule — the bottom hairline every column below it hangs from. `Hero.Title` is the copy block it centers.",
  "setup": null,

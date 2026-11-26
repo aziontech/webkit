@@ -1,7 +1,7 @@
 <script setup>
-  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import VideoPlayer from '@aziontech/webkit/video-player'
+  import placeholderClip from '@aziontech/ui/assets/placeholder-clip.webm'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import VideoPlayer from '@aziontech/ui/video-player'
 
   const vtt = 'WEBVTT\n\n00:00.000 --> 00:05.000\nCreate an application for Acme Store.'
   const captions = [

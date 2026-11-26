@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Timeline from '@aziontech/webkit/timeline'
+  import Card from '@aziontech/ui/card'
+  import Timeline from '@aziontech/ui/timeline'
   import { computed } from 'vue'
 
   import type { DetailTicketActivity } from '../detail-ticket.vue'

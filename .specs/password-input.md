@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 25b9380bffc8495caa4b57a73f5db6089ed61b54d1a62301808c318c2cbcc25d
+checksum: 21c252c7944233ca08852bee463503cd9965c75a9254506df1b879e1de2d426b
 created: 2026-06-16
 last_updated: 2026-11-19
 ---
@@ -18,7 +18,7 @@ last_updated: 2026-11-19
 
 Single-line password input for forms. Renders a bordered field with a built-in visibility toggle button on the trailing edge that flips the native `type` between `password` and `text`. Shares the visual language of `Input` (same heights, borders, focus ring, disabled treatment). The component is the field only — labels, helper text, and strength meters live in the wrapping form-field layer.
 
-Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mapping was originally inferred from the `input` sibling because the Figma MCP was unreachable during spec authoring; it has since been **reconciled against the frame** as rendered inside the password field frame (`2027:3212`), which corrected the trailing padding to `var(--spacing-xs)` and the visibility toggle to the 28 px (`small`) `IconButton`. One frame value is deliberately not adopted: the border width stays at the shared 1 px rather than the frame's `var(--border-width-default)` (0.8 px), because this component's contract is to share `Input`'s borders and `Input` is still on 1 px — moving one without the other would break that stated invariant. Adopting it is a coordinated follow-up across every bordered input.
+Aligned with Figma frame `3714:10788` (Azion UI / PasswordInput). The token mapping was originally inferred from the `input` sibling because the Figma MCP was unreachable during spec authoring; it has since been **reconciled against the frame** as rendered inside the password field frame (`2027:3212`), which corrected the trailing padding to `var(--spacing-xs)` and the visibility toggle to the 28 px (`small`) `IconButton`. One frame value is deliberately not adopted: the border width stays at the shared 1 px rather than the frame's `var(--border-width-default)` (0.8 px), because this component's contract is to share `Input`'s borders and `Input` is still on 1 px — moving one without the other would break that stated invariant. Adopting it is a coordinated follow-up across every bordered input.
 
 ## When to use
 
@@ -50,7 +50,7 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 
 ```vue
 <script setup>
-  import PasswordInput from '@aziontech/webkit/password-input'
+  import PasswordInput from '@aziontech/ui/password-input'
   import { ref } from 'vue'
 
   const password = ref('')
@@ -192,7 +192,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

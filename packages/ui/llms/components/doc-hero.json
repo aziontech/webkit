@@ -1,8 +1,8 @@
 {
  "name": "doc-hero",
  "binding": "DocHero",
- "import": "@aziontech/webkit/doc-hero",
- "treeShakeableImport": "@aziontech/webkit/doc-hero",
+ "import": "@aziontech/ui/doc-hero",
+ "treeShakeableImport": "@aziontech/ui/doc-hero",
  "category": "docs",
  "surface": "docs",
  "structure": "monolithic",

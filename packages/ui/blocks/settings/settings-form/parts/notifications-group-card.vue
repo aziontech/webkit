@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Subheader from '@aziontech/webkit/subheader'
-  import Switch from '@aziontech/webkit/switch'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Subheader from '@aziontech/ui/subheader'
+  import Switch from '@aziontech/ui/switch'
   import { reactive } from 'vue'
 
   import { useCardSave } from '../composables/use-card-save'

@@ -1,5 +1,5 @@
 <script setup>
-  import AudioPlayer from '@aziontech/webkit/audio-player'
+  import AudioPlayer from '@aziontech/ui/audio-player'
 </script>
 
 <template>

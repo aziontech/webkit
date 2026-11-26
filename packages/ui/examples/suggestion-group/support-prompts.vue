@@ -1,5 +1,5 @@
 <script setup>
-  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup from '@aziontech/ui/suggestion-group'
 
   const items = [
     { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'az az-github' },

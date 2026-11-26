@@ -1,16 +1,16 @@
 {
  "name": "carousel",
  "binding": "Carousel",
- "import": "@aziontech/webkit/carousel",
- "treeShakeableImport": "@aziontech/webkit/carousel-root",
+ "import": "@aziontech/ui/carousel",
+ "treeShakeableImport": "@aziontech/ui/carousel-root",
  "category": "content",
  "surface": "site",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/carousel-item",
-  "@aziontech/webkit/carousel-previous",
-  "@aziontech/webkit/carousel-next"
+  "@aziontech/ui/carousel-item",
+  "@aziontech/ui/carousel-previous",
+  "@aziontech/ui/carousel-next"
  ],
  "purpose": "A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote` or a `feature-item`. Two layouts, set on the root with `variant`: `strip` (the default) sets the cards edge to edge with no gutter — each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip; `cards` separates them with a gutter and rounds each one, so the row reads as a set of standalone cards. Each card takes its width from its own `size`, never from a class. The track fades at whichever end still has cards past it. An optional `header` slot shares the row the step controls sit in: the band's title goes at the start and the controls move to the end, so a titled carousel needs no hand-built row around it.",
  "setup": null,

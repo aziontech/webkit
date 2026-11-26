@@ -1,9 +1,9 @@
 <script setup>
-  import claudeSymbol from '@aziontech/webkit/assets/claude-symbol-color.svg'
-  import codexSymbol from '@aziontech/webkit/assets/codex-symbol-mono.svg'
-  import cursorSymbol from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
-  import geminiSymbol from '@aziontech/webkit/assets/gemini-symbol-color.svg'
-  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+  import claudeSymbol from '@aziontech/ui/assets/claude-symbol-color.svg'
+  import codexSymbol from '@aziontech/ui/assets/codex-symbol-mono.svg'
+  import cursorSymbol from '@aziontech/ui/assets/cursor-symbol-mono.svg'
+  import geminiSymbol from '@aziontech/ui/assets/gemini-symbol-color.svg'
+  import CopyPromptButton from '@aziontech/ui/copy-prompt-button'
   import { ref } from 'vue'
 
   const prompt = 'Set up the Azion CLI, connect the Azion docs over MCP and link this project.'

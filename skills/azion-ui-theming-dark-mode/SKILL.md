@@ -1,13 +1,13 @@
 ---
-name: webkit-theming-dark-mode
-description: Every screen in a @aziontech/webkit app works in BOTH light and dark with zero per-theme edits, because it is styled only through semantic tokens (var(--bg-surface), var(--text-default), var(--primary)…) that carry a role and swap value per theme — never a hex, rgb/hsl, Tailwind palette color, or a value that reads in one theme only. Use when building or reviewing any screen, and before calling one done. Covers the data-theme mechanism, elevation-in-dark, and the two-theme check.
+name: azion-ui-theming-dark-mode
+description: Every screen in a @aziontech/ui app works in BOTH light and dark with zero per-theme edits, because it is styled only through semantic tokens (var(--bg-surface), var(--text-default), var(--primary)…) that carry a role and swap value per theme — never a hex, rgb/hsl, Tailwind palette color, or a value that reads in one theme only. Use when building or reviewing any screen, and before calling one done. Covers the data-theme mechanism, elevation-in-dark, and the two-theme check.
 status: active
 last_updated: 2026-11-25
 scope: general
-enforced_by: [webkit-tokens, ui-verify]
+enforced_by: [azion-ui-tokens, ui-verify]
 ---
 
-# Skill: webkit-theming-dark-mode
+# Skill: azion-ui-theming-dark-mode
 
 ## Purpose
 
@@ -20,9 +20,9 @@ fixes the discipline that keeps every screen theme-correct with no per-theme bra
 
 ## How to use
 
-- `/webkit-theming-dark-mode` — apply the token discipline to any screen you build in this
+- `/azion-ui-theming-dark-mode` — apply the token discipline to any screen you build in this
   conversation, and switch to the dark check before declaring it done.
-- `/webkit-theming-dark-mode <file>` — review the file and report, per gap: the quoted line, the
+- `/azion-ui-theming-dark-mode <file>` — review the file and report, per gap: the quoted line, the
   hard-coded color, and the semantic token that replaces it.
 
 ## How to find the tokens and components
@@ -33,8 +33,8 @@ Never guess a token or an import path. Resolve both from the contract, not from 
   defined there does not exist. Roles you will reach for most: `--bg-canvas`, `--bg-surface`,
   `--bg-surface-raised`, `--bg-surface-overlay`, `--text-default`, `--text-secondary`,
   `--border-default`, `--primary`, `--primary-foreground`.
-- Components: ask the **webkit MCP** (`suggest_component`) or read
-  **`node_modules/@aziontech/webkit/catalog.json`** — every key under `imports` is a real subpath.
+- Components: ask the **Azion UI MCP** (`suggest_component`) or read
+  **`node_modules/@aziontech/ui/catalog.json`** — every key under `imports` is a real subpath.
 
 ## How theming works — the device decides, an attribute pins
 
@@ -67,8 +67,8 @@ Tailwind's `dark:` variant follows the same three hooks. For a settings control,
 
 ```vue
 <script setup lang="ts">
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import { useColorMode } from '@aziontech/webkit/use-color-mode'
+  import ThemeSwitcher from '@aziontech/ui/theme-switcher'
+  import { useColorMode } from '@aziontech/ui/use-color-mode'
 
   const { mode } = useColorMode()
 </script>
@@ -82,17 +82,17 @@ Tailwind's `dark:` variant follows the same three hooks. For a settings control,
 ```
 
 Under a Content-Security-Policy that blocks inline scripts, allow this one script by its hash instead of
-`'unsafe-inline'`. The hash covers the exact text of `colorModeScript`, and a WebKit test fails when the
+`'unsafe-inline'`. The hash covers the exact text of `colorModeScript`, and an Azion UI test fails when the
 script changes without this line:
 
 ```text
-script-src 'self' 'sha256-Mr2TXUqeQwYxZgSb0xwpzGaZroVMkDVGwawpZp7IcjY='
+script-src 'self' 'sha256-q4pzkH9fDAqO1jCk6DwDOhmtxNBqTrwKv4MfgERzH5w='
 ```
 
-A starting policy for an app built on WebKit, sent as response headers by the server or the edge:
+A starting policy for an app built on Azion UI, sent as response headers by the server or the edge:
 
 ```text
-Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-Mr2TXUqeQwYxZgSb0xwpzGaZroVMkDVGwawpZp7IcjY='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'
+Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-q4pzkH9fDAqO1jCk6DwDOhmtxNBqTrwKv4MfgERzH5w='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'
 X-Content-Type-Options: nosniff
 Referrer-Policy: strict-origin-when-cross-origin
 ```
@@ -178,7 +178,7 @@ and accent all move together.
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 
   function toggleTheme() {
     const el = document.documentElement
@@ -214,7 +214,7 @@ on both — do not ship a single saturated hex for both grounds.
 
 ## Validate BOTH themes before "done"
 
-A screen tested in one theme is **not done**. The `webkit-ui-verify` runtime check screenshots the
+A screen tested in one theme is **not done**. The `azion-ui-verify` runtime check screenshots the
 view in light **and** dark — run it, look at both, and confirm text contrast, surface separation, and
 accents all hold. A regression that only shows in dark is invisible until someone opens dark mode in
 production; the two-theme screenshot is what catches it first.
@@ -230,12 +230,12 @@ production; the two-theme screenshot is what catches it first.
 - No `dark:` override for a role a token already covers; reserve `dark:` for the property no token
   expresses, and prefer proposing the token.
 - Every new accent is contrast-checked and desaturated for **both** grounds.
-- A screen is done only after it is verified in **both** themes (`webkit-ui-verify` two-theme
+- A screen is done only after it is verified in **both** themes (`azion-ui-verify` two-theme
   screenshots).
 
 ## Review output
 
-For `/webkit-theming-dark-mode <file>`, list gaps grouped by element. Each:
+For `/azion-ui-theming-dark-mode <file>`, list gaps grouped by element. Each:
 
 ```
 ✗ WorkloadCard.vue:14  class="bg-white text-zinc-900 border-slate-200"

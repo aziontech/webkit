@@ -1,6 +1,6 @@
 import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
-const WEBKIT_PREFIX = '@aziontech/webkit/'
+const AZION_UI_PREFIX = '@aziontech/ui/'
 
 const HEADER_ENTRIES = new Set(['page-header'])
 
@@ -59,7 +59,7 @@ export default {
       size:
         '{{control}} in the PageHeader actions is size="{{size}}": every heading action is ' +
         'size="medium" (32px), so the row keeps one height. Set size="medium"; give the create ' +
-        'action variant="primary" and the others variant="outline" (rule `webkit-page-layout`).'
+        'action variant="primary" and the others variant="outline" (rule `azion-ui-page-layout`).'
     }
   },
   create(context) {
@@ -69,8 +69,8 @@ export default {
     const scriptVisitor = {
       ImportDeclaration(node) {
         const source = node.source.value
-        if (typeof source !== 'string' || !source.startsWith(WEBKIT_PREFIX)) return
-        const entry = source.slice(WEBKIT_PREFIX.length)
+        if (typeof source !== 'string' || !source.startsWith(AZION_UI_PREFIX)) return
+        const entry = source.slice(AZION_UI_PREFIX.length)
         const target = HEADER_ENTRIES.has(entry)
           ? headerNames
           : CONTROL_ENTRIES.has(entry)

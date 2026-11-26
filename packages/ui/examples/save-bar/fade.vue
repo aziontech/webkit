@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import SaveBar from '@aziontech/webkit/save-bar'
+  import Button from '@aziontech/ui/button'
+  import SaveBar from '@aziontech/ui/save-bar'
 </script>
 
 <template>

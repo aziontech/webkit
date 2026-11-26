@@ -61,7 +61,7 @@ let typeErrors = []
 
 test('every TypeScript block, variant and example type-checks in a strict consumer app', () => {
   assert.ok(typed.length > 0, 'expected TypeScript blocks')
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-copyable-ts-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-copyable-ts-'))
   try {
     const tsconfig = join(dir, 'tsconfig.json')
     writeFileSync(

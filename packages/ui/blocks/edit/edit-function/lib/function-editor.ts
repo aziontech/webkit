@@ -1,4 +1,4 @@
-import type { CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
+import type { CodeEditorMonacoModule } from '@aziontech/ui/code-editor'
 
 import type { FunctionEditorField } from '../edit-function.vue'
 

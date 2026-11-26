@@ -1,5 +1,5 @@
 <script setup>
-  import Avatar from '@aziontech/webkit/avatar'
+  import Avatar from '@aziontech/ui/avatar'
 </script>
 
 <template>

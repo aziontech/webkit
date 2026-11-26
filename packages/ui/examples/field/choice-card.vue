@@ -1,7 +1,7 @@
 <script setup>
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import Switch from '@aziontech/webkit/switch'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const backups = ref(true)

@@ -1,8 +1,5 @@
-import {
-  useUnsavedChanges,
-  type UseUnsavedChangesReturn
-} from '@aziontech/webkit/use-unsaved-changes'
-import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
+import { useUnsavedChanges, type UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
+import { focusFirstInvalid } from '@aziontech/ui/utils/focus-invalid'
 import {
   type ComputedRef,
   inject,

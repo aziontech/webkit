@@ -3,10 +3,10 @@
 > The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary medium Create Application at the same height, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests in 24h, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the edit-delete-dialog pattern: a warning `Alert`, the selected names and its typed confirmation phrase, delete), and `CollectionPreferences` for the page size and which fields every card shows; then `CardList` and a `Pagination`. Each card is named by a `Link` to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a flush `Card` holding a medium `EmptyState` with a Create action; a load failure shows a danger `Alert` with Retry; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/view/view-card/view-card.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-card/view-card.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-card")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CardList](../../components/card-list.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [EmptyState](../../components/empty-state.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), [PropertyFilter](../../components/property-filter.md), [Tag](../../components/tag.md), `use-collection`, `use-locale`
-- Skills: `webkit-lists`, `webkit-ui-states`
+- Skills: `azion-ui-lists`, `azion-ui-states`
 
 ## Asked as
 
@@ -36,7 +36,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined medium Documentation button, which opens the docs in a new tab, and the primary `Create <Object>` button at the same `size="medium"`, set apart by its colour, as `skills/webkit-lists` asks; everything on the controls row stays medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears.
+`PageHeader` at its medium size carries the module name as the title and one sentence of purpose as the description. Its actions slot holds the outlined medium Documentation button, which opens the docs in a new tab, and the primary `Create <Object>` button at the same `size="medium"`, set apart by its colour, as `skills/azion-ui-lists` asks; everything on the controls row stays medium. On a phone the actions stack below the copy at full width. At first level this heading is the only place the module name appears.
 
 ### B. Property filter — `PropertyFilter` (required)
 
@@ -140,7 +140,7 @@ Then delete `sample.ts` and its import.
 - **Delete dialog:** title `Delete <n> applications`, consequence `The selected applications will be deleted, along with their domains and settings:` followed by the names, prompt `Type <name> to confirm.` for one, `Type delete to confirm.` for several, actions `Cancel` and `Delete applications` (singular for one).
 - **No match:** "No matching applications", then "No application matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No applications yet"; description is one sentence with what to do, e.g. "Create an application to start serving traffic."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -169,7 +169,7 @@ Then delete `sample.ts` and its import.
 - `create/create-page` — where the Create action leads for a short form.
 - `detail/detail-resource` — where a card's name leads.
 - `state/state-first-use` — the module before its first resource.
-- `useCollection`, `CardList` and `Pagination` — see `skills/webkit-lists`.
+- `useCollection`, `CardList` and `Pagination` — see `skills/azion-ui-lists`.
 
 ## Variants
 
@@ -184,20 +184,20 @@ Each variant is the same screen in another state: `get_block("view/view-card", {
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CardList from '@aziontech/webkit/card-list'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Link from '@aziontech/webkit/link'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Pagination from '@aziontech/webkit/pagination-root'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CardList from '@aziontech/ui/card-list'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Pagination from '@aziontech/ui/pagination-root'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
+  import { type FilteringProperty, useCollection } from '@aziontech/ui/use-collection'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import { sampleApplications } from './sample'

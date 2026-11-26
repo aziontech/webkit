@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/input/switch/switch.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/input/switch/switch.vue
 // component=Switch
 import figma from 'figma'
 
@@ -17,7 +17,7 @@ const variant = instance.getEnum('kind', {
 
 export default {
   example: figma.code`<Switch v-model="enabled"${variant === 'default' ? '' : figma.code` variant="${variant}"`}${disabled ? figma.code` disabled` : ''} />`,
-  imports: ["import Switch from '@aziontech/webkit/switch'"],
+  imports: ["import Switch from '@aziontech/ui/switch'"],
   id: 'switch',
   metadata: { nestable: true }
 }

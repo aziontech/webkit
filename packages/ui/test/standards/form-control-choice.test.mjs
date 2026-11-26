@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 const PKG_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const REPO_ROOT = resolve(PKG_ROOT, '..', '..')
 const INPUT_DIR = join(PKG_ROOT, 'src', 'components', 'input')
-const SKILL = join(REPO_ROOT, 'skills', 'webkit-form', 'SKILL.md')
+const SKILL = join(REPO_ROOT, 'skills', 'azion-ui-form', 'SKILL.md')
 const HEADING = '## Pick the control from the kind of value'
 
 // Not a control that holds a value: the field wrapper, the info glyph and a display token.
@@ -24,7 +24,7 @@ const pascal = (name) =>
 function section() {
   const text = readFileSync(SKILL, 'utf8')
   const start = text.indexOf(HEADING)
-  assert.notEqual(start, -1, `skills/webkit-form/SKILL.md has no "${HEADING}" section`)
+  assert.notEqual(start, -1, `skills/azion-ui-form/SKILL.md has no "${HEADING}" section`)
   const end = text.indexOf('\n## ', start + HEADING.length)
   return text.slice(start, end === -1 ? undefined : end)
 }
@@ -45,7 +45,7 @@ test('the form skill names every input component in its control table', () => {
   assert.deepEqual(
     missing,
     [],
-    `skills/webkit-form/SKILL.md, "${HEADING}": add a row for ${missing.join(', ')} ` +
+    `skills/azion-ui-form/SKILL.md, "${HEADING}": add a row for ${missing.join(', ')} ` +
       '(the kind of value it holds, what it binds, what it replaces). ' +
       'A form control the skill does not name is a control agents do not use.'
   )

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import DocMarkdown, { parseDocMarkdown } from '@aziontech/webkit/doc-markdown'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
+  import Alert from '@aziontech/ui/alert'
+  import DocMarkdown, { parseDocMarkdown } from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import DocTableOfContents from '@aziontech/ui/doc-table-of-contents'
 
   const components = { Alert }
 

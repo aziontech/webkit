@@ -4,14 +4,14 @@ import { dirname, join } from 'node:path'
 
 import { read } from '../init/project-files.js'
 
-const WEBKIT_PKGS = ['@aziontech/webkit']
+const AZION_UI_PKGS = ['@aziontech/ui']
 
 export function resolveCatalog(projectDir) {
-  if (process.env.WEBKIT_CATALOG_PATH && existsSync(process.env.WEBKIT_CATALOG_PATH)) {
-    return process.env.WEBKIT_CATALOG_PATH
+  if (process.env.AZION_UI_CATALOG_PATH && existsSync(process.env.AZION_UI_CATALOG_PATH)) {
+    return process.env.AZION_UI_CATALOG_PATH
   }
-  const require = createRequire(join(projectDir, '__webkit_resolve__.js'))
-  for (const pkg of WEBKIT_PKGS) {
+  const require = createRequire(join(projectDir, '__azion_ui_resolve__.js'))
+  for (const pkg of AZION_UI_PKGS) {
     try {
       return require.resolve(`${pkg}/catalog.json`)
     } catch {}

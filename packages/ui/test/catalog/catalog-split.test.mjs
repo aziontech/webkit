@@ -20,12 +20,12 @@ const {
 
 const SPLIT_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
 const full = await build()
-const dir = mkdtempSync(join(tmpdir(), 'webkit-catalog-'))
+const dir = mkdtempSync(join(tmpdir(), 'azion-ui-catalog-'))
 const MONOLITH_PATH = join(dir, 'catalog.json')
 writeFileSync(MONOLITH_PATH, JSON.stringify(full))
 
 function load(path) {
-  process.env.WEBKIT_CATALOG_PATH = path
+  process.env.AZION_UI_CATALOG_PATH = path
   _resetCatalogCache()
   return loadCatalog()
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import DataTable, { type TableColumn } from '@aziontech/ui/data-table'
+  import { useCollection } from '@aziontech/ui/use-collection'
   import { ref } from 'vue'
 
   interface Domain {

@@ -1,8 +1,8 @@
 {
  "name": "module-header",
  "binding": "ModuleHeader",
- "import": "@aziontech/webkit/module-header",
- "treeShakeableImport": "@aziontech/webkit/module-header",
+ "import": "@aziontech/ui/module-header",
+ "treeShakeableImport": "@aziontech/ui/module-header",
  "category": "layout",
  "surface": "site",
  "structure": "monolithic",

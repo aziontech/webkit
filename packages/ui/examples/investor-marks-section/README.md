@@ -4,7 +4,7 @@ The company's investors as a row of linked marks under a centered title, like th
 
 On hover and keyboard focus the mark lifts and a "Visit website" line rises under it. Under reduced motion both stay put. Each mark carries a light and a dark logo, so it reads in either theme.
 
-The band is the `InvestorMarksSection` component from `@aziontech/webkit/investor-marks-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame` and `BentoGrid`.
+The band is the `InvestorMarksSection` component from `@aziontech/ui/investor-marks-section`; it composes `Module`, `ModuleHeader`, `RegistrationFrame` and `BentoGrid`.
 
 ## Examples
 

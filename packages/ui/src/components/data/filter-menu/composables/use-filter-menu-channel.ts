@@ -64,7 +64,7 @@ export function useFilterMenuChannel(
   const requestOpen = (fieldId: string, origin: HTMLElement | null): void => {
     const target = channel.value
     if (!listeners.get(target)) {
-      console.warn('[webkit] FilterMenu.ChipGroup: no FilterMenu has these fields.')
+      console.warn('[azion-ui] FilterMenu.ChipGroup: no FilterMenu has these fields.')
     }
     target.value = { fieldId, origin, token: (target.value?.token ?? 0) + 1 }
   }

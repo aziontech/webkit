@@ -595,7 +595,7 @@ describe('PhoneInput', () => {
     })
 
     it('announces how many countries match, and the no-match text when none does', async () => {
-      const spoken = () => document.querySelector('[data-webkit-announcer]')?.textContent ?? ''
+      const spoken = () => document.querySelector('[data-azion-announcer]')?.textContent ?? ''
       const { getByTestId } = render(PhoneInput, { props: { noMatch: 'Nothing here' } })
 
       await fireEvent.click(getByTestId('select-trigger'))
@@ -610,7 +610,7 @@ describe('PhoneInput', () => {
       expect(document.body.querySelector('[data-slot="no-match"]')?.hasAttribute('role')).toBe(
         false
       )
-      document.querySelector('[data-webkit-announcer]')?.remove()
+      document.querySelector('[data-azion-announcer]')?.remove()
     })
 
     it('marks its parts with data-slot', () => {

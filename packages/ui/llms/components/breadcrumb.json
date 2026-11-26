@@ -1,16 +1,16 @@
 {
  "name": "breadcrumb",
  "binding": "Breadcrumb",
- "import": "@aziontech/webkit/breadcrumb",
- "treeShakeableImport": "@aziontech/webkit/breadcrumb-root",
+ "import": "@aziontech/ui/breadcrumb",
+ "treeShakeableImport": "@aziontech/ui/breadcrumb-root",
  "category": "navigation",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/breadcrumb-item"
+  "@aziontech/ui/breadcrumb-item"
  ],
- "purpose": "Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).",
+ "purpose": "Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Azion UI tokens).",
  "setup": null,
  "useWhen": [
   "Use Breadcrumb (with `items`, or Breadcrumb.Item parts) for the page trail.",

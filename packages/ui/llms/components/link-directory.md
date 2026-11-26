@@ -2,8 +2,8 @@
 
 > A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.
 
-- Import: `import LinkDirectoryRoot from '@aziontech/webkit/link-directory-root'`
-- Compound import (dot notation, not tree-shakeable): `import LinkDirectory from '@aziontech/webkit/link-directory'`
+- Import: `import LinkDirectoryRoot from '@aziontech/ui/link-directory-root'`
+- Compound import (dot notation, not tree-shakeable): `import LinkDirectory from '@aziontech/ui/link-directory'`
 - Category: marketing · Surface: site · Structure: composition
 - API as JSON: [link-directory.json](link-directory.json)
 
@@ -57,8 +57,8 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/link-directory-column`
-- `@aziontech/webkit/link-directory-item`
+- `@aziontech/ui/link-directory-column`
+- `@aziontech/ui/link-directory-item`
 
 ## Sub-components
 
@@ -94,9 +94,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import LinkDirectoryColumn from '@aziontech/webkit/link-directory-column'
-  import LinkDirectoryItem from '@aziontech/webkit/link-directory-item'
-  import LinkDirectoryRoot from '@aziontech/webkit/link-directory-root'
+  import LinkDirectoryColumn from '@aziontech/ui/link-directory-column'
+  import LinkDirectoryItem from '@aziontech/ui/link-directory-item'
+  import LinkDirectoryRoot from '@aziontech/ui/link-directory-root'
 </script>
 
 <template>
@@ -192,9 +192,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import LinkDirectoryColumn from '@aziontech/webkit/link-directory-column'
-  import LinkDirectoryItem from '@aziontech/webkit/link-directory-item'
-  import LinkDirectoryRoot from '@aziontech/webkit/link-directory-root'
+  import LinkDirectoryColumn from '@aziontech/ui/link-directory-column'
+  import LinkDirectoryItem from '@aziontech/ui/link-directory-item'
+  import LinkDirectoryRoot from '@aziontech/ui/link-directory-root'
 </script>
 
 <template>
@@ -308,9 +308,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import LinkDirectoryColumn from '@aziontech/webkit/link-directory-column'
-  import LinkDirectoryItem from '@aziontech/webkit/link-directory-item'
-  import LinkDirectoryRoot from '@aziontech/webkit/link-directory-root'
+  import LinkDirectoryColumn from '@aziontech/ui/link-directory-column'
+  import LinkDirectoryItem from '@aziontech/ui/link-directory-item'
+  import LinkDirectoryRoot from '@aziontech/ui/link-directory-root'
 </script>
 
 <template>

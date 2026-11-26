@@ -9,7 +9,7 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import unusedImports from 'eslint-plugin-unused-imports'
 import vuejsAccessibility from 'eslint-plugin-vuejs-accessibility'
 
-import webkitPlugin from './packages/webkit/src/eslint-plugin/index.js'
+import azionUiPlugin from './packages/ui/src/eslint-plugin/index.js'
 
 export default [
   {
@@ -144,7 +144,7 @@ export default [
   },
   {
     files: ['**/*.vue'],
-    plugins: { webkit: webkitPlugin },
-    rules: { 'webkit/no-physical-direction': 'error' }
+    plugins: { 'azion-ui': azionUiPlugin },
+    rules: { 'azion-ui/no-physical-direction': 'error' }
   }
 ]

@@ -1,6 +1,6 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
-  import StatusCode from '@aziontech/webkit/status-code'
+  import DataTable from '@aziontech/ui/data-table'
+  import StatusCode from '@aziontech/ui/status-code'
 
   const rows = [
     { id: 'r1', time: '12:04:31', method: 'GET', status: 200, path: '/', duration: '38 ms' },

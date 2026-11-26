@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Sidebar from '@aziontech/webkit/sidebar'
+  import Sidebar from '@aziontech/ui/sidebar'
 
   import SideNav from './side-nav.vue'
 

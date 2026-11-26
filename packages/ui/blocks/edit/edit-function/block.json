@@ -40,7 +40,7 @@
     "edit function code",
     "function arguments page"
   ],
-  "skills": ["webkit-layout", "webkit-navigation", "webkit-form"],
+  "skills": ["azion-ui-layout", "azion-ui-navigation", "azion-ui-form"],
   "primary": {
     "name": "Code",
     "file": "edit-function.vue"

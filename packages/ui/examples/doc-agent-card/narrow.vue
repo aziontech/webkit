@@ -1,5 +1,5 @@
 <script setup>
-  import DocAgentCard from '@aziontech/webkit/doc-agent-card'
+  import DocAgentCard from '@aziontech/ui/doc-agent-card'
 
   const prompt = 'Set up the Azion CLI and link this project to my Azion account.'
 </script>

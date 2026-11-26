@@ -1,4 +1,4 @@
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 export interface ServiceWizardOption extends SelectOptionItem {
   description?: string

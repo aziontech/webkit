@@ -1,5 +1,5 @@
 <script setup>
-  import PlatformDirectorySection from '@aziontech/webkit/platform-directory-section'
+  import PlatformDirectorySection from '@aziontech/ui/platform-directory-section'
 </script>
 
 <template>

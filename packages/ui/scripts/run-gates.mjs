@@ -30,6 +30,11 @@ export const GATES = [
   },
   { id: 'naming', label: 'Naming', steps: [['node', 'scripts/check-naming.mjs']] },
   {
+    id: 'old-name',
+    label: 'No old library name outside the allowed list (the package is @aziontech/ui)',
+    steps: [['node', 'scripts/check-old-name.mjs']]
+  },
+  {
     id: 'migrations',
     label: 'Public API changes have a codemod entry',
     steps: [['node', 'scripts/check-migrations.mjs']]
@@ -138,7 +143,7 @@ export const GATES = [
     label:
       'No line over 200 characters and no accessibility lint finding in components, blocks and examples',
     root: true,
-    steps: [['pnpm', '--filter', '@aziontech/webkit', 'run', 'lint:quality']]
+    steps: [['pnpm', '--filter', '@aziontech/ui', 'run', 'lint:quality']]
   },
   {
     id: 'hooks',
@@ -155,7 +160,7 @@ export const GATES = [
     label: 'MCP, theme and icons package tests, icons manifest',
     root: true,
     steps: [
-      ['pnpm', '--filter', '@aziontech/webkit-mcp', 'test'],
+      ['pnpm', '--filter', '@aziontech/ui-mcp', 'test'],
       ['pnpm', '--filter', '@aziontech/theme', 'test'],
       ['pnpm', '--filter', '@aziontech/icons', 'test'],
       ['pnpm', '--filter', '@aziontech/icons', 'check:manifest']
@@ -171,7 +176,7 @@ export const GATES = [
     id: 'stylelint',
     label: 'Stylelint',
     root: true,
-    steps: [['pnpm', 'run', 'lint:webkit:style']]
+    steps: [['pnpm', 'run', 'lint:ui:style']]
   },
   {
     id: 'lint-canaries',
@@ -183,37 +188,37 @@ export const GATES = [
     id: 'lint',
     label: 'ESLint on the package source, no warning',
     root: true,
-    steps: [['pnpm', 'run', 'lint:webkit']]
+    steps: [['pnpm', 'run', 'lint:ui']]
   },
   {
     id: 'typecheck',
     label: 'TypeScript check (vue-tsc)',
     root: true,
-    steps: [['pnpm', 'run', 'typecheck:webkit']]
+    steps: [['pnpm', 'run', 'typecheck:ui']]
   },
   {
     id: 'type-coverage',
     label: 'Type coverage of the .ts files, at least 95%',
     root: true,
-    steps: [['pnpm', 'run', 'check:webkit:type-coverage']]
+    steps: [['pnpm', 'run', 'check:ui:type-coverage']]
   },
   {
     id: 'ssr',
     label: 'Server render of every block and example',
     root: true,
-    steps: [['pnpm', '--filter', '@aziontech/webkit', 'test:ssr']]
+    steps: [['pnpm', '--filter', '@aziontech/ui', 'test:ssr']]
   },
   {
     id: 'types-tests',
     label: 'Tests TypeScript check',
     root: true,
-    steps: [['pnpm', 'run', 'typecheck:webkit:tests']]
+    steps: [['pnpm', 'run', 'typecheck:ui:tests']]
   },
   {
     id: 'format',
     label: 'Prettier check',
     root: true,
-    steps: [['pnpm', 'run', 'check:webkit:format']]
+    steps: [['pnpm', 'run', 'check:ui:format']]
   },
   {
     id: 'unused',
@@ -281,7 +286,7 @@ export function formatTable(results) {
   )
   const failed = results.filter((r) => !r.pass).length
   return [
-    '| Gate | Command (in packages/webkit, or the repo root for root gates) | Result | Time |',
+    '| Gate | Command (in packages/ui, or the repo root for root gates) | Result | Time |',
     '| --- | --- | --- | --- |',
     ...rows,
     '',

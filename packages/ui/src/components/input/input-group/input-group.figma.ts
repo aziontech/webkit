@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/input/input-group/input-group.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/input/input-group/input-group.vue
 // component=InputGroup
 import figma from 'figma'
 
@@ -37,7 +37,7 @@ export default {
       : ''
   }
 </InputGroup>`,
-  imports: ["import InputGroup from '@aziontech/webkit/input-group'"],
+  imports: ["import InputGroup from '@aziontech/ui/input-group'"],
   id: 'input-group',
   metadata: { nestable: true }
 }

@@ -1,10 +1,10 @@
 {
-  "webkit/authoring-standards": "webkit/require-authoring-standards",
-  "webkit/composable-readonly-return": "webkit/require-readonly-composable-return",
-  "webkit/composable-scope-cleanup": "webkit/require-composable-scope-cleanup",
-  "webkit/accessible-name": "webkit/require-accessible-name",
-  "webkit/container-needs-width": "webkit/require-container-width",
-  "webkit/header-search-trigger": "webkit/require-header-search",
-  "webkit/menu-node-href": "webkit/prefer-href-in-menu-node",
-  "webkit/valid-import-path": "webkit/no-unknown-import"
+  "azion-ui/authoring-standards": "azion-ui/require-authoring-standards",
+  "azion-ui/composable-readonly-return": "azion-ui/require-readonly-composable-return",
+  "azion-ui/composable-scope-cleanup": "azion-ui/require-composable-scope-cleanup",
+  "azion-ui/accessible-name": "azion-ui/require-accessible-name",
+  "azion-ui/container-needs-width": "azion-ui/require-container-width",
+  "azion-ui/header-search-trigger": "azion-ui/require-header-search",
+  "azion-ui/menu-node-href": "azion-ui/prefer-href-in-menu-node",
+  "azion-ui/valid-import-path": "azion-ui/no-unknown-import"
 }

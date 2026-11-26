@@ -56,7 +56,7 @@ function propNames(script) {
 function imports(script, file, nameByFile) {
   const out = new Set()
   for (const [, spec] of script.matchAll(/import\s+\w+\s+from\s+'([^']+)'/g)) {
-    if (spec.startsWith('@aziontech/webkit/')) out.add(spec.split('/').pop())
+    if (spec.startsWith('@aziontech/ui/')) out.add(spec.split('/').pop())
     else if (spec.startsWith('.')) {
       let abs = resolve(dirname(file), spec)
       if (!abs.endsWith('.vue')) abs = join(abs, basename(abs) + '.vue')

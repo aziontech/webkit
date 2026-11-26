@@ -3,10 +3,10 @@
 > The surfaces a project passes through when it is dropped on the page: the drop target (`FileDropzone` with `directories`, its title saying what dropping does and Choose a folder and Choose files `Button`s as the keyboard way in, only Choose files on a phone), then the full-screen Initializing overlay: an `UploadProgress` card in the flow listing the received files with their status in words (Done, the percentage while uploading, Waiting), Cancel and Retry, over the upload summary. A large drop lists only the files still moving (at most 50 rows) while the heading keeps the counts. UploadError shows a file that failed: its row carries the reason and Retry, and a danger `Alert` above sums it up with Retry. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. DropZone is a page body inside the default slot of ConsoleLayout; Initializing covers the whole screen.
 
 - Surface: app
-- Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/webkit`
+- Source: `blocks/state/state-project-intake/state-project-intake.vue` in `@aziontech/ui`
 - MCP: `get_block("state/state-project-intake")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [FileDropzone](../../components/file-dropzone.md), [UploadProgress](../../components/upload-progress.md), `use-file-picker`, `use-locale`
-- Skills: `webkit-ui-states`, `webkit-motion-polish`
+- Skills: `azion-ui-states`, `azion-ui-motion-polish`
 
 ## Asked as
 
@@ -23,7 +23,7 @@ DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`she
 
 ## When not to use
 
-- Choosing a single file as a form value: use a file upload field inside the form (`skills/webkit-form`).
+- Choosing a single file as a form value: use a file upload field inside the form (`skills/azion-ui-form`).
 - Browsing or managing stored files: use `view/view-file-browser`.
 - The build and deploy that follow the upload: use `state/state-async-submit` and `detail/detail-deployment-logs`.
 - Importing from a repository: use the From GitHub method in `state/state-first-use` or `create/create-deploy-template` (ImportFromGit).
@@ -141,12 +141,12 @@ Each variant is the same screen in another state: `get_block("state/state-projec
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import FileDropzone from '@aziontech/ui/file-dropzone'
+  import UploadProgress, { type UploadProgressItem } from '@aziontech/ui/upload-progress'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   /** One file of the upload, with its state and progress. */

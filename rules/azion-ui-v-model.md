@@ -5,7 +5,7 @@ never a hand-written `modelValue` prop paired with an `update:modelValue` emit, 
 a local `ref` mirrored into a `watch`. One macro solves both problems every stateful
 component has: the **controlled/uncontrolled split** (when the parent binds `v-model` the
 parent owns the value; when it doesn't, the returned ref holds local state) and the
-**boilerplate**. The `webkit/require-authoring-standards` ESLint rule blocks the manual
+**boilerplate**. The `azion-ui/require-authoring-standards` ESLint rule blocks the manual
 `modelValue` + `update:modelValue` pair as an **error** — this rule is why, and what to
 write instead.
 
@@ -45,7 +45,7 @@ write instead.
 
 ```vue
 <script setup lang="ts">
-  import Input from '@aziontech/webkit/input'
+  import Input from '@aziontech/ui/input'
 
   // Primary value — consumer binds v-model="query".
   // Boundary transform: what leaves the component is always trimmed.
@@ -72,7 +72,7 @@ write instead.
 
 ```vue
 <script setup lang="ts">
-  // Hand-rolled pair — blocked by the webkit/require-authoring-standards ESLint rule
+  // Hand-rolled pair — blocked by the azion-ui/require-authoring-standards ESLint rule
   const props = defineProps<{ modelValue: string }>()
   const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 

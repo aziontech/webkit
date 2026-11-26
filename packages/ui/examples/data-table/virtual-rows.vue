@@ -1,5 +1,5 @@
 <script setup>
-  import DataTable from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/ui/data-table'
 
   const rows = Array.from({ length: 10000 }, (_, i) => ({
     id: String(i + 1),

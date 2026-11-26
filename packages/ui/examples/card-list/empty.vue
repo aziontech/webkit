@@ -1,7 +1,7 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CardList from '@aziontech/webkit/card-list'
-  import EmptyState from '@aziontech/webkit/empty-state'
+  import Button from '@aziontech/ui/button'
+  import CardList from '@aziontech/ui/card-list'
+  import EmptyState from '@aziontech/ui/empty-state'
 </script>
 
 <template>

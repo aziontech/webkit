@@ -67,7 +67,7 @@ function applyAddDep(projectDir, action) {
     return {
       action,
       result: 'skipped',
-      detail: `${field}.${action.dep}@${current} kept (WebKit needs ${action.version})`
+      detail: `${field}.${action.dep}@${current} kept (Azion UI needs ${action.version})`
     }
   }
   pkg[field][action.dep] = action.version
@@ -75,7 +75,7 @@ function applyAddDep(projectDir, action) {
   return {
     action,
     result: 'written',
-    detail: `${field}.${action.dep}@${action.version}${current ? ` (was ${current}, older than WebKit needs)` : ''}`
+    detail: `${field}.${action.dep}@${action.version}${current ? ` (was ${current}, older than Azion UI needs)` : ''}`
   }
 }
 

@@ -1,5 +1,5 @@
 <script setup>
-  import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
+  import TemplateGallerySection from '@aziontech/ui/template-gallery-section'
 </script>
 
 <template>

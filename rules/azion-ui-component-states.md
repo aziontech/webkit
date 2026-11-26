@@ -1,14 +1,14 @@
-# Rule: render every component state through data-\* and webkit's state components
+# Rule: render every component state through data-\* and Azion UI's state components
 
 Every interactive component has a **state surface** — the set of conditions it must visibly
-handle. webkit components own the rendering of their states; your screen supplies only the
+handle. Azion UI components own the rendering of their states; your screen supplies only the
 **trigger** (a boolean prop, or the async data your app owns). The same applies to components
 you author in this project: decide which states each one handles and render them through
-`data-*` attributes and webkit's own state components (`Skeleton`, `EmptyState`,
+`data-*` attributes and Azion UI's own state components (`Skeleton`, `EmptyState`,
 `FieldDescription`) — never an ad-hoc spinner or "no results" string improvised per screen.
 This pattern is convention + code review in this project; the tokens used inside state
 styling are still checked mechanically by the stylelint config and the
-`webkit/no-hardcoded-color` ESLint rule.
+`azion-ui/no-hardcoded-color` ESLint rule.
 
 The canonical states and how each renders:
 

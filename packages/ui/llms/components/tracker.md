@@ -2,7 +2,7 @@
 
 > Use Tracker for the history of a state across periods (an uptime strip); the current state of one resource is a StatusIndicator. A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus. It shows the history of a state at a glance (uptime, health checks, build results), where a `chart` would plot a measure.
 
-- Import: `import Tracker from '@aziontech/webkit/tracker'`
+- Import: `import Tracker from '@aziontech/ui/tracker'`
 - Category: chart · Surface: app · Structure: monolithic
 - API as JSON: [tracker.json](tracker.json)
 
@@ -92,8 +92,8 @@
 
 ```vue
 <script setup>
-  import Tracker from '@aziontech/webkit/tracker'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Tracker from '@aziontech/ui/tracker'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   const DAYS = 90
   const DEGRADED_DAY = 52
@@ -137,7 +137,7 @@
 
 ```vue
 <script setup>
-  import Tracker from '@aziontech/webkit/tracker'
+  import Tracker from '@aziontech/ui/tracker'
 </script>
 
 <template>
@@ -154,7 +154,7 @@
 
 ```vue
 <script setup>
-  import Tracker from '@aziontech/webkit/tracker'
+  import Tracker from '@aziontech/ui/tracker'
 </script>
 
 <template>

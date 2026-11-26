@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import ConfigProvider from '@aziontech/webkit/config-provider'
+  import ConfigProvider from '@aziontech/ui/config-provider'
   import { useHead } from '@unhead/vue'
   import {
     computed,
@@ -13,13 +13,13 @@
 
   import { loadDocsShell } from './lib/docs-shell-loader'
   import { persistSettings, restoreSettings, settings } from './lib/settings'
-  import { loadWebkitCatalog, webkitCatalogs as catalogs } from './lib/webkit-catalogs'
+  import { loadAzionUiCatalog, azionUiCatalogs as catalogs } from './lib/azion-ui-catalogs'
 
   const DocsShell = defineAsyncComponent(loadDocsShell)
 
   watch(
     () => settings.locale,
-    (locale) => void loadWebkitCatalog(locale),
+    (locale) => void loadAzionUiCatalog(locale),
     { immediate: true }
   )
   useHead({ htmlAttrs: { lang: computed(() => settings.locale) } })

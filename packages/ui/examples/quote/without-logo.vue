@@ -1,5 +1,5 @@
 <script setup>
-  import Quote from '@aziontech/webkit/quote'
+  import Quote from '@aziontech/ui/quote'
 </script>
 
 <template>

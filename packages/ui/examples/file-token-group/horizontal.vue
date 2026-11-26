@@ -1,5 +1,5 @@
 <script setup>
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
   import { ref } from 'vue'
 
   const items = ref(

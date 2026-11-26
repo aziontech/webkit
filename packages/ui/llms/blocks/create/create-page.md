@@ -3,10 +3,10 @@
 > The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section, a Tags section (`TagEditor`) and a collapsed Advanced section, and an action whose submit label follows what it does: Save stores the new resource, Purge runs one. A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `AppHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `FieldError`, `Switch`, `RadioGroup` (`variant="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
 
 - Surface: app
-- Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
+- Source: `blocks/create/create-page/create-page.vue` in `@aziontech/ui`
 - MCP: `get_block("create/create-page")`
 - Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [TagEditor](../../components/tag-editor.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-escape-to-cancel`, `use-file-picker`, `use-shortcuts`, `use-unsaved-changes`, `utils/focus-invalid`
-- Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
+- Skills: `azion-ui-create-surface`, `azion-ui-form`, `azion-ui-errors`, `azion-ui-layout`
 
 ## Asked as
 
@@ -17,7 +17,7 @@ The page a first-level resource is created on when everything it needs fits on o
 ## When to use
 
 - Use create-page only to create a first-level resource on one page; its settings page is edit-resource (`edit/edit-resource`).
-- The resource is one the sidebar routes to (a domain, a service, a purge) and the user came only to create it (`skills/webkit-create-surface`).
+- The resource is one the sidebar routes to (a domain, a service, a purge) and the user came only to create it (`skills/azion-ui-create-surface`).
 - Its fields fit in a few sections without depending on each other's answers step by step.
 - An action that takes a form and runs once, whose submit names what it does (Save, Purge, Deploy).
 
@@ -91,7 +91,7 @@ To go live, render the block from a page that owns the request:
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import CreatePage, { type CreatePageValues } from './create-page.vue'
 
   const { mutate, pending, error } = useCreateDomain()
@@ -118,7 +118,7 @@ To go live, render the block from a page that owns the request:
 - Give every control an `aria-label` that repeats its row title.
 - Keep Cancel and the submit in the same bar, submit last, and name the submit after what it does (Save, Purge, Deploy).
 - Lock the whole `fieldset` and every control with one `loading` flag while the request is in flight, and put `:loading` on the submit.
-- On success, show a toast that names the resource and opens it; on failure, an error toast with Retry that keeps the values (`skills/webkit-errors`). Every submit in this block models the request: Default, CreateZone, CreatePurge, CreateService and CreateOrganization.
+- On success, show a toast that names the resource and opens it; on failure, an error toast with Retry that keeps the values (`skills/azion-ui-errors`). Every submit in this block models the request: Default, CreateZone, CreatePurge, CreateService and CreateOrganization.
 
 ## Don't
 
@@ -139,7 +139,7 @@ To go live, render the block from a page that owns the request:
 - **Submit:** one verb, e.g. "Save", "Purge", "Deploy". Cancel is always exactly "Cancel".
 - **Required message:** "This field is required."
 - **Invalid message:** what to enter, with an example, e.g. "Enter a valid domain name. Example: example.com."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no parentheses in labels, no "please".
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no parentheses in labels, no "please".
 
 ## Accessibility
 
@@ -169,7 +169,7 @@ To go live, render the block from a page that owns the request:
 - `settings/settings-form` — the edit page that reuses these sections.
 - `state/state-form-validation` — required and invalid states on submit.
 - `view/view-table` — the list whose `Create <Object>` button opens this page.
-- `SettingsRow` — the field row every section is built from; see `skills/webkit-form`.
+- `SettingsRow` — the field row every section is built from; see `skills/azion-ui-form`.
 
 ## Variants
 
@@ -186,29 +186,29 @@ Each variant is the same screen in another state: `get_block("create/create-page
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import AppHeaderAccount from '@aziontech/webkit/app-header-account'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import FieldError from '@aziontech/webkit/field-error'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import TagEditor, { type TagEditorTag } from '@aziontech/webkit/tag-editor'
-  import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
-  import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
+  import Alert from '@aziontech/ui/alert'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppHeaderAccount from '@aziontech/ui/app-header-account'
+  import Brand from '@aziontech/ui/brand'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import FieldError from '@aziontech/ui/field-error'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import Kbd from '@aziontech/ui/kbd'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import TagEditor, { type TagEditorTag } from '@aziontech/ui/tag-editor'
+  import { useEscapeToCancel } from '@aziontech/ui/use-escape-to-cancel'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/ui/use-shortcuts'
+  import { useUnsavedChanges } from '@aziontech/ui/use-unsaved-changes'
+  import { focusFirstInvalid } from '@aziontech/ui/utils/focus-invalid'
   import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   import { type CreatePageDomainErrors, validateDomainForm } from './domain-validation'

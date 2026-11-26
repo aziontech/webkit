@@ -4,7 +4,7 @@ The proof band of a solution page: one client quote at a time, picked from a row
 
 Each solution page leads the row with the client closest to its audience. All eight solution pages use it.
 
-The band is the `ClientQuotesSection` component from `@aziontech/webkit/client-quotes-section`; it composes `Module`, `RegistrationFrame`, `QuoteTabs` and `Button`.
+The band is the `ClientQuotesSection` component from `@aziontech/ui/client-quotes-section`; it composes `Module`, `RegistrationFrame`, `QuoteTabs` and `Button`.
 
 ## Examples
 

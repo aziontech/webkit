@@ -1,5 +1,5 @@
 <script setup>
-  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
+  import BreadcrumbItem from '@aziontech/ui/breadcrumb-item'
 </script>
 
 <template>

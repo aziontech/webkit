@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6784-16296
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/marketing/media-tile/media-tile.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/marketing/media-tile/media-tile.vue
 // component=MediaTile
 import figma from 'figma'
 
@@ -56,7 +56,7 @@ export default {
       : ''
   }
 </MediaTile>`,
-  imports: ["import MediaTile from '@aziontech/webkit/media-tile'"],
+  imports: ["import MediaTile from '@aziontech/ui/media-tile'"],
   id: 'media-tile',
   metadata: { nestable: false }
 }

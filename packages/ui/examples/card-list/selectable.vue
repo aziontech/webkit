@@ -1,7 +1,7 @@
 <script setup>
-  import CardList from '@aziontech/webkit/card-list'
-  import Pagination from '@aziontech/webkit/pagination-root'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import CardList from '@aziontech/ui/card-list'
+  import Pagination from '@aziontech/ui/pagination-root'
+  import { useCollection } from '@aziontech/ui/use-collection'
 
   const edges = Array.from({ length: 14 }, (_, i) => ({
     id: `edge-${i + 1}`,

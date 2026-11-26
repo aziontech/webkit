@@ -1,5 +1,5 @@
 <script setup>
-  import AvatarGroup from '@aziontech/webkit/avatar-group'
+  import AvatarGroup from '@aziontech/ui/avatar-group'
 
   const owners = [
     { name: 'Jane Doe' },

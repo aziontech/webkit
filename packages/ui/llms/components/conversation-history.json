@@ -1,8 +1,8 @@
 {
  "name": "conversation-history",
  "binding": "ConversationHistory",
- "import": "@aziontech/webkit/conversation-history",
- "treeShakeableImport": "@aziontech/webkit/conversation-history",
+ "import": "@aziontech/ui/conversation-history",
+ "treeShakeableImport": "@aziontech/ui/conversation-history",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import type { MarkdownEditorMention } from '@aziontech/webkit/markdown-editor'
-  import PriorityTag from '@aziontech/webkit/priority-tag'
-  import Select from '@aziontech/webkit/select'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import type { MarkdownEditorMention } from '@aziontech/ui/markdown-editor'
+  import PriorityTag from '@aziontech/ui/priority-tag'
+  import Select from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import { useLocale } from '@aziontech/ui/use-locale'
 
   import type {
     CreateTicketChannel,

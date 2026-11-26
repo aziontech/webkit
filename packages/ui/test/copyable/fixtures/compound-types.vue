@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Accordion, { type AccordionValue } from '@aziontech/webkit/accordion'
-  import type { PopoverSide } from '@aziontech/webkit/popover'
-  import Stepper, { type StepperStepStatus } from '@aziontech/webkit/stepper'
-  import type { TableSortDirection, TableStateSnapshot } from '@aziontech/webkit/table'
+  import Accordion, { type AccordionValue } from '@aziontech/ui/accordion'
+  import type { PopoverSide } from '@aziontech/ui/popover'
+  import Stepper, { type StepperStepStatus } from '@aziontech/ui/stepper'
+  import type { TableSortDirection, TableStateSnapshot } from '@aziontech/ui/table'
   import { ref } from 'vue'
 
   const open = ref<AccordionValue>(null)

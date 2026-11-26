@@ -1,4 +1,4 @@
-import type { DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+import type { DropdownMenuItemValue } from '@aziontech/ui/dropdown-menu'
 import { type Ref, ref } from 'vue'
 
 import type { RuleListControl, RuleListDraft } from '../lib/rule-list'

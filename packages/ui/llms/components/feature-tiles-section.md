@@ -2,7 +2,7 @@
 
 > The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
-- Import: `import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'`
+- Import: `import FeatureTilesSection from '@aziontech/ui/feature-tiles-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [feature-tiles-section.json](feature-tiles-section.json)
 
@@ -66,7 +66,7 @@
 
 ```vue
 <script setup>
-  import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'
+  import FeatureTilesSection from '@aziontech/ui/feature-tiles-section'
 </script>
 
 <template>
@@ -97,7 +97,7 @@
 
 ```vue
 <script setup>
-  import FeatureTilesSection from '@aziontech/webkit/feature-tiles-section'
+  import FeatureTilesSection from '@aziontech/ui/feature-tiles-section'
 </script>
 
 <template>

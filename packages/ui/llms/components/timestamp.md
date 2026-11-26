@@ -2,7 +2,7 @@
 
 > Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates every minute. Activating it opens a small panel that lists the moment as UTC (ISO 8601), local time with its time zone, the reader's browser time when the app's time zone differs from it, the relative phrase and the raw value it was given, each with a copy button, so an operator can paste the exact value into a query or a ticket. It accepts a `Date`, an epoch in milliseconds or microseconds, or an ISO string, and reads the app-wide time zone from the nearest `ConfigProvider` (`time-zone`), so an app-level time zone picker changes every timestamp at once. Use it anywhere outside a table: log details, cards, side panels, activity lines. `TableCellTime` keeps its own author-plus-relative-time layout and shares the parsing and the relative phrasing with Timestamp.
 
-- Import: `import Timestamp from '@aziontech/webkit/timestamp'`
+- Import: `import Timestamp from '@aziontech/ui/timestamp'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [timestamp.json](timestamp.json)
 
@@ -62,7 +62,7 @@
 - Visible focus: the trigger and the copy buttons draw the ring token.
 - Contrast: `var(--text-default)` and `var(--text-muted)` on `var(--bg-surface-raised)` are theme-guaranteed.
 - `motion-reduce:*`: the panel and the hover colour transition both pair with a reduced-motion fallback.
-- Touch target: the copy buttons use the `small` `IconButton` size with the row padding around them; the trigger is inline text and grows with the text it sits in; on a coarse pointer an invisible layer (`data-slot="touch-target"`) extends its hit area to 40 px tall, the WebKit floor, without moving the text.
+- Touch target: the copy buttons use the `small` `IconButton` size with the row padding around them; the trigger is inline text and grows with the text it sits in; on a coarse pointer an invisible layer (`data-slot="touch-target"`) extends its hit area to 40 px tall, the Azion UI floor, without moving the text.
 
 ## Right-to-left
 
@@ -100,8 +100,8 @@
 
 ```vue
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Timestamp from '@aziontech/webkit/timestamp'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Timestamp from '@aziontech/ui/timestamp'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
   const VALUE = '2026-11-14T12:04:31Z'
@@ -147,9 +147,9 @@
 
 ```vue
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Select from '@aziontech/webkit/select'
-  import Timestamp from '@aziontech/webkit/timestamp'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Select from '@aziontech/ui/select'
+  import Timestamp from '@aziontech/ui/timestamp'
   import { ref } from 'vue'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
@@ -208,10 +208,10 @@
 
 ```vue
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import StatusCode from '@aziontech/webkit/status-code'
-  import Timestamp from '@aziontech/webkit/timestamp'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import StatusCode from '@aziontech/ui/status-code'
+  import Timestamp from '@aziontech/ui/timestamp'
 
   const NOW = Date.UTC(2026, 10, 14, 12, 10)
 </script>

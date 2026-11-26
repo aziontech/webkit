@@ -1,15 +1,15 @@
 # Browser Frame
 
-> A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.
+> A browser window that renders live Azion UI components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.
 
-- Import: `import BrowserFrame from '@aziontech/webkit/browser-frame'`
+- Import: `import BrowserFrame from '@aziontech/ui/browser-frame'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [browser-frame.json](browser-frame.json)
 
 ## When to use
 
 - Use BrowserFrame to run real components inside a resizable device viewport (docs, stories); for a screenshot or clip in documentation use DocFrame, for third-party iframe content use Embed.
-- Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.
+- Showing a real screen — a site band, a console page, a template — built from Azion UI components, at a device size you choose.
 - Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.
 - Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.
 - Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`.
@@ -29,7 +29,7 @@
 - For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.
 - For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.
 - For a framed page section or grid cell → use `registration-frame`.
-- In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `webkit-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself.
+- In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `azion-ui-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -120,16 +120,16 @@ The frame is static apart from its resize handles.
 
 ```vue
 <script setup>
-  import BrowserFrame from '@aziontech/webkit/browser-frame'
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
-  import CardGrid from '@aziontech/webkit/card-grid'
-  import Container from '@aziontech/webkit/container'
-  import FeatureItem from '@aziontech/webkit/feature-item'
-  import Module from '@aziontech/webkit/module'
-  import ModuleHeader from '@aziontech/webkit/module-header'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import Spacer from '@aziontech/webkit/spacer'
+  import BrowserFrame from '@aziontech/ui/browser-frame'
+  import Button from '@aziontech/ui/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import CardGrid from '@aziontech/ui/card-grid'
+  import Container from '@aziontech/ui/container'
+  import FeatureItem from '@aziontech/ui/feature-item'
+  import Module from '@aziontech/ui/module'
+  import ModuleHeader from '@aziontech/ui/module-header'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import Spacer from '@aziontech/ui/spacer'
 </script>
 
 <template>
@@ -242,16 +242,16 @@ The frame is static apart from its resize handles.
 
 ```vue
 <script setup>
-  import BrowserFrame from '@aziontech/webkit/browser-frame'
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
-  import CardGrid from '@aziontech/webkit/card-grid'
-  import Container from '@aziontech/webkit/container'
-  import FeatureItem from '@aziontech/webkit/feature-item'
-  import Module from '@aziontech/webkit/module'
-  import ModuleHeader from '@aziontech/webkit/module-header'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import Spacer from '@aziontech/webkit/spacer'
+  import BrowserFrame from '@aziontech/ui/browser-frame'
+  import Button from '@aziontech/ui/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import CardGrid from '@aziontech/ui/card-grid'
+  import Container from '@aziontech/ui/container'
+  import FeatureItem from '@aziontech/ui/feature-item'
+  import Module from '@aziontech/ui/module'
+  import ModuleHeader from '@aziontech/ui/module-header'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import Spacer from '@aziontech/ui/spacer'
 </script>
 
 <template>

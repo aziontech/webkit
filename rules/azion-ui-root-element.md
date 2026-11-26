@@ -4,20 +4,20 @@ A component renders **its own root element**: which element it is switches on a 
 consumer attributes reach it via `inheritAttrs: false` + `v-bind="$attrs"`, and the
 imperative surface (`defineExpose`) stays minimal. No wrapper `<div>` that swallows attrs,
 no `as`/`asChild` polymorphism helper, no leaked internal state. The
-`webkit/no-polymorphic-as-prop` ESLint rule blocks an `as` or `asChild` prop in
+`azion-ui/no-polymorphic-as-prop` ESLint rule blocks an `as` or `asChild` prop in
 `defineProps`; the rest of the pattern is convention + code review. (Token discipline
 inside class strings is enforced separately by the stylelint config and the
-`webkit/no-hardcoded-color` ESLint rule.)
+`azion-ui/no-hardcoded-color` ESLint rule.)
 
 ## Do
 
 - Switch the root element by **intent expressed as data**: an `href` prop, never an `as`
-  string. For a link-or-button root, render WebKit's `Button` and pass `href` on: it renders an
+  string. For a link-or-button root, render Azion UI's `Button` and pass `href` on: it renders an
   anchor when there is a URL and a button otherwise, so the raw `<a>` / `<button>` stay inside
-  their owners (`webkit/no-unowned-element`).
+  their owners (`azion-ui/no-unowned-element`).
 - Set `inheritAttrs: false` in `defineOptions` and put `v-bind="$attrs"` on the **real**
   root, so attributes (including `class`) land on the element the consumer means.
-- Merge the consumer's `class` with `cn` from `@aziontech/webkit/utils/cn` (the only
+- Merge the consumer's `class` with `cn` from `@aziontech/ui/utils/cn` (the only
   class-composition helper). Keep the base classes a flat literal.
 - Expose **functions only** via `defineExpose` (`focus()`, `open()`) — and only when a prop,
   event, or `v-model` cannot express the interaction. Default to exposing nothing.
@@ -26,7 +26,7 @@ inside class strings is enforced separately by the stylelint config and the
 
 - Never switch the root with an `as`/`is` **string prop** — use a data prop like `href`.
   Blocked by lint.
-- Never import or invent an `asChild`/`Slot` polymorphism helper — webkit does not ship one.
+- Never import or invent an `asChild`/`Slot` polymorphism helper — Azion UI does not ship one.
 - Never wrap the root in a `<div>` that eats `$attrs`.
 - Never declare `class` in `defineProps` — it flows through `useAttrs()` + `cn`.
 - Never `defineExpose` internal reactive state (`internalValue`, raw element refs) — the
@@ -38,7 +38,7 @@ inside class strings is enforced separately by the stylelint config and the
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
 
   defineOptions({ name: 'DeployAction', inheritAttrs: false })
 
@@ -64,7 +64,7 @@ inside class strings is enforced separately by the stylelint config and the
 ```vue
 <script setup lang="ts">
   import { useAttrs } from 'vue'
-  import { cn } from '@aziontech/webkit/utils/cn'
+  import { cn } from '@aziontech/ui/utils/cn'
 
   defineOptions({ name: 'SummaryPanel', inheritAttrs: false })
 

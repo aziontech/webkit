@@ -1,8 +1,8 @@
 {
  "name": "subagent-card",
  "binding": "SubagentCard",
- "import": "@aziontech/webkit/subagent-card",
- "treeShakeableImport": "@aziontech/webkit/subagent-card",
+ "import": "@aziontech/ui/subagent-card",
+ "treeShakeableImport": "@aziontech/ui/subagent-card",
  "category": "ai",
  "surface": "app",
  "structure": "monolithic",

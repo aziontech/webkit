@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { ChartLabel, ChartSeries } from '@aziontech/webkit/chart'
-  import Hint from '@aziontech/webkit/hint'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  import Alert from '@aziontech/ui/alert'
+  import type { ChartLabel, ChartSeries } from '@aziontech/ui/chart'
+  import Hint from '@aziontech/ui/hint'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import { computed, ref, watch } from 'vue'
 
   import { type FigureFormat, hostColumns, trafficCards, trafficFigures } from './analytics-cards'

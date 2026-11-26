@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocProse from '@aziontech/ui/doc-prose'
 
   import type { DocPart } from '../lib/types'
   import CodeView from './code-view.vue'

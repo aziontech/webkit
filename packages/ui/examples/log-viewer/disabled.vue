@@ -1,5 +1,5 @@
 <script setup>
-  import LogViewer from '@aziontech/webkit/log-viewer'
+  import LogViewer from '@aziontech/ui/log-viewer'
 
   const lines = [
     { id: '1', time: '0.000s', level: 'info', type: 'text', message: 'Request received' },

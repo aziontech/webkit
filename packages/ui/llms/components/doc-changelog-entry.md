@@ -2,7 +2,7 @@
 
 > One entry in a changelog: what shipped, when, and under which version. The release's identity sits in a left column — the date, the version under it, the tags under that — the notes sit on the right, and a rule runs between them for the length of the entry and bridges the block gap to the next one, so a set of entries reads as one continuous timeline rather than a stack of boxes. The label is an `h2` and a link to its own id, because every entry is a URL somebody sends — the id is the label slugified, unless an explicit `anchor` overrides it. Given a `title`, the entry becomes a release: the label turns into a plain date beside a node on the rule, and the title takes the `h2`, the anchor and the tags, sized above every heading the notes carry.
 
-- Import: `import DocChangelogEntry from '@aziontech/webkit/doc-changelog-entry'`
+- Import: `import DocChangelogEntry from '@aziontech/ui/doc-changelog-entry'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-changelog-entry.json](doc-changelog-entry.json)
 
@@ -72,8 +72,8 @@
 
 ```vue
 <script setup>
-  import DocChangelogEntry from '@aziontech/webkit/doc-changelog-entry'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocChangelogEntry from '@aziontech/ui/doc-changelog-entry'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>
@@ -96,8 +96,8 @@
 
 ```vue
 <script setup>
-  import DocChangelogEntry from '@aziontech/webkit/doc-changelog-entry'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocChangelogEntry from '@aziontech/ui/doc-changelog-entry'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>
@@ -145,8 +145,8 @@
 
 ```vue
 <script setup>
-  import DocChangelogEntry from '@aziontech/webkit/doc-changelog-entry'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocChangelogEntry from '@aziontech/ui/doc-changelog-entry'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>

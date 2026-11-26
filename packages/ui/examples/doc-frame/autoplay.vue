@@ -1,6 +1,6 @@
 <script setup>
-  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
-  import DocFrame from '@aziontech/webkit/doc-frame'
+  import placeholderClip from '@aziontech/ui/assets/placeholder-clip.webm'
+  import DocFrame from '@aziontech/ui/doc-frame'
 </script>
 
 <template>

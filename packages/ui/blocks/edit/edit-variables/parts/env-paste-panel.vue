@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import FieldError from '@aziontech/webkit/field-error'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import FieldError from '@aziontech/ui/field-error'
   import { computed } from 'vue'
 
   import { useVariablesFormContext } from '../composables/use-variables-form'

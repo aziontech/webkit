@@ -1,7 +1,7 @@
 <script setup>
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
+  import Select from '@aziontech/ui/select'
+  import Switch from '@aziontech/ui/switch'
   import { ref } from 'vue'
 
   const definition = [

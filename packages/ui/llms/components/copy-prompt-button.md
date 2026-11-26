@@ -2,7 +2,7 @@
 
 > The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow that turns once behind it and rests, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`; a disabled chip drops it and takes the page theme's disabled fill, like every other disabled button), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
 
-- Import: `import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'`
+- Import: `import CopyPromptButton from '@aziontech/ui/copy-prompt-button'`
 - Category: action · Surface: app · Structure: monolithic
 - API as JSON: [copy-prompt-button.json](copy-prompt-button.json)
 
@@ -18,7 +18,7 @@
 - Keep the default agents unless the product supports a different set; pass `:agents="[]"` to draw the label alone.
 - Pass the exact prompt in `value`; the button copies it as it stands.
 - Do not recolour the marks: they are single-colour by design and follow the chip's ink.
-- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `ThirdPartyLogo` flattens it to the chip's ink.
+- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/ui/assets/claude-symbol-color.svg`); `ThirdPartyLogo` flattens it to the chip's ink.
 - Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Bind `v-model:open` to remember or restore the choice (`close` still fires with the click).
 
 ## Don’t
@@ -53,7 +53,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `copy` | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds (the async clipboard, or the copy-command fallback of `@aziontech/webkit/utils/clipboard` on an insecure origin). When both are refused, the copy fallback popover opens instead. |
+| `copy` | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds (the async clipboard, or the copy-command fallback of `@aziontech/ui/utils/clipboard` on an insecure origin). When both are refused, the copy fallback popover opens instead. |
 | `close` | `MouseEvent` | Fires with the click on the dismiss button (`closable`), after the chip removes itself; whether it stays away is the page's decision. |
 
 ## v-model
@@ -110,8 +110,8 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+  import Button from '@aziontech/ui/button'
+  import CopyPromptButton from '@aziontech/ui/copy-prompt-button'
 
   const prompt =
     'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
@@ -134,7 +134,7 @@
 
 ```vue
 <script setup>
-  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+  import CopyPromptButton from '@aziontech/ui/copy-prompt-button'
 
   const prompt = 'Deploy this repository to Azion with the Azion CLI.'
   const agents = [
@@ -162,7 +162,7 @@
 
 ```vue
 <script setup>
-  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+  import CopyPromptButton from '@aziontech/ui/copy-prompt-button'
 </script>
 
 <template>

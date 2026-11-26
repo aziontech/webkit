@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "webkit": {
+    "azion-ui": {
       "command": "npx",
-      "args": ["-y", "@aziontech/webkit-mcp@^6"]
+      "args": ["-y", "@aziontech/ui-mcp@^6"]
     }
   }
 }

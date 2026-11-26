@@ -1,5 +1,5 @@
 <script setup>
-  import ResponseLoading from '@aziontech/webkit/response-loading'
+  import ResponseLoading from '@aziontech/ui/response-loading'
 </script>
 
 <template>

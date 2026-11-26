@@ -3,10 +3,10 @@
 > The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is an `IntegrationCard` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValueList` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/create-deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `IntegrationCard`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `KeyValueList` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
-- Source: `blocks/view/view-template-browser/view-template-browser.vue` in `@aziontech/webkit`
+- Source: `blocks/view/view-template-browser/view-template-browser.vue` in `@aziontech/ui`
 - MCP: `get_block("view/view-template-browser")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [IntegrationCard](../../components/integration-card.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), `use-collection`
-- Skills: `webkit-lists`, `webkit-create-surface`, `webkit-ui-states`
+- Skills: `azion-ui-lists`, `azion-ui-create-surface`, `azion-ui-states`
 
 ## Asked as
 
@@ -137,7 +137,7 @@ Then delete `sample.ts` and its import.
 - **Drawer actions:** "View repository", "Deploy".
 - **No match:** "No matching templates", then "No template matches this search. Remove a filter to widen the results.", and "Clear filters".
 - **Failure:** "Couldn't load templates. Check your connection and retry." with "Retry"; the empty state "Templates are unavailable" with "Import from Git".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -164,7 +164,7 @@ Then delete `sample.ts` and its import.
 - `state/state-async-submit` — the toast and inline outcome every deploy follows.
 - `view/view-marketplace` — installable integrations into an existing resource; it lists no templates.
 - `create/create-hub` — the creation hub that links here for "Start from a template".
-- `IntegrationCard` and `useCollection` — see `skills/webkit-lists`.
+- `IntegrationCard` and `useCollection` — see `skills/azion-ui-lists`.
 
 ## Variants
 
@@ -180,23 +180,23 @@ Each variant is the same screen in another state: `get_block("view/view-template
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import DocProse from '@aziontech/webkit/doc-prose'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PanelBody from '@aziontech/webkit/panel-body'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import DrawerContent from '@aziontech/ui/drawer-content'
+  import Drawer from '@aziontech/ui/drawer-root'
+  import DrawerTitle from '@aziontech/ui/drawer-title'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IntegrationCard from '@aziontech/ui/integration-card'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PanelBody from '@aziontech/ui/panel-body'
+  import PanelFooter from '@aziontech/ui/panel-footer'
+  import PanelHeader from '@aziontech/ui/panel-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import { useCollection } from '@aziontech/ui/use-collection'
   import { computed, ref } from 'vue'
 
   import { sampleTemplates } from './sample'

@@ -369,11 +369,11 @@ describe('AppHeader', () => {
 
     it('keeps a consumer aria-label over the catalog name', () => {
       const { getByRole } = render(AppHeader.Brand, {
-        attrs: { 'aria-label': 'WebKit home' },
-        props: { href: '/', label: 'WebKit' },
+        attrs: { 'aria-label': 'Azion UI home' },
+        props: { href: '/', label: 'Azion UI' },
         slots: { default: mark }
       })
-      expect(getByRole('link', { name: 'WebKit home' })).toBeTruthy()
+      expect(getByRole('link', { name: 'Azion UI home' })).toBeTruthy()
     })
 
     it('leaves the label readable when the brand is not a link', () => {

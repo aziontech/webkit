@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import ListingIndexSection from '@aziontech/webkit/listing-index-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import ListingIndexSection from '@aziontech/ui/listing-index-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const columns = [
     {

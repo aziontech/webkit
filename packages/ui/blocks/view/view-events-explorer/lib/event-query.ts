@@ -2,7 +2,7 @@ import type {
   FilteringProperty,
   PropertyFilterQuery,
   PropertyFilterToken
-} from '@aziontech/webkit/property-filter'
+} from '@aziontech/ui/property-filter'
 
 import { sampleEvents, sampleFields, sampleNow } from '../sample'
 import type { EventsExplorerEvent, EventsExplorerFilters } from '../view-events-explorer.vue'

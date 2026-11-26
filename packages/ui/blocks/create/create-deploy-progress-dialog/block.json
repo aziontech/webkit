@@ -19,7 +19,7 @@
     "arrastar e implantar",
     "progreso del despliegue"
   ],
-  "skills": ["webkit-ui-states", "webkit-errors", "webkit-microcopy"],
+  "skills": ["azion-ui-states", "azion-ui-errors", "azion-ui-microcopy"],
   "primary": {
     "name": "Running",
     "file": "create-deploy-progress-dialog.vue"

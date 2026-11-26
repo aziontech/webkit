@@ -24,7 +24,7 @@
     },
     {
       "name": "Files",
-      "summary": "The drawings a section shows as a picture also ship as files. Import one by its final name from `@aziontech/webkit/assets/` — the folder it lives in is not part of the path, so the file can move without breaking the import — and render it as an image where an inline, theme-following scene is not wanted.",
+      "summary": "The drawings a section shows as a picture also ship as files. Import one by its final name from `@aziontech/ui/assets/` — the folder it lives in is not part of the path, so the file can move without breaking the import — and render it as an image where an inline, theme-following scene is not wanted.",
       "file": "files.vue"
     },
     {

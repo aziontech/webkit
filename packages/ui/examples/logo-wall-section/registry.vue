@@ -1,6 +1,6 @@
 <script setup>
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import LogoWallSection from '@aziontech/webkit/logo-wall-section'
+  import { CLIENTS } from '@aziontech/ui/assets/client-registry'
+  import LogoWallSection from '@aziontech/ui/logo-wall-section'
 
   const WALL = [
     'Agibank',

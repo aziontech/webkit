@@ -304,7 +304,8 @@ const SYNONYMS = {
   loader: 'spinner',
   ticker: 'marquee',
   overline: 'eyebrow',
-  helper: 'description (Field.Description)'
+  helper: 'description (Field.Description)',
+  webkit: 'azion-ui (the old name of the library)'
 }
 
 const NAME_WORD_EXEMPT = new Set([
@@ -475,7 +476,7 @@ function nameWordProblems(name) {
 }
 
 function componentPath(rel) {
-  const m = rel.match(/^packages\/webkit\/src\/components\/(.+)$/)
+  const m = rel.match(/^packages\/ui\/src\/components\/(.+)$/)
   if (!m) return null
   const segs = m[1].split('/')
   return { category: segs[0], root: segs[1] ?? null, segs, file: segs[segs.length - 1] }
@@ -1172,7 +1173,7 @@ export function checkTemplateModels(rel, text) {
           'model-shape',
           rel,
           lineOf(text, text.indexOf(m[0])),
-          `v-model:${m[1]} is not a WebKit model — use ${Object.hasOwn(MODELS.banned, name) ? want : `v-model:${want}`} (${RULE_DOC}).`
+          `v-model:${m[1]} is not an Azion UI model — use ${Object.hasOwn(MODELS.banned, name) ? want : `v-model:${want}`} (${RULE_DOC}).`
         )
       )
   }
@@ -1522,7 +1523,7 @@ function retiredPathWords(rel, json) {
 
 function checkBlockFile(rel, text) {
   const out = []
-  const m = rel.match(/^packages\/webkit\/blocks\/(.+)\/block\.json$/)
+  const m = rel.match(/^packages\/ui\/blocks\/(.+)\/block\.json$/)
   if (!m) return out
   const segs = m[1].split('/')
   if (segs.length !== 2)
@@ -1690,7 +1691,7 @@ const PROPER_NOUNS = new Set([
   'Playwright',
   'Chromium',
   'Firefox',
-  'WebKit',
+  'Azion UI',
   'Vitest',
   'ESLint',
   'Stylelint',
@@ -1774,7 +1775,7 @@ function checkWorkflow(rel, text) {
 }
 
 function checkEslintRuleFile(rel) {
-  const m = rel.match(/^packages\/webkit\/src\/eslint-plugin\/rules\/([^/]+)\.js$/)
+  const m = rel.match(/^packages\/ui\/src\/eslint-plugin\/rules\/([^/]+)\.js$/)
   if (!m) return []
   const name = m[1]
   if (!KEBAB.test(name))
@@ -1785,7 +1786,7 @@ function checkEslintRuleFile(rel) {
         'eslint-rule-name',
         rel,
         1,
-        `ESLint rule "webkit/${name}" must start with ${ESLINT_PREFIXES.map((p) => `${p}-`).join(', ')} (${RULE_DOC}).`
+        `ESLint rule "azion-ui/${name}" must start with ${ESLINT_PREFIXES.map((p) => `${p}-`).join(', ')} (${RULE_DOC}).`
       )
     ]
   return []
@@ -1824,13 +1825,13 @@ function checkToolingName(rel) {
   }
   if ((m = rel.match(/^skills\/([^/]+)\/SKILL\.md$/))) {
     const name = m[1]
-    if (!/^webkit-[a-z0-9]+(-[a-z0-9]+)*$/.test(name))
+    if (!/^azion-ui-[a-z0-9]+(-[a-z0-9]+)*$/.test(name))
       out.push(
         v(
           'tooling-name',
           rel,
           1,
-          `consumer skill "${name}" must be "webkit-<kebab>" (${RULE_DOC}).`
+          `consumer skill "${name}" must be "azion-ui-<kebab>" (${RULE_DOC}).`
         )
       )
     const ab = abbreviation(name)
@@ -2051,7 +2052,7 @@ export function checkFile(rel, text, ctx = {}) {
   }
   if (rel.endsWith('package.json')) {
     out.push(...checkScripts(rel, text))
-    if (rel === 'packages/webkit/package.json')
+    if (rel === 'packages/ui/package.json')
       out.push(...checkExportKeys(rel, text), ...checkEnforcedExports(rel, text, ctx))
     return out
   }
@@ -2060,23 +2061,21 @@ export function checkFile(rel, text, ctx = {}) {
   if (rel.startsWith('packages/icons/src/svg-raw/')) return [...out, ...checkIconFile(rel)]
   if (/^\.specs\/[a-z0-9-]+\.md$/.test(rel)) return [...out, ...checkSpecVocabulary(rel, text, ctx)]
   out.push(...checkEslintRuleFile(rel), ...checkToolingName(rel))
-  if (rel === 'packages/webkit-mcp/src/server.js') out.push(...checkMcpTools(rel, text))
-  if (rel === 'packages/webkit/src/cli/cli.js') out.push(...checkCliCommands(rel, text))
-  if (rel === 'packages/webkit/scripts/build-catalog.mjs') out.push(...checkCatalogWords(rel, text))
-  if (/^packages\/webkit\/examples\/[^/]+\/examples\.json$/.test(rel))
+  if (rel === 'packages/ui-mcp/src/server.js') out.push(...checkMcpTools(rel, text))
+  if (rel === 'packages/ui/src/cli/cli.js') out.push(...checkCliCommands(rel, text))
+  if (rel === 'packages/ui/scripts/build-catalog.mjs') out.push(...checkCatalogWords(rel, text))
+  if (/^packages\/ui\/examples\/[^/]+\/examples\.json$/.test(rel))
     out.push(...checkExampleIndex(rel, text, ctx))
-  if (/^packages\/webkit\/blocks\/.+\/block\.json$/.test(rel))
-    out.push(...checkBlockFile(rel, text))
-  if (/^packages\/webkit\/src\/locales\/[^/]+\.ts$/.test(rel))
-    out.push(...checkI18n(rel, text, ctx))
+  if (/^packages\/ui\/blocks\/.+\/block\.json$/.test(rel)) out.push(...checkBlockFile(rel, text))
+  if (/^packages\/ui\/src\/locales\/[^/]+\.ts$/.test(rel)) out.push(...checkI18n(rel, text, ctx))
   if (/^packages\/theme\/src\/tokens\//.test(rel) && /\.(js|mjs|css)$/.test(rel))
     out.push(...checkTokenNames(rel, text))
   const code = /\.(vue|ts|js|mjs|tsx|jsx|css)$/.test(rel) && !rel.endsWith('.d.ts')
   if (!code || isTest(rel)) return out
-  const inSrc = rel.startsWith('packages/webkit/src/')
-  const webkitCode =
-    /^packages\/webkit\/(src|blocks|examples)\//.test(rel) || /^apps\/[^/]+\/src\//.test(rel)
-  if (!webkitCode) return out
+  const inSrc = rel.startsWith('packages/ui/src/')
+  const azionUiCode =
+    /^packages\/ui\/(src|blocks|examples)\//.test(rel) || /^apps\/[^/]+\/src\//.test(rel)
+  if (!azionUiCode) return out
   const cp = componentPath(rel)
   if (cp) out.push(...checkComponentPath(rel, ctx))
   if (ext !== 'css') {
@@ -2114,7 +2113,7 @@ export function checkFile(rel, text, ctx = {}) {
   return out
 }
 
-const MIGRATION_TOOLING = /^packages\/webkit\/src\/cli\/(migrate[\w-]*\.js|cli\.js|migrations\/.+)$/
+const MIGRATION_TOOLING = /^packages\/ui\/src\/cli\/(migrate[\w-]*\.js|cli\.js|migrations\/.+)$/
 
 const SKIP_DIRS = new Set([
   'node_modules',
@@ -2142,13 +2141,13 @@ function walk(abs, root, out) {
 }
 
 const SCAN_ROOTS = [
-  'packages/webkit/src',
-  'packages/webkit/blocks',
-  'packages/webkit/examples',
-  'packages/webkit/scripts',
+  'packages/ui/src',
+  'packages/ui/blocks',
+  'packages/ui/examples',
+  'packages/ui/scripts',
   'packages/theme/src',
   'packages/icons/src/svg-raw',
-  'packages/webkit-mcp/src',
+  'packages/ui-mcp/src',
   '.specs',
   '.github/workflows',
   'contributing/skills',
@@ -2186,7 +2185,7 @@ const readJson = (p) => {
 }
 
 export function loadContext(root) {
-  const pkg = readJson(join(root, 'packages/webkit/package.json')) || {}
+  const pkg = readJson(join(root, 'packages/ui/package.json')) || {}
   const exports = new Set(
     Object.keys(pkg.exports || {})
       .filter((k) => k.startsWith('./'))
@@ -2198,16 +2197,14 @@ export function loadContext(root) {
     if (!existsSync(dir)) continue
     for (const f of readdirSync(dir)) if (f.endsWith('.svg')) icons.add(f.replace(/\.svg$/, ''))
   }
-  const iconMap = readJson(join(root, 'packages/webkit/src/cli/migrations/v6-icons.json')) || {}
+  const iconMap = readJson(join(root, 'packages/ui/src/cli/migrations/v6-icons.json')) || {}
   const iconRenames = Object.fromEntries(
     Object.entries(iconMap.azionicons || {}).map(([from, to]) => [
       `az-${from.replace(/^ai-/, '')}`,
       typeof to === 'string' ? to : (to?.to ?? null)
     ])
   )
-  const retired = retiredNames(
-    readJson(join(root, 'packages/webkit/src/cli/migrations/v6.json')) || {}
-  )
+  const retired = retiredNames(readJson(join(root, 'packages/ui/src/cli/migrations/v6.json')) || {})
   const specProps = {}
   const specDir = join(root, '.specs')
   if (existsSync(specDir)) {
@@ -2222,7 +2219,7 @@ export function loadContext(root) {
   }
   const parts = []
   const componentNames = new Set()
-  const compRoot = join(root, 'packages/webkit/src/components')
+  const compRoot = join(root, 'packages/ui/src/components')
   for (const rel of walk(compRoot, root, [])) {
     const cp = componentPath(rel)
     if (!cp || !cp.root || !cp.file.endsWith('.vue')) continue
@@ -2233,7 +2230,7 @@ export function loadContext(root) {
   }
   const cssVarReaders = new Map()
   const types = new Map()
-  for (const rel of walk(join(root, 'packages/webkit/src/utils'), root, [])) {
+  for (const rel of walk(join(root, 'packages/ui/src/utils'), root, [])) {
     if (rel.endsWith('.ts') && !isTest(rel))
       collectTypes(readFileSync(join(root, rel), 'utf8'), types)
   }

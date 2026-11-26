@@ -1,8 +1,8 @@
 <script setup>
-  import ArticleCardsSection from '@aziontech/webkit/article-cards-section'
-  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ArticleCardsSection from '@aziontech/ui/article-cards-section'
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const items = [
     {

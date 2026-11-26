@@ -50,7 +50,7 @@ export function renderMaps(dir = MAPS) {
   const lines = [
     '# Migration maps, 6.0',
     '',
-    'Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`; do not edit by hand. Every row is a rename `npx @aziontech/webkit migrate v6` applies, or a removal it reports. The guide that explains them is [`MIGRATION_V6.md`](../MIGRATION_V6.md).',
+    'Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`; do not edit by hand. Every row is a rename `npx @aziontech/ui migrate v6` applies, or a removal it reports. The guide that explains them is [`MIGRATION_V6.md`](../MIGRATION_V6.md).',
     ''
   ]
   for (const file of files) {

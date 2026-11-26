@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 101c6f7e545e51a1f0f38b82ef87343122187c9ff7d96cbfce17984c087742f4
+checksum: 71778b4bc93d54233e1aed9b140f5335457ff999072ceadb2b591a8b22bcc05c
 created: 2026-09-22
 last_updated: 2026-11-16
 ---
@@ -73,8 +73,8 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
 
 ```vue
 <script setup>
-  import CallToAction from '@aziontech/webkit/call-to-action'
-  import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
@@ -98,8 +98,8 @@ The `lead` register, the lead cell standing alone:
 
 ```vue
 <script setup>
-  import CallToAction from '@aziontech/webkit/call-to-action'
-  import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
@@ -128,8 +128,8 @@ The `split` register, for a hand-built close with two paths of unequal weight:
 
 ```vue
 <script setup>
-  import CallToAction from '@aziontech/webkit/call-to-action'
-  import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
@@ -249,7 +249,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -2,8 +2,8 @@
 
 > DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and a Cancel / Apply pair. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); Cancel closes, drops the draft and refocuses the trigger, as in `date-range-picker`. Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty), and the panel shows and edits it in that zone too: the grid, the date and time fields and the `min` / `max` bounds are wall-clock time there, and `v-model` stays the instant. Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
 
-- Import: `import DatePickerRoot from '@aziontech/webkit/date-picker-root'`
-- Compound import (dot notation, not tree-shakeable): `import DatePicker from '@aziontech/webkit/date-picker'`
+- Import: `import DatePickerRoot from '@aziontech/ui/date-picker-root'`
+- Compound import (dot notation, not tree-shakeable): `import DatePicker from '@aziontech/ui/date-picker'`
 - Category: input · Surface: app · Structure: composition
 - API as JSON: [date-picker.json](date-picker.json)
 
@@ -74,7 +74,7 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/date-picker-clear`
+- `@aziontech/ui/date-picker-clear`
 
 ## Sub-components
 
@@ -148,7 +148,7 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ```vue
 <script setup>
-  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
+  import DatePickerRoot from '@aziontech/ui/date-picker-root'
   import { ref } from 'vue'
 
   const date = ref(null)
@@ -166,8 +166,8 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ```vue
 <script setup>
-  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
-  import Field from '@aziontech/webkit/field'
+  import DatePickerRoot from '@aziontech/ui/date-picker-root'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const start = ref(new Date(2026, 9, 8))
@@ -206,8 +206,8 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ```vue
 <script setup>
-  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
-  import Field from '@aziontech/webkit/field'
+  import DatePickerRoot from '@aziontech/ui/date-picker-root'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const date = ref(null)

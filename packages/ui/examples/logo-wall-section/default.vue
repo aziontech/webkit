@@ -1,15 +1,15 @@
 <script setup>
-  import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'
-  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
-  import bancoDeLaNacionExtendedMono from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
-  import crefisaExtendedReversed from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import marisaExtendedColor from '@aziontech/webkit/assets/marisa-extended-color.svg'
-  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
-  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
-  import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import LogoWallSection from '@aziontech/webkit/logo-wall-section'
+  import agibankExtendedColor from '@aziontech/ui/assets/agibank-extended-color.svg'
+  import agibankExtendedReversed from '@aziontech/ui/assets/agibank-extended-reversed.svg'
+  import bancoDeLaNacionExtendedMono from '@aziontech/ui/assets/banco-de-la-nacion-extended-mono.svg'
+  import crefisaExtendedReversed from '@aziontech/ui/assets/crefisa-extended-reversed.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import magaluExtendedColor from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import marisaExtendedColor from '@aziontech/ui/assets/marisa-extended-color.svg'
+  import netshoesExtendedColor from '@aziontech/ui/assets/netshoes-extended-color.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
+  import zoopExtendedColor from '@aziontech/ui/assets/zoop-extended-color.svg'
+  import LogoWallSection from '@aziontech/ui/logo-wall-section'
 </script>
 
 <template>

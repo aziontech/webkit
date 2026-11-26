@@ -1,8 +1,8 @@
 {
  "name": "call-to-action",
  "binding": "CallToAction",
- "import": "@aziontech/webkit/call-to-action",
- "treeShakeableImport": "@aziontech/webkit/call-to-action",
+ "import": "@aziontech/ui/call-to-action",
+ "treeShakeableImport": "@aziontech/ui/call-to-action",
  "category": "marketing",
  "surface": "site",
  "structure": "monolithic",

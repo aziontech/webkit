@@ -51,7 +51,7 @@ A medium `ConfirmDialog` titled `Truncate <table>`, following `edit/edit-delete-
 
 ### Outcome toasts — through `toast`
 
-Raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. The toasts show when `loading` turns off with no `error`. A failed Add column, Insert row, Change type or Truncate is a danger toast with the `error` text and Retry that keeps the form; a refused Create table is the General `Alert` and the Name field error. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Raised through `toast` with one id, so each change replaces the last toast. Schema changes are not deploys: each success names what changed and offers the next thing to do with the table, never Edit and Redeploy or View deployments. Create table: `Table events created.` with Insert row and Add column. Add column: `Column phone added to customers.` with Change type. Insert row: `Row inserted into customers.` with Insert another. Change type: `email is now text.` with Change again. Truncate: `customers truncated. 3 rows removed.` with Insert row. The toasts show when `loading` turns off with no `error`. A failed Add column, Insert row, Change type or Truncate is a danger toast with the `error` text and Retry that keeps the form; a refused Create table is the General `Alert` and the Name field error. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -134,7 +134,7 @@ Then delete `sample.ts` and its import.
 - **Errors:** `This field is required.`, `Start with a letter or an underscore; use letters, numbers and underscores.`, `Another column is also named email.`, `Add at least one named column.`, `customers already has a column named email.`, `email cannot be NULL. Enter a value.`
 - **Server rejection:** `The table wasn't created. A table named customers already exists in acme-store. Your columns are kept; pick another name and create it again.`
 - **Toasts:** as in building block H.
-- Follow `skills/webkit-microcopy`: sentence case except the product's object names (`Create table`), no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case except the product's object names (`Create table`), no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -162,4 +162,4 @@ Then delete `sample.ts` and its import.
 - `edit/edit-delete-dialog` — the typed confirmation Truncate table follows.
 - `state/state-form-validation` (SectionRejected) — the rule for the server's name conflict.
 - `state/state-async-submit` — the long-action rule; schema changes use item actions, not Edit and Redeploy.
-- `CodeEditor`, `Select`, `Field` — see `skills/webkit-form` and `skills/webkit-create-surface`.
+- `CodeEditor`, `Select`, `Field` — see `skills/azion-ui-form` and `skills/azion-ui-create-surface`.

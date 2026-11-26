@@ -1,7 +1,7 @@
-import type { TableColumn } from '@aziontech/webkit/data-table'
-import { toast } from '@aziontech/webkit/toast'
-import { copyText } from '@aziontech/webkit/utils/clipboard'
-import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+import type { TableColumn } from '@aziontech/ui/data-table'
+import { toast } from '@aziontech/ui/toast'
+import { copyText } from '@aziontech/ui/utils/clipboard'
+import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/ui/utils/csv'
 
 import type { SecurityCardId, SecurityPeriodRange } from './dashboard-security.vue'
 

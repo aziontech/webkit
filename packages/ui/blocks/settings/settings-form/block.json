@@ -53,7 +53,7 @@
     "minha conta",
     "configuración de la cuenta"
   ],
-  "skills": ["webkit-form", "webkit-errors", "webkit-ux-heuristics"],
+  "skills": ["azion-ui-form", "azion-ui-errors", "azion-ui-ux-heuristics"],
   "primary": {
     "name": "SaveAll",
     "file": "settings-form.vue"

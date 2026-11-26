@@ -13,19 +13,19 @@ import {
 import { BUILD_OUTPUT_DIRS, firstExisting, read, VITE_CONFIG_CANDIDATES } from './project-files.js'
 
 export function styleEntryContent() {
-  return `/* @aziontech/webkit design-system styles. Import this once from your app entry. */
+  return `/* @aziontech/ui design-system styles. Import this once from your app entry. */
 @import '@aziontech/theme';
 
 /* The Azion fonts (Rubik, Roboto Mono, Noto Sans Arabic), shipped inside @aziontech/theme.
    Delete this line if your app hosts its own font files. */
 @import '@aziontech/theme/fonts.css';
 
-/* The base rules WebKit components share. */
-@import '@aziontech/webkit/styles';
+/* The base rules Azion UI components share. */
+@import '@aziontech/ui/styles';
 
-/* The WebKit files this app imports, so Tailwind compiles only the classes they use. The
-   Vite plugin (@aziontech/webkit/vite-plugin) rewrites it when your imports change; without
-   Vite, run \`npx @aziontech/webkit css\` after adding or removing a WebKit import. */
+/* The Azion UI files this app imports, so Tailwind compiles only the classes they use. The
+   Vite plugin (@aziontech/ui/vite-plugin) rewrites it when your imports change; without
+   Vite, run \`npx @aziontech/ui css\` after adding or removing an Azion UI import. */
 ${SOURCES_IMPORT}
 
 /* The AI guidance files are full of example classes that are not your UI: keep them out of the scan. */
@@ -54,13 +54,13 @@ const EARLIER_STYLE_ENTRIES = [
   'c45ab2a0f76cc676'
 ]
 
-const STYLE_ENTRY = 'src/webkit.css'
+const STYLE_ENTRY = 'src/azion-ui.css'
 
-function registersWebkit(css) {
+function registersAzionUi(css) {
   return (
-    /@import\b[^\n]*['"]\.\/webkit\.sources\.css['"]/.test(css) ||
-    /@import\b[^\n]*@aziontech\/webkit\/styles\/all/.test(css) ||
-    /@source\b[^\n]*@aziontech\/webkit/.test(css)
+    /@import\b[^\n]*['"]\.\/azion-ui\.sources\.css['"]/.test(css) ||
+    /@import\b[^\n]*@aziontech\/ui\/styles\/all/.test(css) ||
+    /@source\b[^\n]*@aziontech\/ui/.test(css)
   )
 }
 
@@ -68,16 +68,16 @@ function patchStyleEntry(css) {
   const lines = css.split('\n')
   const added = []
   const lastImport = () => lines.findLastIndex((line) => /^\s*@import\b/.test(line))
-  if (!registersWebkit(css)) {
+  if (!registersAzionUi(css)) {
     const styles = lines.findIndex((line) =>
-      /^\s*@import\b[^\n]*@aziontech\/webkit\/styles['"]/.test(line)
+      /^\s*@import\b[^\n]*@aziontech\/ui\/styles['"]/.test(line)
     )
     lines.splice((styles >= 0 ? styles : lastImport()) + 1, 0, SOURCES_IMPORT)
     added.push(SOURCES_IMPORT)
   }
   const exclusions = missingExclusions(css).map(exclusionLine)
   if (exclusions.length) {
-    const sources = lines.findIndex((line) => line.includes("'./webkit.sources.css'"))
+    const sources = lines.findIndex((line) => line.includes("'./azion-ui.sources.css'"))
     lines.splice((sources >= 0 ? sources : lastImport()) + 1, 0, ...exclusions)
     added.push(...exclusions)
   }
@@ -94,7 +94,7 @@ function styleEntryAction(projectDir) {
       type: 'write',
       path: STYLE_ENTRY,
       content,
-      note: 'the untouched template of an earlier WebKit, replaced with the 6.0 one'
+      note: 'the untouched template of an earlier Azion UI, replaced with the 6.0 one'
     }
   }
   const { css, added } = patchStyleEntry(current)
@@ -107,8 +107,8 @@ function styleEntryAction(projectDir) {
   }
 }
 
-export const VITE_PLUGIN_SPECIFIER = '@aziontech/webkit/vite-plugin'
-const VITE_PLUGIN_IMPORT = `import webkit from '${VITE_PLUGIN_SPECIFIER}'`
+export const VITE_PLUGIN_SPECIFIER = '@aziontech/ui/vite-plugin'
+const VITE_PLUGIN_IMPORT = `import azionUi from '${VITE_PLUGIN_SPECIFIER}'`
 
 export function patchViteConfig(src) {
   if (src.includes(VITE_PLUGIN_SPECIFIER)) return src
@@ -116,7 +116,7 @@ export function patchViteConfig(src) {
   if (!plugins) return null
   const space = plugins[1]
   const at = plugins.index + plugins[0].length
-  const inserted = space.includes('\n') ? `webkit(),${space}` : 'webkit(), '
+  const inserted = space.includes('\n') ? `azionUi(),${space}` : 'azionUi(), '
   const withPlugin = `${src.slice(0, at)}${inserted}${src.slice(at)}`
   const imports = [...withPlugin.matchAll(/^import\b[^;]*?['"][^'"\n]+['"];?[ \t]*$/gm)]
   const last = imports.at(-1)
@@ -132,8 +132,8 @@ function vitePluginActions(projectDir) {
       {
         type: 'advise',
         message:
-          `No Vite config found. Run \`npx @aziontech/webkit css\` after you add or remove a WebKit ` +
-          `import: it rewrites ${SOURCES_FILE}, the list of WebKit files Tailwind compiles (doctor and ` +
+          `No Vite config found. Run \`npx @aziontech/ui css\` after you add or remove an Azion UI ` +
+          `import: it rewrites ${SOURCES_FILE}, the list of Azion UI files Tailwind compiles (doctor and ` +
           `check fail when it is stale).`
       }
     ]
@@ -145,7 +145,7 @@ function vitePluginActions(projectDir) {
     return [
       {
         type: 'advise',
-        message: `Add the WebKit plugin to ${cfg} so ${SOURCES_FILE} follows your imports:\n${VITE_PLUGIN_IMPORT}\n// plugins: [webkit(), …]`
+        message: `Add the Azion UI plugin to ${cfg} so ${SOURCES_FILE} follows your imports:\n${VITE_PLUGIN_IMPORT}\n// plugins: [azionUi(), …]`
       }
     ]
   }
@@ -153,7 +153,7 @@ function vitePluginActions(projectDir) {
     {
       type: 'write',
       path: cfg,
-      description: `add the WebKit Vite plugin (${VITE_PLUGIN_SPECIFIER})`,
+      description: `add the Azion UI Vite plugin (${VITE_PLUGIN_SPECIFIER})`,
       content: patched
     }
   ]
@@ -182,7 +182,7 @@ export function rawColourStylesheets(projectDir) {
       const child = `${rel}/${entry.name}`
       if (entry.name.startsWith('.') || BUILD_OUTPUT_DIRS.includes(entry.name)) continue
       if (entry.isDirectory()) walk(child)
-      else if (/\.(css|scss)$/.test(entry.name) && child !== 'src/webkit.css') {
+      else if (/\.(css|scss)$/.test(entry.name) && child !== 'src/azion-ui.css') {
         if (RAW_COLOUR.test(read(join(projectDir, child)) || '')) found.push(child)
       }
     }

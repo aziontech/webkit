@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Card from '@aziontech/ui/card'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   import type {
     OnboardingFormBillingPeriod,

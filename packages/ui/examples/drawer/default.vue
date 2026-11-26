@@ -1,6 +1,6 @@
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Drawer from '@aziontech/webkit/drawer'
+  import Button from '@aziontech/ui/button'
+  import Drawer from '@aziontech/ui/drawer'
   import { ref } from 'vue'
 
   const open = ref(false)

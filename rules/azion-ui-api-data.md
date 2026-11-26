@@ -4,8 +4,8 @@ A console screen shows records that come from an API: resources that point at ot
 that stand for states, ports and ranges with a shape of their own. The person reading the screen must
 see names, labels and summaries, never the storage form behind them. This rule is the contract for
 any value that came from an API. The recipes (references, remote pickers, freshness, lists) are in the
-[`webkit-api-data`](../skills/webkit-api-data/SKILL.md) skill; how the call itself reaches the API is
-in [`webkit-azion-api`](../skills/webkit-azion-api/SKILL.md).
+[`azion-ui-api-data`](../skills/azion-ui-api-data/SKILL.md) skill; how the call itself reaches the API is
+in [`azion-ui-azion-api`](../skills/azion-ui-azion-api/SKILL.md).
 
 ## The contract
 

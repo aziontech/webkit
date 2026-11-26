@@ -3,10 +3,10 @@
 > The error page of Azion's own surfaces (Console, the site, the docs) when a page cannot show what the user asked for. Quiet and traceable: one centred `EmptyState` column with the HTTP code as a `StatusCode` in its figure, a title in plain words, one sentence, at most two `Button`s, and a reference line with the error code, the request ID (with `CopyButton`) and the time (`Timestamp`, UTC) for support. A visually hidden h1 names the code. The primary is the 404 (Go to home and Docs); variants cover 401 (session expired, Sign in), 403 (Request access, Switch account), 429 (Try again, About rate limits), 500 (Retry, System status), 503 (scheduled maintenance) and a missing record inside the console (Back to services). A page body: render it in the default slot of ConsoleLayout (or the site and docs shells); the 401 renders signed out, without the rail. The pages Azion's edge serves to visitors of customer sites use `state/state-edge-error-page` instead.
 
 - Surface: app
-- Source: `blocks/state/state-error-page/state-error-page.vue` in `@aziontech/webkit`
+- Source: `blocks/state/state-error-page/state-error-page.vue` in `@aziontech/ui`
 - MCP: `get_block("state/state-error-page")`
 - Components: [Button](../../components/button.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [StatusCode](../../components/status-code.md), [Timestamp](../../components/timestamp.md)
-- Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
+- Skills: `azion-ui-states`, `azion-ui-errors`, `azion-ui-microcopy`
 
 ## Asked as
 
@@ -169,11 +169,11 @@ Each variant is the same screen in another state: `get_block("state/state-error-
 
 ```vue
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import StatusCode from '@aziontech/webkit/status-code'
-  import Timestamp from '@aziontech/webkit/timestamp'
+  import Button from '@aziontech/ui/button'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import StatusCode from '@aziontech/ui/status-code'
+  import Timestamp from '@aziontech/ui/timestamp'
 
   export interface StateErrorPageProps {
     /** HTTP status code the page answers with. */

@@ -5,7 +5,7 @@ import test from 'node:test'
 
 // Point the loader at the real generated catalog (version-locked, deterministic).
 // Set BEFORE importing the loader so the first resolve honors the override.
-process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
+process.env.AZION_UI_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
 
 const { loadCatalog, _resetCatalogCache } = await import('../../src/catalog/catalog.js')
 const {
@@ -228,7 +228,7 @@ test('getComponent(table) has compoundRoot + subcomponents + props', () => {
   assert.equal(res.found, true)
   assert.equal(res.compoundRoot, true)
   assert.ok(Array.isArray(res.subcomponents) && res.subcomponents.length > 0)
-  assert.ok(res.subcomponents.includes('@aziontech/webkit/table-row'))
+  assert.ok(res.subcomponents.includes('@aziontech/ui/table-row'))
   assert.ok(Array.isArray(res.props) && res.props.length > 0)
   assert.equal(res.structure, 'composition')
 })
@@ -242,19 +242,19 @@ test('getComponent for an unknown name returns suggestions', () => {
 test('getImport(table) returns the tree-shakeable -root import + compound alternative', () => {
   const res = getImport(catalog, 'table')
   assert.equal(res.found, true)
-  assert.equal(res.importPath, '@aziontech/webkit/table-root')
-  assert.match(res.import, /@aziontech\/webkit\/table-root/)
+  assert.equal(res.importPath, '@aziontech/ui/table-root')
+  assert.match(res.import, /@aziontech\/ui\/table-root/)
   assert.equal(res.binding, 'TableRoot')
   assert.ok(res.compoundAlternative, 'should surface the compound alternative')
-  assert.equal(res.compoundAlternative.importPath, '@aziontech/webkit/table')
+  assert.equal(res.compoundAlternative.importPath, '@aziontech/ui/table')
 })
 
 test('getImport(button) returns the plain button import', () => {
   const res = getImport(catalog, 'button')
   assert.equal(res.found, true)
-  assert.equal(res.importPath, '@aziontech/webkit/button')
+  assert.equal(res.importPath, '@aziontech/ui/button')
   assert.equal(res.binding, 'Button')
-  assert.match(res.import, /import Button from '@aziontech\/webkit\/button'/)
+  assert.match(res.import, /import Button from '@aziontech\/ui\/button'/)
   assert.equal(res.compoundAlternative, undefined)
 })
 
@@ -280,14 +280,14 @@ test('getUsageExample synthesizes a runnable SFC with the tree-shakeable import'
   const res = getUsageExample(catalog, 'button', { fromStory: false })
   assert.equal(res.found, true)
   assert.match(res.sfc, /<script setup( lang="ts")?>/)
-  assert.match(res.sfc, /import Button from '@aziontech\/webkit\/button'/)
+  assert.match(res.sfc, /import Button from '@aziontech\/ui\/button'/)
   assert.match(res.sfc, /<Button/)
   assert.match(res.sfc, /<template>/)
   assert.doesNotMatch(res.sfc, /primevue/i)
 })
 
 test('validateUsage flags an unknown import with suggestions', () => {
-  const res = validateUsage(catalog, { import: '@aziontech/webkit/datatable' })
+  const res = validateUsage(catalog, { import: '@aziontech/ui/datatable' })
   assert.equal(res.ok, false)
   const problem = res.problems.find((p) => p.kind === 'import')
   assert.ok(problem)
@@ -296,14 +296,14 @@ test('validateUsage flags an unknown import with suggestions', () => {
 })
 
 test('validateUsage accepts a real import', () => {
-  const res = validateUsage(catalog, { import: '@aziontech/webkit/button' })
+  const res = validateUsage(catalog, { import: '@aziontech/ui/button' })
   assert.equal(res.ok, true)
   assert.equal(res.problems.length, 0)
 })
 
-test('validateUsage does NOT flag a sibling package as an invalid webkit import', () => {
-  // @aziontech/webkit-cli / -mcp share the name as a prefix but are not webkit imports.
-  for (const sibling of ['@aziontech/webkit-cli', '@aziontech/webkit-mcp']) {
+test('validateUsage does NOT flag a sibling package as an invalid Azion UI import', () => {
+  // @aziontech/ui-cli / -mcp share the name as a prefix but are not Azion UI imports.
+  for (const sibling of ['@aziontech/ui-cli', '@aziontech/ui-mcp']) {
     const res = validateUsage(catalog, { import: sibling })
     const problem = res.problems.find((p) => p.kind === 'import')
     assert.ok(problem, `${sibling} should produce an info problem`)
@@ -389,7 +389,7 @@ test('getBlock returns the SFC, components, skills and steps; variants by name',
   assert.match(p.sfc, /autocomplete="username"/)
   assert.ok(p.components.includes('Input'))
   assert.deepEqual(p.steps, ['email', 'password', 'reset', 'sent', 'new-password'])
-  assert.ok(p.skills.includes('webkit-errors'))
+  assert.ok(p.skills.includes('azion-ui-errors'))
   const v = getBlock(catalog, 'auth/auth-sign-in', { variant: 'IncorrectCredentials' })
   assert.equal(v.variant, 'IncorrectCredentials')
   assert.match(v.sfc, /error="bad-credentials"/)
@@ -505,7 +505,7 @@ test('getComponent carries the agent docs and story examples (D2)', () => {
   assert.ok(ft.useWhen.length > 0)
   assert.ok(ft.avoidWhen.length > 0)
   assert.ok(ft.examples.length > 0)
-  assert.match(ft.examples[0].sfc, /@aziontech\/webkit\/field'/)
+  assert.match(ft.examples[0].sfc, /@aziontech\/ui\/field'/)
 })
 
 test('every exported component has purpose, when to use and when not to use', async () => {
@@ -532,7 +532,7 @@ test('getComponent resolves a market or retired name to the current export with 
   assert.equal(modal.binding, 'Dialog')
   assert.equal(modal.requested, 'modal')
   assert.equal(modal.aliasOf, 'dialog')
-  assert.match(modal.note, /"modal" is not a webkit export.*@aziontech\/webkit\/dialog/)
+  assert.match(modal.note, /"modal" is not an Azion UI export.*@aziontech\/ui\/dialog/)
   assert.equal(getComponent(catalog, 'paginator').name, 'pagination')
   assert.equal(getComponent(catalog, 'Segmented Control').name, 'toggle-group')
   const missing = getComponent(catalog, 'no-such-thing')
@@ -568,9 +568,7 @@ test('suggestComponent answers an alias with the current component, not a block'
     assert.equal(res.best.name, name, need)
     assert.match(
       res.note,
-      new RegExp(
-        `another name for "${name}"|renamed in WebKit v6: import @aziontech/webkit/${name}`
-      )
+      new RegExp(`another name for "${name}"|renamed in Azion UI v6: import @aziontech/ui/${name}`)
     )
   }
 })

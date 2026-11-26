@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import ResizablePane from '@aziontech/webkit/resizable-pane'
-  import Resizable from '@aziontech/webkit/resizable-root'
+  import ResizablePane from '@aziontech/ui/resizable-pane'
+  import Resizable from '@aziontech/ui/resizable-root'
 
   defineProps<{ split: boolean }>()
 

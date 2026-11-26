@@ -53,8 +53,10 @@ function setup() {
           sourceType: 'module'
         }
       },
-      plugins: { webkit: { rules: SIGNATURE_RULES } },
-      rules: Object.fromEntries(Object.keys(SIGNATURE_RULES).map((id) => [`webkit/${id}`, 'error']))
+      plugins: { 'azion-ui': { rules: SIGNATURE_RULES } },
+      rules: Object.fromEntries(
+        Object.keys(SIGNATURE_RULES).map((id) => [`azion-ui/${id}`, 'error'])
+      )
     }
   ]
 }
@@ -65,8 +67,8 @@ export function scanSignatures(filename, text) {
   if (!linter) setup()
   const found = []
   for (const m of linter.verify(text, config, { filename })) {
-    if (!m.ruleId?.startsWith('webkit/')) continue
-    found.push({ id: m.ruleId.slice('webkit/'.length), line: m.line, message: m.message })
+    if (!m.ruleId?.startsWith('azion-ui/')) continue
+    found.push({ id: m.ruleId.slice('azion-ui/'.length), line: m.line, message: m.message })
   }
   return found
 }

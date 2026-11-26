@@ -37,9 +37,9 @@ that state from the state switcher, and it renders inside its own frame.
 
 ## Enforcement
 
-- `packages/webkit/test/standards/overlays-closed-on-load.test.mjs` (the `toolkit` tests) scans
+- `packages/ui/test/standards/overlays-closed-on-load.test.mjs` (the `toolkit` tests) scans
   every example and every block's primary file and fails on a floating overlay root with `open`,
   `:open="true"`, `default-open` or `v-model:open` bound to a `ref(true)`.
-- `packages/webkit/src/test/overlays-closed-on-load.test.ts` (the browser suite) mounts every
+- `packages/ui/src/test/overlays-closed-on-load.test.ts` (the browser suite) mounts every
   example and fails when a dialog, menu, listbox, tooltip or open panel is visible outside it on
   mount.

@@ -8,9 +8,10 @@ import { join } from 'node:path'
 import { planInit } from '../../src/cli/plan.js'
 import { applyPlan } from '../../src/cli/apply.js'
 import { planDoctor } from '../../src/cli/doctor.js'
+import { LEGACY_MCP_SERVER_ARGS, LEGACY_MCP_SERVER_NAME } from '../../src/cli/init/mcp.js'
 
 function makeProject(pkg = { name: 'demo', version: '1.0.0' }) {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-doctor-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-doctor-'))
   writeFileSync(join(dir, 'package.json'), JSON.stringify(pkg, null, 2))
   return dir
 }
@@ -22,52 +23,52 @@ test('doctor on a bare project fails the required checks', () => {
   const dir = makeProject()
   try {
     const report = planDoctor(dir)
-    assert.equal(statusOf(report, 'webkit catalog'), 'fail')
+    assert.equal(statusOf(report, 'Azion UI catalog'), 'fail')
     assert.equal(statusOf(report, 'eslint config'), 'fail')
     assert.equal(statusOf(report, 'stylelint config'), 'fail')
-    assert.equal(statusOf(report, 'webkit.css @source'), 'fail')
+    assert.equal(statusOf(report, 'azion-ui.css @source'), 'fail')
     assert.equal(statusOf(report, 'mcp server'), 'fail')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
 
-test('doctor warns when src/webkit.css does not keep the AI guidance files out of the scan', () => {
+test('doctor warns when src/azion-ui.css does not keep the AI guidance files out of the scan', () => {
   const dir = makeProject()
   try {
     mkdirSync(join(dir, 'src'))
     writeFileSync(
-      join(dir, 'src/webkit.css'),
-      "@import '@aziontech/theme';\n@import './webkit.sources.css';\n@source not '../.claude';\n"
+      join(dir, 'src/azion-ui.css'),
+      "@import '@aziontech/theme';\n@import './azion-ui.sources.css';\n@source not '../.claude';\n"
     )
-    const warned = detailOf(planDoctor(dir), 'webkit.css @source not')
+    const warned = detailOf(planDoctor(dir), 'azion-ui.css @source not')
     assert.equal(warned.status, 'warn')
     assert.match(warned.detail, /CLAUDE\.md, AGENTS\.md/)
     assert.match(warned.detail, /`@source not '\.\.\/AGENTS\.md';`/)
     writeFileSync(
-      join(dir, 'src/webkit.css'),
-      "@import './webkit.sources.css';\n@source not '../.claude';\n@source not '../CLAUDE.md';\n@source not '../AGENTS.md';\n"
+      join(dir, 'src/azion-ui.css'),
+      "@import './azion-ui.sources.css';\n@source not '../.claude';\n@source not '../CLAUDE.md';\n@source not '../AGENTS.md';\n"
     )
-    assert.equal(statusOf(planDoctor(dir), 'webkit.css @source not'), 'ok')
+    assert.equal(statusOf(planDoctor(dir), 'azion-ui.css @source not'), 'ok')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
 })
 
-test('doctor fails a v5 .mcp.json that still runs the webkit-mcp bin of @aziontech/webkit', () => {
+test('doctor fails a v5 .mcp.json that still runs the old package name', () => {
   const dir = makeProject()
   try {
     writeFileSync(
       join(dir, '.mcp.json'),
       JSON.stringify({
         mcpServers: {
-          webkit: { command: 'npx', args: ['-y', '-p', '@aziontech/webkit', 'webkit-mcp'] }
+          [LEGACY_MCP_SERVER_NAME]: { command: 'npx', args: LEGACY_MCP_SERVER_ARGS }
         }
       })
     )
     const report = planDoctor(dir)
     assert.equal(statusOf(report, 'mcp server'), 'fail')
-    assert.match(detailOf(report, 'mcp server').detail, /@aziontech\/webkit-mcp/)
+    assert.match(detailOf(report, 'mcp server').detail, /@aziontech\/ui-mcp/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -86,13 +87,13 @@ test(
       const report = planDoctor(dir)
       assert.equal(statusOf(report, 'eslint config'), 'ok')
       assert.equal(statusOf(report, 'stylelint config'), 'ok')
-      assert.equal(statusOf(report, 'webkit.css @source'), 'ok')
+      assert.equal(statusOf(report, 'azion-ui.css @source'), 'ok')
       assert.equal(statusOf(report, 'tailwind build'), 'ok')
       assert.equal(statusOf(report, 'mcp server'), 'ok')
       assert.equal(statusOf(report, 'husky prepare script'), 'ok')
       assert.equal(statusOf(report, 'pre-commit hook'), 'ok')
-      // webkit is not actually installed in the scratch project → catalog still fails.
-      assert.equal(statusOf(report, 'webkit catalog'), 'fail')
+      // ui is not actually installed in the scratch project → catalog still fails.
+      assert.equal(statusOf(report, 'Azion UI catalog'), 'fail')
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }
@@ -176,23 +177,23 @@ test('doctor warns when neither @tailwindcss/vite nor a Tailwind PostCSS config 
   }
 })
 
-test('doctor resolves the catalog via WEBKIT_CATALOG_PATH', () => {
+test('doctor resolves the catalog via AZION_UI_CATALOG_PATH', () => {
   const dir = makeProject()
   const catalog = join(dir, 'catalog.json')
   writeFileSync(
     catalog,
-    JSON.stringify({ package: '@aziontech/webkit', webkitVersion: '1.2.3', imports: {} })
+    JSON.stringify({ package: '@aziontech/ui', azionUiVersion: '1.2.3', imports: {} })
   )
-  const prev = process.env.WEBKIT_CATALOG_PATH
-  process.env.WEBKIT_CATALOG_PATH = catalog
+  const prev = process.env.AZION_UI_CATALOG_PATH
+  process.env.AZION_UI_CATALOG_PATH = catalog
   try {
     const report = planDoctor(dir)
-    const c = report.find((x) => x.check === 'webkit catalog')
+    const c = report.find((x) => x.check === 'Azion UI catalog')
     assert.equal(c.status, 'ok')
     assert.match(c.detail, /1\.2\.3/)
   } finally {
-    if (prev === undefined) delete process.env.WEBKIT_CATALOG_PATH
-    else process.env.WEBKIT_CATALOG_PATH = prev
+    if (prev === undefined) delete process.env.AZION_UI_CATALOG_PATH
+    else process.env.AZION_UI_CATALOG_PATH = prev
     rmSync(dir, { recursive: true, force: true })
   }
 })
@@ -201,15 +202,15 @@ test('doctor warns when a toolkit dependency is pinned as "latest" and reports i
   const dir = makeProject({
     name: 'demo',
     version: '1.0.0',
-    dependencies: { '@aziontech/webkit': 'latest' }
+    dependencies: { '@aziontech/ui': 'latest' }
   })
   try {
     // Simulate the installed package so doctor can read its resolved version.
-    const inst = join(dir, 'node_modules', '@aziontech', 'webkit')
+    const inst = join(dir, 'node_modules', '@aziontech', 'ui')
     mkdirSync(inst, { recursive: true })
     writeFileSync(
       join(inst, 'package.json'),
-      JSON.stringify({ name: '@aziontech/webkit', version: '2.5.0' })
+      JSON.stringify({ name: '@aziontech/ui', version: '2.5.0' })
     )
 
     const report = planDoctor(dir)
@@ -255,7 +256,7 @@ test('doctor flags toast usage with no wired region, and passes once wired', () 
     // toast imported, no region wired → warn with the fix.
     writeFileSync(
       join(dir, 'src/components/save.ts'),
-      "import { toast } from '@aziontech/webkit/toast'\ntoast.success('Saved')\n"
+      "import { toast } from '@aziontech/ui/toast'\ntoast.success('Saved')\n"
     )
     const warned = planDoctor(dir).find((c) => c.check === 'toast setup')
     assert.equal(warned.status, 'warn')
@@ -264,7 +265,7 @@ test('doctor flags toast usage with no wired region, and passes once wired', () 
     // Service wiring in the entry → ok.
     writeFileSync(
       join(dir, 'src/main.ts'),
-      "import { ToastPlugin } from '@aziontech/webkit/toast'\nimport { createApp } from 'vue'\ncreateApp({}).use(ToastPlugin).mount('#app')\n"
+      "import { ToastPlugin } from '@aziontech/ui/toast'\nimport { createApp } from 'vue'\ncreateApp({}).use(ToastPlugin).mount('#app')\n"
     )
     assert.equal(statusOf(planDoctor(dir), 'toast setup'), 'ok')
 
@@ -272,7 +273,7 @@ test('doctor flags toast usage with no wired region, and passes once wired', () 
     writeFileSync(join(dir, 'src/main.ts'), "import { createApp } from 'vue'\n")
     writeFileSync(
       join(dir, 'src/components/App.vue'),
-      "<script setup>\nimport Toaster from '@aziontech/webkit/toast-root'\n</script>\n<template>\n  <Toaster />\n</template>\n"
+      "<script setup>\nimport Toaster from '@aziontech/ui/toast-root'\n</script>\n<template>\n  <Toaster />\n</template>\n"
     )
     assert.equal(statusOf(planDoctor(dir), 'toast setup'), 'ok')
   } finally {
@@ -293,20 +294,20 @@ test('doctor reports a malformed .mcp.json as a failure, not a crash', () => {
   }
 })
 
-test('doctor fails when a second theme copy is nested under webkit or the theme misses the peer range', () => {
+test('doctor fails when a second theme copy is nested under ui or the theme misses the peer range', () => {
   const dir = makeProject({
     name: 'demo',
     version: '1.0.0',
-    dependencies: { '@aziontech/webkit': '^6.0.0', '@aziontech/theme': '^5.2.2' }
+    dependencies: { '@aziontech/ui': '^6.0.0', '@aziontech/theme': '^5.2.2' }
   })
   try {
     const nm = join(dir, 'node_modules', '@aziontech')
-    mkdirSync(join(nm, 'webkit', 'node_modules', '@aziontech', 'theme'), { recursive: true })
+    mkdirSync(join(nm, 'ui', 'node_modules', '@aziontech', 'theme'), { recursive: true })
     mkdirSync(join(nm, 'theme'), { recursive: true })
     writeFileSync(
-      join(nm, 'webkit', 'package.json'),
+      join(nm, 'ui', 'package.json'),
       JSON.stringify({
-        name: '@aziontech/webkit',
+        name: '@aziontech/ui',
         version: '6.0.0',
         peerDependencies: { '@aziontech/theme': '^5.2.2' }
       })
@@ -316,13 +317,13 @@ test('doctor fails when a second theme copy is nested under webkit or the theme 
       JSON.stringify({ name: '@aziontech/theme', version: '5.2.2' })
     )
     writeFileSync(
-      join(nm, 'webkit', 'node_modules', '@aziontech', 'theme', 'package.json'),
+      join(nm, 'ui', 'node_modules', '@aziontech', 'theme', 'package.json'),
       JSON.stringify({ name: '@aziontech/theme', version: '4.3.1' })
     )
     let c = planDoctor(dir).find((x) => x.check === 'theme version')
     assert.equal(c.status, 'fail')
     assert.match(c.detail, /second copy/)
-    rmSync(join(nm, 'webkit', 'node_modules'), { recursive: true, force: true })
+    rmSync(join(nm, 'ui', 'node_modules'), { recursive: true, force: true })
     c = planDoctor(dir).find((x) => x.check === 'theme version')
     assert.equal(c.status, 'ok')
     writeFileSync(

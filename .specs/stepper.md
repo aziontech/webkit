@@ -4,7 +4,7 @@ category: navigation
 structure: composition
 status: implemented
 spec_version: 7
-checksum: d4613a10bfe942178aa65a0f8c860193be32c92a62e3e4b673654d8f577f2796
+checksum: d9538903401f50499d90a63ddcb4f2a8d843f8ef488afde8e16e9ab09ca89904
 created: 2026-09-22
 last_updated: 2026-11-25
 ---
@@ -54,7 +54,7 @@ component with a different job (a compact progress ribbon), not a prop on this o
 
 ```vue
 <script setup>
-  import Stepper from '@aziontech/webkit/stepper'
+  import Stepper from '@aziontech/ui/stepper'
   import { ref } from 'vue'
 
   const step = ref('host')
@@ -93,10 +93,10 @@ The root ships a **compound API**: an `index.ts` (beside `stepper.vue`) attaches
   - Props: `value?: string` (default `''` — identity of this step; matches the root's `v-model` when it is the active one), `title?: string` (default `''` — what this step asks, in the reader's words), `description?: string` (default `''` — one line under the title saying what the step decides), `status?: 'pending' | 'running' | 'success' | 'error'` (default `'pending'` — what the owner knows about this step; the active step is derived from the root and is never set here), `disabled?: boolean` (default `false` — the step cannot be reached yet; not focusable and not clickable).
   - Slot: `default` — optional body under the description, inside the rail. It renders after the step's `button`, in the same `li` and aligned with the title column, so interactive content (a link, a Retry button) is never nested inside the button.
 
-Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports` resolves every path, and `.d.ts` is generated at publish time):
+Resulting layout (no per-component `package.json`; the root `packages/ui/package.json#exports` resolves every path, and `.d.ts` is generated at publish time):
 
 ```
-packages/webkit/src/components/navigation/stepper/
+packages/ui/src/components/navigation/stepper/
 ├── stepper.vue                   (root; owns the model, provides the registry)
 ├── stepper.test.ts
 ├── index.ts                      (compound: attaches Step to the root)
@@ -107,7 +107,7 @@ packages/webkit/src/components/navigation/stepper/
     └── stepper-step.vue
 ```
 
-Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the folder only):
+Exports to add to `packages/ui/package.json#exports` (flat public names; category lives in the folder only):
 
 ```jsonc
 "./stepper": "./src/components/navigation/stepper/index.ts",
@@ -235,7 +235,7 @@ even when the row carries nothing but its title.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

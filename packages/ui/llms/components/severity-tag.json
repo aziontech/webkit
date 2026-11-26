@@ -1,8 +1,8 @@
 {
  "name": "severity-tag",
  "binding": "SeverityTag",
- "import": "@aziontech/webkit/severity-tag",
- "treeShakeableImport": "@aziontech/webkit/severity-tag",
+ "import": "@aziontech/ui/severity-tag",
+ "treeShakeableImport": "@aziontech/ui/severity-tag",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

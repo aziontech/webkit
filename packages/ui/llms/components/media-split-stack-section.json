@@ -1,8 +1,8 @@
 {
  "name": "media-split-stack-section",
  "binding": "MediaSplitStackSection",
- "import": "@aziontech/webkit/media-split-stack-section",
- "treeShakeableImport": "@aziontech/webkit/media-split-stack-section",
+ "import": "@aziontech/ui/media-split-stack-section",
+ "treeShakeableImport": "@aziontech/ui/media-split-stack-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",
@@ -61,7 +61,7 @@
    "type": "MediaSplitStackSectionBand[]",
    "default": "[]",
    "required": "false",
-   "doc": "The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button."
+   "doc": "The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget` or `illustration` (with `illustrationLabel?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` an Azion UI scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `illustration` a name of the illustration registry, and `action` `{ label, href }` the outlined button."
   }
  ],
  "events": [],

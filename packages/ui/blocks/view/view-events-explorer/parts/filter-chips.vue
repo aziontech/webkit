@@ -1,9 +1,6 @@
 <script setup lang="ts">
-  import Chip from '@aziontech/webkit/chip'
-  import FilterMenu, {
-    type FilterMenuField,
-    type FilterMenuValue
-  } from '@aziontech/webkit/filter-menu'
+  import Chip from '@aziontech/ui/chip'
+  import FilterMenu, { type FilterMenuField, type FilterMenuValue } from '@aziontech/ui/filter-menu'
 
   import type { EventsExplorerExclusionChip } from '../composables/use-events-explorer-log'
   import type { EventsExplorerFilters } from '../view-events-explorer.vue'

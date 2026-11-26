@@ -22,7 +22,7 @@ describe('DocCodeGroup', () => {
     const tabs = getAllByRole('tab')
     expect(tabs.map((tab) => tab.textContent?.trim())).toEqual(['npm', 'pnpm', 'yarn'])
     await userEvent.click(tabs[1])
-    expect(container.textContent).toContain('pnpm add @aziontech/webkit')
+    expect(container.textContent).toContain('pnpm add @aziontech/ui')
   })
 
   it('titles a single sample with the readable language name by default', () => {

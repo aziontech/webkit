@@ -1,10 +1,10 @@
 # useHeadingNavigation
 
-Composable `@aziontech/webkit/use-heading-navigation`. The signatures and option tables below are read from its typed source, [`src/composables/use-heading-navigation/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-heading-navigation/index.ts).
+Composable `@aziontech/ui/use-heading-navigation`. The signatures and option tables below are read from its typed source, [`src/composables/use-heading-navigation/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-heading-navigation/index.ts).
 
 ```ts
-import { useHeadingNavigation, provideHeadingNavigation, provideHeadingOutline, useHeadingOutline } from '@aziontech/webkit/use-heading-navigation'
-import type { HeadingNavigationItem, HeadingNavigate, HeadingOutlineItem, RegisterHeading } from '@aziontech/webkit/use-heading-navigation'
+import { useHeadingNavigation, provideHeadingNavigation, provideHeadingOutline, useHeadingOutline } from '@aziontech/ui/use-heading-navigation'
+import type { HeadingNavigationItem, HeadingNavigate, HeadingOutlineItem, RegisterHeading } from '@aziontech/ui/use-heading-navigation'
 ```
 
 ## `useHeadingNavigation`

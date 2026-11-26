@@ -1,5 +1,5 @@
 <script setup>
-  import AudioPlayer from '@aziontech/webkit/audio-player'
+  import AudioPlayer from '@aziontech/ui/audio-player'
   import { ref } from 'vue'
 
   const error = ref('The speech service did not answer, so this summary has no audio yet.')

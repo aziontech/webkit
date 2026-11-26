@@ -1,5 +1,5 @@
 <script setup>
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
 
   const onActionClick = (event, action) => action
 </script>

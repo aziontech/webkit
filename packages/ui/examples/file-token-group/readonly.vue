@@ -1,5 +1,5 @@
 <script setup>
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
 
   const items = [
     { file: { name: 'invoice-2026-10.pdf', size: 184_000, type: 'application/pdf' } },

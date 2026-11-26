@@ -23,7 +23,7 @@
     "rearrange cards",
     "resize dashboard cards"
   ],
-  "skills": ["webkit-data-viz", "webkit-layout", "webkit-ui-states"],
+  "skills": ["azion-ui-data-viz", "azion-ui-layout", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "dashboard-configurable.vue"

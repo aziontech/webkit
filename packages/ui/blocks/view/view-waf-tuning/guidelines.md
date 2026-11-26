@@ -36,7 +36,7 @@ A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says 
 
 ### E. Outcome — `Alert` (required)
 
-Allow rules emits `allow`; the page sets `allowing` while the request runs. Success (`allowing` turns off with no `allowError`) closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure (`allowError` set) keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `state/state-form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+Allow rules emits `allow`; the page sets `allowing` while the request runs. Success (`allowing` turns off with no `allowError`) closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure (`allowError` set) keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `state/state-form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -118,7 +118,7 @@ Then delete `sample.ts` and its import.
 - **No match in the range:** "No matches in the last 24 hours", "This rule set matched no request in the last 24 hours. Widen the time range, or come back as traffic arrives.", with an outlined "Show the last 7 days" while a shorter range is set.
 - **Dialog:** title "Allow 2 rules", submit "Allow rules", reason error "Enter why these requests are legitimate."
 - **Outcome:** "6 allowed rules created." and "The allowed rules weren't created. Nothing changed in the rule set; try again."
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 

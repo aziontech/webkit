@@ -2,7 +2,7 @@
 
 > The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it. It is a material, not a container — it takes no content and claims no space, so a band composes it into its own backdrop slot and keeps ownership of its layout.
 
-- Import: `import Texture from '@aziontech/webkit/texture'`
+- Import: `import Texture from '@aziontech/ui/texture'`
 - Category: content · Surface: site · Structure: monolithic
 - API as JSON: [texture.json](texture.json)
 
@@ -69,7 +69,7 @@
 
 ```vue
 <script setup>
-  import Texture from '@aziontech/webkit/texture'
+  import Texture from '@aziontech/ui/texture'
 </script>
 
 <template>
@@ -87,7 +87,7 @@
 
 ```vue
 <script setup>
-  import Texture from '@aziontech/webkit/texture'
+  import Texture from '@aziontech/ui/texture'
 </script>
 
 <template>
@@ -130,7 +130,7 @@
 
 ```vue
 <script setup>
-  import Texture from '@aziontech/webkit/texture'
+  import Texture from '@aziontech/ui/texture'
 </script>
 
 <template>

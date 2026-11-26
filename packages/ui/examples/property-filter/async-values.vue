@@ -1,6 +1,6 @@
 <script setup>
-  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import DatePickerRoot from '@aziontech/ui/date-picker-root'
+  import PropertyFilter from '@aziontech/ui/property-filter'
   import { ref } from 'vue'
 
   const hosts = [

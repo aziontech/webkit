@@ -1,4 +1,4 @@
-import type { BarListItem } from '@aziontech/webkit/bar-list'
+import type { BarListItem } from '@aziontech/ui/bar-list'
 
 import type {
   HealthScoreHourlyRow,

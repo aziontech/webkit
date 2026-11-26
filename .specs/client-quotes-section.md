@@ -6,7 +6,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-04
 last_updated: 2026-11-18
-checksum: f84277884df45c27715b1d123b288fd32bc7e5996f58a113160e6a78b7e3ea70
+checksum: fb5ea27b09dedb703ea799a1d21a3a55dc05461bf7cf24c6d0b949572e22d563
 ---
 
 # ClientQuotesSection — Component Spec
@@ -34,7 +34,7 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 
 - Three to six items; the tabs need room for each client's mark.
 - Give each item either a registry `mark` or a `logo` URL with `clientName`, not both.
-- On azion.com the client wall is in each brand's colours, not one ink: give each client its logo file from the package, `import gpa from '@aziontech/webkit/assets/gpa-extended-color.svg'`, then `logo: gpa`. On the dark site use `-extended-color.svg` where the colour logo reads on black (GPA, Zoop, HeroSpark, Magalu) and `-extended-reversed.svg` where the colour logo has dark lettering (Axur, Contabilizei, Dafiti, Global Fashion Group as `gfg`); on a light page use `-extended-color.svg`. A registry `mark` (one ink, follows the theme) is for a client that ships no logo file. `catalog.json` lists every file under `imports` with `"kind": "asset"`.
+- On azion.com the client wall is in each brand's colours, not one ink: give each client its logo file from the package, `import gpa from '@aziontech/ui/assets/gpa-extended-color.svg'`, then `logo: gpa`. On the dark site use `-extended-color.svg` where the colour logo reads on black (GPA, Zoop, HeroSpark, Magalu) and `-extended-reversed.svg` where the colour logo has dark lettering (Axur, Contabilizei, Dafiti, Global Fashion Group as `gfg`); on a light page use `-extended-color.svg`. A registry `mark` (one ink, follows the theme) is for a client that ships no logo file. `catalog.json` lists every file under `imports` with `"kind": "asset"`.
 - Every item needs its quotation (`text`): a card is a tab that features it, and an item without one is skipped. Do not invent a quotation to fill the wall; list the clients you have quotes for, or use `logo-wall-section` for one quotation beside a logo wall.
 - The band advances on a timer like azion.com's. Set `:autoplay="false"` when the page must hold one quote (a still capture, a page with other moving content), and bind `v-model` (the selected index) to open on a quote other than the first; never wrap or re-time the band yourself.
 
@@ -42,9 +42,9 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 
 ```vue
 <script setup>
-  import ClientQuotesSection from '@aziontech/webkit/client-quotes-section'
-  import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-  import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import ClientQuotesSection from '@aziontech/ui/client-quotes-section'
+  import axur from '@aziontech/ui/assets/axur-extended-reversed.svg'
+  import magalu from '@aziontech/ui/assets/magalu-extended-color.svg'
 </script>
 
 <template>
@@ -139,7 +139,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

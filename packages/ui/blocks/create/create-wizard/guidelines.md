@@ -92,7 +92,7 @@ To go live, render the block from a page that owns the policies and the request:
 
 ```vue
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import CreateWizard, { type CreateWizardSubmission } from './create-wizard.vue'
 
   const { data: policies } = usePolicies()
@@ -144,7 +144,7 @@ Then delete `sample.ts` and its import.
 - **Module alert:** the consequence in one sentence, e.g. "acme-staging has IP filtering off, so no rule reads this list until the module is on."
 - **Escape routes:** verb first, e.g. "Create a policy", "Continue without a policy".
 - **Required message:** "This field is required.", or what to do, e.g. "Select the project this service serves, or create a new one."
-- Follow `skills/webkit-microcopy`: "Select", never "Choose"; no em dash; no "simply".
+- Follow `skills/azion-ui-microcopy`: "Select", never "Choose"; no em dash; no "simply".
 
 ## Accessibility
 
@@ -175,7 +175,7 @@ Then delete `sample.ts` and its import.
 
 ## Related
 
-- `Wizard` — the component this block is built on; see `skills/webkit-form`.
+- `Wizard` — the component this block is built on; see `skills/azion-ui-form`.
 - `create/create-page` — the same job when the fields fit one screen.
 - `create/create-hub` and `create/create-deploy-template` — a new project from Git, a template or an upload.
 - `create/create-resource-picker` — the Existing or New band CreateAndDeploy binds its project with.

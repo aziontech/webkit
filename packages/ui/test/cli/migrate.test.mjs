@@ -54,11 +54,11 @@ test('renameSubpath maps roots and their sub-components', () => {
 test('migrateSource rewrites imports, bindings, kebab tags and props', () => {
   const sfc = [
     '<script setup>',
-    "import TabView from '@aziontech/webkit/tab-view'",
-    "import DropdownTrigger from '@aziontech/webkit/dropdown-trigger'",
-    "import Message from '@aziontech/webkit/message'",
-    "import LogView from '@aziontech/webkit/log-view'",
-    "import ShellMockup from '@aziontech/webkit/shell-mockup'",
+    "import TabView from '@aziontech/ui/tab-view'",
+    "import DropdownTrigger from '@aziontech/ui/dropdown-trigger'",
+    "import Message from '@aziontech/ui/message'",
+    "import LogView from '@aziontech/ui/log-view'",
+    "import ShellMockup from '@aziontech/ui/shell-mockup'",
     '</script>',
     '<template>',
     '  <TabView v-model:value="tab" />',
@@ -69,11 +69,8 @@ test('migrateSource rewrites imports, bindings, kebab tags and props', () => {
     '</template>'
   ].join('\n')
   const { source, changes } = migrateSource(sfc, { ...migration, props: migration.props })
-  assert.match(source, /import Tabs from '@aziontech\/webkit\/tabs'/)
-  assert.match(
-    source,
-    /import DropdownMenuTrigger from '@aziontech\/webkit\/dropdown-menu-trigger'/
-  )
+  assert.match(source, /import Tabs from '@aziontech\/ui\/tabs'/)
+  assert.match(source, /import DropdownMenuTrigger from '@aziontech\/ui\/dropdown-menu-trigger'/)
   assert.match(source, /<Tabs v-model="tab" \/>/)
   assert.match(source, /<dropdown-menu-trigger \/>/)
   assert.match(source, /<Alert severity="danger" label="Failed" \/>/)
@@ -84,11 +81,11 @@ test('migrateSource rewrites imports, bindings, kebab tags and props', () => {
 test('migrateSource turns kind into variant (the look) or type (the sort of part), parts included', () => {
   const sfc = [
     '<script setup>',
-    "import Button from '@aziontech/webkit/button'",
-    "import Table from '@aziontech/webkit/table'",
-    "import Pagination from '@aziontech/webkit/pagination'",
-    "import ConsolePanel from '@aziontech/webkit/console-panel'",
-    "import Skeleton from '@aziontech/webkit/skeleton'",
+    "import Button from '@aziontech/ui/button'",
+    "import Table from '@aziontech/ui/table'",
+    "import Pagination from '@aziontech/ui/pagination'",
+    "import ConsolePanel from '@aziontech/ui/console-panel'",
+    "import Skeleton from '@aziontech/ui/skeleton'",
     '</script>',
     '<template>',
     '  <Button kind="outlined" label="Cancel" />',
@@ -116,11 +113,11 @@ test('migrateSource is idempotent and handles the cases found migrating this rep
   const v6 = [
     '<script setup>',
     "import { ref } from 'vue'",
-    "import DropdownMenu from '@aziontech/webkit/dropdown-menu'",
-    "import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'",
-    "import Tabs from '@aziontech/webkit/tabs'",
-    "import ShellMockup from '@aziontech/webkit/shell-mockup'",
-    "import Input from '@aziontech/webkit/input'",
+    "import DropdownMenu from '@aziontech/ui/dropdown-menu'",
+    "import DropdownMenuTrigger from '@aziontech/ui/dropdown-menu-trigger'",
+    "import Tabs from '@aziontech/ui/tabs'",
+    "import ShellMockup from '@aziontech/ui/shell-mockup'",
+    "import Input from '@aziontech/ui/input'",
     '</script>',
     '<template>',
     '  <DropdownMenu><DropdownMenuTrigger /></DropdownMenu>',
@@ -130,7 +127,7 @@ test('migrateSource is idempotent and handles the cases found migrating this rep
     '</template>'
   ].join('\n')
   const { source } = migrateSource(v6, migration)
-  assert.match(source, /import DropdownMenu from '@aziontech\/webkit\/dropdown-menu'/)
+  assert.match(source, /import DropdownMenu from '@aziontech\/ui\/dropdown-menu'/)
   assert.match(source, /<DropdownMenu><DropdownMenuTrigger \/><\/DropdownMenu>/)
   assert.match(source, /<Tabs\.Root v-model="tab" \/>/)
   assert.match(source, /<ShellMockup :animated="!\(paused\)" \/>/)
@@ -142,24 +139,24 @@ test('migrateSource is idempotent and handles the cases found migrating this rep
 
 test('migrateSource lists removed components as manual work and leaves other code alone', () => {
   const sfc =
-    "<script setup>\nimport FieldText from '@aziontech/webkit/field-text'\nconst Message = 1\n</script>"
+    "<script setup>\nimport FieldText from '@aziontech/ui/field-text'\nconst Message = 1\n</script>"
   const { source, warnings } = migrateSource(sfc, migration)
   assert.equal(source, sfc)
   assert.deepEqual(warnings, [
-    '@aziontech/webkit/field-text was removed in v6: Field + FieldLabel + Input + FieldDescription'
+    '@aziontech/ui/field-text was removed in v6: Field + FieldLabel + Input + FieldDescription'
   ])
 })
 
 test('migrateSource flags a removed prop as manual work and leaves the tag alone', () => {
   const v6 = loadMigration(6)
   const sfc =
-    '<script setup>\nimport Item from \'@aziontech/webkit/item\'\n</script>\n<template>\n  <Item as-child><a href="/x">X</a></Item>\n  <Item size="small">Y</Item>\n</template>'
+    '<script setup>\nimport Item from \'@aziontech/ui/item\'\n</script>\n<template>\n  <Item as-child><a href="/x">X</a></Item>\n  <Item size="small">Y</Item>\n</template>'
   const { source, warnings } = migrateSource(sfc, v6)
   assert.equal(source, sfc)
   assert.equal(warnings.length, 1)
   assert.match(
     warnings[0],
-    /^@aziontech\/webkit\/item: <Item> prop asChild was removed in v6: set href/
+    /^@aziontech\/ui\/item: <Item> prop asChild was removed in v6: set href/
   )
 })
 
@@ -167,10 +164,10 @@ test('migrateSource maps the removed section layouts and flags the removed media
   const v6 = loadMigration(6)
   const sfc = [
     '<script setup>',
-    "import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'",
-    "import HeroSection from '@aziontech/webkit/hero-section'",
-    "import MediaSplitSection from '@aziontech/webkit/media-split-section'",
-    "import MediaSplitStackSection from '@aziontech/webkit/media-split-stack-section'",
+    "import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'",
+    "import HeroSection from '@aziontech/ui/hero-section'",
+    "import MediaSplitSection from '@aziontech/ui/media-split-section'",
+    "import MediaSplitStackSection from '@aziontech/ui/media-split-stack-section'",
     '</script>',
     '<template>',
     '  <HeroSection variant="pixel-floor" title="T" />',
@@ -201,10 +198,10 @@ test('migrateSource renames slots, events and sub-component props from # and @ k
   }
   const sfc = [
     '<script setup>',
-    "import Button from '@aziontech/webkit/button'",
-    "import Input from '@aziontech/webkit/input'",
-    "import Tree from '@aziontech/webkit/tree'",
-    "import Select from '@aziontech/webkit/select'",
+    "import Button from '@aziontech/ui/button'",
+    "import Input from '@aziontech/ui/input'",
+    "import Tree from '@aziontech/ui/tree'",
+    "import Select from '@aziontech/ui/select'",
     '</script>',
     '<template>',
     '  <Button label="Save">',
@@ -242,7 +239,7 @@ test('migrateSource moves a static value to another prop from a moves map', () =
   }
   const sfc = [
     '<script setup>',
-    "import Tag from '@aziontech/webkit/tag'",
+    "import Tag from '@aziontech/ui/tag'",
     '</script>',
     '<template>',
     '  <Tag severity="accent" label="New" />',
@@ -263,9 +260,9 @@ test('migrateSource splits an overlay placement into side and align, logical sid
   const { props } = loadMigration(6)
   const sfc = [
     '<script setup>',
-    "import Popover from '@aziontech/webkit/popover'",
-    "import Tooltip from '@aziontech/webkit/tooltip'",
-    "import DropdownMenu from '@aziontech/webkit/dropdown-menu'",
+    "import Popover from '@aziontech/ui/popover'",
+    "import Tooltip from '@aziontech/ui/tooltip'",
+    "import DropdownMenu from '@aziontech/ui/dropdown-menu'",
     '</script>',
     '<template>',
     '  <Popover placement="bottom-end" :offset="8" />',
@@ -379,18 +376,18 @@ test('migrateIcons moves the v5 X mark to az-x-brand only for a v5 project', () 
 test('migrateSource rewrites a renamed logo asset path and keeps its binding', () => {
   const sfc = [
     '<script setup>',
-    "import cocacola from '@aziontech/webkit/assets/cocacola-extended-color.svg'",
-    "import gfg from '@aziontech/webkit/assets/gfg-extended-mono.svg'",
+    "import cocacola from '@aziontech/ui/assets/cocacola-extended-color.svg'",
+    "import gfg from '@aziontech/ui/assets/gfg-extended-mono.svg'",
     '</script>'
   ].join('\n')
   const { source } = migrateSource(sfc, loadMigration(6))
   assert.match(
     source,
-    /import cocacola from '@aziontech\/webkit\/assets\/coca-cola-extended-color\.svg'/
+    /import cocacola from '@aziontech\/ui\/assets\/coca-cola-extended-color\.svg'/
   )
   assert.match(
     source,
-    /import gfg from '@aziontech\/webkit\/assets\/global-fashion-group-extended-mono\.svg'/
+    /import gfg from '@aziontech\/ui\/assets\/global-fashion-group-extended-mono\.svg'/
   )
 })
 
@@ -421,7 +418,7 @@ test('the icon map points every old name at a real Azion glyph', () => {
   }
 })
 
-test('migrateSource rewrites icons in a file that imports no WebKit component', () => {
+test('migrateSource rewrites icons in a file that imports no Azion UI component', () => {
   const { source, changes } = migrateSource(
     "export const nav = [{ label: 'Home', icon: 'pi pi-home' }]\n",
     loadMigration(6)
@@ -437,17 +434,14 @@ test('planMigrate rewrites files under the project and honours --dry-run', () =>
     mkdirSync(join(dir, 'node_modules/x'), { recursive: true })
     const file = join(dir, 'src/App.vue')
     const original =
-      "<script setup>\nimport Paginator from '@aziontech/webkit/paginator'\n</script>\n<template><Paginator /></template>\n"
+      "<script setup>\nimport Paginator from '@aziontech/ui/paginator'\n</script>\n<template><Paginator /></template>\n"
     writeFileSync(file, original)
     writeFileSync(join(dir, 'node_modules/x/a.vue'), original)
     const dry = planMigrate(dir, { dryRun: true })
     assert.equal(dry.length, 1)
     assert.equal(readFileSync(file, 'utf8'), original)
     planMigrate(dir)
-    assert.match(
-      readFileSync(file, 'utf8'),
-      /import Pagination from '@aziontech\/webkit\/pagination'/
-    )
+    assert.match(readFileSync(file, 'utf8'), /import Pagination from '@aziontech\/ui\/pagination'/)
     assert.equal(readFileSync(join(dir, 'node_modules/x/a.vue'), 'utf8'), original)
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -472,10 +466,10 @@ function project(files) {
 
 const v3Screen = [
   '<script setup>',
-  "import Dropdown from '@aziontech/webkit/dropdown'",
-  "import Divider from '@aziontech/webkit/divider'",
-  "import SegmentedButton from '@aziontech/webkit/actions/segmented-button'",
-  "import ActionButton from '@aziontech/webkit/actions/button'",
+  "import Dropdown from '@aziontech/ui/dropdown'",
+  "import Divider from '@aziontech/ui/divider'",
+  "import SegmentedButton from '@aziontech/ui/actions/segmented-button'",
+  "import ActionButton from '@aziontech/ui/actions/button'",
   '</script>',
   '<template>',
   '  <!-- Dropdown of regions -->',
@@ -488,29 +482,31 @@ const v3Screen = [
 
 test('a v3 project keeps PrimeVue-era imports as MANUAL and rewrites the native ones', () => {
   const dir = project({
-    'package.json': JSON.stringify({ dependencies: { '@aziontech/webkit': '3.9.4' } }),
+    'package.json': JSON.stringify({ dependencies: { '@aziontech/ui': '3.9.4' } }),
     'src/Screen.vue': v3Screen,
     'src/screen.test.js':
-      "vi.mock('@aziontech/webkit/actions/button', () => ({}))\nvi.mock('@aziontech/webkit/plugin')\n"
+      "vi.mock('@aziontech/ui/actions/button', () => ({}))\nvi.mock('@aziontech/ui/plugin')\n"
   })
   try {
     const results = planMigrate(dir)
     const screen = readFileSync(join(dir, 'src/Screen.vue'), 'utf8')
-    assert.match(screen, /import Dropdown from '@aziontech\/webkit\/dropdown'/)
+    assert.match(screen, /import Dropdown from '@aziontech\/ui\/dropdown'/)
     assert.match(screen, /<Dropdown :options="regions" \/>/)
-    assert.match(screen, /import Divider from '@aziontech\/webkit\/divider'/)
-    assert.match(screen, /import ToggleGroup from '@aziontech\/webkit\/toggle-group'/)
+    assert.match(screen, /import Divider from '@aziontech\/ui\/divider'/)
+    assert.match(screen, /import ToggleGroup from '@aziontech\/ui\/toggle-group'/)
     assert.match(screen, /<ToggleGroup :options="modes" \/>/)
-    assert.match(screen, /import ActionButton from '@aziontech\/webkit\/button'/)
+    assert.match(screen, /import ActionButton from '@aziontech\/ui\/button'/)
     assert.match(screen, /<ActionButton variant="ghost" label="Back" \/>/)
     assert.match(screen, /<!-- Dropdown of regions -->/)
     const mocks = readFileSync(join(dir, 'src/screen.test.js'), 'utf8')
-    assert.match(mocks, /vi\.mock\('@aziontech\/webkit\/button'/)
-    assert.match(mocks, /vi\.mock\('@aziontech\/webkit\/plugin'\)/)
+    assert.match(mocks, /vi\.mock\('@aziontech\/ui\/button'/)
+    assert.match(mocks, /vi\.mock\('@aziontech\/ui\/plugin'\)/)
     const warnings = results.flatMap((r) => r.warnings)
-    assert.ok(warnings.some((w) => /project is on @aziontech\/webkit v3 \(3\.9\.4\)/.test(w)))
-    assert.ok(warnings.some((w) => /webkit\/dropdown is a v3 component.*use Select/.test(w)))
-    assert.ok(warnings.some((w) => /webkit\/plugin is a v3 component/.test(w)))
+    assert.ok(warnings.some((w) => /project is on @aziontech\/ui v3 \(3\.9\.4\)/.test(w)))
+    assert.ok(
+      warnings.some((w) => /@aziontech\/ui\/dropdown is a v3 component.*use Select/.test(w))
+    )
+    assert.ok(warnings.some((w) => /@aziontech\/ui\/plugin is a v3 component/.test(w)))
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -518,9 +514,9 @@ test('a v3 project keeps PrimeVue-era imports as MANUAL and rewrites the native 
 
 test('a v3 project is detected from its imports after the dependency was bumped', () => {
   const dir = project({
-    'package.json': JSON.stringify({ dependencies: { '@aziontech/webkit': '^6.0.0' } }),
+    'package.json': JSON.stringify({ dependencies: { '@aziontech/ui': '^6.0.0' } }),
     'src/Screen.vue':
-      v3Screen + "\n<script>import InputText from '@aziontech/webkit/inputtext'</script>"
+      v3Screen + "\n<script>import InputText from '@aziontech/ui/inputtext'</script>"
   })
   try {
     const results = planMigrate(dir, { dryRun: true })
@@ -531,7 +527,7 @@ test('a v3 project is detected from its imports after the dependency was bumped'
     const forcedScreen = forced.find((r) => r.file === join('src', 'Screen.vue'))
     assert.ok(
       forcedScreen.changes.some((c) =>
-        /webkit\/dropdown → @aziontech\/webkit\/dropdown-menu/.test(c)
+        /@aziontech\/ui\/dropdown → @aziontech\/ui\/dropdown-menu/.test(c)
       )
     )
   } finally {
@@ -542,7 +538,7 @@ test('a v3 project is detected from its imports after the dependency was bumped'
 test('declaredMajor reads the dependency range and ignores workspace links', () => {
   const read = (range) => {
     const dir = project({
-      'package.json': JSON.stringify({ devDependencies: { '@aziontech/webkit': range } })
+      'package.json': JSON.stringify({ devDependencies: { '@aziontech/ui': range } })
     })
     try {
       return declaredMajor(dir)
@@ -555,7 +551,7 @@ test('declaredMajor reads the dependency range and ignores workspace links', () 
   assert.equal(read('>= 5.2.0 <6').major, 5)
   assert.equal(read('5.x').major, 5)
   assert.equal(read('^5.0.0 || ^6.0.0').major, 5)
-  assert.equal(read('npm:@aziontech/webkit@^5.4.0').major, 5)
+  assert.equal(read('npm:@aziontech/ui@^5.4.0').major, 5)
   assert.equal(read('workspace:*'), null)
   assert.equal(read('workspace:^5.1.0').major, 5)
   assert.equal(read('latest'), null)
@@ -564,10 +560,10 @@ test('declaredMajor reads the dependency range and ignores workspace links', () 
 test('declaredMajor reads a tarball file name, never digits in the folders around it', () => {
   const read = (range, installed) => {
     const files = {
-      'package.json': JSON.stringify({ dependencies: { '@aziontech/webkit': range } })
+      'package.json': JSON.stringify({ dependencies: { '@aziontech/ui': range } })
     }
     if (installed)
-      files['node_modules/@aziontech/webkit/package.json'] = JSON.stringify({ version: installed })
+      files['node_modules/@aziontech/ui/package.json'] = JSON.stringify({ version: installed })
     const dir = project(files)
     try {
       return declaredMajor(dir)
@@ -575,28 +571,28 @@ test('declaredMajor reads a tarball file name, never digits in the folders aroun
       rmSync(dir, { recursive: true, force: true })
     }
   }
-  const tarball = read('file:../../pkgs-r1/aziontech-webkit-5.12.3.tgz')
+  const tarball = read('file:../../pkgs-r1/aziontech-ui-5.12.3.tgz')
   assert.equal(tarball.major, 5)
   assert.equal(tarball.source, 'tarball')
-  assert.equal(read('file:../v1-builds/aziontech-webkit-6.0.0-rc.1.tgz').major, 6)
-  assert.equal(read('file:../pkgs-r1/webkit.tgz'), null)
-  assert.equal(read('file:../pkgs-r1/webkit.tgz', '5.12.3').major, 5)
+  assert.equal(read('file:../v1-builds/aziontech-ui-6.0.0-rc.1.tgz').major, 6)
+  assert.equal(read('file:../pkgs-r1/ui.tgz'), null)
+  assert.equal(read('file:../pkgs-r1/ui.tgz', '5.12.3').major, 5)
   assert.equal(read('link:../webkit2', '5.4.0').major, 5)
   assert.equal(read('workspace:*', '6.1.0').major, 6)
-  assert.equal(read('file:../webkit-v3'), null)
+  assert.equal(read('file:../azion-ui-v3'), null)
 })
 
 test('migrate says so when the version is unknown instead of guessing', () => {
   const dir = project({
     'package.json': JSON.stringify({
-      dependencies: { '@aziontech/webkit': 'file:../pkgs-r1/webkit-build' }
+      dependencies: { '@aziontech/ui': 'file:../pkgs-r1/azion-ui-build' }
     }),
-    'src/App.vue': "<script setup>\nimport Button from '@aziontech/webkit/button'\n</script>"
+    'src/App.vue': "<script setup>\nimport Button from '@aziontech/ui/button'\n</script>"
   })
   try {
     const results = planMigrate(dir, { dryRun: true })
     const warnings = results.flatMap((r) => r.warnings).join('\n')
-    assert.match(warnings, /cannot tell which @aziontech\/webkit version .* pass --from <major>/)
+    assert.match(warnings, /cannot tell which @aziontech\/ui version .* pass --from <major>/)
     assert.doesNotMatch(warnings, /v1|treating the project/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -607,8 +603,8 @@ test('an import that v6 does not export is MANUAL, and comments keep their words
   const v6 = loadMigration(6)
   const sfc = [
     '<script setup>',
-    "import Paginator from '@aziontech/webkit/paginator'",
-    "import Ghost from '@aziontech/webkit/ghost-widget'",
+    "import Paginator from '@aziontech/ui/paginator'",
+    "import Ghost from '@aziontech/ui/ghost-widget'",
     '// Paginator below',
     '</script>',
     '<template><Paginator /><Ghost /></template>'
@@ -617,7 +613,7 @@ test('an import that v6 does not export is MANUAL, and comments keep their words
   assert.match(source, /\/\/ Paginator below/)
   assert.match(source, /<Pagination \/>/)
   assert.deepEqual(warnings, [
-    '@aziontech/webkit/ghost-widget is not an export of v6: find its replacement in the catalog (MIGRATION_V6.md)'
+    '@aziontech/ui/ghost-widget is not an export of v6: find its replacement in the catalog (MIGRATION_V6.md)'
   ])
 })
 
@@ -625,10 +621,10 @@ test('renamed exported types are rewritten where the consumer imports them', () 
   const v6 = loadMigration(6)
   const sfc = [
     '<script setup lang="ts">',
-    "import Accordion, { type AccordionArrowPosition } from '@aziontech/webkit/accordion'",
-    "import type { DocCardGroupMobileCols } from '@aziontech/webkit/doc-card-group'",
-    "import type { MessageSeverity as Tone } from '@aziontech/webkit/message'",
-    "import type { TabViewValue } from '@aziontech/webkit/tab-view'",
+    "import Accordion, { type AccordionArrowPosition } from '@aziontech/ui/accordion'",
+    "import type { DocCardGroupMobileCols } from '@aziontech/ui/doc-card-group'",
+    "import type { MessageSeverity as Tone } from '@aziontech/ui/message'",
+    "import type { TabViewValue } from '@aziontech/ui/tab-view'",
     'const place: AccordionArrowPosition = "leading"',
     'const cols: DocCardGroupMobileCols = 2',
     'const tone: Tone = "info"',
@@ -640,8 +636,8 @@ test('renamed exported types are rewritten where the consumer imports them', () 
   assert.match(source, /const place: AccordionIconPosition/)
   assert.match(source, /import type \{ DocCardGroupMobileColumns \} from/)
   assert.match(source, /const cols: DocCardGroupMobileColumns/)
-  assert.match(source, /import type \{ AlertSeverity as Tone \} from '@aziontech\/webkit\/alert'/)
-  assert.match(source, /import type \{ TabsValue \} from '@aziontech\/webkit\/tabs'/)
+  assert.match(source, /import type \{ AlertSeverity as Tone \} from '@aziontech\/ui\/alert'/)
+  assert.match(source, /import type \{ TabsValue \} from '@aziontech\/ui\/tabs'/)
   assert.match(source, /const tab: TabsValue = 1/)
   assert.equal(migrateSource(source, v6).source, source)
 })
@@ -658,7 +654,7 @@ test('type renames apply at once, so a swap does not chain', () => {
   }
   const sfc = [
     '<script setup lang="ts">',
-    "import type { TooltipPlacementInput, TooltipPlacement } from '@aziontech/webkit/tooltip'",
+    "import type { TooltipPlacementInput, TooltipPlacement } from '@aziontech/ui/tooltip'",
     'const a: TooltipPlacementInput = "auto"',
     'const b: TooltipPlacement = "top"',
     '</script>'
@@ -711,14 +707,14 @@ test('a rename whose new name prefixes the old one still rewrites the sub-compon
   assert.equal(renameSubpath('dropdown-menu-trigger', v6.components), 'dropdown-menu-trigger')
   const sfc = [
     '<script setup>',
-    "import CommandMenuItem from '@aziontech/webkit/command-menu-item'",
-    "import ResizablePanelPane from '@aziontech/webkit/resizable-panel-pane'",
+    "import CommandMenuItem from '@aziontech/ui/command-menu-item'",
+    "import ResizablePanelPane from '@aziontech/ui/resizable-panel-pane'",
     '</script>',
     '<template><CommandMenuItem /><ResizablePanelPane /></template>'
   ].join('\n')
   const { source } = migrateSource(sfc, v6)
-  assert.match(source, /import CommandItem from '@aziontech\/webkit\/command-item'/)
-  assert.match(source, /import ResizablePane from '@aziontech\/webkit\/resizable-pane'/)
+  assert.match(source, /import CommandItem from '@aziontech\/ui\/command-item'/)
+  assert.match(source, /import ResizablePane from '@aziontech\/ui\/resizable-pane'/)
   assert.match(source, /<CommandItem \/><ResizablePane \/>/)
   assert.equal(migrateSource(source, v6).source, source)
 })
@@ -727,7 +723,7 @@ test('migrateBlockManifest moves 5.x block ids, sources and renamed variants', (
   const blocks = loadMigration(6).blocks
   const { manifest, changes, warnings } = migrateBlockManifest(
     {
-      package: '@aziontech/webkit',
+      package: '@aziontech/ui',
       blocks: {
         'platform/view/rules-list': {
           version: '5.12.0',
@@ -762,7 +758,9 @@ test('migrateBlockManifest moves 5.x block ids, sources and renamed variants', (
       ['blocks/view/view-rule-list/variants/save-error.vue', 'SaveError']
     ]
   )
-  assert.deepEqual(changes, ['webkit.blocks.json: platform/view/rules-list → view/view-rule-list'])
+  assert.deepEqual(changes, [
+    'azion-ui.blocks.json: platform/view/rules-list → view/view-rule-list'
+  ])
   assert.match(warnings[0], /platform\/account\/profile is now settings\/settings-form#profile/)
 })
 
@@ -781,12 +779,12 @@ test('renamed compound parts are rewritten on the dot-notation, the subpath and 
   const v6 = loadMigration(6)
   const sfc = [
     '<script setup lang="ts">',
-    "import Tabs from '@aziontech/webkit/tabs'",
-    "import Select, { SelectOption } from '@aziontech/webkit/select'",
-    "import Toast from '@aziontech/webkit/toast'",
-    "import PanelContent from '@aziontech/webkit/panel-content'",
-    "import KeyValuePairs from '@aziontech/webkit/key-value-pairs'",
-    "import type { SelectOptionProps } from '@aziontech/webkit/select'",
+    "import Tabs from '@aziontech/ui/tabs'",
+    "import Select, { SelectOption } from '@aziontech/ui/select'",
+    "import Toast from '@aziontech/ui/toast'",
+    "import PanelContent from '@aziontech/ui/panel-content'",
+    "import KeyValuePairs from '@aziontech/ui/key-value-pairs'",
+    "import type { SelectOptionProps } from '@aziontech/ui/select'",
     'const props: SelectOptionProps = { value: 1 }',
     '</script>',
     '<template>',
@@ -806,9 +804,9 @@ test('renamed compound parts are rewritten on the dot-notation, the subpath and 
   assert.match(source, /<Tabs\.Trigger value="a">A<\/Tabs\.Trigger>/)
   assert.match(source, /<Tabs\.Content value="a">One<\/Tabs\.Content>/)
   assert.match(source, /<Select\.Item value="a">A<\/Select\.Item><SelectItem value="b" \/>/)
-  assert.match(source, /import Select, \{ SelectItem \} from '@aziontech\/webkit\/select'/)
+  assert.match(source, /import Select, \{ SelectItem \} from '@aziontech\/ui\/select'/)
   assert.match(source, /import type \{ SelectItemProps \} from/)
-  assert.match(source, /import PanelBody from '@aziontech\/webkit\/panel-body'/)
+  assert.match(source, /import PanelBody from '@aziontech\/ui\/panel-body'/)
   assert.match(
     source,
     /<PanelBody \/><KeyValueList><KeyValueList\.Item label="Region" \/><\/KeyValueList>/
@@ -842,7 +840,7 @@ test('a removed compound member is reported as manual work and left in place', (
   const v6 = loadMigration(6)
   const sfc = [
     '<script setup>',
-    "import NavigationMenu from '@aziontech/webkit/navigation-menu'",
+    "import NavigationMenu from '@aziontech/ui/navigation-menu'",
     '</script>',
     '<template>',
     '  <NavigationMenu><NavigationMenu.Portal><NavigationMenu.Viewport /></NavigationMenu.Portal></NavigationMenu>',
@@ -857,7 +855,7 @@ test('a Table preset or toolbar control moves to its own import, and an unused c
   const v6 = loadMigration(6)
   const kept = [
     '<script setup>',
-    "  import Table from '@aziontech/webkit/table'",
+    "  import Table from '@aziontech/ui/table'",
     '</script>',
     '<template>',
     '  <Table><Table.Body><Table.Row><Table.Cell><Table.CellStatus label="Active" /></Table.Cell></Table.Row></Table.Body></Table>',
@@ -866,15 +864,15 @@ test('a Table preset or toolbar control moves to its own import, and an unused c
   const first = migrateSource(kept, v6).source
   assert.match(
     first,
-    /import Table from '@aziontech\/webkit\/table'\n {2}import TableCellStatus from '@aziontech\/webkit\/table-cell-status'/
+    /import Table from '@aziontech\/ui\/table'\n {2}import TableCellStatus from '@aziontech\/ui\/table-cell-status'/
   )
   assert.match(first, /<Table\.Cell><TableCellStatus label="Active" \/><\/Table\.Cell>/)
   assert.equal(migrateSource(first, v6).source, first)
 
   const slots = [
     '<script setup>',
-    "import DataTable from '@aziontech/webkit/data-table'",
-    "import Table from '@aziontech/webkit/table'",
+    "import DataTable from '@aziontech/ui/data-table'",
+    "import Table from '@aziontech/ui/table'",
     'const toolbar = () => h(Table.Export)',
     '</script>',
     '<template>',
@@ -882,10 +880,10 @@ test('a Table preset or toolbar control moves to its own import, and an unused c
     '</template>'
   ].join('\n')
   const { source } = migrateSource(slots, v6)
-  assert.doesNotMatch(source, /@aziontech\/webkit\/table'/)
+  assert.doesNotMatch(source, /@aziontech\/ui\/table'/)
   assert.match(
     source,
-    /import TableExportButton from '@aziontech\/webkit\/table-export-button'\nimport TableSearch from '@aziontech\/webkit\/table-search'/
+    /import TableExportButton from '@aziontech\/ui\/table-export-button'\nimport TableSearch from '@aziontech\/ui\/table-search'/
   )
   assert.match(source, /h\(TableExportButton\)/)
   assert.match(source, /<TableSearch \/>/)
@@ -894,7 +892,7 @@ test('a Table preset or toolbar control moves to its own import, and an unused c
 test('migrateSource renames a static value and a bound single literal, never other bound expressions', () => {
   const sfc = [
     '<script setup>',
-    "import Message from '@aziontech/webkit/message'",
+    "import Message from '@aziontech/ui/message'",
     '</script>',
     '<template>',
     '  <Message severity="error" label="Failed" />',
@@ -913,7 +911,7 @@ test('migrateSource renames a static value and a bound single literal, never oth
   assert.ok(manual.some((w) => w.includes(`results.type === 'error'`) && w.includes('error')))
   const unread = warnings.filter((w) => w.includes('migrate cannot read'))
   assert.equal(unread.length, 1)
-  assert.match(unread[0], /"level".*never yields 'error' \(now 'danger'\).*webkit-migrate-ok/)
+  assert.match(unread[0], /"level".*never yields 'error' \(now 'danger'\).*azion-ui-migrate-ok/)
   assert.equal(migrateSource(source, migration).source, source)
 })
 
@@ -921,17 +919,17 @@ test('a bound value whose literals are all current values is not manual work', (
   const tag = loadMigration(6)
   const sfc = [
     '<script setup>',
-    "import Tag from '@aziontech/webkit/tag'",
-    "import Alert from '@aziontech/webkit/alert'",
+    "import Tag from '@aziontech/ui/tag'",
+    "import Alert from '@aziontech/ui/alert'",
     '</script>',
     '<template>',
     `  <Tag :severity="value ? 'success' : 'neutral'" />`,
     `  <Tag :severity="value ? 'success' : 'secondary'" />`,
     `  <Alert :severity="\`\${kind}\`" />`,
     '  <Tag :severity="levelSeverity(value)" />',
-    '  <!-- webkit-migrate-ok -->',
+    '  <!-- azion-ui-migrate-ok -->',
     '  <Tag :severity="documentBadge.severity" />',
-    `  <!-- webkit-migrate-ok -->`,
+    `  <!-- azion-ui-migrate-ok -->`,
     `  <Alert :severity="result === 'error' ? 'danger' : 'info'" />`,
     '</template>'
   ].join('\n')
@@ -950,7 +948,7 @@ test('migrateSource maps a Toaster corner onto the logical position', () => {
   const v6 = loadMigration(6)
   const sfc = [
     '<script setup>',
-    "import { Toaster } from '@aziontech/webkit/toast'",
+    "import { Toaster } from '@aziontech/ui/toast'",
     '</script>',
     '<template>',
     '  <Toaster position="bottom-right" />',
@@ -969,8 +967,8 @@ test('DocStep inside DocSteps becomes DocSteps.Step, and the import follows', ()
   const v6 = loadMigration(6)
   const withRoot = [
     '<script setup>',
-    "  import DocStep from '@aziontech/webkit/doc-step'",
-    "  import DocSteps from '@aziontech/webkit/doc-steps'",
+    "  import DocStep from '@aziontech/ui/doc-step'",
+    "  import DocSteps from '@aziontech/ui/doc-steps'",
     '</script>',
     '<template>',
     '  <DocSteps>',
@@ -989,18 +987,18 @@ test('DocStep inside DocSteps becomes DocSteps.Step, and the import follows', ()
     /<DocSteps\.Step title="Install">\n {6}<p>npm i<\/p>\n {4}<\/DocSteps\.Step>/
   )
   assert.match(one.source, /<DocSteps\.Step title="Deploy" \/>/)
-  assert.equal(one.source.split("from '@aziontech/webkit/doc-steps'").length, 2)
+  assert.equal(one.source.split("from '@aziontech/ui/doc-steps'").length, 2)
   assert.equal(migrateSource(one.source, v6, { fromMajor: 5 }).source, one.source)
 
   const kebab = [
     '<script setup>',
-    "import DocStep from '@aziontech/webkit/doc-step'",
+    "import DocStep from '@aziontech/ui/doc-step'",
     '</script>',
     '<template><doc-steps><doc-step title="A">x</doc-step></doc-steps></template>'
   ].join('\n')
   const two = migrateSource(kebab, v6, { fromMajor: 5 })
   assert.deepEqual(two.warnings, [])
-  assert.match(two.source, /^import DocSteps from '@aziontech\/webkit\/doc-steps'$/m)
+  assert.match(two.source, /^import DocSteps from '@aziontech\/ui\/doc-steps'$/m)
   assert.match(two.source, /<doc-steps><DocSteps\.Step title="A">x<\/DocSteps\.Step><\/doc-steps>/)
 })
 
@@ -1008,8 +1006,8 @@ test('DocStep stays MANUAL when migrate cannot prove it sits inside DocSteps', (
   const v6 = loadMigration(6)
   const loose = [
     '<script setup>',
-    "import DocStep from '@aziontech/webkit/doc-step'",
-    "import DocSteps from '@aziontech/webkit/doc-steps'",
+    "import DocStep from '@aziontech/ui/doc-step'",
+    "import DocSteps from '@aziontech/ui/doc-steps'",
     '</script>',
     '<template>',
     '  <DocSteps><DocStep title="A" /></DocSteps>',
@@ -1018,7 +1016,7 @@ test('DocStep stays MANUAL when migrate cannot prove it sits inside DocSteps', (
   ].join('\n')
   const scripted = [
     '<script setup>',
-    "import DocStep from '@aziontech/webkit/doc-step'",
+    "import DocStep from '@aziontech/ui/doc-step'",
     'const step = DocStep',
     '</script>',
     '<template><DocSteps><DocStep title="A" /></DocSteps></template>'
@@ -1030,17 +1028,18 @@ test('DocStep stays MANUAL when migrate cannot prove it sits inside DocSteps', (
   }
 })
 
-test('the webkit-migrate-ok marker is a tool directive, so the comments rule lets it through', () => {
+test('the azion-ui-migrate-ok marker is a tool directive, so the comments rule lets it through', () => {
   const text =
-    '<template>\n  <!-- webkit-migrate-ok -->\n  <Tag :severity="level" />\n</template>\n'
+    '<template>\n  <!-- azion-ui-migrate-ok -->\n  <Tag :severity="level" />\n</template>\n'
   assert.deepEqual(
     findComments('src/views/a.vue', text).map((c) => c.kind),
     ['directive']
   )
   assert.deepEqual(
-    findComments('src/views/a.vue', '<template><!-- webkit-migrate-ok, checked --></template>').map(
-      (c) => c.kind
-    ),
+    findComments(
+      'src/views/a.vue',
+      '<template><!-- azion-ui-migrate-ok, checked --></template>'
+    ).map((c) => c.kind),
     ['prose']
   )
 })

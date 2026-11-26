@@ -1,7 +1,8 @@
 import { loadMigration } from '../../cli/migrate.js'
+import { loadPackageMap } from '../../cli/migrate-package.js'
 import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
-const PREFIX = '@aziontech/webkit/'
+const PREFIX = '@aziontech/ui/'
 const ICON =
   /(?<![\w-])(?:pi\s+(pi-[a-z0-9]+(?:-[a-z0-9]+)*)|(ai-color|ai-cor|ai)\s+(ai-[a-z0-9]+(?:-[a-z0-9]+)*))(?![\w-])/g
 
@@ -9,9 +10,9 @@ let cached = null
 function migration() {
   if (!cached) {
     try {
-      cached = loadMigration(6)
+      cached = { ...loadMigration(6), packages: loadPackageMap().packages || {} }
     } catch {
-      cached = { components: {}, removed: {}, props: {}, icons: {} }
+      cached = { components: {}, removed: {}, props: {}, icons: {}, packages: {} }
     }
   }
   return cached
@@ -82,9 +83,22 @@ function checkAttribute(context, props, tag, sub, attr) {
   if (finding) context.report({ node: attr, ...finding })
 }
 
-function checkSource(context, { components, removed }, node) {
+function oldPackage(source, packages) {
+  return Object.keys(packages)
+    .sort((a, b) => b.length - a.length)
+    .find((name) => source === name || source.startsWith(`${name}/`))
+}
+
+function checkSource(context, { components, removed, packages = {} }, node) {
   const source = node?.value
-  if (typeof source !== 'string' || !source.startsWith(PREFIX)) return null
+  if (typeof source !== 'string') return null
+  const old = oldPackage(source, packages)
+  if (old) {
+    const next = `${packages[old]}${source.slice(old.length)}`
+    context.report({ node, messageId: 'package', data: { old: source, next } })
+    return null
+  }
+  if (!source.startsWith(PREFIX)) return null
   const sub = source.slice(PREFIX.length)
   if (components[sub]) {
     context.report({
@@ -154,20 +168,22 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Flag a name WebKit 6.0 renamed or removed: an import of a retired component subpath, a ' +
-        'renamed prop or value on a WebKit tag, a retired icon class. Reads the same maps ' +
-        '`webkit migrate` applies (src/cli/migrations/v6*.json), so running `npx ' +
-        '@aziontech/webkit migrate` fixes what this rule reports.'
+        'Flag a name Azion UI 6.0 renamed or removed: an import of the old package name, of a retired component subpath, a ' +
+        'renamed prop or value on an Azion UI tag, a retired icon class. Reads the same maps ' +
+        '`azion-ui migrate` applies (src/cli/migrations/v6*.json), so running `npx ' +
+        '@aziontech/ui migrate` fixes what this rule reports.'
     },
     schema: [],
     messages: {
-      component: "'{{old}}' was renamed in WebKit 6.0 — import '{{next}}'.",
-      removed: "'{{old}}' was removed in WebKit 6.0: {{hint}}",
-      prop: '{{tag}}: the prop "{{old}}" is "{{next}}" since WebKit 6.0.',
-      value: '{{tag}}: {{prop}}="{{old}}" is {{prop}}="{{next}}" since WebKit 6.0.',
-      propRemoved: '{{tag}}: the prop "{{old}}" was removed in WebKit 6.0: {{hint}}',
-      icon: 'The icon class "{{old}}" is "{{next}}" since WebKit 6.0.',
-      iconRemoved: 'The icon class "{{old}}" has no WebKit 6.0 icon; draw your own SVG.'
+      package:
+        "'{{old}}' is the old package name: Azion UI 6.0 ships as @aziontech/ui. Import '{{next}}' and run `npx @aziontech/ui migrate v6`.",
+      component: "'{{old}}' was renamed in Azion UI 6.0 — import '{{next}}'.",
+      removed: "'{{old}}' was removed in Azion UI 6.0: {{hint}}",
+      prop: '{{tag}}: the prop "{{old}}" is "{{next}}" since Azion UI 6.0.',
+      value: '{{tag}}: {{prop}}="{{old}}" is {{prop}}="{{next}}" since Azion UI 6.0.',
+      propRemoved: '{{tag}}: the prop "{{old}}" was removed in Azion UI 6.0: {{hint}}',
+      icon: 'The icon class "{{old}}" is "{{next}}" since Azion UI 6.0.',
+      iconRemoved: 'The icon class "{{old}}" has no Azion UI 6.0 icon; draw your own SVG.'
     }
   },
   create(context) {

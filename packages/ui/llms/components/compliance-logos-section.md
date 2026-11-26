@@ -2,7 +2,7 @@
 
 > The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a "see more" cell. It is a page section — the site places it from a `{ _id: 'compliance-logos-section', props }` entry and binds `props` straight onto it — and it composes `module`, `media-split` and `card-grid`.
 
-- Import: `import ComplianceLogosSection from '@aziontech/webkit/compliance-logos-section'`
+- Import: `import ComplianceLogosSection from '@aziontech/ui/compliance-logos-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [compliance-logos-section.json](compliance-logos-section.json)
 
@@ -76,12 +76,12 @@ No built-in strings: every visible and announced text is a prop from the page JS
 
 ```vue
 <script setup>
-  import ccpaSymbolColor from '@aziontech/webkit/assets/ccpa-symbol-color.svg'
-  import gdprSymbolColor from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
-  import lgpdSymbolColor from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
-  import pciDssSymbolColor from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
-  import socSymbolColor from '@aziontech/webkit/assets/soc-symbol-color.svg'
-  import ComplianceLogosSection from '@aziontech/webkit/compliance-logos-section'
+  import ccpaSymbolColor from '@aziontech/ui/assets/ccpa-symbol-color.svg'
+  import gdprSymbolColor from '@aziontech/ui/assets/gdpr-symbol-color.svg'
+  import lgpdSymbolColor from '@aziontech/ui/assets/lgpd-symbol-color.svg'
+  import pciDssSymbolColor from '@aziontech/ui/assets/pci-dss-symbol-color.svg'
+  import socSymbolColor from '@aziontech/ui/assets/soc-symbol-color.svg'
+  import ComplianceLogosSection from '@aziontech/ui/compliance-logos-section'
 </script>
 
 <template>

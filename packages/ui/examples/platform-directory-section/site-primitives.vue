@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import PlatformDirectorySection from '@aziontech/webkit/platform-directory-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import PlatformDirectorySection from '@aziontech/ui/platform-directory-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const groups = [
     {

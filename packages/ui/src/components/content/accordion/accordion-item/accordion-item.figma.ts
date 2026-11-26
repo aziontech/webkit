@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/content/accordion/accordion-item/accordion-item.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/content/accordion/accordion-item/accordion-item.vue
 // component=AccordionItem
 import figma from 'figma'
 
@@ -17,7 +17,7 @@ export default {
     ${content}
   </Accordion.Content>
 </Accordion.Item>`,
-  imports: ["import Accordion from '@aziontech/webkit/accordion'"],
+  imports: ["import Accordion from '@aziontech/ui/accordion'"],
   id: 'accordion-item',
   metadata: { nestable: true }
 }

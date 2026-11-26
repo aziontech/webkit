@@ -27,7 +27,7 @@
     "onboarding da conta",
     "onboarding stepper"
   ],
-  "skills": ["webkit-form", "webkit-errors", "webkit-microcopy"],
+  "skills": ["azion-ui-form", "azion-ui-errors", "azion-ui-microcopy"],
   "steps": ["organization", "plan", "profile"],
   "primary": {
     "name": "Organization",

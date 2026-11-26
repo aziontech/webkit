@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/action/toggle-group/toggle-group.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/action/toggle-group/toggle-group.vue
 // component=ToggleGroup
 import figma from 'figma'
 
@@ -18,7 +18,7 @@ export default {
   v-model="value"
   :options="[${options}]"
 />`,
-  imports: ["import ToggleGroup from '@aziontech/webkit/toggle-group'"],
+  imports: ["import ToggleGroup from '@aziontech/ui/toggle-group'"],
   id: 'toggle-group',
   metadata: { nestable: true }
 }

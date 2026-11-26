@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3212-2550
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/action/icon-button/icon-button.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/ui/src/components/action/icon-button/icon-button.vue
 // component=IconButton
 import figma from 'figma'
 
@@ -45,7 +45,7 @@ export default {
       : ''
   }
 />`,
-  imports: ["import IconButton from '@aziontech/webkit/icon-button'"],
+  imports: ["import IconButton from '@aziontech/ui/icon-button'"],
   id: 'icon-button',
   metadata: { nestable: true }
 }

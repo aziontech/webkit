@@ -46,7 +46,7 @@ test('a route offered by the rail and a page menu fails, naming both controls an
   const findings = navigationFindings({ url: PAGE, controls: [rail(true), pageMenu] })
   assert.equal(findings.length, 1)
   const [f] = findings
-  assert.equal(f.rule, 'webkit-navigation-levels/duplicate-route')
+  assert.equal(f.rule, 'azion-ui-navigation-levels/duplicate-route')
   assert.equal(f.route, ACCESS_RULES)
   assert.deepEqual(f.controls, ['Console navigation', 'Private access'])
   assert.match(f.message, /"Console navigation" \(nav\)/)
@@ -73,7 +73,7 @@ test('a control with two current rows fails (rule 6)', () => {
   ])
   const findings = navigationFindings({ url: PAGE, controls: [menu] })
   assert.equal(findings.length, 1)
-  assert.equal(findings[0].rule, 'webkit-navigation-levels/many-current')
+  assert.equal(findings[0].rule, 'azion-ui-navigation-levels/many-current')
   assert.match(findings[0].message, /2 rows as aria-current="page"/)
 })
 
@@ -83,7 +83,7 @@ test('current rows that point at different places fail; an ancestor agrees (rule
   ])
   const findings = navigationFindings({ url: PAGE, controls: [railElsewhere, pageMenu] })
   assert.equal(findings.length, 1)
-  assert.equal(findings[0].rule, 'webkit-navigation-levels/current-disagrees')
+  assert.equal(findings[0].rule, 'azion-ui-navigation-levels/current-disagrees')
   assert.match(findings[0].message, /Server groups/)
   assert.match(findings[0].message, /Access rules/)
 

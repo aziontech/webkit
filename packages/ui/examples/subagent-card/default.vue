@@ -1,5 +1,5 @@
 <script setup>
-  import SubagentCard from '@aziontech/webkit/subagent-card'
+  import SubagentCard from '@aziontech/ui/subagent-card'
 </script>
 
 <template>

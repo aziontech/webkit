@@ -2,7 +2,7 @@
 
 > Click-open note (a "toggletip") on a small muted `az az-circle-info` glyph. A click, a tap, `Enter` or `Space` on the glyph opens a small panel, anchored below the glyph and aligned to its start, that holds one to three sentences and an optional "Learn more" link to the docs. It is level C of the in-product help standard: the way to attach a "why does this matter?" note to a field name, a setting or a column header without spending a line of vertical space on it. `Field.Label`, `SettingsRow` and `SettingsGroup` render it from their own `hint` prop.
 
-- Import: `import Hint from '@aziontech/webkit/hint'`
+- Import: `import Hint from '@aziontech/ui/hint'`
 - Category: input · Surface: app · Structure: monolithic
 - API as JSON: [hint.json](hint.json)
 
@@ -36,7 +36,7 @@
 - [help-panel](help-panel.md) — level D: page-level help in the console's tools region, opened from an "Info" link after the page title.
 - [popover](popover.md) — the overlay Hint composes; use it for interactive content.
 - `Field.Label`, `settings-row`, `settings-group` — render a Hint from their `hint` prop.
-- `/webkit-in-product-help` — the consumer skill that picks the level of help.
+- `/azion-ui-in-product-help` — the consumer skill that picks the level of help.
 
 ## Props
 
@@ -83,7 +83,7 @@
 
 ```vue
 <script setup>
-  import Hint from '@aziontech/webkit/hint'
+  import Hint from '@aziontech/ui/hint'
 </script>
 
 <template>
@@ -95,7 +95,7 @@
 
 ```vue
 <script setup>
-  import Hint from '@aziontech/webkit/hint'
+  import Hint from '@aziontech/ui/hint'
 </script>
 
 <template>
@@ -124,9 +124,9 @@
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Hint from '@aziontech/webkit/hint'
-  import Input from '@aziontech/webkit/input'
+  import Field from '@aziontech/ui/field'
+  import Hint from '@aziontech/ui/hint'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   const ttl = ref('3600')

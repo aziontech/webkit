@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Container from '@aziontech/webkit/container'
-  import Hero from '@aziontech/webkit/hero'
-  import Module from '@aziontech/webkit/module'
-  import RegistrationFrame from '@aziontech/webkit/registration-frame'
+  import Button from '@aziontech/ui/button'
+  import Container from '@aziontech/ui/container'
+  import Hero from '@aziontech/ui/hero'
+  import Module from '@aziontech/ui/module'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
   import SiteLayout, {
     type SiteLayoutFooter,
     type SiteLayoutNavigation
-  } from '@aziontech/webkit/site-layout'
-  import Spacer from '@aziontech/webkit/spacer'
-  import Stats from '@aziontech/webkit/stats'
-  import Texture from '@aziontech/webkit/texture'
+  } from '@aziontech/ui/site-layout'
+  import Spacer from '@aziontech/ui/spacer'
+  import Stats from '@aziontech/ui/stats'
+  import Texture from '@aziontech/ui/texture'
 
   import { sampleFigures, sampleFooter, sampleNavigation } from './sample'
 

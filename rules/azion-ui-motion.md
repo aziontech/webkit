@@ -1,15 +1,15 @@
 # Rule: motion uses theme animation tokens only — never hardcoded timing or a lib
 
-Animation in UI built on `@aziontech/webkit` is constrained to the design system's motion
+Animation in UI built on `@aziontech/ui` is constrained to the design system's motion
 vocabulary: the `animate-*` utilities and the `duration-*` / `ease-*` / `curve` tokens from
 `@aziontech/theme`. Motion confirms an action or guides attention — it never decorates — and it
-always has a reduced-motion escape. This is the invariant behind the `/webkit-motion-polish` skill
+always has a reduced-motion escape. This is the invariant behind the `/azion-ui-motion-polish` skill
 (which is the how-to); this rule is the constraint.
 
 ## Do
 
 - Animate with the catalogued `animate-*` utilities (`animate-fade-in`, `animate-slide-down`,
-  `animate-popup-scale-in/out`, …) — discover the catalog via the webkit MCP or
+  `animate-popup-scale-in/out`, …) — discover the catalog via the Azion UI MCP or
   `node_modules/@aziontech/theme`. For `animate-popup-scale-*`, set `--popup-origin` per instance.
 - Take timing only from tokens: `duration-fast-01/02`, `duration-moderate-01/02`,
   `duration-slow-01/02`; curves `ease-productive-entrance/exit`, `ease-expressive-entrance/exit`.
@@ -48,18 +48,18 @@ and hand the enter/leave phases to the catalogued utilities. For lateral panels 
 ```
 
 Content or backdrops appearing in place use `animate-fade-in` / `animate-fade-out` in the same
-shape; vertical disclosure uses `animate-slide-down`. Ask the webkit MCP
+shape; vertical disclosure uses `animate-slide-down`. Ask the Azion UI MCP
 (`list_tokens` with category `animations`) for every utility, its timing, and when to use it.
 
 ## Enforcement
 
-- The mandatory `motion-reduce:*` escape overlaps the shipped `webkit-accessibility` rule (motion is
-  an a11y concern) and is verified at runtime by the `webkit-ui-verifier` agent (it exercises
+- The mandatory `motion-reduce:*` escape overlaps the shipped `azion-ui-accessibility` rule (motion is
+  an a11y concern) and is verified at runtime by the `azion-ui-verifier` agent (it exercises
   `prefers-reduced-motion`).
 - The no-external-lib constraint holds because the forbidden packages are never installed — an import
   fails the build.
 - The token discipline (no hardcoded ms / inline `cubic-bezier` / layout-prop animation) is the
-  `/webkit-motion-polish` review pass; where a stylelint rule can catch a raw `cubic-bezier(` or a
+  `/azion-ui-motion-polish` review pass; where a stylelint rule can catch a raw `cubic-bezier(` or a
   bare `transition: all`, wire it as the mechanical floor. Suggestion is not the ceiling: what a lint
   can block, block.
 

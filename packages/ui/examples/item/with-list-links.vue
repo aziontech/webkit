@@ -1,6 +1,6 @@
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
 </script>
 
 <template>

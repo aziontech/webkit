@@ -144,7 +144,7 @@ export default {
       description:
         'A native control element (button, a, input, textarea, select, dialog, table, progress, ' +
         'hr, kbd), an ARIA widget role (dialog, menu, listbox, tab, switch, checkbox, tooltip, ' +
-        'progressbar) or a marker class (animate-spin, animate-pulse) belongs to the WebKit ' +
+        'progressbar) or a marker class (animate-spin, animate-pulse) belongs to the Azion UI ' +
         'component that owns it. Anywhere else, render that component instead.'
     },
     schema: [

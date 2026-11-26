@@ -1,7 +1,7 @@
 <script setup>
-  import LinkDirectoryColumn from '@aziontech/webkit/link-directory-column'
-  import LinkDirectoryItem from '@aziontech/webkit/link-directory-item'
-  import LinkDirectoryRoot from '@aziontech/webkit/link-directory-root'
+  import LinkDirectoryColumn from '@aziontech/ui/link-directory-column'
+  import LinkDirectoryItem from '@aziontech/ui/link-directory-item'
+  import LinkDirectoryRoot from '@aziontech/ui/link-directory-root'
 </script>
 
 <template>

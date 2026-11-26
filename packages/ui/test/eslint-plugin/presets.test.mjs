@@ -5,13 +5,15 @@ import { Linter } from 'eslint'
 import * as astroParser from 'astro-eslint-parser'
 
 // Point the catalog-backed rules at the fixture (version-locked, deterministic).
-process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('./fixtures/catalog.json', import.meta.url))
+process.env.AZION_UI_CATALOG_PATH = fileURLToPath(
+  new URL('./fixtures/catalog.json', import.meta.url)
+)
 
-const { default: webkitPlugin, HEURISTIC_RULES } = await import('../../src/eslint-plugin/index.js')
+const { default: azionUiPlugin, HEURISTIC_RULES } = await import('../../src/eslint-plugin/index.js')
 
 test('every preset covers .astro and .vue files', () => {
   for (const name of ['strict', 'recommended', 'performance']) {
-    const [config] = webkitPlugin.configs[name]
+    const [config] = azionUiPlugin.configs[name]
     assert.ok(Array.isArray(config.files), `${name} preset should declare a files array`)
     assert.ok(config.files.includes('**/*.astro'), `${name} preset should lint **/*.astro`)
     assert.ok(config.files.includes('**/*.vue'), `${name} preset should lint **/*.vue`)
@@ -19,11 +21,11 @@ test('every preset covers .astro and .vue files', () => {
 })
 
 test('every rule ships in recommended or strict, never as warn except the layout heuristics; performance is a subset of recommended', () => {
-  const [recommended] = webkitPlugin.configs.recommended
-  const [strict] = webkitPlugin.configs.strict
-  const [performance] = webkitPlugin.configs.performance
+  const [recommended] = azionUiPlugin.configs.recommended
+  const [strict] = azionUiPlugin.configs.strict
+  const [performance] = azionUiPlugin.configs.performance
 
-  const heuristics = new Set(HEURISTIC_RULES.map((rule) => `webkit/${rule}`))
+  const heuristics = new Set(HEURISTIC_RULES.map((rule) => `azion-ui/${rule}`))
   assert.deepEqual(
     [...HEURISTIC_RULES],
     [
@@ -40,8 +42,8 @@ test('every rule ships in recommended or strict, never as warn except the layout
     }
   }
 
-  for (const ruleName of Object.keys(webkitPlugin.rules)) {
-    const key = `webkit/${ruleName}`
+  for (const ruleName of Object.keys(azionUiPlugin.rules)) {
+    const key = `azion-ui/${ruleName}`
     const inRecommended = Object.prototype.hasOwnProperty.call(recommended.rules, key)
     const inStrict = Object.prototype.hasOwnProperty.call(strict.rules, key)
     assert.ok(inRecommended || inStrict, `rule "${ruleName}" must appear in recommended or strict`)
@@ -59,14 +61,14 @@ test('lints a minimal .astro fixture with astro-eslint-parser: fires on a hardco
   const linter = new Linter({ configType: 'flat' })
 
   const code = `---
-import Button from '@aziontech/webkit/button'
+import Button from '@aziontech/ui/button'
 const label = 'hi'
 ---
 <div class="text-[#ff0000]"><Button class="p-8">{label}</Button></div>
 `
 
   for (const presetName of ['strict', 'recommended', 'performance']) {
-    const [preset] = webkitPlugin.configs[presetName]
+    const [preset] = azionUiPlugin.configs[presetName]
     const config = [
       {
         ...preset,
@@ -86,7 +88,7 @@ const label = 'hi'
     assert.deepEqual(fatals, [], `${presetName}: no rule should throw on an .astro file`)
 
     if (presetName !== 'performance') {
-      const hexHit = messages.find((m) => m.ruleId === 'webkit/no-hardcoded-color')
+      const hexHit = messages.find((m) => m.ruleId === 'azion-ui/no-hardcoded-color')
       assert.ok(
         hexHit,
         `${presetName}: no-hardcoded-color should still fire on .astro frontmatter/markup`
@@ -97,7 +99,7 @@ const label = 'hi'
 
 test('prefer-href-in-menu-node is an error in recommended and strict', () => {
   for (const name of ['recommended', 'strict']) {
-    const [config] = webkitPlugin.configs[name]
-    assert.equal(config.rules['webkit/prefer-href-in-menu-node'], 'error', name)
+    const [config] = azionUiPlugin.configs[name]
+    assert.equal(config.rules['azion-ui/prefer-href-in-menu-node'], 'error', name)
   }
 })

@@ -1,5 +1,5 @@
 <script setup>
-  import ModuleHeader from '@aziontech/webkit/module-header'
+  import ModuleHeader from '@aziontech/ui/module-header'
 
   const DESCRIPTION =
     'We make every application fast and reliable. Deploy your projects instantly on the most reliable global infrastructure, leverage enterprise-grade security, and scale from zero to ' +

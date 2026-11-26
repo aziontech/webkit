@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Countdown from '@aziontech/webkit/countdown'
-  import PriorityTag from '@aziontech/webkit/priority-tag'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import TableCellStatus from '@aziontech/webkit/table-cell-status'
+  import Avatar from '@aziontech/ui/avatar'
+  import Countdown from '@aziontech/ui/countdown'
+  import PriorityTag from '@aziontech/ui/priority-tag'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import TableCellStatus from '@aziontech/ui/table-cell-status'
 
   import { slaPaused, statusSeverity } from './view-ticket-inbox.ticket-fields'
   import type { TicketInboxTicket } from './view-ticket-inbox.vue'

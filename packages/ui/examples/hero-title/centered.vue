@@ -1,5 +1,5 @@
 <script setup>
-  import HeroTitle from '@aziontech/webkit/hero-title'
+  import HeroTitle from '@aziontech/ui/hero-title'
 </script>
 
 <template>

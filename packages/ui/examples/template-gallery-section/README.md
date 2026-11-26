@@ -4,7 +4,7 @@ The templates band of a solution page. Copy on one side invites the reader to st
 
 Each template card is a mark, a title, one line and a `Deploy now` action. Retail, Web Apps, AI Workloads, Security, Performance and Streaming use it.
 
-The band is the `TemplateGallerySection` component from `@aziontech/webkit/template-gallery-section`; it composes `Module`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `RegistrationFrame` and `Marquee` (and `Texture` on the closing frame with `closing`).
+The band is the `TemplateGallerySection` component from `@aziontech/ui/template-gallery-section`; it composes `Module`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `RegistrationFrame` and `Marquee` (and `Texture` on the closing frame with `closing`).
 
 ## Examples
 

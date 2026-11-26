@@ -2,7 +2,7 @@
 
 > The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit. It is a page section — the site places it from a `{ _id: 'stats-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame` and `stats`, which owns the figures' scale and layout.
 
-- Import: `import StatsSection from '@aziontech/webkit/stats-section'`
+- Import: `import StatsSection from '@aziontech/ui/stats-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [stats-section.json](stats-section.json)
 
@@ -75,7 +75,7 @@ No built-in strings: every visible and announced text is a prop from the page JS
 
 ```vue
 <script setup>
-  import StatsSection from '@aziontech/webkit/stats-section'
+  import StatsSection from '@aziontech/ui/stats-section'
 </script>
 
 <template>

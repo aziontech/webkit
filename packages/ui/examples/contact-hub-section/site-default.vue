@@ -1,7 +1,7 @@
 <script setup>
-  import ContactHubSection from '@aziontech/webkit/contact-hub-section'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
+  import ContactHubSection from '@aziontech/ui/contact-hub-section'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
 
   const lanes = [
     {

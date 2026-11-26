@@ -70,7 +70,7 @@ export function planDoctor(projectDir) {
     eslintCfg,
     eslintText: readText(projectDir, eslintCfg),
     stylelintCfg: firstExisting(projectDir, STYLELINT_CONFIG_CANDIDATES),
-    cssEntry: read(join(projectDir, 'src/webkit.css')),
+    cssEntry: read(join(projectDir, 'src/azion-ui.css')),
     srcFiles: listSrcFiles(projectDir)
   }
   for (const check of CHECKS) check(context)

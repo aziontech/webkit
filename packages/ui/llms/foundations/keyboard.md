@@ -3,11 +3,11 @@
 > The console keyboard contract: focus on open, Esc, Enter and Cmd+Enter, Cmd+S, Cmd+K, /, ?, list keys, and no single-key shortcut while typing.
 
 A console screen answers the keyboard the same way everywhere: the same key opens, closes, submits,
-saves, searches and lists the shortcuts, on every page. WebKit components already own the keys
+saves, searches and lists the shortcuts, on every page. Azion UI components already own the keys
 inside them (a `Dialog` traps focus and closes on `Esc`, a `DropdownMenu` moves with the arrows,
 `Command` owns `⌘K`). This rule is the contract for the screen around them: where focus lands when
 a page opens, what `Esc` means, which shortcuts exist, and what never fires while someone types.
-It completes [`webkit-accessibility`](./accessibility.md), which covers the keyboard map of
+It completes [`azion-ui-accessibility`](./accessibility.md), which covers the keyboard map of
 one control.
 
 ## The contract
@@ -20,7 +20,7 @@ one control.
 | `Esc`                                              | Closes the top layer only: menu, then dialog, then drawer. On a full-page task it means Cancel, through the unsaved-changes guard. On a browse page it does nothing. |
 | `Enter`, `⌘ Enter` (`Ctrl Enter` off Apple)        | `Enter` submits a short single-line form; `⌘ Enter` submits from a textarea or the code editor.                                                                      |
 | `⌘ S` (`Ctrl S`)                                   | Saves a page that has a `SaveBar`, and stops the browser's own save.                                                                                                 |
-| `⌘ K` (`Ctrl K`)                                   | Opens the command palette (rule [`webkit-header-search`](https://github.com/aziontech/webkit/blob/main/rules/webkit-header-search.md)).                                                                                |
+| `⌘ K` (`Ctrl K`)                                   | Opens the command palette (rule [`azion-ui-header-search`](https://github.com/aziontech/webkit/blob/main/rules/azion-ui-header-search.md)).                                                                            |
 | `/`                                                | Focuses the page's search field, when the page has one.                                                                                                              |
 | `?` (`Shift /`)                                    | Opens the list of every shortcut the current screen offers.                                                                                                          |
 | Lists and tables                                   | Arrow keys move between rows, `Enter` opens, `Space` selects, `Delete` asks before it deletes.                                                                       |
@@ -38,8 +38,8 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 
   ```vue
   <script setup>
-    import Input from '@aziontech/webkit/input'
-    import PageHeader from '@aziontech/webkit/page-header'
+    import Input from '@aziontech/ui/input'
+    import PageHeader from '@aziontech/ui/page-header'
     import { onMounted, ref } from 'vue'
 
     const name = ref('')
@@ -64,7 +64,7 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 
   ```vue
   <script setup>
-    import PageHeader from '@aziontech/webkit/page-header'
+    import PageHeader from '@aziontech/ui/page-header'
     import { onMounted } from 'vue'
 
     onMounted(() => document.getElementById('page-title')?.focus({ preventScroll: true }))
@@ -82,7 +82,7 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
   overlay stack and handle `Esc` only while they are on top, so a menu inside a drawer closes the
   menu first.
 - Route `Esc` on a full-page task through the same guard as the Cancel button
-  (`useUnsavedChanges` from `@aziontech/webkit/use-unsaved-changes`), so unsaved work is never lost
+  (`useUnsavedChanges` from `@aziontech/ui/use-unsaved-changes`), so unsaved work is never lost
   to a key.
 - Save with `⌘ S` on a page that has a `SaveBar`: listen to its `save` event, which the bar emits
   on `⌘ S` (`Ctrl S`) after it stops the browser's own save and lists the shortcut under `?`. Save
@@ -90,9 +90,9 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 
   ```vue
   <script setup>
-    import Button from '@aziontech/webkit/button'
-    import Kbd from '@aziontech/webkit/kbd'
-    import SaveBar from '@aziontech/webkit/save-bar'
+    import Button from '@aziontech/ui/button'
+    import Kbd from '@aziontech/ui/kbd'
+    import SaveBar from '@aziontech/ui/save-bar'
     import { ref } from 'vue'
 
     const dirty = ref(true)
@@ -131,7 +131,7 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
   `PropertyFilter` and `TableSearch` bind `/` themselves while they are mounted; bind it yourself
   only for another field (`Input type="search"`) with `useShortcuts`.
 - Register every shortcut a screen adds where the `?` list can read it (`useShortcuts` from
-  `@aziontech/webkit/use-shortcuts`, with a `label`), so the list always matches what the screen
+  `@aziontech/ui/use-shortcuts`, with a `label`), so the list always matches what the screen
   does. A shortcut that is not in the list does not exist for the person using it. `ConsoleLayout`
   renders the one `ShortcutsDialog`; an app without it mounts one `ShortcutsDialog` in its shell.
 - Let a `DataTable` move with the arrow keys, open the row with `Enter` and select it with
@@ -157,7 +157,7 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 - Do not bind `⌘ S` on a page without a `SaveBar`, and do not let it fall through to the browser's
   "Save page as".
 - Do not bind `⌘ K` yourself: `SearchTrigger` and `Command` own it (rule
-  [`webkit-header-search`](https://github.com/aziontech/webkit/blob/main/rules/webkit-header-search.md)).
+  [`azion-ui-header-search`](https://github.com/aziontech/webkit/blob/main/rules/azion-ui-header-search.md)).
 - Do not fire a single-key shortcut (`/`, `?`, a letter) while focus is in an `input`, a
   `textarea`, a `contenteditable` element or a combobox, or while `⌘`, `Ctrl` or `Alt` is held.
 - Do not take a key the browser or the screen reader needs: `Tab`, `F6`, `⌘ L`, `⌘ W`, `⌘ T`,
@@ -167,13 +167,13 @@ macOS, `Ctrl` on Windows, Linux and ChromeOS.
 
 ## Enforced
 
-- **Inside WebKit components** — focus trap and restore, `Esc` closing one layer, arrow-key
+- **Inside Azion UI components** — focus trap and restore, `Esc` closing one layer, arrow-key
   movement and `Enter` / `Space` on rows are asserted by each component's browser test (`Dialog`,
   `Drawer`, `Popover`, `DropdownMenu`, `Command`, `DataTable`, `Tree`).
-- **On WebKit blocks and demos** — the `keyboard` check of the styled visual suite drives every
+- **On Azion UI blocks and demos** — the `keyboard` check of the styled visual suite drives every
   block and demo screen in a real browser: focus on open, `Esc`, the shortcuts in this table, the
   `?` list, and no single-key shortcut firing inside a field.
-- **In your app** — `/webkit-ui-verify` runs the same keyboard pass over the routes you built, and
-  review (`/webkit-ux-heuristics`) holds the rest.
-- **`⌘ K`** — `webkit/require-header-search` (ESLint) flags a `Meta+K` / `Control+K` shortcut
+- **In your app** — `/azion-ui-verify` runs the same keyboard pass over the routes you built, and
+  review (`/azion-ui-ux-heuristics`) holds the rest.
+- **`⌘ K`** — `azion-ui/require-header-search` (ESLint) flags a `Meta+K` / `Control+K` shortcut
   outside `SearchTrigger`.

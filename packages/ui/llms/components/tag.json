@@ -1,8 +1,8 @@
 {
  "name": "tag",
  "binding": "Tag",
- "import": "@aziontech/webkit/tag",
- "treeShakeableImport": "@aziontech/webkit/tag",
+ "import": "@aziontech/ui/tag",
+ "treeShakeableImport": "@aziontech/ui/tag",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

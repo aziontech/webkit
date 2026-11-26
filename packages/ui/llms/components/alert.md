@@ -2,7 +2,7 @@
 
 > Use Alert for a persistent message on a console page or section (info, warning, error) — the answer for 'banner' or 'notice'. A short confirmation after an action that disappears on its own is a Toast. Inline feedback banner that communicates status, alerts, or progress. Presents a severity-marked box (a neutral box for info, a soft tint for success, warning and danger, always with default text) with a leading icon, an optional bold `title` over the copy, and message copy that may carry inline links, plus an optional secondary action button.
 
-- Import: `import Alert from '@aziontech/webkit/alert'`
+- Import: `import Alert from '@aziontech/ui/alert'`
 - Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [alert.json](alert.json)
 
@@ -112,7 +112,7 @@
 
 ```vue
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
+  import Alert from '@aziontech/ui/alert'
 </script>
 
 <template>
@@ -128,7 +128,7 @@
 
 ```vue
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
+  import Alert from '@aziontech/ui/alert'
 </script>
 
 <template>
@@ -161,7 +161,7 @@
 
 ```vue
 <script setup>
-  import Alert from '@aziontech/webkit/alert'
+  import Alert from '@aziontech/ui/alert'
 </script>
 
 <template>

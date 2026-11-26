@@ -1,4 +1,4 @@
-import type { SelectOptionItem } from '@aziontech/webkit/select'
+import type { SelectOptionItem } from '@aziontech/ui/select'
 
 export const optionLabel =
   (options: SelectOptionItem<string | number>[]) => (value: string | number) =>

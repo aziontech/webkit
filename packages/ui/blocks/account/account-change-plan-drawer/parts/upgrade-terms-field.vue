@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import Link from '@aziontech/webkit/link'
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Link from '@aziontech/ui/link'
 
   export interface UpgradeTermsFieldProps {
     /** The upgrade request is in flight. */

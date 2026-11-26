@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import aiGateway from '@aziontech/webkit/assets/ai-gateway.svg'
-  import branches from '@aziontech/webkit/assets/branches.svg'
-  import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
-  import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
+  import aiGateway from '@aziontech/ui/assets/ai-gateway.svg'
+  import branches from '@aziontech/ui/assets/branches.svg'
+  import ddosProtection from '@aziontech/ui/assets/ddos-protection.svg'
+  import usageChart from '@aziontech/ui/assets/usage-chart.svg'
+  import ImageGallery from '@aziontech/ui/image-gallery'
 
   const items = [
     { key: 'gateway', src: aiGateway, alt: 'AI gateway illustration' },

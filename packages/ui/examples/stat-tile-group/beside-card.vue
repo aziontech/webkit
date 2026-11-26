@@ -1,7 +1,7 @@
 <script setup>
-  import Card from '@aziontech/webkit/card'
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import Card from '@aziontech/ui/card'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
 </script>
 
 <template>

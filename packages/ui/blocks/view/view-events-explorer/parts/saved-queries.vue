@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item-root'
-  import Popover from '@aziontech/webkit/popover'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item-root'
+  import Popover from '@aziontech/ui/popover'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import type { SavedQuery } from '../lib/event-query'
 

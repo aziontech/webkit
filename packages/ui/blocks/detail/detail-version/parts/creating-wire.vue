@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import ScrollArea from '@aziontech/webkit/scroll-area'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import Card from '@aziontech/ui/card'
+  import ScrollArea from '@aziontech/ui/scroll-area'
+  import Skeleton from '@aziontech/ui/skeleton'
 
   export interface CreatingWireProps {
     /** Name of the version being copied. */

@@ -1,7 +1,7 @@
 <script setup>
-  import Container from '@aziontech/webkit/container'
-  import PlanComparisonSection from '@aziontech/webkit/plan-comparison-section'
-  import Spacer from '@aziontech/webkit/spacer'
+  import Container from '@aziontech/ui/container'
+  import PlanComparisonSection from '@aziontech/ui/plan-comparison-section'
+  import Spacer from '@aziontech/ui/spacer'
 
   const plans = [
     {

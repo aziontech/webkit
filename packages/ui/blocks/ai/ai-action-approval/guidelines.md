@@ -52,7 +52,7 @@ A `structured-output` part draws as a JSON `CodeBlock`: the progressive `partial
 
 ## Data
 
-The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `structured-output`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and runs no AI library; `@aziontech/webkit/utils/ai-chat` names TanStack AI's own message types, imported from `@tanstack/ai` as types only (an optional peer, `^1.5.0`), with the helpers that read them (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`; import the types from there), so the shape follows TanStack when you update it, and any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
+The block draws a conversation in the message shape of TanStack AI: each message has an `id`, a `role` and its `parts` in order (`text`, `thinking`, `tool-call`, `tool-result`, `structured-output`), so the values `useChat` from `@tanstack/ai-vue` returns go straight into its props, with no conversion. The block calls no model and runs no AI library; `@aziontech/ui/utils/ai-chat` names TanStack AI's own message types, imported from `@tanstack/ai` as types only (an optional peer, `^1.5.0`), with the helpers that read them (`AiChatMessage`, `AiChatPart`, `AiChatTool`, `AiChatInterrupt`; import the types from there), so the shape follows TanStack when you update it, and any source that produces it works. Parts it does not draw (images, audio) are skipped. `sample.ts` holds the sample threads the variants pass. The draft in the composer stays local.
 
 What TanStack AI does not carry, the app adds in `metadata`: `sources` (the documents the response cites, numbered in order), `reasoningSeconds` (left out, the block measures the thinking time) and `stopped` (the block also marks the response that Stop ended). A message's time is its `createdAt`, formatted in the reader's locale.
 
@@ -154,7 +154,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Outcomes:** Approved, Denied (built in).
 - **Decision not sent:** `Your decision was not sent` with the reason and Retry.
 - **Assistant after a denial:** "Got it, nothing was deployed."
-- Follow `skills/webkit-microcopy`: sentence case, no "please", present tense.
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", present tense.
 
 ## Accessibility
 
@@ -179,4 +179,4 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - `ai/ai-chat` — the conversation this card lives in.
 - `ai/ai-chat-drawer` — the same flow in a drawer over a resource page.
 - `edit/edit-delete-dialog` — confirming a destructive action the reader started.
-- `skills/webkit-ai-surfaces` — when to ask, what to show and how to record the outcome.
+- `skills/azion-ui-ai-surfaces` — when to ask, what to show and how to record the outcome.

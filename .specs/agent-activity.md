@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: e50def7b71617be7fe96940313e340ee8686ac93c9f0163f554e900e40394e8a
+checksum: b9eb2cddff700baf602ee3553e707e6960707b2dc5bd283724121879112e1570
 created: 2026-11-19
 last_updated: 2026-11-22
 ---
@@ -54,7 +54,7 @@ a step only when it has been the current one for a second, and the outcome once,
 
 ```vue
 <script setup>
-  import AgentActivity from '@aziontech/webkit/agent-activity'
+  import AgentActivity from '@aziontech/ui/agent-activity'
 </script>
 
 <template>
@@ -180,7 +180,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/agent-activity/`: Default (a step running, two done, one pending, collapsed), Statuses (every status in the open list), Streaming (steps tick over on a timer the reader starts, ending done)._
+_Examples in `packages/ui/examples/agent-activity/`: Default (a step running, two done, one pending, collapsed), Statuses (every status in the open list), Streaming (steps tick over on a timer the reader starts, ending done)._
 
 The Statuses example is justified because the component has a closed `status` set and no `variant`; Streaming shows the live behaviour (the announcement and the current-step swap) that a static render cannot.
 
@@ -191,7 +191,7 @@ The Statuses example is justified because the component has a closed `status` se
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

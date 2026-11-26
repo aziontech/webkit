@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
   import { ref } from 'vue'
 
   import StateErrorPage from '../state-error-page.vue'

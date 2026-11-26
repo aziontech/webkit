@@ -1,8 +1,8 @@
 {
  "name": "chip",
  "binding": "Chip",
- "import": "@aziontech/webkit/chip",
- "treeShakeableImport": "@aziontech/webkit/chip",
+ "import": "@aziontech/ui/chip",
+ "treeShakeableImport": "@aziontech/ui/chip",
  "category": "input",
  "surface": "app",
  "structure": "monolithic",

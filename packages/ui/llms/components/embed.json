@@ -1,8 +1,8 @@
 {
  "name": "embed",
  "binding": "Embed",
- "import": "@aziontech/webkit/embed",
- "treeShakeableImport": "@aziontech/webkit/embed",
+ "import": "@aziontech/ui/embed",
+ "treeShakeableImport": "@aziontech/ui/embed",
  "category": "content",
  "surface": "site",
  "structure": "monolithic",

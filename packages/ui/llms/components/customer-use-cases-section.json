@@ -1,8 +1,8 @@
 {
  "name": "customer-use-cases-section",
  "binding": "CustomerUseCasesSection",
- "import": "@aziontech/webkit/customer-use-cases-section",
- "treeShakeableImport": "@aziontech/webkit/customer-use-cases-section",
+ "import": "@aziontech/ui/customer-use-cases-section",
+ "treeShakeableImport": "@aziontech/ui/customer-use-cases-section",
  "category": "section",
  "surface": "site",
  "structure": "monolithic",

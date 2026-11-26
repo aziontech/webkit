@@ -2,7 +2,7 @@
 
 > Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package. `name` selects a scene from a closed registry; there is no way to assemble artwork out of markup, so a page can only render illustrations design has actually signed off, and a scene can never drift between the screens that use it. The library is drawn once, in dark mode. The scene is drawn into the page as inline SVG and every colour it carries is repainted from the `illustration` theme foundation of `@aziontech/theme` — `--illustration-*` roles that alias the global tokens — so the one export follows light and dark like the rest of the page.
 
-- Import: `import Illustration from '@aziontech/webkit/illustration'`
+- Import: `import Illustration from '@aziontech/ui/illustration'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [illustration.json](illustration.json)
 
@@ -18,7 +18,7 @@
 - Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is hidden from assistive tech, which keeps screen readers out of a graphic that adds nothing.
 - Size the illustration from the call site with a class. The root is `w-full` at the canvas aspect ratio, so a narrower column simply gets a smaller scene.
 - Pick the scene that draws the claim next to it, not the one whose filename matches the page title.
-- Find the names in `llms/foundations/illustrations.md` (installed under `node_modules/@aziontech/webkit/llms/`), the MCP tool `list_assets` (`kind: "illustration"`) or the Assets example. Never guess a name from a file name or a page title: an unknown name renders the placeholder.
+- Find the names in `llms/foundations/illustrations.md` (installed under `node_modules/@aziontech/ui/llms/`), the MCP tool `list_assets` (`kind: "illustration"`) or the Assets example. Never guess a name from a file name or a page title: an unknown name renders the placeholder.
 - To add a scene, export the frame from the Figma assets library (592×300 for a scene, the tile's own size for a tile or crop), drop the `.svg` into `src/assets/illustrations/`, and register it in `registry.ts`. The test fails while a drawing in the folder is unregistered. Never hand-draw one.
 - Leave `<Illustration />` unnamed where a scene is still being drawn: the placeholder frame reserves the space and reads as unfinished on the screen, which is louder than a gap nobody notices.
 
@@ -74,7 +74,7 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
+  import Illustration from '@aziontech/ui/illustration'
 </script>
 
 <template>
@@ -86,7 +86,7 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
+  import Illustration from '@aziontech/ui/illustration'
 </script>
 
 <template>
@@ -159,7 +159,7 @@
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
+  import Illustration from '@aziontech/ui/illustration'
 </script>
 
 <template>

@@ -3,10 +3,10 @@
 > The deploy logs of a build or deploy run with known steps, wherever it is shown: `LogViewer.Steps` lists the pipeline as an Accordion of steps, each with its status glyph and the status in words for assistive technology, its title and sentence, its time and its own LogViewer, or every line as one continuous LogViewer in the Complete view, with a flush Progress on the bottom edge while it runs. On its own its toolbar row reports the step count and the step in flight, or the outcome Tag, the time and the Phased or Complete switch once it has settled. In a create flow (InCreateFlow) it sits in a Card titled Deployment that opens on a cloning splash (a source tile, a marching dashed connector and a large destination tile) with a Cloning StatusIndicator, and once a run fails the card header carries the view switch and its footer Edit and Redeploy. On a deployment page (DeploymentDetail, DeploymentError, DeploymentQueued) it is the Deployment logs card under a status banner and the Deployment details card. Built from `LogViewer` (`LogViewer.Steps`), `Tag`, `Card`, `StatusIndicator`, `ToggleGroup` and `Button`; the deployment pages add `Alert`, `Accordion`, `Avatar`, `CopyButton`, `DropdownMenu`, `IconButton`, `EmptyState` and `Tooltip`. The deployment pages are page bodies for ConsoleLayout.
 
 - Surface: app
-- Source: `blocks/detail/detail-deployment-logs/detail-deployment-logs.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-deployment-logs/detail-deployment-logs.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-deployment-logs")`
 - Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [LogViewer](../../components/log-viewer.md), [StatusIndicator](../../components/status-indicator.md), `TableCellLink`, [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`
-- Skills: `webkit-ui-states`, `webkit-errors`, `webkit-layout`
+- Skills: `azion-ui-states`, `azion-ui-errors`, `azion-ui-layout`
 
 ## Asked as
 
@@ -34,7 +34,7 @@ The user started a deployment and wants to know where it is, whether it went liv
 
 ### A. Steps — `LogViewer.Steps` (required)
 
-`LogViewer.Steps` (`@aziontech/webkit/log-viewer`, or `@aziontech/webkit/log-viewer-steps` on its own) takes the steps in run order, each with its key, title, one sentence of outcome, status (`done`, `running`, `failed`, `skipped`, `pending`), time and its own log lines. It draws a single collapsible `Accordion` with the status glyph, a visually hidden status word, the title, the sentence and the time per step, and a borderless `LogViewer` per open step. Only one step is open at a time: unbound, the running step opens, else the failed one; bind `v-model:open-step` to open the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted; the running step's sentence shimmers only when motion is allowed. Put a step's outcome `Tag` (Failed, Skipped) in the `step-meta` slot and the skipped step's sentence in `step-empty`. Never rebuild this list by hand from `Accordion` and `LogViewer`.
+`LogViewer.Steps` (`@aziontech/ui/log-viewer`, or `@aziontech/ui/log-viewer-steps` on its own) takes the steps in run order, each with its key, title, one sentence of outcome, status (`done`, `running`, `failed`, `skipped`, `pending`), time and its own log lines. It draws a single collapsible `Accordion` with the status glyph, a visually hidden status word, the title, the sentence and the time per step, and a borderless `LogViewer` per open step. Only one step is open at a time: unbound, the running step opens, else the failed one; bind `v-model:open-step` to open the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted; the running step's sentence shimmers only when motion is allowed. Put a step's outcome `Tag` (Failed, Skipped) in the `step-meta` slot and the skipped step's sentence in `step-empty`. Never rebuild this list by hand from `Accordion` and `LogViewer`.
 
 ### B. Toolbar row — `LogViewer.Steps` header slot, `Tag` (required)
 
@@ -104,7 +104,7 @@ Then delete `sample.ts` and its import.
 - **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
 - **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing rules."
 - **Splash line:** names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
-- Follow `skills/webkit-microcopy` and `skills/webkit-errors`: say what failed and why, no "please", no exclamation in console copy.
+- Follow `skills/azion-ui-microcopy` and `skills/azion-ui-errors`: say what failed and why, no "please", no exclamation in console copy.
 
 ## Accessibility
 
@@ -134,7 +134,7 @@ Then delete `sample.ts` and its import.
 - `create/create-deploy-success` — where a create flow lands once the run goes live.
 - `state/state-async-submit` — a long run the user leaves and comes back to, with the same steps in its logs card.
 - `detail/detail-resource` — the overview of the resource a deployment belongs to; its Deployments tab links here.
-- `LogViewer` — `LogViewer.Steps` draws the steps; see `skills/webkit-ui-states` for the running and failed states.
+- `LogViewer` — `LogViewer.Steps` draws the steps; see `skills/azion-ui-states` for the running and failed states.
 
 ## Variants
 
@@ -155,11 +155,8 @@ Each variant is the same screen in another state: `get_block("detail/detail-depl
 
 ```vue
 <script setup lang="ts">
-  import LogViewer, {
-    type LogViewerStep,
-    type LogViewerStepsView
-  } from '@aziontech/webkit/log-viewer'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import LogViewer, { type LogViewerStep, type LogViewerStepsView } from '@aziontech/ui/log-viewer'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import { sampleSteps } from './sample'

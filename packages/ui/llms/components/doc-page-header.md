@@ -2,7 +2,7 @@
 
 > The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slot, the consumer's own menu; the trail is likewise slottable, for an application whose crumbs route rather than navigate), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.
 
-- Import: `import DocPageHeader from '@aziontech/webkit/doc-page-header'`
+- Import: `import DocPageHeader from '@aziontech/ui/doc-page-header'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-page-header.json](doc-page-header.json)
 
@@ -81,7 +81,7 @@
 
 ```vue
 <script setup>
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
 </script>
 
 <template>
@@ -119,7 +119,7 @@
 
 ```vue
 <script setup>
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
 
   const onActionClick = (event, action) => action
 </script>
@@ -161,7 +161,7 @@
 
 ```vue
 <script setup>
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
 </script>
 
 <template>

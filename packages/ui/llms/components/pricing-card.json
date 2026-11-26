@@ -1,8 +1,8 @@
 {
  "name": "pricing-card",
  "binding": "PricingCard",
- "import": "@aziontech/webkit/pricing-card",
- "treeShakeableImport": "@aziontech/webkit/pricing-card",
+ "import": "@aziontech/ui/pricing-card",
+ "treeShakeableImport": "@aziontech/ui/pricing-card",
  "category": "content",
  "surface": "app",
  "structure": "monolithic",

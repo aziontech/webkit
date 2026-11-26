@@ -1,6 +1,6 @@
 <script setup>
-  import KeyValueList from '@aziontech/webkit/key-value-list'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import ToolApproval from '@aziontech/ui/tool-approval'
   import { ref } from 'vue'
 
   const status = ref('pending')

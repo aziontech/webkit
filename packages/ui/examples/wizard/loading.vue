@@ -1,9 +1,9 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
-  import Wizard from '@aziontech/webkit/wizard'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Switch from '@aziontech/ui/switch'
+  import Wizard from '@aziontech/ui/wizard'
   import { ref } from 'vue'
 
   const step = ref(3)

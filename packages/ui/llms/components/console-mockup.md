@@ -1,8 +1,8 @@
 # Console Mockup
 
-> Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
+> Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real Azion UI components inside an internal `ConsoleMockupShell` frame (not exported), that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
 
-- Import: `import ConsoleMockup from '@aziontech/webkit/console-mockup'`
+- Import: `import ConsoleMockup from '@aziontech/ui/console-mockup'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [console-mockup.json](console-mockup.json)
 
@@ -25,7 +25,7 @@
 
 ## Don’t
 
-- The screen you need is not in the registry → add it to the registry inside WebKit (drawn in the internal `ConsoleMockupShell` frame). Do not approximate it at the call site.
+- The screen you need is not in the registry → add it to the registry inside Azion UI (drawn in the internal `ConsoleMockupShell` frame). Do not approximate it at the call site.
 - A live, working screen at a device size → use `browser-frame`.
 - A static product concept drawing → use `illustration`.
 - A screenshot or clip in documentation → use `doc-frame`.
@@ -103,7 +103,7 @@
 
 ```vue
 <script setup>
-  import ConsoleMockup from '@aziontech/webkit/console-mockup'
+  import ConsoleMockup from '@aziontech/ui/console-mockup'
 </script>
 
 <template>
@@ -117,7 +117,7 @@
 
 ```vue
 <script setup>
-  import ConsoleMockup from '@aziontech/webkit/console-mockup'
+  import ConsoleMockup from '@aziontech/ui/console-mockup'
 </script>
 
 <template>
@@ -154,7 +154,7 @@
 
 ```vue
 <script setup>
-  import ConsoleMockup from '@aziontech/webkit/console-mockup'
+  import ConsoleMockup from '@aziontech/ui/console-mockup'
 </script>
 
 <template>

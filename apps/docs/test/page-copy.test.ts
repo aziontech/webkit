@@ -59,7 +59,7 @@ test('the not-found page offers search and the three sections, not only the star
   )
 })
 
-test('a rule or skill the docs site renders speaks as a page and spells WebKit', () => {
+test('a rule or skill the docs site renders speaks as a page and spells Azion UI', () => {
   const root = fileURLToPath(new URL('../../../', import.meta.url))
   const patterns = JSON.parse(readFileSync(`${root}skills/patterns.json`, 'utf8')) as {
     patterns: { skill: string }[]
@@ -70,7 +70,7 @@ test('a rule or skill the docs site renders speaks as a page and spells WebKit',
   ]
   assert.ok(sources.length > 5)
   const leaks = sources.filter((path) =>
-    /\bThis skill\b|\bWebkit\b/.test(readFileSync(`${root}${path}`, 'utf8'))
+    /\bThis skill\b|\bAzionUi\b/.test(readFileSync(`${root}${path}`, 'utf8'))
   )
   assert.deepEqual(leaks, [])
 })

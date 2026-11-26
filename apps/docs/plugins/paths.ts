@@ -4,11 +4,11 @@ import { fileURLToPath } from 'node:url'
 
 const APP = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 export const REPO = resolve(APP, '../..')
-export const WEBKIT = join(REPO, 'packages/webkit')
+export const AZION_UI = join(REPO, 'packages/ui')
 export const THEME = join(REPO, 'packages/theme')
-export const CATALOG = join(WEBKIT, 'catalog.json')
+export const CATALOG = join(AZION_UI, 'catalog.json')
 export const SPECS = join(REPO, '.specs')
-export const LLMS = join(WEBKIT, 'llms')
+export const LLMS = join(AZION_UI, 'llms')
 export const SKILLS = join(REPO, 'skills')
 
 export function walk(dir: string, match: (name: string) => boolean, out: string[] = []): string[] {
@@ -45,9 +45,9 @@ function slugify(value: string): string {
 }
 
 export function readBlocks(): (BlockManifest & { dir: string; states: BlockVariant[] })[] {
-  return walk(join(WEBKIT, 'blocks'), (name) => name === 'block.json').map((file) => {
+  return walk(join(AZION_UI, 'blocks'), (name) => name === 'block.json').map((file) => {
     const manifest = JSON.parse(readFileSync(file, 'utf8')) as BlockManifest
-    const dir = relative(join(WEBKIT, 'blocks'), dirname(file))
+    const dir = relative(join(AZION_UI, 'blocks'), dirname(file))
     const states = [manifest.primary, ...(manifest.variants ?? [])].map((state) => ({
       ...state,
       slug: slugify(state.name)
@@ -86,7 +86,7 @@ export function readCatalog(): Catalog {
     const data = JSON.parse(readFileSync(CATALOG, 'utf8')) as Catalog
     for (const entry of Object.values(data.imports)) {
       if (!entry.docsFile) continue
-      Object.assign(entry, JSON.parse(readFileSync(join(WEBKIT, entry.docsFile), 'utf8')))
+      Object.assign(entry, JSON.parse(readFileSync(join(AZION_UI, entry.docsFile), 'utf8')))
       delete entry.docsFile
     }
     catalogCache = { mtime, data }

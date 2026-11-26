@@ -3,10 +3,10 @@
 > A DNS zone detail page, opened from its index: a full-bleed tab bar with Main settings and Records over a scrolling tab panel. Main settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a hint glyph over a flush `Card` of `ItemList` rows. Name and Domain Name are required `Input`s that show a required `FieldError` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroupRoot` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (`PropertyFilter` over Name, Type, Policy and Value, Refresh, Download CSV and `CollectionPreferences`, all driven by `useCollection`) and a records table paginated at 10: the value cell pins a copy button, Weight and Description stay blank when they do not apply, the row menu carries Edit and Delete, and the empty slot separates no records (Add Record, Import zone file) from no match (Clear filters). Built from `PageHeader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `Card`, `ItemList`, `Input`, `InputGroupRoot`, `CopyButton`, `Switch`, `FieldError`, `Button`, `PropertyFilter`, `CollectionPreferences`, `DataTable` and `EmptyState`. A page body for ConsoleLayout.
 
 - Surface: app
-- Source: `blocks/detail/detail-dns-zone/detail-dns-zone.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-dns-zone/detail-dns-zone.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-dns-zone")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DataTablePagination`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [Kbd](../../components/kbd.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsGroup](../../components/settings-group.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), `TableCellActions`, `TableCellId`, `TableCellLink`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-file-picker`
-- Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
+- Skills: `azion-ui-tables`, `azion-ui-form`, `azion-ui-navigation`
 
 ## Asked as
 
@@ -31,11 +31,11 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 ### A. Tab bar — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
+A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/azion-ui-navigation`.
 
 ### B. Settings sections — `SettingsGroup`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
 
-Main settings is a form in the form column with four `SettingsGroup` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
+Main settings is a form in the form column with four `SettingsGroup` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/azion-ui-form`.
 
 ### C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
 
@@ -168,7 +168,7 @@ Then delete `sample.ts` and its import.
 - **Save bar:** the label states the fact, e.g. "You have unsaved changes."; buttons "Discard" and "Save".
 - **Records heading:** title "Records", description one sentence, e.g. "The authoritative records this zone answers with."; actions "Documentation" and "Add Record".
 - **Copy buttons:** name the value, e.g. "Copy nameserver 1", "Copy record value".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -199,7 +199,7 @@ Then delete `sample.ts` and its import.
 - `edit/edit-resource` — the settings form and save bar pattern used by Main settings.
 - `detail/detail-domains-card` — a short related list inside a settings section.
 - `edit/edit-delete-dialog` — the dialog behind the row menu's Delete.
-- `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
+- `SaveBar` — the unsaved-changes band; see `skills/azion-ui-form`.
 
 ## Variants
 
@@ -213,10 +213,10 @@ Each variant is the same screen in another state: `get_block("detail/detail-dns-
 
 ```vue
 <script setup lang="ts">
-  import type { DropdownMenuItemValue, TableColumn } from '@aziontech/webkit/data-table'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import type { DropdownMenuItemValue, TableColumn } from '@aziontech/ui/data-table'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import { type FilteringProperty, useCollection } from '@aziontech/ui/use-collection'
   import { computed, reactive, ref, useId, watch } from 'vue'
 
   import { DNS_ZONE_POLICY_TYPES } from './dns-zone-policy'
@@ -522,29 +522,25 @@ export const dnsZonePolicyLabel = (value: string) =>
 
 ```ts
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
-  import type {
-    DropdownMenuItemValue,
-    TableColumn,
-    TableExposed
-  } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import TableCellId from '@aziontech/webkit/table-cell-id'
-  import TableCellLink from '@aziontech/webkit/table-cell-link'
-  import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import type { UseCollectionReturn } from '@aziontech/webkit/use-collection'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
+  import type { DropdownMenuItemValue, TableColumn, TableExposed } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import IconButton from '@aziontech/ui/icon-button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import PropertyFilter from '@aziontech/ui/property-filter'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import TableCellId from '@aziontech/ui/table-cell-id'
+  import TableCellLink from '@aziontech/ui/table-cell-link'
+  import Tag from '@aziontech/ui/tag'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import type { UseCollectionReturn } from '@aziontech/ui/use-collection'
   import { ref } from 'vue'
 
   import type { DnsZoneDetailRecord, DnsZoneDetailZone } from '../detail-dns-zone.vue'
@@ -824,19 +820,19 @@ export const dnsZonePolicyLabel = (value: string) =>
 
 ```ts
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import CopyButton from '@aziontech/webkit/copy-button'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import ItemList from '@aziontech/webkit/item-list'
-  import Kbd from '@aziontech/webkit/kbd'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import CopyButton from '@aziontech/ui/copy-button'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import InputGroupRoot from '@aziontech/ui/input-group-root'
+  import ItemList from '@aziontech/ui/item-list'
+  import Kbd from '@aziontech/ui/kbd'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
   import { computed } from 'vue'
 
   import type { DnsZoneDetailSettings, DnsZoneDetailZone } from '../detail-dns-zone.vue'

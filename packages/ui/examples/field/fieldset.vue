@@ -1,8 +1,8 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import Select from '@aziontech/webkit/select'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import Select from '@aziontech/ui/select'
   import { ref } from 'vue'
 
   const region = ref('sa-east')

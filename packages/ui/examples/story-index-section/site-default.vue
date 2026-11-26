@@ -1,13 +1,13 @@
 <script setup>
-  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'
-  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
-  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
-  import marisaExtendedReversed from '@aziontech/webkit/assets/marisa-extended-reversed.svg'
-  import panvelExtendedReversed from '@aziontech/webkit/assets/panvel-extended-reversed.svg'
-  import Container from '@aziontech/webkit/container'
-  import Spacer from '@aziontech/webkit/spacer'
-  import StoryIndexSection from '@aziontech/webkit/story-index-section'
+  import axurExtendedReversed from '@aziontech/ui/assets/axur-extended-reversed.svg'
+  import exameExtendedReversed from '@aziontech/ui/assets/exame-extended-reversed.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'
+  import marisaExtendedReversed from '@aziontech/ui/assets/marisa-extended-reversed.svg'
+  import panvelExtendedReversed from '@aziontech/ui/assets/panvel-extended-reversed.svg'
+  import Container from '@aziontech/ui/container'
+  import Spacer from '@aziontech/ui/spacer'
+  import StoryIndexSection from '@aziontech/ui/story-index-section'
 
   const items = [
     {

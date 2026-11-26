@@ -2,7 +2,7 @@
 
 > The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'plan-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `select`, `input`, `button`, `hint`, `tooltip`, `eyebrow`, `tag` and `link`.
 
-- Import: `import PlanComparisonSection from '@aziontech/webkit/plan-comparison-section'`
+- Import: `import PlanComparisonSection from '@aziontech/ui/plan-comparison-section'`
 - Category: section · Surface: site · Structure: monolithic
 - API as JSON: [plan-comparison-section.json](plan-comparison-section.json)
 
@@ -75,7 +75,7 @@
 
 ```vue
 <script setup>
-  import PlanComparisonSection from '@aziontech/webkit/plan-comparison-section'
+  import PlanComparisonSection from '@aziontech/ui/plan-comparison-section'
 
   const plans = [
     {
@@ -134,7 +134,7 @@
 
 ```vue
 <script setup>
-  import PlanComparisonSection from '@aziontech/webkit/plan-comparison-section'
+  import PlanComparisonSection from '@aziontech/ui/plan-comparison-section'
 
   const plans = [
     { id: 'starter', name: 'Starter', action: { label: 'Start for free', href: '/signup' } },
@@ -187,7 +187,7 @@
 
 ```vue
 <script setup>
-  import PlanComparisonSection from '@aziontech/webkit/plan-comparison-section'
+  import PlanComparisonSection from '@aziontech/ui/plan-comparison-section'
 
   const tiers = [
     {

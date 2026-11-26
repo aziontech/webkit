@@ -65,7 +65,7 @@ async function main() {
 
   process.stderr.write(
     `enforce-test-exists: ${info.category}/${info.name} has no co-located ${info.name}.test.ts\n\n` +
-      `Every webkit component ships a browser-mode functional suite next to its .vue\n` +
+      `Every Azion UI component ships a browser-mode functional suite next to its .vue\n` +
       `(contributing/rules/testing.md). Missing:\n` +
       `  ${relative(ROOT, testPath)}\n\n` +
       `Mount the component (or its example), assert the functional surface (render,\n` +

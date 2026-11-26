@@ -1,10 +1,10 @@
 # useShortcuts
 
-Composable `@aziontech/webkit/use-shortcuts`. The signatures and option tables below are read from its typed source, [`src/composables/use-shortcuts/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-shortcuts/index.ts).
+Composable `@aziontech/ui/use-shortcuts`. The signatures and option tables below are read from its typed source, [`src/composables/use-shortcuts/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-shortcuts/index.ts).
 
 ```ts
-import { useShortcuts, matchesShortcut, parseShortcutKeys, shortcutKeyList, toAriaKeyshortcuts, isTypingTarget, createShortcutRegistry, provideShortcuts, useShortcutList, ShortcutsInjectionKey } from '@aziontech/webkit/use-shortcuts'
-import type { UseShortcutsReturn, ShortcutCombination, Shortcut, ShortcutListGroup, ShortcutListItem, ShortcutRegistry, ShortcutRegistryEntry, UseShortcutListReturn } from '@aziontech/webkit/use-shortcuts'
+import { useShortcuts, matchesShortcut, parseShortcutKeys, shortcutKeyList, toAriaKeyshortcuts, isTypingTarget, createShortcutRegistry, provideShortcuts, useShortcutList, ShortcutsInjectionKey } from '@aziontech/ui/use-shortcuts'
+import type { UseShortcutsReturn, ShortcutCombination, Shortcut, ShortcutListGroup, ShortcutListItem, ShortcutRegistry, ShortcutRegistryEntry, UseShortcutListReturn } from '@aziontech/ui/use-shortcuts'
 ```
 
 ## `useShortcuts`

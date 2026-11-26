@@ -1,8 +1,8 @@
 {
  "name": "site-layout",
  "binding": "SiteLayout",
- "import": "@aziontech/webkit/site-layout",
- "treeShakeableImport": "@aziontech/webkit/site-layout",
+ "import": "@aziontech/ui/site-layout",
+ "treeShakeableImport": "@aziontech/ui/site-layout",
  "category": "layout",
  "surface": "site",
  "structure": "monolithic",

@@ -2,7 +2,7 @@
 
 > ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment. It renders as a `radiogroup` whose segments are `radio` buttons, is driven by an `options` array plus `v-model`, and works uncontrolled through `defaultValue`. It differs from `tabs`, which switches between content panels it owns: a segmented button only holds the chosen value and leaves rendering what that value means to the consumer.
 
-- Import: `import ToggleGroup from '@aziontech/webkit/toggle-group'`
+- Import: `import ToggleGroup from '@aziontech/ui/toggle-group'`
 - Category: action · Surface: app · Structure: monolithic
 - API as JSON: [toggle-group.json](toggle-group.json)
 
@@ -59,7 +59,7 @@
 | --------- | --------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model` | `TValue \| undefined` | `undefined` | `update:modelValue` | Selected option value via `defineModel`. While unbound (`undefined`) the group is uncontrolled: it starts at `defaultValue`, else the first non-disabled option. Emits only when the selection changes to a different value, always as the string-coerced option `value`. |
 
-**Generic.** The component is generic over `TValue extends string` (default `string`), inferred from the bound `v-model`: on a `Ref<'day' | 'week'>`, `update:modelValue` sends `'day' | 'week' | undefined` (the `undefined` of an unbound model), so `v-model` binds the union with no cast. `ToggleGroupOption<TOptionValue = string | number>` types a list against the same union (`ToggleGroupOption<'day' | 'week'>[]`); the `options` prop itself stays `ToggleGroupOption[]`, so a list typed `{ label: string; value: string }[]` still binds. `ToggleGroupOption` and `ToggleGroupSize` are exported by `@aziontech/webkit/toggle-group`.
+**Generic.** The component is generic over `TValue extends string` (default `string`), inferred from the bound `v-model`: on a `Ref<'day' | 'week'>`, `update:modelValue` sends `'day' | 'week' | undefined` (the `undefined` of an unbound model), so `v-model` binds the union with no cast. `ToggleGroupOption<TOptionValue = string | number>` types a list against the same union (`ToggleGroupOption<'day' | 'week'>[]`); the `options` prop itself stays `ToggleGroupOption[]`, so a list typed `{ label: string; value: string }[]` still binds. `ToggleGroupOption` and `ToggleGroupSize` are exported by `@aziontech/ui/toggle-group`.
 
 ## States
 
@@ -110,7 +110,7 @@
 
 ```vue
 <script setup>
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
 
   const options = [
@@ -137,7 +137,7 @@
 
 ```vue
 <script setup>
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
 
   const options = [
@@ -163,7 +163,7 @@
 
 ```vue
 <script setup>
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
 
   const options = [
     { label: 'Day', value: 'day' },

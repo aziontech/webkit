@@ -1,5 +1,5 @@
 <script setup>
-  import PlanComparisonSection from '@aziontech/webkit/plan-comparison-section'
+  import PlanComparisonSection from '@aziontech/ui/plan-comparison-section'
 
   const plans = [
     { id: 'starter', name: 'Starter', action: { label: 'Start for free', href: '/signup' } },

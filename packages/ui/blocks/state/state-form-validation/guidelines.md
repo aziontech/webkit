@@ -69,7 +69,7 @@ The Section variants add `AppHeader`, `IconButton`, `Tooltip`, `Brand`, `Breadcr
 
 ### Result notices — through `toast`
 
-A toast shows the result of a save that no field owns: `toast.error` with **Retry** when the request failed and no field is to blame (row 3 of `skills/webkit-errors`), `toast.success` naming the new object when the save went through. Both use one `id`, and the previous result is dismissed when a new submit starts, so attempts never stack. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+A toast shows the result of a save that no field owns: `toast.error` with **Retry** when the request failed and no field is to blame (row 3 of `skills/azion-ui-errors`), `toast.success` naming the new object when the save went through. Both use one `id`, and the previous result is dismissed when a new submit starts, so attempts never stack. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -174,7 +174,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## Related
 
 - `state/state-async-submit` — the long-running counterpart: use it when the action runs long enough that the user leaves (build, deploy, import) and the result must reach them later.
-- `skills/webkit-errors` — where every error renders, row by row.
+- `skills/azion-ui-errors` — where every error renders, row by row.
 - `create/create-page` — the sectioned create page these states apply to.
 - `auth/auth-sign-in` — the signed-out version, where every outcome lands in one card `Alert` and nothing toasts.
 - `settings/settings-form` — the same field states on an existing object.

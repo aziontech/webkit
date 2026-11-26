@@ -2,7 +2,7 @@
 
 > CopyText shows one code value (a CSS custom property, a utility class, a CNAME, a key ID, a one-line command) in monospace inside a quiet bordered box, with an always-visible `CopyButton` at its inline end that copies the value. It composes `CopyButton` for the clipboard write, the copied confirmation, the live announcement and the manual-copy fallback, so it re-implements none of them. Unlike `CopyButton` (icon only, no visible value) and `TableCellId` (an identifier laid out for a table cell), CopyText is the inline "show this value and let me copy it" pattern for prose, key/value lists, token tables and cards.
 
-- Import: `import CopyText from '@aziontech/webkit/copy-text'`
+- Import: `import CopyText from '@aziontech/ui/copy-text'`
 - Category: content · Surface: app · Structure: monolithic
 - API as JSON: [copy-text.json](copy-text.json)
 
@@ -102,7 +102,7 @@
 
 ```vue
 <script setup>
-  import CopyText from '@aziontech/webkit/copy-text'
+  import CopyText from '@aziontech/ui/copy-text'
 </script>
 
 <template>
@@ -114,7 +114,7 @@
 
 ```vue
 <script setup>
-  import CopyText from '@aziontech/webkit/copy-text'
+  import CopyText from '@aziontech/ui/copy-text'
 </script>
 
 <template>
@@ -135,7 +135,7 @@
 
 ```vue
 <script setup>
-  import CopyText from '@aziontech/webkit/copy-text'
+  import CopyText from '@aziontech/ui/copy-text'
 </script>
 
 <template>

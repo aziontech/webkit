@@ -3,10 +3,10 @@
 > The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.
 
 - Surface: app
-- Source: `blocks/detail/detail-domains-card/detail-domains-card.vue` in `@aziontech/webkit`
+- Source: `blocks/detail/detail-domains-card/detail-domains-card.vue` in `@aziontech/ui`
 - MCP: `get_block("detail/detail-domains-card")`
 - Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, `TableCellActions`, [Tag](../../components/tag.md)
-- Skills: `webkit-tables`
+- Skills: `azion-ui-tables`
 
 ## Asked as
 
@@ -40,7 +40,7 @@ A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-k
 
 ### C. Environment chip — `Tag` (optional)
 
-One chip per row, following `skills/webkit-tables`: Environment is a `Tag` with `severity="neutral"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
+One chip per row, following `skills/azion-ui-tables`: Environment is a `Tag` with `severity="neutral"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
 
 ### D. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
@@ -99,7 +99,7 @@ Then delete `sample.ts` and its import.
 - Leave a cell empty when the attribute does not apply to that record.
 - Hide the row menu on records the user cannot change, rather than showing disabled options.
 - Count the records in the footer with the right singular or plural noun.
-- Follow `skills/webkit-tables` for column kinds and the action column.
+- Follow `skills/azion-ui-tables` for column kinds and the action column.
 
 ## Don't
 
@@ -116,7 +116,7 @@ Then delete `sample.ts` and its import.
 - **Count:** a number and the noun, singular or plural, e.g. "1 domain", "3 domains".
 - **Row menu:** single verbs, e.g. "Edit", "Delete"; the trigger tooltip reads "Row actions".
 - **Attribute values:** the value as the product names it, e.g. "Production", "Managed".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -135,7 +135,7 @@ Then delete `sample.ts` and its import.
 - `edit/edit-resource` — the Settings tab whose Domains section renders this card.
 - `view/view-table` — the full list, with filters and pages, for longer related lists.
 - `edit/edit-delete-dialog` — the dialog behind the row menu's Delete.
-- `DataTable` — the table this card wraps; see `skills/webkit-tables`.
+- `DataTable` — the table this card wraps; see `skills/azion-ui-tables`.
 
 ## Variants
 
@@ -147,15 +147,15 @@ Each variant is the same screen in another state: `get_block("detail/detail-doma
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import type { DropdownMenuItemValue, TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
-  import TableCellActions from '@aziontech/webkit/table-cell-actions'
-  import Tag from '@aziontech/webkit/tag'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import type { DropdownMenuItemValue, TableColumn } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import DropdownMenuGroup from '@aziontech/ui/dropdown-menu-group'
+  import DropdownMenuItem from '@aziontech/ui/dropdown-menu-item'
+  import TableCellActions from '@aziontech/ui/table-cell-actions'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import { sampleDomains } from './sample'

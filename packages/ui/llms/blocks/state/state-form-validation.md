@@ -3,10 +3,10 @@
 > A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. A required field carries the Required marker from the start; on submit an empty or filled but wrong one takes `invalid`, and a `Field.Error` (danger text with a leading alert icon) adds the message under the description, which keeps its guidance; there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. Its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. The block fetches nothing: Create emits `submit` with the values, and the page passes back `submitting`, `error`, `takenKey` or `saved`. Below md the actions stack at full width. Its page-level parts are `PageHeader`; the Section variants add `Subheader`, `SettingsRow`, `SaveBar`, `AppHeader`, `Breadcrumb`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `Alert`. The Section variants move the same rules to a long sectioned Create Service page (the creation header, section headings over flush `Card` groups of `Item` rows, a sticky `SaveBar`): another user deleted the linked origin, Save comes back with an error the Origin section owns, the page scrolls there, one danger `Alert` under the heading says what happened with the recovery action on it (Reload origins), and the Origin select turns invalid with its own reason and takes the focus; reloading swaps the select for a `Skeleton` and disables Save, and once reloaded the Alert closes and the select asks for another origin. Never a toast, never a summary. A page body for a create page: render it under the focused creation header (top-bar/top-bar-creation), not in ConsoleLayout.
 
 - Surface: app
-- Source: `blocks/state/state-form-validation/state-form-validation.vue` in `@aziontech/webkit`
+- Source: `blocks/state/state-form-validation/state-form-validation.vue` in `@aziontech/ui`
 - MCP: `get_block("state/state-form-validation")`
 - Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), `AppHeaderAccount`, [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Kbd](../../components/kbd.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Subheader](../../components/subheader.md), [Switch](../../components/switch.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
-- Skills: `webkit-form`, `webkit-errors`, `webkit-ui-states`
+- Skills: `azion-ui-form`, `azion-ui-errors`, `azion-ui-states`
 
 ## Asked as
 
@@ -81,7 +81,7 @@ The Section variants add `AppHeader`, `IconButton`, `Tooltip`, `Brand`, `Breadcr
 
 ### Result notices — through `toast`
 
-A toast shows the result of a save that no field owns: `toast.error` with **Retry** when the request failed and no field is to blame (row 3 of `skills/webkit-errors`), `toast.success` naming the new object when the save went through. Both use one `id`, and the previous result is dismissed when a new submit starts, so attempts never stack. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
+A toast shows the result of a save that no field owns: `toast.error` with **Retry** when the request failed and no field is to blame (row 3 of `skills/azion-ui-errors`), `toast.success` naming the new object when the save went through. Both use one `id`, and the previous result is dismissed when a new submit starts, so attempts never stack. This page body only calls `toast` from `@aziontech/ui/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so the page never renders a `Toaster`.
 
 ## Data
 
@@ -186,7 +186,7 @@ Then delete `sample.ts` and its imports in the variants.
 ## Related
 
 - `state/state-async-submit` — the long-running counterpart: use it when the action runs long enough that the user leaves (build, deploy, import) and the result must reach them later.
-- `skills/webkit-errors` — where every error renders, row by row.
+- `skills/azion-ui-errors` — where every error renders, row by row.
 - `create/create-page` — the sectioned create page these states apply to.
 - `auth/auth-sign-in` — the signed-out version, where every outcome lands in one card `Alert` and nothing toasts.
 - `settings/settings-form` — the same field states on an existing object.
@@ -211,15 +211,15 @@ Each variant is the same screen in another state: `get_block("state/state-form-v
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Textarea from '@aziontech/webkit/textarea'
-  import { toast } from '@aziontech/webkit/toast'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select from '@aziontech/ui/select'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Textarea from '@aziontech/ui/textarea'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
   /** A field of the Create Variable form. */

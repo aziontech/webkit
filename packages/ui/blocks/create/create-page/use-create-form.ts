@@ -1,10 +1,7 @@
-import { useEscapeToCancel } from '@aziontech/webkit/use-escape-to-cancel'
-import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/webkit/use-shortcuts'
-import {
-  useUnsavedChanges,
-  type UseUnsavedChangesReturn
-} from '@aziontech/webkit/use-unsaved-changes'
-import { focusFirstInvalid } from '@aziontech/webkit/utils/focus-invalid'
+import { useEscapeToCancel } from '@aziontech/ui/use-escape-to-cancel'
+import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/ui/use-shortcuts'
+import { useUnsavedChanges, type UseUnsavedChangesReturn } from '@aziontech/ui/use-unsaved-changes'
+import { focusFirstInvalid } from '@aziontech/ui/utils/focus-invalid'
 import { computed, type ComputedRef, nextTick, readonly, type Ref, ref } from 'vue'
 
 /** Options of `useCreateForm`. */

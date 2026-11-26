@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import Switch from '@aziontech/webkit/switch'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Switch from '@aziontech/ui/switch'
 
   const active = defineModel<boolean>({ required: true })
 </script>

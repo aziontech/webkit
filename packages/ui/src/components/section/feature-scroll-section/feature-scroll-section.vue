@@ -56,7 +56,7 @@
     title: string
     /** One sentence explaining the feature. */
     description: string
-    /** Live scene pinned for this step and shown still as the tile's media, `{ component, props? }` naming a webkit scene asset; wins over the code and the illustration. */
+    /** Live scene pinned for this step and shown still as the tile's media, `{ component, props? }` naming an Azion UI scene asset; wins over the code and the illustration. */
     scene?: SceneRef
     /** One-file code sample pinned for this step and shown as the tile's media when no scene is set, `{ fileName, code, language?, fileIcon?, copyAriaLabel? }`. */
     code?: FeatureScrollSectionCode
@@ -77,7 +77,7 @@
     description?: string
     /**
      * The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }`
-     * where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still
+     * where `scene` is `{ component, props? }` naming an Azion UI scene asset (drawn live in the stack, still
      * in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }`
      * drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and
      * `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the

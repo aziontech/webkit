@@ -1,10 +1,10 @@
 # usePlacement
 
-Composable `@aziontech/webkit/use-placement`. The signatures and option tables below are read from its typed source, [`src/composables/use-placement/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/composables/use-placement/index.ts).
+Composable `@aziontech/ui/use-placement`. The signatures and option tables below are read from its typed source, [`src/composables/use-placement/index.ts`](https://github.com/aziontech/webkit/blob/main/packages/ui/src/composables/use-placement/index.ts).
 
 ```ts
-import { usePlacement, getClippingBoundary, computePlacement } from '@aziontech/webkit/use-placement'
-import type { UsePlacementOptions, UsePlacementReturn, Align, CollisionPadding, ComputePlacementInput, ComputePlacementResult, PhysicalSide, Rect, Side, Size } from '@aziontech/webkit/use-placement'
+import { usePlacement, getClippingBoundary, computePlacement } from '@aziontech/ui/use-placement'
+import type { UsePlacementOptions, UsePlacementReturn, Align, CollisionPadding, ComputePlacementInput, ComputePlacementResult, PhysicalSide, Rect, Side, Size } from '@aziontech/ui/use-placement'
 ```
 
 ## `usePlacement`

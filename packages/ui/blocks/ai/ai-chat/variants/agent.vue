@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { AiChatInterrupt } from '@aziontech/webkit/utils/ai-chat'
+  import type { AiChatInterrupt } from '@aziontech/ui/utils/ai-chat'
   import { ref } from 'vue'
 
   import AiChat from '../ai-chat.vue'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Toaster } from '@aziontech/webkit/toast'
+  import { Toaster } from '@aziontech/ui/toast'
   import { useHead } from '@unhead/vue'
   import { type Component, computed, h, onBeforeUnmount, onMounted, watch } from 'vue'
   import { useRoute } from 'vue-router'
@@ -37,12 +37,14 @@
       'data-type-set': computed(() => (block.value?.surface === 'app' ? 'console' : undefined))
     },
     title: computed(() =>
-      block.value && state.value ? `${block.value.title}: ${state.value.name} — WebKit` : 'WebKit'
+      block.value && state.value
+        ? `${block.value.title}: ${state.value.name} — Azion UI`
+        : 'Azion UI'
     )
   })
 
   function onMessage(event: MessageEvent) {
-    if (event.origin !== location.origin || event.data?.source !== 'webkit-docs') return
+    if (event.origin !== location.origin || event.data?.source !== 'azion-ui-docs') return
     if (event.data.theme === 'dark' || event.data.theme === 'light')
       settings.theme = event.data.theme
     if (event.data.dir === 'ltr' || event.data.dir === 'rtl') settings.dir = event.data.dir

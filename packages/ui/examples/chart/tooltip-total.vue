@@ -1,5 +1,5 @@
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
+  import Chart from '@aziontech/ui/chart'
   import { computed, ref } from 'vue'
 
   const labels = [

@@ -71,7 +71,7 @@ test('diff flags a canonical block that changed since the copy, and unknown targ
   const dir = makeProject()
   try {
     assert.equal(cli(dir, 'add', BLOCK).code, 0)
-    const manifestPath = join(dir, 'webkit.blocks.json')
+    const manifestPath = join(dir, 'azion-ui.blocks.json')
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
     manifest.blocks[BLOCK].version = '0.0.1'
     manifest.blocks[BLOCK].files[0].checksum = 'sha256:old'
@@ -81,7 +81,7 @@ test('diff flags a canonical block that changed since the copy, and unknown targ
 
     const missing = cli(dir, 'diff', 'auth/no-such-block')
     assert.equal(missing.code, 2)
-    assert.match(missing.stderr, /not recorded in webkit\.blocks\.json/)
+    assert.match(missing.stderr, /not recorded in azion-ui\.blocks\.json/)
   } finally {
     cleanup(dir)
   }

@@ -26,7 +26,7 @@
     "importar arquivo de zona",
     "importar registros dns"
   ],
-  "skills": ["webkit-tables", "webkit-form", "webkit-navigation"],
+  "skills": ["azion-ui-tables", "azion-ui-form", "azion-ui-navigation"],
   "primary": {
     "name": "MainSettings",
     "file": "detail-dns-zone.vue"

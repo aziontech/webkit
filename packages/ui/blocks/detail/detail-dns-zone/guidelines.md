@@ -19,11 +19,11 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 ### A. Tab bar — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
+A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/azion-ui-navigation`.
 
 ### B. Settings sections — `SettingsGroup`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
 
-Main settings is a form in the form column with four `SettingsGroup` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
+Main settings is a form in the form column with four `SettingsGroup` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/azion-ui-form`.
 
 ### C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
 
@@ -156,7 +156,7 @@ Then delete `sample.ts` and its import.
 - **Save bar:** the label states the fact, e.g. "You have unsaved changes."; buttons "Discard" and "Save".
 - **Records heading:** title "Records", description one sentence, e.g. "The authoritative records this zone answers with."; actions "Documentation" and "Add Record".
 - **Copy buttons:** name the value, e.g. "Copy nameserver 1", "Copy record value".
-- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
@@ -187,4 +187,4 @@ Then delete `sample.ts` and its import.
 - `edit/edit-resource` — the settings form and save bar pattern used by Main settings.
 - `detail/detail-domains-card` — a short related list inside a settings section.
 - `edit/edit-delete-dialog` — the dialog behind the row menu's Delete.
-- `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
+- `SaveBar` — the unsaved-changes band; see `skills/azion-ui-form`.

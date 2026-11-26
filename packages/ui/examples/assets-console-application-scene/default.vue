@@ -1,6 +1,6 @@
 <script setup>
-  import ConsoleApplicationScene from '@aziontech/webkit/assets/console-application-scene'
-  import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'
+  import ConsoleApplicationScene from '@aziontech/ui/assets/console-application-scene'
+  import ConsoleShowcaseSection from '@aziontech/ui/console-showcase-section'
 
   const tabs = [
     { value: 'build', title: 'Build' },

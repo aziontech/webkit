@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { PropertyFilterQuery } from '@aziontech/webkit/use-collection'
+  import type { PropertyFilterQuery } from '@aziontech/ui/use-collection'
 
   import SettingsCannedResponses from '../settings-canned-responses.vue'
 

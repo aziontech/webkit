@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import NumberInput from '@aziontech/webkit/number-input'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import NumberInput from '@aziontech/ui/number-input'
+  import RadioGroup from '@aziontech/ui/radio-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
 
   import {
     browserCacheOptions,

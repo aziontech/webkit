@@ -1,6 +1,6 @@
 # Rule: `data-testid` — derived name on the root, overridable
 
-Every webkit component root carries a **`data-testid`** that is the component's own kebab
+Every Azion UI component root carries a **`data-testid`** that is the component's own kebab
 name (`chip`, `badge`, `toast`, `data-table`); a sub-component uses its own name too
 (`dialog-header`, `table-row`, `popover-trigger`). Your tests target that attribute instead
 of inventing selectors, and you override it per instance by passing `data-testid` on the
@@ -32,7 +32,7 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 - Do not apply the same testid to two elements, or leave a test-critical sub-element
   unaddressable.
 - Do not select by tag position, utility classes, or generated markup in tests — those
-  change between webkit versions; the testid does not.
+  change between Azion UI versions; the testid does not.
 
 ## Example
 

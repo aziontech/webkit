@@ -1,8 +1,8 @@
 {
  "name": "skeleton",
  "binding": "Skeleton",
- "import": "@aziontech/webkit/skeleton",
- "treeShakeableImport": "@aziontech/webkit/skeleton",
+ "import": "@aziontech/ui/skeleton",
+ "treeShakeableImport": "@aziontech/ui/skeleton",
  "category": "feedback",
  "surface": "app",
  "structure": "monolithic",

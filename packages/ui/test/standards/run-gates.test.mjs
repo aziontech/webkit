@@ -8,7 +8,7 @@ import { GATES, formatTable, parseGateArgs } from '../../scripts/run-gates.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..')
 const workflow = readFileSync(resolve(ROOT, '.github/workflows/governance.yml'), 'utf8')
-const pkg = JSON.parse(readFileSync(resolve(ROOT, 'packages/webkit/package.json'), 'utf8'))
+const pkg = JSON.parse(readFileSync(resolve(ROOT, 'packages/ui/package.json'), 'utf8'))
 
 const scriptsFor = (step) => {
   const file = step.find((a) => a.endsWith('.mjs'))
@@ -28,8 +28,8 @@ const ciCovers = (gate, step) => {
     (step.includes('--test') && workflow.includes('test:toolkit')) ||
     scripts.some(
       (name) =>
-        new RegExp(`webkit (run )?${name}\\n`).test(workflow) ||
-        new RegExp(`pnpm run ${name}\\n\\s+working-directory: packages/webkit\\n`).test(workflow)
+        new RegExp(`ui (run )?${name}\\n`).test(workflow) ||
+        new RegExp(`pnpm run ${name}\\n\\s+working-directory: packages/ui\\n`).test(workflow)
     )
   )
 }
@@ -57,23 +57,23 @@ const CI_ONLY = {
   'pnpm test:docs:smoke':
     'needs the docs build and Chromium; pnpm test:docs:smoke after pnpm build:docs',
   'pnpm check:docs:editor-chunks': 'needs the docs build; pnpm test:docs covers its logic',
-  'pnpm --filter @aziontech/webkit-docs run check:external-links':
+  'pnpm --filter @aziontech/ui-docs run check:external-links':
     'needs the docs build, lychee and the network (it requests every external link)',
-  'pnpm --filter @aziontech/webkit-docs run check:lighthouse':
+  'pnpm --filter @aziontech/ui-docs run check:lighthouse':
     'needs both built sites, Chromium and the network (npx downloads Lighthouse); about 2 min',
   'pnpm build:demos': 'a full demos build',
-  'pnpm --filter @aziontech/webkit run test:consume': 'installs and builds a consumer app',
-  'pnpm --filter @aziontech/webkit run check:package-lint':
-    'packs theme, icons and webkit and downloads publint and arethetypeswrong (about 40 s)',
-  'pnpm --filter @aziontech/webkit run check:consumer-types': 'packs and builds a consumer app',
+  'pnpm --filter @aziontech/ui run test:consume': 'installs and builds a consumer app',
+  'pnpm --filter @aziontech/ui run check:package-lint':
+    'packs theme, icons and ui and downloads publint and arethetypeswrong (about 40 s)',
+  'pnpm --filter @aziontech/ui run check:consumer-types': 'packs and builds a consumer app',
   'pnpm exec vitest run --shard=${{ matrix.shard }}/4': 'the browser suite, minutes long',
-  'pnpm --filter @aziontech/webkit-visual exec playwright test --shard=${{ matrix.shard }}/4':
+  'pnpm --filter @aziontech/ui-visual exec playwright test --shard=${{ matrix.shard }}/4':
     'the styled visual suite, needs the built sites',
   'printf \'%s\\n\' "$PR_TITLE" | pnpm exec commitlint --verbose': 'needs the PR title'
 }
 
 const gateCommand = (line) => {
-  const filtered = line.match(/^pnpm --filter @aziontech\/webkit (?:run )?(\S+)$/)
+  const filtered = line.match(/^pnpm --filter @aziontech\/ui (?:run )?(\S+)$/)
   const local = line.match(/^pnpm (?:run )?(\S+)$/)
   const name = filtered?.[1] ?? local?.[1]
   return GATES.some((gate) =>
@@ -126,7 +126,7 @@ test('formatTable prints one row per gate and the pass count', () => {
 
 test('a pre-push hook runs the gates, so a push never skips them', () => {
   const hook = readFileSync(resolve(ROOT, '.husky/pre-push'), 'utf8')
-  assert.match(hook, /@aziontech\/webkit run gates/)
+  assert.match(hook, /@aziontech\/ui run gates/)
 })
 
 test('the type coverage gate names its scope, .ts files only', () => {

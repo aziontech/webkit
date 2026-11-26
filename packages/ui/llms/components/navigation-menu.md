@@ -2,8 +2,8 @@
 
 > The top bar of a site: a row of links and triggers whose items open large panels of grouped links (product and solution menus). The items share one hover-intent timing, one keyboard model and one animated popup that resizes and slides between panels, inside a `navigation` landmark.
 
-- Import: `import NavigationMenuRoot from '@aziontech/webkit/navigation-menu-root'`
-- Compound import (dot notation, not tree-shakeable): `import NavigationMenu from '@aziontech/webkit/navigation-menu'`
+- Import: `import NavigationMenuRoot from '@aziontech/ui/navigation-menu-root'`
+- Compound import (dot notation, not tree-shakeable): `import NavigationMenu from '@aziontech/ui/navigation-menu'`
 - Category: navigation · Surface: app · Structure: composition
 - API as JSON: [navigation-menu.json](navigation-menu.json)
 
@@ -67,16 +67,16 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/navigation-menu-list`
-- `@aziontech/webkit/navigation-menu-item`
-- `@aziontech/webkit/navigation-menu-trigger`
-- `@aziontech/webkit/navigation-menu-content`
-- `@aziontech/webkit/navigation-menu-link`
-- `@aziontech/webkit/navigation-menu-viewport`
+- `@aziontech/ui/navigation-menu-list`
+- `@aziontech/ui/navigation-menu-item`
+- `@aziontech/ui/navigation-menu-trigger`
+- `@aziontech/ui/navigation-menu-content`
+- `@aziontech/ui/navigation-menu-link`
+- `@aziontech/ui/navigation-menu-viewport`
 
 ## Sub-components
 
-Every part is attached to the compound (`NavigationMenu.List`, …) and importable on its own as `@aziontech/webkit/navigation-menu-<part>`; `@aziontech/webkit/navigation-menu-root` is the root file (`navigation-menu.vue`) alone.
+Every part is attached to the compound (`NavigationMenu.List`, …) and importable on its own as `@aziontech/ui/navigation-menu-<part>`; `@aziontech/ui/navigation-menu-root` is the root file (`navigation-menu.vue`) alone.
 
 - `navigation-menu-list.vue` — Public sub-component `navigation-menu-list`; `show-highlight` (default `true`) shows the sliding highlight on the root horizontal list.
 - `navigation-menu-item.vue` — Public sub-component `navigation-menu-item`.
@@ -125,8 +125,8 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import NavigationMenu from '@aziontech/webkit/navigation-menu'
+  import Button from '@aziontech/ui/button'
+  import NavigationMenu from '@aziontech/ui/navigation-menu'
 </script>
 
 <template>

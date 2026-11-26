@@ -2,8 +2,8 @@
 
 > The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attached by a button, by dropping them on the box or by pasting them, a model and mode picker, dictation, a voice-conversation control that stands in for Submit while the prompt is empty, a Submit control that becomes Stop while a response is generated, a secondary row under the box (a context picker, tools, links), an optional character limit with a counter, and constraint text under it all. Enter submits on a fine pointer; Shift+Enter adds a line; on a coarse pointer (a phone keyboard) Enter adds a line and Submit sends; an IME composition never submits. It is controlled: the owner holds the text and the files, receives `submit` with the trimmed prompt, its references and its files, and clears them. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop. With `queueable` the owner keeps a queue of prompts to send after the response (TanStack AI `useChat` queues a `sendMessage` made while it streams): Submit then stays beside Stop, and Enter or Submit sends the next prompt into that queue while Stop still ends the response. The anatomy is composed by the app: the root draws the box, the text area, Submit / Stop / voice and the file tokens; the controls the app wants (attach, dictate, model, context, tools) are sub-components it places in the `actions`, `end` and `footer` slots. Each reads the composer through `provide` / `inject`, so the app wires nothing but its own values. At rest it is one floating bar (Attach `+`, the text, the `end` controls, Submit, voice or Stop) on a translucent raised surface with a shadow and a backdrop blur, so a thread can scroll under it. A second line, attached files or references, or an open shortcut menu stack it into two rows (text on its own row) until the prompt is cleared.
 
-- Import: `import PromptInputRoot from '@aziontech/webkit/prompt-input-root'`
-- Compound import (dot notation, not tree-shakeable): `import PromptInput from '@aziontech/webkit/prompt-input'`
+- Import: `import PromptInputRoot from '@aziontech/ui/prompt-input-root'`
+- Compound import (dot notation, not tree-shakeable): `import PromptInput from '@aziontech/ui/prompt-input'`
 - Category: ai · Surface: app · Structure: composition
 - API as JSON: [prompt-input.json](prompt-input.json)
 
@@ -86,12 +86,12 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/prompt-input-attach-button`
-- `@aziontech/webkit/prompt-input-dictate-button`
-- `@aziontech/webkit/prompt-input-model-picker`
-- `@aziontech/webkit/prompt-input-context-picker`
-- `@aziontech/webkit/prompt-input-access-picker`
-- `@aziontech/webkit/prompt-input-tools`
+- `@aziontech/ui/prompt-input-attach-button`
+- `@aziontech/ui/prompt-input-dictate-button`
+- `@aziontech/ui/prompt-input-model-picker`
+- `@aziontech/ui/prompt-input-context-picker`
+- `@aziontech/ui/prompt-input-access-picker`
+- `@aziontech/ui/prompt-input-tools`
 
 ## Sub-components
 
@@ -103,7 +103,7 @@ the composer context (`injection-key.ts`): `disabled`, `voiceActive`, `accept`, 
 `fileCount`, the text (read and write), `appendFiles`, `reject`, `setRejection`, `setDragging`,
 `registerAttach(handlers)`, `setChips(count)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
 Every part disables with the composer. The compound attaches the three pickers as async
-components, so `@aziontech/webkit/prompt-input` does not carry `DropdownMenu` until a picker
+components, so `@aziontech/ui/prompt-input` does not carry `DropdownMenu` until a picker
 renders; their standalone paths are static.
 
 - `prompt-input-attach-button/prompt-input-attach-button.vue` — the attach control: a ghost
@@ -203,7 +203,7 @@ attach, dictate), `file-token-group` (files, loaded on first file), `button`, `d
 `chip`.
 
 ```
-packages/webkit/src/components/ai/prompt-input/
+packages/ui/src/components/ai/prompt-input/
 ├── prompt-input.vue
 ├── prompt-input.test.ts
 ├── index.ts
@@ -330,10 +330,10 @@ packages/webkit/src/components/ai/prompt-input/
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PromptInput from '@aziontech/webkit/prompt-input'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Button from '@aziontech/ui/button'
+  import PromptInput from '@aziontech/ui/prompt-input'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
 
   const prompt = ref('')
@@ -548,7 +548,7 @@ packages/webkit/src/components/ai/prompt-input/
 
 ```vue
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
   import { onBeforeUnmount, ref } from 'vue'
 
   const prompt = ref('Why did my cache hit ratio drop?')
@@ -588,7 +588,7 @@ packages/webkit/src/components/ai/prompt-input/
 
 ```vue
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
   import { ref } from 'vue'
 
   const prompt = ref(

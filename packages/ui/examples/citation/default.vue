@@ -1,5 +1,5 @@
 <script setup>
-  import Citation from '@aziontech/webkit/citation'
+  import Citation from '@aziontech/ui/citation'
 
   const sources = [
     {

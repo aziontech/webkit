@@ -2,7 +2,7 @@
 
 > The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-2xl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.
 
-- Import: `import DocHero from '@aziontech/webkit/doc-hero'`
+- Import: `import DocHero from '@aziontech/ui/doc-hero'`
 - Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-hero.json](doc-hero.json)
 
@@ -80,9 +80,9 @@
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
-  import DocHero from '@aziontech/webkit/doc-hero'
+  import Button from '@aziontech/ui/button'
+  import CopyPromptButton from '@aziontech/ui/copy-prompt-button'
+  import DocHero from '@aziontech/ui/doc-hero'
 
   const prompt =
     'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
@@ -113,7 +113,7 @@
 
 ```vue
 <script setup>
-  import DocHero from '@aziontech/webkit/doc-hero'
+  import DocHero from '@aziontech/ui/doc-hero'
 </script>
 
 <template>

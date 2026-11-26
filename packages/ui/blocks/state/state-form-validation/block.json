@@ -38,7 +38,7 @@
     "error de formulario",
     "validación en el servidor"
   ],
-  "skills": ["webkit-form", "webkit-errors", "webkit-ui-states"],
+  "skills": ["azion-ui-form", "azion-ui-errors", "azion-ui-states"],
   "primary": {
     "name": "Default",
     "file": "state-form-validation.vue"

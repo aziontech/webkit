@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import type { DropdownMenuItemValue, TableColumn } from '@aziontech/webkit/data-table'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
-  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import type { DropdownMenuItemValue, TableColumn } from '@aziontech/ui/data-table'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import { type FilteringProperty, useCollection } from '@aziontech/ui/use-collection'
   import { computed, reactive, ref, useId, watch } from 'vue'
 
   import { DNS_ZONE_POLICY_TYPES } from './dns-zone-policy'

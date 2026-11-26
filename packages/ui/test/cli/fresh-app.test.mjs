@@ -29,10 +29,10 @@ import {
 } from '../../src/cli/plan.js'
 import { PKG_ROOT } from './lib/cli-project.mjs'
 
-const requireFromWebkit = createRequire(join(PKG_ROOT, 'package.json'))
+const requireFromAzionUi = createRequire(join(PKG_ROOT, 'package.json'))
 
 function packageDir(name) {
-  let dir = dirname(requireFromWebkit.resolve(name))
+  let dir = dirname(requireFromAzionUi.resolve(name))
   while (
     !existsSync(join(dir, 'package.json')) ||
     readJson(join(dir, 'package.json')).name !== name
@@ -55,7 +55,7 @@ function link(dir, name, target) {
 }
 
 function makeApp(files = {}) {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-fresh-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-fresh-'))
   writeFileSync(
     join(dir, 'package.json'),
     JSON.stringify({ name: 'fresh', version: '0.0.0', type: 'module' }, null, 2)
@@ -87,7 +87,7 @@ test('the generated eslint config lints a fresh app clean and never the build ou
   const dir = makeApp()
   try {
     applyPlan(dir, planInit(dir, { wireEntry: false }))
-    link(dir, '@aziontech/webkit', PKG_ROOT)
+    link(dir, '@aziontech/ui', PKG_ROOT)
     for (const dep of [
       'eslint-plugin-vuejs-accessibility',
       'vue-eslint-parser',
@@ -113,7 +113,7 @@ test('the generated eslint config lints a fresh app clean and never the build ou
     const [own] = await eslint.lintFiles(['src/format.ts'])
     assert.deepEqual(
       own.messages.map((m) => m.ruleId),
-      ['webkit/require-authoring-standards'],
+      ['azion-ui/require-authoring-standards'],
       'the tool-config exemption must not reach the source'
     )
   } finally {
@@ -125,7 +125,7 @@ test('the generated .stylelintignore keeps stylelint off the compiled CSS', asyn
   const dir = makeApp()
   try {
     applyPlan(dir, planInit(dir, { wireEntry: false }))
-    link(dir, '@aziontech/webkit', PKG_ROOT)
+    link(dir, '@aziontech/ui', PKG_ROOT)
     assert.equal(readFileSync(join(dir, '.stylelintignore'), 'utf8'), _internals.STYLELINT_IGNORE)
     for (const out of BUILD_OUTPUT_DIRS) {
       assert.match(_internals.STYLELINT_IGNORE, new RegExp(`^${out.replace('.', '\\.')}/$`, 'm'))
@@ -133,7 +133,7 @@ test('the generated .stylelintignore keeps stylelint off the compiled CSS', asyn
 
     const { results } = await stylelint.lint({ files: '**/*.css', cwd: dir })
     const linted = results.map((r) => r.source.slice(dir.length + 1)).sort()
-    assert.deepEqual(linted, ['src/style.css', 'src/webkit.css', 'src/webkit.sources.css'])
+    assert.deepEqual(linted, ['src/azion-ui.css', 'src/azion-ui.sources.css', 'src/style.css'])
     assert.ok(results.every((r) => !r.errored))
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -164,7 +164,7 @@ test('the pre-commit hook lints only the source, and an existing .stylelintignor
 
 test('init upgrades the whole-tree hook an older init wrote, keeping the user lines', () => {
   const legacy =
-    'npm test\n# Lint with the webkit rules before every commit.\nnpx eslint .\nnpx stylelint "**/*.{css,scss,vue}"\n'
+    'npm test\n# Lint with the Azion UI rules before every commit.\nnpx eslint .\nnpx stylelint "**/*.{css,scss,vue}"\n'
   const dir = makeApp({ '.husky/pre-commit': legacy })
   try {
     const plan = planInit(dir, {})
@@ -185,8 +185,8 @@ test('init upgrades the whole-tree hook an older init wrote, keeping the user li
 test('doctor warns about a whole-tree hook and about build output that is not ignored', () => {
   const dir = makeApp({
     'eslint.config.mjs':
-      "import webkit from '@aziontech/webkit/eslint-plugin'\nexport default [...webkit.configs.recommended]\n",
-    '.stylelintrc.json': '{ "extends": ["@aziontech/webkit/stylelint-config"] }\n',
+      "import azionUi from '@aziontech/ui/eslint-plugin'\nexport default [...ui.configs.recommended]\n",
+    '.stylelintrc.json': '{ "extends": ["@aziontech/ui/stylelint-config"] }\n',
     '.husky/pre-commit': 'npx eslint .\nnpx stylelint "**/*.{css,scss,vue}"\n'
   })
   try {
@@ -285,7 +285,7 @@ test(
   'init in a project below the git root advises the husky subdirectory setup',
   { skip: !hasGit && 'git is not installed' },
   () => {
-    const root = mkdtempSync(join(tmpdir(), 'webkit-mono-'))
+    const root = mkdtempSync(join(tmpdir(), 'azion-ui-mono-'))
     try {
       assert.equal(git(root, 'init', '-q').status, 0)
       const dir = join(root, 'apps', 'web')
@@ -313,7 +313,7 @@ test('init and doctor flag a starter stylesheet with raw colours before the firs
     const note = plan.find((a) => a.type === 'advise' && /raw colours/.test(a.message))
     assert.ok(note, 'expected the raw-colour note')
     assert.match(note.message, /^src\/style\.css uses raw colours/)
-    assert.doesNotMatch(note.message, /card\.scss|webkit\.css|dist/)
+    assert.doesNotMatch(note.message, /card\.scss|azion-ui\.css|dist/)
 
     applyPlan(dir, plan)
     const check = planDoctor(dir).find((c) => c.check === 'raw colours in styles')
@@ -335,7 +335,7 @@ const VITE_MAIN =
 const VUE_MAIN =
   "import './assets/main.css'\n\nimport { createApp } from 'vue'\nimport App from './App.vue'\n\ncreateApp(App).mount('#app')\n"
 
-test('init replaces an untouched create-vite starter stylesheet with the WebKit one', () => {
+test('init replaces an untouched create-vite starter stylesheet with the Azion UI one', () => {
   const dir = makeApp({ 'src/main.ts': VITE_MAIN, 'src/style.css': starter('create-vite-style') })
   try {
     const plan = planInit(dir, {})
@@ -348,7 +348,7 @@ test('init replaces an untouched create-vite starter stylesheet with the WebKit 
     const main = readFileSync(join(dir, 'src/main.ts'), 'utf8')
     assert.equal(
       main,
-      "import '@aziontech/icons'\nimport { createApp } from 'vue'\nimport './webkit.css'\nimport App from './App.vue'\n\ncreateApp(App).mount('#app')\n"
+      "import '@aziontech/icons'\nimport { createApp } from 'vue'\nimport './azion-ui.css'\nimport App from './App.vue'\n\ncreateApp(App).mount('#app')\n"
     )
     const done = results.find((r) => r.action.type === 'remove-starter')
     assert.match(done.detail, /removed src\/style\.css/)
@@ -378,7 +378,7 @@ test('init removes the untouched create-vue main.css and base.css', () => {
     assert.ok(!existsSync(join(dir, 'src/assets/base.css')))
     assert.match(
       readFileSync(join(dir, 'src/main.ts'), 'utf8'),
-      /^import '\.\/webkit\.css'\n\nimport \{ createApp \}/
+      /^import '\.\/azion-ui\.css'\n\nimport \{ createApp \}/
     )
   } finally {
     rmSync(dir, { recursive: true, force: true })

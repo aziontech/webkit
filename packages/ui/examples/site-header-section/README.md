@@ -4,7 +4,7 @@ The bar above every marketing page: the Azion mark, the four mega-menus (Solutio
 
 From `xl` the menus sit in the bar. Below it the bar keeps the menu button, the mark, `Login`, the call to action and the search trigger; on a phone (below `sm`) `Login` steps out, as on azion.com, unless `secondaryActionOnPhones` is set. The same menus open in a `Drawer`, where each mega-menu is a drill level behind a Back row, with `Login` and `Start for free` stacked full width at its foot.
 
-The bar is the `SiteHeaderSection` component from `@aziontech/webkit/site-header-section`; it composes `AppHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `SearchTrigger`, `Drawer`, `Menu` and `ScrollArea`, and keeps the sheet's open state and drill path as its own.
+The bar is the `SiteHeaderSection` component from `@aziontech/ui/site-header-section`; it composes `AppHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `SearchTrigger`, `Drawer`, `Menu` and `ScrollArea`, and keeps the sheet's open state and drill path as its own.
 
 ## Examples
 
