@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, useAttrs, watch } from 'vue'
+  import { computed, onBeforeUnmount, ref, useAttrs, watch } from 'vue'
 
-  import { useDropdownContext } from '../injection-key'
+  import { useDropdownContext, useDropdownSelectionScope } from '../injection-key'
 
   defineOptions({
     name: 'DropdownOption',
@@ -40,12 +40,19 @@
 
   const attrs = useAttrs()
   const ctx = useDropdownContext()
+  const selection = useDropdownSelectionScope()
+  const rowRef = ref<globalThis.HTMLElement | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__option`
   )
 
   const hasCommand = computed(() => props.command.length > 0)
+
+  const role = computed(() => (selection.hasSelection.value ? 'menuitemradio' : 'menuitem'))
+  const ariaChecked = computed(() => (selection.hasSelection.value ? props.selected : undefined))
+
+  const selectionKey = Symbol('DropdownOption')
 
   function activate(event: globalThis.MouseEvent | globalThis.KeyboardEvent) {
     if (props.disabled) return
@@ -63,6 +70,12 @@
     }
   }
 
+  watch(
+    () => props.selected,
+    (selected) => selection.setOptionSelected(selectionKey, selected),
+    { immediate: true }
+  )
+
   let unregisterCommand: (() => void) | null = null
 
   watch(
@@ -79,16 +92,20 @@
 
   onBeforeUnmount(() => {
     unregisterCommand?.()
+    selection.setOptionSelected(selectionKey, false)
+    const active = globalThis.document?.activeElement ?? null
+    if (active && rowRef.value?.contains(active)) ctx.recoverFocus()
   })
 </script>
 
 <template>
   <div
     v-bind="attrs"
-    role="menuitem"
+    ref="rowRef"
+    :role="role"
     :tabindex="disabled ? -1 : 0"
     :aria-disabled="disabled || undefined"
-    :aria-current="selected ? 'true' : undefined"
+    :aria-checked="ariaChecked"
     :data-testid="testId"
     :data-selected="selected || null"
     :data-disabled="disabled || null"

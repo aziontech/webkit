@@ -1,7 +1,11 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId } from 'vue'
+  import { computed, provide, ref, useAttrs, useId } from 'vue'
 
-  import { useDropdownContext } from '../injection-key'
+  import {
+    createDropdownSelectionScope,
+    DropdownSelectionScopeKey,
+    useDropdownContext
+  } from '../injection-key'
 
   defineOptions({
     name: 'DropdownGroup',
@@ -30,6 +34,8 @@
   const labelId = `${uid}-label`
 
   const groupIndex = ref(ctx.registerGroup())
+
+  provide(DropdownSelectionScopeKey, createDropdownSelectionScope())
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__group`

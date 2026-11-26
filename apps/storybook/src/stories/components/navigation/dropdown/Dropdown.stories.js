@@ -105,12 +105,14 @@ const meta = {
     },
     top: {
       control: false,
-      description: 'Sticky region rendered above the scrollable group list (e.g. a search input).',
+      description:
+        'Sticky region rendered above the scrollable group list (e.g. a search input). Sits outside the `role="menu"` list and is reached with `Tab` / `Shift+Tab`.',
       table: { category: 'slots', type: { summary: 'VNode' } }
     },
     bottom: {
       control: false,
-      description: 'Sticky region rendered below the scrollable group list (e.g. a footer action).',
+      description:
+        'Sticky region rendered below the scrollable group list (e.g. a footer action). Sits outside the `role="menu"` list; `Tab` from the menu reaches it without closing the panel.',
       table: { category: 'slots', type: { summary: 'VNode' } }
     },
     'onUpdate:open': {
@@ -424,7 +426,7 @@ const WITH_TOP_AND_BOTTOM_SLOTS_TEMPLATE = `<Dropdown :open="true">
 
   <DropdownGroup label="Suggestions">
     <DropdownOption value="profile" label="Profile" />
-    <DropdownOption value="settings" label="Settings" />
+    <DropdownOption value="settings" label="Settings" selected />
     <DropdownOption value="billing" label="Billing" />
   </DropdownGroup>
 
@@ -444,7 +446,7 @@ export const WithTopAndBottomSlots = {
       story: { inline: false, iframeHeight: '360px' },
       description: {
         story:
-          'Root `top` and `bottom` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and stay outside the scrollable group list.'
+          'Root `top` and `bottom` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and sit outside the `role="menu"` list, so a `Button` or link in the footer is valid inside the panel. The `selected` option is announced as the checked `menuitemradio`. This demo is forced open, so nothing is focused on load: when a dropdown is opened from its trigger, focus lands on the selected option. From a focused option, `Tab` reaches the footer action without closing the panel and `Shift+Tab` returns to the menu.'
       },
       source: {
         code: toSfc(

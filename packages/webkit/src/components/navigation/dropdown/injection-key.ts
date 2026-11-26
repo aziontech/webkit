@@ -1,4 +1,4 @@
-import { inject, type InjectionKey, type Ref } from 'vue'
+import { computed, inject, type InjectionKey, readonly, type Ref, ref } from 'vue'
 
 export type DropdownPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'
 
@@ -24,6 +24,8 @@ export interface DropdownContext {
   panelRef: Ref<globalThis.HTMLElement | null>
   /** Teleport target inside the open panel; groups portal their content here. */
   panelBodyRef: Ref<globalThis.HTMLElement | null>
+  /** Moves focus back into the open panel when the focused option is removed. */
+  recoverFocus: () => void
   /** Drives open state. Sub-components never call defineEmits directly. */
   setOpen: (value: boolean) => void
   /** Activates an option — emits select and closes the panel. */
@@ -55,6 +57,34 @@ export interface DropdownContext {
 }
 
 export const DropdownInjectionKey: InjectionKey<DropdownContext> = Symbol('DropdownContext')
+
+export interface DropdownSelectionScope {
+  /** True while at least one option of this set is selected; its options then render as menuitemradio. */
+  hasSelection: Readonly<Ref<boolean>>
+  /** Records whether the option identified by `key` is selected; pass false on unmount. */
+  setOptionSelected: (key: symbol, selected: boolean) => void
+}
+
+export const DropdownSelectionScopeKey: InjectionKey<DropdownSelectionScope> =
+  Symbol('DropdownSelectionScope')
+
+export function createDropdownSelectionScope(): DropdownSelectionScope {
+  const selectedKeys = ref(new Set<symbol>())
+  const hasSelection = computed(() => selectedKeys.value.size > 0)
+  const setOptionSelected = (key: symbol, selected: boolean) => {
+    if (selected) selectedKeys.value.add(key)
+    else selectedKeys.value.delete(key)
+  }
+  return { hasSelection: readonly(hasSelection), setOptionSelected }
+}
+
+export function useDropdownSelectionScope(): DropdownSelectionScope {
+  const scope = inject(DropdownSelectionScopeKey, null)
+  if (!scope) {
+    throw new Error('Dropdown.Option must be used inside <Dropdown>.')
+  }
+  return scope
+}
 
 export function useDropdownContext(): DropdownContext {
   const ctx = inject(DropdownInjectionKey)
