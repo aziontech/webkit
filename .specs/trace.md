@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 9f159260bc99483588e22e05e59c545a2af48c0a50f60fc840495896fbad9082
+checksum: 334c259d09a054cde510f7d3b201a3ac0056b9601684ed769eaa43c2b603ab71
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -126,8 +126,8 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 ## Motion & Animations
 
 | Trigger   | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| --------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| row hover | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| --------- | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| row hover | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

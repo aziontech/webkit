@@ -30,7 +30,9 @@ test('contributing/AGENTS.md states the Node version of .nvmrc and engines.node'
 })
 
 test('contributing/AGENTS.md counts and lists every hook', () => {
-  const hooks = readdirSync(join(ROOT, 'contributing/hooks')).filter((file) => file.endsWith('.mjs'))
+  const hooks = readdirSync(join(ROOT, 'contributing/hooks')).filter((file) =>
+    file.endsWith('.mjs')
+  )
   const word = WORDS[hooks.length]
   assert.match(
     agents,

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 4
 template: 2
-checksum: 1e9640c3460099db936f373a9ccaae515b213ed742f620a22ab6bba9f95f746b
+checksum: 41511c38a1f0b1f3e688752862b59b1f959a58838f3ce02129100bd545bc4f44
 created: 2026-09-22
 last_updated: 2026-11-25
 ---
@@ -123,10 +123,10 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 ## Motion & Animations
 
 | Trigger               | Animation / Transition                                                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                 |
-| --------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------- |
-| step control pressed  | `scroll-smooth` on the track                                                                           | native smooth scrolling                           | `motion-reduce:scroll-auto` (jumps instantly)           |
-| control hover / focus | `transition-colors duration-150 ease-out`                                                              | inline (matches catalog)                          | `motion-reduce:transition-none`                         |
-| pointer drag          | none — the track follows the pointer 1:1 (`data-[dragging]:scroll-auto` stands the smooth scroll down) | —                                                 | unaffected; the drag is direct manipulation, not motion |
+| --------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------- |
+| step control pressed  | `scroll-smooth` on the track                                                                           | native smooth scrolling                                | `motion-reduce:scroll-auto` (jumps instantly)           |
+| control hover / focus | `transition-colors duration-150 ease-out`                                                              | inline (matches catalog)                               | `motion-reduce:transition-none`                         |
+| pointer drag          | none — the track follows the pointer 1:1 (`data-[dragging]:scroll-auto` stands the smooth scroll down) | —                                                      | unaffected; the drag is direct manipulation, not motion |
 
 ## Tokens
 

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 13
 template: 2
-checksum: 0806ab14a6fca4018087e28a79c5d60c35800cc4fc6a8597ad1dcdacce29dbdd
+checksum: 38be3fe54a65b0fb892a8409ea82108beb40b8718c603ce2a2d6fc55a3612459
 created: 2026-07-23
 last_updated: 2026-11-25
 ---
@@ -215,8 +215,8 @@ packages/webkit/src/components/overlay/command/
 The palette panel's open/close scale animation is owned by the wrapped `Dialog` (its `DialogContent`), including its reduced-motion escape — Command Menu renders no panel animation of its own. The only motion this component's own markup introduces is the item hover/active color transition:
 
 | Trigger                    | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| -------------------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| item hover / active change | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| -------------------------- | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| item hover / active change | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

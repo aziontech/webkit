@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 56e041a529666c30d5dce5c2b3a16886938223d67247d825c2a8f6654d215a3e
+checksum: 809fa810b5cba13ed7718157e50a6b652f781e53d17cc475281ca625d7062aac
 created: 2026-11-12
 last_updated: 2026-11-18
 ---
@@ -92,8 +92,8 @@ _none_
 ## Motion & Animations
 
 | Trigger                  | Animation / Transition                                        | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------ | ------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover/focus state change | `transition-colors duration-fast-02 ease-productive-entrance` | semantic (fast-02 · productive entrance)          | `motion-reduce:transition-none` |
+| ------------------------ | ------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover/focus state change | `transition-colors duration-fast-02 ease-productive-entrance` | semantic (fast-02 · productive entrance)               | `motion-reduce:transition-none` |
 
 ## Tokens
 

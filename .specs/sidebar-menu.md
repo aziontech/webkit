@@ -7,7 +7,7 @@ spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 1c18627b1cf97ef82d4d3263b6a10747246bba1993b46b3eb1ba5fc0f1bf3162
+checksum: 18017512284496e719145a7a12679cb5b573fcc24ba8caf68654b580b66a44a0
 created: 2026-08-03
 last_updated: 2026-11-19
 ---
@@ -475,7 +475,7 @@ literals), so the right column is the contract:
 | rail elbow height     | —                                       | `h-4` — half the row, so the horizontal leg meets the row's centre line                                                                                                                                                                                                           |
 | nested indent         | `pl-7` (28 px)                          | `pl-[calc(var(--spacing-sm)+var(--spacing-md))]` (**28 px — matched to the reference**); narrower than our own 40 px icon column, so children sit slightly left of the parent's label rather than on it. Both tokens are breakpoint-fixed, unlike `--spacing-lg` / `--spacing-xl` |
 | hover / active        | `hover:bg-*` on the root                | `::before` / `::after` ghost layers on `var(--bg-hover)` / `var(--bg-active)` — the interactive-states standard                                                                                                                                                                   |
-| focus                 | `focus-visible:bg-*`, no ring           | `focus-visible:ring-2` + `ring-offset-1` on `var(--ring-color)` — the interactive-states standard; a visible ring is required by [`accessibility.md`](../contributing/rules/accessibility.md), so our standard wins over the reference                                                 |
+| focus                 | `focus-visible:bg-*`, no ring           | `focus-visible:ring-2` + `ring-offset-1` on `var(--ring-color)` — the interactive-states standard; a visible ring is required by [`accessibility.md`](../contributing/rules/accessibility.md), so our standard wins over the reference                                            |
 | motion                | `250ms cubic-bezier(0.77, 0, 0.175, 1)` | `duration` / `curve` from `animate.js` only — see Motion                                                                                                                                                                                                                          |
 
 **A sliding surface carries a fill, and only while it slides.** Backgroundless layers cannot

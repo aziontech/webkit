@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 5cfc334cb6b0282bc206a98d2030c136ac8eed2ec0382f03c68e7f7b6109557e
+checksum: e9c89d4a256ce2233339f18e0f41bae18610404f490058774b10941c7feeebfd
 spec_version: 14
 template: 2
 created: 2026-10-20
@@ -267,12 +267,12 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 ## Motion & Animations
 
 | Trigger                           | Animation / Transition                                                                                                                                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                         |
-| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------- |
-| line and area edge entrance       | `transition-[stroke-dashoffset,opacity] duration-slow-02 ease-productive-entrance`, `pathLength="1"`, dash offset 1 to 0 on `data-entered`, staggered per series by `transition-delay` | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` (drawn at once) |
-| area wash entrance                | `transition-opacity duration-slow-01 ease-productive-entrance`, opacity 0 to 1 on `data-entered`                                                                                       | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none`                 |
-| bar entrance                      | `transition-[scale,opacity] duration-slow-01 ease-productive-entrance`, grows from the baseline on `data-entered`                                                                      | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none`                 |
-| crosshair and tooltip follow      | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance`                                                                                                             | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none`                 |
-| legend emphasis dim, refetch hold | `transition-opacity duration-moderate-01`                                                                                                                                              | `moderate-01`                                     | `motion-reduce:transition-none`                 |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------- |
+| line and area edge entrance       | `transition-[stroke-dashoffset,opacity] duration-slow-02 ease-productive-entrance`, `pathLength="1"`, dash offset 1 to 0 on `data-entered`, staggered per series by `transition-delay` | `slow-02` · `productive-entrance`                      | `motion-reduce:transition-none` (drawn at once) |
+| area wash entrance                | `transition-opacity duration-slow-01 ease-productive-entrance`, opacity 0 to 1 on `data-entered`                                                                                       | `slow-01` · `productive-entrance`                      | `motion-reduce:transition-none`                 |
+| bar entrance                      | `transition-[scale,opacity] duration-slow-01 ease-productive-entrance`, grows from the baseline on `data-entered`                                                                      | `slow-01` · `productive-entrance`                      | `motion-reduce:transition-none`                 |
+| crosshair and tooltip follow      | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance`                                                                                                             | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none`                 |
+| legend emphasis dim, refetch hold | `transition-opacity duration-moderate-01`                                                                                                                                              | `moderate-01`                                          | `motion-reduce:transition-none`                 |
 
 The entrance is a composition assembling on first paint with a per-series stagger, so it is the `data-entered` transition recipe from the animation-add skill, not a catalog keyframe. No component-local `@keyframes`.
 

@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 936acd60af8f5c5ca6c30beb16e86a5198b2060132fce3f21099bb6fad134c38
+checksum: 534db1e9b3b2eb32ba242d3d2aa869564c378388dfbafbe9a6f4792fefbc2d20
 ---
 
 # ArticleCardsSection — Component Spec
@@ -95,9 +95,9 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 ## Motion & Animations
 
 | Trigger                     | Animation / Transition                                             | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| --------------------------- | ------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
-| hover fill change on a card | `transition-colors duration-fast-02 ease-productive-entrance`      | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| hover scale of the media    | `transition-[scale] duration-moderate-02 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| --------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
+| hover fill change on a card | `transition-colors duration-fast-02 ease-productive-entrance`      | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| hover scale of the media    | `transition-[scale] duration-moderate-02 ease-productive-entrance` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

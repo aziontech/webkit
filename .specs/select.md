@@ -7,7 +7,7 @@ spec_version: 16
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 3fd5771dee34521c2412fab79533b0864ec64e8769e06eaa39c9e28417f15ed2
+checksum: f9e12f8b8a9e4680f9a2bda6d722f57e6719084caddb4232e3c9db9a9cc14cb1
 created: 2026-06-15
 last_updated: 2026-11-21
 ---
@@ -145,10 +145,10 @@ _none_
 ## Motion & Animations
 
 | Trigger                                  | Animation / Transition                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| ---------------------------------------- | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| dropdown open (on `SelectContent` only)  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
-| dropdown close (on `SelectContent` only) | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
-| trigger state change (border/ring/bg)    | `transition-colors duration-150 ease-out`               | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| ---------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| dropdown open (on `SelectContent` only)  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)       | `motion-reduce:animate-none` (instant) |
+| dropdown close (on `SelectContent` only) | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)               | `motion-reduce:animate-none` (instant) |
+| trigger state change (border/ring/bg)    | `transition-colors duration-150 ease-out`               | inline (matches catalog)                               | `motion-reduce:transition-none`        |
 
 ## Tokens
 

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: abf1a59b59c7fd20ce06bcb4cabe23e15e07e7ab07fb419ad78585934583ecaf
+checksum: bdbb701c97e697de92b979cd1232ed003ef6fa45b3af439440785bd275f70b90
 created: 2026-11-14
 last_updated: 2026-11-17
 ---
@@ -121,9 +121,9 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 ## Motion & Animations
 
 | Trigger    | Animation / Transition                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| ---------- | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| card open  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
-| card close | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
+| ---------- | ------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| card open  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)       | `motion-reduce:animate-none` (instant) |
+| card close | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)               | `motion-reduce:animate-none` (instant) |
 
 ## Tokens
 

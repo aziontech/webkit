@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: 177028fbe7ba091141f7d9b5185fac23e6b3ea2bc5598f03267fbb33de1f7f8c
+checksum: f2b054c14a28ad925ee100c38c15dcbfe1874886e7ee6a8422c0432d6955d5a6
 created: 2026-06-23
 last_updated: 2026-11-25
 ---
@@ -178,7 +178,7 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 
 ## Motion & Animations
 
-| Trigger                                   | Animation / Transition                                                                                                                                                                                                                                                                                                                                                        | Token (see `contributing/docs/TOKENS.md` § Animations)                                          | Reduced-motion fallback                |
+| Trigger                                   | Animation / Transition                                                                                                                                                                                                                                                                                                                                                        | Token (see `contributing/docs/TOKENS.md` § Animations)                                     | Reduced-motion fallback                |
 | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------- |
 | remove (chip dismiss)                     | **none — the chip does not animate its own removal.** It emits `remove` and leaves presence to the consumer; exit motion belongs to whatever owns the list. The chip sets **no inline `transition`**, so a consumer's own `transition-*` utilities on the root are never overridden (an inline style beats every class, which silently killed consumer-authored chip motion). | —                                                                                          | —                                      |
 | variant / border colour / selected change | `transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance`                                                                                                                                                                                                                                                                       | TOKENS.md § Interactive states                                                             | `motion-reduce:transition-none`        |

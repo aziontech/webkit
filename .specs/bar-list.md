@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: dbc74c6d61849b2af24503edefbf8ae357c76515994a96f17e4a6994114b1587
+checksum: af6af532102d175e0c26790c39f5b9eb15aeeea3af949dea8cef365cc654d2ef
 ---
 
 # BarList — Component Spec
@@ -119,10 +119,10 @@ The rows are data (`items`). The state surface matches `chart`, `donut-chart`, `
 ## Motion & Animations
 
 | Trigger                   | Animation / Transition                                             | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------- | ------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
-| entrance and value change | bar `transition-[width] duration-slow-01 ease-productive-entrance` | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none` |
-| row hover                 | `transition-colors duration-fast-02 ease-productive-entrance`      | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
-| refetching                | list `transition-opacity duration-moderate-01`                     | `moderate-01`                                     | `motion-reduce:transition-none` |
+| ------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
+| entrance and value change | bar `transition-[width] duration-slow-01 ease-productive-entrance` | `slow-01` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| row hover                 | `transition-colors duration-fast-02 ease-productive-entrance`      | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| refetching                | list `transition-opacity duration-moderate-01`                     | `moderate-01`                                          | `motion-reduce:transition-none` |
 
 ## Tokens
 

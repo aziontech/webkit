@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: fda1f1ff05bf88f1336497344fcfa563ba00a11a6bf3348e1196d751201eb0c3
+checksum: 6dc3db94d20303f139219808ff431a9c4b181be6a2556b1df239f2aa4a31f303
 created: 2026-11-12
 last_updated: 2026-11-19
 ---
@@ -101,8 +101,8 @@ The marketing site's chrome, composed once in the app: `SiteHeaderSection` on to
 ## Motion & Animations
 
 | Trigger            | Animation / Transition         | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback     |
-| ------------------ | ------------------------------ | ------------------------------------------------- | --------------------------- |
-| palette, mega-menu | `Command`, `SiteHeaderSection` | component                                         | handled by those components |
+| ------------------ | ------------------------------ | ------------------------------------------------------ | --------------------------- |
+| palette, mega-menu | `Command`, `SiteHeaderSection` | component                                              | handled by those components |
 
 ## Tokens
 

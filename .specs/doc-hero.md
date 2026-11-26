@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 526c15c604b852dceea69d96c6f1c6391d7793c8042280a1eab2f29c2e157dcb
+checksum: d3349be7472dbd13bfff7ac7f1e2295dc8deaa2b4c1e29406b95e9900416e322
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -93,8 +93,8 @@ _none_
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback |
-| ------- | ---------------------- | ------------------------------------------------- | ----------------------- |
-| _none_  | —                      | —                                                 | —                       |
+| ------- | ---------------------- | ------------------------------------------------------ | ----------------------- |
+| _none_  | —                      | —                                                      | —                       |
 
 ## Tokens
 

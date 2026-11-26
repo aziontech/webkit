@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: aa22d2394304d6cc902fc2c56c11e10a8e5d89ed729c9b73f150dd8ea51f7085
+checksum: 6a460a7139ddeeb710b308186776f362cddbe24b2e49bd19cb4a0a3e7342f033
 created: 2026-11-12
 last_updated: 2026-11-18
 ---
@@ -91,8 +91,8 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 ## Motion & Animations
 
 | Trigger | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback |
-| ------- | ----------------------------------------- | ------------------------------------------------- | ----------------------- |
-| _none_  | — (the button and copy button own theirs) | —                                                 | —                       |
+| ------- | ----------------------------------------- | ------------------------------------------------------ | ----------------------- |
+| _none_  | — (the button and copy button own theirs) | —                                                      | —                       |
 
 ## Tokens
 

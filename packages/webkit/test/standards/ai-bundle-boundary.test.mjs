@@ -29,7 +29,11 @@ test('every contributor skill in contributing/skills is scope: webkit', () => {
   const wrong = skillFiles(join(REPO, 'contributing/skills')).filter(
     (f) => scopeOf(f) !== null && scopeOf(f) !== 'webkit'
   )
-  assert.deepEqual(wrong, [], 'contributing/skills/ never ships; a general skill belongs in skills/')
+  assert.deepEqual(
+    wrong,
+    [],
+    'contributing/skills/ never ships; a general skill belongs in skills/'
+  )
 })
 
 test('the WebKit-development review gate stays out of the consumer bundle', () => {

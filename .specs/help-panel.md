@@ -3,7 +3,7 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: 0927fe904347260d19c00bc035a90af9ebfe1cd2d13c3be329ece65251145393
+checksum: 65e5b13d3defbbeadf3c7e6fecb4c6877a69ae75c5303514f127eda0e88bef67
 spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-23
@@ -187,8 +187,8 @@ name.
 ## Motion & Animations
 
 | Trigger                       | Animation / Transition                      | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                 |
-| ----------------------------- | ------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------- |
-| `loading` placeholder shimmer | `Skeleton` component (owns its own shimmer) | component                                         | handled by `Skeleton` (suppressed under reduced motion) |
+| ----------------------------- | ------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------- |
+| `loading` placeholder shimmer | `Skeleton` component (owns its own shimmer) | component                                              | handled by `Skeleton` (suppressed under reduced motion) |
 
 ## Tokens
 

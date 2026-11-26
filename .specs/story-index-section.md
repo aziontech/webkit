@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 2860418d92ee41b5b46c85e9eb2d4559efc70d909e9d101277131630ac88dd30
+checksum: 3a07caeaeb524c58de3ba51cd6d7dffa7e6aa08f877aecedc2ef7e2c85bc9328
 ---
 
 # StoryIndexSection — Component Spec
@@ -122,9 +122,9 @@ Every success story of a company as one filterable library. A left-aligned title
 ## Motion & Animations
 
 | Trigger                                  | Animation / Transition                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ---------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover fill of a card and of its read cue | `transition-colors duration-fast-02 ease-productive-entrance`          | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| hover nudge of the read arrow            | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ---------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover fill of a card and of its read cue | `transition-colors duration-fast-02 ease-productive-entrance`          | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| hover nudge of the read arrow            | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

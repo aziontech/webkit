@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 4e0b526029aa2a03ce6a02692b2c63a814e863533f0574d6bb0d608b280960cc
+checksum: 93561348f7a6e0db74faa63f73c76e8fcbb7405cd4eda283eb6454561af6daf4
 created: 2026-08-22
 last_updated: 2026-11-25
 ---
@@ -84,8 +84,8 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 ## Motion & Animations
 
 | Trigger                  | Animation / Transition                               | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback      |
-| ------------------------ | ---------------------------------------------------- | ------------------------------------------------- | ---------------------------- |
-| copy tooltip enter/leave | `animate-popup-scale-in` / `animate-popup-scale-out` | `popup-scale-in` / `popup-scale-out`              | `motion-reduce:animate-none` |
+| ------------------------ | ---------------------------------------------------- | ------------------------------------------------------ | ---------------------------- |
+| copy tooltip enter/leave | `animate-popup-scale-in` / `animate-popup-scale-out` | `popup-scale-in` / `popup-scale-out`                   | `motion-reduce:animate-none` |
 
 ## Tokens
 

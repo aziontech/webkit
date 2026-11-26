@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: ff717b594fb5be0244a678301931428c937875ce818c3e0119c30cbd976aeafe
+checksum: 86a7115b027450c6618c19d8139f97336b64180ded8118bdcb01ee1750539234
 created: 2026-11-14
 last_updated: 2026-11-19
 ---
@@ -151,9 +151,9 @@ Tree-shaking alternative — the root and trigger as standalone imports, with th
 ## Motion & Animations
 
 | Trigger     | Animation / Transition                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| ----------- | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| panel open  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
-| panel close | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
+| ----------- | ------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| panel open  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)       | `motion-reduce:animate-none` (instant) |
+| panel close | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)               | `motion-reduce:animate-none` (instant) |
 
 ## Tokens
 

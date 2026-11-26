@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 9a6e3161003864911414990b971ee11f3bf4b5eaa993a9f2cba85a93afa14396
+checksum: 1e6089c598331d5d6cc12a2deb92057c0b230aa617286a8230ff42e8910caaf4
 spec_version: 10
 created: 2026-10-20
 last_updated: 2026-11-25
@@ -126,9 +126,9 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 ## Motion & Animations
 
 | Trigger            | Animation / Transition                                                                                                                                | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                                 |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
-| value change       | count-up from the previous value over `slow-01`, eased with `productive-entrance`, driven by `requestAnimationFrame` in `composables/use-count-up.ts` | `slow-01` · `productive-entrance`                 | skipped under `prefers-reduced-motion`; the final value renders at once |
-| sparkline entrance | owned by `spark-chart` (its line draws in over `slow-02`)                                                                                             | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` inside `spark-chart`                    |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| value change       | count-up from the previous value over `slow-01`, eased with `productive-entrance`, driven by `requestAnimationFrame` in `composables/use-count-up.ts` | `slow-01` · `productive-entrance`                      | skipped under `prefers-reduced-motion`; the final value renders at once |
+| sparkline entrance | owned by `spark-chart` (its line draws in over `slow-02`)                                                                                             | `slow-02` · `productive-entrance`                      | `motion-reduce:transition-none` inside `spark-chart`                    |
 
 ## Tokens
 

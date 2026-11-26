@@ -6,12 +6,12 @@ The contributor bundle in `contributing/` that steers the AI — the **skills** 
 
 `scope` is not a free choice; it is a fact of **where the file lives**:
 
-| Population      | Glob                                             | `scope` truth |
-| --------------- | ------------------------------------------------ | ------------- |
+| Population      | Glob                                                  | `scope` truth |
+| --------------- | ----------------------------------------------------- | ------------- |
 | Internal skills | `contributing/skills/<name>/SKILL.md`                 | `webkit`      |
 | Internal agents | `contributing/agents/<name>.md` (except `_README.md`) | `webkit`      |
-| Consumer skills | `skills/<name>/SKILL.md` (repo root)             | `general`     |
-| Consumer agents | `adapters/claude/agents/<name>.md` (repo root)   | `general`     |
+| Consumer skills | `skills/<name>/SKILL.md` (repo root)                  | `general`     |
+| Consumer agents | `adapters/claude/agents/<name>.md` (repo root)        | `general`     |
 
 A file inside a skill folder that is not `SKILL.md` (a `references/*.md`) is not governed; nor is `_README.md`; nor are the `contributing/rules/*.md` docs (those are governed by [`standards.mjs`](../hooks/lib/standards.mjs) and the invariant test).
 

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 86a2a0ee943fd5066d942008718209415aa4134e093558fce93e2152c22bad20
+checksum: 3b72177796a648248e77ef81cd3eced326afa0a1c9bbe4b514ac5a3b6271c5b5
 created: 2026-05-28
 last_updated: 2026-11-25
 ---
@@ -231,7 +231,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 
 ## Motion & Animations
 
-| Trigger                                                                                                | Animation / Transition                                                                                                            | Token (see `contributing/docs/TOKENS.md` § Animations)                                   | Reduced-motion fallback                                                                |
+| Trigger                                                                                                | Animation / Transition                                                                                                            | Token (see `contributing/docs/TOKENS.md` § Animations)                              | Reduced-motion fallback                                                                |
 | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | tab change (indicator)                                                                                 | sliding pill via `transform` / `width` transition                                                                                 | `duration-moderate-02` · `ease-productive-entrance` (TOKENS.md § Motion primitives) | `motion-reduce:transition-none`                                                        |
 | tab panel change — a tab click, a controlled `value` change, or the active tab's `code` being replaced | content enters **line by line**: each row slides from the direction of travel + fades, `24ms` a line, the step capped at 12 lines | `duration-moderate-02` · `ease-productive-entrance` (TOKENS.md § Motion primitives) | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |

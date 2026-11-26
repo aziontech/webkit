@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 4
-checksum: ffebc0d57e41acb292be3d3d4385b5ebdc5f8da17587d63fa65463a440038349
+checksum: 2ff3897a1eb73a9c90051d4416039c8cefa783d49d4e193820a656d6351db479
 created: 2026-09-24
 last_updated: 2026-11-18
 ---
@@ -127,9 +127,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Motion & Animations
 
 | Trigger                                      | Animation / Transition                                        | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| -------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| row hover / focus (plate surface + hairline) | `transition-colors duration-fast-02 ease-productive-entrance` | semantic duration + easing                        | `motion-reduce:transition-none` |
-| row hover (glyph takes the brand ink)        | `transition-colors duration-fast-02 ease-productive-entrance` | semantic duration + easing                        | `motion-reduce:transition-none` |
+| -------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| row hover / focus (plate surface + hairline) | `transition-colors duration-fast-02 ease-productive-entrance` | semantic duration + easing                             | `motion-reduce:transition-none` |
+| row hover (glyph takes the brand ink)        | `transition-colors duration-fast-02 ease-productive-entrance` | semantic duration + easing                             | `motion-reduce:transition-none` |
 
 ## Tokens
 

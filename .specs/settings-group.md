@@ -3,7 +3,7 @@ name: settings-group
 category: layout
 structure: monolithic
 status: implemented
-checksum: 3b7cd0d51c59f92bd2eb4f86c940a200557f22c2faef988c7418a3a51a8ee439
+checksum: b4776a8c08d4ac401af7c35473baef6ab82057529a00a82748ac260d99f321be
 spec_version: 10
 template: 2
 created: 2026-11-10
@@ -122,12 +122,12 @@ A band of a settings page: an h2 with a `Hint` glyph that opens the one-sentence
 ## Motion & Animations
 
 | Trigger                  | Animation / Transition                                                          | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| copy-link reveal         | `transition-opacity duration-fast-02 ease-productive-entrance`                  | semantic                                          | `motion-reduce:transition-none` |
-| disclosure hover         | `transition-colors duration-fast-02 ease-productive-entrance`                   | semantic                                          | `motion-reduce:transition-none` |
-| chevron rotate           | `transition-transform duration-fast-02 ease-productive-entrance`                | semantic                                          | `motion-reduce:transition-none` |
-| body unfold (grid track) | `transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance` | semantic                                          | `motion-reduce:transition-none` |
-| body fade and lift       | `transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance`  | semantic                                          | `motion-reduce:transition-none` |
+| ------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| copy-link reveal         | `transition-opacity duration-fast-02 ease-productive-entrance`                  | semantic                                               | `motion-reduce:transition-none` |
+| disclosure hover         | `transition-colors duration-fast-02 ease-productive-entrance`                   | semantic                                               | `motion-reduce:transition-none` |
+| chevron rotate           | `transition-transform duration-fast-02 ease-productive-entrance`                | semantic                                               | `motion-reduce:transition-none` |
+| body unfold (grid track) | `transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance` | semantic                                               | `motion-reduce:transition-none` |
+| body fade and lift       | `transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance`  | semantic                                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

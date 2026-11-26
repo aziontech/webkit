@@ -3,7 +3,7 @@ name: slider
 category: input
 structure: monolithic
 status: implemented
-checksum: 6f501d77175a4a42bbfdfef5b6a919899bee6c1a96f3c5369ccae270b52238a9
+checksum: ba1ce638c586f84ed4907dcb226728c67bde5a8dc303f73cbd1a5547ca9324a5
 spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -94,8 +94,8 @@ Bare range control `Slider`: one thumb on a horizontal track that picks a single
 
 ## Events
 
-| Event    | Payload  | Notes                                                                                                                                                                                                                                                                                                                                                                                                        |
-| -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Event    | Payload  | Notes                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `change` | `number` | Commit signal: emitted from the native `change` event — on pointer release after a drag, and after each keyboard step — with the committed value. Lets the consumer persist once per interaction instead of once per drag frame (`update:modelValue` fires continuously). A value event, so no DOM event in the payload (see `contributing/rules/event-payloads.md`). Not emitted while `disabled` or `readonly`. |
 
 ## Slots
@@ -117,7 +117,7 @@ Bare range control `Slider`: one thumb on a horizontal track that picks a single
 
 ## Motion & Animations
 
-| Trigger                                   | Animation / Transition                                                                     | Token (see `contributing/docs/TOKENS.md` § Animations)              | Reduced-motion fallback         |
+| Trigger                                   | Animation / Transition                                                                     | Token (see `contributing/docs/TOKENS.md` § Animations)         | Reduced-motion fallback         |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------- | ------------------------------- |
 | thumb hover / focus / state colour change | `transition-colors duration-fast-02 ease-productive-entrance` on the thumb pseudo-elements | motion primitives (`duration-fast-02` · `productive-entrance`) | `motion-reduce:transition-none` |
 

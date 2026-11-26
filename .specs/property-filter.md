@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 3236e118f03e5206e8c9ccce828e4ec5f659e91098e64696f8d27cb922042ddd
+checksum: 500b0db524928412c27ced163b1bde2fa52213dcab97d2f3656562fe2ceb67af
 created: 2026-11-11
 last_updated: 2026-11-20
 ---
@@ -176,11 +176,11 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 ## Motion & Animations
 
 | Trigger           | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ----------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| suggestions open  | `animate-popup-scale-in`                  | semantic (150ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
-| suggestions close | `animate-popup-scale-out`                 | semantic (110ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
-| option hover      | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| values loading    | inherits from `Spinner`                   | inherits from `Spinner`                           | inherits from `Spinner`         |
+| ----------------- | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| suggestions open  | `animate-popup-scale-in`                  | semantic (150ms · cubic-bezier)                        | `motion-reduce:animate-none`    |
+| suggestions close | `animate-popup-scale-out`                 | semantic (110ms · cubic-bezier)                        | `motion-reduce:animate-none`    |
+| option hover      | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| values loading    | inherits from `Spinner`                   | inherits from `Spinner`                                | inherits from `Spinner`         |
 
 ## Tokens
 

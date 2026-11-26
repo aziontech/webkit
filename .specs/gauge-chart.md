@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: d7a34b35041eb0ebc077c7afa465895de82f847a86b3149508c4c781177733ce
+checksum: 8fa57c02959e2d2175b67e3eb1af8d79c33417076930814fb54f254fa8406df2
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -144,9 +144,9 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 ## Motion & Animations
 
 | Trigger                    | Animation / Transition                                                                                                       | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                         |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------- |
-| arc entrance, value change | `transition-[stroke-dasharray,stroke] duration-slow-02 ease-productive-entrance`, dash from 0 to the share on `data-entered` | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` (drawn at once) |
-| refetch hold               | `transition-opacity duration-moderate-01`                                                                                    | `moderate-01`                                     | `motion-reduce:transition-none`                 |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------- |
+| arc entrance, value change | `transition-[stroke-dasharray,stroke] duration-slow-02 ease-productive-entrance`, dash from 0 to the share on `data-entered` | `slow-02` · `productive-entrance`                      | `motion-reduce:transition-none` (drawn at once) |
+| refetch hold               | `transition-opacity duration-moderate-01`                                                                                    | `moderate-01`                                          | `motion-reduce:transition-none`                 |
 
 ## Tokens
 

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: e233358775c3768ee1bbb6df161bfb3be9383aa4e994f3b46cb81848afcecc8f
+checksum: 8496df50df4a5c487dd809002f70173598dfa7a2e6ecef861de302cb7ad32719
 created: 2026-09-24
 last_updated: 2026-11-24
 ---
@@ -95,7 +95,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 
 ## Motion & Animations
 
-| Trigger                             | Animation / Transition                                                 | Token (see `contributing/docs/TOKENS.md` § Animations)      | Reduced-motion fallback         |
+| Trigger                             | Animation / Transition                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
 | ----------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
 | hover / focus on a linked claim     | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                               | `motion-reduce:transition-none` |
 | hover on a linked claim (its arrow) | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` |

@@ -7,7 +7,7 @@ spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: b4d708c29c54e249ddc956f60ce249a2b02d073286abb8a57265b35adf431042
+checksum: ceff8a47b19788c408ba1b1af61697eacefb8efbc9641d7e3204e0a3e944218c
 created: 2026-07-01
 last_updated: 2026-11-25
 ---
@@ -193,8 +193,8 @@ Root props:
 ## Motion & Animations
 
 | Trigger                                                | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------------------------------------ | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover / focus-within / invalid / required state change | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ------------------------------------------------------ | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover / focus-within / invalid / required state change | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

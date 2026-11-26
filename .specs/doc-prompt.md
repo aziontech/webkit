@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 3f0d63eb77ed00521a8d269cb923426c414d01c08e739f9d714ac5f569a69e18
+checksum: 64ef6536a8ae48e699e048cc41fbb05594f6c7bc32146565a8f4974c524892b6
 created: 2026-08-22
 last_updated: 2026-11-25
 ---
@@ -89,7 +89,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 ## Motion & Animations
 
-| Trigger                         | Animation / Transition                                                                                                                                                                                                                 | Token (see `contributing/docs/TOKENS.md` § Animations)                                                                            | Reduced-motion fallback                                                                             |
+| Trigger                         | Animation / Transition                                                                                                                                                                                                                 | Token (see `contributing/docs/TOKENS.md` § Animations)                                                                       | Reduced-motion fallback                                                                             |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | disclosure open/close (`block`) | `transition-[max-height]` between the four-line cap and the prompt's own measured content height (pin the current height, commit it across two `requestAnimationFrame`s, set the far end, hand the cap back to CSS on `transitionend`) | `duration-moderate-02` · `ease-productive-entrance` opening / `ease-productive-exit` closing (TOKENS.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (the height snaps); `motion-reduce:transition-none` |
 | cap fade leaving (`block`)      | `transition-opacity` on the bottom gradient, so it leaves with the move it belongs to instead of being cut on the first frame                                                                                                          | `duration-moderate-01` · `ease-productive-exit` (TOKENS.md § Motion primitives)                                              | `motion-reduce:transition-none`                                                                     |

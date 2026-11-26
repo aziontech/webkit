@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: bb44784ffafdb990baf7ecf7b2aac65c154b1f52776d38b71d7f90db703f80c5
+checksum: 66e25092f326d19a5468192fcd63d47f3e817ff7c8d6234390d340623b0b9cf8
 created: 2026-08-21
 last_updated: 2026-11-25
 ---
@@ -85,9 +85,9 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 ## Motion & Animations
 
 | Trigger                     | Animation / Transition                               | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| --------------------------- | ---------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| descendant link hover/focus | `transition-colors duration-150 ease-out`            | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| copy tooltip enter/leave    | `animate-popup-scale-in` / `animate-popup-scale-out` | `popup-scale-in` / `popup-scale-out`              | `motion-reduce:animate-none`    |
+| --------------------------- | ---------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| descendant link hover/focus | `transition-colors duration-150 ease-out`            | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| copy tooltip enter/leave    | `animate-popup-scale-in` / `animate-popup-scale-out` | `popup-scale-in` / `popup-scale-out`                   | `motion-reduce:animate-none`    |
 
 ## Tokens
 

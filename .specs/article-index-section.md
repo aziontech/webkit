@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-15
 last_updated: 2026-11-24
-checksum: 613f9049058386fd807009643494ed6ec08339e0aff78dfbc381dd42d873e1f1
+checksum: f36a65d498acb8e76c6c12fb9708f09ccd52219467e218763b3afcc56f47197e
 ---
 
 # ArticleIndexSection — Component Spec
@@ -155,9 +155,9 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 ## Motion & Animations
 
 | Trigger                              | Animation / Transition                                                         | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
-| hover fill of a row                  | `transition-colors duration-fast-02 ease-productive-entrance`                  | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| read cue rising in on hover or focus | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
+| hover fill of a row                  | `transition-colors duration-fast-02 ease-productive-entrance`                  | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| read cue rising in on hover or focus | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

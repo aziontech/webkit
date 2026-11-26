@@ -3,7 +3,7 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 2e14802ff9471cceebe7df67ac078530baacb270d230d03c7c1613d7010d088d
+checksum: f32e3fa44299e213cef64bf744250f1a6502423196226c52f32c46954867c3e4
 spec_version: 14
 template: 2
 created: 2026-11-10
@@ -154,10 +154,10 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 ## Motion & Animations
 
 | Trigger                            | Animation / Transition                                                                                                       | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| parent expand / collapse (chevron) | `transition-[rotate] duration-fast-02 ease-productive-entrance` + `data-[state=open]:rotate-90` on the chevron glyph         | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none`        |
-| row hover                          | ghost layer `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` + `hover:before:opacity-100` | `fast-02` · `productive-entrance`                 | `motion-reduce:before:transition-none` |
-| row selected change                | `transition-colors duration-fast-02 ease-productive-entrance`                                                                | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none`        |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| parent expand / collapse (chevron) | `transition-[rotate] duration-fast-02 ease-productive-entrance` + `data-[state=open]:rotate-90` on the chevron glyph         | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none`        |
+| row hover                          | ghost layer `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` + `hover:before:opacity-100` | `fast-02` · `productive-entrance`                      | `motion-reduce:before:transition-none` |
+| row selected change                | `transition-colors duration-fast-02 ease-productive-entrance`                                                                | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none`        |
 
 The chevron transition names `rotate`, not `transform`: Tailwind v4 compiles `rotate-90` to the standalone `rotate` property (see `contributing/rules/styling.md` § Transitioning a transform). The children group appears and disappears instantly; no height reveal in v1 (see Open questions). The loading shimmer belongs to the composed `Skeleton`, which already suppresses it under reduced motion; Tree adds no animation for it.
 

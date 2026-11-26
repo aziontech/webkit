@@ -7,7 +7,7 @@ spec_version: 19
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 7eeddcc6c7473ac6c0d16044565f93f900da97f00e96886c331f44ec186a181f
+checksum: 057e26b0d1a7398631b922e03bcfafc57657feac57aa024dba6dcd08c5d52de7
 created: 2026-05-22
 last_updated: 2026-11-25
 ---
@@ -103,9 +103,9 @@ _none_
 ## Motion & Animations
 
 | Trigger            | Animation / Transition                       | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                      |
-| ------------------ | -------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
-| track color change | `transition-colors duration-150 ease-out`    | inline (matches catalog)                          | `motion-reduce:transition-none`                              |
-| handle slide       | `transition-transform duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none motion-reduce:transform-none` |
+| ------------------ | -------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------ |
+| track color change | `transition-colors duration-150 ease-out`    | inline (matches catalog)                               | `motion-reduce:transition-none`                              |
+| handle slide       | `transition-transform duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none motion-reduce:transform-none` |
 
 The handle slides toward the inline end when checked: `translate-x-3.5` in LTR, `-translate-x-3.5` under `rtl:`, so on a right-to-left page the on position is the left end.
 

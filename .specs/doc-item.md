@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 24a8e9beff8d7784dda6578f5be7f44283cf11717a72b20c5a7e5a60bb453674
+checksum: 9eadd5205a62f4c761615e237ca26367e155dfb2a2b0f0d7d69d867bbc42b1c3
 created: 2026-08-22
 last_updated: 2026-11-22
 ---
@@ -100,9 +100,9 @@ One row of the documentation's related-content list: a leading glyph in a framed
 ## Motion & Animations
 
 | Trigger                     | Animation / Transition                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| --------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover on a linked row       | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| hover on the trailing glyph | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | semantic                                          | `motion-reduce:transition-none` |
+| --------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover on a linked row       | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| hover on the trailing glyph | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | semantic                                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

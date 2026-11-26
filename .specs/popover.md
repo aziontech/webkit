@@ -7,7 +7,7 @@ spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 765750ec80b31d661f3ad4100766077f4c4daed07b5b137785456bdb9450a59c
+checksum: 01b17bef0831bfec756ca65bb0fc77ddae0b5cd38c6426ac03eaac2f5f2b4ea1
 created: 2026-06-30
 last_updated: 2026-11-18
 ---
@@ -209,10 +209,10 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 ## Motion & Animations
 
 | Trigger                       | Animation / Transition                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| ----------------------------- | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| panel open                    | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
-| panel close                   | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
-| trigger / close hover / focus | `transition-colors duration-150 ease-out`               | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| ----------------------------- | ------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| panel open                    | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)       | `motion-reduce:animate-none` (instant) |
+| panel close                   | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)               | `motion-reduce:animate-none` (instant) |
+| trigger / close hover / focus | `transition-colors duration-150 ease-out`               | inline (matches catalog)                               | `motion-reduce:transition-none`        |
 
 `--popup-origin` is set per instance from the resolved side and alignment (e.g. `bottom` + `start` → `top left`, `top right` under `rtl`).
 

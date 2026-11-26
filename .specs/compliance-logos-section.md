@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-18
-checksum: 61e0ac0369b32c3510cb08459f8821b362890160a49e4fb80c6b30e20c815df2
+checksum: 72839cc0f3343ded72fb6a3598d06018b8a15aff0c8a2982244ec651836ac31f
 template: 2
 ---
 
@@ -82,9 +82,9 @@ The compliance band: a framed media split whose copy states the certifications a
 ## Motion & Animations
 
 | Trigger                            | Animation / Transition                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ---------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover / focus on the see-more cell | `transition-colors duration-moderate-02 ease-expressive-entrance`      | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| hover on the see-more chevron      | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ---------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover / focus on the see-more cell | `transition-colors duration-moderate-02 ease-expressive-entrance`      | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| hover on the see-more chevron      | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

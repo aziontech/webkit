@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: d4f069e93b2839c9966385e9aed1e3813f7a796acf5cbb17d07fcc93381fb3d0
+checksum: 5e899bac7d3bfa1df49d5b5375c720098f0c0d2fca214e09017e665b425f39e1
 created: 2026-11-12
 last_updated: 2026-11-17
 ---
@@ -108,10 +108,10 @@ It is a page section — the site places it from a `{ _id: 'card-carousel-sectio
 ## Motion & Animations
 
 | Trigger              | Animation / Transition                                                              | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                     |
-| -------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------- |
-| linked card hover    | `transition-[translate] duration-moderate-02 ease-expressive-entrance` on the arrow | catalog duration and easing                       | `motion-reduce:transition-none`             |
-| linked card hover    | `transition-colors duration-fast-02 ease-productive-entrance` on the link label     | catalog duration and easing                       | `motion-reduce:transition-none`             |
-| step control pressed | the carousel's native smooth scroll                                                 | owned by `carousel`                               | `motion-reduce:scroll-auto` (in `carousel`) |
+| -------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------- |
+| linked card hover    | `transition-[translate] duration-moderate-02 ease-expressive-entrance` on the arrow | catalog duration and easing                            | `motion-reduce:transition-none`             |
+| linked card hover    | `transition-colors duration-fast-02 ease-productive-entrance` on the link label     | catalog duration and easing                            | `motion-reduce:transition-none`             |
+| step control pressed | the carousel's native smooth scroll                                                 | owned by `carousel`                                    | `motion-reduce:scroll-auto` (in `carousel`) |
 
 ## Tokens
 

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 5274f4bb06fda8be362427258088c61d2a703cb1e402effa9bd7368d1701242f
+checksum: acdf58b68bce580730b55c24092df46f246213a64d111a1d8ca0424785c0a26c
 template: 2
 ---
 
@@ -89,10 +89,10 @@ The investors band: a centered section title over a two-column bento grid where 
 ## Motion & Animations
 
 | Trigger                               | Animation / Transition                                                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| ------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| hover / focus fill on a cell          | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
-| hover / focus lift of the mark        | `transition-[translate] duration-moderate-01 ease-productive-entrance`                  | inline (matches catalog)                          | `motion-reduce:transition-none`        |
-| hover / focus reveal of the link line | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance`          | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| ------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| hover / focus fill on a cell          | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | inline (matches catalog)                               | `motion-reduce:before:transition-none` |
+| hover / focus lift of the mark        | `transition-[translate] duration-moderate-01 ease-productive-entrance`                  | inline (matches catalog)                               | `motion-reduce:transition-none`        |
+| hover / focus reveal of the link line | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance`          | inline (matches catalog)                               | `motion-reduce:transition-none`        |
 
 ## Tokens
 

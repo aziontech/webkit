@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: f5d0161bea131699b2635d81eb17bed68e2599332deaa406a2ba6b4b48896ba6
+checksum: 511d6f89890f86464941e9c1a58270f4499b17f009fe58ba126ec46e2cdd3ccf
 created: 2026-08-05
 last_updated: 2026-11-23
 ---
@@ -129,8 +129,8 @@ import) when an image, not an inline themed scene, is wanted.
 ## Motion & Animations
 
 | Trigger | Animation / Transition                                                                     | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback |
-| ------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------- | ----------------------- |
-| _none_  | The scene is a static SVG; any motion belongs to the artwork itself, not to the component. | —                                                 | —                       |
+| ------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------ | ----------------------- |
+| _none_  | The scene is a static SVG; any motion belongs to the artwork itself, not to the component. | —                                                      | —                       |
 
 ## Tokens
 

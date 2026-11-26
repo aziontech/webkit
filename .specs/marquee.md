@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 36c7b496384f3195b6976c7e1aa2418078da02c0619cf9f9841f76b0db387d91
+checksum: 9cb1b3904db6667ec2d917df9c6d5fd208bec85a1213881e3a990d5222408968
 created: 2026-09-23
 last_updated: 2026-11-24
 ---
@@ -94,7 +94,7 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Motion & Animations
 
-| Trigger           | Animation / Transition                                         | Token (see `contributing/docs/TOKENS.md` § Animations)                                                      | Reduced-motion fallback                                         |
+| Trigger           | Animation / Transition                                         | Token (see `contributing/docs/TOKENS.md` § Animations)                                                 | Reduced-motion fallback                                         |
 | ----------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
 | always (the loop) | `animate-brand-marquee`                                        | semantic (59s default · linear infinite; the track overrides `animation-duration` from its mark count) | `motion-reduce:animate-none` (the row wraps into a static grid) |
 | hover on a mark   | `transition-opacity duration-fast-02 ease-productive-entrance` | inline (matches catalog)                                                                               | `motion-reduce:transition-none`                                 |

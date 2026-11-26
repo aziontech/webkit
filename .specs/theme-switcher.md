@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 5eb398db64e24f43a39f078c1c958225e386544ed5d85568ddf8f6555bae73c1
+checksum: 0dec9ae3f9b1c9650c34fe4766b1213e5cc7d850fb76379835637099a4b7994b
 created: 2026-07-13
 last_updated: 2026-11-24
 ---
@@ -89,9 +89,9 @@ A compact segmented control drawn like `toggle-group` (same radius, surface and 
 ## Motion & Animations
 
 | Trigger                   | Animation / Transition                                                                                                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
-| hover / icon color change | `transition-colors duration-fast-02 ease-productive-entrance`                                                                                          | semantic (`animate.js`)                           | `motion-reduce:transition-none` |
-| selection change          | indicator slides between segments via `transition-transform duration-moderate-02 ease-productive-entrance` (position measured from the active segment) | semantic (`animate.js`)                           | `motion-reduce:transition-none` |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
+| hover / icon color change | `transition-colors duration-fast-02 ease-productive-entrance`                                                                                          | semantic (`animate.js`)                                | `motion-reduce:transition-none` |
+| selection change          | indicator slides between segments via `transition-transform duration-moderate-02 ease-productive-entrance` (position measured from the active segment) | semantic (`animate.js`)                                | `motion-reduce:transition-none` |
 
 ## Tokens
 

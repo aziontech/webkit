@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 3f8a4dbe4590a4dc90d905f1664c973e79a060a37852e6708802fe1c7720220e
+checksum: b3ea1f1ff50b0b6907b5d2632ead07ebaca4712e01a11a2d393f484279ffcaf6
 created: 2026-11-11
 last_updated: 2026-11-23
 ---
@@ -172,7 +172,7 @@ The only events are the `update:*` of the models above.
 
 ## Motion & Animations
 
-| Trigger                        | Animation / Transition                  | Token (see `contributing/docs/TOKENS.md` § Animations)        | Reduced-motion fallback         |
+| Trigger                        | Animation / Transition                  | Token (see `contributing/docs/TOKENS.md` § Animations)   | Reduced-motion fallback         |
 | ------------------------------ | --------------------------------------- | -------------------------------------------------------- | ------------------------------- |
 | separator hover / focus / drag | `transition-colors` on the separator    | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 | compact drawers open / close   | `Drawer` component (owns its own slide) | component                                                | handled by `Drawer`             |

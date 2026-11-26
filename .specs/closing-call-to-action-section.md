@@ -6,7 +6,7 @@ status: implemented
 spec_version: 9
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 00d4d4ae0bd1fdaf40a0a13aa45d30211a8f67c6b01f5011ef0792120b123d92
+checksum: 2fe915b77fc7dd8a55b3f5a4a5976b7659c93da1cf2f347d902909f39d9fe6c1
 template: 2
 ---
 
@@ -107,10 +107,10 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 ## Motion & Animations
 
 | Trigger                       | Animation / Transition                                                         | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                              |
-| ----------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------- | -------------------------------------------------------------------- |
-| audience switch (swapped row) | `animate-fade-in`                                                              | semantic                                          | `motion-reduce:animate-none`                                         |
-| each typed character enters   | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance` | semantic                                          | `motion-reduce:transition-none`                                      |
-| typed-line cursor             | `animate-blink`                                                                | semantic                                          | `motion-reduce:hidden` (and the word list is shown whole, not typed) |
+| ----------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ | -------------------------------------------------------------------- |
+| audience switch (swapped row) | `animate-fade-in`                                                              | semantic                                               | `motion-reduce:animate-none`                                         |
+| each typed character enters   | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance` | semantic                                               | `motion-reduce:transition-none`                                      |
+| typed-line cursor             | `animate-blink`                                                                | semantic                                               | `motion-reduce:hidden` (and the word list is shown whole, not typed) |
 
 ## Tokens
 

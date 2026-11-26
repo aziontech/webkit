@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: cdaa911f34fd8c82f9550750d6b5a90f6c79f76290613b092cecdc832cf4289e
+checksum: 32cb6f1c2cca2d8fbbfd41c0bbbcf66bd359496933845f34acfa10ab0657be50
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -164,8 +164,8 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 ## Motion & Animations
 
 | Trigger          | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ---------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| frame focus ring | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ---------------- | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| frame focus ring | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

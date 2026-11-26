@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: a826f5c4f95092b51dfcd944c8fcdd87591e9408c8c4209d0ccc180e4e8cc91c
+checksum: 5a802d54cc3a2e3767ac69bebe6062f439557966c19a67a8ed9ab4877e2ab117
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
@@ -90,7 +90,7 @@ quantity.
 
 ## Motion & Animations
 
-| Trigger                         | Animation / Transition                                                                                                                                            | Token (see `contributing/docs/TOKENS.md` § Animations)                      | Reduced-motion fallback                                                                                                                                |
+| Trigger                         | Animation / Transition                                                                                                                                            | Token (see `contributing/docs/TOKENS.md` § Animations)                 | Reduced-motion fallback                                                                                                                                |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `value` change (determinate)    | `transition-[width] duration-moderate-02 ease-productive-entrance` (width morph)                                                                                  | duration/curve aliases from `animate.js` (240ms · productive-entrance) | `motion-reduce:transition-none`                                                                                                                        |
 | `indeterminate` (loading sweep) | `animate-progress-indeterminate` + `animate-progress-indeterminate-short` (two offset bars sweeping across the track via `inset-inline-start`/`inset-inline-end`) | semantic (2.1s · infinite)                                             | `motion-reduce:animate-none` + `motion-reduce:before:inset-x-1/3` (a still segment over the middle third of the track, so the bar never reads as done) |
@@ -109,8 +109,8 @@ quantity.
 
 ## Theme gaps
 
-| Figma variable             | Temporary primitive     | Follow-up                                                            |
-| -------------------------- | ----------------------- | -------------------------------------------------------------------- |
+| Figma variable             | Temporary primitive     | Follow-up                                                                 |
+| -------------------------- | ----------------------- | ------------------------------------------------------------------------- |
 | `--bg-placeholder` (track) | `var(--bg-placeholder)` | `TODO: document --bg-placeholder in contributing/docs/TOKENS.md § Colors` |
 
 ## Accessibility (WCAG 2.1 AA)

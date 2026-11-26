@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 3e5a51008601e96636fb780352806a5afb1a2981325cd67b3046aeea32785965
+checksum: 40ac352d2b215061ae489ab53e60ab5c32ed9a20c3328f83868a4c04d1588d55
 created: 2026-08-10
 last_updated: 2026-11-21
 ---
@@ -171,7 +171,7 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 ## Motion & Animations
 
-| Trigger                       | Animation / Transition                                                               | Token (see `contributing/docs/TOKENS.md` § Animations)      | Reduced-motion fallback         |
+| Trigger                       | Animation / Transition                                                               | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
 | ----------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
 | link hover/focus color change | `transition-colors duration-150 ease-out`                                            | inline (matches catalog)                               | `motion-reduce:transition-none` |
 | home link hover               | `transition-opacity duration-fast-02 ease-productive-entrance` to `hover:opacity-80` | `duration['fast-02']` · `curve['productive-entrance']` | `motion-reduce:transition-none` |

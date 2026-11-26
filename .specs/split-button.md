@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 9408f7574346c37756268f248c42683767b09b929aab34580a4c516a4b612ca6
+checksum: f02afcfa48cf59e2e7becf474a30cae680af32089cf777cec39ce8bec950c8d3
 created: 2026-06-30
 last_updated: 2026-11-25
 ---
@@ -114,10 +114,10 @@ A primary command button visually joined to a chevron toggle that opens an overl
 ## Motion & Animations
 
 | Trigger                   | Animation / Transition                                                         | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
-| hover/active state change | `transition-opacity` ghost layer (`duration-fast-02 ease-productive-entrance`) | semantic (matches `Button`)                       | `motion-reduce:transition-none` |
-| hover/focus state change  | `transition-colors duration-150 ease-out`                                      | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| menu open / close         | provided by the composed `dropdown-menu` overlay                               | semantic (owned by `DropdownMenu`)                | owned by `DropdownMenu`         |
+| ------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
+| hover/active state change | `transition-opacity` ghost layer (`duration-fast-02 ease-productive-entrance`) | semantic (matches `Button`)                            | `motion-reduce:transition-none` |
+| hover/focus state change  | `transition-colors duration-150 ease-out`                                      | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| menu open / close         | provided by the composed `dropdown-menu` overlay                               | semantic (owned by `DropdownMenu`)                     | owned by `DropdownMenu`         |
 
 ## Tokens
 

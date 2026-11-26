@@ -6,7 +6,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 58df7e40eb35ce5f9aedf17256d6eccbb2278ed24ff23c0efd2cfb8dc86186b9
+checksum: 5fc088ef32e1b0622633f6903d4fbebe5195872ec9168567821ac222de20e4a8
 template: 2
 ---
 
@@ -97,8 +97,8 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 ## Motion & Animations
 
 | Trigger                        | Animation / Transition                                          | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                            |
-| ------------------------------ | --------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ |
-| continuous scroll of the strip | the brand marquee of the internal loop it shares with `marquee` | semantic (brand-marquee)                          | reduced motion stops it (the region becomes a horizontal scroller) |
+| ------------------------------ | --------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------ |
+| continuous scroll of the strip | the brand marquee of the internal loop it shares with `marquee` | semantic (brand-marquee)                               | reduced motion stops it (the region becomes a horizontal scroller) |
 
 ## Tokens
 

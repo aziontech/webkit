@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: eb97ed93240784d6278170c7e243c51b2651af69e55752632d6b404d53d25a62
+checksum: 6149124fd2a2632a6184254e1f177650714cda6da090cc60c74b6809ba285669
 created: 2026-08-22
 last_updated: 2026-11-24
 ---
@@ -89,9 +89,9 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 ## Motion & Animations
 
 | Trigger                     | Animation / Transition                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| --------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover on a linked card      | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| hover on the trailing glyph | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | semantic                                          | `motion-reduce:transition-none` |
+| --------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover on a linked card      | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| hover on the trailing glyph | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | semantic                                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

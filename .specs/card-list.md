@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 205d9544fe76afe994e7c98e245af268fa11cd55d1c490959dd585caf6b2cdf3
+checksum: 65ae5c3eff5be51ce5b03658b78c5246a0964184f5c3a0d24592d6c54872e07b
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -100,8 +100,8 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 ## Motion & Animations
 
 | Trigger          | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ---------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| selection change | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ---------------- | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| selection change | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

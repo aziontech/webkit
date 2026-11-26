@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 035a184bd1ec5ea3533ccece83b0a204362972ad8bf306c7a9e5e266ea9709ec
+checksum: 154cca25cc789ae6c11a05d632fc7b45c87d7c277d1c1e65602bb6eaac3e4cdf
 created: 2026-11-14
 last_updated: 2026-11-23
 ---
@@ -97,8 +97,8 @@ _No slots._
 ## Motion & Animations
 
 | Trigger                    | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| -------------------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| `+N` button hover or focus | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| -------------------------- | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| `+N` button hover or focus | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 16
 template: 2
-checksum: d15bf6f1c372adf5d9e692a57bd9e458e7fdaf3ca6c7563effc4005bf648fdd3
+checksum: 9f0c1f4c23ae87774ac2c0730f76ff030b06ca0c1cf45bf5ea31ac3dfda3eef4
 created: 2026-11-11
 last_updated: 2026-11-21
 ---
@@ -155,11 +155,11 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 ## Motion & Animations
 
 | Trigger         | Animation / Transition                       | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| --------------- | -------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| panel open      | `animate-popup-scale-in`                     | semantic (150ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
-| panel close     | `animate-popup-scale-out`                    | semantic (110ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
-| chevron         | `transition-transform duration-150 ease-out` | inline (matches `date-picker`)                    | `motion-reduce:transition-none` |
-| hover / options | `transition-colors duration-150 ease-out`    | inline (matches `date-picker`)                    | `motion-reduce:transition-none` |
+| --------------- | -------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| panel open      | `animate-popup-scale-in`                     | semantic (150ms · cubic-bezier)                        | `motion-reduce:animate-none`    |
+| panel close     | `animate-popup-scale-out`                    | semantic (110ms · cubic-bezier)                        | `motion-reduce:animate-none`    |
+| chevron         | `transition-transform duration-150 ease-out` | inline (matches `date-picker`)                         | `motion-reduce:transition-none` |
+| hover / options | `transition-colors duration-150 ease-out`    | inline (matches `date-picker`)                         | `motion-reduce:transition-none` |
 
 Below 640 px the same `animate-popup-scale-in` / `animate-popup-scale-out` run from the bottom centre of the sheet (`transform-origin: bottom center`); the backdrop appears and disappears with the panel, without motion.
 

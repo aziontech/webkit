@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-25
-checksum: aabc154b5a99bf67cce376a1f6455bf9baf58f54f5eb9d333b7d05cf8f05ed4f
+checksum: 9a5d0a13e4a7b6ea1f3f45fcce53563a9f7dedb0e42262cfdd25f8e020b9354a
 ---
 
 # ContactHubSection — Component Spec
@@ -100,8 +100,8 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 ## Motion & Animations
 
 | Trigger           | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ----------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| status link hover | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ----------------- | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| status link hover | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

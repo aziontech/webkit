@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: fdacb02a6f592027fc0d53a53cde36dfb1f5c338c06e10bd1a8dd1c89dbcd05c
+checksum: a63e74cd7b5e836dcb25edd419a2ff0e377db2fb2ec71cd099755fb342c28286
 created: 2026-08-22
 last_updated: 2026-11-16
 ---
@@ -92,8 +92,8 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 ## Motion & Animations
 
 | Trigger                                                        | Animation / Transition                     | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| -------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------- | ------------------------------- |
-| hover / focus-visible on the label anchor (chain-glyph reveal) | `transition-opacity duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| -------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
+| hover / focus-visible on the label anchor (chain-glyph reveal) | `transition-opacity duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

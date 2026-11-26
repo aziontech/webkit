@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: cbc6c7420a1b7a7c0b5681ad3d7d8b31afb392984e8b9384f52231eb08e10407
+checksum: 2c32c8a0459088049798fea65d0726007fad250df25becfa442c3b3511e9b000
 created: 2026-08-22
 last_updated: 2026-11-24
 ---
@@ -92,10 +92,10 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 
 ## Motion & Animations
 
-| Trigger                       | Animation / Transition                                                                                                  | Token (see `contributing/docs/TOKENS.md` § Animations)   | Reduced-motion fallback         |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------- |
-| active heading changes        | the dash travels along the path (`stroke-dasharray` / `stroke-dashoffset`)                                              | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| pointer moves between entries | `transition-[translate,width,height,opacity]` on the hover highlight (placed with `translate` from the list's top left) | inline (matches catalog)                            | `motion-reduce:transition-none` |
+| Trigger                       | Animation / Transition                                                                                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| active heading changes        | the dash travels along the path (`stroke-dasharray` / `stroke-dashoffset`)                                              | `duration-moderate-02` · `ease-productive-entrance`    | `motion-reduce:transition-none` |
+| pointer moves between entries | `transition-[translate,width,height,opacity]` on the hover highlight (placed with `translate` from the list's top left) | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

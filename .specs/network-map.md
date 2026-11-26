@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: d1d8f4becb50f12a2dd5b9e87f75765f829482ddfafd74cf7777edff191df2bb
+checksum: 5f7769daa526b1cb397b83fcd7f00799afe72a40ea1bb9ba5980985e6833eae5
 created: 2026-09-26
 last_updated: 2026-11-25
 ---
@@ -107,7 +107,7 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's dat
 
 ## Motion & Animations
 
-| Trigger                                                                                         | Animation / Transition | Token (see `contributing/docs/TOKENS.md` § Animations)           | Reduced-motion fallback                            |
+| Trigger                                                                                         | Animation / Transition | Token (see `contributing/docs/TOKENS.md` § Animations)      | Reduced-motion fallback                            |
 | ----------------------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------- | -------------------------------------------------- |
 | `animated` set — data center pulse, three waves at 0 / 350 / 700ms, two pulses each, then still | `animate-pulse-settle` | catalog `pulse-settle` (2s, 2 runs; last wave ends at 4.7s) | `motion-reduce:animate-none` (static data centers) |
 

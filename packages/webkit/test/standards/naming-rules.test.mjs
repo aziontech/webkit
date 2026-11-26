@@ -328,7 +328,10 @@ const FIXTURES = {
     'export default {}\n'
   ],
   'tooling-name': [
-    ['contributing/skills/regen-baselines/SKILL.md', 'contributing/skills/baselines-regenerate/SKILL.md'],
+    [
+      'contributing/skills/regen-baselines/SKILL.md',
+      'contributing/skills/baselines-regenerate/SKILL.md'
+    ],
     '---\nname: x\n---\n',
     '---\nname: x\n---\n'
   ],

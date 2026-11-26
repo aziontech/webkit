@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 31499622be2f4e7100b9bed76d2c7a50bff775404c9dd8e910defc4561a6d584
+checksum: 0a5e546c57461b9f72c19fedfb1ae172a89677ac2bb1ea593d8ab8b36c37b111
 ---
 
 # ClientStoryColumnsSection — Component Spec
@@ -98,9 +98,9 @@ Three featured success stories side by side: each column is a client's mark on a
 ## Motion & Animations
 
 | Trigger                     | Animation / Transition                                                                                                                                                                                                | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| hover fill on the story     | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance`                                                                                                                               | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
-| `reveal="hover"` card opens | `transition-[translate] duration-moderate-02 ease-productive-entrance` (logo rises), `transition-[translate,opacity] duration-moderate-02` (story panel), `transition-[opacity,translate] duration-moderate-01` (cue) | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| hover fill on the story     | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance`                                                                                                                               | inline (matches catalog)                               | `motion-reduce:before:transition-none` |
+| `reveal="hover"` card opens | `transition-[translate] duration-moderate-02 ease-productive-entrance` (logo rises), `transition-[translate,opacity] duration-moderate-02` (story panel), `transition-[opacity,translate] duration-moderate-01` (cue) | inline (matches catalog)                               | `motion-reduce:transition-none`        |
 
 ## Tokens
 

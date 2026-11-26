@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: d989cfd0f04af72bc2d20a8397ad40e5dcfef41addbf53e765ee350456c3a614
+checksum: 363540fd6998ef5f4b01f279a9b030dd6f729e453990cef9694ec757bc6e638e
 created: 2026-09-25
 last_updated: 2026-11-18
 ---
@@ -134,13 +134,13 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 ## Motion & Animations
 
 | Trigger                                                | Animation / Transition                                                                              | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| a claim opens or collapses as the scroll moves         | `transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance`                     | inline (catalog duration + easing)                | `motion-reduce:transition-none` |
-| a claim dims as it is read past                        | `transition-[color,opacity] duration-moderate-01 ease-out`                                          | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| the open claim's description arrives, after its title  | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-100` while open | inline (catalog duration + easing)                | `motion-reduce:transition-none` |
-| the open claim's actions arrive, after its description | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-200` while open | inline (catalog duration + easing)                | `motion-reduce:transition-none` |
-| the medium for the newly open claim arrives            | `animate-fade-in`                                                                                   | semantic (fade-in)                                | `motion-reduce:animate-none`    |
-| the medium for the claim just closed leaves            | `animate-fade-out`                                                                                  | semantic (fade-out)                               | `motion-reduce:animate-none`    |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| a claim opens or collapses as the scroll moves         | `transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance`                     | inline (catalog duration + easing)                     | `motion-reduce:transition-none` |
+| a claim dims as it is read past                        | `transition-[color,opacity] duration-moderate-01 ease-out`                                          | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| the open claim's description arrives, after its title  | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-100` while open | inline (catalog duration + easing)                     | `motion-reduce:transition-none` |
+| the open claim's actions arrive, after its description | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-200` while open | inline (catalog duration + easing)                     | `motion-reduce:transition-none` |
+| the medium for the newly open claim arrives            | `animate-fade-in`                                                                                   | semantic (fade-in)                                     | `motion-reduce:animate-none`    |
+| the medium for the claim just closed leaves            | `animate-fade-out`                                                                                  | semantic (fade-out)                                    | `motion-reduce:animate-none`    |
 
 ## Tokens
 

@@ -7,7 +7,7 @@ spec_version: 4
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-24
-checksum: 682d46be0437e99efa09b20c5b3f40877760172a27aac18ec5cc7d2f0561a922
+checksum: 40ed98906badcafbd14ede7b3129b5d06aaf08ffcddaeb6a2aa3feb88b36d77f
 ---
 
 # ClientMosaicSection — Component Spec
@@ -102,8 +102,8 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 ## Motion & Animations
 
 | Trigger                     | Animation / Transition                                        | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| --------------------------- | ------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover fill change on a cell | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| --------------------------- | ------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover fill change on a cell | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

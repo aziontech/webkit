@@ -166,7 +166,10 @@ test('the token and spec-compliance engines are shared by hook AND ratchet', () 
 
   // spec-compliance engine (DS-internal): hook + ratchet share lib
   assert.ok(existsSync(join(ROOT, 'contributing/hooks/lib/spec-compliance-checks.mjs')))
-  const specHook = readFileSync(join(ROOT, 'contributing/hooks/validate-spec-compliance.mjs'), 'utf-8')
+  const specHook = readFileSync(
+    join(ROOT, 'contributing/hooks/validate-spec-compliance.mjs'),
+    'utf-8'
+  )
   assert.match(specHook, /lib\/spec-compliance-checks\.mjs/, 'spec hook does not use the engine')
   assert.match(ratchet, /spec-compliance-checks\.mjs/, 'ratchet does not import the spec engine')
 })

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: 5f7218c74f15318deda0cf653e1edd8a89f14a0c29d0a6acc80bd05e772ba954
+checksum: c65000cad354dbaf4f94913fd3929957b32bca17b4f41d369c7909f3cc04e9ba
 ---
 
 # Tracker — Component Spec
@@ -117,9 +117,9 @@ _None of its own._ The active index above is the only emit.
 ## Motion & Animations
 
 | Trigger             | Animation / Transition                                                     | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------- | -------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| active block change | blocks `transition-opacity duration-fast-02 ease-productive-entrance`      | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
-| readout follow      | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| ------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| active block change | blocks `transition-opacity duration-fast-02 ease-productive-entrance`      | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| readout follow      | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none` |
 
 ## Tokens
 

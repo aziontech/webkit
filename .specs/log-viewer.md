@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: a96d70d14f76bf5d385ace873cd4f5277f782aea63dcb445c46cf6f3cbdafd2a
+checksum: 8f8b1dda78cb0149375a838a6a764cd425d1afb4904432be3c9037607553a152
 created: 2026-05-26
 last_updated: 2026-11-18
 ---
@@ -205,9 +205,9 @@ LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `Lo
 ## Motion & Animations
 
 | Trigger                                    | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                          |
-| ------------------------------------------ | ----------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------- |
-| log line hover (LogViewerContent)          | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none`                                  |
-| running step description (LogViewer.Steps) | `animate-shimmer`                         | `--animate-shimmer`                               | `motion-reduce:animate-none` (and `motion-safe:` on the shimmer) |
+| ------------------------------------------ | ----------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------- |
+| log line hover (LogViewerContent)          | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none`                                  |
+| running step description (LogViewer.Steps) | `animate-shimmer`                         | `--animate-shimmer`                                    | `motion-reduce:animate-none` (and `motion-safe:` on the shimmer) |
 
 ## Tokens
 

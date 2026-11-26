@@ -357,7 +357,9 @@ const MISSING_SPEC_VUE = 'packages/webkit/src/components/feedback/no-such-widget
 group('lib: legacy whitelist', () => {
   test('the shipped whitelist is empty', () => {
     assertEqual(
-      JSON.parse(readFileSync(resolve(ROOT, 'contributing/hooks/lib/legacy-components.json'), 'utf-8')),
+      JSON.parse(
+        readFileSync(resolve(ROOT, 'contributing/hooks/lib/legacy-components.json'), 'utf-8')
+      ),
       []
     )
     assertTrue(!isLegacyComponent('action', 'button', ROOT))

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: dd476cb0adcf42f9ed198cc43e8d28b2da2c5e445a651972f2c64f4708c5f881
+checksum: d8a8520c20c7d6aa71b0747d4fdafc3434077e558053199dede39f3b41cfd201
 created: 2026-09-22
 last_updated: 2026-11-24
 ---
@@ -122,11 +122,11 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 
 ## Motion & Animations
 
-| Trigger                                           | Animation / Transition                                                                  | Token (see `contributing/docs/TOKENS.md` § Animations)   | Reduced-motion fallback                |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------------- |
-| hover / focus on a linked cell — the wash         | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:before:transition-none` |
-| hover / focus on a linked cell — the mark lift    | `transition-[translate] duration-moderate-01 ease-productive-entrance`                  | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:transition-none`        |
-| hover / focus on a linked cell — the label reveal | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance`          | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:transition-none`        |
+| Trigger                                           | Animation / Transition                                                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| hover / focus on a linked cell — the wash         | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | `duration-moderate-01` + `ease-productive-entrance`    | `motion-reduce:before:transition-none` |
+| hover / focus on a linked cell — the mark lift    | `transition-[translate] duration-moderate-01 ease-productive-entrance`                  | `duration-moderate-01` + `ease-productive-entrance`    | `motion-reduce:transition-none`        |
+| hover / focus on a linked cell — the label reveal | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance`          | `duration-moderate-01` + `ease-productive-entrance`    | `motion-reduce:transition-none`        |
 
 ## Tokens
 

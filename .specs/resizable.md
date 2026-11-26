@@ -4,7 +4,7 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 4
-checksum: c76a7f56b919f0f52e4fc67b0b34ef4cf7ae4c345959606dbc3515b57c974b7b
+checksum: 4eab85aaf3df3a27eb0a561e8e1c19620a353fc36d8d66b58fb00a6a178ae9c9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
@@ -153,8 +153,8 @@ PANE that owns the two-way values (see Sub-components) and the root only carries
 ## Motion & Animations
 
 | Trigger                         | Animation / Transition                                        | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------------- | ------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| handle hover/focus state change | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| handle hover/focus state change | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 A drag itself is deliberately NOT animated. Direct manipulation has to track the pointer exactly; interpolating the pane's length behind the cursor reads as the panel resisting, and the two drift further apart the faster the reader moves.
 

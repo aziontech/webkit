@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 80a565bc65c2b349bced7d5e45b8b340438e3963a55a2554a983119f3ff388b6
+checksum: c8c015f8269a056a6711e5a08ec36206f9de30e76b641711f9719ccd9f804b27
 created: 2026-10-23
 last_updated: 2026-11-25
 ---
@@ -115,7 +115,7 @@ _No slots — a widget is a closed drawing selected by `name`._
 
 ## Motion & Animations
 
-| Trigger                                                                          | Animation / Transition                                                                                                                                                                                               | Token (see `contributing/docs/TOKENS.md` § Animations)       | Reduced-motion fallback         |
+| Trigger                                                                          | Animation / Transition                                                                                                                                                                                               | Token (see `contributing/docs/TOKENS.md` § Animations)  | Reduced-motion fallback         |
 | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------- |
 | widget entrance                                                                  | `ConsoleMockupShell` part transitions on `opacity` and `translate`                                                                                                                                                   | `duration` + `curve` from `@aziontech/theme/animations` | parts drawn in place            |
 | row inserted or removed inside a fragment                                        | Vue `<Transition>` from `-translate-y-1 opacity-0` with `transition-[opacity,translate]`: enter `duration-moderate-02 ease-productive-entrance`, leave `duration-fast-02 ease-productive-exit`                       | catalog durations and curves                            | `motion-reduce:transition-none` |

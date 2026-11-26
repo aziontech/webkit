@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 400b32db61fd32a682775214e91cd4ad9f7553f6662a07817cb5527f6ed568cb
+checksum: 22a29e8dcaeb91957377e4c4538e5bb34fcc43060ddd6ada69489f5e827786ca
 created: 2026-11-14
 last_updated: 2026-11-24
 ---
@@ -106,8 +106,8 @@ You need an Acme account. Run \`acme login\` first.
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback |
-| ------- | ---------------------- | ------------------------------------------------- | ----------------------- |
-| _none_  | —                      | —                                                 | —                       |
+| ------- | ---------------------- | ------------------------------------------------------ | ----------------------- |
+| _none_  | —                      | —                                                      | —                       |
 
 ## Tokens
 

@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: 9f2cc863d057cb241a82fe51191adccdc03bf37bfefb76a8a01771e16456940b
+checksum: 2a532450f5f32da9034d48dde7be0b615b077e5f9357faac8a313927e1971de6
 spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-24
@@ -189,9 +189,9 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 ## Motion & Animations
 
 | Trigger              | Animation / Transition                                         | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| -------------------- | -------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| dragging dim         | `transition-opacity duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
-| handle hover / focus | `transition-colors duration-fast-02 ease-productive-entrance`  | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| -------------------- | -------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| dragging dim         | `transition-opacity duration-fast-02 ease-productive-entrance` | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| handle hover / focus | `transition-colors duration-fast-02 ease-productive-entrance`  | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none` |
 
 A pointer resize follows the pointer 1:1 with no transition; it is direct manipulation, not motion.
 

@@ -4,7 +4,7 @@ category: navigation
 structure: composition
 status: implemented
 spec_version: 7
-checksum: c4c40bc6e3f7a1ee5434002183604c98e0cca8e30ed8ab47357cf3c7914cc068
+checksum: d4613a10bfe942178aa65a0f8c860193be32c92a62e3e4b673654d8f577f2796
 created: 2026-09-22
 last_updated: 2026-11-25
 ---
@@ -170,7 +170,7 @@ even when the row carries nothing but its title.
 
 ## Motion & Animations
 
-| Trigger                        | Animation / Transition                                                                                                                                | Token (see `contributing/docs/TOKENS.md` § Animations)                                                                      | Reduced-motion fallback                |
+| Trigger                        | Animation / Transition                                                                                                                                | Token (see `contributing/docs/TOKENS.md` § Animations)                                                                 | Reduced-motion fallback                |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
 | step becomes `success`         | connector fill `scale-y` 0 → 1 from `origin-top`, `transition-[scale]`                                                                                | inline · `duration-moderate-02` · `ease-productive-entrance`                                                           | `motion-reduce:transition-none`        |
 | step becomes active            | inner disc `scale` 0 → 1, `transition-[scale]`                                                                                                        | inline · `duration-fast-02` · `ease-productive-entrance`                                                               | `motion-reduce:transition-none`        |

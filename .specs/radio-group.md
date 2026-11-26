@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: b776915815594331e0ffb941325289b7ed8551f5cb09506dfed26256c58780ac
+checksum: df461f9aa3646f35e25e2982b9f58dfac2424000a850cb390f815809ef02f3bb
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -172,9 +172,9 @@ _none_
 ## Motion & Animations
 
 | Trigger                          | Animation / Transition                                                                       | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                                    |
-| -------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------- |
-| hover / focus / checked (circle) | `transition-opacity duration-fast-02 ease-productive-entrance` on the hover and press layers | inline (matches catalog)                          | `motion-reduce:before:transition-none motion-reduce:after:transition-none` |
-| hover / checked (card)           | `transition-colors duration-fast-02 ease-productive-entrance`                                | inline (matches catalog)                          | `motion-reduce:transition-none`                                            |
+| -------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------- |
+| hover / focus / checked (circle) | `transition-opacity duration-fast-02 ease-productive-entrance` on the hover and press layers | inline (matches catalog)                               | `motion-reduce:before:transition-none motion-reduce:after:transition-none` |
+| hover / checked (card)           | `transition-colors duration-fast-02 ease-productive-entrance`                                | inline (matches catalog)                               | `motion-reduce:transition-none`                                            |
 
 The root and the item add no motion of their own.
 

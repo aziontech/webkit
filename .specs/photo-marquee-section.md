@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: ff5adc40dd33a41a9efe41ffc9d097f811fb0ca3bc3a1f8d54403a14b60eb623
+checksum: 67a71c0a981954026e7f4692ccf11d84b68575c083152b8e5e6529f34671f74b
 template: 2
 ---
 
@@ -84,8 +84,8 @@ The office band of the careers page: a horizontal section title over a framed st
 ## Motion & Animations
 
 | Trigger                        | Animation / Transition                                          | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                            |
-| ------------------------------ | --------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ |
-| continuous scroll of the strip | the brand marquee of the internal loop it shares with `marquee` | semantic (brand-marquee)                          | reduced motion stops it (the region becomes a horizontal scroller) |
+| ------------------------------ | --------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------ |
+| continuous scroll of the strip | the brand marquee of the internal loop it shares with `marquee` | semantic (brand-marquee)                               | reduced motion stops it (the region becomes a horizontal scroller) |
 
 ## Tokens
 

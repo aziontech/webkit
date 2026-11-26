@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: d62c3d4d94cc6f95de22154ef20da720a100743c0291d77334b2ab5113b11c71
+checksum: a8608c5d639bf52cee67f88e1f00d8098684d95a8e18e1361c3e43342d96e678
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -129,9 +129,9 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 ## Motion & Animations
 
 | Trigger                  | Animation / Transition                                                                   | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| marks entrance           | `transition-opacity duration-slow-01 ease-productive-entrance`, 0 to 1 on `data-entered` | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none` |
-| active dim, refetch hold | `transition-opacity duration-moderate-01`                                                | `moderate-01`                                     | `motion-reduce:transition-none` |
+| ------------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| marks entrance           | `transition-opacity duration-slow-01 ease-productive-entrance`, 0 to 1 on `data-entered` | `slow-01` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| active dim, refetch hold | `transition-opacity duration-moderate-01`                                                | `moderate-01`                                          | `motion-reduce:transition-none` |
 
 ## Tokens
 

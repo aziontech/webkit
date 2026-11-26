@@ -3,7 +3,7 @@ name: subheader
 category: layout
 structure: monolithic
 status: implemented
-checksum: a1dce7d52199ecedc12c7e7bbf3d1ca548692c4f50124da7f602e610adc52f09
+checksum: d77e7efe4beab2598006a388fb0953ed65417dd070f8fcb0935f6256a4d67560
 spec_version: 7
 template: 2
 created: 2026-11-10
@@ -98,8 +98,8 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 ## Motion & Animations
 
 | Trigger                      | Animation / Transition                     | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ---------------------------- | ------------------------------------------ | ------------------------------------------------- | ------------------------------- |
-| heading hover / focus-within | `transition-opacity duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ---------------------------- | ------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
+| heading hover / focus-within | `transition-opacity duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

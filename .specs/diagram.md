@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 66c6f75347fc3ab7ba4a90cf646c4a35b191db84193b8e199cfd73dd8a8c9014
+checksum: 39c2d13d2bbe0b6622c398e0c1a1ba0fb76e2f34b2ae086dc42a15f580b62d3a
 created: 2026-10-21
 last_updated: 2026-11-18
 ---
@@ -138,9 +138,9 @@ _None — every node is drawn from `spec`._
 
 ## Motion & Animations
 
-| Trigger                            | Animation / Transition                                             | Token (see `contributing/docs/TOKENS.md` § Animations)     | Reduced-motion fallback         |
-| ---------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------- | ------------------------------- |
-| first measure lands (`data-ready`) | `transition-opacity duration-moderate-02 ease-productive-entrance` | duration `moderate-02` · easing `productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                            | Animation / Transition                                             | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
+| ---------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
+| first measure lands (`data-ready`) | `transition-opacity duration-moderate-02 ease-productive-entrance` | duration `moderate-02` · easing `productive-entrance`  | `motion-reduce:transition-none` |
 
 ## Tokens
 

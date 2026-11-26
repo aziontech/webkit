@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 63a84681dd69b9813b9009efd67faa169d21bf5c4d8ab4fb8d6f0bd59d19b2eb
+checksum: 05f9478a7fcc49088da1aa532cc091933c3ed31dcb9e50f8e7fb51dc25ff414f
 created: 2026-06-26
 last_updated: 2026-11-25
 ---
@@ -247,10 +247,10 @@ Sub-menus and checkable options:
 ## Motion & Animations
 
 | Trigger                        | Animation / Transition                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| ------------------------------ | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| panel open                     | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
-| panel close                    | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
-| option hover / selected change | `transition-colors duration-150 ease-out`               | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| ------------------------------ | ------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| panel open                     | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)       | `motion-reduce:animate-none` (instant) |
+| panel close                    | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)               | `motion-reduce:animate-none` (instant) |
+| option hover / selected change | `transition-colors duration-150 ease-out`               | inline (matches catalog)                               | `motion-reduce:transition-none`        |
 
 ## Tokens
 

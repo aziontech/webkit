@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-10-20
 last_updated: 2026-11-25
-checksum: 0d421cac88fa5bc6c6921231fe24ac118bba6939265fe52cd43d557b1c1464bd
+checksum: 7fc5fe800f2b189d1b123558da9385d5ca8658355bb930fe63dd03839f37a2eb
 ---
 
 # BrowserFrame — Component Spec
@@ -127,8 +127,8 @@ The frame is static apart from its resize handles.
 ## Motion & Animations
 
 | Trigger                         | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ------------------------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| handle hover/focus color change | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| ------------------------------- | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| handle hover/focus color change | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 Resizing itself is not animated — the size follows the pointer or key press immediately.
 

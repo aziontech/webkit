@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: ed3b906027b107643224617db79d17b2643a29ad9091f89eab60b28c6f15b3d4
+checksum: bbd0155b257aee204cf03378e4d89724229964f58775545dbd4c75c5b52822f3
 created: 2026-11-12
 last_updated: 2026-11-24
 ---
@@ -105,10 +105,10 @@ _none_
 ## Motion & Animations
 
 | Trigger              | Animation / Transition                                                                                                                                                        | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                             |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------- |
-| on mount             | the glow layer turns once and rests (4.2 s, so it stops by itself within 5 s, WCAG 2.2.2): `animate-spin-settle`                                                              | catalog `spin-settle`, as `HighlightButton`       | `motion-reduce:animate-none` (the glow holds still) |
-| hover state change   | the gradient and scrim layers' `transition-opacity duration-300 ease-out`, and the chip's `transition-colors duration-fast-02 ease-productive-entrance`, as `HighlightButton` | semantic (fast-02 · productive entrance)          | `motion-reduce:transition-none` on every layer      |
-| tooltip open / close | owned by `Tooltip` (its popup scale-in and scale-out)                                                                                                                         | semantic                                          | `motion-reduce:animate-none` (in `Tooltip`)         |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
+| on mount             | the glow layer turns once and rests (4.2 s, so it stops by itself within 5 s, WCAG 2.2.2): `animate-spin-settle`                                                              | catalog `spin-settle`, as `HighlightButton`            | `motion-reduce:animate-none` (the glow holds still) |
+| hover state change   | the gradient and scrim layers' `transition-opacity duration-300 ease-out`, and the chip's `transition-colors duration-fast-02 ease-productive-entrance`, as `HighlightButton` | semantic (fast-02 · productive entrance)               | `motion-reduce:transition-none` on every layer      |
+| tooltip open / close | owned by `Tooltip` (its popup scale-in and scale-out)                                                                                                                         | semantic                                               | `motion-reduce:animate-none` (in `Tooltip`)         |
 
 ## Tokens
 

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 3aabd57ab96e90a101b70a6678f72a939a73729c0aaa83b27b923befdbdda692
+checksum: b32eda0de0e88bf3eed55b737d50ce53ae2d8a21c91847c17c447cef5f9b9c5e
 ---
 
 # CliTerminalSection — Component Spec
@@ -88,8 +88,8 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 ## Motion & Animations
 
 | Trigger                          | Animation / Transition                                                                                                                                           | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                                                                                          |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `script` stage scrolls into view | `transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance`, from `translate-y-(--spacing-xl) scale-95 opacity-0` to rest on `data-entered` | `slow-02` · `expressive-entrance`                 | `motion-reduce:transition-none`, drawn at rest (`motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100`) |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `script` stage scrolls into view | `transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance`, from `translate-y-(--spacing-xl) scale-95 opacity-0` to rest on `data-entered` | `slow-02` · `expressive-entrance`                      | `motion-reduce:transition-none`, drawn at rest (`motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100`) |
 
 ## Tokens
 

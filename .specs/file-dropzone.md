@@ -3,7 +3,7 @@ name: file-dropzone
 category: input
 structure: monolithic
 status: implemented
-checksum: e8a78f394f3fb054619c966fd46dcb4f98c495ac90a5402c48eec64c104df86b
+checksum: d6de920f3bd09e8661b7fe921f3695bd18131ce4e54396110cffbf0e9f534c4c
 spec_version: 9
 created: 2026-11-10
 last_updated: 2026-11-22
@@ -174,10 +174,10 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 ## Motion & Animations
 
 | Trigger                                     | Animation / Transition                                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| ------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| overlay shows (files enter the window)      | `animate-fade-in` on the Vue `Transition` enter phase of the overlay root              | semantic (220ms · ease-in-out)                    | `motion-reduce:animate-none` (instant) |
-| overlay hides (drag leave / drop / Escape)  | `animate-fade-out` on the Vue `Transition` leave phase of the overlay root             | semantic (220ms · ease-in-out)                    | `motion-reduce:animate-none` (instant) |
-| inline idle ↔ active (border + fill colour) | `transition-[background-color,border-color] duration-fast-02 ease-productive-entrance` | TOKENS.md § Interactive states                    | `motion-reduce:transition-none`        |
+| ------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| overlay shows (files enter the window)      | `animate-fade-in` on the Vue `Transition` enter phase of the overlay root              | semantic (220ms · ease-in-out)                         | `motion-reduce:animate-none` (instant) |
+| overlay hides (drag leave / drop / Escape)  | `animate-fade-out` on the Vue `Transition` leave phase of the overlay root             | semantic (220ms · ease-in-out)                         | `motion-reduce:animate-none` (instant) |
+| inline idle ↔ active (border + fill colour) | `transition-[background-color,border-color] duration-fast-02 ease-productive-entrance` | TOKENS.md § Interactive states                         | `motion-reduce:transition-none`        |
 
 ## Tokens
 

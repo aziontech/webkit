@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 15
 template: 2
-checksum: e467ae45e7e6c9ebb3586bda66966e67858cd13117d5a5a408e56e6ea3126a12
+checksum: 770e2934ae75997654db1265263ffc48be4f26ab1483e821e37f8fe772368500
 created: 2026-11-12
 last_updated: 2026-11-25
 ---
@@ -228,10 +228,10 @@ packages/webkit/src/components/layout/console-layout/
 ## Motion & Animations
 
 | Trigger           | Animation / Transition                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ----------------- | ------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| route path change | `animate-page-enter` on the `<main>`, keyed on the path | semantic (`page-enter`)                           | `motion-reduce:animate-none`    |
-| brand hover       | `transition-opacity` on the brand link                  | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none` |
-| palette, drawer   | `Command`, `AppLayout` drawers                          | component                                         | handled by those components     |
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| route path change | `animate-page-enter` on the `<main>`, keyed on the path | semantic (`page-enter`)                                | `motion-reduce:animate-none`    |
+| brand hover       | `transition-opacity` on the brand link                  | `duration-fast-02` · `ease-productive-entrance`        | `motion-reduce:transition-none` |
+| palette, drawer   | `Command`, `AppLayout` drawers                          | component                                              | handled by those components     |
 
 ## Tokens
 

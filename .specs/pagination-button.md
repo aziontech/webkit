@@ -4,7 +4,7 @@ category: data
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: cc90f8fe8c1ede8e9430140201ecae34600e37ad8130d400465d5ae4c918e4f3
+checksum: 5d382c6a951ef1b23ea8fac99e60be87843dd8816c3741f12f24faf13c28969e
 created: 2026-11-10
 last_updated: 2026-11-17
 ---
@@ -107,9 +107,9 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 ## Motion & Animations
 
 | Trigger                        | Animation / Transition                                                                | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                                        |
-| ------------------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------ |
-| active / disabled color change | `transition-colors duration-150 ease-out`                                             | inline                                            | `motion-reduce:transition-none`                                                |
-| hover / active layer           | `before:transition-opacity` / `after:transition-opacity` with `duration-150 ease-out` | inline                                            | `motion-reduce:before:transition-none` / `motion-reduce:after:transition-none` |
+| ------------------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| active / disabled color change | `transition-colors duration-150 ease-out`                                             | inline                                                 | `motion-reduce:transition-none`                                                |
+| hover / active layer           | `before:transition-opacity` / `after:transition-opacity` with `duration-150 ease-out` | inline                                                 | `motion-reduce:before:transition-none` / `motion-reduce:after:transition-none` |
 
 ## Tokens
 

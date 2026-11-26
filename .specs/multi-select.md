@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 7bfd32a5d0785f25cb7e7a2bed3c0db69181630e2a54f67c868cd283c7705340
+checksum: d1c18414d100c2651e7403555a0ddd90e5e5b9523a58fc8e6ce9e18763de2a05
 created: 2026-06-25
 last_updated: 2026-11-24
 ---
@@ -201,12 +201,12 @@ Chips, typed filter and a create row:
 ## Motion & Animations
 
 | Trigger                                       | Animation / Transition                                  | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
-| --------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| dropdown open (on `MultiSelectContent` only)  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
-| dropdown close (on `MultiSelectContent` only) | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
-| trigger state change (border/ring/bg)         | `transition-colors duration-150 ease-out`               | inline (matches catalog)                          | `motion-reduce:transition-none`        |
-| checkbox indicator check/uncheck              | inherits from `Checkbox` webkit component               | inherits from `Checkbox`                          | inherits from `Checkbox`               |
-| loading row spinner                           | inherits from `Spinner`                                 | inherits from `Spinner`                           | inherits from `Spinner`                |
+| --------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| dropdown open (on `MultiSelectContent` only)  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)       | `motion-reduce:animate-none` (instant) |
+| dropdown close (on `MultiSelectContent` only) | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)               | `motion-reduce:animate-none` (instant) |
+| trigger state change (border/ring/bg)         | `transition-colors duration-150 ease-out`               | inline (matches catalog)                               | `motion-reduce:transition-none`        |
+| checkbox indicator check/uncheck              | inherits from `Checkbox` webkit component               | inherits from `Checkbox`                               | inherits from `Checkbox`               |
+| loading row spinner                           | inherits from `Spinner`                                 | inherits from `Spinner`                                | inherits from `Spinner`                |
 
 ## Tokens
 

@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 7c704a782e47f5487e8c2481de8d252284b2379c5685afa7fbf7e38cd640daaf
+checksum: c38a2c83e5b19d6e4b53706ceb61b50ad01cf277073e4c9126b1a04384220146
 created: 2026-08-22
 last_updated: 2026-11-18
 ---
@@ -82,8 +82,8 @@ The previous / next pair that closes a documentation page. Each side is a link c
 ## Motion & Animations
 
 | Trigger              | Animation / Transition                                        | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| -------------------- | ------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover on either side | `transition-[translate] duration-150 ease-out` on the chevron | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| -------------------- | ------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover on either side | `transition-[translate] duration-150 ease-out` on the chevron | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

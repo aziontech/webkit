@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: 2fafc7e49723e3f357a5e5607ada4048f24c997841b26b62227860213975eaa9
+checksum: 2e3394dc014dddd2ca9996d8d1c49a8ffbe0ea721b1dc4c6cf6fc3df496fb75c
 ---
 
 # SparkChart — Component Spec
@@ -95,10 +95,10 @@ _No slots._
 ## Motion & Animations
 
 | Trigger              | Animation / Transition                                                                                         | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| -------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| line / area entrance | `transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance`, `pathLength="1"` on `data-entered` | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
-| area fill entrance   | `transition-opacity duration-slow-01 ease-productive-entrance` on `data-entered`                               | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none` |
-| bar entrance         | `transition-[scale] duration-slow-01 ease-productive-entrance` from the baseline on `data-entered`             | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| -------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| line / area entrance | `transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance`, `pathLength="1"` on `data-entered` | `slow-02` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| area fill entrance   | `transition-opacity duration-slow-01 ease-productive-entrance` on `data-entered`                               | `slow-01` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| bar entrance         | `transition-[scale] duration-slow-01 ease-productive-entrance` from the baseline on `data-entered`             | `slow-01` · `productive-entrance`                      | `motion-reduce:transition-none` |
 
 ## Tokens
 

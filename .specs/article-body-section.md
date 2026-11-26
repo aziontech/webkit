@@ -7,7 +7,7 @@ spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 9b9b0a1b5467786f51ef2a44414628ab1d520b2e9bce958460628a58ead16edd
+checksum: 91652ae2d903923d9eff91f466109676a5c82ddab9fbc064a572106aee144a6c
 ---
 
 # ArticleBodySection — Component Spec
@@ -107,8 +107,8 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 ## Motion & Animations
 
 | Trigger                          | Animation / Transition                                        | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| -------------------------------- | ------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover colour of a community link | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| -------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover colour of a community link | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 

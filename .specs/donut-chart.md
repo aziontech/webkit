@@ -3,7 +3,7 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: implemented
-checksum: 9ed0c6ae5c806f43843749c5240b89e750279396232f7f7d9dd2f8432b2cbf8c
+checksum: 4ccdcec172a4b29da588e3aa3ff59ca495345c4d82841a7faedd4df59740bc6b
 spec_version: 4
 created: 2026-10-20
 last_updated: 2026-11-18
@@ -129,10 +129,10 @@ The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and th
 ## Motion & Animations
 
 | Trigger                       | Animation / Transition                                                                                                                                                          | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| slice sweep on entrance       | `transition-[stroke-dasharray,opacity] duration-slow-02 ease-productive-entrance`, each arc grows from zero length on `data-entered`, staggered per slice by `transition-delay` | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
-| active slice lift, others dim | `transition-[stroke-width,opacity] duration-fast-02 ease-productive-entrance`                                                                                                   | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
-| refetch hold                  | `transition-opacity duration-moderate-01`                                                                                                                                       | `moderate-01`                                     | `motion-reduce:transition-none` |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| slice sweep on entrance       | `transition-[stroke-dasharray,opacity] duration-slow-02 ease-productive-entrance`, each arc grows from zero length on `data-entered`, staggered per slice by `transition-delay` | `slow-02` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| active slice lift, others dim | `transition-[stroke-width,opacity] duration-fast-02 ease-productive-entrance`                                                                                                   | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| refetch hold                  | `transition-opacity duration-moderate-01`                                                                                                                                       | `moderate-01`                                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
