@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: d5926f3f385b971e76e1abe6f10d1f1f20a641262af3230395d5d02b74543034
+checksum: 861743ff3429d0ce685b100fcffb7935691792c9fc449b81ebe7cbacf77601f5
 created: 2026-11-24
 last_updated: 2026-11-25
 ---
@@ -45,6 +45,8 @@ Unlike `Tracker` (a 1D status strip of discrete severities for uptime) or `Chart
 - Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).
 - Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.
 - Always supply `ariaLabel` naming the subject and period (e.g. `"Platform contributions in 2026"`).
+- Don't use it to compare amounts precisely; five intensity steps show a pattern, so put the exact numbers in a table or `StatTile`s next to it.
+- Don't place it on a `Texture`; it carries `data-plain-ground`.
 
 ## Usage
 
@@ -118,7 +120,7 @@ _No slots._
 | ---------------------------------- | -------------------------------------------------------------- |
 | typography (axis, footer, readout) | `.text-label-sm`                                               |
 | level 0 cell                       | `var(--bg-placeholder)`                                        |
-| level 1 cell                       | `var(--chart-sequential-2)`                                    |
+| level 1 cell                       | `var(--chart-sequential-3)`                                    |
 | level 2 cell                       | `var(--chart-sequential-4)`                                    |
 | level 3 cell                       | `var(--chart-sequential-5)`                                    |
 | level 4 cell                       | `var(--chart-sequential-7)`                                    |
@@ -128,6 +130,7 @@ _No slots._
 | spacing                            | `var(--spacing-2xs)`, `var(--spacing-xs)`, `var(--spacing-sm)` |
 | shape                              | `var(--shape-control)`                                         |
 | focus ring                         | `var(--ring-color)`, `var(--bg-surface)`                       |
+| selected day (inset outline)       | `var(--text-default)`                                          |
 
 ## Theme gaps
 
@@ -137,9 +140,9 @@ _No slots._
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on each focusable cell (roving `tabindex`).
+- Visible focus: a 2 px focus ring in the ring color, offset from the cell (roving `tabindex`). The selected day has its own mark, a 2 px inset outline in the default text color, so focus and selection never look the same.
 - Keyboard map: `Tab` focuses the active/selected cell in the grid; `ArrowUp` / `ArrowDown` moves by 1 day; `ArrowRight` / `ArrowLeft` moves by 1 week (mirrored under `dir="rtl"` via `logicalArrowKey`); `Home` / `End` jumps to the first/last day; `Enter` / `Space` toggles selection of the focused day; `Escape` clears `selectedDate`.
-- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces the selected day (a focused cell already reads its own name, so focus and hover are not announced again); the grid is named by `ariaLabel`, else the locale's `Contributions`; `role="alert"` on error; `aria-busy="true"` while loading.
+- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces the selected day (a focused cell already reads its own name, so focus and hover are not announced again); the grid is named by `ariaLabel`, else the locale's `Contributions`; `role="alert"` on error; `aria-busy="true"` and a hidden `role="status"` text (`Loading contributions`) while loading; the empty state is read once, by its own text.
 - Contrast: all intensity steps use `--chart-sequential-*` tokens and `forced-color-adjust-none` so cells remain distinguishable in light, dark, and forced-colors modes.
 - `motion-reduce:transition-none` on cell transitions.
 
@@ -149,6 +152,7 @@ _No slots._
 | ----------------------------------- | -------------------------------------------------------------------- | ------------- |
 | `contributionGraph.roleDescription` | `contribution calendar`                                              | —             |
 | `contributionGraph.label`           | `Contributions`                                                      | `ariaLabel`   |
+| `contributionGraph.loading`         | `Loading contributions`                                              | —             |
 | `contributionGraph.noData`          | `No activity recorded`                                               | —             |
 | `contributionGraph.errorTitle`      | `Contributions didn't load`                                          | —             |
 | `contributionGraph.hint`            | `Select a day to see its activity`                                   | —             |
@@ -169,13 +173,13 @@ _No slots._
 ## Responsive
 
 - Container queries: none on the cell grid itself; the calendar sits inside an `overflow-x-auto` scroll container so all 52 weeks stay readable and crisp on narrow viewports without squashing cells below 10 px.
-- Narrow (≤ 640 px): horizontal scroll on the calendar region; footer readout and legend wrap cleanly.
-- Touch: tapping any cell updates the readout and selects/toggles that date without requiring hover.
+- Narrow (≤ 640 px): horizontal scroll on the calendar region, which opens on the latest weeks; the weekday names stay fixed beside it; footer readout and legend wrap cleanly. The footer is as wide as the calendar, so the legend sits under its last week.
+- Touch: on a coarse pointer the cells grow from 11 px with 2 px gaps to 20 px with 4 px gaps (`--contribution-graph-cell-size`, `--contribution-graph-cell-gap`), so every day meets the WCAG 2.5.8 24 px spacing target; tapping a cell updates the readout and selects or clears that date without hover.
 - Reflow: the outer component never forces page-level horizontal overflow; only the calendar strip scrolls when narrower than 52 weeks.
 
 ## Performance
 
-- Bundle budget: `7.2 KB` gzip (the entry includes `Skeleton`, `EmptyState` and the locale composables) for `./contribution-graph` in `.size-limit.json`.
+- Bundle budget: `7.45 KB` gzip (the entry includes `Skeleton`, `EmptyState` and the locale composables) for `./contribution-graph` in `.size-limit.json`.
 - Runtime budget: rendering a full 366-day year completes in `< 16 ms` with a single flat grid of memoized day descriptors.
 - Heavy parts: none.
 

@@ -119,7 +119,7 @@
             "../user-profile-model": "./account-user-profile.user-profile-model",
             "./profile-select.vue": "./account-user-profile-profile-select.vue"
           },
-          "checksum": "sha256:22483bb95b9a928b4a560d4e5478c2027ed2c9dcef30deec10d367a67dfc9b14"
+          "checksum": "sha256:394a7a27a6a3e0d49915a3287f8ea64455dfa28c3adb84c1997b6bbffb62f603"
         },
         {
           "path": "src/blocks/account-user-profile-profile-header.vue",
@@ -147,7 +147,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:89ac29fb698d493468beccef15205fbc1ff324cdd0d54e559b127f0b197a0614"
+          "checksum": "sha256:61051349881498c024a7d5ccbe0f91f527ef9bd707f197c9e38ed63521c53bee"
         },
         {
           "path": "src/blocks/account-user-profile-profile-preferences-tab.vue",
@@ -165,7 +165,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:bebe94689de8e4ee6f524827fb3824d8d68e35645b9029ddc4b91425d3a8cbad"
+          "checksum": "sha256:d9d864f2f9e3b3bb10884b6ff8d1c72e16ad4649032f803445fe4be22437e0ea"
         },
         {
           "path": "src/blocks/account-user-profile-profile-select.vue",
@@ -183,13 +183,13 @@
           "imports": {
             "./user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:1c7d85024b1db05593f88722b64e08e984c20c7a43c779aad29ca55fdc031128"
+          "checksum": "sha256:ae34fb70d00f27707214a30a0d5fba6c2b03cc025053d4fd59000cade04255c2"
         },
         {
           "path": "src/blocks/account-user-profile.user-profile-model.ts",
           "source": "blocks/account/account-user-profile/user-profile-model.ts",
           "variant": "Data",
-          "checksum": "sha256:ea440e007dcace82b82ec962e7ae458d5c1f74bca48f6da7612afddd770e910c"
+          "checksum": "sha256:5411aa1664677b93cd3150e20ba5569f9c48a2c9db5a769df2bde2db7ac2ffb1"
         },
         {
           "path": "src/blocks/account-user-profile.vue",
@@ -205,7 +205,7 @@
             "./sample": "./account-user-profile.sample",
             "./user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:06d3b84d075f2c88a5e4eedf5b693d5c291844b98acabd4bed58508c3fdd25f2"
+          "checksum": "sha256:587fd2e077ad6befb2fc9a1d03113259b1bbbbbe23b4a4457c658df124ec95b9"
         }
       ]
     },

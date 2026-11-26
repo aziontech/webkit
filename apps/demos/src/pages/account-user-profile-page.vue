@@ -18,6 +18,7 @@
   } from '../blocks/account-user-profile.user-profile-model'
   import AccountUserProfile from '../blocks/account-user-profile.vue'
   import { account } from '../lib/navigation'
+  import { settings } from '../lib/settings'
 
   const [firstName = '', ...rest] = account.name.split(' ')
   const handle = account.email.split('@')[0] ?? ''
@@ -30,7 +31,7 @@
     alternateEmails: [account.email, 'ops@example.com']
   })
   const notifications = ref<UserProfileNotificationSettings>({ ...sampleNotifications })
-  const preferences = ref<UserProfilePreferences>({ ...samplePreferences })
+  const preferences = ref<UserProfilePreferences>({ ...samplePreferences, theme: settings.theme })
   const securityPolicy = ref<UserProfileSecurityPolicy>({ ...sampleSecurityPolicy })
   const activeTab = ref<UserProfileTab>('overview')
 
@@ -38,6 +39,7 @@
     profile.value = { ...payload.profile }
     notifications.value = { ...payload.notifications }
     preferences.value = { ...payload.preferences }
+    settings.theme = payload.preferences.theme
     account.name = `${payload.profile.firstName} ${payload.profile.lastName}`.trim()
     account.email = payload.profile.email.trim()
     toast.success('Your profile was saved.', { closable: true })

@@ -6,7 +6,8 @@ import UserProfile from '../../../../blocks/account/account-user-profile/account
 import {
   samplePreferences,
   sampleProfile,
-  sampleSecurityPolicy
+  sampleSecurityPolicy,
+  sampleYears
 } from '../../../../blocks/account/account-user-profile/sample'
 import { expectNoA11yViolations } from '../../axe'
 
@@ -154,6 +155,44 @@ describe('account/account-user-profile', () => {
   it('draws a placeholder on a settings tab while the profile loads', () => {
     const view = render(UserProfile, { props: { activeTab: 'profile', loading: true } })
     expect(view.queryByLabelText('First name')).toBeNull()
+  })
+
+  it('blocks a save with an empty name or a bad email, with the error on the field', async () => {
+    const view = render(UserProfile, { props: { activeTab: 'profile' } })
+    const email = view.getByLabelText('Email') as HTMLInputElement
+    await userEvent.clear(email)
+    await userEvent.type(email, 'jane.doe')
+    await userEvent.clear(view.getByLabelText('First name'))
+    await waitFor(() => expect(saveBar()).not.toBeNull())
+    await fireEvent.click(view.getByRole('button', { name: /Save changes/ }))
+    await waitFor(() => expect(view.getByText('Enter your first name.')).toBeTruthy())
+    expect(view.getByText(/Enter an email address/)).toBeTruthy()
+    expect(view.emitted('save')).toBeUndefined()
+    expect(document.activeElement).toBe(view.getByLabelText('First name'))
+  })
+
+  it('lights up every day the history lists, and nothing after the newest entry', () => {
+    const [year] = sampleYears
+    const lit = new Set(year!.items.filter((item) => item.count > 0).map((item) => item.date))
+    const newest = year!.months
+      .flatMap((month) => month.entries)
+      .reduce((last, entry) => (entry.date > last ? entry.date : last), '')
+    for (const entry of year!.months.flatMap((month) => month.entries)) {
+      expect(lit.has(entry.date)).toBe(true)
+    }
+    expect(year!.items.every((item) => item.date <= newest)).toBe(true)
+  })
+
+  it('labels the panel with the open tab', async () => {
+    const view = render(UserProfile)
+    const panel = await waitFor(() => {
+      const found = view.getByRole('tabpanel')
+      expect(found.getAttribute('aria-labelledby')).toBeTruthy()
+      return found
+    })
+    expect(document.getElementById(panel.getAttribute('aria-labelledby')!)?.textContent).toContain(
+      'Overview'
+    )
   })
 
   it('replaces the page with a danger alert that retries', async () => {

@@ -1604,6 +1604,7 @@ export const es: Messages = {
   contributionGraph: {
     roleDescription: 'calendario de contribuciones',
     label: 'Contribuciones',
+    loading: 'Cargando contribuciones',
     noData: 'Sin actividad registrada',
     errorTitle: 'No se cargaron las contribuciones',
     hint: 'Selecciona un día para ver su actividad',

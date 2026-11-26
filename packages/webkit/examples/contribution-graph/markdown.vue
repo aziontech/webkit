@@ -5,7 +5,7 @@
   const source = [
     '## Platform contributions',
     '',
-    'One square per day of 2026; the darker the square, the more the team shipped that day.',
+    'One square per day of 2026; the stronger the color, the more the team shipped that day.',
     '',
     '<ContributionGraph',
     '  year={2026}',

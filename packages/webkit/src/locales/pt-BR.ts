@@ -1603,6 +1603,7 @@ export const ptBR: Messages = {
   contributionGraph: {
     roleDescription: 'calendário de contribuições',
     label: 'Contribuições',
+    loading: 'Carregando contribuições',
     noData: 'Nenhuma atividade registrada',
     errorTitle: 'As contribuições não carregaram',
     hint: 'Selecione um dia para ver a atividade',

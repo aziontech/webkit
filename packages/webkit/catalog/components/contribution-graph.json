@@ -21,7 +21,9 @@
   "Supply ISO date strings (`YYYY-MM-DD`) in `items`; days without an entry render as level `0` (zero activity) so the calendar grid stays continuous.",
   "Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).",
   "Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.",
-  "Always supply `ariaLabel` naming the subject and period (e.g. `\"Platform contributions in 2026\"`)."
+  "Always supply `ariaLabel` naming the subject and period (e.g. `\"Platform contributions in 2026\"`).",
+  "Don't use it to compare amounts precisely; five intensity steps show a pattern, so put the exact numbers in a table or `StatTile`s next to it.",
+  "Don't place it on a `Texture`; it carries `data-plain-ground`."
  ],
  "channels": [
   "app",

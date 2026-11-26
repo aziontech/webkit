@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useLocale } from '../../../composables/use-locale'
@@ -66,6 +66,17 @@
   const hoveredIndex = ref<number | null>(null)
   const focusedIndex = ref<number>(0)
   const gridEl = ref<globalThis.HTMLDivElement | null>(null)
+  const scrollEl = ref<globalThis.HTMLDivElement | null>(null)
+
+  watch(
+    [scrollEl, () => props.items, () => props.year, () => props.endDate],
+    async () => {
+      await nextTick()
+      const el = scrollEl.value
+      if (el) el.scrollLeft = dir.value === 'rtl' ? -el.scrollWidth : el.scrollWidth
+    },
+    { immediate: true }
+  )
 
   const MONTH_FORMAT: Intl.DateTimeFormatOptions = { month: 'short', timeZone: 'UTC' }
   const WEEKDAY_FORMAT: Intl.DateTimeFormatOptions = { weekday: 'short', timeZone: 'UTC' }
@@ -131,7 +142,6 @@
 
   const announcement = computed(() => {
     if (props.loading || hasError.value) return ''
-    if (isEmpty.value) return t('contributionGraph.noData')
     return selectedIndex.value >= 0 ? (dayLabels.value[selectedIndex.value] ?? '') : ''
   })
 
@@ -197,26 +207,29 @@
     else if (event.key === 'ArrowUp') focusCell(index - 1)
     else if (event.key === 'Home') focusCell(range.value.first)
     else if (event.key === 'End') focusCell(range.value.last)
-    else if (event.key === 'Escape') {
-      selectedDate.value = null
-      hoveredIndex.value = null
-    } else return
+    else if (event.key === 'Escape') selectedDate.value = null
+    else return
     event.preventDefault()
   }
+
+  const ROOT_CLASS =
+    'flex w-full min-w-0 flex-col gap-(--spacing-xs) ' +
+    '[--contribution-graph-cell-gap:0.125rem] [--contribution-graph-cell-size:0.6875rem] ' +
+    'pointer-coarse:[--contribution-graph-cell-gap:0.25rem] pointer-coarse:[--contribution-graph-cell-size:1.25rem]'
 
   const LEGEND_LEVELS: ContributionGraphLevel[] = [0, 1, 2, 3, 4]
 
   const LEVEL_CLASS =
     'forced-color-adjust-none ' +
-    'data-[level=0]:bg-(--bg-placeholder) data-[level=1]:bg-(--chart-sequential-2) ' +
+    'data-[level=0]:bg-(--bg-placeholder) data-[level=1]:bg-(--chart-sequential-3) ' +
     'data-[level=2]:bg-(--chart-sequential-4) data-[level=3]:bg-(--chart-sequential-5) ' +
     'data-[level=4]:bg-(--chart-sequential-7)'
 
   const CELL_CLASS =
-    'size-2.75 shrink-0 cursor-pointer rounded-xs border-0 p-0 outline-none ' +
+    'size-(--contribution-graph-cell-size) shrink-0 cursor-pointer rounded-xs border-0 p-0 outline-none ' +
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
-    'data-[selected]:ring-2 data-[selected]:ring-(--ring-color) data-[selected]:ring-offset-1 ' +
-    'data-[selected]:ring-offset-(--bg-surface) focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'data-[selected]:outline-2 data-[selected]:outline-solid data-[selected]:-outline-offset-2 ' +
+    'data-[selected]:outline-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
     'focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface) ' +
     LEVEL_CLASS
 
@@ -231,14 +244,20 @@
     :data-loading="loading || null"
     :data-error="hasError || null"
     :aria-busy="loading || undefined"
-    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
+    :class="ROOT_CLASS"
   >
-    <Skeleton
-      v-if="loading"
-      width="100%"
-      height="7.5rem"
-      :data-testid="`${testId}__loading`"
-    />
+    <template v-if="loading">
+      <Skeleton
+        width="100%"
+        height="7.5rem"
+        :data-testid="`${testId}__loading`"
+      />
+      <span
+        role="status"
+        class="sr-only"
+        >{{ t('contributionGraph.loading') }}</span
+      >
+    </template>
     <div
       v-else-if="hasError"
       role="alert"
@@ -262,37 +281,45 @@
       bordered
       :data-testid="`${testId}__empty`"
     />
-    <template v-else>
-      <div class="w-full overflow-x-auto pb-(--spacing-2xs)">
-        <div class="inline-flex min-w-max flex-col gap-(--spacing-2xs)">
-          <div
-            :data-testid="`${testId}__months`"
-            aria-hidden="true"
-            class="grid items-center gap-0.5 ps-8 text-label-sm text-(--text-muted)"
-            :style="{ gridTemplateColumns: `repeat(${grid.weeks}, 0.6875rem)` }"
+    <div
+      v-else
+      class="flex w-fit max-w-full flex-col gap-(--spacing-xs)"
+    >
+      <div class="flex max-w-full items-end gap-(--spacing-2xs)">
+        <div
+          :data-testid="`${testId}__weekdays`"
+          aria-hidden="true"
+          class="grid w-7 shrink-0 grid-rows-7 gap-(--contribution-graph-cell-gap) pb-(--spacing-2xs) text-label-sm text-(--text-muted)"
+        >
+          <span
+            v-for="day in weekdayLabels"
+            :key="day.row"
+            class="flex h-(--contribution-graph-cell-size) items-center leading-none"
+            :style="{ gridRow: day.row }"
           >
-            <span
-              v-for="month in monthLabels"
-              :key="month.key"
-              class="whitespace-nowrap"
-              :style="{ gridColumn: `${month.column} / span 3`, gridRow: 1 }"
-            >
-              {{ month.label }}
-            </span>
-          </div>
-          <div class="flex items-start gap-(--spacing-2xs)">
+            {{ day.label }}
+          </span>
+        </div>
+        <div
+          ref="scrollEl"
+          class="min-w-0 overflow-x-auto pb-(--spacing-2xs)"
+        >
+          <div class="inline-flex min-w-max flex-col gap-(--spacing-2xs)">
             <div
-              :data-testid="`${testId}__weekdays`"
+              :data-testid="`${testId}__months`"
               aria-hidden="true"
-              class="grid w-7 shrink-0 grid-rows-7 gap-0.5 text-label-sm text-(--text-muted)"
+              class="grid items-center gap-(--contribution-graph-cell-gap) text-label-sm text-(--text-muted)"
+              :style="{
+                gridTemplateColumns: `repeat(${grid.weeks}, var(--contribution-graph-cell-size))`
+              }"
             >
               <span
-                v-for="day in weekdayLabels"
-                :key="day.row"
-                class="flex h-2.75 items-center leading-none"
-                :style="{ gridRow: day.row }"
+                v-for="month in monthLabels"
+                :key="month.key"
+                class="whitespace-nowrap"
+                :style="{ gridColumn: `${month.column} / span 3`, gridRow: 1 }"
               >
-                {{ day.label }}
+                {{ month.label }}
               </span>
             </div>
             <div
@@ -301,7 +328,7 @@
               :aria-roledescription="t('contributionGraph.roleDescription')"
               :aria-label="ariaLabel || t('contributionGraph.label')"
               :data-testid="`${testId}__grid`"
-              class="flex flex-col gap-0.5"
+              class="flex flex-col gap-(--contribution-graph-cell-gap)"
               @pointerleave="hoveredIndex = null"
               @pointerover="onGridPointer"
               @focusin="onGridPointer"
@@ -311,7 +338,7 @@
                 v-for="(row, dow) in rows"
                 :key="dow"
                 role="row"
-                class="flex gap-0.5"
+                class="flex gap-(--contribution-graph-cell-gap)"
               >
                 <template
                   v-for="cell in row"
@@ -336,7 +363,7 @@
                   <span
                     v-else
                     aria-hidden="true"
-                    class="size-2.75 shrink-0"
+                    class="size-(--contribution-graph-cell-size) shrink-0"
                   />
                 </template>
               </div>
@@ -371,7 +398,7 @@
           <span>{{ t('contributionGraph.more') }}</span>
         </div>
       </div>
-    </template>
+    </div>
 
     <p
       aria-live="polite"

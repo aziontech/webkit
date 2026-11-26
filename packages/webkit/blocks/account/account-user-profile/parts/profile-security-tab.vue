@@ -110,7 +110,10 @@
           :title="`Managed by ${policy.ssoProvider}`"
           label="Your password is set and reset in your organization's identity provider (SSO and SCIM), so it can't be changed here."
         />
-        <Card :padded="false">
+        <Card
+          v-if="!policy.ssoManaged"
+          :padded="false"
+        >
           <Item.List>
             <SettingsRow title="Current password">
               <div class="flex w-full flex-col gap-(--spacing-2xs)">

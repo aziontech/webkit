@@ -42,7 +42,7 @@ export const sampleProfile: UserProfileData = {
   phoneDigits: '5550142',
   timezone: 'America/Los_Angeles',
   displayLocalTime: true,
-  language: 'en-US',
+  language: 'en',
   location: 'San Francisco, United States',
   memberSince: '2023',
   bio: 'Building the Acme storefront on Azion Applications and Functions.',
@@ -83,7 +83,7 @@ export const samplePreferences: UserProfilePreferences = {
   keyboardShortcuts: true
 }
 
-export const sampleYears: UserProfileYearActivity[] = [
+const sampleYearsSource: UserProfileYearActivity[] = [
   {
     year: 2026,
     totalContributions: 1482,
@@ -248,3 +248,23 @@ export const sampleYears: UserProfileYearActivity[] = [
     ]
   }
 ]
+
+function matchHistory(entry: UserProfileYearActivity): UserProfileYearActivity {
+  const history = entry.months.flatMap((month) => month.entries)
+  const newest = history.reduce((last, item) => (item.date > last ? item.date : last), '')
+  const end = entry.year === 2026 ? newest : `${entry.year}-12-31`
+  const byDate = new Map(
+    entry.items.filter((item) => item.date <= end).map((item) => [item.date, { ...item }])
+  )
+  for (const item of history) {
+    const day = byDate.get(item.date)
+    if (day) day.category = item.category
+    else byDate.set(item.date, { date: item.date, count: 3, category: item.category })
+  }
+  return {
+    ...entry,
+    items: [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date))
+  }
+}
+
+export const sampleYears: UserProfileYearActivity[] = sampleYearsSource.map(matchHistory)

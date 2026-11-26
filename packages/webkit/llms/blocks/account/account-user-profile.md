@@ -43,7 +43,7 @@ Five tiles for the selected year: Contributions (with the change against last ye
 
 ### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
 
-A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history. Days are squares; there is no shape switch. The year rail (one `Button` per year, `aria-current` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
+A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history. Days are squares; there is no shape switch. The year rail (one `Button` per year, `aria-pressed` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
 
 ### E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
 
@@ -54,13 +54,13 @@ The year's contributions grouped by month in a `Timeline`, newest first. With a 
 Each tab is `SettingsGroup`s over flush `Card`s of `SettingsRow`s in an `Item.List`.
 
 - **Profile and bio:** picture, names, handle, bio, time zone, local time, language, email, phone, website, and two visibility switches.
-- **Security and access:** current, new and confirm password with live `PasswordRequirements` and its own Change password button, multi-factor and personal tokens. These act on their own and never ride the `SaveBar`: Change password checks the three fields and puts each error on its field (`FieldError`) before it sends `change-password`; turning multi-factor off asks first in a `ConfirmDialog`. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider and the password fields are disabled; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
+- **Security and access:** current, new and confirm password with live `PasswordRequirements` and its own Change password button, multi-factor and personal tokens. These act on their own and never ride the `SaveBar`: Change password checks the three fields and puts each error on its field (`FieldError`) before it sends `change-password`; turning multi-factor off asks first in a `ConfirmDialog`. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider in place of the password fields; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
 - **Notifications:** the notification email, the Application Security, Platform and Delivery, and Account Activity and AI Adoption digests (frequency and channel), and real-time alerts for watched resources, mentions, deployments and AI Copilot sessions.
 - **Preferences:** `ThemeSwitcher` and Keyboard shortcuts.
 
 ### G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
 
-Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
+Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes, pinned to the bottom of the page column so it never covers the last row. Save first checks the first and last name, the handle and the email: each error shows under its field (`FieldError`), the Profile tab opens and the first wrong field takes focus. After Discard or a save, focus goes back to the field you last edited. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
 
 ## Data
 
@@ -102,7 +102,7 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 ## Accessibility
 
 - `ContributionGraph` is a grid: arrow keys move by day and week, Enter picks a day, Escape clears it, and a live region reads the focused day.
-- The year rail is a `nav` with `aria-current` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
+- The year rail is a `nav` with `aria-pressed` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
 
 ## States
 
@@ -147,7 +147,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
   import SaveBar from '@aziontech/webkit/save-bar'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tabs from '@aziontech/webkit/tabs'
-  import { computed, ref, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
   import ProfileBioTab from './parts/profile-bio-tab.vue'
   import ProfileHeader from './parts/profile-header.vue'
@@ -173,6 +173,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
     UserProfileTab,
     UserProfileYearActivity
   } from './user-profile-model'
+  import { profileFieldErrors } from './user-profile-model'
 
   export interface UserProfileProps {
     /** Identity, contact and visibility data. Left out, the sample profile renders. */
@@ -242,6 +243,7 @@ Each variant is the same screen in another state: `get_block("account/account-us
   )
 
   function discard() {
+    saveTried.value = false
     profileForm.value = { ...props.profile }
     notificationForm.value = { ...props.notifications }
     preferencesForm.value = { ...props.preferences }
@@ -276,13 +278,56 @@ Each variant is the same screen in another state: `get_block("account/account-us
     { immediate: true }
   )
 
-  function save() {
+  const rootEl = ref<HTMLElement | null>(null)
+  const saveTried = ref(false)
+  const fieldErrors = computed(() => (saveTried.value ? profileFieldErrors(profileForm.value) : {}))
+
+  const panelLabel = ref<string | undefined>(undefined)
+  const lastFieldEl = ref<HTMLElement | null>(null)
+
+  watch(
+    [activeTab, () => props.loading, () => props.error],
+    async () => {
+      await nextTick()
+      panelLabel.value =
+        rootEl.value?.querySelector('[role="tab"][aria-selected="true"]')?.id || undefined
+    },
+    { immediate: true }
+  )
+
+  function onFocusin(event: FocusEvent) {
+    const target = event.target
+    if (target instanceof HTMLElement && !target.closest('[data-testid="save-bar"]'))
+      lastFieldEl.value = target
+  }
+
+  watch(dirty, async (isDirty) => {
+    if (isDirty) return
+    await nextTick()
+    const active = globalThis.document?.activeElement
+    if (lastFieldEl.value?.isConnected && (!active || active === globalThis.document.body))
+      lastFieldEl.value.focus()
+  })
+
+  async function save() {
+    if (Object.keys(profileFieldErrors(profileForm.value)).length) {
+      saveTried.value = true
+      activeTab.value = 'profile'
+      await nextTick()
+      rootEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
+      return
+    }
+    saveTried.value = false
     emit('save', snapshot())
   }
 </script>
 
 <template>
-  <div class="layout-column layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)">
+  <div
+    ref="rootEl"
+    class="layout-column layout-boundary flex min-h-full min-w-0 flex-col gap-(--layout-group-gap)"
+    @focusin="onFocusin"
+  >
     <Alert
       v-if="error && !loading"
       severity="danger"
@@ -320,44 +365,52 @@ Each variant is the same screen in another state: `get_block("account/account-us
         />
       </PageTabs>
 
-      <Skeleton
-        v-if="loading && activeTab !== 'overview'"
-        width="100%"
-        height="20rem"
-      />
-      <ProfileOverview
-        v-else-if="activeTab === 'overview'"
-        v-model:selected-year="selectedYear"
-        :years="years"
-        :loading="loading"
-      />
-      <ProfileBioTab
-        v-else-if="activeTab === 'profile'"
-        v-model:form="profileForm"
-        @upload-avatar="emit('upload-avatar', $event)"
-        @remove-avatar="emit('remove-avatar', $event)"
-      />
-      <ProfileSecurityTab
-        v-else-if="activeTab === 'security'"
-        v-model:form="securityForm"
-        :policy="securityPolicy"
-        @manage-tokens="emit('manage-tokens', $event)"
-        @change-password="(event, change) => emit('change-password', event, change)"
-        @mfa-change="emit('mfa-change', $event)"
-      />
-      <ProfileNotificationsTab
-        v-else-if="activeTab === 'notifications'"
-        v-model:form="notificationForm"
-        :emails="profile.alternateEmails"
-        @view-watched="emit('view-watched', $event)"
-      />
-      <ProfilePreferencesTab
-        v-else
-        v-model:form="preferencesForm"
-      />
+      <div
+        role="tabpanel"
+        :aria-labelledby="panelLabel"
+        class="flex min-w-0 flex-col"
+      >
+        <Skeleton
+          v-if="loading && activeTab !== 'overview'"
+          width="100%"
+          height="20rem"
+        />
+        <ProfileOverview
+          v-else-if="activeTab === 'overview'"
+          v-model:selected-year="selectedYear"
+          :years="years"
+          :loading="loading"
+        />
+        <ProfileBioTab
+          v-else-if="activeTab === 'profile'"
+          v-model:form="profileForm"
+          :errors="fieldErrors"
+          @upload-avatar="emit('upload-avatar', $event)"
+          @remove-avatar="emit('remove-avatar', $event)"
+        />
+        <ProfileSecurityTab
+          v-else-if="activeTab === 'security'"
+          v-model:form="securityForm"
+          :policy="securityPolicy"
+          @manage-tokens="emit('manage-tokens', $event)"
+          @change-password="(event, change) => emit('change-password', event, change)"
+          @mfa-change="emit('mfa-change', $event)"
+        />
+        <ProfileNotificationsTab
+          v-else-if="activeTab === 'notifications'"
+          v-model:form="notificationForm"
+          :emails="profile.alternateEmails"
+          @view-watched="emit('view-watched', $event)"
+        />
+        <ProfilePreferencesTab
+          v-else
+          v-model:form="preferencesForm"
+        />
+      </div>
 
       <SaveBar
         v-if="dirty"
+        class="mt-auto"
         v-on="preferencesForm.keyboardShortcuts ? { save } : {}"
       >
         You have unsaved changes.
@@ -443,7 +496,7 @@ export const sampleProfile: UserProfileData = {
   phoneDigits: '5550142',
   timezone: 'America/Los_Angeles',
   displayLocalTime: true,
-  language: 'en-US',
+  language: 'en',
   location: 'San Francisco, United States',
   memberSince: '2023',
   bio: 'Building the Acme storefront on Azion Applications and Functions.',
@@ -484,7 +537,7 @@ export const samplePreferences: UserProfilePreferences = {
   keyboardShortcuts: true
 }
 
-export const sampleYears: UserProfileYearActivity[] = [
+const sampleYearsSource: UserProfileYearActivity[] = [
   {
     year: 2026,
     totalContributions: 1482,
@@ -649,6 +702,26 @@ export const sampleYears: UserProfileYearActivity[] = [
     ]
   }
 ]
+
+function matchHistory(entry: UserProfileYearActivity): UserProfileYearActivity {
+  const history = entry.months.flatMap((month) => month.entries)
+  const newest = history.reduce((last, item) => (item.date > last ? item.date : last), '')
+  const end = entry.year === 2026 ? newest : `${entry.year}-12-31`
+  const byDate = new Map(
+    entry.items.filter((item) => item.date <= end).map((item) => [item.date, { ...item }])
+  )
+  for (const item of history) {
+    const day = byDate.get(item.date)
+    if (day) day.category = item.category
+    else byDate.set(item.date, { date: item.date, count: 3, category: item.category })
+  }
+  return {
+    ...entry,
+    items: [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date))
+  }
+}
+
+export const sampleYears: UserProfileYearActivity[] = sampleYearsSource.map(matchHistory)
 ```
 
 ## `user-profile-model.ts`
@@ -841,6 +914,24 @@ export interface UserProfileSecurityForm {
   confirmPassword: string
 }
 
+/** A field of the profile that must be filled in correctly before a save. */
+export type UserProfileCheckedField = 'firstName' | 'lastName' | 'handle' | 'email'
+
+/** The error shown under each profile field that blocks a save. */
+export type UserProfileFieldErrors = Partial<Record<UserProfileCheckedField, string>>
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export function profileFieldErrors(profile: UserProfileData): UserProfileFieldErrors {
+  const errors: UserProfileFieldErrors = {}
+  if (!profile.firstName.trim()) errors.firstName = 'Enter your first name.'
+  if (!profile.lastName.trim()) errors.lastName = 'Enter your last name.'
+  if (!profile.handle.trim()) errors.handle = 'Enter a handle.'
+  if (!EMAIL_PATTERN.test(profile.email.trim()))
+    errors.email = 'Enter an email address like jane.doe@example.com.'
+  return errors
+}
+
 /** Everything the save event hands back. */
 export interface UserProfileSavePayload {
   /** The edited profile. */
@@ -875,10 +966,10 @@ export const CATEGORY_OPTIONS: UserProfileOption<'all' | UserProfileContribution
 ]
 
 export const TIMEZONE_OPTIONS: UserProfileOption[] = [
-  { label: '(UTC -08:00) America/Los_Angeles', value: 'America/Los_Angeles' },
-  { label: '(UTC -05:00) America/New_York', value: 'America/New_York' },
-  { label: '(UTC +00:00) UTC', value: 'UTC' },
-  { label: '(UTC +01:00) Europe/Berlin', value: 'Europe/Berlin' }
+  { label: 'Pacific Time (Los Angeles)', value: 'America/Los_Angeles' },
+  { label: 'Eastern Time (New York)', value: 'America/New_York' },
+  { label: 'Coordinated Universal Time (UTC)', value: 'UTC' },
+  { label: 'Central European Time (Berlin)', value: 'Europe/Berlin' }
 ]
 
 export const CADENCE_OPTIONS: UserProfileOption<UserProfileDigestCadence>[] = [
@@ -1069,7 +1160,7 @@ export function filterHistory(
   import Timeline from '@aziontech/webkit/timeline'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
   import {
     CATEGORY_OPTIONS,
@@ -1114,6 +1205,21 @@ export function filterHistory(
 
   watch(selectedYear, () => {
     selectedDate.value = null
+  })
+
+  const graphEl = ref<HTMLElement | null>(null)
+
+  async function showAllDays() {
+    selectedDate.value = null
+    await nextTick()
+    graphEl.value?.querySelector<HTMLElement>('[role="gridcell"][tabindex="0"]')?.focus()
+  }
+
+  const emptyTitle = computed(() => {
+    if (!filtered.value) return 'No contributions yet'
+    if (selectedDate.value && category.value === 'all')
+      return `Nothing in the history on ${formatDay(selectedDate.value)}`
+    return 'Nothing matches these filters'
   })
 
   function resetFilters() {
@@ -1178,7 +1284,10 @@ export function filterHistory(
         </div>
 
         <div class="flex flex-col gap-(--spacing-md) lg:flex-row lg:items-start">
-          <div class="min-w-0 flex-1">
+          <div
+            ref="graphEl"
+            class="min-w-0"
+          >
             <ContributionGraph
               v-model:selected-date="selectedDate"
               :items="graphItems"
@@ -1221,16 +1330,16 @@ export function filterHistory(
             label="Show all days"
             variant="ghost"
             size="small"
-            @click="selectedDate = null"
+            @click="showAllDays"
           />
         </div>
 
         <EmptyState
           v-if="!loading && history.length === 0"
-          :title="filtered ? 'Nothing matches these filters' : 'No contributions yet'"
+          :title="emptyTitle"
           :description="
             filtered
-              ? 'Pick another day or category, or show everything again.'
+              ? 'The history keeps the larger changes of each month. Pick another day or category, or show everything again.'
               : 'Deploys, Functions and firewall changes you make show up here.'
           "
           icon="az az-history"
@@ -1283,6 +1392,7 @@ export function filterHistory(
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import LanguageSelect from '@aziontech/webkit/language-select'
@@ -1291,12 +1401,30 @@ export function filterHistory(
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
-  import { computed } from 'vue'
+  import { computed, useId } from 'vue'
 
-  import { TIMEZONE_OPTIONS, type UserProfileData } from '../user-profile-model'
+  import {
+    TIMEZONE_OPTIONS,
+    type UserProfileData,
+    type UserProfileFieldErrors
+  } from '../user-profile-model'
   import ProfileSelect from './profile-select.vue'
 
+  export interface ProfileBioTabProps {
+    /** The error under each field that blocks a save. */
+    errors: UserProfileFieldErrors
+  }
+
+  defineProps<ProfileBioTabProps>()
+
   const form = defineModel<UserProfileData>('form', { required: true })
+
+  const errorIds = {
+    firstName: useId(),
+    lastName: useId(),
+    handle: useId(),
+    email: useId()
+  }
 
   const emit = defineEmits<{
     'upload-avatar': [event: MouseEvent]
@@ -1344,33 +1472,60 @@ export function filterHistory(
             </div>
           </SettingsRow>
           <SettingsRow title="First name">
-            <Input
-              v-model="form.firstName"
-              size="large"
-              class="w-full"
-              aria-label="First name"
-              autocomplete="given-name"
-            />
+            <div class="flex w-full flex-col gap-(--spacing-2xs)">
+              <Input
+                v-model="form.firstName"
+                :invalid="Boolean(errors.firstName)"
+                :aria-describedby="errors.firstName ? errorIds.firstName : undefined"
+                size="large"
+                class="w-full"
+                aria-label="First name"
+                autocomplete="given-name"
+              />
+              <FieldError
+                v-if="errors.firstName"
+                :id="errorIds.firstName"
+                >{{ errors.firstName }}</FieldError
+              >
+            </div>
           </SettingsRow>
           <SettingsRow title="Last name">
-            <Input
-              v-model="form.lastName"
-              size="large"
-              class="w-full"
-              aria-label="Last name"
-              autocomplete="family-name"
-            />
+            <div class="flex w-full flex-col gap-(--spacing-2xs)">
+              <Input
+                v-model="form.lastName"
+                :invalid="Boolean(errors.lastName)"
+                :aria-describedby="errors.lastName ? errorIds.lastName : undefined"
+                size="large"
+                class="w-full"
+                aria-label="Last name"
+                autocomplete="family-name"
+              />
+              <FieldError
+                v-if="errors.lastName"
+                :id="errorIds.lastName"
+                >{{ errors.lastName }}</FieldError
+              >
+            </div>
           </SettingsRow>
           <SettingsRow
             title="Handle"
             description="Used for mentions and in your profile link."
           >
-            <Input
-              v-model="form.handle"
-              size="large"
-              class="w-full"
-              aria-label="Handle"
-            />
+            <div class="flex w-full flex-col gap-(--spacing-2xs)">
+              <Input
+                v-model="form.handle"
+                :invalid="Boolean(errors.handle)"
+                :aria-describedby="errors.handle ? errorIds.handle : undefined"
+                size="large"
+                class="w-full"
+                aria-label="Handle"
+              />
+              <FieldError
+                v-if="errors.handle"
+                :id="errorIds.handle"
+                >{{ errors.handle }}</FieldError
+              >
+            </div>
           </SettingsRow>
           <SettingsRow
             title="Bio"
@@ -1429,14 +1584,23 @@ export function filterHistory(
             title="Email"
             description="For account recovery and notifications."
           >
-            <Input
-              v-model="form.email"
-              type="email"
-              size="large"
-              class="w-full"
-              aria-label="Email"
-              autocomplete="email"
-            />
+            <div class="flex w-full flex-col gap-(--spacing-2xs)">
+              <Input
+                v-model="form.email"
+                type="email"
+                :invalid="Boolean(errors.email)"
+                :aria-describedby="errors.email ? errorIds.email : undefined"
+                size="large"
+                class="w-full"
+                aria-label="Email"
+                autocomplete="email"
+              />
+              <FieldError
+                v-if="errors.email"
+                :id="errorIds.email"
+                >{{ errors.email }}</FieldError
+              >
+            </div>
           </SettingsRow>
           <SettingsRow
             title="Phone number"
@@ -1445,6 +1609,7 @@ export function filterHistory(
             <PhoneInput
               v-model="form.phoneDigits"
               v-model:country="form.phoneCountry"
+              size="large"
               aria-label="Phone number"
             />
           </SettingsRow>
@@ -1614,7 +1779,10 @@ export function filterHistory(
           :title="`Managed by ${policy.ssoProvider}`"
           label="Your password is set and reset in your organization's identity provider (SSO and SCIM), so it can't be changed here."
         />
-        <Card :padded="false">
+        <Card
+          v-if="!policy.ssoManaged"
+          :padded="false"
+        >
           <Item.List>
             <SettingsRow title="Current password">
               <div class="flex w-full flex-col gap-(--spacing-2xs)">

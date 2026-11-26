@@ -30,7 +30,7 @@ Five tiles for the selected year: Contributions (with the change against last ye
 
 ### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup`, `Button` (required)
 
-A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history. Days are squares; there is no shape switch. The year rail (one `Button` per year, `aria-current` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
+A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) filters the graph and the history. Days are squares; there is no shape switch. The year rail (one `Button` per year, `aria-pressed` on the shown one) changes the year of the metrics, the graph and the history. Picking a day filters the history to it.
 
 ### E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
 
@@ -41,13 +41,13 @@ The year's contributions grouped by month in a `Timeline`, newest first. With a 
 Each tab is `SettingsGroup`s over flush `Card`s of `SettingsRow`s in an `Item.List`.
 
 - **Profile and bio:** picture, names, handle, bio, time zone, local time, language, email, phone, website, and two visibility switches.
-- **Security and access:** current, new and confirm password with live `PasswordRequirements` and its own Change password button, multi-factor and personal tokens. These act on their own and never ride the `SaveBar`: Change password checks the three fields and puts each error on its field (`FieldError`) before it sends `change-password`; turning multi-factor off asks first in a `ConfirmDialog`. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider and the password fields are disabled; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
+- **Security and access:** current, new and confirm password with live `PasswordRequirements` and its own Change password button, multi-factor and personal tokens. These act on their own and never ride the `SaveBar`: Change password checks the three fields and puts each error on its field (`FieldError`) before it sends `change-password`; turning multi-factor off asks first in a `ConfirmDialog`. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider in place of the password fields; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
 - **Notifications:** the notification email, the Application Security, Platform and Delivery, and Account Activity and AI Adoption digests (frequency and channel), and real-time alerts for watched resources, mentions, deployments and AI Copilot sessions.
 - **Preferences:** `ThemeSwitcher` and Keyboard shortcuts.
 
 ### G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
 
-Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
+Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes, pinned to the bottom of the page column so it never covers the last row. Save first checks the first and last name, the handle and the email: each error shows under its field (`FieldError`), the Profile tab opens and the first wrong field takes focus. After Discard or a save, focus goes back to the field you last edited. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
 
 ## Data
 
@@ -89,7 +89,7 @@ Events: `save` (profile, notifications and preferences), `change-password` (`eve
 ## Accessibility
 
 - `ContributionGraph` is a grid: arrow keys move by day and week, Enter picks a day, Escape clears it, and a live region reads the focused day.
-- The year rail is a `nav` with `aria-current` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
+- The year rail is a `nav` with `aria-pressed` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
 
 ## States
 

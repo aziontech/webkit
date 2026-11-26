@@ -2977,3 +2977,5 @@ Budget-raise: config-provider 14.6 KB → 14.75 KB (measured 14.66 KB): the Cont
 Budget-raise: locales-pt-BR 13.05 KB → 13.2 KB (measured 13.14 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs.
 
 Budget-raise: locales-es 13.15 KB → 13.35 KB (measured 13.26 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs.
+
+Budget-raise: contribution-graph 7.2 KB → 7.45 KB (measured 7.39 KB): the profile audit fixes. Touch screens get 20 px cells through one size variable, the strip scrolls to the latest weeks, the weekday names stay outside the scroller, the selected day has its own outline, a hidden status text speaks while loading, and the levels scale by the shown period.

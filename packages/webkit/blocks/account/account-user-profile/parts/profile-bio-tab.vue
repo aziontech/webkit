@@ -2,6 +2,7 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import LanguageSelect from '@aziontech/webkit/language-select'
@@ -10,12 +11,30 @@
   import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
-  import { computed } from 'vue'
+  import { computed, useId } from 'vue'
 
-  import { TIMEZONE_OPTIONS, type UserProfileData } from '../user-profile-model'
+  import {
+    TIMEZONE_OPTIONS,
+    type UserProfileData,
+    type UserProfileFieldErrors
+  } from '../user-profile-model'
   import ProfileSelect from './profile-select.vue'
 
+  export interface ProfileBioTabProps {
+    /** The error under each field that blocks a save. */
+    errors: UserProfileFieldErrors
+  }
+
+  defineProps<ProfileBioTabProps>()
+
   const form = defineModel<UserProfileData>('form', { required: true })
+
+  const errorIds = {
+    firstName: useId(),
+    lastName: useId(),
+    handle: useId(),
+    email: useId()
+  }
 
   const emit = defineEmits<{
     'upload-avatar': [event: MouseEvent]
@@ -63,33 +82,60 @@
             </div>
           </SettingsRow>
           <SettingsRow title="First name">
-            <Input
-              v-model="form.firstName"
-              size="large"
-              class="w-full"
-              aria-label="First name"
-              autocomplete="given-name"
-            />
+            <div class="flex w-full flex-col gap-(--spacing-2xs)">
+              <Input
+                v-model="form.firstName"
+                :invalid="Boolean(errors.firstName)"
+                :aria-describedby="errors.firstName ? errorIds.firstName : undefined"
+                size="large"
+                class="w-full"
+                aria-label="First name"
+                autocomplete="given-name"
+              />
+              <FieldError
+                v-if="errors.firstName"
+                :id="errorIds.firstName"
+                >{{ errors.firstName }}</FieldError
+              >
+            </div>
           </SettingsRow>
           <SettingsRow title="Last name">
-            <Input
-              v-model="form.lastName"
-              size="large"
-              class="w-full"
-              aria-label="Last name"
-              autocomplete="family-name"
-            />
+            <div class="flex w-full flex-col gap-(--spacing-2xs)">
+              <Input
+                v-model="form.lastName"
+                :invalid="Boolean(errors.lastName)"
+                :aria-describedby="errors.lastName ? errorIds.lastName : undefined"
+                size="large"
+                class="w-full"
+                aria-label="Last name"
+                autocomplete="family-name"
+              />
+              <FieldError
+                v-if="errors.lastName"
+                :id="errorIds.lastName"
+                >{{ errors.lastName }}</FieldError
+              >
+            </div>
           </SettingsRow>
           <SettingsRow
             title="Handle"
             description="Used for mentions and in your profile link."
           >
-            <Input
-              v-model="form.handle"
-              size="large"
-              class="w-full"
-              aria-label="Handle"
-            />
+            <div class="flex w-full flex-col gap-(--spacing-2xs)">
+              <Input
+                v-model="form.handle"
+                :invalid="Boolean(errors.handle)"
+                :aria-describedby="errors.handle ? errorIds.handle : undefined"
+                size="large"
+                class="w-full"
+                aria-label="Handle"
+              />
+              <FieldError
+                v-if="errors.handle"
+                :id="errorIds.handle"
+                >{{ errors.handle }}</FieldError
+              >
+            </div>
           </SettingsRow>
           <SettingsRow
             title="Bio"
@@ -148,14 +194,23 @@
             title="Email"
             description="For account recovery and notifications."
           >
-            <Input
-              v-model="form.email"
-              type="email"
-              size="large"
-              class="w-full"
-              aria-label="Email"
-              autocomplete="email"
-            />
+            <div class="flex w-full flex-col gap-(--spacing-2xs)">
+              <Input
+                v-model="form.email"
+                type="email"
+                :invalid="Boolean(errors.email)"
+                :aria-describedby="errors.email ? errorIds.email : undefined"
+                size="large"
+                class="w-full"
+                aria-label="Email"
+                autocomplete="email"
+              />
+              <FieldError
+                v-if="errors.email"
+                :id="errorIds.email"
+                >{{ errors.email }}</FieldError
+              >
+            </div>
           </SettingsRow>
           <SettingsRow
             title="Phone number"
@@ -164,6 +219,7 @@
             <PhoneInput
               v-model="form.phoneDigits"
               v-model:country="form.phoneCountry"
+              size="large"
               aria-label="Phone number"
             />
           </SettingsRow>

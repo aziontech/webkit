@@ -185,6 +185,24 @@ export interface UserProfileSecurityForm {
   confirmPassword: string
 }
 
+/** A field of the profile that must be filled in correctly before a save. */
+export type UserProfileCheckedField = 'firstName' | 'lastName' | 'handle' | 'email'
+
+/** The error shown under each profile field that blocks a save. */
+export type UserProfileFieldErrors = Partial<Record<UserProfileCheckedField, string>>
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export function profileFieldErrors(profile: UserProfileData): UserProfileFieldErrors {
+  const errors: UserProfileFieldErrors = {}
+  if (!profile.firstName.trim()) errors.firstName = 'Enter your first name.'
+  if (!profile.lastName.trim()) errors.lastName = 'Enter your last name.'
+  if (!profile.handle.trim()) errors.handle = 'Enter a handle.'
+  if (!EMAIL_PATTERN.test(profile.email.trim()))
+    errors.email = 'Enter an email address like jane.doe@example.com.'
+  return errors
+}
+
 /** Everything the save event hands back. */
 export interface UserProfileSavePayload {
   /** The edited profile. */
@@ -219,10 +237,10 @@ export const CATEGORY_OPTIONS: UserProfileOption<'all' | UserProfileContribution
 ]
 
 export const TIMEZONE_OPTIONS: UserProfileOption[] = [
-  { label: '(UTC -08:00) America/Los_Angeles', value: 'America/Los_Angeles' },
-  { label: '(UTC -05:00) America/New_York', value: 'America/New_York' },
-  { label: '(UTC +00:00) UTC', value: 'UTC' },
-  { label: '(UTC +01:00) Europe/Berlin', value: 'Europe/Berlin' }
+  { label: 'Pacific Time (Los Angeles)', value: 'America/Los_Angeles' },
+  { label: 'Eastern Time (New York)', value: 'America/New_York' },
+  { label: 'Coordinated Universal Time (UTC)', value: 'UTC' },
+  { label: 'Central European Time (Berlin)', value: 'Europe/Berlin' }
 ]
 
 export const CADENCE_OPTIONS: UserProfileOption<UserProfileDigestCadence>[] = [

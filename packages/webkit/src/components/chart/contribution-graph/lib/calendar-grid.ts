@@ -127,12 +127,27 @@ function indexItems(
   return { byDate, maxCount }
 }
 
-function startsMonth(day: ContributionGraphDay, months: ContributionGraphMonth[]): boolean {
-  if (!day.inRange || (day.dayOfWeek !== 0 && day.utcDate.getUTCDate() !== 1)) return false
-  const key = `${day.utcDate.getUTCFullYear()}-${day.utcDate.getUTCMonth()}`
+function monthKey(date: Date): string {
+  return `${date.getUTCFullYear()}-${date.getUTCMonth()}`
+}
+
+function placeMonth(
+  day: ContributionGraphDay,
+  months: ContributionGraphMonth[],
+  firstInRange: boolean
+): void {
+  if (!day.inRange || (!firstInRange && day.utcDate.getUTCDate() !== 1)) return
+  const month: ContributionGraphMonth = {
+    key: monthKey(day.utcDate),
+    weekIndex: day.weekIndex,
+    utcDate: new Date(Date.UTC(day.utcDate.getUTCFullYear(), day.utcDate.getUTCMonth(), 1))
+  }
   const last = months[months.length - 1]
-  if (last?.key === key) return false
-  return !last || day.weekIndex - last.weekIndex >= 3
+  if (last && month.weekIndex - last.weekIndex < 3) {
+    if (months.length !== 1) return
+    months.pop()
+  }
+  months.push(month)
 }
 
 export function buildCalendarGrid(
@@ -151,6 +166,7 @@ export function buildCalendarGrid(
 
   const days: ContributionGraphDay[] = []
   const months: ContributionGraphMonth[] = []
+  let seenInRange = false
 
   for (let ms = gridStart, idx = 0; ms <= gridEnd; ms += DAY_MS, idx += 1) {
     const utcDate = new Date(ms)
@@ -167,13 +183,8 @@ export function buildCalendarGrid(
       dayOfWeek: idx % 7,
       inRange
     }
-    if (startsMonth(day, months)) {
-      months.push({
-        key: `${utcDate.getUTCFullYear()}-${utcDate.getUTCMonth()}`,
-        weekIndex: day.weekIndex,
-        utcDate: new Date(Date.UTC(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), 1))
-      })
-    }
+    placeMonth(day, months, inRange && !seenInRange)
+    if (inRange) seenInRange = true
     days.push(day)
   }
 

@@ -6,6 +6,7 @@ import { nextTick } from 'vue'
 import DefaultExample from '../../../../examples/contribution-graph/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ContributionGraph, { type ContributionGraphItem } from './contribution-graph.vue'
+import { buildCalendarGrid } from './lib/calendar-grid'
 
 const sampleItems: ContributionGraphItem[] = [
   { date: '2026-01-05', count: 2, level: 1 },
@@ -192,6 +193,35 @@ describe('ContributionGraph', () => {
     await fireEvent.focusOut(day, { relatedTarget: document.body })
     await nextTick()
     expect(readout.textContent).toContain('Select a day')
+  })
+
+  it('puts each month label on the week of its 1st in a rolling window', () => {
+    const grid = buildCalendarGrid([{ date: '2026-11-26', count: 1 }], undefined, '2026-11-26')
+    const first = grid.months[0]!
+    expect(first.utcDate.toISOString().slice(0, 10)).toBe('2025-12-01')
+    for (const month of grid.months) {
+      const firstDay = grid.days.find(
+        (day) => day.date === month.utcDate.toISOString().slice(0, 10)
+      )!
+      expect(firstDay.weekIndex).toBe(month.weekIndex)
+    }
+    expect(grid.months.map((month) => month.utcDate.getUTCMonth())).toEqual([
+      11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    ])
+  })
+
+  it('says it is loading to assistive tech', () => {
+    const view = mount({ loading: true })
+    expect(view.getByRole('status').textContent).toContain('Loading contributions')
+  })
+
+  it('keeps the focused day in the readout when Escape clears the selection', async () => {
+    const view = mount({ selectedDate: '2026-06-15' })
+    const day = cellOn(view, '2026-06-15')
+    day.focus()
+    await userEvent.keyboard('{Escape}')
+    expect(view.emitted<unknown[]>('update:selectedDate')!.at(-1)).toEqual([null])
+    expect(view.getByTestId('contribution-graph__readout').textContent).toContain('8 contributions')
   })
 
   it('passes axe accessibility checks in LTR and RTL', async () => {

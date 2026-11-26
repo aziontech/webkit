@@ -9,7 +9,7 @@
   import Timeline from '@aziontech/webkit/timeline'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
   import {
     CATEGORY_OPTIONS,
@@ -54,6 +54,21 @@
 
   watch(selectedYear, () => {
     selectedDate.value = null
+  })
+
+  const graphEl = ref<HTMLElement | null>(null)
+
+  async function showAllDays() {
+    selectedDate.value = null
+    await nextTick()
+    graphEl.value?.querySelector<HTMLElement>('[role="gridcell"][tabindex="0"]')?.focus()
+  }
+
+  const emptyTitle = computed(() => {
+    if (!filtered.value) return 'No contributions yet'
+    if (selectedDate.value && category.value === 'all')
+      return `Nothing in the history on ${formatDay(selectedDate.value)}`
+    return 'Nothing matches these filters'
   })
 
   function resetFilters() {
@@ -118,7 +133,10 @@
         </div>
 
         <div class="flex flex-col gap-(--spacing-md) lg:flex-row lg:items-start">
-          <div class="min-w-0 flex-1">
+          <div
+            ref="graphEl"
+            class="min-w-0"
+          >
             <ContributionGraph
               v-model:selected-date="selectedDate"
               :items="graphItems"
@@ -161,16 +179,16 @@
             label="Show all days"
             variant="ghost"
             size="small"
-            @click="selectedDate = null"
+            @click="showAllDays"
           />
         </div>
 
         <EmptyState
           v-if="!loading && history.length === 0"
-          :title="filtered ? 'Nothing matches these filters' : 'No contributions yet'"
+          :title="emptyTitle"
           :description="
             filtered
-              ? 'Pick another day or category, or show everything again.'
+              ? 'The history keeps the larger changes of each month. Pick another day or category, or show everything again.'
               : 'Deploys, Functions and firewall changes you make show up here.'
           "
           icon="az az-history"

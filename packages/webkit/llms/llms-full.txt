@@ -3377,7 +3377,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-use
 ## Accessibility
 
 - `ContributionGraph` is a grid: arrow keys move by day and week, Enter picks a day, Escape clears it, and a live region reads the focused day.
-- The year rail is a `nav` with `aria-current` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
+- The year rail is a `nav` with `aria-pressed` on the shown year; every control in a `SettingsRow` carries an accessible name that matches its row.
 
 ## States
 
@@ -16573,6 +16573,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Pass `year` (e.g. `2026`) when showing a calendar year paired with a year-over-year selector; omit `year` to render the rolling 52 weeks ending at `endDate` (or the latest item date).
 - Bind `v-model:selected-date` to filter a sibling `Timeline` or list to that day, and provide a visible clear control when a date is selected.
 - Always supply `ariaLabel` naming the subject and period (e.g. `"Platform contributions in 2026"`).
+- Don't use it to compare amounts precisely; five intensity steps show a pattern, so put the exact numbers in a table or `StatTile`s next to it.
+- Don't place it on a `Texture`; it carries `data-plain-ground`.
 
 ## Don’t
 
@@ -16622,9 +16624,9 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 ## Accessibility
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on each focusable cell (roving `tabindex`).
+- Visible focus: a 2 px focus ring in the ring color, offset from the cell (roving `tabindex`). The selected day has its own mark, a 2 px inset outline in the default text color, so focus and selection never look the same.
 - Keyboard map: `Tab` focuses the active/selected cell in the grid; `ArrowUp` / `ArrowDown` moves by 1 day; `ArrowRight` / `ArrowLeft` moves by 1 week (mirrored under `dir="rtl"` via `logicalArrowKey`); `Home` / `End` jumps to the first/last day; `Enter` / `Space` toggles selection of the focused day; `Escape` clears `selectedDate`.
-- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces the selected day (a focused cell already reads its own name, so focus and hover are not announced again); the grid is named by `ariaLabel`, else the locale's `Contributions`; `role="alert"` on error; `aria-busy="true"` while loading.
+- ARIA: `role="grid"` with `aria-label` on the calendar grid, one `role="row"` per weekday, and each day a focusable `button` with `role="gridcell"`, a full localized `aria-label` (`"14 contributions on Oct 12, 2026"`) and `aria-selected` for selection; the padding days before the first and after the last day of the period are inert `aria-hidden` spacers, never cells; polite `aria-live` region announces the selected day (a focused cell already reads its own name, so focus and hover are not announced again); the grid is named by `ariaLabel`, else the locale's `Contributions`; `role="alert"` on error; `aria-busy="true"` and a hidden `role="status"` text (`Loading contributions`) while loading; the empty state is read once, by its own text.
 - Contrast: all intensity steps use `--chart-sequential-*` tokens and `forced-color-adjust-none` so cells remain distinguishable in light, dark, and forced-colors modes.
 - `motion-reduce:transition-none` on cell transitions.
 
