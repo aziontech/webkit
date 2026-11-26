@@ -334,7 +334,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Footer](components/footer.md): Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`.
 - [Module](components/module.md): The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another.
 - [ModuleHeader](components/module-header.md): The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the…
-- [PageHeader](components/page-header.md): The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right.
+- [PageHeader](components/page-header.md): The heading that opens a console page: an h1 in the console type set: 16px medium on a top-level page, 14px semibold on a deeper page (one with `breadcrumbs`, or `size="small"`), a one-line description, and the action…
 - [RegistrationFrame](components/registration-frame.md): The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content.
 - [Resizable](components/resizable.md): A group of adjacent regions whose shared edges the reader can drag.
 - [SaveBar](components/save-bar.md): The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions.

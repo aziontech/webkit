@@ -187,6 +187,7 @@ export const tokenPurpose = {
   'text-title-lg': 'The title of a dialog or drawer, medium weight.',
   'text-title-md': 'The title of a side panel, medium weight, a flat 16px.',
   'text-title-sm': 'The title of a popover, card, alert or toast, medium weight.',
+  'text-title-nested': 'The page title of a deeper console page (detail, settings, create step): 14px, semibold.',
   'text-label-lg': 'A large label of compact interface text.',
   'text-label-md': 'Labels and compact interface text.',
   'text-label-sm': 'Small labels and metadata.',

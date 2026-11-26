@@ -1165,7 +1165,7 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
       <Card class="w-full">
         <template #header>
           <div class="flex w-full min-w-0 items-center justify-between gap-(--spacing-md)">
-            <h2 class="text-heading-xs text-(--text-default)">Subscription plan</h2>
+            <h2 class="text-title-sm text-(--text-default)">Subscription plan</h2>
             <Button
               label="Change plan"
               variant="outline"
@@ -1236,7 +1236,7 @@ export const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
     <div class="@container/plan flex min-w-0 flex-1">
       <Card class="w-full">
         <template #header>
-          <h2 class="text-heading-xs text-(--text-default)">Upgrade to Enterprise</h2>
+          <h2 class="text-title-sm text-(--text-default)">Upgrade to Enterprise</h2>
         </template>
         <template #default>
           <div class="flex min-w-0 flex-col gap-(--spacing-lg)">

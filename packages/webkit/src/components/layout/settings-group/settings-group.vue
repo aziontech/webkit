@@ -143,7 +143,7 @@
       <h2
         :id="anchor || undefined"
         :data-testid="`${testId}__label`"
-        class="scroll-mt-(--spacing-xl) text-balance text-heading-2xs text-(--text-default)"
+        class="scroll-mt-(--spacing-xl) text-balance text-title-sm text-(--text-default)"
       >
         <button
           v-if="collapsible"

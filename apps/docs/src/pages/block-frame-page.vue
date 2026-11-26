@@ -33,6 +33,9 @@
   })
 
   useHead({
+    htmlAttrs: {
+      'data-type-set': computed(() => (block.value?.surface === 'app' ? 'console' : undefined))
+    },
     title: computed(() =>
       block.value && state.value ? `${block.value.title}: ${state.value.name} — WebKit` : 'WebKit'
     )

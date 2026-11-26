@@ -78,7 +78,7 @@
           <header
             class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-2xs)"
           >
-            <h1 class="text-balance text-heading-lg text-(--text-default)">{{ title }}</h1>
+            <h1 class="text-balance text-title-md text-(--text-default)">{{ title }}</h1>
             <p
               class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
             >

@@ -299,7 +299,7 @@
       >
         <h2
           :id="kpisHeadingId"
-          class="text-heading-xs text-(--text-default)"
+          class="text-title-sm text-(--text-default)"
         >
           This month
         </h2>

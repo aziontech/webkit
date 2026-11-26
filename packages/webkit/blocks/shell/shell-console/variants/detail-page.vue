@@ -39,7 +39,7 @@
           />
         </Tooltip>
       </div>
-      <h1 class="min-w-0 truncate text-heading-xs text-(--text-default)">azion-site</h1>
+      <h1 class="min-w-0 truncate text-title-nested text-(--text-default)">azion-site</h1>
     </div>
 
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">

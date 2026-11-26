@@ -67,6 +67,7 @@ Reference: `packages/webkit/src/components/action/button/button.vue`.
 | `text-heading-3xl` … `text-heading-sm`                             | Headings                                                                                                                                                                                                                           |
 | `text-heading-xs` / `text-heading-2xs`                             | Small headings — a flat 16px / 14px, no responsive ladder (a card's title, a wordmark written in type)                                                                                                                             |
 | `text-title-lg` / `text-title-md` / `text-title-sm`                | Titles of a contained surface, medium weight (500): a dialog or drawer (lg, the heading-sm ladder), a side panel (md, 16px), a popover, card, alert or toast (sm, 14px). Page and section headings stay `text-heading-*`, regular. |
+| `text-title-nested`                                                | The page title of a deeper console page (detail, settings tab, create step): 14px semibold (600). `PageHeader` picks it when the page has breadcrumbs. Console type set only (CT-1)                                                |
 | `text-body-lg` … `text-body-2xs`                                   | Body copy                                                                                                                                                                                                                          |
 | `text-body-prose-md`                                               | Long-form prose — body copy at `--leading-relaxed` (1.625); the `text-body-*` set is `snug` (1.375)                                                                                                                                |
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                                                                                                                                                                                                            |
@@ -77,6 +78,19 @@ Reference: `packages/webkit/src/components/action/button/button.vue`.
 | `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in)                                                                                                                                                                                           |
 | `text-button-lg` / `text-button-md`                                | Button labels                                                                                                                                                                                                                      |
 | `text-link`                                                        | A link inside body/heading copy, rendered by `Link inline` (inherits parent size; quiet underline at rest, full underline on hover)                                                                                                |
+
+### Console type set (CT-1)
+
+The console (`ConsoleLayout`, blocks with `surface: app`, the demos app) uses its own set: no heading above 16px. The docs site and the marketing site keep the sizes above.
+
+| Role                                   | Top-level page (list, dashboard, home)        | Deeper page (detail, settings tab, create step) |
+| -------------------------------------- | --------------------------------------------- | ----------------------------------------------- |
+| Page title (h1)                        | `text-title-md` 16 / 500                      | `text-title-nested` 14 / 600                    |
+| Dialog or drawer title                 | `text-title-md` 16 / 500                      | `text-title-md` 16 / 500                        |
+| Section band (h2), card or group title | `text-title-sm` 14 / 500                      | `text-title-sm` 14 / 500                        |
+| Item title                             | `text-heading-2xs` / `text-label-md` 14 / 400 | same                                            |
+
+Data values (stat numbers, amounts, the device code) are data, not headings, and keep their own steps. A shared component that also renders on the site (`EmptyState`, `Dialog.Title`, `Drawer.Title`) switches with `in-data-[type-set=console]:`; the console sets `data-type-set="console"` on `ConsoleLayout` and on `<html>`, because overlays teleport to `body`.
 
 These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do not duplicate breakpoint logic in components.
 

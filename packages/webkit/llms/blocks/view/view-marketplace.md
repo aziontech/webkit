@@ -1527,7 +1527,7 @@ export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'ap
     { id: 'update', header: '', minWidth: 120, hideable: false }
   ]
 
-  const HEADING_CLASS = 'm-0 text-heading-xs text-(--text-default)'
+  const HEADING_CLASS = 'm-0 text-title-sm text-(--text-default)'
   const TEXT_CLASS = 'm-0 text-body-sm text-(--text-default)'
   const CODE_CLASS = 'text-label-code-sm text-(--text-default)'
 

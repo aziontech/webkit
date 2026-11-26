@@ -137,6 +137,13 @@ export const typography = {
     fontWeight: fontWeight.medium,
     letterSpacing: tracking.normal
   },
+  'text-title-nested': {
+    textWrapStyle: 'balance',
+    fontSize: fontSize.sm,
+    lineHeight: leading.snug,
+    fontWeight: fontWeight.semibold,
+    letterSpacing: tracking.normal
+  },
   'text-label-lg': {
     fontSize: fontSize.base,
     lineHeight: leading.normal,

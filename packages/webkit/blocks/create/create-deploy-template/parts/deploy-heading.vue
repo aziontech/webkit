@@ -9,7 +9,7 @@
 
 <template>
   <div class="flex flex-col gap-(--spacing-2xs)">
-    <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
+    <h2 class="text-title-sm text-(--text-default)">Deploy your project</h2>
     <p
       v-if="once"
       class="text-body-sm text-pretty text-(--text-muted)"

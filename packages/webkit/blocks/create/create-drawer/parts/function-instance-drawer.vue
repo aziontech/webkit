@@ -156,7 +156,7 @@
 <template>
   <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
     <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-      <h2 class="m-0 text-heading-sm text-(--text-default)">Function instances</h2>
+      <h2 class="m-0 text-title-sm text-(--text-default)">Function instances</h2>
       <Button
         type="button"
         label="Add Function Instance"

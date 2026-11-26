@@ -50,7 +50,7 @@
           <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
             <h2
               id="ev-origin-heading"
-              class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"
+              class="scroll-mt-(--spacing-xl) text-balance text-title-sm text-(--text-default)"
             >
               Origin
             </h2>

@@ -20,7 +20,7 @@
     <div class="flex items-center gap-(--spacing-xs)">
       <h2
         id="summary-metrics"
-        class="text-heading-xs text-(--text-default)"
+        class="text-title-sm text-(--text-default)"
       >
         Metrics
       </h2>

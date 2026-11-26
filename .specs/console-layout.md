@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 15
 template: 2
-checksum: 5e0951ce0fca93ea75823a75fde1a64d184188922f4c59b9746a23674fd0313f
+checksum: f209ef525a5bc17216db48b25385cab45fccffe6f20f3f72740a17760adbb07e
 created: 2026-11-12
 last_updated: 2026-11-25
 ---
@@ -217,6 +217,7 @@ packages/webkit/src/components/layout/console-layout/
 
 - Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the brand joins the breadcrumbs, which hide only below a 28rem header (`@max-md`); when the page trail has control crumbs, they take the brand's place as a trail of their own, `__page-control`, and the brand stays in the navigation drawer; otherwise the brand is in the header beside the hamburger, so the drawer drops its brand row and the navigation starts under the close button), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
+- `data-type-set="console"` on the root selects the console type set (decision CT-1): `EmptyState`, `Dialog.Title` and `Drawer.Title` read it to take their console sizes. A dialog or drawer teleports to `body`, so an app that opens overlays sets the same attribute on `<html>`.
 - Fill: a direct child of the `<main>` with `data-layout-fill` makes the main a `flex-1 min-h-0 h-full overflow-hidden` item of `AppLayout`'s body (which turns into a fixed-height flex column while it holds a fill page), and the child `flex-1 min-h-0`; pure CSS, right in the server render. The page then never scrolls as a whole: a chat keeps its composer pinned and scrolls only its thread, at every width (styled test `src/test/layout-fill.test.ts`).
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
 - Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.

@@ -249,7 +249,7 @@
       >
         <Card :padded="false">
           <template #header>
-            <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
+            <p class="truncate text-title-sm text-(--text-default)">Deployment</p>
             <StatusIndicator
               v-if="status === 'running'"
               loading

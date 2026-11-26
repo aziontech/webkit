@@ -96,7 +96,7 @@
       <p
         :data-testid="`${testId}__title`"
         :data-size="size"
-        class="text-(--text-default) data-[size=small]:text-heading-2xs data-[size=medium]:text-heading-sm"
+        class="text-(--text-default) data-[size=small]:text-heading-2xs data-[size=medium]:text-heading-sm in-data-[type-set=console]:data-[size=small]:text-title-sm in-data-[type-set=console]:data-[size=medium]:text-title-md"
       >
         {{ title }}
       </p>

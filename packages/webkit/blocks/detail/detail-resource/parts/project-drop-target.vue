@@ -35,7 +35,7 @@
           />
         </span>
         <div class="flex max-w-(--container-md) flex-col gap-(--spacing-2xs)">
-          <p class="text-heading-xs text-(--text-default)">Drop your project to deploy it</p>
+          <p class="text-title-sm text-(--text-default)">Drop your project to deploy it</p>
           <p class="text-pretty text-body-sm text-(--text-muted)">
             We build a new version of {{ name }}, then you choose where it goes live.
           </p>

@@ -102,7 +102,7 @@
               <div class="flex flex-col gap-(--spacing-2xs)">
                 <h1
                   id="deploy-template-where-title"
-                  class="text-heading-xs text-(--text-default)"
+                  class="text-title-nested text-(--text-default)"
                 >
                   Where it runs
                 </h1>

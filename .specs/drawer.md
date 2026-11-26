@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 10
-checksum: 6f30cdbf09978eb78be868bac985e3adbe4341bc647386d1839ac029415a7a6d
+checksum: 11ffb5952d741e95f563f2be62ea54e72b8e0d2683f2823c8cd153a005b239ae
 created: 2026-05-22
 last_updated: 2026-11-20
 ---
@@ -157,14 +157,14 @@ No element sets an inline `transition`, so `motion-reduce:transition-none` wins 
 
 ## Tokens
 
-| Region         | Token (DESIGN.md)                                                |
-| -------------- | ---------------------------------------------------------------- |
-| title          | `.text-title-lg` (medium weight), `var(--text-default)`          |
-| description    | `.text-body-sm`, `var(--text-muted)`                             |
-| body           | `PanelBody`: `.text-body-sm`, `var(--spacing-lg)`, `min-h-24`    |
-| header, footer | `PanelHeader` / `PanelFooter`: `var(--spacing-md)` block padding |
-| surface        | `var(--bg-surface)`                                              |
-| ring           | `var(--ring-color)`                                              |
+| Region         | Token (DESIGN.md)                                                                            |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| title          | `.text-title-lg` (medium weight); `.text-title-md` in the console set, `var(--text-default)` |
+| description    | `.text-body-sm`, `var(--text-muted)`                                                         |
+| body           | `PanelBody`: `.text-body-sm`, `var(--spacing-lg)`, `min-h-24`                                |
+| header, footer | `PanelHeader` / `PanelFooter`: `var(--spacing-md)` block padding                             |
+| surface        | `var(--bg-surface)`                                                                          |
+| ring           | `var(--ring-color)`                                                                          |
 
 ## Theme gaps
 

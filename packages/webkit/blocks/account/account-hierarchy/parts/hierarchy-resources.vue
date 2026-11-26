@@ -57,7 +57,7 @@
     <div class="flex min-h-8 items-center justify-between gap-(--spacing-xs)">
       <h2
         :id="`${uid}-resources`"
-        class="text-heading-xs text-(--text-default)"
+        class="text-title-sm text-(--text-default)"
       >
         Resources
       </h2>
