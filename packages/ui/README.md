@@ -41,9 +41,10 @@ rules and the list of Azion UI files your app imports, and import it once at you
 @import '@aziontech/theme/fonts.css'; /* skip it if your app hosts its own font files */
 @import '@aziontech/ui/styles';
 @import './azion-ui.sources.css';
+@source not '../.agents';
+@source not '../AGENTS.md';
 @source not '../.claude';
 @source not '../CLAUDE.md';
-@source not '../AGENTS.md';
 ```
 
 ```js
@@ -182,7 +183,7 @@ Creating or changing Azion UI itself? Skip to "Changing Azion UI (contribute)" b
 screen or an app with Azion UI? Follow these steps.
 
 1. Run `npx @aziontech/ui init`. It installs the `azion-ui` MCP server, the lint, the skills and
-   rules, and writes the Azion UI block into `AGENTS.md` (and `CLAUDE.md`).
+   rules (in `.agents/`), and writes the Azion UI block into `AGENTS.md`.
 2. The app's chrome is one layout, composed once in `App.vue` around `RouterView`: `ConsoleLayout`
    (console), `SiteLayout` (marketing site) or `DocLayout` (docs). Start it from its shell block
    (`npx @aziontech/ui add shell/shell-console`, `shell/shell-site`, `shell/shell-docs`): `add` writes the block

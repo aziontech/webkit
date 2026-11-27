@@ -37,7 +37,7 @@ Creating or changing Azion UI itself? Skip to [Changing Azion UI](#changing-azio
 a screen or an app with Azion UI? Follow these steps.
 
 1. Run `npx @aziontech/ui init`. It installs the `azion-ui` MCP server, the lint, the skills and
-   rules, and writes the Azion UI block into `AGENTS.md` (and `CLAUDE.md`).
+   rules (in `.agents/`), and writes the Azion UI block into `AGENTS.md`.
 2. A whole screen (login, signup, settings, a list, a create flow): start from a block.
    `npx @aziontech/ui search <the screen in plain words>`, then
    `npx @aziontech/ui add <block-id>` (`--variant <state>` for another state). It copies the
@@ -77,7 +77,7 @@ pnpm install
 npx @aziontech/ui doctor
 ```
 
-`doctor` writes nothing and exits non-zero on a broken setup, so it also works as a CI gate. To pull in a newer Azion UI's `.claude/` bundle and `CLAUDE.md` fragment later, run `npx @aziontech/ui sync` (`--check` reports drift without writing). Full flag reference: [`packages/ui/docs/toolkit/CLI.md`](./packages/ui/docs/toolkit/CLI.md).
+`doctor` writes nothing and exits non-zero on a broken setup, so it also works as a CI gate. To pull in a newer Azion UI's agent files (`.agents/` and the `AGENTS.md` block) later, run `npx @aziontech/ui sync` (`--check` reports drift without writing). Full flag reference: [`packages/ui/docs/toolkit/CLI.md`](./packages/ui/docs/toolkit/CLI.md).
 
 Once the project is wired, import components by path:
 

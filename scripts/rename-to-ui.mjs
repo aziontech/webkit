@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process'
-import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -56,6 +56,9 @@ export const PROTECT = [
 ]
 
 export const REPLACE = [
+  [/\badapters\/claude\/agents\b/g, 'agents'],
+  [/\badapters\/AGENTS_FRAGMENT\.md\b/g, 'fragments/AGENTS.md'],
+  [/\.github\/tools\/claude-code\b/g, '.github/tools/usage-check'],
   [/\bAzion WebKit\b/g, 'Azion UI'],
   [/\bAzion [Ww]ebkit\b/g, 'Azion UI'],
   [/@aziontech\\\/webkit-/g, '@aziontech\\/ui-'],
@@ -156,7 +159,9 @@ const MOVES = [
   ['apps/demos/src/webkit.sources.css', 'apps/demos/src/azion-ui.sources.css'],
   ['apps/demos/webkit.blocks.json', 'apps/demos/azion-ui.blocks.json'],
   ['apps/docs/src/lib/webkit-catalogs.ts', 'apps/docs/src/lib/azion-ui-catalogs.ts'],
-  ['lint-canaries/eslint/webkit', 'lint-canaries/eslint/azion-ui']
+  ['lint-canaries/eslint/webkit', 'lint-canaries/eslint/azion-ui'],
+  ['adapters/AGENTS_FRAGMENT.md', 'fragments/AGENTS.md'],
+  ['.github/tools/claude-code', '.github/tools/usage-check']
 ]
 
 function protect(line) {
@@ -210,6 +215,7 @@ function skipped(path) {
 function moves() {
   for (const [from, to] of MOVES) {
     if (!existsSync(join(root, from))) continue
+    if (!dryRun) mkdirSync(dirname(join(root, to)), { recursive: true })
     if (!dryRun) git('mv', from, to)
     console.log(`mv ${from} -> ${to}`)
   }
@@ -221,7 +227,10 @@ function moves() {
     )
     if (!m || seen.has(m[1])) continue
     seen.add(m[1])
-    const to = m[1].replace(/webkit-(?:ui-)?/, 'azion-ui-')
+    const to = m[1]
+      .replace(/webkit-(?:ui-)?/, 'azion-ui-')
+      .replace(/^adapters\/claude\/agents\//, 'agents/')
+    if (!dryRun) mkdirSync(dirname(join(root, to)), { recursive: true })
     if (!dryRun) git('mv', m[1], to)
     console.log(`mv ${m[1]} -> ${to}`)
   }

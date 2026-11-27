@@ -48,6 +48,10 @@ function walkMarkdown(dir) {
 }
 
 const BUNDLE_DIRS = ['rules', 'skills', 'agents']
+const AGENTS_DIR = '.agents'
+const CLAUDE_DIR = '.claude'
+const CLAUDE_BUNDLE_DIRS = new Set(['skills', 'agents'])
+export const CLAUDE_FRAGMENT = '@AGENTS.md\n'
 
 function isAzionUiBundleName(rel) {
   return (
@@ -57,10 +61,10 @@ function isAzionUiBundleName(rel) {
   )
 }
 
-function listConsumerClaudeFiles(claudeDir) {
+function listBundleFiles(baseDir) {
   const out = []
   for (const bundleDir of BUNDLE_DIRS) {
-    const abs = join(claudeDir, bundleDir)
+    const abs = join(baseDir, bundleDir)
     for (const file of walkMarkdown(abs)) {
       out.push(toPosix(join(bundleDir, file.slice(abs.length + 1))))
     }
@@ -68,27 +72,33 @@ function listConsumerClaudeFiles(claudeDir) {
   return out
 }
 
-function classifyFragment(claudeMdContent, fragmentBody) {
-  if (claudeMdContent === null) return 'missing'
-  const hasFence =
-    claudeMdContent.includes(FRAGMENT_START) && claudeMdContent.includes(FRAGMENT_END)
+function classifyFragment(content, fragmentBody) {
+  if (content === null) return 'missing'
+  const hasFence = content.includes(FRAGMENT_START) && content.includes(FRAGMENT_END)
   if (!hasFence) {
-    if (claudeMdContent.includes(LEGACY_MARKER)) return 'legacy'
-    return claudeMdContent.includes(FRAGMENT_START) ? 'stale' : 'missing'
+    if (content.includes(LEGACY_MARKER)) return 'legacy'
+    return content.includes(FRAGMENT_START) ? 'stale' : 'missing'
   }
-  const next = spliceFragment(claudeMdContent, fragmentBody, {
+  const next = spliceFragment(content, fragmentBody, {
     start: FRAGMENT_START,
     end: FRAGMENT_END
   })
-  return next === claudeMdContent ? 'current' : 'stale'
+  return next === content ? 'current' : 'stale'
+}
+
+function hasFragment(dir, name) {
+  const content = readOrNull(join(dir, name))
+  return Boolean(content && (content.includes(FRAGMENT_START) || content.includes(LEGACY_MARKER)))
 }
 
 export function hasBundle(dir) {
-  if (listConsumerClaudeFiles(join(dir, '.claude')).some(isAzionUiBundleName)) return true
-  return ['AGENTS.md', 'CLAUDE.md'].some((name) => {
-    const content = readOrNull(join(dir, name))
-    return Boolean(content && (content.includes(FRAGMENT_START) || content.includes(LEGACY_MARKER)))
-  })
+  if (listBundleFiles(join(dir, AGENTS_DIR)).some(isAzionUiBundleName)) return true
+  if (listBundleFiles(join(dir, CLAUDE_DIR)).some(isAzionUiBundleName)) return true
+  return ['AGENTS.md', 'CLAUDE.md'].some((name) => hasFragment(dir, name))
+}
+
+function usesClaudeCode(projectDir) {
+  return existsSync(join(projectDir, CLAUDE_DIR)) || existsSync(join(projectDir, 'CLAUDE.md'))
 }
 
 function canonical(path) {
@@ -121,60 +131,95 @@ export function resolveBundleRoot(projectDir, { templatesDir = AI_TEMPLATES } = 
 const COPY_STATES = new Set(['missing', 'stale', 'unstamped-identical'])
 const EDITED_STATES = new Set(['modified', 'unstamped-different'])
 
-function copyStamped(rel, templateContent, state, { version, forced }) {
+function copyStamped(entry, state, { version, forced }) {
   const action = {
     type: 'copy-stamped',
-    to: join('.claude', rel),
-    content: stamp(templateContent, { source: `claude/${rel}`, version }),
+    to: entry.path,
+    content: stamp(entry.template, { source: entry.source, version }),
     state
   }
   return forced ? { ...action, forced: true } : action
 }
 
-function bundleAction(rel, templateContent, state, { force, version }) {
-  if (COPY_STATES.has(state)) return copyStamped(rel, templateContent, state, { version })
+function bundleAction(entry, state, { force, version }) {
+  if (COPY_STATES.has(state)) return copyStamped(entry, state, { version })
   if (!EDITED_STATES.has(state)) return null
-  if (force) return copyStamped(rel, templateContent, state, { version, forced: true })
+  if (force) return copyStamped(entry, state, { version, forced: true })
   return {
     type: 'report',
-    rel,
+    rel: entry.rel,
+    path: entry.path,
     state,
     reportResult: 'skipped',
-    detail: `${join('.claude', rel)} was edited after sync stamped it — skipped (use --force to overwrite)`
+    detail: `${entry.path} was edited after sync stamped it — skipped (use --force to overwrite)`
   }
 }
 
-function bundleEntries(claudeDir, bundleRels, options) {
-  return bundleRels.map((rel) => {
-    const templateContent = readOrNull(templateFile(options.templatesDir, rel)) ?? ''
-    const consumerContent = readOrNull(join(claudeDir, rel))
-    const state = classify(templateContent, consumerContent)
-    return { rel, state, action: bundleAction(rel, templateContent, state, options) }
+function frontmatterOf(content) {
+  const match = content.match(/^---\n[\s\S]*?\n---\n/)
+  return match ? match[0] : ''
+}
+
+function claudePointer(rel, templateContent) {
+  const kind = rel.startsWith('skills/') ? 'skill' : 'agent'
+  return `${frontmatterOf(templateContent)}\nRead \`${AGENTS_DIR}/${rel}\` and follow it: it is this ${kind}. This file only lets Claude Code find it.\n`
+}
+
+function targets(projectDir, bundleRels, { templatesDir, claude }) {
+  const out = []
+  for (const rel of bundleRels) {
+    const template = readOrNull(templateFile(templatesDir, rel)) ?? ''
+    out.push({ rel, path: toPosix(join(AGENTS_DIR, rel)), source: rel, template })
+    if (claude && CLAUDE_BUNDLE_DIRS.has(rel.split('/')[0])) {
+      out.push({
+        rel,
+        path: toPosix(join(CLAUDE_DIR, rel)),
+        source: `claude/${rel}`,
+        template: claudePointer(rel, template)
+      })
+    }
+  }
+  return out
+}
+
+function bundleEntries(projectDir, list, options) {
+  return list.map((entry) => {
+    const state = classify(entry.template, readOrNull(join(projectDir, entry.path)))
+    return {
+      rel: entry.rel,
+      path: entry.path,
+      state,
+      action: bundleAction(entry, state, options)
+    }
   })
 }
 
 const SYNC_MARKER = /^<!-- azion-ui-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->/m
 
-function orphanEntry(claudeDir, rel) {
-  const content = readOrNull(join(claudeDir, rel))
+function orphanEntry(projectDir, base, rel) {
+  const path = toPosix(join(base, rel))
+  const content = readOrNull(join(projectDir, path))
   if (content === null) return null
   const marker = content.match(SYNC_MARKER)
   if (!marker) return null
   const action = {
     type: 'report',
     rel,
+    path,
     state: 'orphan',
     reportResult: 'skipped',
-    detail: `${join('.claude', rel)} carries an azion-ui-sync marker for "${marker[1]}", which no longer exists in the bundle — left in place`
+    detail: `${path} carries an azion-ui-sync marker for "${marker[1]}", which no longer exists in the bundle — left in place`
   }
-  return { rel, state: 'orphan', action }
+  return { rel, path, state: 'orphan', action }
 }
 
-function orphanEntries(claudeDir, bundleRelSet) {
-  return listConsumerClaudeFiles(claudeDir)
-    .filter((rel) => !bundleRelSet.has(rel) && isAzionUiBundleName(rel))
-    .map((rel) => orphanEntry(claudeDir, rel))
-    .filter(Boolean)
+function orphanEntries(projectDir, bundleRelSet) {
+  return [AGENTS_DIR, CLAUDE_DIR].flatMap((base) =>
+    listBundleFiles(join(projectDir, base))
+      .filter((rel) => !bundleRelSet.has(rel) && isAzionUiBundleName(rel))
+      .map((rel) => orphanEntry(projectDir, base, rel))
+      .filter(Boolean)
+  )
 }
 
 function fenceFor(projectDir, path, fragmentBody) {
@@ -192,25 +237,28 @@ const isEntryDrift = (e) => e.state === 'missing' || e.state === 'stale' || e.st
 
 export function planSync(
   projectDir,
-  { force = false, templatesDir = AI_TEMPLATES, version = AZION_UI_VERSION } = {}
+  {
+    force = false,
+    templatesDir = AI_TEMPLATES,
+    version = AZION_UI_VERSION,
+    claude = usesClaudeCode(projectDir)
+  } = {}
 ) {
-  const claudeDir = join(projectDir, '.claude')
   const bundleRels = listBundle(templatesDir)
+  const list = targets(projectDir, bundleRels, { templatesDir, claude })
   const entries = [
-    ...bundleEntries(claudeDir, bundleRels, { force, templatesDir, version }),
-    ...orphanEntries(claudeDir, new Set(bundleRels))
+    ...bundleEntries(projectDir, list, { force, version }),
+    ...orphanEntries(projectDir, new Set(bundleRels))
   ]
   const fragmentBody = readOrNull(fragmentFile(templatesDir)) || ''
-  const agentsFragment = fenceFor(projectDir, 'AGENTS.md', fragmentBody)
-  const claudeFragment = fenceFor(projectDir, 'CLAUDE.md', fragmentBody)
-  const actions = [
-    ...entries.map((e) => e.action),
-    agentsFragment.action,
-    claudeFragment.action
-  ].filter(Boolean)
+  const fragment = fenceFor(projectDir, 'AGENTS.md', fragmentBody)
+  const claudeFragment = claude ? fenceFor(projectDir, 'CLAUDE.md', CLAUDE_FRAGMENT) : null
+  const actions = [...entries.map((e) => e.action), fragment.action, claudeFragment?.action].filter(
+    Boolean
+  )
   const drift =
     entries.some(isEntryDrift) ||
-    isFragmentDrift(claudeFragment.state) ||
-    isFragmentDrift(agentsFragment.state)
-  return { entries, fragment: claudeFragment, agentsFragment, actions, drift }
+    isFragmentDrift(fragment.state) ||
+    Boolean(claudeFragment && isFragmentDrift(claudeFragment.state))
+  return { entries, fragment, claudeFragment, claude, actions, drift }
 }

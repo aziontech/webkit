@@ -14,8 +14,10 @@ If you are building an app, stop here and follow the first door.
 reads. `.claude/` is only the Claude Code adapter: `settings.json` wires the hooks
 (`contributing/hooks/`), and `agents`, `commands`, `rules`, `skills` and `AGENTS.md` there are links
 into `contributing/`, so Claude Code loads the same files. Never add a file under `.claude/` itself.
-An app gets the same split: `init` writes the agent-neutral `AGENTS.md` block, and the `.claude/`
-copy it also writes is a convenience for Claude Code.
+`.agents/skills` links to `contributing/skills` for the tools that read that folder. An app gets the
+same split: `init` writes the agent files to `.agents/` and the Azion UI block to `AGENTS.md`; only
+when the app uses Claude Code does it add short pointer files in `.claude/` and a `CLAUDE.md` that
+imports `AGENTS.md`.
 
 **`TOKENS.md` is not a DESIGN.md.** [`contributing/docs/TOKENS.md`](./contributing/docs/TOKENS.md) is
 the contributors' guide to the tokens, type, spacing and motion. Azion UI ships no `DESIGN.md` (the
@@ -27,7 +29,7 @@ file other tools generate to describe a design to agents): apps get the same fac
 | Area                                                                      | Audience                              | Ships to npm |
 | ------------------------------------------------------------------------- | ------------------------------------- | ------------ |
 | `packages/*`                                                              | everyone (the libraries)              | yes          |
-| `skills/`, `rules/`, `adapters/`                                          | apps that consume Azion UI            | yes          |
+| `skills/`, `rules/`, `agents/`, `fragments/`                              | apps that consume Azion UI            | yes          |
 | `contributing/` (agents, commands, docs, hooks, rules, skills)            | people and agents developing Azion UI | no           |
 | `.specs/`                                                                 | the contract of every component       | no           |
 | `apps/docs/`, `apps/demos/`, `apps/visual/`, `lint-canaries/`, `.github/` | docs site, demos, visual suite, CI    | no           |

@@ -1839,7 +1839,7 @@ function checkToolingName(rel) {
       out.push(v('tooling-name', rel, 1, `"${name}" uses the abbreviation "${ab}" (${RULE_DOC}).`))
     return out
   }
-  if ((m = rel.match(/^(?:contributing\/agents|adapters\/claude\/agents)\/([^/]+)\.md$/))) {
+  if ((m = rel.match(/^(?:contributing\/agents|agents)\/([^/]+)\.md$/))) {
     const name = m[1]
     if (name.startsWith('_')) return out
     if (!KEBAB.test(name) || !/(er|or)$/.test(name.split('-').pop()))
@@ -2154,7 +2154,7 @@ const SCAN_ROOTS = [
   'contributing/agents',
   'contributing/commands',
   'skills',
-  'adapters/claude/agents'
+  'agents'
 ]
 
 function repoFiles(root) {

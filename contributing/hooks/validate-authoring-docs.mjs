@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // PostToolUse hook: after Write/Edit/MultiEdit on a skill (SKILL.md) or agent (.md) —
 // internal (contributing/skills, contributing/agents) or consumer bundle
-// (skills/ and adapters/claude/agents/ at the repo root) — re-read the file and verify
+// (skills/ and agents/ at the repo root) — re-read the file and verify
 // its frontmatter + body match contributing/rules/authoring-docs.md. Blocks (exit 2) on any
 // NEW violation; pre-existing debt is grandfathered via authoring-docs-baseline.json,
 // exactly like validate-spec-compliance reads authoring-baseline.json. Same engine

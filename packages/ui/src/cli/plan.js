@@ -35,9 +35,9 @@ import { starterActions } from './init/starter.js'
 import { styleActions, styleEntryContent } from './init/styles.js'
 import { planSync } from './sync.js'
 
-const CLAUDE_BUNDLE = listBundle()
+const AGENT_BUNDLE = listBundle()
 
-export const CLAUDE_FRAGMENT_MARKER = LEGACY_MARKER
+export const FRAGMENT_LEGACY_MARKER = LEGACY_MARKER
 
 export function planInit(projectDir, opts = {}) {
   const severity = opts.recommended ? 'recommended' : 'strict'
@@ -57,7 +57,7 @@ export function planInit(projectDir, opts = {}) {
     mcpAction(projectDir),
     ...gitHookActions(projectDir, pkg, git, gitHooks),
     ...starterActions(projectDir, entry, { wireEntry, gitHooks }),
-    ...planSync(projectDir).actions,
+    ...planSync(projectDir, opts.claude ? { claude: true } : {}).actions,
     ...entryActions(projectDir, entry, { icons, wireEntry })
   ]
 }
@@ -84,7 +84,7 @@ export const _internals = {
   STYLE_DEV_DEPS,
   DEP_VERSION,
   DEP_VERSIONS,
-  CLAUDE_BUNDLE,
+  AGENT_BUNDLE,
   eslintFlatConfig,
   postcssConfig,
   usesTailwindVitePlugin,

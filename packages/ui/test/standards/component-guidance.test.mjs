@@ -26,7 +26,7 @@ function markdown(dir, out = []) {
 const guidance = [
   ...markdown(join(REPO_ROOT, 'skills')),
   ...markdown(join(REPO_ROOT, 'rules')),
-  readFileSync(join(REPO_ROOT, 'adapters', 'AGENTS_FRAGMENT.md'), 'utf8')
+  readFileSync(join(REPO_ROOT, 'fragments', 'AGENTS.md'), 'utf8')
 ].join('\n')
 
 test('every app component is named in a skill or rule, so agents are told when to use it', () => {
@@ -50,7 +50,7 @@ test('every app component is named in a skill or rule, so agents are told when t
 })
 
 test('the always-on agent text tells agents to pick the component from the kind of value', () => {
-  const fragment = readFileSync(join(REPO_ROOT, 'adapters', 'AGENTS_FRAGMENT.md'), 'utf8')
+  const fragment = readFileSync(join(REPO_ROOT, 'fragments', 'AGENTS.md'), 'utf8')
   for (const name of ['DatePicker', 'NumberInput', 'PhoneInput', 'Timestamp', 'CurrencyAmount']) {
     assert.match(fragment, new RegExp(`\`${name}\``), name)
   }

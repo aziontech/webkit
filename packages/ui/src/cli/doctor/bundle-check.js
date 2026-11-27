@@ -10,20 +10,18 @@ const byState =
 function fragmentLines(sync, at) {
   const lines = []
   if (sync.fragment.state !== 'current') {
-    lines.push(`fragment: ${at('CLAUDE.md')} is ${sync.fragment.state}`)
+    lines.push(`fragment: ${at('AGENTS.md')} is ${sync.fragment.state}`)
   }
-  if (sync.agentsFragment && sync.agentsFragment.state !== 'current') {
-    lines.push(`fragment: ${at('AGENTS.md')} is ${sync.agentsFragment.state}`)
+  if (sync.claudeFragment && sync.claudeFragment.state !== 'current') {
+    lines.push(`fragment: ${at('CLAUDE.md')} is ${sync.claudeFragment.state}`)
   }
   return lines
 }
 
 function driftLines(sync, at) {
   return [
-    ...sync.entries
-      .filter(byState('missing', 'stale'))
-      .map((e) => `${e.state}: ${at(`.claude/${e.rel}`)}`),
-    ...sync.entries.filter(byState('orphan')).map((e) => `orphan: ${at(`.claude/${e.rel}`)}`),
+    ...sync.entries.filter(byState('missing', 'stale')).map((e) => `${e.state}: ${at(e.path)}`),
+    ...sync.entries.filter(byState('orphan')).map((e) => `orphan: ${at(e.path)}`),
     ...fragmentLines(sync, at)
   ]
 }
@@ -41,15 +39,15 @@ function bundleState(sync, where) {
     return [
       'warn',
       `${modified.length} file(s) edited locally after sync stamped them (left alone) — ${syncHint} with --force to overwrite, or ignore if intentional.\n${modified
-        .map((e) => `modified: ${at(`.claude/${e.rel}`)}`)
+        .map((e) => `modified: ${at(e.path)}`)
         .join('\n')}`
     ]
   }
   return [
     'ok',
     where
-      ? `every bundle file and the AGENTS.md / CLAUDE.md fragment in ${where} are current`
-      : 'every bundle file and the AGENTS.md / CLAUDE.md fragment are current'
+      ? `every agent file and the AGENTS.md fragment in ${where} are current`
+      : 'every agent file and the AGENTS.md fragment are current'
   ]
 }
 
@@ -59,11 +57,11 @@ export function bundleCheck({ projectDir, add }) {
     bundleRoot.kind === 'own' ? '' : relative(projectDir, bundleRoot.dir) || bundleRoot.dir
   if (bundleRoot.kind === 'source') {
     add(
-      'claude bundle',
+      'agent files',
       'ok',
-      `${where} holds the bundle sources (skills/, rules/, adapters/) this app is built with — nothing to sync`
+      `${where} holds the bundle sources (skills/, rules/, agents/) this app is built with — nothing to sync`
     )
     return
   }
-  add('claude bundle', ...bundleState(planSync(bundleRoot.dir), where))
+  add('agent files', ...bundleState(planSync(bundleRoot.dir), where))
 }

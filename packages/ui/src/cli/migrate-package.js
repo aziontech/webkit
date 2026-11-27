@@ -211,9 +211,11 @@ function bundleMoves(projectDir, bundle) {
     for (const name of readdirSync(abs)) {
       const next = renamedBundleEntry(name, bundle.prefixes || {})
       if (!next) continue
-      const key = `${dir.split('/').pop()}/${next}`
+      const kind = dir.split('/').pop()
+      const key = `${kind}/${next}`
+      const destDir = bundle.target ? join(bundle.target, kind) : dir
       if (shipped && !shipped.has(key)) retired.push(join(dir, name))
-      else moves.push([join(dir, name), join(dir, next)])
+      else moves.push([join(dir, name), join(destDir, next)])
     }
   }
   return { moves, retired }
@@ -284,9 +286,10 @@ function bundleResults(projectDir, map, dryRun) {
   }
   if (!moves.length) return results
   const warning =
-    `${moves.length} AI file(s) moved to their azion-ui names: run \`npx @aziontech/ui sync --force\` ` +
-    'to refresh them (it overwrites local edits to those files)'
-  return [...results, { file: '.claude', changes: [], warnings: [warning] }]
+    `${moves.length} AI file(s) moved to .agents/ under their azion-ui names: run ` +
+    '`npx @aziontech/ui sync --force` to refresh them (it overwrites local edits to those files); ' +
+    'Claude Code keeps short pointer files in .claude/'
+  return [...results, { file: '.agents', changes: [], warnings: [warning] }]
 }
 
 export function planPackageMigration(projectDir, { dryRun = false, map = loadPackageMap() } = {}) {

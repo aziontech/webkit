@@ -43,11 +43,11 @@ test('doctor warns when src/azion-ui.css does not keep the AI guidance files out
     )
     const warned = detailOf(planDoctor(dir), 'azion-ui.css @source not')
     assert.equal(warned.status, 'warn')
-    assert.match(warned.detail, /CLAUDE\.md, AGENTS\.md/)
+    assert.match(warned.detail, /\.agents, AGENTS\.md, CLAUDE\.md/)
     assert.match(warned.detail, /`@source not '\.\.\/AGENTS\.md';`/)
     writeFileSync(
       join(dir, 'src/azion-ui.css'),
-      "@import './azion-ui.sources.css';\n@source not '../.claude';\n@source not '../CLAUDE.md';\n@source not '../AGENTS.md';\n"
+      "@import './azion-ui.sources.css';\n@source not '../.agents';\n@source not '../AGENTS.md';\n@source not '../.claude';\n@source not '../CLAUDE.md';\n"
     )
     assert.equal(statusOf(planDoctor(dir), 'azion-ui.css @source not'), 'ok')
   } finally {

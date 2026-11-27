@@ -49,7 +49,7 @@ export function sourceExclusionCheck({ cssEntry, add }) {
           `Tailwind scan, so the example classes in the AI guidance files compile into your CSS. Add ` +
           `${unexcluded.map((p) => `\`${exclusionLine(p)}\``).join(' ')} (or run \`npx ` +
           `@aziontech/ui init\`).`
-      : 'src/azion-ui.css keeps the AI guidance files (.claude, CLAUDE.md, AGENTS.md) out of the Tailwind scan'
+      : 'src/azion-ui.css keeps the AI guidance files (.agents, AGENTS.md, .claude, CLAUDE.md) out of the Tailwind scan'
   )
 }
 

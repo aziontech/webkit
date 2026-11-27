@@ -1,7 +1,7 @@
 # `contributing/` — everything for improving Azion UI
 
 This folder is for people and agents who add or change Azion UI's components, blocks and tokens. Any
-coding agent reads it; `.claude/` only links Claude Code to it. Building an app with Azion UI is the
+coding agent reads it (`.agents/skills` links to its skills); `.claude/` only links Claude Code to it. Building an app with Azion UI is the
 other door: see the root [`AGENTS.md`](../AGENTS.md). The standards here apply by construction and
 block off-standard code; this is the map, and each area links to its own index.
 

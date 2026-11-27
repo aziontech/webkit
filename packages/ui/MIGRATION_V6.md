@@ -13,23 +13,27 @@ The library was called WebKit and shipped as `@aziontech/webkit` up to 5.x. From
 
 `npx @aziontech/ui migrate v6` (step 1) does the whole switch before the other renames:
 
-| Was (5.x)                                                                            | Is (6.0)                                                                                                             |
-| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| `@aziontech/webkit` and `@aziontech/webkit/<subpath>`                                | `@aziontech/ui` and `@aziontech/ui/<subpath>`                                                                        |
-| `@aziontech/webkit-mcp`                                                              | `@aziontech/ui-mcp`                                                                                                  |
-| the `webkit` CLI (`npx webkit init`)                                                 | `azion-ui` (`npx @aziontech/ui init`)                                                                                |
-| ESLint rules `webkit/<rule>`                                                         | `azion-ui/<rule>`                                                                                                    |
-| `src/webkit.css`, `src/webkit.sources.css`, `webkit.blocks.json`                     | `src/azion-ui.css`, `src/azion-ui.sources.css`, `azion-ui.blocks.json`                                               |
-| the `webkit` server in `.mcp.json`                                                   | the `azion-ui` server, running `@aziontech/ui-mcp`                                                                   |
-| `.claude/skills/webkit-*`, `.claude/rules/webkit-*.md`, `.claude/agents/webkit-*.md` | `azion-ui-*` (`webkit-ui-states` and `webkit-ui-verify` drop the doubled word: `azion-ui-states`, `azion-ui-verify`) |
-| `WEBKIT_CATALOG_PATH`                                                                | `AZION_UI_CATALOG_PATH`                                                                                              |
-| the `<!-- @aziontech/webkit:start -->` block in `AGENTS.md` and `CLAUDE.md`          | `<!-- @aziontech/ui:start -->`                                                                                       |
+| Was (5.x)                                                                            | Is (6.0)                                                                                                                                           |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@aziontech/webkit` and `@aziontech/webkit/<subpath>`                                | `@aziontech/ui` and `@aziontech/ui/<subpath>`                                                                                                      |
+| `@aziontech/webkit-mcp`                                                              | `@aziontech/ui-mcp`                                                                                                                                |
+| the `webkit` CLI (`npx webkit init`)                                                 | `azion-ui` (`npx @aziontech/ui init`)                                                                                                              |
+| ESLint rules `webkit/<rule>`                                                         | `azion-ui/<rule>`                                                                                                                                  |
+| `src/webkit.css`, `src/webkit.sources.css`, `webkit.blocks.json`                     | `src/azion-ui.css`, `src/azion-ui.sources.css`, `azion-ui.blocks.json`                                                                             |
+| the `webkit` server in `.mcp.json`                                                   | the `azion-ui` server, running `@aziontech/ui-mcp`                                                                                                 |
+| `.claude/skills/webkit-*`, `.claude/rules/webkit-*.md`, `.claude/agents/webkit-*.md` | `.agents/{skills,rules,agents}/azion-ui-*` (`webkit-ui-states` and `webkit-ui-verify` drop the doubled word: `azion-ui-states`, `azion-ui-verify`) |
+| `WEBKIT_CATALOG_PATH`                                                                | `AZION_UI_CATALOG_PATH`                                                                                                                            |
+| the `<!-- @aziontech/webkit:start -->` block in `AGENTS.md` and `CLAUDE.md`          | `<!-- @aziontech/ui:start -->` in `AGENTS.md`; `CLAUDE.md` keeps only an `@AGENTS.md` import                                                       |
 
 It rewrites `package.json` (dependencies and scripts), every source file, `.mcp.json`,
-`AGENTS.md`, `CLAUDE.md` and the AI bundle in `.claude/`, and moves the files above. Then run
+`AGENTS.md`, `CLAUDE.md` and the AI bundle in `.claude/`, and moves the files above: the skills,
+rules and agents leave `.claude/` for `.agents/`, the folder every coding agent reads. Then run
 `pnpm install` and `npx @aziontech/ui sync --force` to refresh the moved skills, rules and agents
 (5.x wrote them without a sync stamp, so a plain `sync` keeps them as edited; `--force` overwrites
-local edits to those files, so commit first).
+local edits to those files, so commit first). Because the app has `.claude/`, `sync` also writes the
+Claude Code adapter: short pointer files in `.claude/skills/` and `.claude/agents/` that send Claude
+Code to the `.agents/` files, and a `CLAUDE.md` block that imports `AGENTS.md`. `.claude/rules/` is
+no longer used; delete it once it is empty.
 
 The lint rule `azion-ui/no-deprecated-name` flags any import of `@aziontech/webkit` that is left.
 
@@ -1050,7 +1054,7 @@ with one `@source` per Azion UI file the app imports, and the Button-only app sh
 - An app that really renders every component (a catalogue, a playground) imports
   `@aziontech/ui/styles/all` instead of the list.
 - Tailwind 4.1 or later: the stylesheet `init` writes keeps the AI guidance files out of the scan
-  with `@source not '../.claude'` (and `CLAUDE.md`, `AGENTS.md`).
+  with `@source not '../.agents'` (and `AGENTS.md`, `.claude`, `CLAUDE.md`).
 
 ### TypeScript reads declarations
 
@@ -2271,7 +2275,7 @@ rail when its container is narrower than 36rem. A fixed-size scene keeps a row w
 ### AI skills renamed
 
 Four skills in the AI bundle have plain names. `npx @aziontech/ui sync` writes them under the
-new folders and reports the old ones as orphans; delete the old folders in `.claude/skills/`.
+new folders in `.agents/skills/` and reports the old ones as orphans; delete the old folders.
 
 | 5.x skill                    | 6.0 skill                |
 | ---------------------------- | ------------------------ |
@@ -2280,8 +2284,9 @@ new folders and reports the old ones as orphans; delete the old folders in `.cla
 | `azion-ui-baseline-ui`       | `azion-ui-quick-cleanup` |
 | `azion-ui-impeccable-polish` | `azion-ui-final-polish`  |
 
-The Claude Code agent `webkit-expert` is `azion-ui-advisor` (an agent name ends in an agent noun):
-`sync` writes `.claude/agents/azion-ui-advisor.md`; delete the old `webkit-expert.md`.
+The agent `webkit-expert` is `azion-ui-advisor` (an agent name ends in an agent noun): `sync`
+writes `.agents/agents/azion-ui-advisor.md` (and its Claude Code pointer in `.claude/agents/`);
+delete the old `.claude/agents/webkit-expert.md`.
 
 ### Lint rules renamed
 

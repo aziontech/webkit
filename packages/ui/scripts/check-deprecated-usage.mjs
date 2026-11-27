@@ -17,7 +17,8 @@ export const SCANNED = [
   'packages/ui/src',
   'skills',
   'rules',
-  'adapters'
+  'agents',
+  'fragments'
 ]
 
 export const VALUE_DEPRECATIONS = [
@@ -418,6 +419,6 @@ if (invoked) {
     process.exit(1)
   }
   console.log(
-    'No deprecated Azion UI names used in blocks, examples, src, skills, rules or adapters.'
+    'No deprecated Azion UI names used in blocks, examples, src, skills, rules, agents or fragments.'
   )
 }

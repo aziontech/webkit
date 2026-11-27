@@ -40,7 +40,7 @@ coverage
 .edge
 
 package-lock.json
-!.github/tools/claude-code/package-lock.json
+!.github/tools/usage-check/package-lock.json
 yarn.lock
 
 .DS_Store
@@ -116,10 +116,11 @@ apps/visual/test-results/
 apps/visual/playwright-report/
 apps/visual/baseline-review/
 
-# AI bundle copies made by packages/ui's prepack (sources live in skills/, rules/, adapters/)
+# AI bundle copies made by packages/ui's prepack (sources live in skills/, rules/, agents/, fragments/)
 packages/ui/skills/
 packages/ui/rules/
-packages/ui/adapters/
+packages/ui/agents/
+packages/ui/fragments/
 packages/ui/test/docs/.snippets-*/
 
 # Release supply-chain files written by .github/workflows/release-package.yml

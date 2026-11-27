@@ -59,8 +59,8 @@ jobs:
 
       - name: Install the pinned Claude Code CLI from its lockfile
         run: |
-          npm ci --prefix .github/tools/claude-code --no-audit --no-fund
-          echo "$GITHUB_WORKSPACE/.github/tools/claude-code/node_modules/.bin" >> "$GITHUB_PATH"
+          npm ci --prefix .github/tools/usage-check --no-audit --no-fund
+          echo "$GITHUB_WORKSPACE/.github/tools/usage-check/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Run the usage check
         working-directory: packages/ui

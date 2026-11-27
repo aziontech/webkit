@@ -10,7 +10,7 @@ import { ESLint } from 'eslint'
 
 import {
   planInit,
-  CLAUDE_FRAGMENT_MARKER,
+  FRAGMENT_LEGACY_MARKER,
   MCP_SERVER_NAME,
   _internals
 } from '../../src/cli/plan.js'
@@ -214,7 +214,7 @@ test('init replaces the untouched 5.x src/azion-ui.css with the 6.0 template', (
     applyPlan(dir, [action])
     const css = readFileSync(join(dir, 'src/azion-ui.css'), 'utf8')
     assert.match(css, /@import '\.\/azion-ui\.sources\.css';/)
-    assert.match(css, /@source not '\.\.\/\.claude';/)
+    assert.match(css, /@source not '\.\.\/\.agents';/)
     assert.equal(planInit(dir, {}).find((a) => a.path === 'src/azion-ui.css').skipIfExists, true)
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -234,7 +234,7 @@ test('init patches an edited src/azion-ui.css with only the 6.0 lines it lacks',
     assert.match(css, /\.brand \{ color: var\(--primary\); \}/)
     assert.match(
       css,
-      /@import '@aziontech\/ui\/styles';\n@import '\.\/azion-ui\.sources\.css';\n@source not '\.\.\/\.claude';\n@source not '\.\.\/CLAUDE\.md';\n@source not '\.\.\/AGENTS\.md';/
+      /@import '@aziontech\/ui\/styles';\n@import '\.\/azion-ui\.sources\.css';\n@source not '\.\.\/\.agents';\n@source not '\.\.\/AGENTS\.md';\n@source not '\.\.\/\.claude';\n@source not '\.\.\/CLAUDE\.md';/
     )
     assert.equal(planInit(dir, {}).find((a) => a.path === 'src/azion-ui.css').skipIfExists, true)
   } finally {
@@ -503,78 +503,78 @@ test('planInit copies the .claude/rules/azion-ui-*.md bundle', () => {
     const plan = planInit(dir, {})
     const copies = plan.filter((a) => a.type === 'copy-stamped').map((a) => a.to)
     for (const rel of [
-      '.claude/rules/azion-ui-imports.md',
-      '.claude/rules/azion-ui-tokens.md',
-      '.claude/rules/azion-ui-performance.md',
-      '.claude/rules/azion-ui-prefer-over-custom.md',
-      '.claude/rules/azion-ui-style-override.md',
-      '.claude/rules/azion-ui-comments.md',
-      '.claude/rules/azion-ui-construction-standards.md',
-      '.claude/rules/azion-ui-prop-vocabulary.md',
-      '.claude/rules/azion-ui-styling.md',
-      '.claude/rules/azion-ui-direction.md',
-      '.claude/rules/azion-ui-strings.md',
-      '.claude/rules/azion-ui-example-data.md',
-      '.claude/rules/azion-ui-component-structure.md',
-      '.claude/rules/azion-ui-props.md',
-      '.claude/rules/azion-ui-v-model.md',
-      '.claude/rules/azion-ui-emits.md',
-      '.claude/rules/azion-ui-slots.md',
-      '.claude/rules/azion-ui-composables.md',
-      '.claude/rules/azion-ui-root-element.md',
-      '.claude/rules/azion-ui-component-states.md',
-      '.claude/rules/azion-ui-accessibility.md',
-      '.claude/rules/azion-ui-motion.md',
-      '.claude/rules/azion-ui-testid.md',
-      '.claude/rules/azion-ui-deprecation.md',
-      '.claude/rules/azion-ui-api-data.md',
-      '.claude/skills/azion-ui-usage/SKILL.md',
+      '.agents/rules/azion-ui-imports.md',
+      '.agents/rules/azion-ui-tokens.md',
+      '.agents/rules/azion-ui-performance.md',
+      '.agents/rules/azion-ui-prefer-over-custom.md',
+      '.agents/rules/azion-ui-style-override.md',
+      '.agents/rules/azion-ui-comments.md',
+      '.agents/rules/azion-ui-construction-standards.md',
+      '.agents/rules/azion-ui-prop-vocabulary.md',
+      '.agents/rules/azion-ui-styling.md',
+      '.agents/rules/azion-ui-direction.md',
+      '.agents/rules/azion-ui-strings.md',
+      '.agents/rules/azion-ui-example-data.md',
+      '.agents/rules/azion-ui-component-structure.md',
+      '.agents/rules/azion-ui-props.md',
+      '.agents/rules/azion-ui-v-model.md',
+      '.agents/rules/azion-ui-emits.md',
+      '.agents/rules/azion-ui-slots.md',
+      '.agents/rules/azion-ui-composables.md',
+      '.agents/rules/azion-ui-root-element.md',
+      '.agents/rules/azion-ui-component-states.md',
+      '.agents/rules/azion-ui-accessibility.md',
+      '.agents/rules/azion-ui-motion.md',
+      '.agents/rules/azion-ui-testid.md',
+      '.agents/rules/azion-ui-deprecation.md',
+      '.agents/rules/azion-ui-api-data.md',
+      '.agents/skills/azion-ui-usage/SKILL.md',
       // UI-craft pack (18 skills: the redundancy/false-positive pass + azion-ui-tables +
       // azion-ui-lists (the index page around the table and its filter system) +
       // azion-ui-create-surface (page vs drawer, and the anatomy both share) +
       // azion-ui-errors (where a failure goes) + azion-ui-layout (the container system every
       // page is built on) + azion-ui-microcopy (Azion product copy rules, unlike the
       // generic content-microcopy dropped below)).
-      '.claude/skills/azion-ui-ux-heuristics/SKILL.md',
-      '.claude/skills/azion-ui-states/SKILL.md',
-      '.claude/skills/azion-ui-form/SKILL.md',
-      '.claude/skills/azion-ui-create-surface/SKILL.md',
-      '.claude/skills/azion-ui-errors/SKILL.md',
-      '.claude/skills/azion-ui-microcopy/SKILL.md',
-      '.claude/skills/azion-ui-tables/SKILL.md',
-      '.claude/skills/azion-ui-lists/SKILL.md',
-      '.claude/skills/azion-ui-navigation/SKILL.md',
-      '.claude/skills/azion-ui-layout/SKILL.md',
-      '.claude/skills/azion-ui-quick-cleanup/SKILL.md',
-      '.claude/skills/azion-ui-theming-dark-mode/SKILL.md',
-      '.claude/skills/azion-ui-data-viz/SKILL.md',
-      '.claude/skills/azion-ui-motion-polish/SKILL.md',
-      '.claude/skills/azion-ui-final-polish/SKILL.md',
-      '.claude/skills/azion-ui-verify/SKILL.md',
-      '.claude/skills/azion-ui-adoption/SKILL.md',
-      '.claude/skills/azion-ui-azion-api/SKILL.md',
-      '.claude/skills/azion-ui-query-explorer/SKILL.md',
-      '.claude/skills/azion-ui-in-product-help/SKILL.md',
-      '.claude/skills/azion-ui-api-data/SKILL.md',
-      '.claude/skills/azion-ui-site-pages/SKILL.md',
-      '.claude/skills/azion-ui-product-screens/SKILL.md',
-      '.claude/agents/azion-ui-advisor.md',
-      '.claude/agents/azion-ui-adopter.md',
-      '.claude/agents/azion-ui-reviewer.md',
-      '.claude/agents/azion-ui-verifier.md',
-      '.claude/agents/azion-ui-adoption-auditor.md'
+      '.agents/skills/azion-ui-ux-heuristics/SKILL.md',
+      '.agents/skills/azion-ui-states/SKILL.md',
+      '.agents/skills/azion-ui-form/SKILL.md',
+      '.agents/skills/azion-ui-create-surface/SKILL.md',
+      '.agents/skills/azion-ui-errors/SKILL.md',
+      '.agents/skills/azion-ui-microcopy/SKILL.md',
+      '.agents/skills/azion-ui-tables/SKILL.md',
+      '.agents/skills/azion-ui-lists/SKILL.md',
+      '.agents/skills/azion-ui-navigation/SKILL.md',
+      '.agents/skills/azion-ui-layout/SKILL.md',
+      '.agents/skills/azion-ui-quick-cleanup/SKILL.md',
+      '.agents/skills/azion-ui-theming-dark-mode/SKILL.md',
+      '.agents/skills/azion-ui-data-viz/SKILL.md',
+      '.agents/skills/azion-ui-motion-polish/SKILL.md',
+      '.agents/skills/azion-ui-final-polish/SKILL.md',
+      '.agents/skills/azion-ui-verify/SKILL.md',
+      '.agents/skills/azion-ui-adoption/SKILL.md',
+      '.agents/skills/azion-ui-azion-api/SKILL.md',
+      '.agents/skills/azion-ui-query-explorer/SKILL.md',
+      '.agents/skills/azion-ui-in-product-help/SKILL.md',
+      '.agents/skills/azion-ui-api-data/SKILL.md',
+      '.agents/skills/azion-ui-site-pages/SKILL.md',
+      '.agents/skills/azion-ui-product-screens/SKILL.md',
+      '.agents/agents/azion-ui-advisor.md',
+      '.agents/agents/azion-ui-adopter.md',
+      '.agents/agents/azion-ui-reviewer.md',
+      '.agents/agents/azion-ui-verifier.md',
+      '.agents/agents/azion-ui-adoption-auditor.md'
     ]) {
       assert.ok(copies.includes(rel), `missing bundle copy ${rel}`)
     }
     // Dropped (false positives) and merged skills must NOT ship — locks the redundancy pass.
     for (const gone of [
-      '.claude/skills/azion-ui-performance-ux/SKILL.md',
-      '.claude/skills/azion-ui-content-microcopy/SKILL.md',
-      '.claude/skills/azion-ui-i18n-readiness/SKILL.md',
-      '.claude/skills/azion-ui-responsive-layout/SKILL.md',
-      '.claude/skills/azion-ui-usability/SKILL.md',
-      '.claude/skills/azion-ui-delight/SKILL.md',
-      '.claude/skills/azion-ui-accessibility-implementation/SKILL.md'
+      '.agents/skills/azion-ui-performance-ux/SKILL.md',
+      '.agents/skills/azion-ui-content-microcopy/SKILL.md',
+      '.agents/skills/azion-ui-i18n-readiness/SKILL.md',
+      '.agents/skills/azion-ui-responsive-layout/SKILL.md',
+      '.agents/skills/azion-ui-usability/SKILL.md',
+      '.agents/skills/azion-ui-delight/SKILL.md',
+      '.agents/skills/azion-ui-accessibility-implementation/SKILL.md'
     ]) {
       assert.ok(!copies.includes(gone), `dropped/merged skill must not ship: ${gone}`)
     }
@@ -583,25 +583,25 @@ test('planInit copies the .claude/rules/azion-ui-*.md bundle', () => {
   }
 })
 
-test('planInit fences the CLAUDE.md fragment instead of appending it once', () => {
+test('planInit fences the AGENTS.md fragment instead of appending it once', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
-    const fenceAction = plan.find((a) => a.type === 'fence' && a.path === 'CLAUDE.md')
-    assert.ok(fenceAction, 'expected a CLAUDE.md fence action')
+    const fenceAction = plan.find((a) => a.type === 'fence' && a.path === 'AGENTS.md')
+    assert.ok(fenceAction, 'expected a AGENTS.md fence action')
     assert.equal(fenceAction.start, FRAGMENT_START)
     assert.ok(fenceAction.content.length > 0, 'fence content must be the fragment body')
     // The fragment body itself is not marker-wrapped by the plan — spliceFragment owns the
     // wrapping — so the legacy marker string should not appear inside the plain content.
     assert.ok(
-      !fenceAction.content.includes(CLAUDE_FRAGMENT_MARKER),
+      !fenceAction.content.includes(FRAGMENT_LEGACY_MARKER),
       'fence content must be the raw fragment body, not pre-wrapped with a marker'
     )
-    // No append action for CLAUDE.md anymore.
+    // No append action for AGENTS.md anymore.
     assert.equal(
-      plan.find((a) => a.type === 'append' && a.path === 'CLAUDE.md'),
+      plan.find((a) => a.type === 'append' && a.path === 'AGENTS.md'),
       undefined,
-      'CLAUDE.md must no longer be planned as an append-once action'
+      'AGENTS.md must no longer be planned as an append-once action'
     )
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -622,8 +622,10 @@ test(
       assert.ok(existsSync(join(dir, '.stylelintrc.json')))
       assert.ok(existsSync(join(dir, '.mcp.json')))
       assert.ok(existsSync(join(dir, '.husky/pre-commit')))
-      assert.ok(existsSync(join(dir, '.claude/rules/azion-ui-imports.md')))
-      assert.ok(existsSync(join(dir, 'CLAUDE.md')))
+      assert.ok(existsSync(join(dir, '.agents/rules/azion-ui-imports.md')))
+      assert.ok(existsSync(join(dir, 'AGENTS.md')))
+      assert.ok(!existsSync(join(dir, 'CLAUDE.md')), 'no Claude Code files without --claude')
+      assert.ok(!existsSync(join(dir, '.claude')), 'no Claude Code files without --claude')
 
       // package.json got the deps.
       const pkg1 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
@@ -635,7 +637,7 @@ test(
       assert.equal(Object.keys(mcp1.mcpServers).length, 1)
       assert.ok(mcp1.mcpServers[MCP_SERVER_NAME])
 
-      const claude1 = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
+      const claude1 = readFileSync(join(dir, 'AGENTS.md'), 'utf8')
       const fenceCount1 = claude1.split(FRAGMENT_START).length - 1
       assert.equal(fenceCount1, 1)
 
@@ -647,11 +649,11 @@ test(
       assert.equal(Object.keys(mcp2.mcpServers).length, 1)
       assert.deepEqual(mcp2, mcp1, '.mcp.json changed on the second run')
 
-      // CLAUDE.md fenced block present exactly once (no duplication), content unchanged.
-      const claude2 = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
+      // AGENTS.md fenced block present exactly once (no duplication), content unchanged.
+      const claude2 = readFileSync(join(dir, 'AGENTS.md'), 'utf8')
       const fenceCount2 = claude2.split(FRAGMENT_START).length - 1
-      assert.equal(fenceCount2, 1, 'CLAUDE fragment duplicated on the second run')
-      assert.equal(claude2, claude1, 'CLAUDE.md changed on the second run')
+      assert.equal(fenceCount2, 1, 'AGENTS fragment duplicated on the second run')
+      assert.equal(claude2, claude1, 'AGENTS.md changed on the second run')
 
       // Dependency versions unchanged (no re-pin).
       const pkg2 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
@@ -667,7 +669,7 @@ test('applyPlan migrates a pre-existing legacy CLAUDE.md marker into a fenced bl
   try {
     writeFileSync(
       join(dir, 'CLAUDE.md'),
-      `# My project\n\n${CLAUDE_FRAGMENT_MARKER}\nOld fragment body.\n\n## Notes\nUser content.\n`
+      `# My project\n\n${FRAGMENT_LEGACY_MARKER}\nOld fragment body.\n\n## Notes\nUser content.\n`
     )
 
     const results = applyPlan(dir, planInit(dir, {}))
@@ -683,7 +685,7 @@ test('applyPlan migrates a pre-existing legacy CLAUDE.md marker into a fenced bl
     const claude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
     assert.equal(claude.split(FRAGMENT_START).length - 1, 1, 'expected exactly one fenced block')
     assert.ok(
-      !claude.includes(CLAUDE_FRAGMENT_MARKER),
+      !claude.includes(FRAGMENT_LEGACY_MARKER),
       'legacy marker must be gone after migration'
     )
     assert.ok(claude.startsWith('# My project'), 'user heading must be preserved')
@@ -718,7 +720,7 @@ test('applyPlan repairs a CLAUDE.md with the legacy fragment duplicated at two p
   const dir = makeProject()
   try {
     // Mirrors the real docs-repo case: the legacy marker + fragment appended twice.
-    const legacyFragment = `${CLAUDE_FRAGMENT_MARKER}\n## @aziontech/ui design system\nOld body.\n`
+    const legacyFragment = `${FRAGMENT_LEGACY_MARKER}\n## @aziontech/ui design system\nOld body.\n`
     writeFileSync(
       join(dir, 'CLAUDE.md'),
       `# Proj\n\n${legacyFragment}\n${legacyFragment}\n## Other\nkeep me\n`
@@ -727,7 +729,7 @@ test('applyPlan repairs a CLAUDE.md with the legacy fragment duplicated at two p
     applyPlan(dir, planInit(dir, {}))
 
     const claude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
-    assert.equal(claude.split(CLAUDE_FRAGMENT_MARKER).length - 1, 0, 'no legacy marker must remain')
+    assert.equal(claude.split(FRAGMENT_LEGACY_MARKER).length - 1, 0, 'no legacy marker must remain')
     assert.equal(claude.split(FRAGMENT_START).length - 1, 1, 'exactly one fenced block must remain')
     assert.ok(claude.includes('## Other\nkeep me'), 'trailing user content must survive the repair')
   } finally {
@@ -735,15 +737,28 @@ test('applyPlan repairs a CLAUDE.md with the legacy fragment duplicated at two p
   }
 })
 
-test('applyPlan writes CLAUDE.md fresh (fence result "written") when the file is absent', () => {
+test('applyPlan writes AGENTS.md fresh (fence result "written") when the file is absent', () => {
   const dir = makeProject()
   try {
-    assert.ok(!existsSync(join(dir, 'CLAUDE.md')))
+    assert.ok(!existsSync(join(dir, 'AGENTS.md')))
     const results = applyPlan(dir, planInit(dir, {}))
     const fenceResult = results.find(
-      (r) => r.action.type === 'fence' && r.action.path === 'CLAUDE.md'
+      (r) => r.action.type === 'fence' && r.action.path === 'AGENTS.md'
     )
     assert.equal(fenceResult.result, 'written')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('init --claude adds the Claude Code adapter: pointers in .claude/ and CLAUDE.md importing AGENTS.md', () => {
+  const dir = makeProject()
+  try {
+    applyPlan(dir, planInit(dir, { claude: true }))
+    assert.match(readFileSync(join(dir, 'CLAUDE.md'), 'utf8'), /@AGENTS\.md/)
+    const pointer = readFileSync(join(dir, '.claude/skills/azion-ui-usage/SKILL.md'), 'utf8')
+    assert.match(pointer, /Read `\.agents\/skills\/azion-ui-usage\/SKILL\.md` and follow it/)
+    assert.ok(!existsSync(join(dir, '.claude/rules')), 'rules stay in .agents/ only')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

@@ -458,7 +458,7 @@ migration (M2.10 row 1), the marketing site (M2.8) and the `azion-ai-toolkit` cl
 | CLI                | New `add`, `diff`, `search` / `view` and `check`.                                                                                                                                                                                                                                                                                                                |
 | Who builds         | AI agents, in parallel where possible (see above). AI evaluation of screens runs in M2.7.                                                                                                                                                                                                                                                                        |
 | Who decides        | Nobody in this project: it is fully specified and merges into `main` at the end (M2.11). For components made after it, the M1.3 flow applies.                                                                                                                                                                                                                    |
-| Development area   | Material for developing Azion UI lives in `contributing/` (and `.specs/`); only `skills/`, `rules/`, `adapters/` and the packages ship.                                                                                                                                                                                                                          |
+| Development area   | Material for developing Azion UI lives in `contributing/` (and `.specs/`); only `skills/`, `rules/`, `agents/`, `fragments/` and the packages ship.                                                                                                                                                                                                              |
 | Surfaces           | Every export and block is `app`, `site` or `docs`; nothing on the site or docs surface may disappear unrecorded.                                                                                                                                                                                                                                                 |
 
 ## Done since the merge review
@@ -742,7 +742,7 @@ accessibility, RTL, examples with code) with its API as `components/<name>.json`
 typography, spacing, motion, i18n, RTL, devices, accessibility, usage) and `llms-full.txt` (every
 page, ~2.1 MB, 3 MB budget: block guidelines without code, first example per component).
 `catalog:build` regenerates it, `catalog:check` and the `llms` gate check it, `test/llms/` tests it,
-and it ships in the npm package. Skills, rules, adapters and both READMEs point agents without the
+and it ships in the npm package. Skills, rules, agents and both READMEs point agents without the
 MCP at `node_modules/@aziontech/ui/llms/llms.txt`. The docs site (M2.3) serves the folder as is.
 
 ## M2.3 — Docs site

@@ -17,7 +17,7 @@ Thanks for working on Azion UI. This document covers how to propose changes that
 Development material and the material Azion UI ships to apps never mix:
 
 - **Ships to apps** (in the npm package): `packages/*`, plus the AI bundle at the root — `skills/`,
-  `rules/` (`scope: general`) and `adapters/`.
+  `rules/` (`scope: general`), `agents/` (the app agents) and `fragments/` (the `AGENTS.md` block).
 - **For Azion UI development only**: `contributing/` (agents, commands, hooks, contributor rules and skills
   such as the mandatory `ui-craft` review, and the process docs `PROCESS.md`, `DOC_LINTS.md`,
   `OVERVIEW_LINT.md`, `OVERVIEW_TESTS.md`, `GOVERNANCE_IMPLEMENTATION.md`), `.specs/`,

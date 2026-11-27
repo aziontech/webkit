@@ -28,13 +28,13 @@ Options:
 3. Writes `.stylelintrc.json` (extending `@aziontech/ui/stylelint-config`, with the `.vue` / `.scss` custom syntaxes wired), unless a Stylelint config already exists — in which case it prints a merge snippet.
 4. Merges the `ui` server into `.mcp.json`.
 5. In a git repository, adds a `prepare` script (`husky`) to `package.json` and writes `.husky/pre-commit` to lint on commit. Running the package-manager install runs `prepare`, which activates the hooks. Outside a git repository it adds no hook and says to re-run `init` after `git init`.
-6. Copies the Claude Code bundle (rules, the `azion-ui-usage` skill, agents) into `.claude/` — only files that are missing, never overwriting local edits.
-7. Appends a `@aziontech/ui` fragment to `CLAUDE.md`, guarded by a marker so it is added once.
+6. Copies the agent files (rules, skills, agents) into `.agents/`, which every coding agent reads — only files that are missing, never overwriting local edits.
+7. Writes the `@aziontech/ui` block into `AGENTS.md`, fenced by markers so it is replaced, never duplicated. When the project uses Claude Code (it has `.claude/` or `CLAUDE.md`, or `init --claude`), it also writes short pointer files in `.claude/skills/` and `.claude/agents/` and a `CLAUDE.md` block that imports `AGENTS.md`.
 8. Writes `src/azion-ui.css` (theme, fonts, `@aziontech/ui/styles` and `./azion-ui.sources.css`) and `src/azion-ui.sources.css` (the Azion UI files the app imports), adds `azionUi()` from `@aziontech/ui/vite-plugin` to an existing `vite.config`, and prepends `import './azion-ui.css'` and `import '@aziontech/icons'` to `src/main.*`. An untouched create-vite (`src/style.css`) or create-vue (`src/assets/main.css`) starter stylesheet is deleted and its import replaced by `import './azion-ui.css'`; an edited one is kept with a note.
 
 ## Idempotency
 
-`init` is safe to run repeatedly. Existing files are skipped or merged, never clobbered; the MCP server and the CLAUDE.md fragment are added only if absent. Re-run it after upgrading without fear.
+`init` is safe to run repeatedly. Existing files are skipped or merged, never clobbered; the MCP server and the `AGENTS.md` block are added only if absent. Re-run it after upgrading without fear.
 
 ## How you work
 
@@ -46,5 +46,5 @@ Options:
 ## What you do not do
 
 - Do not hand-edit the consumer's entry file automatically — advise the import; let them apply it.
-- Do not overwrite an existing ESLint config or existing `.claude/` files.
+- Do not overwrite an existing ESLint config or existing `.agents/` or `.claude/` files.
 - Do not run a package install on their behalf unless they ask.

@@ -60,7 +60,7 @@ When changing UI components in `packages/ui`, update or add examples in the same
 example is enough: the docs page (`/components/<name>`, `/frame/example/<name>/<file>`) and the styled
 visual test of the first example follow from the files; refresh baselines with `/baselines-regenerate`.
 
-Changed a block in `packages/ui/blocks/` (its `.vue`, `variants/`, `block.json` or `guidelines.md`) or an example in `packages/ui/examples/`? They are what the AI copies: keep `block.json` intents and skills and `guidelines.md` current, run `pnpm --filter @aziontech/ui build:catalog`, then commit `catalog.json` and `catalog/` (`check:catalog` compares them). The docs pages and visual tests follow from the files. Consumer skills and rules live at the repo root in `skills/` and `rules/` (agents in `adapters/claude/agents/`); `contributing/` is for people who maintain Azion UI. The full table is in CONTRIBUTING, "What to update when Azion UI changes".
+Changed a block in `packages/ui/blocks/` (its `.vue`, `variants/`, `block.json` or `guidelines.md`) or an example in `packages/ui/examples/`? They are what the AI copies: keep `block.json` intents and skills and `guidelines.md` current, run `pnpm --filter @aziontech/ui build:catalog`, then commit `catalog.json` and `catalog/` (`check:catalog` compares them). The docs pages and visual tests follow from the files. Consumer skills and rules live at the repo root in `skills/` and `rules/` (agents in `agents/`, the `AGENTS.md` block in `fragments/AGENTS.md`); `contributing/` is for people who maintain Azion UI. The full table is in CONTRIBUTING, "What to update when Azion UI changes".
 
 ## 5) Component and styling standards
 
@@ -247,9 +247,9 @@ pnpm --filter @aziontech/ui test:ssr
 
 For deeper, package-specific instructions, agents should also read [`packages/ui/AGENTS.md`](../packages/ui/AGENTS.md) when working inside `packages/ui/`.
 
-## 12) Active enforcement (Claude Code hooks)
+## 12) Active enforcement (write-time hooks)
 
-Nine hooks in [`contributing/hooks/`](hooks/) act as physical guard rails on top of the cultural rules above. They are wired up in [`.claude/settings.json`](../.claude/settings.json) and run automatically — the agent cannot bypass them.
+Nine hooks in [`contributing/hooks/`](hooks/) act as physical guard rails on top of the cultural rules above. They are plain Node scripts; Claude Code runs them through its adapter, [`.claude/settings.json`](../.claude/settings.json), and the agent cannot bypass them. Every check they make also runs in CI, so work from any other agent is held to the same rules at the pull request.
 
 ### 12.1) Tokens, references and authoring
 

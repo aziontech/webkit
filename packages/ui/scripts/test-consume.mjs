@@ -55,7 +55,7 @@ if (!/drift: no/.test(syncOut)) {
   fail(`sync --check reported drift right after init:\n${syncOut}`)
 }
 
-const ruleFile = join(app, '.claude/rules/azion-ui-imports.md')
+const ruleFile = join(app, '.agents/rules/azion-ui-imports.md')
 const pristine = readFileSync(ruleFile, 'utf8')
 writeFileSync(ruleFile, `${pristine}\n<!-- local note -->\n`)
 
@@ -74,8 +74,8 @@ if (!/drift: no/.test(syncOut)) {
 }
 
 const doctorOut = execFileSync('node', [cliBin, 'doctor'], { cwd: app, encoding: 'utf8' })
-if (!/OK\s+claude bundle/.test(doctorOut)) {
-  fail(`doctor did not report the claude bundle as OK after sync --force:\n${doctorOut}`)
+if (!/OK\s+agent files/.test(doctorOut)) {
+  fail(`doctor did not report the agent files as OK after sync --force:\n${doctorOut}`)
 }
 
 run('pnpm', ['run', 'build'], app, { PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: 'false' })

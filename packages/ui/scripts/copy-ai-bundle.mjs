@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const PKG = resolve(SCRIPT_DIR, '..')
 const REPO = resolve(PKG, '../..')
-const COPIES = ['skills', 'rules', 'adapters']
+const COPIES = ['skills', 'rules', 'agents', 'fragments']
 
 export function cleanAiBundle(pkg = PKG) {
   for (const dir of COPIES) rmSync(join(pkg, dir), { recursive: true, force: true })

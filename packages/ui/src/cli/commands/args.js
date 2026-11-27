@@ -13,6 +13,7 @@ const KNOWN_FLAGS = new Set([
   '--json',
   '--with-guidelines',
   '--no-lint',
+  '--claude',
   '-h',
   '--help'
 ])
@@ -70,6 +71,7 @@ export function parseArgs(argv) {
     json: flags.has('--json'),
     withGuidelines: flags.has('--with-guidelines'),
     noLint: flags.has('--no-lint'),
+    claude: flags.has('--claude'),
     dest: values['--dest'],
     variant: values['--variant'],
     example: values['--example'],

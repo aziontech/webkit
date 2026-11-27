@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
 const CATALOG_PATH = resolve(SCRIPT_DIR, '../catalog.json')
-const DOC_DIRS = ['skills', 'rules', 'adapters']
+const DOC_DIRS = ['skills', 'rules', 'agents', 'fragments']
 const IMPORT_RE = /(node_modules\/)?@aziontech\/ui\/([a-z0-9][a-zA-Z0-9./-]*[a-zA-Z0-9])(-\*|\/<)?/g
 const NOT_A_SUBPATH = new Set(['src'])
 const NEGATION_RE =
@@ -70,7 +70,7 @@ function main() {
     process.exit(1)
   }
   process.stdout.write(
-    `✓ every @aziontech/ui/* cited in skills/, rules/, adapters/ and blocks exists (${sources.length} sources)\n`
+    `✓ every @aziontech/ui/* cited in skills/, rules/, agents/, fragments/ and blocks exists (${sources.length} sources)\n`
   )
 }
 

@@ -1,6 +1,6 @@
 # Rule: authoring docs — skills and agents carry conforming frontmatter, name no files as examples
 
-The contributor bundle in `contributing/` that steers the AI — the **skills** and **agents**, both the DS-internal set and the consumer-facing set kept at the repo root (`skills/`, `rules/`, `adapters/claude/agents/`) and shipped in the package by its `prepack` — is a public interface as much as a component is. A skill whose `name` disagrees with its folder, an agent with an empty `description`, a doc missing its `scope`, or a skill that hardcodes a component **source path** as an example are all the same class of drift the component standards already forbid in code. This rule fixes the frontmatter shape and bans the file-as-example anti-pattern, and it is enforced write-time and in CI exactly like every other standard.
+The contributor bundle in `contributing/` that steers the AI — the **skills** and **agents**, both the DS-internal set and the consumer-facing set kept at the repo root (`skills/`, `rules/`, `agents/`) and shipped in the package by its `prepack` — is a public interface as much as a component is. A skill whose `name` disagrees with its folder, an agent with an empty `description`, a doc missing its `scope`, or a skill that hardcodes a component **source path** as an example are all the same class of drift the component standards already forbid in code. This rule fixes the frontmatter shape and bans the file-as-example anti-pattern, and it is enforced write-time and in CI exactly like every other standard.
 
 ## The populations and their scope
 
@@ -11,7 +11,7 @@ The contributor bundle in `contributing/` that steers the AI — the **skills** 
 | Internal skills | `contributing/skills/<name>/SKILL.md`                 | `ui`          |
 | Internal agents | `contributing/agents/<name>.md` (except `_README.md`) | `ui`          |
 | Consumer skills | `skills/<name>/SKILL.md` (repo root)                  | `general`     |
-| Consumer agents | `adapters/claude/agents/<name>.md` (repo root)        | `general`     |
+| Consumer agents | `agents/<name>.md` (repo root)                        | `general`     |
 
 A file inside a skill folder that is not `SKILL.md` (a `references/*.md`) is not governed; nor is `_README.md`; nor are the `contributing/rules/*.md` docs (those are governed by [`standards.mjs`](../hooks/lib/standards.mjs) and the invariant test).
 
@@ -80,7 +80,7 @@ The authoring guide with the shapes and examples is `apps/docs/README.md` § "Do
 ## Hard prohibitions
 
 - Do not ship a skill/agent without conforming frontmatter (name == folder/filename, non-empty description, correct `scope`).
-- Do not set `scope` to anything but `general` (`skills/`, `adapters/`) / `ui` (`contributing/`).
+- Do not set `scope` to anything but `general` (`skills/`, `agents/`) / `ui` (`contributing/`).
 - Do not ship a consumer skill without an `azion-ui-` name prefix, a `status:`, and a `last_updated:`.
 - Do not ship a skill without a non-empty `enforced_by:`, and do not name an enforcer that does not resolve (a non-existent rule, the wrong population's rule, or anything other than `ui-verify` / `review`).
 - Do not label an example pair with anything but Do / Don't, colour its icon with a `-foreground` token on a surface, or put a task list in a page the docs site renders.

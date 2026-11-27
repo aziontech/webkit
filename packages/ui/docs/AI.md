@@ -17,7 +17,9 @@ Paste this into Claude Code, Cursor, Codex or any other coding agent, in your pr
 
 - **`.mcp.json`**: the `azion-ui` MCP server, pinned to the major version you installed.
 - **The agent instructions**: an Azion UI block in `AGENTS.md`, which every agent reads, and the
-  same block in `CLAUDE.md`, plus the skills and rules for Claude Code.
+  skills, rules and agents in `.agents/`. When the project uses Claude Code (or with
+  `init --claude`), it also adds short pointer files in `.claude/` and a `CLAUDE.md` that imports
+  `AGENTS.md`, so Claude Code finds the same files.
 - **The lint**: an ESLint config with the Azion UI preset, a Stylelint config and a pre-commit
   hook, so a wrong import or a raw colour fails before it is committed.
 - **The styles**: `src/azion-ui.css` with the theme and the component classes, imported once in

@@ -15,11 +15,11 @@ function resolveTemplatesRoot() {
 export const AI_TEMPLATES = resolveTemplatesRoot()
 
 export function agentsDir(templatesDir = AI_TEMPLATES) {
-  return join(templatesDir, 'adapters/claude/agents')
+  return join(templatesDir, 'agents')
 }
 
 export function fragmentFile(templatesDir = AI_TEMPLATES) {
-  return join(templatesDir, 'adapters/AGENTS_FRAGMENT.md')
+  return join(templatesDir, 'fragments/AGENTS.md')
 }
 
 export function templateFile(templatesDir, rel) {

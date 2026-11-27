@@ -182,7 +182,7 @@ message naming the violated rule.
 <details>
 <summary><b>▸ Details — every hook and what it blocks</b></summary>
 
-Wired in [`.claude/settings.json`](../../.claude/settings.json); all fail **open** on
+Wired in [`.claude/settings.json`](../../.claude/settings.json) (the Claude Code adapter; another agent runs the same scripts, and CI runs the same checks); all fail **open** on
 unexpected errors (a hook bug never bricks the workflow) and fail **closed** on violations.
 
 | Hook                                                                | Fires on                                | Blocks                                                                                                                                                                                                                                         |
@@ -372,12 +372,15 @@ husky pre-commit, and a `contributing/` guidance bundle. Idempotent; `--dry-run`
    syntaxes wired.
 4. **`.mcp.json`** — the `azion-ui` MCP server merged in.
 5. **husky `pre-commit`** — lint on commit.
-6. **`contributing/` bundle** — the `general`-scope rules rewritten for consumers
+6. **Agent files in `.agents/`** — the `general`-scope rules rewritten for consumers
    (`azion-ui-tokens`, `azion-ui-props`, `azion-ui-emits`, `azion-ui-styling`,
    `azion-ui-prefer-over-custom`, …), an `azion-ui-usage` skill, and reviewer/expert/adopter
    agents (sources at the repo root: [`skills/`](../../skills/), [`rules/`](../../rules/),
-   [`adapters/claude/agents/`](../../adapters/claude/agents/); the package ships them through `prepack`).
-7. **`AGENTS.md` / `CLAUDE.md` fragment** ([`adapters/AGENTS_FRAGMENT.md`](../../adapters/AGENTS_FRAGMENT.md)) — the same block, fenced in both files.
+   [`agents/`](../../agents/); the package ships them through `prepack`). With Claude Code in the
+   project (or `--claude`), short pointer files in `.claude/skills/` and `.claude/agents/` send it
+   to the `.agents/` files.
+7. **`AGENTS.md` block** ([`fragments/AGENTS.md`](../../fragments/AGENTS.md)) — fenced, replaced in
+   place on every run; with Claude Code, `CLAUDE.md` gets a fenced `@AGENTS.md` import.
 8. **Theme wiring advice** — suggests the theme import at your entry file, never edits it.
 
 Flags: `--dry-run` (plan only) · `--strict` (default preset — everything `error`) ·
@@ -568,7 +571,7 @@ practices**, adoptable by any project (with or without Azion UI components).
 | Token discipline engine    | `src/eslint-plugin/lib/token-checks.js`          | pack engine (token source configurable)     |
 | ESLint preset              | `@aziontech/ui/eslint-plugin` (standards subset) | the pack's eslint plugin                    |
 | Stylelint config           | `@aziontech/ui/stylelint-config`                 | the pack's stylelint config                 |
-| AI guidance bundle         | `skills/`, `rules/`, `adapters/` (repo root)     | the pack's `init` bundle                    |
+| AI guidance bundle         | `skills/`, `rules/`, `agents/`, `fragments/`     | the pack's `init` bundle                    |
 | Registry + invariant       | `standards.mjs` + `invariant.test.mjs`           | the pack's registry; Azion UI re-imports it |
 
 **What stays in Azion UI**: the 10 `ui`-scope standards, the spec pipeline

@@ -1,4 +1,4 @@
-// Every ```vue and ```ts snippet in the shipped docs (READMEs, skills, rules, adapters, the
+// Every ```vue and ```ts snippet in the shipped docs (READMEs, skills, rules, agents, fragments, the
 // package docs and the migration guide) is type-checked with vue-tsc as a file in a create-vue
 // app that resolves @aziontech/ui from this workspace, so a renamed prop, a removed export or a
 // wrong import in a snippet fails here instead of in the app that copied it.
@@ -55,7 +55,8 @@ export const DOC_FILES = [
   'packages/ui/docs/toolkit',
   'skills',
   'rules',
-  'adapters'
+  'agents',
+  'fragments'
 ].flatMap((path) => markdownFiles(join(REPO_ROOT, path)))
 
 function markedPartial(lines, fenceIndex) {

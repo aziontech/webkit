@@ -13,7 +13,7 @@ import {
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
 const BASELINE = join(SCRIPT_DIR, 'authoring-docs-baseline.json')
-const DIRS = ['contributing/skills', 'contributing/agents', 'skills', 'adapters/claude/agents']
+const DIRS = ['contributing/skills', 'contributing/agents', 'skills', 'agents']
 
 function walk(dir) {
   const out = []

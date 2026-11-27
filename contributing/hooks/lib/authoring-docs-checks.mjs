@@ -9,7 +9,7 @@ const LOC = {
   skillInternal: /^contributing\/skills\/([a-z][a-z0-9-]*)\/SKILL\.md$/,
   agentInternal: /^contributing\/agents\/([a-z][a-z0-9-]*)\.md$/,
   skillConsumer: /^skills\/([a-z][a-z0-9-]*)\/SKILL\.md$/,
-  agentConsumer: /^adapters\/claude\/agents\/([a-z][a-z0-9-]*)\.md$/
+  agentConsumer: /^agents\/([a-z][a-z0-9-]*)\.md$/
 }
 
 // rel is POSIX-normalized. Returns null for anything that is not a governed doc
@@ -45,7 +45,7 @@ export const MESSAGES = {
   'scope-missing': 'frontmatter is missing the required `scope:` field (general|ui).',
   'scope-invalid': 'frontmatter `scope` must be exactly "general" or "ui".',
   'scope-mismatch':
-    'frontmatter `scope` disagrees with the file location (skills/ and adapters/ ⇒ general; contributing/ ⇒ ui).',
+    'frontmatter `scope` disagrees with the file location (skills/ and agents/ ⇒ general; contributing/ ⇒ ui).',
   'consumer-skill-prefix': 'a consumer skill `name` must start with "azion-ui-".',
   'consumer-skill-status': 'a consumer skill must declare `status:`.',
   'consumer-skill-last-updated': 'a consumer skill must declare `last_updated:`.',

@@ -111,7 +111,7 @@ test('scanMarkdown reads fenced snippets and indented ones, and stays silent on 
   )
 })
 
-test('blocks, examples, src, skills, rules and adapters use no deprecated Azion UI name', () => {
+test('blocks, examples, src, skills, rules, agents and fragments use no deprecated Azion UI name', () => {
   const findings = scanRepo()
   assert.deepEqual(
     findings.map((f) => `${f.file}:${f.line} ${f.message}`),

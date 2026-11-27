@@ -27,7 +27,7 @@ function makeMonorepo({ git = true } = {}) {
   return { root, app }
 }
 
-const bundleCheck = (dir) => planDoctor(dir).find((c) => c.check === 'claude bundle')
+const bundleCheck = (dir) => planDoctor(dir).find((c) => c.check === 'agent files')
 
 test('an app with no agent files of its own uses the bundle at the repository root', () => {
   const { root, app } = makeMonorepo()
@@ -41,11 +41,11 @@ test('an app with no agent files of its own uses the bundle at the repository ro
     assert.equal(check.status, 'ok')
     assert.match(check.detail, /\.\.\/\.\. are current/)
 
-    rmSync(join(root, '.claude', 'rules', 'azion-ui-imports.md'))
+    rmSync(join(root, '.agents', 'rules', 'azion-ui-imports.md'))
     check = bundleCheck(app)
     assert.equal(check.status, 'fail')
     assert.match(check.detail, /sync` in \.\.\/\.\./)
-    assert.match(check.detail, /missing: \.\.\/\.\.\/\.claude\/rules\/azion-ui-imports\.md/)
+    assert.match(check.detail, /missing: \.\.\/\.\.\/\.agents\/rules\/azion-ui-imports\.md/)
   } finally {
     rmSync(root, { recursive: true, force: true })
   }
@@ -58,8 +58,8 @@ test('sync run inside the app reconciles the root bundle instead of writing a se
     const r = cli(app, 'sync')
     assert.equal(r.code, 0, r.stderr)
     assert.match(r.stdout, /the repository root that owns the agent files/)
-    assert.equal(existsSync(join(app, '.claude')), false)
-    assert.equal(existsSync(join(root, '.claude', 'rules', 'azion-ui-imports.md')), true)
+    assert.equal(existsSync(join(app, '.agents')), false)
+    assert.equal(existsSync(join(root, '.agents', 'rules', 'azion-ui-imports.md')), true)
     assert.equal(bundleCheck(app).status, 'ok')
   } finally {
     rmSync(root, { recursive: true, force: true })

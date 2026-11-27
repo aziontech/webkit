@@ -30,7 +30,8 @@ async function resolveInitOptions(parsed) {
   const opts = {
     recommended: parsed.recommended,
     icons: !parsed.noIcons,
-    wireEntry: !parsed.noEntry
+    wireEntry: !parsed.noEntry,
+    claude: parsed.claude
   }
   const interactive = process.stdin.isTTY && process.stdout.isTTY && !parsed.yes && !parsed.dryRun
   if (!interactive) return opts
@@ -74,7 +75,7 @@ const PLAN_LINES = {
   'remove-starter': (action) =>
     `PLAN   remove the starter ${action.files.join(', ')} and its import in ${action.path}\n`,
   fence: (action) => `PLAN   fence ${action.path}\n`,
-  report: (action) => `PLAN   report ${action.state}: .claude/${action.rel}\n`,
+  report: (action) => `PLAN   report ${action.state}: ${action.path}\n`,
   'activate-hooks': () => 'PLAN   activate git hooks (npx husky)\n'
 }
 

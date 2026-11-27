@@ -69,8 +69,9 @@ Commands:
                    exits 1 when the file is stale.
   report          Measure ui adoption via this project's own ESLint.
   canary          Prove the design-system lint rules still reach this project.
-  sync            Reconcile the copied .claude/ bundle + CLAUDE.md fragment against
-                   this Azion UI version's templates. In a monorepo app with no agent
+  sync            Reconcile the agent files (.agents/ and the AGENTS.md fragment; for
+                   Claude Code also .claude/ pointers and CLAUDE.md) against this Azion UI
+                   version's templates. In a monorepo app with no agent
                    files of its own, works on the repository root that has them.
   migrate v6      Rewrite this project for the v6 major: renamed imports and components,
                    renamed props and values, icon classes (pi pi-times → az az-x,
@@ -86,6 +87,8 @@ Options (init):
   -y, --yes       Accept every default; never prompt (CI / scripted runs).
   --no-icons      Skip @aziontech/icons (the icon font) and its entry import.
   --no-entry      Do not edit the app entry (src/main.*); print the imports instead.
+  --claude        Also write the Claude Code adapter (.claude/ pointers, CLAUDE.md). Written
+                  anyway when the project already has .claude/ or CLAUDE.md.
   -h, --help      Show this help.
 
 Options (add):
@@ -117,6 +120,7 @@ Options (sync):
   --dry-run       Apply nothing; print what would happen; always exits 0.
   --force         Also overwrite files edited locally after they were stamped.
   --json          Print the report as JSON instead of the state table.
+  --claude        Also write the Claude Code adapter (see init).
 
 Run interactively (a TTY, no --yes) and init asks about the optional pieces —
 icons, entry wiring — before writing anything.
@@ -141,7 +145,8 @@ const HANDLERS = {
       check: parsed.check,
       dryRun: parsed.dryRun,
       force: parsed.force,
-      json: parsed.json
+      json: parsed.json,
+      claude: parsed.claude
     })
 }
 

@@ -32,7 +32,7 @@ test('docFileKind resolves each population and skips non-governed paths', () => 
     scope: 'general',
     unit: 'azion-ui-usage'
   })
-  assert.deepEqual(docFileKind('adapters/claude/agents/azion-ui-advisor.md'), {
+  assert.deepEqual(docFileKind('agents/azion-ui-advisor.md'), {
     kind: 'agent',
     variant: 'consumer',
     scope: 'general',
@@ -153,7 +153,7 @@ test('enforced_by is required on skills and exempt on agents', () => {
 })
 
 test('scope-mismatch fires when scope disagrees with the file location', () => {
-  const rel = 'adapters/claude/agents/azion-ui-x.md'
+  const rel = 'agents/azion-ui-x.md'
   const content = [
     '---',
     'name: azion-ui-x',

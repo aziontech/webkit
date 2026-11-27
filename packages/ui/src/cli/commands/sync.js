@@ -20,11 +20,15 @@ function printSyncTable(plan) {
     if (!entry.action) continue
     acted += 1
     const forced = entry.action.forced === true
-    out(`${syncLabel(entry.state, forced)} .claude/${entry.rel} (${entry.state})\n`)
+    out(`${syncLabel(entry.state, forced)} ${entry.path} (${entry.state})\n`)
   }
-  if (plan.fragment.action) {
+  for (const [name, fragment] of [
+    ['AGENTS.md', plan.fragment],
+    ['CLAUDE.md', plan.claudeFragment]
+  ]) {
+    if (!fragment?.action) continue
     acted += 1
-    out(`FENCE  CLAUDE.md (fragment ${plan.fragment.state})\n`)
+    out(`FENCE  ${name} (fragment ${fragment.state})\n`)
   }
   const current = plan.entries.length - plan.entries.filter((e) => e.action).length
   out(
@@ -36,7 +40,7 @@ function printSourceRoot(bundleRoot, json) {
   out(
     json
       ? `${JSON.stringify({ drift: false, source: bundleRoot.dir, entries: [] }, null, 2)}\n`
-      : `\n@aziontech/ui sync\n${bundleRoot.dir} holds the bundle sources (skills/, rules/, adapters/) — nothing to sync.\n`
+      : `\n@aziontech/ui sync\n${bundleRoot.dir} holds the bundle sources (skills/, rules/, agents/) — nothing to sync.\n`
   )
 }
 
@@ -46,6 +50,7 @@ function printSyncJson(plan) {
     fragment: plan.fragment.state,
     entries: plan.entries.map((e) => ({
       rel: e.rel,
+      path: e.path,
       state: e.state,
       action: e.action ? e.action.type : null
     }))
@@ -62,14 +67,14 @@ function printSyncText(plan, bundleRoot, applyNothing) {
   printSyncTable(plan)
 }
 
-function syncBundle(appDir, { check, dryRun, force, json }) {
+function syncBundle(appDir, { check, dryRun, force, json, claude }) {
   const applyNothing = check || dryRun
   const bundleRoot = resolveBundleRoot(appDir)
   if (bundleRoot.kind === 'source') {
     printSourceRoot(bundleRoot, json)
     return 0
   }
-  const plan = planSync(bundleRoot.dir, { force })
+  const plan = planSync(bundleRoot.dir, claude ? { force, claude } : { force })
   if (json) printSyncJson(plan)
   else printSyncText(plan, bundleRoot, applyNothing)
   if (!applyNothing) applyPlan(bundleRoot.dir, plan.actions)

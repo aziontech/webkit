@@ -4,7 +4,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 
 ## v6-package.json
 
-`v6-package.json`, 33 entries.
+`v6-package.json`, 34 entries.
 
 | Where | Old | New |
 | --- | --- | --- |
@@ -24,6 +24,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | aiBundle › dirs | `0` | `.claude/skills` |
 | aiBundle › dirs | `1` | `.claude/rules` |
 | aiBundle › dirs | `2` | `.claude/agents` |
+| aiBundle | `target` | `.agents` |
 | aiBundle › prefixes | `webkit-ui-` | `azion-ui-` |
 | aiBundle › prefixes | `webkit-` | `azion-ui-` |
 | aiBundle › marker | `webkit-sync` | `azion-ui-sync` |

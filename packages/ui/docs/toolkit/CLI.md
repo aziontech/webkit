@@ -6,7 +6,7 @@ One command to adopt the [`@aziontech/ui`](https://github.com/aziontech/webkit) 
 npx @aziontech/ui init
 ```
 
-It wires everything and then gets out of the way: after setup there are no extra commands to remember. The FORCE layer (ESLint + Stylelint) blocks incorrect usage on commit and in CI; the GUIDE layer (the Azion UI MCP + a Claude Code bundle) helps you and your AI write correct code from the start.
+It wires everything and then gets out of the way: after setup there are no extra commands to remember. The FORCE layer (ESLint + Stylelint) blocks incorrect usage on commit and in CI; the GUIDE layer (the Azion UI MCP + the agent files in `.agents/` and `AGENTS.md`) helps you and your AI write correct code from the start.
 
 ## What `init` does
 
@@ -28,8 +28,9 @@ On a TTY (and without `--yes`), `init` first asks about the optional pieces — 
 
    `init` also lists any stylesheet under `src/` with raw colours (hex, `rgb()`, `hsl()` — a starter template's `style.css` usually has them): the hook's stylelint rejects them, so replace them with tokens or delete the starter stylesheet before the first commit.
 
-7. **`.claude/` bundle** — every `rules/*.md`, `skills/*/SKILL.md` and `agents/*.md` template, derived from the templates directory itself (so a new template ships automatically instead of needing a hand-maintained list; anything outside that shape, such as a skill's `references/`, is not shipped, and a test fails if one appears so shipping it is a deliberate decision), copied via the same policy as `sync` (see below): on a fresh project every file is missing, so `init` copies all of them — each stamped with a provenance marker so a later `sync` can tell a pristine copy from one you have edited.
-8. **`CLAUDE.md` fragment** — kept in a fenced block (`<!-- @aziontech/ui:start -->` … `<!-- @aziontech/ui:end -->`) that is replaced in place on every `init` run, so template updates reach a project that already ran `init` once. A pre-fence legacy marker (`<!-- @aziontech/ui -->`) from an older `init` is migrated into the fence automatically; a fragment duplicated at more than one position (however it got that way) is repaired down to a single fenced block.
+7. **Agent files in `.agents/`** — every `rules/*.md`, `skills/*/SKILL.md` and `agents/*.md` template, derived from the templates directory itself (so a new template ships automatically instead of needing a hand-maintained list; anything outside that shape, such as a skill's `references/`, is not shipped, and a test fails if one appears so shipping it is a deliberate decision), copied via the same policy as `sync` (see below): on a fresh project every file is missing, so `init` copies all of them — each stamped with a provenance marker so a later `sync` can tell a pristine copy from one you have edited.
+   `.agents/` is the one real copy, read by any coding agent (Codex, Cursor, Copilot, Gemini CLI, Claude Code). When the project uses Claude Code (it has `.claude/` or `CLAUDE.md`), or with `--claude`, `init` also writes the **Claude Code adapter**: a short pointer file in `.claude/skills/<name>/SKILL.md` and `.claude/agents/<name>.md` for each skill and agent (the same frontmatter, and a body that says to read the `.agents/` file), plus a fenced `@AGENTS.md` import in `CLAUDE.md`. Rules are not copied to `.claude/`; `AGENTS.md` points at `.agents/rules/`.
+8. **`AGENTS.md` block** — kept in a fenced block (`<!-- @aziontech/ui:start -->` … `<!-- @aziontech/ui:end -->`) that is replaced in place on every `init` run, so template updates reach a project that already ran `init` once. A pre-fence legacy marker (`<!-- @aziontech/ui -->`) from an older `init` is migrated into the fence automatically; a fragment duplicated at more than one position (however it got that way) is repaired down to a single fenced block.
 9. **CSS scan list** — `src/azion-ui.sources.css`, one `@source` per Azion UI file the app imports (the components plus what they import), so the app's stylesheet holds only their classes; `src/azion-ui.css` imports it. An existing `vite.config` gets `azionUi()` from `@aziontech/ui/vite-plugin`, which rewrites the list on every dev start, build and import change (a changed file is read again once it settles, so a half-written file never shrinks the list); with no Vite config, `init` says to run `npx @aziontech/ui css` after changing imports.
 10. **Entry wiring** — `import './azion-ui.css'` and `import '@aziontech/icons'` prepended once to `src/main.*`; skipped when already imported, `--no-entry` prints the imports instead of editing the file. The starter stylesheet of a `create-vite` app (`src/style.css`, `import './style.css'`) or a `create-vue` app (`src/assets/main.css` + `base.css`, `import './assets/main.css'`) is removed when it is byte-for-byte the template's, and its import line becomes `import './azion-ui.css'`: its global rules (body margin and colours, `#app` width) fight the theme. A starter you edited, or one another file imports (a Cypress support file), is left in place with a note.
 
@@ -197,39 +198,39 @@ The toolkit is fail-open by design (a missing catalog disables the lint rules ra
 - **styles import** (`./azion-ui.css`) at the app entry, and the **icons import** when `@aziontech/icons` is a dependency;
 - **toast setup** — only when the source imports `@aziontech/ui/toast`: a region must be wired (`.use(ToastPlugin)` in the entry, or a mounted Toaster), otherwise `WARN` with the exact fix;
 - **dependency versions** — the resolved installed version of each toolkit dependency, with a `WARN` for any still pinned as `latest` (and the suggested `^x.y.z` pin);
-- **claude bundle** — every `.claude/` rule/skill/agent and the `CLAUDE.md` fragment are current for this Azion UI version. `FAIL` when anything is `missing`/`stale`/`orphan` (drift — the same condition `sync --check` exits 1 on); `WARN` when the only issue is a file you edited locally (`modified`) — the detail line always names `npx @aziontech/ui sync` as the fix.
+- **agent files** — every `.agents/` rule/skill/agent, the `AGENTS.md` block and, with the Claude Code adapter, the `.claude/` pointers and the `CLAUDE.md` import are current for this Azion UI version. `FAIL` when anything is `missing`/`stale`/`orphan` (drift — the same condition `sync --check` exits 1 on); `WARN` when the only issue is a file you edited locally (`modified`) — the detail line always names `npx @aziontech/ui sync` as the fix.
 
 It writes nothing and exits non-zero if any check is `FAIL` — safe to run in CI as a setup gate.
 
-## `sync` — reconcile the `.claude/` bundle and `CLAUDE.md` fragment
+## `sync` — reconcile the agent files and the `AGENTS.md` block
 
 ```bash
-npx @aziontech/ui sync [--check] [--dry-run] [--force] [--json]
+npx @aziontech/ui sync [--check] [--dry-run] [--force] [--json] [--claude]
 ```
 
-`init` copies the `.claude/` bundle once, skip-if-exists — an upstream update to a rule/skill/agent never reaches a project that already ran `init`, and there is no way to tell a pristine copy from one you edited on purpose. `sync` fixes both: every file `init`/`sync` writes into `.claude/` carries one inert HTML-comment **provenance marker** —
+`init` copies the agent files once, skip-if-exists — an upstream update to a rule/skill/agent never reaches a project that already ran `init`, and there is no way to tell a pristine copy from one you edited on purpose. `sync` fixes both: every file `init`/`sync` writes into `.agents/` (and each `.claude/` pointer) carries one inert HTML-comment **provenance marker** —
 
 ```
-<!-- azion-ui-sync source=claude/rules/azion-ui-imports.md version=5.0.0 sha256=2751a3a2f303ad21 -->
+<!-- azion-ui-sync source=rules/azion-ui-imports.md version=5.0.0 sha256=2751a3a2f303ad21 -->
 ```
 
-— placed on line 1 for a file with no frontmatter, or as the first line after the closing `---` of a YAML frontmatter block (skills/agents), so it is never mistaken for a frontmatter key. `sha256` is the first 16 hex chars of a hash of the file's own body (the marker line removed, `\r\n` normalized to `\n`). It's an HTML comment specifically because that is inert in rendered Markdown, adds no YAML key for Claude Code (or anything else) to validate, and works identically whether or not the file has frontmatter.
+— placed on line 1 for a file with no frontmatter, or as the first line after the closing `---` of a YAML frontmatter block (skills/agents), so it is never mistaken for a frontmatter key. `sha256` is the first 16 hex chars of a hash of the file's own body (the marker line removed, `\r\n` normalized to `\n`). It's an HTML comment specifically because that is inert in rendered Markdown, adds no YAML key for an agent tool to validate, and works identically whether or not the file has frontmatter.
 
 Comparing that hash to a freshly computed one is how `sync` classifies every bundle file, and the same policy decides what it does about each:
 
-| State                 | Meaning                                                                                                                                 | Action (default)                                      | Action (`--force`)       |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ------------------------ |
-| `missing`             | not present in the project yet                                                                                                          | **COPY** (write, stamped)                             | same                     |
-| `current`             | marker present, body unchanged since stamped, template unchanged since                                                                  | nothing                                               | same                     |
-| `stale`               | marker present, body unchanged since stamped, but the **template** has since changed                                                    | **UPDATE** (rewrite, stamped)                         | same                     |
-| `modified`            | marker present, but the body no longer matches its own marker hash (you edited it)                                                      | **SKIP** (left alone, reported)                       | **STAMP** (overwritten)  |
-| `unstamped-identical` | no marker, but the body is byte-identical to the template (a pre-`sync` copy)                                                           | **STAMP** (marker added, content otherwise unchanged) | same                     |
-| `unstamped-different` | no marker, and the body differs from the template                                                                                       | **SKIP** (left alone, reported)                       | **STAMP** (overwritten)  |
-| `orphan`              | an `azion-ui-*`-named file under `.claude/{rules,skills,agents}` carries a marker whose `source` no longer exists in the current bundle | **ORPHAN** (reported only)                            | same — **never deleted** |
+| State                 | Meaning                                                                                                                                                              | Action (default)                                      | Action (`--force`)       |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ------------------------ |
+| `missing`             | not present in the project yet                                                                                                                                       | **COPY** (write, stamped)                             | same                     |
+| `current`             | marker present, body unchanged since stamped, template unchanged since                                                                                               | nothing                                               | same                     |
+| `stale`               | marker present, body unchanged since stamped, but the **template** has since changed                                                                                 | **UPDATE** (rewrite, stamped)                         | same                     |
+| `modified`            | marker present, but the body no longer matches its own marker hash (you edited it)                                                                                   | **SKIP** (left alone, reported)                       | **STAMP** (overwritten)  |
+| `unstamped-identical` | no marker, but the body is byte-identical to the template (a pre-`sync` copy)                                                                                        | **STAMP** (marker added, content otherwise unchanged) | same                     |
+| `unstamped-different` | no marker, and the body differs from the template                                                                                                                    | **SKIP** (left alone, reported)                       | **STAMP** (overwritten)  |
+| `orphan`              | an `azion-ui-*`-named file under `.agents/{rules,skills,agents}` or `.claude/{skills,agents}` carries a marker whose `source` no longer exists in the current bundle | **ORPHAN** (reported only)                            | same — **never deleted** |
 
-The `CLAUDE.md` fragment is tracked separately (it isn't one file among many; it's the one fenced block `init` already replaces wholesale — see above), with its own three drift states — `missing`, `legacy` (a pre-fence marker that needs migrating), `stale` (the fence exists but its body no longer matches the current template) — each printed as **FENCE**; `current` prints nothing.
+The `AGENTS.md` block (and, with the Claude Code adapter, the `CLAUDE.md` import) is tracked separately (it isn't one file among many; it's the one fenced block `init` already replaces wholesale — see above), with its own three drift states — `missing`, `legacy` (a pre-fence marker that needs migrating), `stale` (the fence exists but its body no longer matches the current template) — each printed as **FENCE**; `current` prints nothing.
 
-**`drift`** — the condition `--check`'s exit code reports — is true when anything is `missing`, `stale`, or `orphan`, or the fragment is anything but `current`. A `modified` file is **not** drift: it is a deliberate local edit, reported so you know about it, never touched without `--force`.
+**`drift`** — the condition `--check`'s exit code reports — is true when anything is `missing`, `stale`, or `orphan`, or a fenced block is anything but `current`. A `modified` file is **not** drift: it is a deliberate local edit, reported so you know about it, never touched without `--force`.
 
 If a marker's `sha256` is hand-edited while the body stays pristine, the recomputed body hash no longer matches the (tampered) marker hash, so the file classifies as `modified` — indistinguishable from, and treated the same as, a genuine local edit. That's deliberate: there's no way to tell "the body changed" from "the marker changed" from content alone, and `modified` is the safe side to err on — sync never overwrites either without `--force`.
 
@@ -240,7 +241,8 @@ If a marker's `sha256` is hand-edited while the body stays pristine, the recompu
 | `--check`   | Apply nothing. Print the state table. **Exit 1 if `drift`, else exit 0.** The CI gate.      |
 | `--dry-run` | Apply nothing. Print what would happen. Always exits 0 (unless an internal error — exit 2). |
 | `--force`   | Also overwrite `modified` / `unstamped-different` files with the current stamped template.  |
-| `--json`    | Print `{ drift, fragment, entries: [{ rel, state, action }] }` instead of the text table.   |
+| `--json`    | Print `{ drift, fragment, entries: [{ rel, path, state, action }] }` instead of the table.  |
+| `--claude`  | Also write the Claude Code adapter (written anyway when `.claude/` or `CLAUDE.md` exists).  |
 
 Exit codes: **0** nothing to do / applied successfully; **1** only from `--check` when `drift` is true; **2** an internal error (e.g. a malformed file it could not read) — the state table is not to be trusted if you see this.
 
@@ -250,18 +252,18 @@ Sample output (default run, applying):
 @aziontech/ui sync
 project: /path/to/app
 
-COPY   .claude/rules/azion-ui-comments.md (missing)
-UPDATE .claude/rules/azion-ui-imports.md (stale)
-SKIP   .claude/rules/azion-ui-styling.md (modified)
-ORPHAN .claude/rules/azion-ui-retired-rule.md (orphan)
-FENCE  CLAUDE.md (fragment stale)
+COPY   .agents/rules/azion-ui-comments.md (missing)
+UPDATE .agents/rules/azion-ui-imports.md (stale)
+SKIP   .agents/rules/azion-ui-styling.md (modified)
+ORPHAN .agents/rules/azion-ui-retired-rule.md (orphan)
+FENCE  AGENTS.md (fragment stale)
 
 4 action(s), 40 current, fragment stale, drift: yes
 ```
 
-`sync` touches only `.claude/{rules,skills,agents}` and `CLAUDE.md` — never `.husky`, `.mcp.json`, `package.json`, or anything else `init` wired.
+`sync` touches only `.agents/{rules,skills,agents}`, `AGENTS.md` and, with the Claude Code adapter, `.claude/{skills,agents}` and `CLAUDE.md` — never `.husky`, `.mcp.json`, `package.json`, or anything else `init` wired.
 
-Consumers are expected to keep their `.claude/` copies **committed**, and to run `sync --check` in CI (it is read-only and exits non-zero on drift) so an upstream Azion UI update is caught instead of silently going stale.
+Consumers are expected to keep their `.agents/` files (and `.claude/` pointers) **committed**, and to run `sync --check` in CI (it is read-only and exits non-zero on drift) so an upstream Azion UI update is caught instead of silently going stale.
 
 ## Project contract
 
@@ -271,9 +273,9 @@ before any UI work, and the skills (`azion-ui-product-screens`, `azion-ui-site-p
 1. `@aziontech/ui`, `@aziontech/theme` and `@aziontech/icons` are installed at a version the
    repository pins.
 2. `init` has run: lint, styles, the theme entry, the MCP server, the pre-commit lint, the
-   `.claude/` bundle and the `CLAUDE.md` fragment are wired.
+   agent files in `.agents/` and the `AGENTS.md` block are wired.
 3. The lint preset is the strictest one the package offers (`strict`).
-4. The `.claude/` bundle is committed and current: `sync --check` exits 0. A deliberate local edit is
+4. The agent files are committed and current: `sync --check` exits 0. A deliberate local edit is
    reported, never treated as the rule; a rule changes in Azion UI.
 5. `doctor` reports no `FAIL`.
 
@@ -297,9 +299,9 @@ make a gate pass.
 Read every rule, skill and agent at the version the project runs, from the first of these that
 exists:
 
-1. the project's `.claude/` bundle, when `sync --check` reports it current;
-2. `node_modules/@aziontech/ui/` (`rules/`, `skills/`, `adapters/claude/agents/`, `docs/`,
-   `llms/`, `catalog.json`), for a stale or edited bundle or a file outside it;
+1. the project's `.agents/` files, when `sync --check` reports them current;
+2. `node_modules/@aziontech/ui/` (`rules/`, `skills/`, `agents/`, `docs/`,
+   `llms/`, `catalog.json`), for stale or edited files or a file outside them;
 3. the published package by URL at the installed version
    (`https://cdn.jsdelivr.net/npm/@aziontech/ui@<version>/<path>`), when nothing is installed;
 4. the Azion UI repository, only for a change not yet published.
@@ -312,7 +314,7 @@ Cite what was read as `@aziontech/ui@<version> <path>`.
 
 ## Idempotency
 
-`init` is safe to run repeatedly: existing files are skipped or merged, never overwritten; the MCP server and the `prepare` script are added only if absent. The CLAUDE.md fragment is the one piece of wiring that is **not** add-once: its fenced block is kept current in place on every run, so a later `@aziontech/ui` version's updated invariants/skills reach a project that already ran `init` — while everything outside the fence is left untouched. A malformed `package.json` / `.mcp.json` is reported as an error and left untouched — never replaced. `doctor` is read-only.
+`init` is safe to run repeatedly: existing files are skipped or merged, never overwritten; the MCP server and the `prepare` script are added only if absent. The `AGENTS.md` block is the one piece of wiring that is **not** add-once: its fenced block is kept current in place on every run, so a later `@aziontech/ui` version's updated invariants/skills reach a project that already ran `init` — while everything outside the fence is left untouched. A malformed `package.json` / `.mcp.json` is reported as an error and left untouched — never replaced. `doctor` is read-only.
 
 ## License
 

@@ -92,10 +92,10 @@ test('listBundle accepts an injected templates dir (for testing exclusions/fixtu
   try {
     mkdirSync(join(dir, 'rules'), { recursive: true })
     mkdirSync(join(dir, 'skills', 'foo'), { recursive: true })
-    mkdirSync(join(dir, 'adapters', 'claude', 'agents'), { recursive: true })
+    mkdirSync(join(dir, 'agents'), { recursive: true })
     writeFileSync(join(dir, 'rules', 'a.md'), '# a')
     writeFileSync(join(dir, 'skills', 'foo', 'SKILL.md'), '# skill')
-    writeFileSync(join(dir, 'adapters', 'claude', 'agents', 'b.md'), '# b')
+    writeFileSync(join(dir, 'agents', 'b.md'), '# b')
     writeFileSync(join(dir, 'rules', 'ignored.txt'), 'not markdown')
     mkdirSync(join(dir, 'skills', 'foo', 'references'), { recursive: true })
     writeFileSync(join(dir, 'skills', 'foo', 'references', 'notes.md'), '# not shipped')
@@ -357,9 +357,9 @@ test('classify: unstamped-different for an unmarked copy that diverged from the 
   assert.equal(classify(template, 'a different body\n'), 'unstamped-different')
 })
 
-test('the bundle is read from the repo-root layout: skills/, rules/, adapters/', () => {
-  assert.ok(agentsDir(AI_TEMPLATES).endsWith(join('adapters', 'claude', 'agents')))
-  assert.ok(fragmentFile(AI_TEMPLATES).endsWith(join('adapters', 'AGENTS_FRAGMENT.md')))
+test('the bundle is read from the repo-root layout: skills/, rules/, agents/, fragments/', () => {
+  assert.ok(agentsDir(AI_TEMPLATES).endsWith('agents'))
+  assert.ok(fragmentFile(AI_TEMPLATES).endsWith(join('fragments', 'AGENTS.md')))
   const bundle = listBundle()
   assert.ok(bundle.includes('rules/azion-ui-sections.md'))
   assert.ok(bundle.includes('rules/azion-ui-page-layout.md'))
@@ -373,25 +373,25 @@ test('the bundle is read from the repo-root layout: skills/, rules/, adapters/',
   assert.equal(bundle.filter((rel) => rel.startsWith('skills/')).length, 25)
 })
 
-test('copyAiBundle writes skills/, rules/ and adapters/ only — no legacy cli-templates/ copy', () => {
+test('copyAiBundle writes skills/, rules/, agents/ and fragments/ only — no legacy cli-templates/ copy', () => {
   const pkg = mkdtempSync(join(tmpdir(), 'azion-ui-pkg-'))
   try {
     copyAiBundle(join(import.meta.dirname, '../../../..'), pkg)
-    assert.deepEqual(readdirSync(pkg).sort(), ['adapters', 'rules', 'skills'])
+    assert.deepEqual(readdirSync(pkg).sort(), ['agents', 'fragments', 'rules', 'skills'])
     assert.equal(existsSync(join(pkg, 'cli-templates')), false)
   } finally {
     rmSync(pkg, { recursive: true, force: true })
   }
 })
 
-test('the CLI never falls back to the legacy agents/ or CLAUDE.fragment.md layout', () => {
+test('the CLI never falls back to the legacy adapters/ or CLAUDE.fragment.md layout', () => {
   const dir = mkdtempSync(join(tmpdir(), 'azion-ui-legacy-'))
   try {
-    mkdirSync(join(dir, 'agents'), { recursive: true })
-    writeFileSync(join(dir, 'agents', 'old.md'), '# old')
+    mkdirSync(join(dir, 'adapters', 'claude', 'agents'), { recursive: true })
+    writeFileSync(join(dir, 'adapters', 'claude', 'agents', 'old.md'), '# old')
     writeFileSync(join(dir, 'CLAUDE.fragment.md'), '# old')
-    assert.equal(agentsDir(dir), join(dir, 'adapters', 'claude', 'agents'))
-    assert.equal(fragmentFile(dir), join(dir, 'adapters', 'AGENTS_FRAGMENT.md'))
+    assert.equal(agentsDir(dir), join(dir, 'agents'))
+    assert.equal(fragmentFile(dir), join(dir, 'fragments', 'AGENTS.md'))
     assert.deepEqual(listBundle(dir), [])
   } finally {
     rmSync(dir, { recursive: true, force: true })

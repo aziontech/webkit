@@ -9,11 +9,10 @@ them is optional:
    the `azion-ui` MCP grounds every screen and component choice; `npx @aziontech/ui check` and the
    `azion-ui-verify` skill check the rest (axe, both themes, states). If lint or the check fails, the
    change is not done.
-3. **Patterns and skills (on-demand guidance)** — `node_modules/@aziontech/ui/skills/<name>/SKILL.md`
-   (Claude Code also gets them as `/azion-ui-*` in `.claude/skills/`). Read the pattern for the job
-   before composing a screen.
-4. **Reference (depth)** — `node_modules/@aziontech/ui/rules/azion-ui-*.md` (also copied to
-   `.claude/rules/`) carry the full standards behind the invariants.
+3. **Patterns and skills (on-demand guidance)** — `.agents/skills/<name>/SKILL.md` (the same files
+   as `node_modules/@aziontech/ui/skills/`). Read the pattern for the job before composing a screen.
+4. **Reference (depth)** — `.agents/rules/azion-ui-*.md` (the same files as
+   `node_modules/@aziontech/ui/rules/`) carry the full standards behind the invariants.
 
 ### Compose the app layout once, then every screen is a page body
 
@@ -193,11 +192,12 @@ before any polish:
 
 Mechanics of consuming the package (imports, tokens, tree-shaking) live in `/azion-ui-usage`.
 
-### Agents (Claude Code) — delegate a whole task
+### Agents — delegate a whole task
 
 `azion-ui-advisor` (which component + how) · `azion-ui-adopter` (the init/adoption flow) · `azion-ui-reviewer`
 (review a diff for correct/performant usage) · `azion-ui-verifier` (drive the screen: both themes,
 widths, console, axe, states) · `azion-ui-adoption-auditor` (coverage scorecard: custom → Azion UI).
+Each is a Markdown role file in `.agents/agents/`; a tool with subagents can run it as one, any other
+agent reads it as instructions.
 
-Full standards behind the invariants: `node_modules/@aziontech/ui/rules/azion-ui-*.md` (Claude Code:
-`.claude/rules/azion-ui-*.md`).
+Full standards behind the invariants: `.agents/rules/azion-ui-*.md`.

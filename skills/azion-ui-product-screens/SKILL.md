@@ -16,9 +16,9 @@ that owns it, and runs the order they apply in. Azion web pages (the site, landi
 [Building a site page](../azion-ui-site-pages/SKILL.md) instead: never compose product UI from page sections, and never apply an SD
 rule to product UI.
 
-Read every file from the installed package (`node_modules/@aziontech/ui/`, or `.claude/` once
-`azion-ui sync` has copied the bundle), never from memory or an older copy. When a `.claude/` copy
-and the package disagree, the package wins and `npx @aziontech/ui sync --check` reports the
+Read every file from the installed package (`node_modules/@aziontech/ui/`, or `.agents/` once
+`azion-ui sync` has copied the agent files), never from memory or an older copy. When an `.agents/`
+copy and the package disagree, the package wins and `npx @aziontech/ui sync --check` reports the
 drift.
 
 ## Routing table
@@ -68,7 +68,7 @@ diff), `azion-ui-verifier` (drive the finished screen), `azion-ui-adopter` (set 
 Run the stages in order; ask the person at every fork the owning files leave open.
 
 0. **Set up the project.** `@aziontech/ui` and `@aziontech/theme` are installed at a pinned
-   version, `init` has wired lint, styles, the MCP and the `.claude/` bundle, the bundle is
+   version, `init` has wired lint, styles, the MCP and the `.agents/` files, the files are
    committed, `npx @aziontech/ui sync --check` reports no drift and `doctor` is clean (project
    contract: `docs/toolkit/CLI.md`). Show the `init --dry-run` plan and get the person's yes before
    any setup, bundle update or CI change.

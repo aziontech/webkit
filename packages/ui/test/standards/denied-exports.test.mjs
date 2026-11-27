@@ -14,7 +14,8 @@ const REPO_ROOT = resolve(PKG_ROOT, '..', '..')
 const SOURCES = [
   'skills',
   'rules',
-  'adapters',
+  'agents',
+  'fragments',
   'contributing/skills',
   'contributing/docs',
   'packages/ui/README.md'

@@ -14,7 +14,7 @@ import {
 } from '../../src/cli/bundle.js'
 import { planDoctor } from '../../src/cli/doctor.js'
 import { planInit } from '../../src/cli/plan.js'
-import { planSync } from '../../src/cli/sync.js'
+import { CLAUDE_FRAGMENT, planSync } from '../../src/cli/sync.js'
 
 const VERSION = '5.0.0'
 
@@ -33,7 +33,8 @@ function makeTemplatesDir(overrides = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'azion-ui-templates-'))
   mkdirSync(join(dir, 'rules'), { recursive: true })
   mkdirSync(join(dir, 'skills/azion-ui-sample'), { recursive: true })
-  mkdirSync(join(dir, 'adapters/claude/agents'), { recursive: true })
+  mkdirSync(join(dir, 'agents'), { recursive: true })
+  mkdirSync(join(dir, 'fragments'), { recursive: true })
   writeFileSync(
     join(dir, 'rules/azion-ui-imports.md'),
     overrides.rule ?? '# Rule: imports\n\nUse the flat path.\n'
@@ -44,14 +45,14 @@ function makeTemplatesDir(overrides = {}) {
       '---\nname: azion-ui-sample\ndescription: A sample skill.\n---\n\n# Skill: azion-ui-sample\nBody.\n'
   )
   writeFileSync(
-    join(dir, 'adapters/AGENTS_FRAGMENT.md'),
+    join(dir, 'fragments/AGENTS.md'),
     overrides.fragment ?? '## @aziontech/ui design system\n\nFollow the rules.\n'
   )
   return dir
 }
 
-function entryFor(plan, rel) {
-  return plan.entries.find((e) => e.rel === rel)
+function entryFor(plan, rel, base = '.agents') {
+  return plan.entries.find((e) => e.path === `${base}/${rel}`)
 }
 
 test('planSync: fresh project — every bundle file + fragment is missing; apply makes them current', () => {
@@ -87,7 +88,7 @@ test('planSync: editing a synced rule body reports it modified; sync skips it, -
   try {
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
 
-    const rulePath = join(project, '.claude/rules/azion-ui-imports.md')
+    const rulePath = join(project, '.agents/rules/azion-ui-imports.md')
     const stampedOriginal = readFileSync(rulePath, 'utf8')
     writeFileSync(rulePath, `${stampedOriginal}\nOne more local line.\n`)
 
@@ -134,7 +135,7 @@ test('planSync: a tampered marker sha with the body otherwise untouched — see 
   const templatesDir = makeTemplatesDir()
   try {
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
-    const rulePath = join(project, '.claude/rules/azion-ui-imports.md')
+    const rulePath = join(project, '.agents/rules/azion-ui-imports.md')
     const original = readFileSync(rulePath, 'utf8')
     writeFileSync(rulePath, original.replace(/sha256=[0-9a-f]{16}/, 'sha256=0000000000000000'))
 
@@ -179,8 +180,8 @@ test('planSync: an unstamped byte-identical copy (docs-repo case) is stamped wit
   const templatesDir = makeTemplatesDir()
   try {
     const templateContent = readFileSync(join(templatesDir, 'rules/azion-ui-imports.md'), 'utf8')
-    mkdirSync(join(project, '.claude/rules'), { recursive: true })
-    writeFileSync(join(project, '.claude/rules/azion-ui-imports.md'), templateContent)
+    mkdirSync(join(project, '.agents/rules'), { recursive: true })
+    writeFileSync(join(project, '.agents/rules/azion-ui-imports.md'), templateContent)
 
     const plan = planSync(project, { templatesDir, version: VERSION })
     const entry = entryFor(plan, 'rules/azion-ui-imports.md')
@@ -188,7 +189,7 @@ test('planSync: an unstamped byte-identical copy (docs-repo case) is stamped wit
     assert.equal(entry.action.type, 'copy-stamped')
 
     applyPlan(project, plan.actions)
-    const written = readFileSync(join(project, '.claude/rules/azion-ui-imports.md'), 'utf8')
+    const written = readFileSync(join(project, '.agents/rules/azion-ui-imports.md'), 'utf8')
     // Body identical to the template; only a marker line was added.
     assert.equal(stripMarker(written), templateContent)
 
@@ -206,11 +207,11 @@ test('planSync: an orphaned bundle file (marker source no longer in the bundle) 
   try {
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
 
-    const orphanPath = join(project, '.claude/rules/azion-ui-retired.md')
+    const orphanPath = join(project, '.agents/rules/azion-ui-retired.md')
     writeFileSync(
       orphanPath,
       stamp('# Rule: retired\n\nNo longer shipped.\n', {
-        source: 'claude/rules/azion-ui-retired.md',
+        source: 'rules/azion-ui-retired.md',
         version: VERSION
       })
     )
@@ -235,7 +236,7 @@ test('planSync: an orphaned bundle file (marker source no longer in the bundle) 
   }
 })
 
-test('planSync: CLAUDE.md fragment states — missing, legacy (deduped), stale, current', () => {
+test('planSync: AGENTS.md fragment states — missing, legacy (deduped), stale, current', () => {
   const project = makeProject()
   const templatesDir = makeTemplatesDir()
   try {
@@ -246,13 +247,13 @@ test('planSync: CLAUDE.md fragment states — missing, legacy (deduped), stale, 
 
     // legacy, duplicated — applying must collapse it to exactly one fenced block.
     writeFileSync(
-      join(project, 'CLAUDE.md'),
+      join(project, 'AGENTS.md'),
       `# Project\n\n${LEGACY_MARKER}\nOld body.\n\n${LEGACY_MARKER}\nOld body again.\n`
     )
     plan = planSync(project, { templatesDir, version: VERSION })
     assert.equal(plan.fragment.state, 'legacy')
     applyPlan(project, plan.actions)
-    const afterLegacy = readFileSync(join(project, 'CLAUDE.md'), 'utf8')
+    const afterLegacy = readFileSync(join(project, 'AGENTS.md'), 'utf8')
     assert.equal(
       afterLegacy.split(FRAGMENT_START).length - 1,
       1,
@@ -266,7 +267,7 @@ test('planSync: CLAUDE.md fragment states — missing, legacy (deduped), stale, 
 
     // stale — the fragment template changed upstream.
     writeFileSync(
-      join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'),
+      join(templatesDir, 'fragments/AGENTS.md'),
       '## @aziontech/ui design system\n\nFollow the rules, updated.\n'
     )
     plan = planSync(project, { templatesDir, version: VERSION })
@@ -278,18 +279,18 @@ test('planSync: CLAUDE.md fragment states — missing, legacy (deduped), stale, 
   }
 })
 
-test('planSync: a CLAUDE.md with a lone start marker is stale and applying leaves one fenced block', () => {
+test('planSync: an AGENTS.md with a lone start marker is stale and applying leaves one fenced block', () => {
   const project = makeProject()
   const templatesDir = makeTemplatesDir()
   try {
     writeFileSync(
-      join(project, 'CLAUDE.md'),
+      join(project, 'AGENTS.md'),
       `# Project\n\n${FRAGMENT_START}\n## @aziontech/ui design system\nStale fragment.\n\n## Team notes\nkeep\n`
     )
     let plan = planSync(project, { templatesDir, version: VERSION })
     assert.equal(plan.fragment.state, 'stale')
     applyPlan(project, plan.actions)
-    const after = readFileSync(join(project, 'CLAUDE.md'), 'utf8')
+    const after = readFileSync(join(project, 'AGENTS.md'), 'utf8')
     assert.ok(!after.includes('Stale fragment.'))
     assert.equal(after.split(FRAGMENT_START).length - 1, 1)
     assert.equal(after.split(FRAGMENT_END).length - 1, 1)
@@ -308,7 +309,7 @@ test('planSync: skills/agents frontmatter is preserved verbatim; marker lands af
   try {
     const plan = planSync(project, { templatesDir, version: VERSION })
     applyPlan(project, plan.actions)
-    const written = readFileSync(join(project, '.claude/skills/azion-ui-sample/SKILL.md'), 'utf8')
+    const written = readFileSync(join(project, '.agents/skills/azion-ui-sample/SKILL.md'), 'utf8')
     const template = readFileSync(join(templatesDir, 'skills/azion-ui-sample/SKILL.md'), 'utf8')
     const fmEnd = template.indexOf('---\n', 4) + 4
     assert.equal(
@@ -327,43 +328,75 @@ test('planSync: skills/agents frontmatter is preserved verbatim; marker lands af
   }
 })
 
-test('doctor reports the claude bundle status per sync state', () => {
+test('doctor reports the agent files status per sync state', () => {
   const project = makeProject()
   try {
-    // No .claude at all yet — real templates dir (planDoctor doesn't take an override),
+    // No .agents at all yet — real templates dir (planDoctor doesn't take an override),
     // so this always drifts on a bare project.
     let report = planDoctor(project)
-    let bundle = report.find((c) => c.check === 'claude bundle')
+    let bundle = report.find((c) => c.check === 'agent files')
     assert.equal(bundle.status, 'fail')
 
     applyPlan(project, planInit(project, {}))
     report = planDoctor(project)
-    bundle = report.find((c) => c.check === 'claude bundle')
+    bundle = report.find((c) => c.check === 'agent files')
     assert.equal(bundle.status, 'ok')
 
-    const rulePath = join(project, '.claude/rules/azion-ui-imports.md')
+    const rulePath = join(project, '.agents/rules/azion-ui-imports.md')
     writeFileSync(rulePath, `${readFileSync(rulePath, 'utf8')}\nedited.\n`)
     report = planDoctor(project)
-    bundle = report.find((c) => c.check === 'claude bundle')
+    bundle = report.find((c) => c.check === 'agent files')
     assert.equal(bundle.status, 'warn')
   } finally {
     rmSync(project, { recursive: true, force: true })
   }
 })
 
-test('planSync fences the same fragment into AGENTS.md and CLAUDE.md', () => {
+test('planSync writes no Claude Code files unless the project uses Claude Code', () => {
   const project = makeProject()
   const templatesDir = makeTemplatesDir()
   try {
     const plan = planSync(project, { templatesDir, version: VERSION })
-    assert.equal(plan.agentsFragment.state, 'missing')
+    assert.equal(plan.claude, false)
+    assert.equal(plan.claudeFragment, null)
+    assert.ok(plan.entries.every((e) => e.path.startsWith('.agents/')))
     applyPlan(project, plan.actions)
-    const agents = readFileSync(join(project, 'AGENTS.md'), 'utf8')
+    assert.ok(existsSync(join(project, 'AGENTS.md')))
+    assert.ok(!existsSync(join(project, '.claude')))
+    assert.ok(!existsSync(join(project, 'CLAUDE.md')))
+    assert.equal(planSync(project, { templatesDir, version: VERSION }).drift, false)
+  } finally {
+    rmSync(project, { recursive: true, force: true })
+    rmSync(templatesDir, { recursive: true, force: true })
+  }
+})
+
+test('the Claude Code adapter is pointers only: .claude/ skills and agents, CLAUDE.md imports AGENTS.md', () => {
+  const project = makeProject()
+  const templatesDir = makeTemplatesDir()
+  try {
+    writeFileSync(
+      join(templatesDir, 'agents/azion-ui-advisor.md'),
+      '---\nname: azion-ui-advisor\ndescription: Advises.\n---\n\nLong agent prompt.\n'
+    )
+    mkdirSync(join(project, '.claude'))
+    const plan = planSync(project, { templatesDir, version: VERSION })
+    assert.equal(plan.claude, true)
+    assert.equal(entryFor(plan, 'rules/azion-ui-imports.md', '.claude'), undefined)
+    applyPlan(project, plan.actions)
+    const skill = readFileSync(join(project, '.claude/skills/azion-ui-sample/SKILL.md'), 'utf8')
+    assert.match(skill, /^---\nname: azion-ui-sample\ndescription: A sample skill\.\n---\n/)
+    assert.match(skill, /Read `\.agents\/skills\/azion-ui-sample\/SKILL\.md` and follow it/)
+    assert.doesNotMatch(skill, /Body\./)
+    const agent = readFileSync(join(project, '.claude/agents/azion-ui-advisor.md'), 'utf8')
+    assert.match(agent, /Read `\.agents\/agents\/azion-ui-advisor\.md`/)
+    assert.doesNotMatch(agent, /Long agent prompt/)
     const claude = readFileSync(join(project, 'CLAUDE.md'), 'utf8')
-    assert.match(agents, /Follow the rules\./)
-    assert.equal(agents, claude)
+    assert.ok(claude.includes(CLAUDE_FRAGMENT))
+    assert.doesNotMatch(claude, /Follow the rules\./)
+    assert.match(readFileSync(join(project, 'AGENTS.md'), 'utf8'), /Follow the rules\./)
     const after = planSync(project, { templatesDir, version: VERSION })
-    assert.equal(after.agentsFragment.state, 'current')
+    assert.equal(after.claudeFragment.state, 'current')
     assert.equal(after.drift, false)
   } finally {
     rmSync(project, { recursive: true, force: true })
@@ -371,15 +404,33 @@ test('planSync fences the same fragment into AGENTS.md and CLAUDE.md', () => {
   }
 })
 
-test('planSync reads the adapters layout (adapters/claude/agents, adapters/AGENTS_FRAGMENT.md)', () => {
+test('a 5.x CLAUDE.md holding the whole fragment becomes an import of AGENTS.md', () => {
   const project = makeProject()
   const templatesDir = makeTemplatesDir()
   try {
-    mkdirSync(join(templatesDir, 'adapters/claude/agents'), { recursive: true })
-    writeFileSync(join(templatesDir, 'adapters/claude/agents/azion-ui-advisor.md'), '# Agent\n')
-    writeFileSync(join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'), '## ui\n\nNew layout.\n')
+    writeFileSync(
+      join(project, 'CLAUDE.md'),
+      `# Project\n\n${FRAGMENT_START}\n## Old fragment\nLong body.\n${FRAGMENT_END}\n\n## Notes\nkeep\n`
+    )
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
-    assert.ok(existsSync(join(project, '.claude/agents/azion-ui-advisor.md')))
+    const claude = readFileSync(join(project, 'CLAUDE.md'), 'utf8')
+    assert.ok(!claude.includes('Long body.'))
+    assert.ok(claude.includes('@AGENTS.md'))
+    assert.ok(claude.includes('## Notes\nkeep'))
+  } finally {
+    rmSync(project, { recursive: true, force: true })
+    rmSync(templatesDir, { recursive: true, force: true })
+  }
+})
+
+test('planSync reads the repo-root layout (agents/, fragments/AGENTS.md)', () => {
+  const project = makeProject()
+  const templatesDir = makeTemplatesDir()
+  try {
+    writeFileSync(join(templatesDir, 'agents/azion-ui-advisor.md'), '# Agent\n')
+    writeFileSync(join(templatesDir, 'fragments/AGENTS.md'), '## ui\n\nNew layout.\n')
+    applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
+    assert.ok(existsSync(join(project, '.agents/agents/azion-ui-advisor.md')))
     assert.match(readFileSync(join(project, 'AGENTS.md'), 'utf8'), /New layout\./)
   } finally {
     rmSync(project, { recursive: true, force: true })

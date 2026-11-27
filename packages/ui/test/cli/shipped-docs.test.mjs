@@ -23,7 +23,9 @@ function markdownFiles(dir, out = []) {
 }
 
 const SHIPPED_DOCS = [
-  ...['skills', 'rules', 'adapters'].flatMap((dir) => markdownFiles(join(REPO_ROOT, dir))),
+  ...['skills', 'rules', 'agents', 'fragments'].flatMap((dir) =>
+    markdownFiles(join(REPO_ROOT, dir))
+  ),
   join(PKG_ROOT, 'README.md'),
   ...markdownFiles(join(PKG_ROOT, 'docs', 'toolkit'))
 ]
@@ -138,7 +140,7 @@ test('the docs that list the allowed layout classes list all of LAYOUT_CLASS_FAM
   for (const rel of [
     'rules/azion-ui-style-override.md',
     'skills/azion-ui-usage/SKILL.md',
-    'adapters/AGENTS_FRAGMENT.md'
+    'fragments/AGENTS.md'
   ]) {
     const text = readFileSync(join(REPO_ROOT, rel), 'utf8').replace(/\s*\n\s*/g, ' ')
     if (!text.includes(full)) stale.push(rel)

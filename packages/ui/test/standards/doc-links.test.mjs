@@ -16,7 +16,9 @@ const markdown = (dir) =>
   })
 
 const files = [
-  ...['contributing', 'rules', 'skills', 'adapters'].flatMap((dir) => markdown(join(ROOT, dir))),
+  ...['contributing', 'rules', 'skills', 'agents', 'fragments'].flatMap((dir) =>
+    markdown(join(ROOT, dir))
+  ),
   ...['AGENTS.md', 'CONTRIBUTING.md'].map((name) => join(ROOT, name))
 ]
 

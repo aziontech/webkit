@@ -3,7 +3,7 @@ import { dirname, join, relative, resolve, sep } from 'node:path'
 
 export const SOURCES_FILE = 'src/azion-ui.sources.css'
 export const SOURCES_IMPORT = "@import './azion-ui.sources.css';"
-export const SOURCE_EXCLUSIONS = ['../.claude', '../CLAUDE.md', '../AGENTS.md']
+export const SOURCE_EXCLUSIONS = ['../.agents', '../AGENTS.md', '../.claude', '../CLAUDE.md']
 export const exclusionLine = (path) => `@source not '${path}';`
 
 const escapeRe = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
