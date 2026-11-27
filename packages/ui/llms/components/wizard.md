@@ -24,7 +24,7 @@
 - Make the last step a review of the answers when the resource is costly to change after creation, and
 - Bind `loading` to the submit request. It disables Cancel, Previous and the rail, so the handler needs no
 - Mark a step `optional` only when Next works with every field in it empty.
-- Always pass `ariaLabel` naming the task (`Create edge application`). Without it, the root is an
+- Always pass `ariaLabel` naming the task (`Create application`). Without it, the root is an
 - The wizard sets no page width. Place it inside the page's create container
 
 ## Don’t
@@ -50,7 +50,7 @@
 | --- | --- | --- | --- | --- |
 | `submitLabel` | `string` | `''` | false | Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). |
 | `loading` | `boolean` | `false` | false | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. |
-| `ariaLabel` | `string` | `''` | false | Accessible name for the wizard region. Name the task, for example Create edge application. |
+| `ariaLabel` | `string` | `''` | false | Accessible name for the wizard region. Name the task, for example Create application. |
 | `modelValue` | `number \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Events

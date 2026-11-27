@@ -80,7 +80,12 @@ test('retired-product-name fires on a retired Azion product name', () => {
   for (const content of [
     'title="Edge Functions"',
     ":tags=\"['Console', 'Edge SQL']\"",
-    '<Footer.Link>Edge Application</Footer.Link>'
+    '<Footer.Link>Edge Application</Footer.Link>',
+    "label: 'New Edge Function'",
+    "description: 'Edge functions run every month'",
+    'a same-origin edge function proxy',
+    'href="/docs/edge-firewall"',
+    'title="Edge Applications"'
   ]) {
     assert.ok(
       ids(content).includes('retired-product-name'),
@@ -95,7 +100,10 @@ test('retired-product-name stays silent on the official names and Edge DNS', () 
     'title="SQL Database"',
     'label="Applications"',
     'label="Edge DNS"',
-    'label="Edge Nodes"'
+    'label="Edge Nodes"',
+    'label="Edge cache"',
+    "href: 'https://www.azion.com/en/success-case/acme-using-azion-edge-application/'",
+    '"ai-edge-functions": "az-functions"'
   ]) {
     assert.ok(!ids(content).includes('retired-product-name'), `unexpected for: ${content}`)
   }
@@ -111,6 +119,15 @@ test('the retired names match deprecatedNames in the product list', async () => 
     [...RETIRED_PRODUCT_NAMES].sort(),
     products.deprecatedNames.map((entry) => entry.deprecated).sort()
   )
+})
+
+test('specs are scanned for retired names', async () => {
+  const { RETIRED_NAME_DIRS, scanRetiredNames } =
+    await import('../../src/eslint-plugin/lib/example-data.js')
+  assert.deepEqual(RETIRED_NAME_DIRS, ['.specs'])
+  assert.deepEqual(scanRetiredNames('Run it in Claude.ai and on Edge SQL'), [
+    'retired-product-name'
+  ])
 })
 
 test('the microcopy skill may name the retired products it bans', () => {

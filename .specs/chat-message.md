@@ -3,6 +3,7 @@ name: chat-message
 category: ai
 structure: composition
 status: implemented
+stability: preview
 spec_version: 7
 template: 2
 checksum: f3686a3f9eafc7f76a9124305d10c359d3c6a167dbd099f5aa9f535acdda43d2

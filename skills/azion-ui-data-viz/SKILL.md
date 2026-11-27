@@ -2,7 +2,7 @@
 name: azion-ui-data-viz
 description: The token adapter that maps charts onto @aziontech/theme — every series color derived from the --color-* families (never hex), computed tokens re-read on a data-theme change so a canvas re-themes (SVG re-themes for free), and the chart's loading/empty/error surface rendered with Azion UI components. For chart-form and palette theory, use the generic dataviz skill; this skill covers only mapping that onto theme tokens. Use when building or reviewing a chart, dashboard, or KPI tile in an Azion UI app.
 status: active
-last_updated: 2026-11-25
+last_updated: 2026-11-26
 scope: general
 enforced_by: [azion-ui-tokens, azion-ui-component-states, ui-verify]
 ---
@@ -64,6 +64,7 @@ Never guess an import path or a hex value. Resolve both from the contract:
 | A metric by country                                       | `MapChart`                                                | `NetworkMap` (that is the Azion network map) |
 | The recent shape of a metric beside its number, in a row  | `SparkChart`                                              | a full `Chart` squeezed into a cell          |
 | Uptime or status day by day                               | `Tracker`                                                 | a row of hand-coloured boxes                 |
+| How much happened each day of a year (contributions)      | `ContributionGraph`                                       | a `Tracker` or a grid of hand-coloured boxes |
 | One headline number, with its change                      | `StatTile` (several in one card: `StatTileGroup`)         | a `Card` with a large number typed in        |
 | A chart with its title, period and actions on a dashboard | `ChartCard` (in a `DashboardGrid` when widgets rearrange) | a `Card` composed by hand around a chart     |
 
@@ -258,6 +259,9 @@ above rather than eyeballing one mode.
 
 ## Hard rules
 
+- **A filter sits above every chart, metric and list it changes** and changes nothing above it: a
+  dashboard's time range or year opens the page band; a series toggle in a chart card header narrows
+  that card and what follows it (rule `azion-ui-page-layout`).
 - Use `Chart` / `DonutChart` / `StatTile` / `StatTileGroup` / `ChartCard` before a charting library.
 - A KPI row that reads as one band is a `StatTileGroup`, never tiles in a hand-built card with dividers.
 - Every chart color is a `--chart-*` token — **never** a hex, rgb/hsl, Tailwind-palette literal, or a

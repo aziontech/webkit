@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 488352bb8fd425bb2d662a6c3e2b4351ab7f8c2b8b30d26518b6f09bf313b041
+checksum: c01741cbe018b372b2e9bb0afcb9a3a97c59caf5f9691dd3f7c7fd01aa9ba9a6
 created: 2026-11-16
 last_updated: 2026-11-25
 ---
@@ -18,7 +18,7 @@ The preview of one stored file in a storage or object browser, or of a document 
 
 ## When to use
 
-- The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Edge Storage bucket, a KV value).
+- The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Object Storage bucket, a KV value).
 - Showing an uploaded object before it is published or replaced.
 - A document part or an attachment in an AI conversation: a PDF, a text file or an image, from a URL or from base64 bytes.
 - Any screen that shows one file and needs a type-aware fallback for files it cannot draw.

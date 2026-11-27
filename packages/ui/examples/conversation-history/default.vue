@@ -16,7 +16,7 @@
       title: 'Migrate DNS records from another provider',
       updatedAt: '2026-10-28T16:30:00Z'
     },
-    { id: 'c6', title: 'Edge storage pricing', updatedAt: '2026-08-02T10:00:00Z' }
+    { id: 'c6', title: 'Object Storage pricing', updatedAt: '2026-08-02T10:00:00Z' }
   ])
   const active = ref('c2')
   const historyOpen = ref(false)

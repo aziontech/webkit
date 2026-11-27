@@ -15,7 +15,7 @@
     {
       icon: 'az az-build-pillar',
       title: '35B functions a month',
-      description: 'Edge functions run every month for security controls.'
+      description: 'Functions run every month for security controls.'
     },
     {
       icon: 'az az-application-accelerator',

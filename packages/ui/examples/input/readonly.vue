@@ -15,7 +15,7 @@
     />
     <InputGroupRoot class="w-full">
       <Input
-        model-value="azion create edge-function"
+        model-value="azion create function"
         class="min-w-0 flex-1"
         aria-label="Create function command"
         :spellcheck="false"
@@ -23,7 +23,7 @@
         monospace
       />
       <CopyButton
-        value="azion create edge-function"
+        value="azion create function"
         aria-label="Copy the create function command"
         copied-label="Command copied"
         size="small"

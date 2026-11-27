@@ -4,6 +4,7 @@
 
 - Import: `import Sources from '@aziontech/ui/sources'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [sources.json](sources.json)
 
 ## When to use

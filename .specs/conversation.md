@@ -3,6 +3,7 @@ name: conversation
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 5
 template: 2
 checksum: 7782e028fcb1c26ba907c6027526745c56bfec7b4da4ee30f2d9acb6e4fce29f

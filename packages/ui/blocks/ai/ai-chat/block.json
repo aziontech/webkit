@@ -2,6 +2,7 @@
   "id": "ai/ai-chat",
   "name": "AiChat",
   "title": "Blocks/Ai/AiChat",
+  "stability": "preview",
   "surface": "app",
   "keyboard": {
     "entry": "prompt"

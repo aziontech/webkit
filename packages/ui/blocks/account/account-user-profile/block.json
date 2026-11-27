@@ -1,0 +1,91 @@
+{
+  "id": "account/account-user-profile",
+  "name": "AccountUserProfile",
+  "title": "Blocks/Account/AccountUserProfile",
+  "stability": "preview",
+  "surface": "app",
+  "summary": "An Azion user's profile and personal settings, the body of ConsoleLayout's default slot. A compact header (`Avatar`, name, role `Tag`) sits over `PageTabs`: Overview, Profile and bio, Security and access, Notifications and Preferences. From 1192px it is a column beside the tabs, with a `KeyValueList` summary on Overview. Overview opens with a year `ToggleGroup` (a `Select` past five years) above the `StatTile`s, a `ContributionGraph` card with a category filter, and a `Timeline` history. Settings tabs are `SettingsGroup`s of `SettingsRow`s with a docked `SaveBar`; loading draws `Skeleton`s, a failure a danger `Alert`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "user profile",
+    "my profile",
+    "profile settings",
+    "personal settings",
+    "contribution graph",
+    "platform contributions",
+    "notification preferences",
+    "security settings",
+    "perfil do usuário",
+    "configurações de perfil",
+    "contribuições na plataforma",
+    "preferências de notificação"
+  ],
+  "skills": [
+    "azion-ui-form",
+    "azion-ui-layout",
+    "azion-ui-states",
+    "azion-ui-data-viz",
+    "azion-ui-microcopy"
+  ],
+  "primary": {
+    "name": "Default",
+    "file": "account-user-profile.vue"
+  },
+  "files": [
+    "sample.ts",
+    "user-profile-model.ts",
+    "parts/profile-header.vue",
+    "parts/profile-about.vue",
+    "parts/profile-overview.vue",
+    "parts/profile-bio-tab.vue",
+    "parts/profile-security-tab.vue",
+    "parts/profile-notifications-tab.vue",
+    "parts/profile-preferences-tab.vue",
+    "parts/profile-select.vue"
+  ],
+  "variants": [
+    {
+      "name": "Profile",
+      "summary": "The Profile and bio tab: personal information, contact and links, and contribution visibility.",
+      "file": "variants/settings.vue"
+    },
+    {
+      "name": "Security",
+      "summary": "The Security and access tab for an account that signs in with a password: password fields with live requirements, multi-factor and personal tokens.",
+      "file": "variants/security.vue"
+    },
+    {
+      "name": "SecuritySso",
+      "summary": "The Security and access tab when the organization's SSO and SCIM provider manages the password and requires multi-factor: the controls are locked and say why.",
+      "file": "variants/security-scim.vue"
+    },
+    {
+      "name": "Notifications",
+      "summary": "The Notifications tab: the notification email, the three scheduled digests and the real-time alerts.",
+      "file": "variants/notifications.vue"
+    },
+    {
+      "name": "Preferences",
+      "summary": "The Preferences tab: theme and the Keyboard shortcuts switch that hides every shortcut hint when off.",
+      "file": "variants/preferences.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A new user with no contributions yet: zero metrics, an empty graph and an EmptyState in place of the history.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: Skeletons in the header, the metrics, the graph and the history.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The profile failed to load: a danger Alert with Retry replaces the page.",
+      "file": "variants/error.vue"
+    }
+  ]
+}

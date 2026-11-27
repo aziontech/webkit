@@ -263,7 +263,9 @@ export function addedLines(headText, baseText) {
 
 export function evaluate(changes, ctx) {
   const failures = []
+  const released = ctx.releasedExports
   for (const c of changes.filter((x) => x.kind === 'demoted to preview')) {
+    if (released && !released.has(c.subpath)) continue
     failures.push(
       `${c.subpath}: GA → preview is not allowed. A GA API is frozen (deprecation applies); keep stability ga in .specs/${ctx.parents?.[c.subpath] || c.subpath}.md.`
     )
@@ -360,6 +362,12 @@ function parentsOf(catalog) {
   )
 }
 
+export function releasedExportsAt(ref) {
+  const raw = showAtBase({ commit: ref }, 'packages/ui/package.json')
+  if (!raw) return null
+  return new Set(Object.keys(JSON.parse(raw).exports || {}).map((k) => k.replace(/^\.\//, '')))
+}
+
 export function run({ against = null, env = process.env } = {}) {
   const base = resolveBase({ against, env })
   const baseRaw = base ? showAtBase(base, 'packages/ui/catalog.json') : null
@@ -382,6 +390,7 @@ export function run({ against = null, env = process.env } = {}) {
     migrations: loadMigrations(),
     migrationLines: migrationDocLines(base),
     parents: parentsOf(headCatalog),
+    releasedExports: releasedExportsAt(env.RELEASED_REF || 'origin/main'),
     specOf,
     baseSpecVersions: readSpecVersions(
       specNames.filter((n) => baseSpecs.has(`${n}.md`)),

@@ -36,7 +36,7 @@ A new component or block ships as **preview** (`stability: preview` in its spec 
 
 - A **preview** part's API (props, events, slots, models, parts, exports) may change in a **minor** release, with no `@deprecated` step and no codemod. Name the change in the commit body (`Preview API change: <Name> renames <old> to <new>.`), so it reaches the changelog. Mark nothing `!` or `BREAKING CHANGE:` for it; `check-api-diff.mjs` and `check-migrations.mjs` exempt it.
 - **Promoting** preview → GA is its own PR, `feat(ui): promote <Name> to GA`, approved by the owner. From that commit the API is frozen.
-- **Demoting** GA → preview is not allowed: `check-api-diff.mjs` fails it, because it would unfreeze a stable API without a deprecation cycle.
+- **Demoting** GA → preview is not allowed once the part is in a published release: `check-api-diff.mjs` fails it, because it would unfreeze a stable API without a deprecation cycle. A part that was never released (not an export of `origin/main`) may still be set to preview (LC-05).
 
 ## Tag details
 

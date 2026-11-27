@@ -1,6 +1,6 @@
 ---
 name: azion-ui-azion-api
-description: Calling the Azion API from a browser app built on @aziontech/ui — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin edge function proxy for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to an Azion UI state. Use when an app signs in with a personal token (auth/auth-sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
+description: Calling the Azion API from a browser app built on @aziontech/ui — why a direct fetch to api.azion.com fails (CORS), the Vite dev proxy for local work, a same-origin proxy in an Azion Function for production, where the person's personal token lives (memory or sessionStorage, never a bundle, a URL or localStorage), and how each API answer maps to an Azion UI state. Use when an app signs in with a personal token (auth/auth-sign-in PersonalToken) or calls the Azion REST or GraphQL APIs.
 status: active
 last_updated: 2026-11-25
 scope: general

@@ -2966,6 +2966,20 @@ Budget-raise: sidebar-root 25.3 KB → 25.6 KB (measured 25.57 KB): it renders T
 
 Budget-raise: tooltip 5.9 KB → 6.25 KB (measured 6.22 KB): Tooltip keeps its trigger span and moves its behaviour and panel into a private TooltipContent part, so the lazy Tooltip can render the same span and load only that part after mount; before, the late swap remounted the slotted button (the manual-copy popover lost its focus target on Escape) and its teleports hydrated out of order (the open Drawer in two blocks claimed a tooltip's anchor). The part carries its own props and mirrors its open state and placement on the trigger.
 
+Budget-raise: doc-markdown 42 KB → 42.25 KB (measured 42.14 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
+
+Budget-raise: feature-widgets-section 20.7 KB → 20.9 KB (measured 20.79 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
+
+Budget-raise: feature-tabs-section 55.25 KB → 55.45 KB (measured 55.36 KB): ContributionGraph joins the content scenes and the DocMarkdown tags (the content-channels rule), one more lazy loader entry in the shared registry.
+
+Budget-raise: config-provider 14.6 KB → 14.75 KB (measured 14.66 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs.
+
+Budget-raise: locales-pt-BR 13.05 KB → 13.2 KB (measured 13.14 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs.
+
+Budget-raise: locales-es 13.15 KB → 13.35 KB (measured 13.26 KB): the ContributionGraph strings (roleDescription, noData, errorTitle, hint, less, more, the day labels) join the locale catalogs.
+
+Budget-raise: contribution-graph 7.2 KB → 7.55 KB (measured 7.49 KB): the profile audit fixes and days that grow to fill the width on a fine pointer. Touch screens get 20 px cells through one size variable, the strip scrolls to the latest weeks, the weekday names stay outside the scroller, the selected day has its own outline, a hidden status text speaks while loading, and the levels scale by the shown period.
+
 ## Resizable columns by default (2026-11-25)
 
 Budget-raise: data-table 59.25 KB → 59.4 KB (measured 59.34 KB): every column resizes unless it sets `resizable: false`, and a drag that moved ends with a `column-resize` event (the column id and its width), so an app or `useCollection` can save the width and restore it as the column `width`.

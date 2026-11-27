@@ -4,6 +4,7 @@
 
 - Import: `import FeedbackReasonDialog from '@aziontech/ui/feedback-reason-dialog'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [feedback-reason-dialog.json](feedback-reason-dialog.json)
 
 ## When to use

@@ -7,7 +7,7 @@
     <DocCard
       title="Applications"
       icon="az az-server"
-      href="/docs/edge-application"
+      href="/docs/applications"
       link-label="Read the guide"
     >
       The plain shape: a glyph, a title, copy and a call to action.

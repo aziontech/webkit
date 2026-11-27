@@ -68,6 +68,10 @@ follows the nearest container.
   already carries that top padding (and so does a Markdown `<Tabs>` in `DocMarkdown`), so put no `mt-*`, `pt-*` or `gap` of
   your own between `Tabs.List` and the panels; any other strip that switches what shows below it
   follows the same step.
+- Put a filter above everything it changes, and change nothing above it. A page-wide filter (a
+  year, a time range, an environment) opens the band it filters, over the metrics, the charts and the
+  lists it narrows; a filter inside a card (a category toggle in a chart's header) changes only that
+  card and what sits below it. When the content above must stay unfiltered, say so in its label.
 - Size cards, dialogs and side columns with the container scale: `max-w-(--container-sm)` …
   `max-w-(--container-7xl)`.
 - Start a screen from its block (`npx @aziontech/ui search <words>` → `npx @aziontech/ui add
@@ -83,6 +87,10 @@ follows the nearest container.
   (`Alert`), a card or a framed table never sits flush against the next card or section heading.
   The stack that holds them carries the gap: the parent section `gap-(--layout-section-gap)`, even
   when its first child is a banner rather than a section.
+- Never place a filter beside or below content it changes: a year picker next to a chart that also
+  changes the metrics above it, a filter at the bottom of a card that narrows the list over it. The
+  eye reads a filter as acting on what follows it; content above it that changes anyway looks
+  unrelated, or unexplained.
 - Never write a literal length (`px`, `rem`) for a layout width; every measure is a token.
 - Never make the create action taller than the actions beside it (`size="large"` in a
   `PageHeader`): emphasis comes from `variant="primary"`, not from height.

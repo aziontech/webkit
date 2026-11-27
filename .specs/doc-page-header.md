@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 17b01a99ad9cb71d17576818bae0e63c6e761f4d303a499697540761191a4f02
+checksum: c9fd37367743230df72111626a935b07052e94369cdfd032bf28805fa22427f4
 created: 2026-08-22
 last_updated: 2026-11-24
 ---
@@ -50,7 +50,7 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 <template>
   <DocPageHeader
     title="Deploy an application"
-    description="Go from a template to a live edge application in a few clicks."
+    description="Go from a template to a live application in a few clicks."
     :breadcrumbs="[{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]"
     last-updated="2026-06-30"
     :meta-actions="[

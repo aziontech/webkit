@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A full year of daily Azion platform contributions. Hover or focus any day to inspect its count, and click a day to select or clear it.",
+   "file": "examples/contribution-graph/default.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "A Skeleton placeholder holds the space of the calendar while contributions load.",
+   "file": "examples/contribution-graph/loading.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "No activity recorded: renders an empty placeholder state when no items or year are supplied.",
+   "file": "examples/contribution-graph/empty.vue"
+  }
+ ]
+}

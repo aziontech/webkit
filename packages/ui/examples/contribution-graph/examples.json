@@ -1,0 +1,37 @@
+{
+  "component": "contribution-graph",
+  "title": "Components/Chart/ContributionGraph",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A full year of daily Azion platform contributions. Hover or focus any day to inspect its count, and click a day to select or clear it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "A Skeleton placeholder holds the space of the calendar while contributions load.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "No activity recorded: renders an empty placeholder state when no items or year are supplied.",
+      "file": "empty.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "When contributions fail to load, a bordered empty state with the error message replaces the grid and is announced as an alert.",
+      "file": "error.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same graph written in a docs page: `DocMarkdown` turns a `<ContributionGraph year={2026} items={[…]} />` tag into a real `ContributionGraph`. The attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same graph in the marketing site's page JSON: `ContributionGraph` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"`) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
+    }
+  ]
+}

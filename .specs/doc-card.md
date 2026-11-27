@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: cf54eff9f33e04d05c56d1f55ef873c6b49a3521c6612d1421eb4481f3136b57
+checksum: c8db26374c8a47a15a4424ea8a6f07026208cf323a561259cf314550a2ec5355
 created: 2026-08-22
 last_updated: 2026-11-24
 ---
@@ -47,9 +47,9 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 <template>
   <DocCard
-    title="Edge Application"
+    title="Applications"
     icon="az az-server"
-    href="/docs/edge-application"
+    href="/docs/applications"
     link-label="Read the guide"
   >
     Serve and cache your application at the edge, close to the people using it.

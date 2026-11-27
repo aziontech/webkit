@@ -82,13 +82,13 @@
 
   export interface InvocationsProps {
     /** The function and its request path. Left out, the sample renders. */
-    edgeFunction?: InvocationsFunction
+    functionDetail?: InvocationsFunction
     /** Recent invocations, newest first; the Recent menu lists them. Left out, the sample renders. */
     invocations?: InvocationsInvocation[]
   }
 
   const props = withDefaults(defineProps<InvocationsProps>(), {
-    edgeFunction: undefined,
+    functionDetail: undefined,
     invocations: undefined
   })
 
@@ -103,7 +103,7 @@
   const invocationId = defineModel<string>('invocation', { default: '' })
   const selectedSpan = defineModel<string>('span', { default: '' })
 
-  const fn = computed<InvocationsFunction>(() => props.edgeFunction ?? sampleFunction)
+  const fn = computed<InvocationsFunction>(() => props.functionDetail ?? sampleFunction)
   const runs = computed<InvocationsInvocation[]>(() => props.invocations ?? sampleInvocations)
 
   const severities: Record<InvocationsStatus, StatusIndicatorSeverity> = {

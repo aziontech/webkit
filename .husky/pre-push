@@ -1,1 +1,2 @@
+unset $(env | sed -n 's/^\(GIT_[A-Z_]*\)=.*/\1/p')
 [ -n "$AZION_UI_GATES_DONE" ] || pnpm --filter @aziontech/ui run gates -- --bail

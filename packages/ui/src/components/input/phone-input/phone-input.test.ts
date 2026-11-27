@@ -841,6 +841,15 @@ describe('PhoneInput', () => {
       restore()
     })
 
+    it('names the number field, not the wrapper, from aria-label outside a Field', async () => {
+      const { getByTestId, getByRole, container } = render(PhoneInput, {
+        attrs: { 'aria-label': 'Phone number' }
+      })
+      expect(getByRole('textbox', { name: 'Phone number' })).toBe(getByTestId('phone-input__input'))
+      expect(getByTestId('phone-input').getAttribute('aria-label')).toBeNull()
+      await expectNoA11yViolations(container)
+    })
+
     it('focuses the number field when the touch target is pressed', () => {
       const { getByTestId } = render(PhoneInput, { attrs: { 'aria-label': 'Phone' } })
       const touch = getByTestId('phone-input__touch-target')

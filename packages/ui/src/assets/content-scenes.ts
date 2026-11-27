@@ -30,6 +30,7 @@ const loaders = {
   ChartTooltip: () => import('../components/chart/chart/chart-tooltip/chart-tooltip.vue'),
   CodeBlock: () => import('../components/code/code-block/code-block.vue'),
   ConsoleMockup: () => import('../components/content/console-mockup/console-mockup.vue'),
+  ContributionGraph: () => import('../components/chart/contribution-graph/contribution-graph.vue'),
   Diagram: () => import('../components/marketing/diagram/diagram.vue'),
   DonutChart: () => import('../components/chart/donut-chart/donut-chart.vue'),
   Embed: () => import('../components/content/embed/embed.vue'),

@@ -3,6 +3,7 @@ name: prompt-queue
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 1
 template: 2
 checksum: 8906b81a46c25a20352f0ce6dbcbd2bc6bae9c0ca9a2fe348f2a72f22b48dc95

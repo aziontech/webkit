@@ -34,7 +34,7 @@
         <SidebarMenuItem
           label="Firewall"
           icon="az az-shield"
-          href="/edge-firewall"
+          href="/firewall"
           tag-value="Beta"
         />
         <SidebarMenuItem

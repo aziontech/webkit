@@ -56,7 +56,7 @@ The block takes the function and its recent invocations through props, owns the 
 
 | Prop / model         | Type                      | What it does                                                                                       |
 | -------------------- | ------------------------- | -------------------------------------------------------------------------------------------------- |
-| `edgeFunction`       | `InvocationsFunction`     | The function (name, ID, runtime) and the path its requests take (service, resource, rule, origin). |
+| `functionDetail`     | `InvocationsFunction`     | The function (name, ID, runtime) and the path its requests take (service, resource, rule, origin). |
 | `invocations`        | `InvocationsInvocation[]` | Recent runs, newest first: their status, times, request, outcome, logs and trace spans.            |
 | `v-model:invocation` | `string`                  | The ID of the open run; empty opens the first. Picking one in Recent updates it.                   |
 | `v-model:span`       | `string`                  | The selected trace span; empty selects none. A request path node's jump sets it.                   |
@@ -89,7 +89,7 @@ To go live, render the block from a page that owns the request and the route:
   <DetailInvocations
     v-if="fn && invocations"
     v-model:invocation="open"
-    :edge-function="fn"
+    :function-detail="fn"
     :invocations="invocations"
     @replay="replay"
   />
@@ -239,13 +239,13 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
 
   export interface InvocationsProps {
     /** The function and its request path. Left out, the sample renders. */
-    edgeFunction?: InvocationsFunction
+    functionDetail?: InvocationsFunction
     /** Recent invocations, newest first; the Recent menu lists them. Left out, the sample renders. */
     invocations?: InvocationsInvocation[]
   }
 
   const props = withDefaults(defineProps<InvocationsProps>(), {
-    edgeFunction: undefined,
+    functionDetail: undefined,
     invocations: undefined
   })
 
@@ -260,7 +260,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-invo
   const invocationId = defineModel<string>('invocation', { default: '' })
   const selectedSpan = defineModel<string>('span', { default: '' })
 
-  const fn = computed<InvocationsFunction>(() => props.edgeFunction ?? sampleFunction)
+  const fn = computed<InvocationsFunction>(() => props.functionDetail ?? sampleFunction)
   const runs = computed<InvocationsInvocation[]>(() => props.invocations ?? sampleInvocations)
 
   const severities: Record<InvocationsStatus, StatusIndicatorSeverity> = {

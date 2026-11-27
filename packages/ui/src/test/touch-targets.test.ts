@@ -189,16 +189,18 @@ describe('tap targets on a coarse pointer (styled)', () => {
       await touch()
       const view = await mount(SettingsGroupDefault)
       const link = byTestId(view.container as HTMLElement, 'settings-group__copy-link')[0]!
-      const target = link.querySelector<HTMLElement>('[data-slot="touch-target"]')!
       const hint = await vi.waitFor(() => {
-        const box = target.getBoundingClientRect()
-        expect(box.height).toBeGreaterThanOrEqual(44)
-        expect(box.width).toBeGreaterThanOrEqual(44)
         const trigger = link.parentElement!.querySelector<HTMLElement>(
           '[data-testid="hint__trigger"]'
         )
         expect(trigger).not.toBeNull()
         return trigger!
+      })
+      const target = link.querySelector<HTMLElement>('[data-slot="touch-target"]')!
+      await vi.waitFor(() => {
+        const box = target.getBoundingClientRect()
+        expect(box.height).toBeGreaterThanOrEqual(44)
+        expect(box.width).toBeGreaterThanOrEqual(44)
       })
       const linkBox = link.getBoundingClientRect()
       const hintBox = hint.getBoundingClientRect()

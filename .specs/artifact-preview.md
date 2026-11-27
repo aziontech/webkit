@@ -3,6 +3,7 @@ name: artifact-preview
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 6
 template: 2
 checksum: bd64cfd1d60e1ba333e709a95df430b54331e2876f3deb95f701cc4d87962acb

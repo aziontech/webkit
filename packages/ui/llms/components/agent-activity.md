@@ -4,6 +4,7 @@
 
 - Import: `import AgentActivity from '@aziontech/ui/agent-activity'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [agent-activity.json](agent-activity.json)
 
 ## When to use

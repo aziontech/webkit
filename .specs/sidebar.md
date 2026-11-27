@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 4849026de5d54bd992809def8f8b62393da93dae5d3033681a1d2941d6211f45
+checksum: 0c80ceea605a4f5350436468ea7d4f6ad4620e0309aa072b6ba9432d46728fd2
 created: 2026-05-22
 last_updated: 2026-11-21
 ---
@@ -126,7 +126,7 @@ Two details are what make the pair correct, and neither costs more than one attr
 
         <SidebarMenu.Sub default-open>
           <SidebarMenu.SubTrigger
-            label="Edge Functions"
+            label="Functions"
             type="inline"
           />
           <SidebarMenu.SubContent>

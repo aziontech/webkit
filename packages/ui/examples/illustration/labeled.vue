@@ -5,6 +5,6 @@
 <template>
   <Illustration
     name="deploy-secure-mcp-server"
-    aria-label="An MCP server deployed behind the edge firewall"
+    aria-label="An MCP server deployed behind the firewall"
   />
 </template>

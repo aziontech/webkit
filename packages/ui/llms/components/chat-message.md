@@ -5,6 +5,7 @@
 - Import: `import ChatMessageRoot from '@aziontech/ui/chat-message-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChatMessage from '@aziontech/ui/chat-message'`
 - Category: ai · Surface: app · Structure: composition
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [chat-message.json](chat-message.json)
 
 ## When to use

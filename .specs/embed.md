@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 203689fc781f643ee97f239658951f9ae41356096eb57c5fda27964644dbeea0
+checksum: f984d4940b7ffa91ba5092a096ec1842e3fbfdba6c07d9a83006f9d72e41490a
 created: 2026-09-22
 last_updated: 2026-11-24
 ---
@@ -52,8 +52,8 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 
 <template>
   <Embed
-    src="https://demo.azion.com/edge-function"
-    title="An interactive demo of an edge function responding to a request"
+    src="https://demo.azion.com/functions"
+    title="An interactive demo of a function responding to a request"
     ratio="video"
   />
 </template>

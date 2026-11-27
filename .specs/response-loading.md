@@ -3,6 +3,7 @@ name: response-loading
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 5
 template: 2
 checksum: 75f8c7c10098151d11ef9a8a242315c171688029865479a7c5ff8c0446dde4f4

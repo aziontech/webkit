@@ -3,6 +3,7 @@ name: tool-call
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 7
 template: 2
 checksum: 8b8cf6df010879b49c9d2ad0942d028811041e29d0be212a729208688066322f

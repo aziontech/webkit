@@ -40,7 +40,10 @@ function canonical(path) {
 }
 
 export function gitState(projectDir) {
-  const git = (args) => spawnSync('git', args, { cwd: projectDir, encoding: 'utf8' })
+  const env = Object.fromEntries(
+    Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))
+  )
+  const git = (args) => spawnSync('git', args, { cwd: projectDir, encoding: 'utf8', env })
   const top = git(['rev-parse', '--show-toplevel'])
   if (top.error) return { available: false, repo: false }
   if (top.status !== 0) return { available: true, repo: false }

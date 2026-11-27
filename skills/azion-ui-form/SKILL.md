@@ -2,7 +2,7 @@
 name: azion-ui-form
 description: Accessible forms on @aziontech/ui, and which control each kind of value takes (a date or date and time is DatePicker, a range DateRangePicker, a number NumberInput, a phone PhoneInput, a secret PasswordInput — never a text Input that asks for a format). Use for any field, even one. Also: one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own invalid state as the feedback (required is static and draws no colour) — no custom error-summary block, no Alert callout for field validation. The a11y companion to /azion-ui-ux-heuristics (states) and /azion-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-25
+last_updated: 2026-11-26
 scope: general
 enforced_by: [azion-ui-accessibility, azion-ui-component-states, ui-verify]
 ---
@@ -1287,6 +1287,9 @@ there. `Input` takes `type`, `autocomplete` and `spellcheck` on its `<input>`; `
   or a search box. A login or contact field **must** set `autocomplete` to stay fillable;
   `type="email"` alone is not enough, so the e-mail of a profile or settings form stays hidden. A
   read-only field is always hidden.
+- A page that edits saved values (a profile, account settings, anything with a `SaveBar`) is not a
+  sign-in: its name, email and link fields set `autocomplete="off"`, so no password manager offers to
+  sign in or overwrite them. Only a change-password card keeps `current-password` / `new-password`.
 - **Never block paste** — not in passwords, not in one-time codes, not in confirmation fields.
 - Do not block keystrokes in a numeric field: accept the input and validate on submit.
 - Trim the value before validating: input methods and autofill add trailing spaces.

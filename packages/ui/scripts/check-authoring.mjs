@@ -15,7 +15,9 @@ import {
   EXAMPLE_DATA_DIRS,
   EXAMPLE_DATA_MESSAGES,
   exampleDataApplies,
-  scanExampleData
+  RETIRED_NAME_DIRS,
+  scanExampleData,
+  scanRetiredNames
 } from '../src/eslint-plugin/lib/example-data.js'
 import {
   scanTextureBackdrop,
@@ -182,6 +184,15 @@ function exampleDataViolations() {
       const rel = relative(ROOT, abs).split('\\').join('/')
       if (!exampleDataApplies(rel)) continue
       for (const id of scanExampleData(readFileSync(abs, 'utf-8'))) {
+        keys.push(`${rel}::example-data:${id}`)
+      }
+    }
+  }
+  for (const dir of RETIRED_NAME_DIRS) {
+    for (const abs of walkAll(join(ROOT, dir))) {
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      if (!exampleDataApplies(rel)) continue
+      for (const id of scanRetiredNames(readFileSync(abs, 'utf-8'))) {
         keys.push(`${rel}::example-data:${id}`)
       }
     }

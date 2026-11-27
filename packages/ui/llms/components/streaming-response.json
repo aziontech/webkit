@@ -58,6 +58,7 @@
  "events": [],
  "slots": [],
  "styleSeam": false,
+ "stability": "preview",
  "assets": [],
  "examples": [
   {
