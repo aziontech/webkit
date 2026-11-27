@@ -156,7 +156,7 @@
           "imports": {
             "../user-profile-model": "./account-user-profile.user-profile-model"
           },
-          "checksum": "sha256:542f701c7313bbb5041cd216a4a9b35c56ddd85071bf1a6fdaa00869cbb73035"
+          "checksum": "sha256:2927de07d3d581a23a1f480584d2142c323656228d3fbba7fdb3979b7bf638f6"
         },
         {
           "path": "src/blocks/account-user-profile-profile-preferences-tab.vue",

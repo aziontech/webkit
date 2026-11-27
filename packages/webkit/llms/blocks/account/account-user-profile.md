@@ -1,6 +1,6 @@
 # AccountUserProfile (`account/account-user-profile`)
 
-> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`, and from a 1192px-wide block (`@5xl`) it becomes a column beside the tab content with the bio under it and, on Overview, a `KeyValueList` summary (location, time zone, email, website, join year, sign-in and multi-factor as a `StatusIndicator`) with a Review security `Button` that opens the Security tab. The settings tabs stop at the form measure, like the settings page; Overview uses the full width. The tabs: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview opens with a year `ToggleGroup` above everything it changes, then five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` whose days grow to fill the card (a category `ToggleGroup`, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
+> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot. A compact header (a 48 px `Avatar`, the name, a role `Tag`, handle, location and join year; no actions, the tabs are where you edit) sits over `PageTabs`, and from a 1192px-wide block (`@5xl`) it becomes a column beside the tab content with the bio under it and, on Overview, a `KeyValueList` summary (location, time zone, email, website, join year, sign-in and multi-factor as a `StatusIndicator`) with a Review security `Button` that opens the Security tab. The settings tabs stop at the form measure, like the settings page; Overview uses the full width. The tabs: Overview, Profile and bio, Security and access, Notifications and Preferences. Overview opens with a year `ToggleGroup` (a ghost `Select` past five years) above everything it changes, then five `StatTile`s in a `StatTileGroup` for the selected year (hidden on a phone), a `Card` with a `ContributionGraph` whose days grow to fill the card (a category `ToggleGroup`, a day click that filters the history) and a `Card` with a month-grouped `Timeline` of contributions, or an `EmptyState`. The settings tabs are `SettingsGroup`s over flush `Card`s of `SettingsRow`s: profile fields, `PhoneInput`, `LanguageSelect` and visibility `Switch`es; `PasswordInput` with `PasswordRequirements` and a Change password button that checks each field, multi-factor (a `ConfirmDialog` before it turns off) and personal tokens, locked with an info `Alert` and a warning `Tag` when the organization's SSO and SCIM provider manages them; three scheduled digests and real-time alerts as `Select`s; `ThemeSwitcher` and a Keyboard shortcuts `Switch`. A docked `SaveBar` appears with unsaved profile, notification or preference changes (Discard, Save changes; Command S and its hint only while shortcuts are on). Loading draws `Skeleton`s; a load failure is a danger `Alert` with Retry.
 
 - Surface: app
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
@@ -47,7 +47,7 @@ Five tabs on `v-model:active-tab`: Overview, Profile and bio, Security and acces
 
 ### C. Year filter and metrics — `ToggleGroup`, `StatTileGroup`, `StatTile` (required)
 
-The year `ToggleGroup` opens Overview, above everything it changes: the metrics, the graph and the history. Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
+The year `ToggleGroup` opens Overview, above everything it changes: the metrics, the graph and the history. With more than five years it becomes a ghost `Select`, since a `ToggleGroup` holds two to five segments. Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
 
 ### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup` (required)
 
@@ -1306,6 +1306,7 @@ export function filterHistory(
   import Card from '@aziontech/webkit/card'
   import ContributionGraph from '@aziontech/webkit/contribution-graph'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import Tag from '@aziontech/webkit/tag'
@@ -1396,11 +1397,29 @@ export function filterHistory(
       class="flex"
     >
       <ToggleGroup
+        v-if="years.length <= 5"
         v-model="yearValue"
         :options="yearOptions"
         size="small"
         aria-label="Contribution year"
       />
+      <Select
+        v-else
+        v-model="yearValue"
+        variant="ghost"
+        size="medium"
+      >
+        <Select.Trigger aria-label="Contribution year" />
+        <Select.Content>
+          <Select.Item
+            v-for="option in yearOptions"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </Select.Item>
+        </Select.Content>
+      </Select>
     </div>
     <div class="max-md:hidden">
       <StatTileGroup aria-label="Platform contribution metrics">

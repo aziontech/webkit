@@ -966,13 +966,6 @@ A tab strip and its panel are one band too: the panel starts one group step belo
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
 
-**A filter sits above everything it changes, and changes nothing above it.** The eye reads a filter
-as acting on what follows it, so a control that also changes content above it (a year picker beside a
-chart that also rewrites the metric tiles over the chart) breaks the link between cause and effect. A
-page-wide filter opens the band it filters, over every metric, chart and list it narrows; a filter in
-a card header narrows that card and what sits below it, never a card above. When a part above must
-stay unfiltered, its label says so ("this year", "all categories").
-
 **The group step is the floor.** No two regions of a page — a banner (`Alert`), a card, a framed
 table, a section heading — ever sit closer than `--layout-group-gap`. The usual way to break it is a
 parent section with no `gap` of its own: a page-level `Alert` above the first `SettingsGroup` lands
