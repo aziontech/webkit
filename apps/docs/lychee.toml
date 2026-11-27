@@ -5,8 +5,11 @@
 scheme = ["https", "http"]
 exclude_all_private = true
 max_concurrency = 16
-max_retries = 3
-retry_wait_time = 2
+max_retries = 4
+retry_wait_time = 5
+# GitHub answers 503 when one host gets many requests at once.
+host_concurrency = 4
+host_request_interval = "200ms"
 timeout = 30
 cache_exclude_status = "429"
 user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36"

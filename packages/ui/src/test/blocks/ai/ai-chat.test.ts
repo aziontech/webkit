@@ -84,7 +84,7 @@ describe('ai/ai-chat Artifact', () => {
         view.getAllByRole('button', { name: 'More conversation actions' }).length
       ).toBeGreaterThan(0)
       expect(view.queryByText('Preview')).toBeNull()
-      expect(view.getByText(/Check important information before you act on it/)).toBeTruthy()
+      expect(view.queryByText(/Check important information before you act on it/)).toBeNull()
       await userEvent.click(view.getByRole('button', { name: 'Show the customer email too' }))
       expect(view.getByRole('region', { name: 'top-orders.sql' }).textContent).toContain('2 of 2')
     })

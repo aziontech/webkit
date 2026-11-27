@@ -159,7 +159,7 @@ describe('AudioPlayer', () => {
     await expectNoA11yViolations(view.container)
 
     await browserUser.click(view.getByRole('button', { name: 'Try again' }))
-    await waitFor(() => expect(root.hasAttribute('data-error')).toBe(false))
+    await waitFor(() => expect(view.queryByText(/The speech service did not answer/)).toBeNull())
     expect(root.hasAttribute('data-loading')).toBe(true)
   })
 

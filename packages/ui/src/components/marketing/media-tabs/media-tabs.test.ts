@@ -128,7 +128,9 @@ describe('MediaTabs', () => {
   })
 
   it('moves between tabs with the arrow keys, Home and End', async () => {
-    const { getAllByRole } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+    const { getAllByRole } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false, selectOn: 'click' }
+    })
     const tabs = () => getAllByRole('tab')
 
     tabs()[0].focus()
