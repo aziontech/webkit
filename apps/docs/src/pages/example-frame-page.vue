@@ -23,7 +23,7 @@
   const styles = computed(() => cached<Component>(keys.frameStyles(`examples/${dir.value}`)))
 
   useHead({
-    title: computed(() => (dir.value ? `${dir.value}: ${example.value} — Azion UI` : 'Azion UI'))
+    title: computed(() => (dir.value ? `${dir.value}: ${example.value} — Brand` : 'Brand'))
   })
 
   function onMessage(event: MessageEvent) {

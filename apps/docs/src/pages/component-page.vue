@@ -46,7 +46,7 @@
   const doc = computed(() => cached<ComponentDoc>(keys.component(name.value)))
 
   useHead({
-    title: computed(() => (item.value ? `${item.value.title} — Azion UI` : 'Azion UI')),
+    title: computed(() => (item.value ? `${item.value.title} — Brand` : 'Brand')),
     meta: [{ name: 'description', content: computed(() => item.value?.purpose ?? '') }]
   })
 

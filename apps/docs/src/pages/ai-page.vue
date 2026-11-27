@@ -25,7 +25,7 @@
   ])
 
   useHead({
-    title: computed(() => `${t.value.forAi} — Azion UI`),
+    title: computed(() => `${t.value.forAi} — Brand`),
     meta: [{ name: 'description', content: computed(() => t.value.aiPageSummary) }]
   })
 </script>

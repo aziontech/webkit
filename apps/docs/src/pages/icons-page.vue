@@ -10,7 +10,7 @@
   const t = messages
 
   useHead({
-    title: 'Icons — Azion UI',
+    title: 'Icons — Brand',
     meta: [{ name: 'description', content: computed(() => t.value.iconsLead) }]
   })
 </script>

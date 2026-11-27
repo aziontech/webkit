@@ -38,7 +38,7 @@
   )
 
   useHead({
-    title: computed(() => (page.value ? `${page.value.title} — Azion UI` : 'Azion UI')),
+    title: computed(() => (page.value ? `${page.value.title} — Brand` : 'Brand')),
     meta: [{ name: 'description', content: computed(() => page.value?.summary ?? '') }]
   })
 </script>

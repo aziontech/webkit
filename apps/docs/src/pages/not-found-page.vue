@@ -9,7 +9,7 @@
   import { searchOpen } from '../lib/search-open'
 
   const t = messages
-  useHead({ title: 'Not found — Azion UI' })
+  useHead({ title: 'Not found — Brand' })
 
   const sections = computed(() => [
     { to: '/components', label: t.value.components },

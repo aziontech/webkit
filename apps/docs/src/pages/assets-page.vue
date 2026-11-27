@@ -14,7 +14,7 @@
 
   const t = messages
   useHead({
-    title: 'Assets — Azion UI',
+    title: 'Assets — Brand',
     meta: [{ name: 'description', content: computed(() => t.value.assetsLead) }]
   })
 

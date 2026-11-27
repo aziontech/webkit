@@ -13,7 +13,7 @@
 
   const t = messages
   useHead({
-    title: 'Azion UI — Azion design system',
+    title: 'Brand — Azion design system',
     meta: [{ name: 'description', content: computed(() => t.value.homeLead) }]
   })
 

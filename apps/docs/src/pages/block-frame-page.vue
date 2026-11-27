@@ -38,8 +38,8 @@
     },
     title: computed(() =>
       block.value && state.value
-        ? `${block.value.title}: ${state.value.name} — Azion UI`
-        : 'Azion UI'
+        ? `${block.value.title}: ${state.value.name} — Brand`
+        : 'Brand'
     )
   })
 

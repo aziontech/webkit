@@ -126,7 +126,7 @@
             <AppHeader.Brand
               href="/"
               :aria-label="t.home"
-              label="Azion UI"
+              label="Brand"
             >
               <Brand
                 variant="default"
@@ -211,7 +211,7 @@
             <AppHeader.Brand
               href="/"
               :aria-label="t.home"
-              label="Azion UI"
+              label="Brand"
             >
               <Brand
                 variant="default"

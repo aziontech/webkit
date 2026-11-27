@@ -7,7 +7,7 @@
   import { messages } from '../lib/i18n'
 
   const t = messages
-  useHead({ title: 'Foundations — Azion UI' })
+  useHead({ title: 'Foundations — Brand' })
 
   const groups = computed(() => [
     {

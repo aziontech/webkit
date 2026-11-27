@@ -9,7 +9,7 @@
   import { blockGroups } from '../lib/nav'
 
   const t = messages
-  useHead({ title: 'Blocks — Azion UI' })
+  useHead({ title: 'Blocks — Brand' })
 
   const MAX_WORDS = 18
 

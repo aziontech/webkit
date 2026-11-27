@@ -113,7 +113,7 @@
   ])
 
   useHead({
-    title: computed(() => (block.value ? `${block.value.title} — Azion UI blocks` : 'Azion UI')),
+    title: computed(() => (block.value ? `${block.value.title} — Brand` : 'Brand')),
     meta: [{ name: 'description', content: computed(() => block.value?.summary ?? '') }]
   })
 
