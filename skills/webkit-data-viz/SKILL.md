@@ -2,7 +2,7 @@
 name: webkit-data-viz
 description: The token adapter that maps charts onto @aziontech/theme — every series color derived from the --color-* families (never hex), computed tokens re-read on a data-theme change so a canvas re-themes (SVG re-themes for free), and the chart's loading/empty/error surface rendered with webkit components. For chart-form and palette theory, use the generic dataviz skill; this skill covers only mapping that onto theme tokens. Use when building or reviewing a chart, dashboard, or KPI tile in a webkit app.
 status: active
-last_updated: 2026-11-25
+last_updated: 2026-11-26
 scope: general
 enforced_by: [webkit-tokens, webkit-component-states, ui-verify]
 ---
@@ -259,6 +259,9 @@ above rather than eyeballing one mode.
 
 ## Hard rules
 
+- **A filter sits above every chart, metric and list it changes** and changes nothing above it: a
+  dashboard's time range or year opens the page band; a series toggle in a chart card header narrows
+  that card and what follows it (rule `webkit-page-layout`).
 - Use `Chart` / `DonutChart` / `StatTile` / `StatTileGroup` / `ChartCard` before a charting library.
 - A KPI row that reads as one band is a `StatTileGroup`, never tiles in a hand-built card with dividers.
 - Every chart color is a `--chart-*` token — **never** a hex, rgb/hsl, Tailwind-palette literal, or a

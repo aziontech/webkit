@@ -2,7 +2,7 @@
 name: webkit-layout
 description: The page container system — how a page built on @aziontech/webkit gets its width, its inset from the app chrome, and its vertical rhythm. Fixes the three-level page shape (boundary → parent section → band), the five measures and what picks one (the payload, never the URL), why the boundary is not part of the measure and what that buys, the two rhythm steps and the margin form for a band whose parent cannot carry a gap, the site frame, the control cap inside an item-group field row, and the device contract (viewport breakpoints for the shell, container queries for anything that can sit in a drawer, split view or card, touch targets, reflow at 320 px). Everything comes from the `layout-*` utilities and tokens in @aziontech/theme — a page never writes its own `mx-auto max-w-*`, and full-bleed is the absence of a column class, not a `w-full`. Use when building any page, adding a sticky action bar, wondering how wide a page should be, or reviewing a page whose column drifts left, whose bar misaligns with the body it submits, or whose sections breathe unevenly.
 status: active
-last_updated: 2026-11-25
+last_updated: 2026-11-26
 scope: general
 enforced_by: [webkit-styling, webkit-tokens, webkit-direction, ui-verify, review]
 ---
@@ -227,6 +227,13 @@ A tab strip and its panel are one band too: the panel starts one group step belo
 
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
 The section step is the gap _above_ the band, not inside it.
+
+**A filter sits above everything it changes, and changes nothing above it.** The eye reads a filter
+as acting on what follows it, so a control that also changes content above it (a year picker beside a
+chart that also rewrites the metric tiles over the chart) breaks the link between cause and effect. A
+page-wide filter opens the band it filters, over every metric, chart and list it narrows; a filter in
+a card header narrows that card and what sits below it, never a card above. When a part above must
+stay unfiltered, its label says so ("this year", "all categories").
 
 **The group step is the floor.** No two regions of a page — a banner (`Alert`), a card, a framed
 table, a section heading — ever sit closer than `--layout-group-gap`. The usual way to break it is a
@@ -483,6 +490,7 @@ Close with `Layout sound` or `N gaps — fix before polish`.
 - Rhythm is the two steps only — section between sections, group inside one.
 - No two page regions (banner, card, framed table, section heading) closer than the group step.
 - A controls row and the thing it narrows sit in one band at the group step.
+- Every filter sits above everything it changes and changes nothing above it.
 - A sticky bar carries the same column class and `layout-boundary-inline` as its body.
 - Sibling states of the page (empty, populated, each tab) resolve to the same column.
 - Field rows use `layout-field-control`, not a hand-set width.
