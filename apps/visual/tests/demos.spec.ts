@@ -312,6 +312,8 @@ test.describe('demo flows', () => {
     await menu.click()
     await page.getByRole('menuitemradio', { name: 'System' }).click()
     await menu.click()
+    await expect(page.getByRole('menuitemradio', { name: 'System' })).toBeHidden()
+    await menu.click()
     await expect(page.getByRole('menuitemradio', { name: 'System' })).toHaveAttribute(
       'aria-checked',
       'true'
