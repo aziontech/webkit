@@ -1,6 +1,6 @@
 # AiChatDrawer (`ai/ai-chat-drawer`)
 
-> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` that is not modal from `lg` (no overlay), so the page stays undimmed and readable, and modal below `lg`, where it covers the page, whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with Good response, Bad response, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.
+> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` that is not modal from `lg` (no overlay), so the page stays readable, and modal below `lg`, where it covers the page, whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with the reader's prompts in bubbles at the inline end and plain-text responses that think (`Reasoning`), stream (`StreamingResponse` with site-name citation chips) and carry Copy, Read aloud, Share and More (with Good response, Bad response, Try again and Branch in new chat) and a `Sources` pill on the same line, prompts with Copy and Edit, and `ResponseBranches` over their versions, and a `PromptInput` pill floating at the foot with the disclaimer until the first message, the thread on the canvas. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes TanStack AI's `useChat` messages as they are. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.
 
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/ui`
@@ -65,7 +65,7 @@ After the last complete response, aligned with its text.
 
 ### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
 
-The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions`; a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys` (pass it as `sendMessage(content, { body: { tools: toolKeys } })`). It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint until the first message is sent, then no disclaimer. The "+" menu (`attachable`, `toolOptions`, `v-model:toolKeys`; pass the keys as `sendMessage(content, { body: { tools: toolKeys } })`), attachments (`accept`, `maxFiles`, `maxFileSize`), the multimodal `send` content and Dictate work as in `ai/ai-chat`. The composer is disabled while the conversation is restored.
 
 ### J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 
@@ -248,7 +248,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Drawer title:** `AI assistant`, with the Preview tag while in preview.
 - **Empty state:** "Ask about <resource>" and one sentence saying the assistant reads this resource's settings and metrics.
 - **Placeholder:** "Ask about <resource>".
-- **Disclaimer:** "The AI assistant can make mistakes. Check important information before you act on it.", word for word the one `ai/ai-chat` uses; `ai/ai-action-approval` adds "It runs nothing in your account without your approval."
+- **Disclaimer:** "The AI assistant can make mistakes. Check important information before you act on it.", word for word the one `ai/ai-chat` uses, shown only before the first message.
 - Errors, loading and feedback strings follow `ai/ai-chat` and `skills/azion-ui-microcopy`.
 - **Connection:** `Reconnecting`; `Connection lost` with "Your messages send when the connection returns."
 - **Elsewhere and failed answers:** `Responding in another tab`; `Your answer was not sent` with the reason and Retry; `The structured answer failed`.
@@ -711,6 +711,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                   :state="state"
                   :queueable="queueable"
                   :hydrating="hydrating"
+                  :empty="!turns.length"
                   :accept="accept"
                   :max-files="maxFiles"
                   :max-file-size="maxFileSize"
@@ -1504,6 +1505,7 @@ export const sampleTools: PromptInputMenuOption[] = [
     state: PromptInputStatus
     queueable: boolean
     hydrating: boolean
+    empty: boolean
     accept: string
     maxFiles: number
     maxFileSize: number
@@ -1590,7 +1592,9 @@ export const sampleTools: PromptInputMenuOption[] = [
         placeholder="Choose project"
       />
     </template>
-    <template #hint
+    <template
+      v-if="empty"
+      #hint
       >The AI assistant can make mistakes. Check important information before you act on
       it.</template
     >

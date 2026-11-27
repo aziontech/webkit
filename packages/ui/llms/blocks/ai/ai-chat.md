@@ -1,12 +1,12 @@
 # AiChat (`ai/ai-chat`)
 
-> The full-page generative AI assistant in the chat-app look: a thread history grouped by date (search, a project filter, New thread; each row shows its project, the Azion product it started on with how many it touches or the version it edits, a `HoverCard` of details, and Snooze and Settle) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the title of the open conversation with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), the model picker (`v-model:modelKey`, the only one on the page) and Dictate before the button at the end (Start voice conversation while empty, Send once there is text, Stop while a response is generated), a 4,000-character limit whose counter appears near it, and the disclaimer under it on desktop. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `HoverCard`, `Drawer`, `DropdownMenu`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `Button`, `IconButton`, `ResponseBranches` and `FeedbackReasonDialog`. Takes the messages of TanStack AI's `useChat` as they are and reports share, edit, branch, version changes and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
+> The full-page generative AI assistant in the chat-app look: a thread history grouped by date (search, a project filter, New thread; each row shows its project, the Azion product it started on with how many it touches or the version it edits, a `HoverCard` of details, and Snooze and Settle) in a side panel on desktop and a start `Drawer` behind a floating menu button on a phone; no header bar, only floating controls over the thread: on a phone the menu button and one grouped New chat and More control, on desktop the title of the open conversation with Share and More (Rename, Archive, Delete) at the end; before the first message a welcome page with "What can I help with?", the composer in the middle on desktop and at the foot on a phone, and the support prompts as `SuggestionGroup` chips; then a `Conversation` in a centered reading column where the reader's prompts sit in bubbles at the inline end and each response is plain text in a `ChatMessage` that goes pending, thinking (`Reasoning`), streaming (`StreamingResponse` with site-name citation chips) and complete (Copy, Feedback with Good and Bad response, Read aloud, Share, Try again and More, with the `Sources` pill on the same line; a `FeedbackReasonDialog` after Bad response and a `ResponseBranches` pager over regenerated answers and edited prompts, which carry Copy and Edit), followed by follow-up questions; a `PromptInput` pinned at the foot of the column while the thread scrolls behind it, with the "+" menu at the start (Camera, Photos, Files, then tools such as Web search that ride in the composer as chips, `v-model:toolKeys`), the model picker (`v-model:modelKey`, with speed, Ultracode and access in its footer) and Dictate before the button at the end (Voice while empty, Send once there is text, Stop while generating), a 4,000-character limit with a counter near it; the disclaimer only on the welcome page, at its foot. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Takes TanStack AI's `useChat` messages as they are and reports share, edit, branch, version and feedback for the app to run with `setMessages`, `sendMessage` and `reload`. A page body for ConsoleLayout that fills its content region (`data-layout-fill`).
 
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/ui`
 - MCP: `get_block("ai/ai-chat")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), `ResizableHandle`, `ResizablePane`, [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAccessPicker`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), `ResizableHandle`, `ResizablePane`, [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `azion-ui-ai-surfaces`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
@@ -69,13 +69,13 @@ After the last complete response, two or three questions that narrow it, as wrap
 
 ### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`, `PromptInputContextPicker`
 
-The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It ships with the full `PromptInput` feature set by default so apps start complete and only turn off controls they do not offer: `PromptInputAttachButton` with `tools` in `#actions`, `PromptInputModelPicker` (model + effort) and `PromptInputDictateButton` in `#end`, `voice` on by default, `PromptInputContextPicker` in `#footer`, and the disclaimer in `#hint`. The tools live in the "+" menu only, so `PromptInputTools` is not added to `#footer` (both would list the enabled tools as chips). It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The disclaimer is its hint, shown from the md breakpoint and kept for assistive tech on a phone. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating box at the foot of the reading column, pinned there while the thread scrolls behind it (the log keeps room for it, and it keeps the phone's bottom safe area under it), over a fade of the canvas the thread scrolls under, with the connection status, an alert and the queue above it. It ships with the full `PromptInput` feature set by default so apps start complete and only turn off controls they do not offer: `PromptInputAttachButton` with `tools` in `#actions`, `PromptInputModelPicker` (model + effort, Favorites, and a footer with the speed `ToggleGroup`, Ultracode and the access mode `PromptInputAccessPicker`, as in the `PromptInput` default example) and `PromptInputDictateButton` in `#end`, `voice` on by default, `PromptInputContextPicker` in `#footer` (the disclaimer is not in the composer: see Disclaimer). The tools live in the "+" menu only, so `PromptInputTools` is not added to `#footer` (both would list the enabled tools as chips). It stacks into a rounded rectangle when the text runs to more lines or files are attached. Enter submits, Shift+Enter adds a line, a 4,000-character limit shows its counter once the prompt passes 3,200 characters, and Submit becomes Stop while a response is pending or streaming. While the composer is empty the button at the end is Start voice conversation (`voice`, on by default), which emits `voice-start` for the app to open its audio session. The "+" at the start (`attachable`, on by default: a `PromptInputAttachButton` with `tools`, and drop and paste) opens a menu with Camera (touch screens), Photos and Files, then the tools of `toolOptions` (Web search, Deep research, Create image); a turned-on tool rides in the composer as a removable chip and is `v-model:toolKeys`. It attaches up to `maxFiles` files of `accept` (images and PDF by default) under `maxFileSize` (10 MB); `send` then hands over TanStack AI's multimodal content, the text and one `image`, `audio`, `video` or `document` part per file with its base64 bytes, ready for `sendMessage`. Dictate (a `PromptInputDictateButton`, the microphone before Send) writes speech into the prompt with the browser's speech recognition and hides itself where the browser has none; an app that runs its own transcriber swaps in `PromptInputDictateButton` with `transcriber="app"` and writes the text itself. The composer is disabled while the conversation is restored.
 
 ### J. Artifact canvas — `ChatMessage`, `PromptInput` (Artifact)
 
 Variant Artifact only; it fills the `turn-end` and `canvas` slots of the chat with `ArtifactPreview`, `ArtifactCanvas`, `Resizable`, `CodeBlock` and a `Drawer` for narrow screens.
 
-When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it, and any preview's Open brings it back. The Artifact state is the same chat as every other state (history panel, header, composer, disclaimer): the preview goes in its `turn-end` slot and the handle and pane in its `canvas` slot, so an app keeps one chat shell.
+When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it, and any preview's Open brings it back. The Artifact state is the same chat as every other state (history panel, header, composer): the preview goes in its `turn-end` slot and the handle and pane in its `canvas` slot, so an app keeps one chat shell.
 
 ### K. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 
@@ -272,7 +272,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - **Empty state:** "What can I help with?".
 - **Support prompts and follow-ups:** written as the reader would ask, under 72 characters, e.g. "How do I purge the cache of one URL?".
 - **Placeholder:** `Ask a question`, no end punctuation.
-- **Disclaimer (hint):** "The AI assistant can make mistakes. Check important information before you act on it." The three AI blocks share this sentence; `ai/ai-action-approval` appends "It runs nothing in your account without your approval."
+- **Disclaimer:** "The AI assistant can make mistakes. Check important information before you act on it." It shows only before the first message: the welcome page starts with the composer in the middle of the page on desktop, and the disclaimer sits at the foot of the page (under the composer at the foot on a phone). Once the first message is sent the composer moves to the foot of the conversation and the disclaimer is gone. `ai/ai-chat-drawer` follows the same rule; `ai/ai-action-approval`, always mid-conversation, shows none.
 - **Loading:** `Generating a response` (built in); `Loading <what>` when fetching data.
 - **Error:** what happened, in one sentence, e.g. "The connection was interrupted before the response finished.", with Try again.
 - **Stopped:** "You stopped this response."
@@ -286,7 +286,7 @@ A tool that needs approval is declared once with `toolDefinition({ name, inputSc
 - The log is a named `role="log"` whose own live behavior is off; a polite live region reads each finished response once, with its author.
 - Each message is an `article` named by author and time; the author and time are visually hidden, never removed.
 - Responses are `aria-busy` while loading or streaming; the caret is hidden.
-- The composer is named Prompt, described by its counter and disclaimer; Enter submits and an IME composition never does.
+- The composer is named Prompt, described by its counter; Enter submits and an IME composition never does.
 - Feedback is a menu button (`aria-haspopup="menu"`) whose chosen item is `aria-checked`, and the rating is confirmed by a visually hidden status message and the toast; the row shows no text.
 - A prompt's Copy and Edit are transparent until hover or focus, never removed from the tab order; the editor's field is named Edit your message, `Escape` cancels and `Ctrl`/`Cmd` + `Enter` sends.
 - Keyboard order: history panel, header, log (focusable to scroll), each message's links and actions, follow-ups, composer. On the welcome page: header, heading, support prompts, composer.
@@ -1358,6 +1358,38 @@ export const sampleTools: PromptInputMenuOption[] = [
   { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
   { value: 'create-image', label: 'Create image', icon: 'az az-image' }
 ]
+
+export const sampleAccessModes: PromptInputMenuOption[] = [
+  {
+    value: 'supervised',
+    label: 'Supervised',
+    icon: 'az az-lock',
+    description: 'Ask before commands and file changes.'
+  },
+  {
+    value: 'edits',
+    label: 'Auto-accept edits',
+    icon: 'az az-pencil',
+    description: 'Auto-approve edits, ask before other actions.'
+  },
+  {
+    value: 'auto',
+    label: 'Auto',
+    icon: 'az az-shield',
+    description: 'Approve routine actions, ask before the rest.'
+  },
+  {
+    value: 'full',
+    label: 'Full access',
+    icon: 'az az-lock-open',
+    description: 'Allow commands and edits without prompts.'
+  }
+]
+
+export const sampleSpeeds: PromptInputMenuOption[] = [
+  { value: 'standard', label: 'Standard' },
+  { value: 'fast', label: 'Fast', icon: 'az az-bolt' }
+]
 ````
 
 ## `lib/ai-chat-failure.ts`
@@ -1499,19 +1531,28 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
+  import Button from '@aziontech/ui/button'
   import type {
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
   } from '@aziontech/ui/prompt-input'
+  import PromptInputAccessPicker from '@aziontech/ui/prompt-input-access-picker'
   import PromptInputAttachButton from '@aziontech/ui/prompt-input-attach-button'
   import PromptInputContextPicker from '@aziontech/ui/prompt-input-context-picker'
   import PromptInputDictateButton from '@aziontech/ui/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/ui/prompt-input-model-picker'
   import PromptInput from '@aziontech/ui/prompt-input-root'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { nextTick, ref } from 'vue'
 
-  import { sampleContexts, sampleModes, sampleProviders } from '../sample'
+  import {
+    sampleAccessModes,
+    sampleContexts,
+    sampleModes,
+    sampleProviders,
+    sampleSpeeds
+  } from '../sample'
   import AiChatVoice from './ai-chat-voice.vue'
 
   defineProps<{
@@ -1540,6 +1581,10 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
   const modeKey = ref('medium')
   const contextKey = ref('')
+  const accessKey = ref('full')
+  const speedKey = ref('standard')
+  const ultracode = ref(false)
+  const favoriteKeys = ref<string[]>(['gemini-4-neon', 'claude-opus-4-5'])
   const modes = sampleModes
   const contexts = sampleContexts
 
@@ -1596,11 +1641,33 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
         v-if="models.length"
         v-model="modelKey"
         v-model:mode="modeKey"
+        v-model:favorite-keys="favoriteKeys"
         :providers="sampleProviders"
         :models="models"
         :modes="modes"
         mode-label="Thinking Level"
-      />
+      >
+        <template #footer>
+          <ToggleGroup
+            v-model="speedKey"
+            :options="sampleSpeeds"
+            size="small"
+            aria-label="Response speed"
+          />
+          <Button
+            label="Ultracode"
+            icon="az az-sparkles"
+            :variant="ultracode ? 'secondary' : 'ghost'"
+            size="small"
+            :aria-pressed="ultracode"
+            @click="ultracode = !ultracode"
+          />
+          <PromptInputAccessPicker
+            v-model="accessKey"
+            :options="sampleAccessModes"
+          />
+        </template>
+      </PromptInputModelPicker>
       <PromptInputDictateButton />
     </template>
     <template
@@ -1613,11 +1680,6 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
         :options="contexts"
         placeholder="Choose project"
       />
-    </template>
-    <template #hint>
-      <span class="max-md:sr-only">
-        The AI assistant can make mistakes. Check important information before you act on it.
-      </span>
     </template>
   </PromptInput>
 </template>
@@ -2497,13 +2559,13 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
   const START_CLASS =
     'flex min-h-0 flex-1 flex-col overflow-y-auto px-(--spacing-md) pt-(--spacing-2xl) ' +
-    'pb-[max(var(--spacing-md),env(safe-area-inset-bottom))] md:justify-center md:pb-(--spacing-2xl)'
+    'pb-[max(var(--spacing-sm),env(safe-area-inset-bottom))]'
 </script>
 
 <template>
   <div :class="START_CLASS">
     <div
-      class="mx-auto flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-md) max-md:flex-1"
+      class="mx-auto flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-md) max-md:flex-1 md:my-auto"
     >
       <div class="flex items-center justify-center max-md:flex-1 md:pb-(--spacing-sm)">
         <h2 class="text-center text-title-md text-(--text-default)">What can I help with?</h2>
@@ -2518,6 +2580,12 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
         <slot />
       </div>
     </div>
+    <p
+      data-testid="ai-chat__disclaimer"
+      class="pt-(--spacing-sm) text-center text-body-xs text-(--text-muted)"
+    >
+      The AI assistant can make mistakes. Check important information before you act on it.
+    </p>
   </div>
 </template>
 ```
