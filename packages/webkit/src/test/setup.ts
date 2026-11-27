@@ -4,7 +4,7 @@
 // emit no CSS and a computed style reads the UA default. A suite that asserts layout, geometry or
 // a computed style imports ./reflow.css first, which compiles the theme and the component classes
 // with the Tailwind plugin in vitest.config.ts. The two modes are described in
-// .claude/rules/testing.md.
+// contributing/rules/testing.md.
 import { cleanup, configure } from '@testing-library/vue'
 import { afterEach, beforeEach } from 'vitest'
 

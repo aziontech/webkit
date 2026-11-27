@@ -190,7 +190,7 @@
           key="retry"
           v-if="recovery === 'retry'"
           label="Try again"
-          variant="primary"
+          variant="secondary"
           size="medium"
           icon="az az-refresh"
           @click="onRetry"
@@ -199,7 +199,7 @@
           key="home"
           v-else
           label="Go to home page"
-          variant="primary"
+          variant="secondary"
           size="medium"
           icon="az az-home"
           :href="homeHref"

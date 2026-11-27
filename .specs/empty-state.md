@@ -7,7 +7,7 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 1c6cb5f18a7f91c37669bcb186b3c0c8ce32eb00549b6c422173d5c23739bdfc
+checksum: 1b4cc46763ee3d30998fa73aed09337029b71054cd226f1808c33793ad7bfa54
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -87,7 +87,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
 | ------------- | --------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `title`       | `string`              | `—`        | true     | Primary heading announcing the empty resource.                                                                                                                                                                                                                        |
 | `description` | `string`              | `''`       | false    | Supporting body copy below the title.                                                                                                                                                                                                                                 |
-| `icon`        | `string`              | `''`       | false    | Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders.                                                                  |
+| `icon`        | `string`              | `''`       | false    | Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders.                                                                             |
 | `size`        | `'small' \| 'medium'` | `'medium'` | false    | Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
 | `bordered`    | `boolean`             | `false`    | false    | When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background.                                                                                                                                                        |
 
@@ -115,7 +115,7 @@ _none_
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)                                               |
+| Region                      | Token (TOKENS.md)                                               |
 | --------------------------- | --------------------------------------------------------------- |
 | title typography            | per-`size` — see harmonic scale below                           |
 | description typography      | per-`size` — see harmonic scale below                           |
@@ -126,7 +126,7 @@ _none_
 | adornment tile surface      | `var(--bg-surface)`                                             |
 | adornment tile border       | `var(--border-default)`                                         |
 | adornment decorative layers | `var(--bg-canvas)` · `var(--border-strong)`                     |
-| adornment shape             | `var(--shape-card)` · `var(--shape-control)`                   |
+| adornment shape             | `var(--shape-card)` · `var(--shape-control)`                    |
 | adornment icon              | `var(--text-default)`                                           |
 | shape (bordered)            | `var(--shape-button)`                                           |
 | spacing (title gap)         | `var(--spacing-xs)`                                             |
@@ -136,13 +136,13 @@ _none_
 
 Every axis steps up one rung per size on a single harmonic ramp. The title climbs the **heading** scale (`heading` tokens only — never `body`); the description climbs the **body** scale one rung below it, so the pair stays in proportion at every size.
 
-| Axis                   | `small`                                 | `medium`                                 |
-| ---------------------- | --------------------------------------- | ---------------------------------------- |
-| title typography       | `.text-heading-2xs` (14px)              | `.text-heading-sm` (14 → 18px)           |
-| description typography | `.text-body-xs` (12px)                  | `.text-body-sm` (14px)                   |
-| adornment tile         | `size-8` (32px)                         | `size-10` (40px)                         |
-| padding (x · y)        | `var(--spacing-6)` · `var(--spacing-8)` | `var(--spacing-8)` · `var(--spacing-12)` |
-| stack gap              | `var(--spacing-4)`                      | `var(--spacing-6)`                       |
+| Axis                   | `small`                                                         | `medium`                                                            |
+| ---------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------- |
+| title typography       | `.text-heading-2xs` (14px); `.text-title-sm` in the console set | `.text-heading-sm` (14 → 18px); `.text-title-md` in the console set |
+| description typography | `.text-body-xs` (12px)                                          | `.text-body-sm` (14px)                                              |
+| adornment tile         | `size-8` (32px)                                                 | `size-10` (40px)                                                    |
+| padding (x · y)        | `var(--spacing-6)` · `var(--spacing-8)`                         | `var(--spacing-8)` · `var(--spacing-12)`                            |
+| stack gap              | `var(--spacing-4)`                                              | `var(--spacing-6)`                                                  |
 
 ## Theme gaps
 
@@ -174,13 +174,13 @@ _none_ — the title now uses `heading` tokens at every size (`.text-heading-2xs
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: a41c81662e8333032b313b03b360fc4f0e0018113671bfb942537c0f267d4b1d
+checksum: 733d249aa9323214330c3a656ea745d4528ecfdea05f208dc519534fe271f27d
 spec_version: 10
 created: 2026-10-20
 last_updated: 2026-11-25
@@ -110,7 +110,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 ## States
 
 - Visual states: `default`, `loading` (Skeleton), `error`, `empty value`, `not enough data`. A tile never shows a band without a graph: the band under the figure (48px, `data-band`) draws the sparkline when `trend` has two or more points, and otherwise a gray placeholder curve (`spark-chart` `color="other"` at 40% opacity, a fixed gentle wave drawn from zero so it sits low, decorative and hidden from assistive tech) with a centred `Tag` that says why: `not-enough-data` ("Not enough data", neutral) when the value is there but the trend has under two points; `no-data` ("No data", neutral) when `value` is null, over a dash; `error` ("Couldn't load", neutral, because the danger `Alert` that explains the failure and offers Retry belongs to the page, A5-F12-2) when `error` is set, over a dash, with the delta and the sparkline hidden, `data-error` set and the figure's accessible text reading "Couldn't load." followed by the `error` message; `loading` (the curve with no label) while `loading`, and `loading` wins over `error`.
-- When the band shows: always for `no-data` and `error`; for the other kinds when `trend` is not empty (a tile that is loading keeps its band when it is given a `trend`, so nothing moves when the data lands; pass a row of nulls while loading). An empty `trend` leaves the figure alone, the shape of a usage strip. Inside a `StatTileGroup` a tile with no band still renders its placeholder band hidden, and CSS shows it as soon as any cell in the group shows a band (`group-has-[[data-band-shown]]/stat-tile-group`), so a mixed row keeps every label and figure on one line. The figure block is top-aligned in every tile.
+- When the band shows: always for `no-data` and `error`; for the other kinds when `trend` is not empty (a tile that is loading keeps its band when it is given a `trend`, so nothing moves when the data lands; pass a row of nulls while loading). An empty `trend` leaves the figure alone, the shape of a usage strip. Inside a `StatTileGroup` a tile with no band still renders its placeholder band hidden, and shows it (`data-band-row`) as soon as any cell in the group shows a band (counted by the group, no `:has()`), so a mixed row keeps every label and figure on one line. The figure block is top-aligned in every tile.
 - Why a placeholder curve (reverses FR07, owner 2026-11-22): a cell without a graph in a row of graphs reads as broken, and a band that comes and goes moves the row. The curve is the reference systems' chart-shaped placeholder (Carbon Charts skeletons, Infragistics skeleton charts, Dynatrace chart states, Preline chart-shaped empty states); it is gray, faint and always labelled, so it does not read as data.
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
@@ -125,14 +125,14 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                                                                                                                                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                 |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
-| value change       | count-up from the previous value over `slow-01`, eased with `productive-entrance`, driven by `requestAnimationFrame` in `composables/use-count-up.ts` | `slow-01` · `productive-entrance`                 | skipped under `prefers-reduced-motion`; the final value renders at once |
-| sparkline entrance | owned by `spark-chart` (its line draws in over `slow-02`)                                                                                             | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` inside `spark-chart`                    |
+| Trigger            | Animation / Transition                                                                                                                                | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                                 |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| value change       | count-up from the previous value over `slow-01`, eased with `productive-entrance`, driven by `requestAnimationFrame` in `composables/use-count-up.ts` | `slow-01` · `productive-entrance`                      | skipped under `prefers-reduced-motion`; the final value renders at once |
+| sparkline entrance | owned by `spark-chart` (its line draws in over `slow-02`)                                                                                             | `slow-02` · `productive-entrance`                      | `motion-reduce:transition-none` inside `spark-chart`                    |
 
 ## Tokens
 
-| Region           | Token (DESIGN.md)                                                                                                                                                                     |
+| Region           | Token (TOKENS.md)                                                                                                                                                                     |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | surface          | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`; grouped: no surface, `var(--border-default)` end and bottom dividers; in a ChartCard: no border, radius or surface |
 | label            | `.text-label-sm`, `var(--text-muted)`                                                                                                                                                 |
@@ -180,15 +180,15 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

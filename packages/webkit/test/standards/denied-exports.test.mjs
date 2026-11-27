@@ -15,8 +15,8 @@ const SOURCES = [
   'skills',
   'rules',
   'adapters',
-  '.claude/skills',
-  '.claude/docs',
+  'contributing/skills',
+  'contributing/docs',
   'packages/webkit/README.md'
 ]
 

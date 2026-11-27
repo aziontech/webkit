@@ -221,8 +221,7 @@
   ])
 
   const STEP_CLASS =
-    'border-(--border-input) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) ' +
-    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 pointer-coarse:min-w-11'
+    'border-(--border-input) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) pointer-coarse:min-w-11'
 
   const POPOVER_CLASS =
     'w-min max-w-[calc(100vw-2*var(--spacing-sm))] overflow-hidden [--input-ring-offset:var(--bg-surface-raised)]'
@@ -246,6 +245,7 @@
   >
     <DatePickerControl
       ref="controlEl"
+      :data-size="size"
       :data-disabled="isDisabled || null"
       :data-invalid="field.invalid.value || null"
     >

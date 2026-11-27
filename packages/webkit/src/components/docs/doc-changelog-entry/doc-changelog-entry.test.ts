@@ -129,13 +129,12 @@ describe('DocChangelogEntry', () => {
       expect(getByTestId('doc-changelog-entry').id).toBe('tf-2-8')
     })
 
-    it('renders the tags under the title at medium size, without the rounded shape', () => {
+    it('renders the tags under the title at medium size', () => {
       const { getAllByTestId, getByRole } = render(DocChangelogEntry, { props: titled })
       const tags = getAllByTestId('tag')
       expect(tags).toHaveLength(2)
       for (const tag of tags) {
         expect(tag.getAttribute('data-size')).toBe('medium')
-        expect(tag.hasAttribute('data-rounded')).toBe(false)
       }
       const heading = getByRole('heading', { level: 2 })
       expect(heading.parentElement?.contains(tags[0])).toBe(true)

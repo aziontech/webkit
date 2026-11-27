@@ -38,7 +38,7 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `—` | true | The band title, rendered as an h2. |
 | `description` | `string` | `''` | false | One sentence under the title. |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Heading scale of the title (subset: no `large`). |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Kept for compatibility: in the console type set (CT-1) both sizes render the title at 14px medium. |
 | `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears beside the title on hover or focus. |
 
 ## Slots

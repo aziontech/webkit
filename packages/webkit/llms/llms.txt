@@ -25,6 +25,26 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Brand marks](foundations/brand-marks.md): Client, analyst and framework marks drawn as theme-aware SVG.
 - [Icons](foundations/icons.md): Every icon class of `@aziontech/icons`, grouped as Azion (products, product features, platform, solutions, services), Interface (arrows, actions, status, files, media, communication, commerce, people, devices, data, l…
 
+## Patterns
+
+- [Building a console screen](https://github.com/aziontech/webkit/blob/main/skills/webkit-product-screens/SKILL.md): Where to start a console screen: the block, the pattern and the rule for each problem.
+- [Building a site page](https://github.com/aziontech/webkit/blob/main/skills/webkit-site-pages/SKILL.md): How a marketing page is built from page sections, in order, from the content up.
+- [Forms](https://github.com/aziontech/webkit/blob/main/skills/webkit-form/SKILL.md): Which control each value takes, labels, grouping, the two layouts and how a form submits.
+- [Create flows](https://github.com/aziontech/webkit/blob/main/skills/webkit-create-surface/SKILL.md): Page, drawer or dialog: the surface follows what is created, with one shared anatomy.
+- [Tables](https://github.com/aziontech/webkit/blob/main/skills/webkit-tables/SKILL.md): One data-driven table: columns, toolbar, internal scroll and the shared cell recipes.
+- [List pages](https://github.com/aziontech/webkit/blob/main/skills/webkit-lists/SKILL.md): One list page: the controls row, the collection model, filters in the URL, selection.
+- [Charts and figures](https://github.com/aziontech/webkit/blob/main/skills/webkit-data-viz/SKILL.md): Pick the chart for the question, take every colour from the chart role, render its states.
+- [Showing API data](https://github.com/aziontech/webkit/blob/main/skills/webkit-api-data/SKILL.md): References by name, pickers that keep their values, fresh lookups and typed records.
+- [Loading, empty and error states](https://github.com/aziontech/webkit/blob/main/skills/webkit-ui-states/SKILL.md): Every data-backed view owns its states, and an action locks its scope while it runs.
+- [Errors](https://github.com/aziontech/webkit/blob/main/skills/webkit-errors/SKILL.md): Where an error goes, what it carries there and what it says: field, section or toast.
+- [In-product help](https://github.com/aziontech/webkit/blob/main/skills/webkit-in-product-help/SKILL.md): A description first, a Hint note on click, an Info trigger for the page; a Tooltip only names.
+- [Navigation](https://github.com/aziontech/webkit/blob/main/skills/webkit-navigation/SKILL.md): The two shells, navigation levels, tabs, drawers, breadcrumbs and router wiring.
+- [Page layout](https://github.com/aziontech/webkit/blob/main/skills/webkit-layout/SKILL.md): Three decisions per page: the boundary, the measure and the rhythm, each a named token.
+- [Interface text](https://github.com/aziontech/webkit/blob/main/skills/webkit-microcopy/SKILL.md): Punctuation and case, which surface owns which words, and one word per concept.
+- [AI chat and actions](https://github.com/aziontech/webkit/blob/main/skills/webkit-ai-surfaces/SKILL.md): The conversation, a streamed answer and the step where a person authorizes an action.
+- [Calling the Azion API](https://github.com/aziontech/webkit/blob/main/skills/webkit-azion-api/SKILL.md): CORS, a dev proxy and an edge proxy, and where the personal token lives.
+- [Query explorer](https://github.com/aziontech/webkit/blob/main/skills/webkit-query-explorer/SKILL.md): A Metrics and Events GraphQL explorer built from WebKit components.
+
 ## Blocks: Account
 
 - [AccountActivityHistory (account/account-activity-history)](blocks/account/account-activity-history.md): The account's audit log.
@@ -164,7 +184,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [ConversationHistory](components/conversation-history.md): The chat list of an assistant, in a side panel or a `Drawer` on phones: rows grouped by last activity (Today, Yesterday, Previous 7 days, Previous 30 days, Older) or by status (Working, Settled), the open one current,…
 - [FeedbackReasonDialog](components/feedback-reason-dialog.md): Preview. Asks why an assistant response was not helpful, right after Bad response in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback.
 - [McpAppFrame](components/mcp-app-frame.md): Preview. The safe frame for an interactive widget a tool returns inside a chat answer: an MCP app (MCP Apps, or the older MCP-UI) such as a plan picker, a booking form or a map that a tool call rendered as HTML.
-- [PromptInput](components/prompt-input.md): Preview. The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attac…
+- [PromptInput](components/prompt-input.md): The composer of a generative AI chat (ChatGPT, Claude.ai and Gemini composers, AI Elements PromptInput, Cloudscape prompt input): a text area that grows with the prompt up to `maxRows`, a toolbar under it, files attac…
 - [PromptQueue](components/prompt-queue.md): Preview. Messages sent while a response is generating, waiting above the prompt input (TanStack AI `useChat` `queue`): each shows its text in send order with a button that removes it before it is sent; changes are announced po…
 - [Reasoning](components/reasoning.md): Preview. Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is…
 - [ResponseBranches](components/response-branches.md): Preview. Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a ti…
@@ -336,7 +356,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Footer](components/footer.md): Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`.
 - [Module](components/module.md): The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another.
 - [ModuleHeader](components/module-header.md): The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the…
-- [PageHeader](components/page-header.md): The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right.
+- [PageHeader](components/page-header.md): The heading that opens a console page: an h1 in the console type set: 16px medium on a top-level page, 14px semibold on a deeper page (one with `breadcrumbs`, or `size="small"`), a one-line description, and the action…
 - [RegistrationFrame](components/registration-frame.md): The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content.
 - [Resizable](components/resizable.md): A group of adjacent regions whose shared edges the reader can drag.
 - [SaveBar](components/save-bar.md): The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions.

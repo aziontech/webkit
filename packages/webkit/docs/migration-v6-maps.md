@@ -935,7 +935,7 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 
 ## Props, values, slots and events
 
-`v6-props.json`, 654 entries.
+`v6-props.json`, 657 entries.
 
 | Where | Old | New |
 | --- | --- | --- |
@@ -1152,6 +1152,9 @@ Generated from `src/cli/migrations/*.json` by `scripts/build-migration-maps.mjs`
 | table-header › kind › value | `compact` | `compact` |
 | tag | `severity` | `severity` |
 | tag › severity › value | `secondary` | `neutral` |
+| tag | `variant` | `variant` |
+| tag › variant › value | `highlight` | `primary` |
+| tag | `rounded` | (removed) |
 | status-indicator | `severity` | `severity` |
 | status-indicator › severity › value | `alt` | `neutral` |
 | menu-item | `tagSeverity` | `tagSeverity` |

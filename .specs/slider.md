@@ -3,7 +3,7 @@ name: slider
 category: input
 structure: monolithic
 status: implemented
-checksum: 80345e2357f61b270eb88aacad49269fe5df1cf186d1cf4bf1c8e69d1cbcf466
+checksum: ba1ce638c586f84ed4907dcb226728c67bde5a8dc303f73cbd1a5547ca9324a5
 spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -94,9 +94,9 @@ Bare range control `Slider`: one thumb on a horizontal track that picks a single
 
 ## Events
 
-| Event    | Payload  | Notes                                                                                                                                                                                                                                                                                                                                                                                                        |
-| -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `change` | `number` | Commit signal: emitted from the native `change` event — on pointer release after a drag, and after each keyboard step — with the committed value. Lets the consumer persist once per interaction instead of once per drag frame (`update:modelValue` fires continuously). A value event, so no DOM event in the payload (see `.claude/rules/event-payloads.md`). Not emitted while `disabled` or `readonly`. |
+| Event    | Payload  | Notes                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `change` | `number` | Commit signal: emitted from the native `change` event — on pointer release after a drag, and after each keyboard step — with the committed value. Lets the consumer persist once per interaction instead of once per drag frame (`update:modelValue` fires continuously). A value event, so no DOM event in the payload (see `contributing/rules/event-payloads.md`). Not emitted while `disabled` or `readonly`. |
 
 ## Slots
 
@@ -108,7 +108,7 @@ Bare range control `Slider`: one thumb on a horizontal track that picks a single
 - `data-disabled` mirrors the `disabled` prop; the native input is also `disabled`, so it leaves the tab order and ignores pointer and keys.
 - `data-readonly` mirrors the `readonly` prop. A native range input ignores the HTML `readonly` attribute, so the component owns the behaviour: the input stays focusable, `aria-readonly="true"` is set, the navigation keys (arrows, `PageUp`/`PageDown`, `Home`/`End`) are prevented, pointer dragging is prevented, and any native `input` that still slips through writes the current model back to the element without emitting. Visual: fill and thumb border switch to the muted token and the cursor is `default`.
 - `data-invalid` mirrors the `invalid` prop: the fill and the thumb border switch to the danger tokens; `aria-invalid="true"` is set on the input.
-- Fill: the root sets the custom property `--slider-fill` (the clamped value as a percentage of `max - min`; `0%` when `max <= min`) through an inline `style` binding, the same way `tracker` and `chart` set their custom properties. The WebKit/Blink track paints the fill with a bracketed gradient (`[&::-webkit-slider-runnable-track]:bg-[linear-gradient(to_right,var(--accent)_var(--slider-fill),var(--bg-surface)_var(--slider-fill))]`); Firefox paints it natively with `[&::-moz-range-progress]:bg-(--accent)`. Expression values and custom-property declarations stay in brackets per `.claude/rules/styling.md`.
+- Fill: the root sets the custom property `--slider-fill` (the clamped value as a percentage of `max - min`; `0%` when `max <= min`) through an inline `style` binding, the same way `tracker` and `chart` set their custom properties. The WebKit/Blink track paints the fill with a bracketed gradient (`[&::-webkit-slider-runnable-track]:bg-[linear-gradient(to_right,var(--accent)_var(--slider-fill),var(--bg-surface)_var(--slider-fill))]`); Firefox paints it natively with `[&::-moz-range-progress]:bg-(--accent)`. Expression values and custom-property declarations stay in brackets per `contributing/rules/styling.md`.
 - Track and thumb are styled only through arbitrary pseudo-element variants on the native input (`appearance-none`, `[&::-webkit-slider-runnable-track]:…`, `[&::-webkit-slider-thumb]:appearance-none …`, `[&::-moz-range-track]:…`, `[&::-moz-range-thumb]:…`) — no extra track/thumb elements, no `<style>` block.
 - Geometry: the native input is 40 px tall (`h-10`, the hit area) and full width; the track is 4 px tall and centred; the thumb is 16×16 px.
 - Ticks (`ticks`) and reference marks (`referenceValues`) render in an `aria-hidden` row under the track. Each mark is positioned at the thumb-centre position for its value — `thumb/2 + (100% - thumb) × fraction` — so marks line up with the thumb at both ends; the fraction is passed per mark through an inline custom property. Every reference value also draws a tick. Reference labels read `{value}{unit}`; the first label is start-aligned, the last end-aligned, the rest centred on their mark.
@@ -117,7 +117,7 @@ Bare range control `Slider`: one thumb on a horizontal track that picks a single
 
 ## Motion & Animations
 
-| Trigger                                   | Animation / Transition                                                                     | Token (see `.claude/docs/DESIGN.md` § Animations)              | Reduced-motion fallback         |
+| Trigger                                   | Animation / Transition                                                                     | Token (see `contributing/docs/TOKENS.md` § Animations)         | Reduced-motion fallback         |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------- | ------------------------------- |
 | thumb hover / focus / state colour change | `transition-colors duration-fast-02 ease-productive-entrance` on the thumb pseudo-elements | motion primitives (`duration-fast-02` · `productive-entrance`) | `motion-reduce:transition-none` |
 
@@ -125,7 +125,7 @@ The fill and the thumb position are not animated: they track the pointer every f
 
 ## Tokens
 
-| Region                                        | Token (DESIGN.md)       |
+| Region                                        | Token (TOKENS.md)       |
 | --------------------------------------------- | ----------------------- |
 | track — background                            | `var(--bg-surface)`     |
 | track — border                                | `var(--border-default)` |
@@ -175,11 +175,11 @@ The fill and the thumb position are not animated: they track the pointer every f
 - Ticks — justified: `ticks` is a structural visual axis (marks under the track) that Default does not show; renders `step=10` over 0–100 with `ticks`.
 - ReferenceValues — justified: the labelled marks and the `unit` suffix are the Cloudscape-style landmark pattern and need their own copy-pasteable example; renders 0–100 with `:reference-values="[0, 25, 50, 75, 100]"` and `unit="%"`.
 - Disabled
-- Invalid — justified: invalid is a mutually-exclusive state with its own tokens (danger fill + border) per `.claude/rules/component-states.md`; renders the Default args plus `invalid`.
+- Invalid — justified: invalid is a mutually-exclusive state with its own tokens (danger fill + border) per `contributing/rules/component-states.md`; renders the Default args plus `invalid`.
 
 ## Open questions
 
-- Readonly story: `.claude/rules/component-states.md` gives each mutually-exclusive state its own story, but the brief lists only the five above. Decide whether to add `Readonly` before approval.
+- Readonly story: `contributing/rules/component-states.md` gives each mutually-exclusive state its own story, but the brief lists only the five above. Decide whether to add `Readonly` before approval.
 - Readonly pointer suppression: preventing `pointerdown` on a native range also stops click-to-focus in some browsers; confirm in Chromium/Firefox/WebKit that the readonly control still receives focus by pointer, or accept `Tab`-only focus.
 - Thumb focus ring: Tailwind `ring-*` on `::-webkit-slider-thumb` / `::-moz-range-thumb` relies on the `--tw-ring-*` registered properties reaching pseudo-elements; verify in the browser before scaffolding, fall back to an outline on the thumb if not.
 - RTL: a native range flips under `dir="rtl"` but the `to_right` gradient and the mark positions do not; RTL support is out of scope for v1 unless requested.
@@ -195,15 +195,15 @@ The fill and the thumb position are not animated: they track the pointer every f
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

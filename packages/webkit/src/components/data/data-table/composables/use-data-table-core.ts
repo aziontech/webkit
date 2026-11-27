@@ -53,6 +53,7 @@ export interface DataTableEmits {
     event: KeyboardEvent | PointerEvent,
     payload: { from: number; to: number; row: DataTableRecord }
   ) => void
+  columnResize: (event: MouseEvent | TouchEvent, column: { id: string; width: number }) => void
 }
 
 export interface DataTableHost {

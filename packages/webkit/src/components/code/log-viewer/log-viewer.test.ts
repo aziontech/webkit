@@ -601,7 +601,7 @@ describe('LogViewer', () => {
         expect(queryByTestId('log-viewer-header__warnings-filter')).toBeNull()
         const toggles = getAllByTestId('log-viewer-header__level')
         const heights = toggles.map((toggle) => toggle.getBoundingClientRect().height)
-        expect(new Set(heights)).toEqual(new Set([32]))
+        expect(new Set(heights)).toEqual(new Set([28]))
         const lineCount = getByTestId('log-viewer-header__line-count')
         const fontOf = (el: Element) => {
           const style = getComputedStyle(el)
@@ -649,13 +649,13 @@ describe('LogViewer', () => {
         await expectNoA11yViolations(container)
       })
 
-      it('keeps the level toggles 32 px on touch screens and widens only their hit area', () => {
+      it('keeps the level toggles 28 px, the height of the small search and copy controls, and widens only their hit area on touch screens', () => {
         const { getAllByTestId } = render(Levels)
         expect(getAllByTestId('log-viewer-header__level')).toHaveLength(4)
         for (const control of getAllByTestId('log-viewer-header__level')) {
-          expect(control.classList.contains('h-8')).toBe(true)
+          expect(control.classList.contains('h-7')).toBe(true)
           expect(control.classList.contains('pointer-coarse:h-11')).toBe(false)
-          expect(control.classList.contains('pointer-coarse:before:-inset-y-1.5')).toBe(true)
+          expect(control.classList.contains('pointer-coarse:before:-inset-y-2')).toBe(true)
         }
       })
     })

@@ -42,7 +42,7 @@ The `header` slot starts the toolbar row with a level-2 "Deployment logs" headin
 
 ## Create-flow card (InCreateFlow, InCreateFlowError)
 
-`Card :padded="false"` at the full width of the flow's column, titled Deployment (Provisioning when the flow provisions rather than deploys). Its header carries the run status opposite the title: a loading `StatusIndicator` with `severity="info"`, Cloning during the splash, then Building (or Creating). The content opens on the cloning splash, which fades in: a small source tile (the Git provider glyph), a dashed connector whose dashes march toward the destination (`animate-flow-dash`, still under `motion-reduce`) and a large destination tile, with one polite live line naming the repository and the scope. Once the first step starts, the content becomes the steps with their controls moved up to the card header: after a failure the header swaps the indicator for the Phased or Complete `ToggleGroup` bound to `v-model:view` (`:view-switch="false"` on the steps) and the footer holds Edit (outlined, back to the form with the values kept) and Redeploy (primary, with its loading state and a Redeploying indicator). Every deploy surface ends a failure with the same two actions (`create/create-deploy-drawer`, `create/create-deploy-progress-dialog`, `state/state-async-submit`, `create/create-release-impact`).
+`Card :padded="false"` at the full width of the flow's column, titled Deployment (Provisioning when the flow provisions rather than deploys). Its header carries the run status opposite the title: a loading `StatusIndicator` with `severity="info"`, Cloning during the splash, then Building (or Creating). The content opens on the cloning splash, which fades in: a small source tile (the Git provider glyph), a dashed connector whose dashes march toward the destination (`animate-flow-dash`, still under `motion-reduce`) and a large destination tile, with one polite live line naming the repository and the scope. Once the first step starts, the content becomes the steps with their controls moved up to the card header: after a failure the header swaps the indicator for the Phased or Complete `ToggleGroup` bound to `v-model:view` (`:view-switch="false"` on the steps) and the footer holds Edit (outlined, back to the form with the values kept) and Redeploy (secondary, never primary on a failure, with its loading state and a Redeploying indicator). Every deploy surface ends a failure with the same two actions (`create/create-deploy-drawer`, `create/create-deploy-progress-dialog`, `state/state-async-submit`, `create/create-release-impact`).
 
 ## Deployment page (DeploymentDetail, DeploymentError, DeploymentQueued)
 
@@ -231,7 +231,7 @@ Each variant is the same screen in another state: `get_block("detail/detail-depl
     :progress="!settled"
   >
     <template #header>
-      <h2 class="m-0 shrink-0 text-heading-2xs text-(--text-default)">Deployment logs</h2>
+      <h2 class="m-0 shrink-0 text-title-sm text-(--text-default)">Deployment logs</h2>
       <div
         v-if="!settled"
         role="status"

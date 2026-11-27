@@ -204,14 +204,14 @@ screen or an app with WebKit? Follow these steps.
 6. Before you hand it over: `npx @aziontech/webkit check` (the CI gate: setup, v5 names, imports,
    lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
 
-Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/skills) and [`rules/`](https://github.com/aziontech/webkit/tree/main/rules). Do not use `.claude/`,
+Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/skills) and [`rules/`](https://github.com/aziontech/webkit/tree/main/rules). Do not use `contributing/`,
 `.specs/` or `apps/` to build screens; they belong to the people who maintain WebKit.
 
 ## Changing WebKit (contribute)
 
 This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webkit) monorepo.
 
-1. Read [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md).
+1. Read [`contributing/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/contributing/AGENTS.md).
 2. Every component starts from a spec in `.specs/`, through `/component-create`.
 3. Every block in `blocks/` is a screen agents copy and every folder in `examples/` documents a component.
    Changed one? Run `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled

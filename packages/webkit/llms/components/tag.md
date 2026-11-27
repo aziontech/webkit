@@ -1,6 +1,6 @@
 # Tag
 
-> Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag. A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant="primary"`, Blocked in `severity="danger"`). It takes an optional leading icon, a pill shape with `rounded`, and two sizes; it is never interactive and never counts.
+> Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag. A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant="primary"`, Blocked in `severity="danger"`). It takes an optional leading icon and two sizes, and has one shape; it is never interactive and never counts.
 
 - Import: `import Tag from '@aziontech/webkit/tag'`
 - Category: content · Surface: app · Structure: monolithic
@@ -8,16 +8,16 @@
 
 ## When to use
 
-- Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
-- Show a status with its colour via `severity` (`neutral`, `info`, `success`, `warning`, `danger`), or a category with a brand look via `variant` (`primary`, `accent`, `contrast`, `highlight`); `severity` wins when both are set.
-- Mark the one value a list highlights (the Owner role in a users table) with `variant="highlight"`: the logo orange as a fill with `--primary-foreground` text, like the success, info and warning tags.
+- Label or categorize an item with a short descriptive text, optionally with a leading icon.
+- Pick the colour from one of two sets, never both on one tag: `severity` when the word is an outcome or a status (`neutral`, `info`, `success`, `warning`, `danger`), `variant` when it is a category that needs emphasis (`primary`, `accent`, `contrast`). `severity` wins when both are set.
+- The logo orange (`variant="primary"`) marks **one** value per list or card. When several values need emphasis, use `severity` or `accent`.
 
 ## Do
 
 - Colour comes from `variant` or `severity`; the optional icon is decorative — keep it `aria-hidden`.
-- Pick the severity by meaning: `success` Active, `warning` Pending, `neutral` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `variant="highlight"` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
+- Pick the colour by meaning with the table in When to use. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
 - Do not restyle a Tag with colour classes to get a tint; every tint is a `variant` or a `severity`.
-- Use `rounded` for the pill shape rather than a custom radius.
+- Do not round a Tag into a pill with a class: every Tag has the one control shape, so tags in a row line up.
 
 ## Don’t
 
@@ -35,10 +35,9 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `variant` | `'primary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
+| `variant` | `'primary' \| 'accent' \| 'contrast'` | `'primary'` | false | Emphasis look of the tag surface and label, used when `severity` is not set: `primary` (the logo orange, one value per list), `accent` and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
 | `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `—` | false | Status colour of the tag surface and label, the shared `Severity` scale exported from this component; wins over `variant` when set. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
-| `rounded` | `boolean` | `false` | false | Pill shape when true. |
 | `icon` | `string` | `''` | false | Azion icon class for the leading icon. |
 
 ## Slots
@@ -61,7 +60,7 @@
 - Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `highlight` label is `--primary-foreground` on the logo orange fill (6.7:1).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state; the `primary` label is `--primary-foreground` on the logo orange fill (6.7:1).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
@@ -100,46 +99,30 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Tag
-      label="Neutral"
+      label="Inactive"
       severity="neutral"
     />
     <Tag
-      label="Primary"
-      variant="primary"
-    />
-    <Tag
-      label="Accent"
-      variant="accent"
-    />
-    <Tag
-      label="Success"
-      severity="success"
-    />
-    <Tag
-      label="Warning"
-      severity="warning"
-    />
-    <Tag
-      label="Danger"
-      severity="danger"
-    />
-    <Tag
-      label="Info"
+      label="Admin"
       severity="info"
     />
     <Tag
-      label="Contrast"
-      variant="contrast"
+      label="Active"
+      severity="success"
     />
     <Tag
-      label="Highlight"
-      variant="highlight"
+      label="Pending"
+      severity="warning"
+    />
+    <Tag
+      label="Blocked"
+      severity="danger"
     />
   </div>
 </template>
 ```
 
-### Sizes
+### Variants
 
 ```vue
 <script setup>
@@ -147,59 +130,19 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <div class="flex flex-wrap items-center gap-4">
-      <Tag
-        label="Medium"
-        variant="primary"
-        size="medium"
-      />
-      <Tag
-        label="Medium pill"
-        variant="primary"
-        size="medium"
-        rounded
-      />
-      <Tag
-        label="Medium icon"
-        variant="primary"
-        icon="az az-tag"
-        size="medium"
-      />
-      <Tag
-        label="Medium icon pill"
-        variant="primary"
-        icon="az az-tag"
-        size="medium"
-        rounded
-      />
-    </div>
-    <div class="flex flex-wrap items-center gap-4">
-      <Tag
-        label="Small"
-        variant="primary"
-        size="small"
-      />
-      <Tag
-        label="Small pill"
-        variant="primary"
-        size="small"
-        rounded
-      />
-      <Tag
-        label="Small icon"
-        variant="primary"
-        icon="az az-tag"
-        size="small"
-      />
-      <Tag
-        label="Small icon pill"
-        variant="primary"
-        icon="az az-tag"
-        size="small"
-        rounded
-      />
-    </div>
+  <div class="flex flex-wrap items-center gap-4">
+    <Tag
+      label="Owner"
+      variant="primary"
+    />
+    <Tag
+      label="Organization"
+      variant="accent"
+    />
+    <Tag
+      label="Beta"
+      variant="contrast"
+    />
   </div>
 </template>
 ```

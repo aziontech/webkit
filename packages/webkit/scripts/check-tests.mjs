@@ -3,7 +3,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { dirname, join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { componentRootName } from '../../../.claude/hooks/lib/spec.mjs'
+import { componentRootName } from '../../../contributing/hooks/lib/spec.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(SCRIPT_DIR, '..', '..', '..')
@@ -13,7 +13,7 @@ const WIP = join(COMPONENTS, 'wip')
 let legacyNames = new Set()
 try {
   const legacy = JSON.parse(
-    readFileSync(join(ROOT, '.claude/hooks/lib/legacy-components.json'), 'utf-8')
+    readFileSync(join(ROOT, 'contributing/hooks/lib/legacy-components.json'), 'utf-8')
   )
   legacyNames = new Set(legacy.map((c) => c.name))
 } catch {}
@@ -47,10 +47,10 @@ if (!missing.length) {
 }
 
 console.error(
-  `\n✖ ${missing.length} component(s) without a co-located <name>.test.ts — blocked (.claude/rules/testing.md):\n`
+  `\n✖ ${missing.length} component(s) without a co-located <name>.test.ts — blocked (contributing/rules/testing.md):\n`
 )
 for (const m of missing) console.error(`  ${m}  →  add ${m.replace(/\.vue$/, '.test.ts')}`)
 console.error(
-  `\nEvery component ships a <name>.test.ts and it moves with the component. See .claude/rules/testing.md.`
+  `\nEvery component ships a <name>.test.ts and it moves with the component. See contributing/rules/testing.md.`
 )
 process.exit(1)

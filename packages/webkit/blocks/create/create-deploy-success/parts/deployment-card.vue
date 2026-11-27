@@ -25,7 +25,7 @@
         <div class="flex flex-wrap items-start justify-between gap-(--spacing-sm)">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-              <h2 class="min-w-0 truncate text-heading-xs text-(--text-default)">
+              <h2 class="min-w-0 truncate text-title-sm text-(--text-default)">
                 {{ deployment.name }}
               </h2>
               <Tag

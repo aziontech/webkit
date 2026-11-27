@@ -1,5 +1,6 @@
 export type AutofillHintOptions = {
   autocomplete?: string
+  type?: string
   readonly?: boolean
 }
 
@@ -16,5 +17,6 @@ export function passwordManagerHints({
 }: AutofillHintOptions = {}): Readonly<Record<string, string>> {
   if (readonly) return PASSWORD_MANAGER_IGNORE
   const token = autocomplete?.trim().toLowerCase()
-  return token && token !== 'off' ? {} : PASSWORD_MANAGER_IGNORE
+  if (token) return token === 'off' ? PASSWORD_MANAGER_IGNORE : {}
+  return PASSWORD_MANAGER_IGNORE
 }

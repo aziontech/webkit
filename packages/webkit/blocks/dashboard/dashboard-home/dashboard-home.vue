@@ -156,7 +156,7 @@
     class="layout-column layout-boundary relative flex h-dvh flex-col justify-center-safe overflow-y-auto xl:justify-start"
   >
     <header class="flex items-center">
-      <h1 class="text-heading-sm text-(--text-muted)">
+      <h1 class="text-title-md text-(--text-muted)">
         {{ greeting }},
         <span class="text-(--text-default)">{{ name }}</span>
       </h1>

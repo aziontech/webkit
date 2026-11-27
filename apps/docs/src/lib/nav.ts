@@ -1,6 +1,7 @@
 import index from 'virtual:docs-nav'
 
 import { FOUNDATIONS } from './foundations'
+import { PATTERN_GROUPS, PATTERNS } from './patterns'
 import { groupLabel, titleCase } from './words'
 
 export { groupLabel, titleCase, tokenGroupTitle } from './words'
@@ -108,6 +109,7 @@ export function foundationGroups(labels: {
   start: string
   home: string
   gettingStarted: string
+  forAi: string
   foundations: string
   assets: string
   brand: string
@@ -119,7 +121,8 @@ export function foundationGroups(labels: {
       label: labels.start,
       items: [
         { label: labels.home, to: '/' },
-        { label: labels.gettingStarted, to: '/foundations/getting-started' }
+        { label: labels.gettingStarted, to: '/foundations/getting-started' },
+        { label: labels.forAi, to: '/ai' }
       ]
     },
     {
@@ -138,4 +141,14 @@ export function foundationGroups(labels: {
       ]
     }
   ]
+}
+
+export function patternGroups(labels: Record<string, string>): NavGroup[] {
+  return PATTERN_GROUPS.map((group) => ({
+    label: labels[group] ?? titleCase(group),
+    items: PATTERNS.filter((page) => page.group === group).map((page) => ({
+      label: page.title,
+      to: `/patterns/${page.slug}`
+    }))
+  }))
 }

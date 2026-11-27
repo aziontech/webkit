@@ -76,11 +76,21 @@ const markdownIn = (dir, match) =>
         .map((entry) => join(entry.parentPath, entry.name))
     : []
 
+function renderedPages(repo) {
+  const file = join(repo, 'skills/patterns.json')
+  if (!existsSync(file)) return []
+  return JSON.parse(readFileSync(file, 'utf8')).patterns.map((page) =>
+    join(repo, 'skills', page.skill, 'SKILL.md')
+  )
+}
+
 export function docsSources(repo) {
   const rendered = new Set([
+    ...renderedPages(repo),
     ...markdownIn(join(repo, 'rules'), (name) => name.endsWith('.md')),
     ...markdownIn(join(repo, 'packages/webkit/blocks'), (name) => name === 'guidelines.md'),
-    ...markdownIn(join(repo, '.specs'), (name) => name.endsWith('.md') && !name.startsWith('_'))
+    ...markdownIn(join(repo, '.specs'), (name) => name.endsWith('.md') && !name.startsWith('_')),
+    join(repo, 'packages/webkit/docs/AI.md')
   ])
   const all = new Set([
     ...rendered,

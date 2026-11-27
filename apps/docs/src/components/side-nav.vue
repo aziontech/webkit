@@ -13,7 +13,7 @@
   import { useRoute } from 'vue-router'
 
   import { messages } from '../lib/i18n'
-  import { blockGroups, componentGroups, foundationGroups } from '../lib/nav'
+  import { blockGroups, componentGroups, foundationGroups, patternGroups } from '../lib/nav'
 
   const SideNavGroup = defineAsyncComponent({
     loader: () => import('./side-nav-group.vue'),
@@ -26,10 +26,12 @@
     if (route.path.startsWith('/components')) return componentGroups()
     if (route.path.startsWith('/blocks')) return blockGroups()
     const t = messages.value
+    if (route.path.startsWith('/patterns')) return patternGroups(t.patternGroups)
     return foundationGroups({
       start: t.start,
       home: t.homeNav,
       gettingStarted: t.gettingStarted,
+      forAi: t.forAi,
       foundations: t.foundations,
       assets: t.assets,
       brand: t.brand,

@@ -9,7 +9,7 @@ template: 2
 figma:
   url: <https://figma.com/design/...>
   node_id: <e.g. 10:42>
-checksum: 9f6a5dfc5b1dde68851607a090f837d733fdc4a3fb7a847083aa781c187133ca
+checksum: 3ffda110ef2247896df1b33c2ffdd71894ed52f37f1835a3bd218825b0331a2f
 created: <YYYY-MM-DD>
 last_updated: 2026-11-15
 ---
@@ -78,7 +78,7 @@ import MyComponent from '@aziontech/webkit/<name>'
      each sub-component via `<name>-<part>` — but the docs lead with compound.
      The root binding MUST be PascalCase (`Dialog`); a lowercase root would
      collide with a native element and not resolve. See
-     `.claude/rules/compound-api.md`.
+     `contributing/rules/compound-api.md`.
 
 ```vue
 <script setup>
@@ -113,9 +113,9 @@ import DialogContent from '@aziontech/webkit/dialog-content'
 
 <!-- Omit this section when structure: monolithic. -->
 <!-- For structure: composition, list every public sub-component AND the folder layout the component-scaffolder must emit. Each sub-component lives in its own folder under the root component, one folder per part. The file name keeps the full prefix (e.g. `dialog-trigger.vue`, never `index.vue`) so traces and editor breadcrumbs stay unambiguous. -->
-<!-- Composition components ship a COMPOUND API: an `index.ts` that uses `Object.assign` to attach every sub-component to the root (vue-tsc generates the adjacent `index.d.ts`, so `<Root.Part>` is typed; never hand-write the `.d.ts` — it is gitignored). Consumers reach `<Root.Part>` with one import, while the standalone sub-component imports remain for tree-shaking. Member names mirror THIS component's anatomy (`SortButton`, not a generic `Trigger`); `Trigger`/`Content` are for overlay/disclosure components only. See `.claude/rules/compound-api.md`. -->
+<!-- Composition components ship a COMPOUND API: an `index.ts` that uses `Object.assign` to attach every sub-component to the root (vue-tsc generates the adjacent `index.d.ts`, so `<Root.Part>` is typed; never hand-write the `.d.ts` — it is gitignored). Consumers reach `<Root.Part>` with one import, while the standalone sub-component imports remain for tree-shaking. Member names mirror THIS component's anatomy (`SortButton`, not a generic `Trigger`); `Trigger`/`Content` are for overlay/disclosure components only. See `contributing/rules/compound-api.md`. -->
 
-<!-- Part words come from the closed list in `.claude/rules/naming.md` § 2 (Trigger, Content,
+<!-- Part words come from the closed list in `contributing/rules/naming.md` § 2 (Trigger, Content,
      Header, Body, Footer, Title, Description, Close, Item, Group, Label, Separator, List) or a
      domain part the root declares. There is no Portal or Overlay part: Content renders both. -->
 
@@ -167,8 +167,8 @@ export default Object.assign(Root, { Part: RootPart })
 
 <!-- Rules enforced by spec-validator:
      - camelCase prop names (consumers write the kebab attribute); no `is`/`has` prefix on booleans;
-       names and value sets from `.claude/rules/prop-vocabulary.md`.
-     - At most 20 props on a root (`.claude/docs/CODE_QUALITY.md` § 3.4); past that, a feature
+       names and value sets from `contributing/rules/prop-vocabulary.md`.
+     - At most 20 props on a root (`contributing/docs/CODE_QUALITY.md` § 3.4); past that, a feature
        becomes a companion part. The `.vue` declares them as an exported `interface <Component>Props`.
      - Visual variants always named `variant` (a sort of part is `type`). Sizes always named `size`.
      - Every prop has a JSDoc one-liner; no empty cells.
@@ -198,7 +198,7 @@ export default Object.assign(Root, { Part: RootPart })
 <!-- Rules:
      - Event names in kebab-case (or `update:<prop>` for v-model, declared with defineModel).
      - An activation event's payload is the DOM event first, then the subject:
-       `(event: MouseEvent, item: <Component>Item)` (`.claude/rules/event-payloads.md`).
+       `(event: MouseEvent, item: <Component>Item)` (`contributing/rules/event-payloads.md`).
      - A model or value event carries the new value only; no `<x>-change` echo of `update:<x>`. -->
 
 ## Slots
@@ -216,11 +216,11 @@ export default Object.assign(Root, { Part: RootPart })
 - `data-state` values (when applicable): `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop
 - `data-orientation` (when applicable): `horizontal` | `vertical`
-- Loading / empty / error / readonly / invalid as the component owns them (`.claude/rules/component-states.md`); a component that shows a list takes the list state contract of `.claude/docs/CODE_QUALITY.md` § 3.7
+- Loading / empty / error / readonly / invalid as the component owns them (`contributing/rules/component-states.md`); a component that shows a list takes the list state contract of `contributing/docs/CODE_QUALITY.md` § 3.7
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
+| Trigger | Animation / Transition | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
 | open (overlay / popover) | `animate-popup-scale-in` | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
 | close (overlay / popover) | `animate-popup-scale-out` | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
@@ -236,7 +236,7 @@ export default Object.assign(Root, { Part: RootPart })
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
+| Region | Token (TOKENS.md) |
 |---|---|
 | typography (label) | `.text-button-lg` |
 | surface | `var(--bg-surface)` |
@@ -244,14 +244,14 @@ export default Object.assign(Root, { Part: RootPart })
 | shape | `var(--shape-button)` |
 | ring | `var(--ring-color)` |
 
-<!-- Every token here must exist in .claude/docs/DESIGN.md.
+<!-- Every token here must exist in contributing/docs/TOKENS.md.
      spec-validator and token-mapper independently verify this. Spacing is semantic
      (`--spacing-2xs` … `--spacing-2xl`), never the primitive `--spacing-1` … `--spacing-96`.
      A status icon on a surface takes its `-mark` token, never `-foreground` or the fill. -->
 
 ## Theme gaps
 
-<!-- One row per Figma variable that has no DESIGN.md equivalent yet. -->
+<!-- One row per Figma variable that has no TOKENS.md equivalent yet. -->
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
@@ -275,7 +275,7 @@ export default Object.assign(Root, { Part: RootPart })
      `Intl` with the locale from `ConfigProvider`. Write "No built-in strings" when that is true.
      Keys sit in the camelCase component namespace (`<componentName>.<key>`; shared words in
      `common`) and are added to all three catalogs, `packages/webkit/src/locales/en.ts`, `pt-BR.ts`
-     and `es.ts` (`.claude/rules/naming.md` § 13). -->
+     and `es.ts` (`contributing/rules/naming.md` § 13). -->
 
 | Key | English source | Override prop |
 |---|---|---|
@@ -321,7 +321,7 @@ Canonical layout — composite examples (`variants.vue`, `sizes.vue`) render eve
 
 <!-- Rules:
      - DO NOT add LightDark, Accessibility (with play), Playground, WithSlots, WithComposition, Controlled, Uncontrolled examples unless the spec explicitly justifies them in writing here.
-     - File names follow `.claude/rules/naming.md` § 4 (`variants.vue`, `sizes.vue`, `disabled.vue`; never `types`, `basic`, `playground`, `demo`). examples.json ships at least every example listed here (`check:complete`).
+     - File names follow `contributing/rules/naming.md` § 4 (`variants.vue`, `sizes.vue`, `disabled.vue`; never `types`, `basic`, `playground`, `demo`). examples.json ships at least every example listed here (`check:complete`).
      - The harnesses (a11y, hydration, server render) and the styled visual suite cover every example automatically.
      - For each additional state example (Loading/Disabled), the prop delta is the prop being demonstrated — nothing else.
      - Do NOT replace Variants/Sizes with one-example-per-variant (Primary/Secondary/...). The composite examples are the canonical pattern. -->
@@ -336,15 +336,15 @@ Canonical layout — composite examples (`variants.vue`, `sizes.vue`) render eve
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/primitives/animations/animate.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Variants + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Variants/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

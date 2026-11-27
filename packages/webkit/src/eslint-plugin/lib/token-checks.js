@@ -62,14 +62,14 @@ const TOKEN_CHECKS = [
     regex:
       /(?<![\w.])(?<!(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\)|[\w-]+\()*)0(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
     message:
-      'Zero with a unit. A zero length takes no unit — write `0`, not `0px` / `0rem` / `0em` (.claude/rules/styling.md).'
+      'Zero with a unit. A zero length takes no unit — write `0`, not `0px` / `0rem` / `0em` (contributing/rules/styling.md).'
   },
   {
     id: 'zero-unit-in-calc',
     regex:
       /(?<=(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\)|[\w-]+\()*)(?<![\w.])0(?!rem)(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
     message:
-      'Zero with the wrong unit inside a math function. `calc()`/`min()`/`max()`/`clamp()` require a unit on the zero — write `0rem`, not `0px` / `0em` (.claude/rules/styling.md).'
+      'Zero with the wrong unit inside a math function. `calc()`/`min()`/`max()`/`clamp()` require a unit on the zero — write `0rem`, not `0px` / `0em` (contributing/rules/styling.md).'
   },
   {
     id: 'dead-token-shorthand',
@@ -78,7 +78,7 @@ const TOKEN_CHECKS = [
       'Malformed token shorthand — the style NEVER applies (Tailwind emits nothing for a space ' +
       'inside the parens; an inverted `[--(token)]` emits an invalid value the browser ' +
       'discards). Write `prop-(--token)` / `prop-(type:--token)` with no whitespace inside the ' +
-      'parens, and `[--token:value]` to DECLARE a custom property (.claude/rules/styling.md).'
+      'parens, and `[--token:value]` to DECLARE a custom property (contributing/rules/styling.md).'
   },
   {
     id: 'container-query-on-container',
@@ -86,7 +86,7 @@ const TOKEN_CHECKS = [
     message:
       'Container-query variant on the element that declares the container. A container query ' +
       'never matches its own container, so `@xl/name:` on the `@container/name` element NEVER ' +
-      'applies. Put the variant on a child of the container (.claude/rules/styling.md).'
+      'applies. Put the variant on a child of the container (contributing/rules/styling.md).'
   },
   {
     id: 'has-on-scroll-frame',
@@ -97,7 +97,7 @@ const TOKEN_CHECKS = [
       'whole table on every scroll frame (the 10k-row virtual DataTable went from 228 ms to ' +
       '3,580 ms of style recalc). Get the result from the stacking order (the table scroll cue ' +
       'sits below the frozen cells), or measure the state in script, set a data attribute on ' +
-      'the frame and read it with `group-data-[…]/scroll:` (.claude/rules/styling.md).'
+      'the frame and read it with `group-data-[…]/scroll:` (contributing/rules/styling.md).'
   },
   {
     id: 'universal-sibling-selector',
@@ -109,7 +109,7 @@ const TOKEN_CHECKS = [
       'inserted anywhere the stylesheet applies against it (one such rule made each scroll frame ' +
       'of the virtual DataTable restyle three quarters of the table). Put the spacing on the ' +
       'element itself with `not-last:` or `not-first:`, use `[&>*:not(:first-child)]:`, or name ' +
-      'the sibling (.claude/rules/styling.md).'
+      'the sibling (contributing/rules/styling.md).'
   },
   {
     id: 'rtl-double-flip',
@@ -120,7 +120,7 @@ const TOKEN_CHECKS = [
       'rtl:rotate-180 on a directional icon. `@aziontech/webkit/styles` already mirrors every ' +
       'directional `az-*` glyph under RTL with `scale: -1 1`; adding a rotation composes with ' +
       'it and the arrow points the WRONG way. Drop the rotation (or use `rtl:-scale-x-100`, ' +
-      'which sets the same scale) (.claude/rules/styling.md).'
+      'which sets the same scale) (contributing/rules/styling.md).'
   },
   {
     id: 'off-brand-orange',
@@ -175,13 +175,13 @@ const TOKEN_CHECKS = [
     id: 'js-class-preset',
     regex: /\bconst\s+\w*[Cc]lasses\s*=\s*(?:[{[]|computed\b)/g,
     message:
-      'JS class preset (const *Classes = {…}/[…]/computed). Put utilities inline on the root class + switch variants with data-* (.claude/rules/styling.md).'
+      'JS class preset (const *Classes = {…}/[…]/computed). Put utilities inline on the root class + switch variants with data-* (contributing/rules/styling.md).'
   },
   {
     id: 'style-block',
     regex: /<style[\s>]/g,
     message:
-      'Component-local <style> block. Styles live inline on the root class as Tailwind utilities; no <style>/scoped CSS (.claude/rules/styling.md).'
+      'Component-local <style> block. Styles live inline on the root class as Tailwind utilities; no <style>/scoped CSS (contributing/rules/styling.md).'
   },
   {
     id: 'keyframes-local',

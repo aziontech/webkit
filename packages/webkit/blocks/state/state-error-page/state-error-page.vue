@@ -63,7 +63,7 @@
             <slot name="actions">
               <Button
                 label="Go to home"
-                variant="primary"
+                variant="secondary"
                 size="medium"
                 icon="az az-home"
                 :href="homeHref"

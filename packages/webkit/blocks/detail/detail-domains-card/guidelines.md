@@ -83,7 +83,7 @@ Then delete `sample.ts` and its import.
 ## Do
 
 - Keep the card unpadded and the table borderless, so there is one border around the whole list.
-- Keep one chip per row: the Environment `Tag` (secondary, medium, rounded); every other attribute is plain text, with a glyph where it helps.
+- Keep one chip per row: the Environment `Tag` (neutral, medium); every other attribute is plain text, with a glyph where it helps.
 - Leave a cell empty when the attribute does not apply to that record.
 - Hide the row menu on records the user cannot change, rather than showing disabled options.
 - Count the records in the footer with the right singular or plural noun.

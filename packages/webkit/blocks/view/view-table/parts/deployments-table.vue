@@ -103,7 +103,6 @@
         :label="value"
         :severity="environmentSeverity(value)"
         size="medium"
-        rounded
       />
     </template>
     <template #cell-deployedAt="{ row }">

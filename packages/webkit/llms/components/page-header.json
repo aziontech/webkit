@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumbs` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.",
+ "purpose": "The heading that opens a console page: an h1 in the console type set: 16px medium on a top-level page, 14px semibold on a deeper page (one with `breadcrumbs`, or `size=\"small\"`), a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumbs` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.",
  "setup": null,
  "useWhen": [
   "Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses Subheader.",
@@ -60,7 +60,7 @@
    "type": "'small' | 'medium' | 'large'",
    "default": "'medium'",
    "required": "false",
-   "doc": "Heading scale of the title."
+   "doc": "`small` marks a deeper page (14px semibold title); `medium` and `large` are 16px"
   },
   {
    "name": "titleId",

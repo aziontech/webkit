@@ -481,7 +481,14 @@ describe('PromptInput', () => {
 
     it('attaches every part to the compound root', () => {
       expect(PromptInputCompound).toBe(PromptInput)
-      for (const part of ['AttachButton', 'DictateButton', 'ModelPicker', 'ContextPicker', 'Tools'])
+      for (const part of [
+        'AttachButton',
+        'DictateButton',
+        'ModelPicker',
+        'ContextPicker',
+        'Tools',
+        'AccessPicker'
+      ])
         expect(PromptInputCompound).toHaveProperty(part)
     })
 
@@ -699,7 +706,7 @@ describe('PromptInput', () => {
       expect(trigger).toHaveTextContent('Low')
       expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
       await userEvent.click(trigger)
-      await userEvent.click(await screen.findByRole('button', { name: /Terra 6\.1/ }))
+      await userEvent.click(await screen.findByRole('button', { name: 'Terra 6.1' }))
       await userEvent.click(screen.getByRole('button', { name: 'High' }))
       expect(screen.getByRole('button', { name: 'Terra 6.1' })).toHaveAttribute(
         'aria-pressed',
@@ -741,10 +748,147 @@ describe('PromptInput', () => {
       const panel = within(screen.getByTestId('prompt-input-model-picker__panel'))
       expect(panel.queryByRole('button', { name: /Gemini 4 Neon/ })).toBeNull()
       expect(panel.getByText('⌘2').classList.contains('pointer-coarse:hidden')).toBe(true)
-      await userEvent.click(panel.getByRole('button', { name: /Claude Sonnet 4/ }))
+      await userEvent.click(panel.getByRole('button', { name: 'Claude Sonnet 4' }))
       expect(scope.model!.value).toBe('claude-4')
       await nextTick()
       expect(trigger.querySelector('.az-claude')).toBeTruthy()
+      await keys.keyboard('{Escape}')
+    })
+
+    it('stars models into the favorites and filters the list to them from the rail', async () => {
+      const { findByTestId, scope } = composer({ model: 'sol', favorites: [] }, (scope) => ({
+        slots: {
+          end: () =>
+            h(P.ModelPicker, {
+              ...bind(scope, 'model'),
+              ...bind(scope, 'favorites', 'favoriteKeys'),
+              providers: [{ value: 'acme', label: 'Acme AI', icon: 'az az-sparkles' }],
+              models: [
+                { value: 'sol', label: 'Sol 6.1', provider: 'acme' },
+                { value: 'terra', label: 'Terra 6.1', provider: 'acme' }
+              ]
+            })
+        }
+      }))
+      await userEvent.click(await findByTestId('prompt-input-model-picker'))
+      const panel = within(await screen.findByTestId('prompt-input-model-picker__panel'))
+      expect(panel.getByRole('group', { name: 'Providers' })).toBeTruthy()
+      const favoritesFilter = panel.getByRole('button', { name: 'Favorites' })
+      await userEvent.click(favoritesFilter)
+      expect(favoritesFilter).toHaveAttribute('aria-pressed', 'true')
+      expect(panel.getByText('No favorites yet')).toBeTruthy()
+      await userEvent.click(favoritesFilter)
+      expect(favoritesFilter).toHaveAttribute('aria-pressed', 'false')
+      const star = panel.getByRole('button', { name: 'Add to favorites: Terra 6.1' })
+      expect(star).toHaveAttribute('aria-pressed', 'false')
+      await userEvent.click(star)
+      expect(scope.favorites!.value).toEqual(['terra'])
+      await nextTick()
+      expect(
+        panel.getByRole('button', { name: 'Remove from favorites: Terra 6.1' })
+      ).toHaveAttribute('aria-pressed', 'true')
+      await userEvent.click(favoritesFilter)
+      expect(panel.queryByRole('button', { name: 'Sol 6.1' })).toBeNull()
+      expect(panel.getByRole('button', { name: 'Terra 6.1' })).toBeTruthy()
+      await userEvent.click(panel.getByRole('button', { name: 'Remove from favorites: Terra 6.1' }))
+      expect(scope.favorites!.value).toEqual([])
+      await keys.keyboard('{Escape}')
+    })
+
+    it('opens the phone dialog from the icon-only trigger with provider sections', async () => {
+      const { findByTestId, scope } = composer(
+        { model: 'sol', mode: 'high', favorites: ['terra'] },
+        (scope) => ({
+          slots: {
+            end: () =>
+              h(P.ModelPicker, {
+                ...bind(scope, 'model'),
+                ...bind(scope, 'mode', 'mode'),
+                ...bind(scope, 'favorites', 'favoriteKeys'),
+                providers: [{ value: 'acme', label: 'Acme AI', icon: 'az az-sparkles' }],
+                models: [
+                  { value: 'sol', label: 'Sol 6.1', provider: 'acme' },
+                  { value: 'terra', label: 'Terra 6.1', provider: 'acme' }
+                ],
+                modes: [
+                  { value: 'low', label: 'Low' },
+                  { value: 'high', label: 'High' }
+                ],
+                modeLabel: 'Effort'
+              })
+          }
+        })
+      )
+      const compact = await findByTestId('prompt-input-model-picker__compact')
+      expect(compact).toHaveAccessibleName('Model: Sol 6.1, High')
+      expect(compact.textContent?.trim()).toBe('')
+      await userEvent.click(compact)
+      const sheet = within(await screen.findByTestId('prompt-input-model-picker__dialog'))
+      const favorites = within(sheet.getByRole('region', { name: 'Favorites' }))
+      expect(favorites.getByRole('button', { name: 'Terra 6.1' })).toBeTruthy()
+      const acme = within(sheet.getByRole('region', { name: 'Acme AI' }))
+      expect(acme.getByRole('button', { name: 'Sol 6.1' })).toHaveAttribute('aria-pressed', 'true')
+      await userEvent.click(acme.getByRole('button', { name: 'Terra 6.1' }))
+      expect(scope.model!.value).toBe('terra')
+      await userEvent.click(acme.getByRole('button', { name: 'Add to favorites: Sol 6.1' }))
+      expect(scope.favorites!.value).toEqual(['terra', 'sol'])
+      await userEvent.click(sheet.getByRole('radio', { name: 'Low' }))
+      expect(scope.mode!.value).toBe('low')
+      await userEvent.type(sheet.getByRole('searchbox'), 'terra')
+      expect(acme.queryByRole('button', { name: 'Sol 6.1' })).toBeNull()
+      await keys.keyboard('{Escape}')
+    })
+
+    it('renders the footer bar and picks an access mode from the access picker', async () => {
+      const { findByTestId, scope } = composer({ model: 'sol', access: 'supervised' }, (scope) => ({
+        slots: {
+          end: () =>
+            h(
+              P.ModelPicker,
+              { ...bind(scope, 'model'), models: [{ value: 'sol', label: 'Sol 6.1' }] },
+              {
+                footer: () =>
+                  h(P.AccessPicker, {
+                    ...bind(scope, 'access'),
+                    options: [
+                      {
+                        value: 'supervised',
+                        label: 'Supervised',
+                        icon: 'az az-lock',
+                        description: 'Ask before commands and file changes.'
+                      },
+                      {
+                        value: 'full',
+                        label: 'Full access',
+                        icon: 'az az-lock-open',
+                        description: 'Allow commands and edits without prompts.'
+                      }
+                    ]
+                  })
+              }
+            )
+        }
+      }))
+      await userEvent.click(await findByTestId('prompt-input-model-picker'))
+      const footer = await screen.findByTestId('prompt-input-model-picker__footer')
+      const trigger = await within(footer).findByTestId('prompt-input-access-picker')
+      expect(trigger).toHaveAccessibleName('Permissions: Supervised')
+      expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
+      await userEvent.click(trigger)
+      const panel = within(await screen.findByTestId('prompt-input-access-picker__panel'))
+      const modes = panel.getByRole('radiogroup', { name: 'Permissions' })
+      expect(within(modes).getByRole('radio', { name: 'Supervised' })).toHaveAttribute(
+        'aria-checked',
+        'true'
+      )
+      expect(panel.getByText('Ask before commands and file changes.')).toBeTruthy()
+      await userEvent.click(within(modes).getByRole('radio', { name: 'Full access' }))
+      expect(scope.access!.value).toBe('full')
+      await nextTick()
+      expect(panel.getByText('Allow commands and edits without prompts.')).toBeTruthy()
+      expect(trigger).toHaveAccessibleName('Permissions: Full access')
+      expect(screen.getByTestId('prompt-input-model-picker__panel')).toBeTruthy()
+      await keys.keyboard('{Escape}')
       await keys.keyboard('{Escape}')
     })
 
@@ -914,7 +1058,8 @@ describe('PromptInput', () => {
       expect(getByRole('button', { name: 'Start voice conversation' })).toBeTruthy()
       expect(getByRole('button', { name: 'Attach files' })).toBeTruthy()
       expect(await findByRole('button', { name: /Choose project/ })).toBeTruthy()
-      expect(await findByRole('button', { name: /Gemini 4 Neon/ })).toBeTruthy()
+      expect(await findByRole('button', { name: /^Gemini 4 Neon/ })).toBeTruthy()
+      expect(getByRole('button', { name: 'Model: Gemini 4 Neon, Medium' })).toBeTruthy()
       await expectNoA11yViolations(container)
     })
   })

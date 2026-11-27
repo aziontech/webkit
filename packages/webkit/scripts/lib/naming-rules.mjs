@@ -10,19 +10,19 @@ import {
   checkEventVocabulary,
   checkPropVocabulary,
   checkSlotVocabulary
-} from '../../../../.claude/hooks/lib/prop-vocabulary.mjs'
+} from '../../../../contributing/hooks/lib/prop-vocabulary.mjs'
 import {
   getSection,
   parseTable,
   parseTable2,
   parseVueSfc,
   resolveTypeUnion
-} from '../../../../.claude/hooks/lib/spec.mjs'
+} from '../../../../contributing/hooks/lib/spec.mjs'
 import { checkSubpaths, checkSynonyms, retiredNames } from './naming.mjs'
 
 export const NAMING_STAGED_BLOCKS = true
 
-export const RULE_DOC = '.claude/rules/naming.md'
+export const RULE_DOC = 'contributing/rules/naming.md'
 
 export const RULES = {
   'export-kebab': { stage: 'enforced', decision: 'N18', surface: 'export and block ids' },
@@ -1801,8 +1801,8 @@ function checkToolingName(rel) {
       .find(Boolean)
   if (
     (m =
-      rel.match(/^\.claude\/(skills)\/([^/]+)\/SKILL\.md$/) ||
-      rel.match(/^\.claude\/(commands)\/([^/]+)\.md$/))
+      rel.match(/^contributing\/(skills)\/([^/]+)\/SKILL\.md$/) ||
+      rel.match(/^contributing\/(commands)\/([^/]+)\.md$/))
   ) {
     const name = m[2]
     if (name.startsWith('_')) return out
@@ -1838,7 +1838,7 @@ function checkToolingName(rel) {
       out.push(v('tooling-name', rel, 1, `"${name}" uses the abbreviation "${ab}" (${RULE_DOC}).`))
     return out
   }
-  if ((m = rel.match(/^(?:\.claude\/agents|adapters\/claude\/agents)\/([^/]+)\.md$/))) {
+  if ((m = rel.match(/^(?:contributing\/agents|adapters\/claude\/agents)\/([^/]+)\.md$/))) {
     const name = m[1]
     if (name.startsWith('_')) return out
     if (!KEBAB.test(name) || !/(er|or)$/.test(name.split('-').pop()))
@@ -1852,7 +1852,7 @@ function checkToolingName(rel) {
       )
     return out
   }
-  if ((m = rel.match(/^\.claude\/hooks\/([^/]+)\.mjs$/))) {
+  if ((m = rel.match(/^contributing\/hooks\/([^/]+)\.mjs$/))) {
     const name = m[1]
     if (!HOOK_VERBS.includes(name.split('-')[0]))
       out.push(
@@ -2151,9 +2151,9 @@ const SCAN_ROOTS = [
   'packages/webkit-mcp/src',
   '.specs',
   '.github/workflows',
-  '.claude/skills',
-  '.claude/agents',
-  '.claude/commands',
+  'contributing/skills',
+  'contributing/agents',
+  'contributing/commands',
   'skills',
   'adapters/claude/agents'
 ]
@@ -2167,9 +2167,9 @@ function repoFiles(root) {
       if (existsSync(join(root, 'apps', app, 'package.json')))
         files.push(`apps/${app}/package.json`)
     }
-  if (existsSync(join(root, '.claude/hooks')))
-    for (const f of readdirSync(join(root, '.claude/hooks')))
-      if (f.endsWith('.mjs')) files.push(`.claude/hooks/${f}`)
+  if (existsSync(join(root, 'contributing/hooks')))
+    for (const f of readdirSync(join(root, 'contributing/hooks')))
+      if (f.endsWith('.mjs')) files.push(`contributing/hooks/${f}`)
   files.push('package.json')
   for (const pkg of readdirSync(join(root, 'packages')))
     if (existsSync(join(root, 'packages', pkg, 'package.json')))

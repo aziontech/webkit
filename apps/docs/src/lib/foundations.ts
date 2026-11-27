@@ -99,31 +99,6 @@ export const FOUNDATIONS: FoundationPage[] = [
     summary:
       'What an Azion web page may put on its column: sections, hero, frame, assets and copy.',
     markdown: 'rules/webkit-site-pages.md'
-  },
-  {
-    slug: 'azion-api',
-    title: 'Calling the Azion API',
-    summary: 'CORS, a dev proxy and an edge proxy, and where the personal token lives.',
-    markdown: 'skills/webkit-azion-api/SKILL.md'
-  },
-  {
-    slug: 'query-explorer',
-    title: 'Query explorer',
-    summary: 'A Metrics and Events GraphQL explorer built from WebKit components.',
-    markdown: 'skills/webkit-query-explorer/SKILL.md'
-  },
-  {
-    slug: 'in-product-help',
-    title: 'In-product help',
-    summary:
-      'A description first, a Hint note on click, an Info trigger for the page; a Tooltip only names.',
-    markdown: 'skills/webkit-in-product-help/SKILL.md'
-  },
-  {
-    slug: 'api-data',
-    title: 'Showing API data',
-    summary: 'References by name, pickers that keep their values, fresh lookups and typed records.',
-    markdown: 'skills/webkit-api-data/SKILL.md'
   }
 ]
 

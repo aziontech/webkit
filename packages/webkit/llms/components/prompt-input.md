@@ -5,7 +5,6 @@
 - Import: `import PromptInputRoot from '@aziontech/webkit/prompt-input-root'`
 - Compound import (dot notation, not tree-shakeable): `import PromptInput from '@aziontech/webkit/prompt-input'`
 - Category: ai · Surface: app · Structure: composition
-- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [prompt-input.json](prompt-input.json)
 
 ## When to use
@@ -91,14 +90,15 @@
 - `@aziontech/webkit/prompt-input-dictate-button`
 - `@aziontech/webkit/prompt-input-model-picker`
 - `@aziontech/webkit/prompt-input-context-picker`
+- `@aziontech/webkit/prompt-input-access-picker`
 - `@aziontech/webkit/prompt-input-tools`
 
 ## Sub-components
 
 Compound API through `index.ts` (`PromptInput.AttachButton`, `PromptInput.DictateButton`,
-`PromptInput.ModelPicker`, `PromptInput.ContextPicker`, `PromptInput.Tools`); standalone entries
+`PromptInput.ModelPicker`, `PromptInput.ContextPicker`, `PromptInput.Tools`, `PromptInput.AccessPicker`); standalone entries
 `prompt-input-root`, `prompt-input-attach-button`, `prompt-input-dictate-button`,
-`prompt-input-model-picker`, `prompt-input-context-picker`, `prompt-input-tools`. The root provides
+`prompt-input-model-picker`, `prompt-input-context-picker`, `prompt-input-tools`, `prompt-input-access-picker`. The root provides
 the composer context (`injection-key.ts`): `disabled`, `voiceActive`, `accept`, `maxFiles`, `maxFileSize`,
 `fileCount`, the text (read and write), `appendFiles`, `reject`, `setRejection`, `setDragging`,
 `registerAttach(handlers)`, `setChips(count)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
@@ -145,15 +145,38 @@ renders; their standalone paths are static.
   small `Button` showing the selected model's provider icon (when set), the model's label and the
   mode's label (muted), with a chevron, that opens a spacious `Popover` above it with an optional
   vertical provider filter rail (`providers`), a search input (`Search models...`), a scrollable
-  `Model` menu of radio options (provider icon, label, checkmark, and shortcut or muted description)
-  and, when `modes` is not empty, a side-by-side mode column of radio options. The panel stays open
-  on a choice; Escape or an outside click closes it. With no `models` the control is disabled; a
-  `v-model` that matches no model shows `Model`, and a mode that matches none shows no mode label.
+  `Model` menu of radio options (provider icon, label, checkmark, a favorite star, and shortcut or
+  muted description) and, when `modes` is not empty, a side-by-side mode column of radio options.
+  Each row has a star `IconButton` (`aria-pressed`, a lazy `Tooltip`) that toggles the model in
+  `favoriteKeys`; it shows on row hover or focus, on a coarse pointer and while starred. The rail's
+  first button filters to the favorites (`No favorites yet` when none), a provider button to that
+  provider; pressing the active one again shows every model. With the
+  `footer` slot the panel ends in a bar under its columns (`border-t`, wraps; its last control sits
+  at the inline end), for a speed `ToggleGroup`, a toggle `Button` or `PromptInput.AccessPicker`.
+  The panel stays open on a choice; Escape or an outside click closes it. Below `md` the trigger
+  is an icon-only `IconButton` (the model's icon) that opens a `Dialog` bottom sheet, loaded on
+  first open: `Favorites`, then one section per provider (44 px rows, check, star), the modes as a
+  `ToggleGroup`, the `footer` slot, and the search at the bottom. With no `models` the
+  control is disabled; a `v-model` that matches no model shows `Model`, and a mode that matches
+  none shows no mode label.
   - Props: `models?: PromptInputMenuOption[]` (default `[]`); `providers?: PromptInputMenuOption[]` (default `[]` — optional provider rail at the inline start); `modes?: PromptInputMenuOption[]` (default `[]`); `modeLabel?: string` (default `''` — empty uses `Mode`; the mode column's label, such as `Thinking Level` or `Effort`).
-  - v-model: `v-model` `string` (default `''`; emits `update:modelValue`) — the model; `v-model:mode` `string` (default `''`; emits `update:mode`).
+  - v-model: `v-model` `string` (default `''`; emits `update:modelValue`) — the model; `v-model:mode` `string` (default `''`; emits `update:mode`); `v-model:favoriteKeys` `string[]` (default `[]`; emits `update:favoriteKeys`) — the starred models' values, in the order they were starred.
+  - Events: _none_.
+  - Slots: `footer` — a bar under the panel's columns.
+  - `data-testid` fallback: `prompt-input-model-picker`.
+- `prompt-input-access-picker/prompt-input-access-picker.vue` — the access-mode picker (what the
+  agent may do without asking, such as Supervised, Auto-accept edits, Auto or Full access): a ghost
+  small `Button` with the chosen mode's icon and label and a trailing `az az-chevron-up` (named
+  `<title>: <label>`), that opens a `Popover` above it, aligned to the end, holding the `title`
+  (muted, `Permissions` by default), a fluid icon-only `ToggleGroup` (`showLabels` false) of the
+  modes, and the chosen mode's label and description (`aria-live="polite"`, so a change by arrow
+  key is announced). An option without `icon` uses `az az-shield`. It sits in the model picker's
+  `footer` or in the composer's `footer`. With no `options` the control is disabled.
+  - Props: `options?: PromptInputMenuOption[]` (default `[]` — each with `icon`, `label` and `description`); `title?: string` (default `''` — empty uses `Permissions`).
+  - v-model: `v-model` `string` (default `''`; emits `update:modelValue`) — the chosen mode.
   - Events: _none_.
   - Slots: _none_.
-  - `data-testid` fallback: `prompt-input-model-picker`.
+  - `data-testid` fallback: `prompt-input-access-picker`.
 - `prompt-input-context-picker/prompt-input-context-picker.vue` — the context picker ("Choose
   project"): a ghost small `Button` with the option's icon (else `icon`) and the chosen label (else
   the placeholder) that opens a `DropdownMenu` of options (the chosen one checked; a choice closes
@@ -191,6 +214,7 @@ packages/webkit/src/components/ai/prompt-input/
 ├── prompt-input-attach-button/prompt-input-attach-button.vue
 ├── prompt-input-dictate-button/prompt-input-dictate-button.vue
 ├── prompt-input-model-picker/prompt-input-model-picker.vue
+├── prompt-input-access-picker/prompt-input-access-picker.vue
 ├── prompt-input-context-picker/prompt-input-context-picker.vue
 └── prompt-input-tools/prompt-input-tools.vue
 ```
@@ -231,6 +255,9 @@ packages/webkit/src/components/ai/prompt-input/
 - ARIA: the `<textarea>` is named by `aria-label` (no visible label, as Cloudscape allows for an input with an action button), described by the counter (while it shows) and the hint, `aria-invalid` over the limit; Submit, Stop and Start voice conversation are named icon buttons.
 - The placeholder never carries required information (it disappears on typing).
 - Touch target: `IconButton` medium (44 px on coarse pointers); the small picker `Button`s get the 44 px hit area on coarse pointers from `Button`.
+- Model picker favorites: each star is a `button` with `aria-pressed`, named with its model (`Add to favorites: Gemini 4 Neon`), reachable by `Tab` and shown while focused. The rail group is `Providers`.
+- Model picker on a phone: the trigger is named `Model: <model>, <mode>`; the `Dialog` starts focus on the chosen model.
+- Access picker: the trigger is named `Permissions: <mode>`; the modes are a `radiogroup` named by the title, each radio named by its label (visually hidden text); the description under it is `aria-live="polite"`.
 
 ## Right-to-left
 
@@ -268,7 +295,12 @@ packages/webkit/src/components/ai/prompt-input/
 | `promptInput.model`            | `Model`                                                    | —                             |
 | `promptInput.mode`             | `Mode`                                                     | `modeLabel` (ModelPicker)     |
 | `promptInput.searchModels`     | `Search models...`                                         | —                             |
-| `promptInput.allProviders`     | `All providers`                                            | —                             |
+| `promptInput.providers`        | `Providers`                                                | —                             |
+| `promptInput.favorites`        | `Favorites`                                                | —                             |
+| `promptInput.addFavorite`      | `Add to favorites`                                         | —                             |
+| `promptInput.removeFavorite`   | `Remove from favorites`                                    | —                             |
+| `promptInput.noFavorites`      | `No favorites yet`                                         | —                             |
+| `promptInput.access`           | `Permissions`                                              | `title` (AccessPicker)        |
 | `promptInput.context`          | `Choose context`                                           | `placeholder` (ContextPicker) |
 | `promptInput.contextRemove`    | `Remove context`                                           | —                             |
 | `promptInput.tools`            | `Tools`                                                    | `label` (Tools)               |
@@ -289,6 +321,7 @@ packages/webkit/src/components/ai/prompt-input/
 - Shortcut menu (`/`, `@`): opens above the box, and below it when the space above the box in the visible viewport (the on-screen keyboard excluded) is shorter than the list and the space below is larger, so a composer at the top of a page or a panel never draws its list off-screen; the list carries `data-side="top|bottom"`.
 - Height: the text area measures its height again whenever its own width changes (a resize observer, released when the component unmounts), so a composer mounted in a pane that starts near zero width (a split view opening on a phone) settles to one row once the pane has its width.
 - Touch: `enterkeyhint="send"` on a fine pointer and `enterkeyhint="enter"` on a coarse pointer, where Enter adds a line so a multi-line prompt can be typed on a soft keyboard; targets 44 px on coarse pointers, shortcut menu rows included.
+- Phones (below `md`): the model picker is icon-only and opens a bottom sheet; the switch is CSS, so server and client HTML match.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Examples
@@ -300,12 +333,17 @@ packages/webkit/src/components/ai/prompt-input/
   import Button from '@aziontech/webkit/button'
   import PromptInput from '@aziontech/webkit/prompt-input'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
 
   const prompt = ref('')
   const files = ref([])
   const model = ref('gemini-4-neon')
   const mode = ref('medium')
+  const favorites = ref(['gemini-4-neon', 'claude-opus-4-5'])
+  const speed = ref('standard')
+  const ultracode = ref(false)
+  const access = ref('full')
   const project = ref('')
   const tools = ref([])
   const last = ref('')
@@ -338,6 +376,36 @@ packages/webkit/src/components/ai/prompt-input/
     { value: 'medium', label: 'Medium' },
     { value: 'high', label: 'High' },
     { value: 'extra', label: 'Extra' }
+  ]
+  const speeds = [
+    { value: 'standard', label: 'Standard' },
+    { value: 'fast', label: 'Fast', icon: 'az az-bolt' }
+  ]
+  const accessModes = [
+    {
+      value: 'supervised',
+      label: 'Supervised',
+      icon: 'az az-lock',
+      description: 'Ask before commands and file changes.'
+    },
+    {
+      value: 'edits',
+      label: 'Auto-accept edits',
+      icon: 'az az-pencil',
+      description: 'Auto-approve edits, ask before other actions.'
+    },
+    {
+      value: 'auto',
+      label: 'Auto',
+      icon: 'az az-shield',
+      description: 'Approve routine actions, ask before the rest.'
+    },
+    {
+      value: 'full',
+      label: 'Full access',
+      icon: 'az az-lock-open',
+      description: 'Allow commands and edits without prompts.'
+    }
   ]
   const projects = [
     { value: 'acme-store', label: 'acme-store', description: 'Storefront and checkout' },
@@ -410,11 +478,33 @@ packages/webkit/src/components/ai/prompt-input/
         <PromptInput.ModelPicker
           v-model="model"
           v-model:mode="mode"
+          v-model:favorite-keys="favorites"
           :providers="providers"
           :models="models"
           :modes="modes"
           mode-label="Thinking Level"
-        />
+        >
+          <template #footer>
+            <ToggleGroup
+              v-model="speed"
+              :options="speeds"
+              size="small"
+              aria-label="Response speed"
+            />
+            <Button
+              label="Ultracode"
+              icon="az az-sparkles"
+              :variant="ultracode ? 'secondary' : 'ghost'"
+              size="small"
+              :aria-pressed="ultracode"
+              @click="ultracode = !ultracode"
+            />
+            <PromptInput.AccessPicker
+              v-model="access"
+              :options="accessModes"
+            />
+          </template>
+        </PromptInput.ModelPicker>
         <PromptInput.DictateButton />
       </template>
       <template #footer>

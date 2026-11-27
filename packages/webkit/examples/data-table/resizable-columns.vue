@@ -8,7 +8,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import TableCellLink from '@aziontech/webkit/table-cell-link'
   import Tag from '@aziontech/webkit/tag'
-  import { ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
 
   const rows = [
     {
@@ -46,22 +46,43 @@
     }
   ]
 
-  const columns = [
-    { accessorKey: 'name', header: 'Name', resizable: true },
-    { accessorKey: 'status', header: 'Status', resizable: true },
-    { accessorKey: 'id', header: 'ID', sortable: false, resizable: true },
-    {
-      accessorKey: 'editor',
-      header: 'Last Editor',
-      sortable: false,
-      grow: 2,
-      resizable: true
-    },
-    { accessorKey: 'modified', header: 'Last Modified', grow: 2, resizable: true },
-    { id: 'actions', header: '', type: 'action', sortable: false, resizable: true }
+  const baseColumns = [
+    { accessorKey: 'name', header: 'Name' },
+    { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'id', header: 'ID', sortable: false },
+    { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },
+    { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
+    { id: 'actions', header: '', type: 'action', sortable: false }
   ]
 
   const sorting = ref([])
+
+  const WIDTHS_KEY = 'workloads-table-widths'
+  const columnWidths = ref({})
+
+  const columns = computed(() =>
+    baseColumns.map((column) => {
+      const width = columnWidths.value[column.accessorKey ?? column.id]
+      return width === undefined ? column : { ...column, width }
+    })
+  )
+
+  onMounted(() => {
+    try {
+      columnWidths.value = JSON.parse(localStorage.getItem(WIDTHS_KEY) ?? '{}')
+    } catch {
+      columnWidths.value = {}
+    }
+  })
+
+  const onColumnResize = (_event, { id, width }) => {
+    columnWidths.value = { ...columnWidths.value, [id]: width }
+    try {
+      localStorage.setItem(WIDTHS_KEY, JSON.stringify(columnWidths.value))
+    } catch {
+      return
+    }
+  }
 
   const rowActionGroups = [
     [
@@ -86,6 +107,7 @@
     row-key="id"
     sortable
     v-model:sorting="sorting"
+    @column-resize="onColumnResize"
     @row-click="onRowClick"
   >
     <template #cell-name="{ row, value }">

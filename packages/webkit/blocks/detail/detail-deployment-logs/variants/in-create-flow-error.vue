@@ -44,7 +44,7 @@
     class="w-full"
   >
     <template #header>
-      <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
+      <p class="truncate text-title-sm text-(--text-default)">Deployment</p>
       <StatusIndicator
         v-if="redeploying"
         loading
@@ -106,7 +106,7 @@
         />
         <Button
           label="Redeploy"
-          variant="primary"
+          variant="secondary"
           size="medium"
           icon="az az-refresh"
           :loading="redeploying"

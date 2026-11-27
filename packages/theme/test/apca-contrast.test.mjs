@@ -123,10 +123,16 @@ const vars = compileThemeVars()
 const exceptionFor = (variant, fg, bg) =>
   EXCEPTIONS.find((e) => e.themes.includes(variant) && e.fg === fg && e.bg.includes(bg))
 
-const measure = (variant, fg, bg) => {
+const grounds = (variant, bg) => {
   const back = vars[variant][bg]
-  return Math.abs(apcaLc(flatten(vars[variant][fg], back), back))
+  if (back.length === 7) return [back]
+  return SURFACES.map((surface) => flatten(back, vars[variant][surface]))
 }
+
+const measure = (variant, fg, bg) =>
+  Math.min(
+    ...grounds(variant, bg).map((back) => Math.abs(apcaLc(flatten(vars[variant][fg], back), back)))
+  )
 
 test('APCA 0.0.98G-4g reference values: black on white Lc 106.0, white on black Lc -107.9, black on #F3652B Lc 46.6', () => {
   assert.equal(apcaLc('#000000', '#FFFFFF').toFixed(1), '106.0')
@@ -139,7 +145,11 @@ for (const variant of ['light', 'dark']) {
     const failures = []
     for (const [tier, fg, bg] of PAIRS) {
       assert.match(vars[variant][fg] ?? '', /^#[0-9a-f]{6,8}$/i, `${fg} unresolved in ${variant}`)
-      assert.match(vars[variant][bg] ?? '', /^#[0-9a-f]{6}$/i, `${bg} unresolved in ${variant}`)
+      assert.match(
+        vars[variant][bg] ?? '',
+        /^#[0-9a-f]{6}([0-9a-f]{2})?$/i,
+        `${bg} unresolved in ${variant}`
+      )
       const lc = measure(variant, fg, bg)
       if (lc < TARGETS[tier] && !exceptionFor(variant, fg, bg))
         failures.push(`${fg} on ${bg} is Lc ${lc.toFixed(1)}, ${tier} target Lc ${TARGETS[tier]}`)
@@ -203,7 +213,8 @@ for (const variant of ['light', 'dark']) {
     for (const name of names) {
       const { foreground, background } = previewPair(name)
       const pair = PAIRS.find(
-        ([tier, fg, bg]) => fg === foreground && bg === background && ['body', 'text'].includes(tier)
+        ([tier, fg, bg]) =>
+          fg === foreground && bg === background && ['body', 'text'].includes(tier)
       )
       if (!pair) {
         failures.push(`${name}: ${foreground} on ${background} is not a documented text pair`)

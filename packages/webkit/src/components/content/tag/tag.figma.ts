@@ -16,10 +16,6 @@ const severity = instance.getEnum('severity', {
   info: 'info',
   contrast: 'contrast'
 })
-const rounded = instance.getEnum('rounded', {
-  false: false,
-  true: true
-})
 const size = instance.getEnum('size', {
   medium: 'medium',
   small: 'small'
@@ -41,11 +37,6 @@ export default {
       ? ''
       : figma.code`
   size="${size}"`
-  }${
-    rounded
-      ? figma.code`
-  rounded`
-      : ''
   }${
     showIcon
       ? figma.code`

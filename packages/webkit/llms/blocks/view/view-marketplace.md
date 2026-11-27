@@ -580,7 +580,7 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
           >
             <h2
               id="marketplace-featured"
-              class="text-heading-2xs text-(--text-default)"
+              class="text-title-sm text-(--text-default)"
             >
               Featured
             </h2>
@@ -614,7 +614,7 @@ Each variant is the same screen in another state: `get_block("view/view-marketpl
           >
             <h2
               id="marketplace-all"
-              class="text-heading-2xs text-(--text-default)"
+              class="text-title-sm text-(--text-default)"
             >
               All integrations
             </h2>
@@ -1527,7 +1527,7 @@ export const sampleSolutionApplications = ['storefront', 'checkout', 'docs', 'ap
     { id: 'update', header: '', minWidth: 120, hideable: false }
   ]
 
-  const HEADING_CLASS = 'm-0 text-heading-xs text-(--text-default)'
+  const HEADING_CLASS = 'm-0 text-title-sm text-(--text-default)'
   const TEXT_CLASS = 'm-0 text-body-sm text-(--text-default)'
   const CODE_CLASS = 'text-label-code-sm text-(--text-default)'
 

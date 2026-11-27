@@ -9,15 +9,26 @@ enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 
 # Skill: webkit-form
 
+## In short
+
+- Wrap every control in a `Field`; a loose input is the fallback.
+- Pick the control from the kind of value: a date is `DatePicker`, a number `NumberInput`, a phone
+  `PhoneInput`, a secret `PasswordInput`, never a text `Input` that asks for a format.
+- Two layouts: Cards and ItemGroups for settings, separated Fields for short focused forms. The
+  five form types differ only in their container and save model.
+- Group related fields in a real `fieldset` and `legend`, and label a Select on its trigger.
+- Validate on submit: the field's own invalid state and its `FieldError` are the feedback,
+  `required` draws no colour, and one locked scope holds while the form saves.
+
 ## Purpose
 
 Forms are where a product is most keyboard- and screen-reader-tested and most often fails: a label
 that is really a placeholder, a select whose `<label for>` points at nothing, a validation error shown
-only in colour, a field that never says it was required. This skill fixes the accessibility of a form
+only in colour, a field that never says it was required. This pattern fixes the accessibility of a form
 built on `@aziontech/webkit` so it is operable by keyboard, understandable by a screen reader, and
 recoverable when it rejects input. It is the a11y companion to `/webkit-ux-heuristics`
-(which establishes the states) and `/webkit-ui-states` (which locks the scope and
-toasts request errors) — this skill owns **layout, labels, grouping, validation semantics, and submit**.
+(which establishes the states) and [Loading, empty and error states](../webkit-ui-states/SKILL.md) (which locks the scope and
+toasts request errors) — this pattern owns **layout, labels, grouping, validation semantics, and submit**.
 
 There are **two ways to lay out a form**, and both are first-class:
 
@@ -46,7 +57,7 @@ Pick one per form; don't mix row-fields and stacked-fields in the same section.
 - Building or reviewing any create/edit page, settings panel, drawer form, or multi-field form.
 - The user asks "is this form accessible", "wire up the labels", "the screen reader skips this",
   "where do errors go", "which layout for this form".
-- After `/webkit-ux-heuristics` establishes the states and before `/webkit-ui-states` locks the async submit.
+- After `/webkit-ux-heuristics` establishes the states and before [Loading, empty and error states](../webkit-ui-states/SKILL.md) locks the async submit.
 
 ## Wrap every control in a `Field` — loose inputs are the fallback
 
@@ -65,7 +76,7 @@ a control bare only when no label belongs next to it. Which control a value take
   below are satisfied **by construction**.
 - **Extra help on a field:** `Field.Description` first (always visible); detail some people want goes in
   `<Field.Label hint="…">`, a Hint glyph that opens a short note on click. Never a typed `?`, a boxed icon
-  button or a long `Tooltip` beside a label (`/webkit-in-product-help`).
+  button or a long `Tooltip` beside a label ([In-product help](../webkit-in-product-help/SKILL.md)).
 - **Checkbox, switch:** `<Field orientation="horizontal">` with the control first and a
   `<Field.Content>` holding `Field.Label` + `Field.Description`.
 - **One of a few (radios):** always `<RadioGroup v-model>` with a `RadioGroup.Item` per option
@@ -283,7 +294,7 @@ read or typed. Each option shows the **name first**, with the kind or a shortene
 
 The picker follows the long-list rule in `/webkit-ux-heuristics`: search past 7 options, a fixed
 first batch with Load more, a no-match line, and a `Create <noun>` action when the person may not
-have the resource yet (`/webkit-create-surface`, section 6). A whole resource the flow may reuse or
+have the resource yet ([Create flows](../webkit-create-surface/SKILL.md), section 6). A whole resource the flow may reuse or
 create gets its own band instead: the `create/create-resource-picker` block (Existing / New).
 
 **A `Select` with a search field** is the default: the search sits in `Select.Content`'s `#search`
@@ -459,7 +470,7 @@ the raw value.
 Several references are a `MultiSelect` with `searchable` (and `:filter="false"` plus its `search`
 event when the server filters): the chosen resources show as chips with their names. A list filter
 on a referenced resource is a `PropertyFilter` property whose values come from `loadValues`, so the
-token prints the name while the URL keeps the ID (`/webkit-lists`, section 3).
+token prints the name while the URL keeps the ID ([List pages](../webkit-lists/SKILL.md), section 3).
 
 Pasting a full ID into the search is still useful to people who have one: when the text matches
 the ID's pattern, resolve it with the API's get-by-ID call and offer that one resource as the
@@ -469,7 +480,7 @@ result.
 
 The same values in a detail page or a table: **the name first**, linked by name; the ID as
 secondary mono text with a copy button (`TableCellId`, with `resource` naming what it copies); a time
-as `Timestamp` or `TableCellTime`, relative with the absolute date a hover away. `/webkit-tables`
+as `Timestamp` or `TableCellTime`, relative with the absolute date a hover away. [Tables](../webkit-tables/SKILL.md)
 owns the cell recipes.
 
 ### Do and Don't
@@ -549,7 +560,7 @@ contexts** in Azion products:
 - **Drawer form.** In-context creation — the user is working inside a resource and adds an item that
   only exists in it (a rule, an origin, a domain, a record) _without leaving the page they're on_. A
   first-level resource started from its own module creates on a page, not here
-  (`/webkit-create-surface`; variables are the one exception). A `large` drawer (`/webkit-navigation`, Drawers). One scoped save (the drawer's primary
+  ([Create flows](../webkit-create-surface/SKILL.md); variables are the one exception). A `large` drawer ([Navigation](../webkit-navigation/SKILL.md), Drawers). One scoped save (the drawer's primary
   action).
   Approach A for grouped/config-heavy creates (one flush ItemGroup, or several `SettingsGroup` bands),
   Approach B for short ones.
@@ -558,7 +569,7 @@ contexts** in Azion products:
   being created needs a digital certificate the reader has not made. The field offers `Create <noun>`,
   and a drawer holding **that resource's own create form** opens over the form, creates it and selects
   it back. A must, for first-level resources too: never send the reader to another page to create it
-  and come back (`/webkit-navigation`, Create what is missing). `large` when opened from a page;
+  and come back ([Navigation](../webkit-navigation/SKILL.md), Create what is missing). `large` when opened from a page;
   from a drawer it is the nested drawer below.
 
 - **Nested drawer.** A drawer form whose Select points at a resource or an item that may not exist
@@ -597,7 +608,7 @@ contexts** in Azion products:
 save** — a Drawer, a Dialog, or an ItemGroup (whether a single flush block **or** several
 `SettingsGroup` bands, like Account Settings; the sections group the topic, not the save). A form deliberately split
 into independently-committed cards — the **Card with independent saves** type — has **one save per
-card**, each locking off its own `submitting` flag (the `/webkit-ui-states` contract).
+card**, each locking off its own `submitting` flag (the [Loading, empty and error states](../webkit-ui-states/SKILL.md) contract).
 
 Each form type has its pattern in the `webkit` MCP (`get_block`): the Drawer form and the Nested
 drawer are `create/create-drawer` (variant `NestedDrawer` for the stacked child); the
@@ -832,7 +843,7 @@ create page in a new tab, so the form keeps its typing, and give the field a `Re
 Three decisions make it safe:
 
 - **Independent scopes.** The parent and child are separate `<form>`s, each with its **own** `submitting`
-  flag, its own `<fieldset :disabled>`, its own Save `:loading` (the `/webkit-ui-states` Pattern 1 lock, per
+  flag, its own `<fieldset :disabled>`, its own Save `:loading` (the [Loading, empty and error states](../webkit-ui-states/SKILL.md) Pattern 1 lock, per
   drawer). Submitting the child never locks the parent, and the parent's save never touches the child.
 - **A controlled Select + a sentinel value.** The parent `Select` is **controlled** (`:model-value`, not
   `v-model`) so picking the quick-add never commits a real value. The quick-add is a normal
@@ -1273,8 +1284,9 @@ there. `Input` takes `type`, `autocomplete` and `spellcheck` on its `<input>`; `
 - Give every control a meaningful `name` next to `autocomplete`; autofill needs both.
 - WebKit hides every field **without** `autocomplete` from password managers (`data-1p-ignore` and the
   LastPass, Bitwarden and Dashlane equivalents), so 1Password never offers a sign-in on an account name
-  or a search box. A login or sign-up field **must** set `autocomplete` to stay fillable (`type="email"`
-  alone does not); a read-only field is always hidden.
+  or a search box. A login or contact field **must** set `autocomplete` to stay fillable;
+  `type="email"` alone is not enough, so the e-mail of a profile or settings form stays hidden. A
+  read-only field is always hidden.
 - A page that edits saved values (a profile, account settings, anything with a `SaveBar`) is not a
   sign-in: its name, email and link fields set `autocomplete="off"`, so no password manager offers to
   sign in or overwrite them. Only a change-password card keeps `current-password` / `new-password`.
@@ -1357,19 +1369,19 @@ Rules:
 - **No custom error-summary block** (`role="alert"` list of links) and **no `Alert` callout** for
   field validation. Those were removed on purpose: the field's own state + its `FieldError` is the feedback.
 - **Never `toast` a field error.** Missing/invalid input stays on the field. Toast is for
-  request/API failures only (see `/webkit-ui-states`).
+  request/API failures only (see [Loading, empty and error states](../webkit-ui-states/SKILL.md)).
 
 > **A server rejection scoped to one field is a different case**, and it is the one place a `Alert`
 > is right. The value is not malformed — the API rejected it (a referenced object was deleted, a name
 > is already taken), so it takes **both** surfaces: a `Alert` inside that field's own section _and_
 > the field's red `invalid` state. On a
 > long form, scroll-anchor the erroring section. The full placement table — field, section `Alert`,
-> toast, auth card, background-job toast — is **`/webkit-errors`**.
+> toast, auth card, background-job toast — is **[Errors](../webkit-errors/SKILL.md)**.
 
 ## Submission — native submit, one locked scope, sticky actions
 
 The primary action drives the native submit so **Enter submits**. While the request runs, **one flag
-locks the whole scope** — this is `/webkit-ui-states` **Pattern 1**; this skill **references it, does not
+locks the whole scope** — this is [Loading, empty and error states](../webkit-ui-states/SKILL.md) **Pattern 1**; this pattern **references it, does not
 re-derive it**. Save shows `:loading`, and **every field the action reads takes `:disabled` off the same
 flag**. On a long form, the actions live in a **sticky bar** — `SaveBar`
 (`@aziontech/webkit/save-bar`) — so Save/Cancel are always reachable. A create page uses
@@ -1405,7 +1417,7 @@ Rules:
   to wrap the footer too. No hidden `sr-only` submit button.
 - **Lock off one flag.** `<fieldset :disabled="submitting">` + `:disabled="submitting"` on **every**
   control + Save `:loading="submitting"`; guard the handler and release in `finally` (this IS
-  `/webkit-ui-states` Pattern 1 — the fieldset is the native lock, the per-control
+  [Loading, empty and error states](../webkit-ui-states/SKILL.md) Pattern 1 — the fieldset is the native lock, the per-control
   `:disabled` is what makes webkit `Select`/`Switch`/`Input` show the disabled visual).
 - **Report the request result where the user is looking** — `toast.success` on the happy path,
   `toast.error` with a Retry on failure. Field errors stay inline.
@@ -1429,7 +1441,7 @@ exists.`), wired by `aria-describedby`. After the reload clears the stale value 
    scroll container (instant under `prefers-reduced-motion`) and focus the field with
    `preventScroll`. Every other entry is kept.
 
-Where each error renders, row by row, is `/webkit-errors`.
+Where each error renders, row by row, is [Errors](../webkit-errors/SKILL.md).
 
 ### Unsaved changes — `useUnsavedChanges` (`edit/edit-resource`)
 
@@ -1542,7 +1554,7 @@ Rules:
 The module **create** action for a first-level resource lands on a dedicated **page** (route
 `/<module>/new`), not a modal, so it is linkable and back-button-safe, however short the form; a
 drawer creates only an item inside a resource (and variables, the one exception in
-`/webkit-create-surface`).
+[Create flows](../webkit-create-surface/SKILL.md)).
 
 ## Review output
 
@@ -1568,13 +1580,13 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 
 ## References
 
-- `/webkit-api-data` — a `Select` or `MultiSelect` whose options come from an API: server search,
+- [Showing API data](../webkit-api-data/SKILL.md) — a `Select` or `MultiSelect` whose options come from an API: server search,
   selected values that are not in the loaded page, names instead of IDs, revalidated options.
 - `Field` and its parts, `FieldDescription`, `Item`, `Card`, `Select`, `Button` import paths: ask the
   webkit MCP `suggest_component`, or read `node_modules/@aziontech/webkit/catalog.json` (`imports`) —
   every key is a real subpath.
-- Companion skills: `/webkit-ux-heuristics` (states + inline error placement), `/webkit-ui-states`
-  (lock-the-scope + toast for request errors), and `/webkit-errors` (where every failure goes: the
+- Companion skills: `/webkit-ux-heuristics` (states + inline error placement), [Loading, empty and error states](../webkit-ui-states/SKILL.md)
+  (lock-the-scope + toast for request errors), and [Errors](../webkit-errors/SKILL.md) (where every failure goes: the
   field, a section `Alert`, a toast, the auth card — including the signed-out screens, which never
   toast).
 - Token catalog (spacing, colour, shape, typography): the `@aziontech/theme` tokens (the `--*` CSS
@@ -1582,58 +1594,58 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 - Compose only webkit components and theme tokens — no external UI libraries, no hex/rgb colours, no
   component-local CSS.
 
-## Definition of Done
+## How to check it works
 
-- [ ] Every field uses the control for its kind of value (the "Pick the control" table): a date or a
-      date and time is a `DatePicker` (`show-time`), a range a `DateRangePicker`, a number a
-      `NumberInput`, a phone a `PhoneInput`, a secret a `PasswordInput`. No `Input` asks the person to
-      type a format (ISO 8601, `YYYY-MM-DD`, E.164), and the model holds the typed value (`Date`,
-      `number`), converted to the server's string only in the request.
-- [ ] Every labelled control sits in a `Field` (`Field.Label` + control + `Field.Description` /
-      `Field.Error`, state on the `Field`); checkboxes/switches use `orientation="horizontal"`,
-      their cards are `Field.Label` wrapping a horizontal `Field`, radios are one `RadioGroup` (`variant="card"` for cards); a bare control is used only when its
-      label lives elsewhere, and then the `aria-label` + `aria-describedby` are wired by hand.
-- [ ] The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / Card with
-      independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
-      Dialog, or an ItemGroup — single block _or_ multiple `SettingsGroup` bands); one save per card only
-      for the Card-with-independent-saves type.
-- [ ] Every field that needs another resource offers `Create <noun>` when it may not exist yet; the
-      drawer creates it and selects it back, so the reader never leaves the form to create it.
-- [ ] Every control matches the type of its value (Pick the control from the kind of value): instants in a `DatePicker`
-      with `show-time`, dates in a `DatePicker`, periods in one `DateRangePicker`, enums in a
-      `RadioGroup` or `Select` with human labels, references to other resources in a searchable picker
-      labelled with the thing (never an `Input` asking for an ID), money and percentages in a
-      `NumberInput` with the unit in the label, known structures in `AttributeEditor` / `TagEditor`.
-- [ ] A **nested drawer** keeps parent and child as independent forms — each its own `submitting` flag,
-      `<fieldset :disabled>`, and Save `:loading`; the parent `Select` is controlled with a sentinel
-      quick-add; the child creates the missing resource or item with its own create form and wires it
-      back into the parent on save; no `z-*` overrides on the drawers or popups.
-- [ ] Field spacing follows the macro rule: `--spacing-xs` inside a field, `--spacing-lg` between fields
-      and sections (`--spacing-md` only in a compact modal body). No one-off gaps.
-- [ ] Hierarchy is not inverted: title → description → section title → field label → control → helper.
-- [ ] Section titling matches role: a multi-Card ItemGroup titles each band with a `SettingsGroup`
-      over a header-less flush `Card`; a self-contained card that _is_ the form
-      uses the `Card` `title` in its header. Never both on one card.
-- [ ] The form uses **one** layout: Cards + ItemGroups (`Item.List` of `SettingsRow` rows) or
-      Fields separated (`Field` stacked) — not a mix within a section.
-- [ ] Field naming matches the type: in an **ItemGroup**, `Item.Title` is the label and the control
-      takes an `aria-label` (no `<Field.Label>` inside an `Item`); in **Fields separated**, a real `Field.Label`
-      with `for`→`id`, and a `Select` labels its trigger. No bare
-      control with a floating `<p>` label, no placeholder-as-label.
-- [ ] `required` is static from the first render (on the `Field`, or on the control when there is no
-      `Field`), so a `Field.Label` shows the Required marker before any submit; it draws no colour.
-- [ ] Each section is a native `<fieldset>` with an `sr-only` `<legend>`.
-- [ ] Validation runs on submit only; feedback is the field's state **and** an on-field `FieldError`
-      message (`Field.Description` / `Field.Error` in Fields separated; a `<FieldError>` under the control in an
-      ItemGroup), bound to the error and cleared on edit. A failed submit sets `invalid` for an empty
-      required value or a malformed one, and the message says what to enter. No error-summary block,
-      no `Alert` callout for field validation.
-- [ ] Native hints on the `<input>`: `type`, `autocomplete` + `name`, `spellcheck="false"` on
-      e-mails, slugs and codes; paste is never blocked; a failed submit focuses the first field in
-      error; submit is never pre-disabled.
-- [ ] A value the user cannot change is `readonly` on its `Input` or `Textarea` (the filled field,
-      with a helper saying why), never `disabled` and never an editable field the save ignores.
-- [ ] Leaving the page with unsaved edits asks first (or the edits survive the navigation).
-- [ ] `<form novalidate @submit.prevent>`; Enter submits; the scope locks off one flag
-      (`<fieldset :disabled>` **and** `:disabled` on every control + Save `:loading`, per `/webkit-ui-states`
-      Pattern 1); request errors toast, field errors stay inline.
+- Every field uses the control for its kind of value (the "Pick the control" table): a date or a
+  date and time is a `DatePicker` (`show-time`), a range a `DateRangePicker`, a number a
+  `NumberInput`, a phone a `PhoneInput`, a secret a `PasswordInput`. No `Input` asks the person to
+  type a format (ISO 8601, `YYYY-MM-DD`, E.164), and the model holds the typed value (`Date`,
+  `number`), converted to the server's string only in the request.
+- Every labelled control sits in a `Field` (`Field.Label` + control + `Field.Description` /
+  `Field.Error`, state on the `Field`); checkboxes/switches use `orientation="horizontal"`,
+  their cards are `Field.Label` wrapping a horizontal `Field`, radios are one `RadioGroup` (`variant="card"` for cards); a bare control is used only when its
+  label lives elsewhere, and then the `aria-label` + `aria-describedby` are wired by hand.
+- The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / Card with
+  independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
+  Dialog, or an ItemGroup — single block _or_ multiple `SettingsGroup` bands); one save per card only
+  for the Card-with-independent-saves type.
+- Every field that needs another resource offers `Create <noun>` when it may not exist yet; the
+  drawer creates it and selects it back, so the reader never leaves the form to create it.
+- Every control matches the type of its value (Pick the control from the kind of value): instants in a `DatePicker`
+  with `show-time`, dates in a `DatePicker`, periods in one `DateRangePicker`, enums in a
+  `RadioGroup` or `Select` with human labels, references to other resources in a searchable picker
+  labelled with the thing (never an `Input` asking for an ID), money and percentages in a
+  `NumberInput` with the unit in the label, known structures in `AttributeEditor` / `TagEditor`.
+- A **nested drawer** keeps parent and child as independent forms — each its own `submitting` flag,
+  `<fieldset :disabled>`, and Save `:loading`; the parent `Select` is controlled with a sentinel
+  quick-add; the child creates the missing resource or item with its own create form and wires it
+  back into the parent on save; no `z-*` overrides on the drawers or popups.
+- Field spacing follows the macro rule: `--spacing-xs` inside a field, `--spacing-lg` between fields
+  and sections (`--spacing-md` only in a compact modal body). No one-off gaps.
+- Hierarchy is not inverted: title → description → section title → field label → control → helper.
+- Section titling matches role: a multi-Card ItemGroup titles each band with a `SettingsGroup`
+  over a header-less flush `Card`; a self-contained card that _is_ the form
+  uses the `Card` `title` in its header. Never both on one card.
+- The form uses **one** layout: Cards + ItemGroups (`Item.List` of `SettingsRow` rows) or
+  Fields separated (`Field` stacked) — not a mix within a section.
+- Field naming matches the type: in an **ItemGroup**, `Item.Title` is the label and the control
+  takes an `aria-label` (no `<Field.Label>` inside an `Item`); in **Fields separated**, a real `Field.Label`
+  with `for`→`id`, and a `Select` labels its trigger. No bare
+  control with a floating `<p>` label, no placeholder-as-label.
+- `required` is static from the first render (on the `Field`, or on the control when there is no
+  `Field`), so a `Field.Label` shows the Required marker before any submit; it draws no colour.
+- Each section is a native `<fieldset>` with an `sr-only` `<legend>`.
+- Validation runs on submit only; feedback is the field's state **and** an on-field `FieldError`
+  message (`Field.Description` / `Field.Error` in Fields separated; a `<FieldError>` under the control in an
+  ItemGroup), bound to the error and cleared on edit. A failed submit sets `invalid` for an empty
+  required value or a malformed one, and the message says what to enter. No error-summary block,
+  no `Alert` callout for field validation.
+- Native hints on the `<input>`: `type`, `autocomplete` + `name`, `spellcheck="false"` on
+  e-mails, slugs and codes; paste is never blocked; a failed submit focuses the first field in
+  error; submit is never pre-disabled.
+- A value the user cannot change is `readonly` on its `Input` or `Textarea` (the filled field,
+  with a helper saying why), never `disabled` and never an editable field the save ignores.
+- Leaving the page with unsaved edits asks first (or the edits survive the navigation).
+- `<form novalidate @submit.prevent>`; Enter submits; the scope locks off one flag
+  (`<fieldset :disabled>` **and** `:disabled` on every control + Save `:loading`, per [Loading, empty and error states](../webkit-ui-states/SKILL.md)
+  Pattern 1); request errors toast, field errors stay inline.

@@ -185,7 +185,7 @@ export interface TableColumn {
   align?: 'start' | 'center' | 'end'
   /** Body cell type (action renders a 40px trailing cell, auto-pinned to the right edge). */
   type?: 'default' | 'action'
-  /** Allow drag-to-resize on this column's header (ignored for frozen/action columns). */
+  /** Drag-to-resize on this column's header (defaults true; frozen and action columns never resize). */
   resizable?: boolean
   /** Column label in CollectionPreferences and the stacked layout when `header` is not a string. */
   label?: string

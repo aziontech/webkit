@@ -27,7 +27,7 @@ import {
   checkValueSet,
   checkSlotVocabulary,
   vocabularySnapshot
-} from '../../../../.claude/hooks/lib/prop-vocabulary.mjs'
+} from '../../../../contributing/hooks/lib/prop-vocabulary.mjs'
 
 const ROOT = fileURLToPath(new URL('../../../../', import.meta.url))
 const C = 'packages/webkit/src/components'
@@ -328,7 +328,10 @@ const FIXTURES = {
     'export default {}\n'
   ],
   'tooling-name': [
-    ['.claude/skills/regen-baselines/SKILL.md', '.claude/skills/baselines-regenerate/SKILL.md'],
+    [
+      'contributing/skills/regen-baselines/SKILL.md',
+      'contributing/skills/baselines-regenerate/SKILL.md'
+    ],
     '---\nname: x\n---\n',
     '---\nname: x\n---\n'
   ],
@@ -566,7 +569,7 @@ test('the repo scan is clean on every rule', () => {
 })
 
 const hook = (input, env = {}) =>
-  spawnSync('node', ['.claude/hooks/validate-naming.mjs'], {
+  spawnSync('node', ['contributing/hooks/validate-naming.mjs'], {
     cwd: ROOT,
     input: JSON.stringify(input),
     encoding: 'utf8',
@@ -612,7 +615,7 @@ test('validate-naming hook: an edit that keeps existing debt is not blocked, and
     }
   }
   assert.equal(hook(keep, { WEBKIT_NAMING_STRICT: '1' }).status, 0)
-  const broken = spawnSync('node', ['.claude/hooks/validate-naming.mjs'], {
+  const broken = spawnSync('node', ['contributing/hooks/validate-naming.mjs'], {
     cwd: ROOT,
     input: 'not json',
     encoding: 'utf8'

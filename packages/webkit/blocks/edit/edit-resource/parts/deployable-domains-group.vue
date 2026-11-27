@@ -45,7 +45,6 @@
                 v-if="value"
                 severity="neutral"
                 size="medium"
-                rounded
                 icon="az az-layers"
                 :label="value"
               />

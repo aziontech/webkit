@@ -58,7 +58,7 @@
 <template>
   <Card :padded="false">
     <template #header>
-      <p class="text-heading-xs text-(--text-default)">Deployment details</p>
+      <p class="text-title-sm text-(--text-default)">Deployment details</p>
 
       <div class="flex shrink-0 items-center gap-(--spacing-xs)">
         <Tooltip :content="live ? URL : 'Available once the deployment is live'">

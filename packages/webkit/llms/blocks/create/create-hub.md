@@ -339,7 +339,7 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
               class="flex w-full min-w-0 flex-col gap-(--layout-group-gap) lg:min-h-0 lg:flex-1"
             >
               <header class="flex min-h-(--size-8) items-center">
-                <h2 class="text-heading-2xs text-(--text-default)">Import from GitHub</h2>
+                <h2 class="text-title-sm text-(--text-default)">Import from GitHub</h2>
               </header>
 
               <div class="flex flex-col lg:min-h-0 lg:flex-1">
@@ -1108,7 +1108,7 @@ export const sampleTemplates: CreateHubTemplateSection[] = [
   <section class="flex w-full min-w-0 flex-col gap-(--layout-group-gap) lg:min-h-0 lg:flex-1">
     <div class="flex flex-col gap-(--spacing-sm)">
       <div class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)">
-        <h2 class="text-heading-2xs text-(--text-default)">Start from template</h2>
+        <h2 class="text-title-sm text-(--text-default)">Start from template</h2>
 
         <div class="flex w-full shrink-0 items-center sm:w-(--container-3xs)">
           <Input

@@ -11,8 +11,21 @@ export const es: Messages = {
   components: 'Componentes',
   blocks: 'Bloques',
   foundations: 'Fundamentos',
+  patterns: 'Patrones',
+  patternsLead:
+    'Cómo construir cada tipo de pantalla: formularios, tablas, estados, errores, navegación y textos. Cada página es el mismo archivo que lee un agente de IA.',
+  patternGroups: {
+    screens: 'Pantallas enteras',
+    forms: 'Formularios y creación',
+    data: 'Datos',
+    feedback: 'Feedback y estados',
+    navigation: 'Navegación y diseño',
+    content: 'Contenido',
+    ai: 'IA',
+    azion: 'APIs de Azion'
+  },
   search: 'Buscar',
-  searchPlaceholder: 'Buscar componentes, bloques y fundamentos…',
+  searchPlaceholder: 'Buscar componentes, patrones, bloques y fundamentos…',
   noResults: 'Nada coincide con esa búsqueda.',
   openNavigation: 'Abrir navegación',
   navigation: 'Documentación',
@@ -231,19 +244,57 @@ export const es: Messages = {
   brandMonochrome: 'Monocromo: negro sobre blanco, blanco sobre oscuro.',
   brandKnockout: 'Calado: sobre un fondo naranja.',
   openIcons: 'Abrir la galería de iconos',
-  homeTitle: 'Un design system. Todos los componentes, listos para componer.',
+  homeTitle: 'El design system de Azion, hecho para IA.',
+  homeNote:
+    'El prompt instala WebKit y ejecuta init, así tu agente de código recibe el servidor MCP, la guía y el lint.',
   homeLead:
-    'Explora @aziontech/webkit: todos los componentes en vivo, los bloques hechos con ellos, los fundamentos debajo y los recursos de la marca. Tokens, accesibilidad y modo oscuro incluidos.',
+    'Componentes, bloques, patrones y fundamentos para Azion Console, la documentación y el sitio. Tu agente de IA lee el mismo catálogo que recorres aquí, y agentes de IA construyen el propio WebKit.',
   startWithAgents: 'Empezar con agentes',
-  exploreTitle: 'Explora la documentación',
-  exploreLead:
-    'Cuatro entradas: los fundamentos, todos los componentes, los bloques y los recursos de la marca.',
+  pathsTitle: 'Empieza por tu rol',
+  pathsLead:
+    'Entrega el trabajo a tu agente de código, o elige tu camino: construye una app con WebKit, o mejora WebKit.',
+  pathBuildTitle: 'Empieza a construir',
+  pathBuildBody:
+    'Instala los paquetes, ejecuta npx @aziontech/webkit init y arma tus pantallas con bloques y componentes. Tu agente de IA recibe el servidor MCP, las pautas y el lint en el mismo paso.',
+  pathBuildLink: 'Primeros pasos',
+  pathContributeTitle: 'Empieza a contribuir',
+  pathContributeBody:
+    'WebKit lo construyen agentes de IA. Abres una issue en GitHub; los agentes investigan, escriben la spec, un segundo agente la revisa, construyen, ejecutan cada verificación y la revisión de UI y abren el pull request. Sin archivo de diseño, sin componentes hechos a mano.',
+  pathContributeLink: 'Cómo se construye WebKit',
+  forAi: 'WebKit para IA',
+  aiNav: 'IA',
+  aiPageSummary:
+    'El servidor MCP, el comando de configuración, las pautas que leen los agentes, las verificaciones que pasan y cómo los agentes construyen el propio WebKit.',
+  aiTitle: 'Tu agente de IA lee el mismo WebKit que tú',
+  aiLead:
+    'Este sitio es la mitad. La otra mitad es para agentes de IA: un servidor que consultan, pautas que cargan y verificaciones que mantienen su código en el estándar.',
+  aiMcpTitle: 'Servidor MCP',
+  aiMcpBody:
+    '@aziontech/webkit-mcp responde search_blocks, get_component, list_tokens y validate_usage desde el catálogo de la versión instalada.',
+  aiInitTitle: 'Un comando de configuración',
+  aiInitBody:
+    'npx @aziontech/webkit init configura el servidor MCP, el lint, el tema y las instrucciones del agente en AGENTS.md.',
+  aiGuidanceTitle: 'Skills, reglas y patrones',
+  aiGuidanceBody:
+    'Las pautas de este sitio van en Markdown dentro del paquete, así el agente lee el patrón de la tarea antes de escribir una línea.',
+  aiChecksTitle: 'Verificaciones que sostienen el estándar',
+  aiChecksBody:
+    'Los presets de lint, webkit doctor y webkit check fallan el build ante un import erróneo, un color crudo o una etiqueta que falta.',
+  aiAgentTitle: 'Configura tu agente con un prompt',
+  aiAgentBody:
+    'Pégalo en Claude Code, Cursor, Codex o ChatGPT. Instala WebKit y ejecuta init, así el agente conoce los componentes desde la primera pantalla.',
+  aiAgentAside: '¿Quieres ver los detalles antes?',
+  aiAgentAction: 'Leer WebKit para IA',
+  exploreTitle: 'Explora WebKit',
+  exploreLead: 'Todo lo que tiene el sistema, para personas y para agentes.',
   exploreFoundations:
     'Tokens, color, tipografía, idiomas, derecha a izquierda, accesibilidad y teclado.',
   exploreComponents:
     'Todos los componentes por categoría, renderizados en vivo desde su primer ejemplo.',
+  explorePatterns: 'Cómo construir formularios, tablas, errores, estados y navegación.',
   exploreBlocks: 'Pantallas enteras hechas con los componentes, en un marco redimensionable.',
   exploreAssets: 'Las versiones de la marca, ilustraciones de producto e iconos.',
+  exploreAi: 'El servidor MCP, el comando de configuración y cómo los agentes construyen WebKit.',
   whyTitle: 'Un kit impulsa todas las interfaces de Azion',
   whyLead:
     '{components} componentes, {examples} ejemplos en vivo y {blocks} bloques: las mismas piezas del Azion Console, moldeadas por los equipos que las usan cada día.',
@@ -252,7 +303,7 @@ export const es: Messages = {
     'Fundamentos fiables y una velocidad que se nota. Los equipos dejan de rehacer lo básico y entregan lo que importa.',
   whyPeopleTitle: 'Hecho por quienes lo usan',
   whyPeopleBody:
-    'Lo moldean diseñadores e ingenieros que construyen en Azion. Mejora cada vez que se usa en el producto real.',
+    'Los equipos que construyen en Azion piden lo que necesitan, y los agentes lo construyen con un flujo revisado. Mejora cada vez que se usa en el producto real.',
   whyNextTitle: 'Listo para lo que viene',
   whyNextBody:
     'Fundamentos con criterio y patrones componibles, para que el sistema siga el ritmo del oficio.',

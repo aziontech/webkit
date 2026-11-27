@@ -248,7 +248,7 @@ Each variant is the same screen in another state: `get_block("state/state-projec
       class="animate-fade-in motion-reduce:animate-none fixed inset-0 z-(--z-control-overlay) flex flex-col items-center justify-center gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
     >
       <header class="flex flex-col items-center gap-(--spacing-2xs) text-center">
-        <h1 class="text-heading-sm text-(--text-default)">
+        <h1 class="text-title-md text-(--text-default)">
           {{ failedCount ? 'Upload paused' : 'Initializing' }}
         </h1>
         <p

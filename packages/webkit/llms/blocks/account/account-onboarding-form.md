@@ -565,7 +565,6 @@ Each variant is the same screen in another state: `get_block("account/account-on
                                   :variant="option.variant"
                                   :severity="option.severity"
                                   size="small"
-                                  rounded
                                 />
                                 <span class="text-label-sm text-(--text-muted)">
                                   {{ option.price }}
@@ -1048,7 +1047,7 @@ export const roleOptions = [
           <div class="min-w-0 flex-1 overflow-hidden bg-(--bg-canvas)">
             <div class="flex min-h-(--container-2xl) flex-col gap-(--spacing-lg) p-(--spacing-lg)">
               <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-                <p class="truncate text-heading-sm text-(--text-default)">
+                <p class="truncate text-title-md text-(--text-default)">
                   {{ ownerName ? 'Hello, ' + ownerName : 'Hello' }}
                 </p>
                 <p class="truncate text-body-sm text-(--text-muted)">
@@ -1483,7 +1482,7 @@ export const roleOptions = [
         <div
           class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
         >
-          <span class="text-heading-xs text-(--text-default)">Total</span>
+          <span class="text-title-sm text-(--text-default)">Total</span>
           <span class="flex items-baseline gap-(--spacing-xs)">
             <span class="text-heading-xs text-(--text-default)">{{ charge.total.value }}</span>
             <span class="text-body-sm text-(--text-muted)">{{ charge.total.suffix }}</span>

@@ -11,6 +11,6 @@ export const info = {
     info: tokenRef('primitives.blue.900'),
     'info-border': tokenRef('primitives.alpha.blue.400'),
     'info-foreground': tokenRef('primitives.blue.200'),
-    'info-mark': tokenRef('primitives.blue.400')
+    'info-mark': tokenRef('primitives.blue.350')
   }
 }

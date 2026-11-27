@@ -3,7 +3,7 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 1106611d45261eb62adf61cce3bbaa6bc5f420de29dea3a7e56a014219e7d8c8
+checksum: f32e3fa44299e213cef64bf744250f1a6502423196226c52f32c46954867c3e4
 spec_version: 14
 template: 2
 created: 2026-11-10
@@ -153,17 +153,17 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 
 ## Motion & Animations
 
-| Trigger                            | Animation / Transition                                                                                                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| parent expand / collapse (chevron) | `transition-[rotate] duration-fast-02 ease-productive-entrance` + `data-[state=open]:rotate-90` on the chevron glyph         | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none`        |
-| row hover                          | ghost layer `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` + `hover:before:opacity-100` | `fast-02` · `productive-entrance`                 | `motion-reduce:before:transition-none` |
-| row selected change                | `transition-colors duration-fast-02 ease-productive-entrance`                                                                | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none`        |
+| Trigger                            | Animation / Transition                                                                                                       | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| parent expand / collapse (chevron) | `transition-[rotate] duration-fast-02 ease-productive-entrance` + `data-[state=open]:rotate-90` on the chevron glyph         | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none`        |
+| row hover                          | ghost layer `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` + `hover:before:opacity-100` | `fast-02` · `productive-entrance`                      | `motion-reduce:before:transition-none` |
+| row selected change                | `transition-colors duration-fast-02 ease-productive-entrance`                                                                | `fast-02` · `productive-entrance`                      | `motion-reduce:transition-none`        |
 
-The chevron transition names `rotate`, not `transform`: Tailwind v4 compiles `rotate-90` to the standalone `rotate` property (see `.claude/rules/styling.md` § Transitioning a transform). The children group appears and disappears instantly; no height reveal in v1 (see Open questions). The loading shimmer belongs to the composed `Skeleton`, which already suppresses it under reduced motion; Tree adds no animation for it.
+The chevron transition names `rotate`, not `transform`: Tailwind v4 compiles `rotate-90` to the standalone `rotate` property (see `contributing/rules/styling.md` § Transitioning a transform). The children group appears and disappears instantly; no height reveal in v1 (see Open questions). The loading shimmer belongs to the composed `Skeleton`, which already suppresses it under reduced motion; Tree adds no animation for it.
 
 ## Tokens
 
-| Region                                            | Token (DESIGN.md)                                                                                                                                   |
+| Region                                            | Token (TOKENS.md)                                                                                                                                   |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | label                                             | `.text-label-md` (`large`: `.text-label-lg`), `var(--text-default)`                                                                                 |
 | description                                       | `.text-label-sm` (`large`: `.text-label-md`), `var(--text-muted)`                                                                                   |
@@ -292,15 +292,15 @@ Decisions taken in this draft that a reviewer should confirm before approval:
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

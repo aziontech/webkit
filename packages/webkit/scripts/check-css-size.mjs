@@ -126,7 +126,7 @@ async function main(only) {
   }
   if (failures.length) {
     console.error(
-      `\n✖ CSS budget: ${failures.join(', ')}. An app's stylesheet holds the classes of the WebKit files it imports; shrink what those files emit, or justify a raise in the PR (Budget-raise:) — .claude/rules/bundle-budget.md.`
+      `\n✖ CSS budget: ${failures.join(', ')}. An app's stylesheet holds the classes of the WebKit files it imports; shrink what those files emit, or justify a raise in the PR (Budget-raise:) — contributing/rules/bundle-budget.md.`
     )
     return 1
   }

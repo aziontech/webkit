@@ -583,9 +583,17 @@
       "moves": {
         "primary": "variant",
         "accent": "variant",
-        "contrast": "variant",
-        "highlight": "variant"
+        "contrast": "variant"
       }
+    },
+    "variant": {
+      "to": "variant",
+      "values": {
+        "highlight": "primary"
+      }
+    },
+    "rounded": {
+      "removed": "every Tag has the one control shape now; delete the attribute."
     }
   },
   "status-indicator": {

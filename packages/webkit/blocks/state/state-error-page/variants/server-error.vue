@@ -22,7 +22,7 @@
     <template #actions>
       <Button
         label="Retry"
-        variant="primary"
+        variant="secondary"
         size="medium"
         icon="az az-refresh"
         :loading="retrying"

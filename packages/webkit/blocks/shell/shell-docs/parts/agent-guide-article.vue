@@ -81,7 +81,6 @@
               :label="fact"
               severity="neutral"
               size="medium"
-              rounded
             />
           </div>
           <div class="flex flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)">

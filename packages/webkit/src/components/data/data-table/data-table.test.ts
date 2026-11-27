@@ -746,6 +746,107 @@ describe('DataTable', () => {
     })
   })
 
+  describe('column resize — on by default, widths written when a drag ends', () => {
+    const handles = (container: Element): HTMLElement[] =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>('[role="columnheader"] > span[aria-hidden="true"]')
+      )
+
+    const drag = async (handle: HTMLElement, by: number): Promise<void> => {
+      const x = handle.getBoundingClientRect().left
+      await fireEvent.mouseDown(handle, { clientX: x })
+      await fireEvent.mouseMove(document, { clientX: x + by / 2 })
+      await fireEvent.mouseMove(document, { clientX: x + by })
+      await fireEvent.mouseUp(document, { clientX: x + by })
+    }
+
+    const resizeColumns = [
+      { accessorKey: 'name', header: 'Name' },
+      { accessorKey: 'status', header: 'Status' },
+      { id: 'actions', header: '', type: 'action' as const }
+    ]
+
+    it('puts a handle on every column but the action column, and none where resizable is false', () => {
+      const all = render(DataTable, { props: { data: rows, columns: resizeColumns } })
+      expect(handles(all.container)).toHaveLength(2)
+      all.unmount()
+
+      const optedOut = render(DataTable, {
+        props: {
+          data: rows,
+          columns: [
+            { accessorKey: 'name', header: 'Name' },
+            { ...columns[1], resizable: false }
+          ]
+        }
+      })
+      expect(handles(optedOut.container)).toHaveLength(1)
+    })
+
+    it('emits column-resize once, when the drag ends, with the dragged column and its width', async () => {
+      const onResize = vi.fn()
+      const { container } = render(DataTable, {
+        props: { data: rows, columns: resizeColumns, onColumnResize: onResize }
+      })
+      const [nameHandle] = handles(container)
+      const x = nameHandle!.getBoundingClientRect().left
+      await fireEvent.mouseDown(nameHandle!, { clientX: x })
+      await fireEvent.mouseMove(document, { clientX: x + 60 })
+      expect(onResize).not.toHaveBeenCalled()
+      await fireEvent.mouseUp(document, { clientX: x + 60 })
+      expect(onResize).toHaveBeenCalledTimes(1)
+      const [event, column] = onResize.mock.calls[0] as [Event, { id: string; width: number }]
+      expect(event.type).toBe('mouseup')
+      expect(column.id).toBe('name')
+      expect(column.width).toBeGreaterThan(0)
+    })
+
+    it('emits nothing for a click on the handle that does not move', async () => {
+      const onResize = vi.fn()
+      const { container } = render(DataTable, {
+        props: { data: rows, columns: resizeColumns, onColumnResize: onResize }
+      })
+      const handle = handles(container)[0]!
+      await fireEvent.mouseDown(handle, { clientX: 10 })
+      await fireEvent.mouseUp(document, { clientX: 10 })
+      expect(onResize).not.toHaveBeenCalled()
+    })
+
+    it('round-trips through useCollection: the stored width comes back as the column width', async () => {
+      const data: Record<string, string> = {}
+      const storage = {
+        getItem: (key: string) => data[key] ?? null,
+        setItem: (key: string, value: string) => {
+          data[key] = value
+        }
+      }
+      const Host = defineComponent({
+        setup() {
+          const { tableProps } = useCollection({
+            items: rows,
+            columns: resizeColumns,
+            preferences: { storageKey: 'resize-prefs', storage }
+          })
+          return () => h(DataTable, { ...tableProps.value, 'data-testid': 'resize' })
+        }
+      })
+      const first = render(Host)
+      await drag(handles(first.container)[1]!, 40)
+      const saved = JSON.parse(data['resize-prefs'] ?? '{}') as {
+        columnWidths?: Record<string, number>
+      }
+      expect(Object.keys(saved.columnWidths ?? {})).toEqual(['status'])
+      const width = saved.columnWidths?.status ?? 0
+      first.unmount()
+
+      const again = render(Host)
+      await waitFor(() => {
+        const head = again.getAllByRole('columnheader')[1]!
+        expect(head.getAttribute('style') ?? '').toContain(`${width}px`)
+      })
+    })
+  })
+
   describe('documented examples', () => {
     it('renders the Default (data-driven) story with rows', () => {
       const { getByTestId, getAllByRole } = render(Default)

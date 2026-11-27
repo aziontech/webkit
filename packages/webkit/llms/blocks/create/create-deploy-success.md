@@ -229,7 +229,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
           <header
             class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-2xs)"
           >
-            <h1 class="text-balance text-heading-lg text-(--text-default)">{{ title }}</h1>
+            <h1 class="text-balance text-title-md text-(--text-default)">{{ title }}</h1>
             <p
               class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
             >
@@ -629,7 +629,7 @@ jobs:
                   >
                     {{ index + 1 }}
                   </span>
-                  <h3 class="min-w-0 text-heading-xs text-(--text-default)">
+                  <h3 class="min-w-0 text-title-sm text-(--text-default)">
                     {{ step.title }}
                   </h3>
                 </div>
@@ -684,7 +684,7 @@ jobs:
         <div class="flex flex-wrap items-start justify-between gap-(--spacing-sm)">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-              <h2 class="min-w-0 truncate text-heading-xs text-(--text-default)">
+              <h2 class="min-w-0 truncate text-title-sm text-(--text-default)">
                 {{ deployment.name }}
               </h2>
               <Tag

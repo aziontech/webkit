@@ -19,6 +19,13 @@ function orderColumns<C extends CollectionColumn>(
   return [...listed, ...rest]
 }
 
+function withWidths<C extends CollectionColumn>(columns: C[], widths: Record<string, number>): C[] {
+  return columns.map((column) => {
+    const width = widths[columnIdOf(column)]
+    return width === undefined ? column : { ...column, width }
+  })
+}
+
 export function useCollectionTableProps<T extends object, C extends CollectionColumn>(
   s: CollectionState<T, C>,
   view: CollectionView<T>,
@@ -29,7 +36,12 @@ export function useCollectionTableProps<T extends object, C extends CollectionCo
   const { sorting, columns } = s
   const { preferences, setPreferences } = prefs
 
-  const orderedColumns = computed<C[]>(() => orderColumns(columns.value, preferences.value.columns))
+  const orderedColumns = computed<C[]>(() =>
+    withWidths(
+      orderColumns(columns.value, preferences.value.columns),
+      preferences.value.columnWidths
+    )
+  )
 
   const columnVisibility = computed<Record<string, boolean>>(() =>
     Object.fromEntries(
@@ -65,6 +77,8 @@ export function useCollectionTableProps<T extends object, C extends CollectionCo
           id: c.id,
           visible: value[c.id] !== false
         }))
-      })
+      }),
+    onColumnResize: (_event, { id, width }) =>
+      setPreferences({ columnWidths: { ...preferences.value.columnWidths, [id]: width } })
   }))
 }

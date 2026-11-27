@@ -10,6 +10,17 @@ export const navigation: ConsoleLayoutNavGroup[] = [
     items: [{ id: 'resources', label: 'Resources', icon: 'az az-box', href: '/resources' }]
   },
   {
+    label: 'Secure',
+    items: [
+      {
+        id: 'network-lists',
+        label: 'Network Lists',
+        icon: 'az az-network-lists',
+        href: '/network-lists'
+      }
+    ]
+  },
+  {
     label: 'Support',
     items: [
       { id: 'support-tickets', label: 'Tickets', icon: 'az az-ticket', href: '/support' },

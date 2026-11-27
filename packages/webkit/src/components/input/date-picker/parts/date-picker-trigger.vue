@@ -39,7 +39,6 @@
   const TRIGGER_CLASS =
     'relative text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:cursor-not-allowed disabled:text-(--text-disabled) ' +
-    'data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 ' +
     'data-[empty]:text-(--text-muted) ' +
     'motion-reduce:transition-none'
 

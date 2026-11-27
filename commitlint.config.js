@@ -28,7 +28,7 @@
  *   chore | docs | style | refactor |
  *   perf | test | ci | revert      → no release  (allowed for hygiene, no version bump)
  *   any-type with `!` or BREAKING:  → major
- * Contract: .claude/rules/release-types.md
+ * Contract: contributing/rules/release-types.md
  */
 export default {
   parserPreset: {

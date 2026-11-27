@@ -5,7 +5,7 @@ import { dirname, join, posix, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadManifest as loadIconManifest } from '../../icons/scripts/lib/icons-manifest.mjs'
 
-import { getSection, parseSpecFile } from '../../../.claude/hooks/lib/spec.mjs'
+import { getSection, parseSpecFile } from '../../../contributing/hooks/lib/spec.mjs'
 import { hydratePart } from '../src/catalog/catalog.js'
 import { composableExports } from './lib/composable-docs.mjs'
 
@@ -1122,6 +1122,11 @@ function header(catalog) {
   ].join('\n')
 }
 
+function patterns() {
+  const abs = resolve(REPO_ROOT, 'skills/patterns.json')
+  return existsSync(abs) ? JSON.parse(readFileSync(abs, 'utf-8')).patterns : []
+}
+
 export function buildLlms(catalog = loadCatalog()) {
   const files = {}
   const index = [header(catalog)]
@@ -1158,6 +1163,16 @@ export function buildLlms(catalog = loadCatalog()) {
     fullParts.push(`<!-- foundations/${f.slug}.md -->\n\n${namesOnly(f.compact ?? f.md)}`)
   }
   index.push('')
+
+  const patternPages = patterns()
+  if (patternPages.length) {
+    index.push('## Patterns', '')
+    for (const page of patternPages)
+      index.push(
+        `- [${page.title}](https://github.com/aziontech/webkit/blob/main/skills/${page.skill}/SKILL.md): ${page.summary}`
+      )
+    index.push('')
+  }
 
   const ids = Object.keys(catalog.blocks).sort()
   const blockGroups = {}

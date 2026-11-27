@@ -3,7 +3,7 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 28c8265f68d5f6fa9ccae95833f827bec2d03a5faa7aa21972e3722965bd5161
+checksum: fc2ef673e0396990a427cad0a8bcfade8602e988e938876801538998b7af9d1b
 spec_version: 9
 template: 2
 created: 2026-11-10
@@ -14,7 +14,7 @@ last_updated: 2026-11-23
 
 ## Purpose
 
-The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumbs` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
+The heading that opens a console page: an h1 in the console type set: 16px medium on a top-level page, 14px semibold on a deeper page (one with `breadcrumbs`, or `size="small"`), a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumbs` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
 
 ## When to use
 
@@ -125,12 +125,12 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 
 ## Props
 
-| Prop          | Type                             | Default    | Required | JSDoc                                                                         |
-| ------------- | -------------------------------- | ---------- | -------- | ----------------------------------------------------------------------------- |
-| `title`       | `string`                         | `—`        | true     | The page title, rendered as the page h1.                                      |
-| `description` | `string`                         | `''`       | false    | One sentence under the title that says what the page is for.                  |
-| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Heading scale of the title.                                                   |
-| `titleId`     | `string`                         | `''`       | false    | Id set on the h1, so a landmark or form can name itself with aria-labelledby. |
+| Prop          | Type                             | Default    | Required | JSDoc                                                                            |
+| ------------- | -------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------- |
+| `title`       | `string`                         | `—`        | true     | The page title, rendered as the page h1.                                         |
+| `description` | `string`                         | `''`       | false    | One sentence under the title that says what the page is for.                     |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | `small` marks a deeper page (14px semibold title); `medium` and `large` are 16px |
+| `titleId`     | `string`                         | `''`       | false    | Id set on the h1, so a landmark or form can name itself with aria-labelledby.    |
 
 ## Events
 
@@ -151,6 +151,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop on the root and the h1
+- `data-nested` on the h1 when the page is a deeper page (a `breadcrumbs` slot, or `size="small"`)
 - Each region renders only when its slot is filled: `__breadcrumbs` (a full-width row above the title row), `__icon` (before the h1, `aria-hidden`), `__meta` (after the h1 on the same line, wrapping under it), `__tabs` (a full-width row after the copy and the actions). With no region slot the header renders exactly as before.
 - Responsive: the root is the `@container/page-header`. Below `@md` of its own box the actions drop under the copy and each one stretches to the full width; from `@md` they sit beside the title at their own width. A header inside a drawer or a split view lays out for that box, not the window.
 
@@ -160,17 +161,17 @@ _none_
 
 ## Tokens
 
-| Region           | Token (DESIGN.md)                                                                     |
-| ---------------- | ------------------------------------------------------------------------------------- |
-| title typography | `.text-heading-xs` (small) · `.text-heading-sm` (medium) · `.text-heading-lg` (large) |
-| title text       | `var(--text-default)`                                                                 |
-| description      | `.text-body-sm` · `var(--text-muted)`                                                 |
-| row gap          | `var(--spacing-md)`                                                                   |
-| copy gap         | `var(--spacing-2xs)`                                                                  |
-| actions gap      | `var(--spacing-sm)`                                                                   |
-| icon             | `var(--text-muted)` · `.text-heading-sm` glyph size                                   |
-| title-row gap    | `var(--spacing-xs)` (icon, title, meta)                                               |
-| breadcrumb, tabs | full-width rows separated by the row gap, `var(--spacing-md)`                         |
+| Region           | Token (TOKENS.md)                                                      |
+| ---------------- | ---------------------------------------------------------------------- |
+| title typography | `.text-title-md` (top-level page) · `.text-title-nested` (deeper page) |
+| title text       | `var(--text-default)`                                                  |
+| description      | `.text-body-sm` · `var(--text-muted)`                                  |
+| row gap          | `var(--spacing-md)`                                                    |
+| copy gap         | `var(--spacing-2xs)`                                                   |
+| actions gap      | `var(--spacing-sm)`                                                    |
+| icon             | `var(--text-muted)` · `.text-title-md` glyph size                      |
+| title-row gap    | `var(--spacing-xs)` (icon, title, meta)                                |
+| breadcrumb, tabs | full-width rows separated by the row gap, `var(--spacing-md)`          |
 
 ## Theme gaps
 
@@ -229,15 +230,15 @@ No built-in strings: the title, description and every region come from the consu
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

@@ -2,7 +2,7 @@
 name: webkit-lists
 description: The list page — the one shape every resource index takes on @aziontech/webkit, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/webkit/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `CardList`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or CardList), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
 status: active
-last_updated: 2026-11-22
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-styling, ui-verify, review]
 ---
@@ -17,10 +17,10 @@ the same job behind a badged funnel button, a third filters in the page and page
 lands on an empty page 4 — and none of them keep the filter when the link is shared or remember the page
 size someone picked yesterday.
 
-They are all the same page, and they all hold the same state. This skill fixes that page: **one
+They are all the same page, and they all hold the same state. This pattern fixes that page: **one
 skeleton**, **one collection model** (`useCollection`), and **one rule for which columns become filter
-properties**. `/webkit-tables` owns what happens inside the `Table` — the column model and the cell
-recipes. This skill owns everything around it: the page's structure, the controls row, and the state
+properties**. [Tables](../webkit-tables/SKILL.md) owns what happens inside the `Table` — the column model and the cell
+recipes. This pattern owns everything around it: the page's structure, the controls row, and the state
 that connects them.
 
 Find the components named here through the `webkit` MCP (`suggest_component` / `get_component`) or
@@ -28,13 +28,13 @@ Find the components named here through the `webkit` MCP (`suggest_component` / `
 
 ## How to use
 
-- `/webkit-lists` — build any index page in this conversation to the shape below.
+- [List pages](../webkit-lists/SKILL.md) — build any index page in this conversation to the shape below.
 - `/webkit-lists <file>` — review that page against the patterns; per gap report the exact line/element
   (quoted), which pattern it breaks (one sentence), and the concrete fix.
 
-Related: `/webkit-tables` (the Table, columns, cells) · `/webkit-navigation` (the app shell the page sits
-in) · `/webkit-ui-states` (the empty and loading states a filtered list must render) ·
-`/webkit-microcopy` (field labels, the empty-state sentence).
+Related: [Tables](../webkit-tables/SKILL.md) (the Table, columns, cells) · [Navigation](../webkit-navigation/SKILL.md) (the app shell the page sits
+in) · [Loading, empty and error states](../webkit-ui-states/SKILL.md) (the empty and loading states a filtered list must render) ·
+[Interface text](../webkit-microcopy/SKILL.md) (field labels, the empty-state sentence).
 
 ## When to invoke
 
@@ -135,10 +135,10 @@ the band is one `useCollection` call:
 
 **A first-level module index opens with a `PageHeader` (`@aziontech/webkit/page-header`), and the module's
 create action lives in it.** `ConsoleLayout` passes no breadcrumb on a first-level page; the trail
-starts at the **second** level (`/webkit-navigation`), so the heading is the only place the module's
+starts at the **second** level ([Navigation](../webkit-navigation/SKILL.md)), so the heading is the only place the module's
 name appears. Title, one line of what the module is, `size="medium"`, and the create button in
 `#actions`. The page is only a body in the layout's default slot: it sets its own `layout-boundary` and
-column, and renders no `<main>` (`/webkit-layout`).
+column, and renders no `<main>` ([Page layout](../webkit-layout/SKILL.md)).
 
 **One height in the heading, colour for emphasis.** Every action in the `PageHeader` actions slot is
 `size="medium"` (32px), the create action included: buttons side by side share one height
@@ -149,7 +149,7 @@ What the page is _for_ reads first because it is the one primary button, not bec
 **Where each action goes.** The page's create action is the heading's. An action on the **listing** — a
 bulk operation over the selected rows — sits in the controls row beside the preferences. Never move the
 create button onto the controls row. The label reads `Create <object>` for a list the sidebar routes to,
-`Add <Product Module>` for a list that is a tab inside a resource (`/webkit-microcopy`).
+`Add <Product Module>` for a list that is a tab inside a resource ([Interface text](../webkit-microcopy/SKILL.md)).
 
 **The controls and the table are ONE band**, joined by the group step (`--layout-group-gap`), not the
 section step. Pushing the filter a full section step away from the rows it narrows is the single most
@@ -242,7 +242,7 @@ const properties = [
 - **Reference column (another resource: the organization, the assignee) → a property whose values
   come from `loadValues`**, the `PropertyFilter` prop that fetches the values for the typed text. The
   suggestion and the token print the name, the query keeps the ID; nobody types an ID into a filter.
-  It is the filter form of the searchable picker in `/webkit-form` (Pick the control from the kind of value).
+  It is the filter form of the searchable picker in [Forms](../webkit-form/SKILL.md) (Pick the control from the kind of value).
 - **Date column on a time-ordered list → a `DateRangePicker` next to the filter** when the period is
   the main question (logs, activity, invoices); a `type: 'date'` property when it is one filter among
   many. Never a text token holding an ISO date.
@@ -268,7 +268,7 @@ Bind `totalCount` (it comes in `propertyFilterProps`) so the count is announced 
   flush `Card` with a medium `EmptyState` and the create action instead of the table.
 - **`no-match`** — the filters hide everything: the table's `#empty` slot with an `EmptyState` that says
   so ("No applications match these filters") and a **Clear filters** button bound to `clearFilters`.
-- **`error`** — an `Alert` above the table with a retry bound to `refresh` (`/webkit-ui-states`).
+- **`error`** — an `Alert` above the table with a retry bound to `refresh` ([Loading, empty and error states](../webkit-ui-states/SKILL.md)).
 
 ---
 
@@ -280,7 +280,8 @@ Bind `totalCount` (it comes in `propertyFilterProps`) so the count is announced 
   pass `url: { prefix: 'domains.' }`. With Vue Router, pass `url: { adapter: routerAdapter(useRouter()) }`
   (`routerAdapter` from `@aziontech/webkit/use-collection`), which also works during server rendering.
 - **`preferences: { storageKey }`** saves the page size, the visible columns and their order, wrapped
-  lines, striped rows and density in `localStorage` under that key, read after mount so server and
+  lines, striped rows, density and the widths of the columns someone resized in `localStorage` under
+  that key, read after mount so server and
   client render the same first page. `defaults.columns` hides columns until someone shows them.
 - `CollectionPreferences` edits a draft and confirms it; it is the only place those settings change.
   Lock the column that names the row (`hideable: false` on the column → `locked` in the panel).
@@ -357,27 +358,27 @@ Close with `List sound` or `N gaps — fix before polish`.
 
 ## References
 
-- `/webkit-api-data` — server-owned lists, the default order, a new item on the first page, and
+- [Showing API data](../webkit-api-data/SKILL.md) — server-owned lists, the default order, a new item on the first page, and
   reference columns rendered by name.
-- `/webkit-tables` — the `Table`, the column model and the cell recipes inside the card.
-- `/webkit-navigation` — the shell the page sits in and how its nav row is activated.
-- `/webkit-ui-states` — the loading skeleton, the error alert, and the empty vs no-match states.
-- `/webkit-microcopy` — property labels, the empty-state sentences, the filter placeholder.
+- [Tables](../webkit-tables/SKILL.md) — the `Table`, the column model and the cell recipes inside the card.
+- [Navigation](../webkit-navigation/SKILL.md) — the shell the page sits in and how its nav row is activated.
+- [Loading, empty and error states](../webkit-ui-states/SKILL.md) — the loading skeleton, the error alert, and the empty vs no-match states.
+- [Interface text](../webkit-microcopy/SKILL.md) — property labels, the empty-state sentences, the filter placeholder.
 - Blocks: `view/view-table` (rows) and `view/view-card` (cards).
 - Resolvable through the MCP or the catalog: `useCollection`, `PropertyFilter`, `CollectionPreferences`,
   `Table`, `CardList`, `Pagination`, `Card`, `EmptyState`, `Button`.
 
-## Definition of Done
+## How to check it works
 
-- [ ] Page body (in the app layout's slot, no `<main>`) is boundary → column → heading → section → one band holding the controls and the card.
-- [ ] First-level index carries a `size="medium"` `PageHeader` with the create action in `#actions`.
-- [ ] Heading action `large`; every control on the controls row `medium`.
-- [ ] One `useCollection` call holds filter, sort, page, selection and preferences; `tableProps` /
-      `cardListProps`, `propertyFilterProps` and `preferencesProps` are bound with `v-bind`.
-- [ ] Server lists pass `fetch` and forward `signal` to the request.
-- [ ] Every enumerable column is a property with `options`; ordered columns carry `type`.
-- [ ] `empty` and `no-match` render different states; `no-match` offers Clear filters.
-- [ ] `url: true` (or a router adapter) on any list someone will share or reload.
-- [ ] `preferences.storageKey` unique to the list; the naming column is locked.
-- [ ] Bulk actions count the selection; "Select all N items" uses `selectAllMatching`.
-- [ ] Verified in both themes with `/webkit-ui-verify`.
+- Page body (in the app layout's slot, no `<main>`) is boundary → column → heading → section → one band holding the controls and the card.
+- First-level index carries a `size="medium"` `PageHeader` with the create action in `#actions`.
+- Heading action `large`; every control on the controls row `medium`.
+- One `useCollection` call holds filter, sort, page, selection and preferences; `tableProps` /
+  `cardListProps`, `propertyFilterProps` and `preferencesProps` are bound with `v-bind`.
+- Server lists pass `fetch` and forward `signal` to the request.
+- Every enumerable column is a property with `options`; ordered columns carry `type`.
+- `empty` and `no-match` render different states; `no-match` offers Clear filters.
+- `url: true` (or a router adapter) on any list someone will share or reload.
+- `preferences.storageKey` unique to the list; the naming column is locked.
+- Bulk actions count the selection; "Select all N items" uses `selectAllMatching`.
+- Verified in both themes with `/webkit-ui-verify`.

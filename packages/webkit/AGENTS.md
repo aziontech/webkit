@@ -1,12 +1,12 @@
 # AGENTS.md — `packages/webkit`
 
-You are working inside the `@aziontech/webkit` package. Universal monorepo guidance lives in [`../../.claude/AGENTS.md`](../../.claude/AGENTS.md). Spec-driven component workflow + hard rules + hooks live in [`../../.claude/`](../../.claude/). This file only covers what is **specific to this package** and is not already documented elsewhere.
+You are working inside the `@aziontech/webkit` package. Universal monorepo guidance lives in [`../../contributing/AGENTS.md`](../../contributing/AGENTS.md). Spec-driven component workflow + hard rules + hooks live in [`../../contributing/`](../../contributing/). This file only covers what is **specific to this package** and is not already documented elsewhere.
 
 ## 1) Layers within this package
 
 ```
 packages/webkit/src/
-├── components/          ← the design-system components (spec-driven; see .claude/)
+├── components/          ← the design-system components (spec-driven; see contributing/)
 │   ├── action/  ai/  chart/  code/  content/  data/  docs/  feedback/
 │   └── input/  layout/  marketing/  navigation/  overlay/  provider/  section/
 ├── composables/         use-controllable, use-direction, use-focus-trap, use-placement, use-collection, …
@@ -18,17 +18,17 @@ packages/webkit/src/
 ├── svg/, images/, styles/, vite/
 ```
 
-Component creation under `components/**` is **always** driven by the pipeline at [`../../.claude/`](../../.claude/) — see [`../../.claude/commands/component-create.md`](../../.claude/commands/component-create.md). The end-to-end process (creation → release, adoption → enforcement) is mapped in [`.claude/docs/PROCESS.md`](../../.claude/docs/PROCESS.md).
+Component creation under `components/**` is **always** driven by the pipeline at [`../../contributing/`](../../contributing/) — see [`../../contributing/commands/component-create.md`](../../contributing/commands/component-create.md). The end-to-end process (creation → release, adoption → enforcement) is mapped in [`contributing/docs/PROCESS.md`](../../contributing/docs/PROCESS.md).
 
 ## 2) Files agents must NOT edit without explicit human approval
 
-- [`../../.claude/docs/COMPONENT_REQUIREMENTS.md`](../../.claude/docs/COMPONENT_REQUIREMENTS.md)
+- [`../../contributing/docs/COMPONENT_REQUIREMENTS.md`](../../contributing/docs/COMPONENT_REQUIREMENTS.md)
 - `package.json` outside of the `exports` block (structural changes only with approval)
 - `.github/workflows/governance.yml` (CI config)
 
 ## 3) Layer rules outside `components/**`
 
-- **`composables/*`** — Vue composables following [`../../.claude/rules/composables.md`](../../.claude/rules/composables.md) (`readonly` state out, `toValue` args, `onScopeDispose` cleanup); document the API in TSDoc; export through the root `packages/webkit/package.json#exports` (one entry per public composable).
+- **`composables/*`** — Vue composables following [`../../contributing/rules/composables.md`](../../contributing/rules/composables.md) (`readonly` state out, `toValue` args, `onScopeDispose` cleanup); document the API in TSDoc; export through the root `packages/webkit/package.json#exports` (one entry per public composable).
 - **`cli/` · `mcp/` · `eslint-plugin/` · `stylelint-config.js`** — the adoption toolkit. It ships inside `@aziontech/webkit` (bins + subpath exports; no separate packages). Covered by `test/**/*.test.mjs` (`pnpm test:toolkit`) and documented in [`docs/toolkit/`](./docs/toolkit/). The check engines in `eslint-plugin/lib/*.js` are shared with the write-time hooks and the CI ratchet — changing them changes three enforcement surfaces at once.
 
 ## 4) Validation gate (must pass before reporting done)
@@ -58,4 +58,4 @@ Type coverage threshold: **95%**.
 
 ---
 
-For everything else — workflow, hard rules, isolated sub-agents, hook behavior, rules catalog — read [`../../.claude/AGENTS.md`](../../.claude/AGENTS.md) § 11 and the artifacts under [`../../.claude/`](../../.claude/).
+For everything else — workflow, hard rules, isolated sub-agents, hook behavior, rules catalog — read [`../../contributing/AGENTS.md`](../../contributing/AGENTS.md) § 11 and the artifacts under [`../../contributing/`](../../contributing/).

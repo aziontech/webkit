@@ -51,7 +51,7 @@ An `Item.List` with one small `Item variant="outline"` per Deployment Setting: i
 
 ### F. Footer — `PanelFooter`, `Button` (required)
 
-Retry failed appears only when the run settled with failures, and is then the primary action with Close outlined beside it; otherwise the primary button reads Hide while the run goes on and Close once it settled; both close the dialog, and Show progress reopens it.
+Retry failed appears only when the run settled with failures, as a secondary button (never primary: a failure carries no orange button) with Close outlined beside it; otherwise the primary button reads Hide while the run goes on and Close once it settled; both close the dialog, and Show progress reopens it.
 
 ### Outcome toast — through `toast`
 
@@ -384,7 +384,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
 <template>
   <div class="layout-column-form layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)">
     <header class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-      <h1 class="text-balance text-heading-lg text-(--text-default)">{{ resourceName }}</h1>
+      <h1 class="text-balance text-title-md text-(--text-default)">{{ resourceName }}</h1>
       <p class="text-body-md text-(--text-muted)">
         Deploys to {{ items.length }} {{ noun(items.length) }}, each going live on its own.
       </p>
@@ -527,7 +527,7 @@ Each variant is the same screen in another state: `get_block("create/create-depl
               <Button
                 class="w-full"
                 label="Retry failed"
-                variant="primary"
+                variant="secondary"
                 size="medium"
                 icon="az az-refresh"
                 @click="retryFailed"

@@ -55,7 +55,7 @@
         <div
           class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
         >
-          <span class="text-heading-xs text-(--text-default)">Total</span>
+          <span class="text-title-sm text-(--text-default)">Total</span>
           <span class="flex items-baseline gap-(--spacing-xs)">
             <span class="text-heading-xs text-(--text-default)">{{
               chargeCards[upgradePeriod].total.value

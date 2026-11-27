@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import test from 'node:test'
 
 import { checkSpecTemplates } from '../../scripts/check-spec-template.mjs'
-import { TEMPLATE_2_SECTIONS } from '../../../../.claude/hooks/lib/spec.mjs'
+import { TEMPLATE_2_SECTIONS } from '../../../../contributing/hooks/lib/spec.mjs'
 
 const filled = TEMPLATE_2_SECTIONS.map((h) => `## ${h}\n\n- Filled in for this component.\n`).join(
   '\n'

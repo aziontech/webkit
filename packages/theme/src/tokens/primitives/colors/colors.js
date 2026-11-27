@@ -13,6 +13,7 @@ export const primitives = {
     100: '#CCE4FF',
     200: '#99C9FF',
     300: '#66ADFF',
+    350: '#4C9FFF',
     400: '#3392FF',
     500: '#0072F5',
     600: '#005FCC',

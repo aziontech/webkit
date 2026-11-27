@@ -58,7 +58,7 @@ export function formatReport(staged, { rule, limit }) {
     if (!n) continue
     for (const x of staged.filter((s) => s.rule === id).slice(0, limit))
       lines.push(
-        `      ${x.file}:${x.line} ${x.message.replace(` (${RULE_DOC}).`, '').replace(/ \(\.claude\/rules\/[\w-]+\.md\)\.?$/, '')}`
+        `      ${x.file}:${x.line} ${x.message.replace(` (${RULE_DOC}).`, '').replace(/ \(contributing\/rules\/[\w-]+\.md\)\.?$/, '')}`
       )
   }
   return lines.join('\n')

@@ -14,7 +14,7 @@ export const roleSeverity = (value: UsersRole): TagSeverity | undefined =>
     : (({ Admin: 'info', Developer: 'neutral', Viewer: 'neutral' } as const)[value] ?? 'neutral')
 
 export const roleVariant = (value: UsersRole): TagVariant | undefined =>
-  value === 'Owner' ? 'highlight' : undefined
+  value === 'Owner' ? 'primary' : undefined
 
 export const displayName = (user: UsersUser): string => user.name || user.email
 

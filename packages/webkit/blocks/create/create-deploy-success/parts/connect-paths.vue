@@ -67,7 +67,7 @@
                   >
                     {{ index + 1 }}
                   </span>
-                  <h3 class="min-w-0 text-heading-xs text-(--text-default)">
+                  <h3 class="min-w-0 text-title-sm text-(--text-default)">
                     {{ step.title }}
                   </h3>
                 </div>

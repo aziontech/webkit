@@ -347,7 +347,7 @@
           >
             <h2
               id="marketplace-featured"
-              class="text-heading-2xs text-(--text-default)"
+              class="text-title-sm text-(--text-default)"
             >
               Featured
             </h2>
@@ -381,7 +381,7 @@
           >
             <h2
               id="marketplace-all"
-              class="text-heading-2xs text-(--text-default)"
+              class="text-title-sm text-(--text-default)"
             >
               All integrations
             </h2>

@@ -16,7 +16,7 @@
     <template #actions>
       <Button
         label="Try again"
-        variant="primary"
+        variant="secondary"
         size="medium"
         icon="az az-refresh"
         @click="reload"

@@ -3,7 +3,7 @@
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-import { checkAllSpecs, specFiles } from '../../../.claude/hooks/lib/spec-integrity.mjs'
+import { checkAllSpecs, specFiles } from '../../../contributing/hooks/lib/spec-integrity.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
 

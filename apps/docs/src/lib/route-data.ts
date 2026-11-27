@@ -113,9 +113,16 @@ export async function preloadRoute(route: RouteLocationNormalized) {
     const segments = param('path').split('/').filter(Boolean)
     if (segments.length > 1)
       await preloadExample(segments.slice(0, -1).join('/'), segments.at(-1) as string)
+  } else if (route.name === 'ai') {
+    const { AI_DOC } = await import('./ai-doc')
+    await preloadMarkdown(AI_DOC)
   } else if (route.name === 'foundation') {
     const { FOUNDATIONS } = await import('./foundations')
     const page = FOUNDATIONS.find((item) => item.slug === param('slug'))
     if (page?.markdown) await preloadMarkdown(page.markdown)
+  } else if (route.name === 'pattern') {
+    const { PATTERNS } = await import('./patterns')
+    const page = PATTERNS.find((item) => item.slug === param('slug'))
+    if (page) await preloadMarkdown(page.markdown)
   }
 }

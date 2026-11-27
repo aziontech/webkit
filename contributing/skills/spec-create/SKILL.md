@@ -1,0 +1,89 @@
+---
+name: spec-create
+description: Interactively draft `.specs/<name>.md` for a new webkit component. Owns the questions, the cross-reference with TOKENS.md and Figma, and the initial `status: draft` write. Never writes component code.
+status: active
+last_updated: 2026-11-23
+scope: webkit
+enforced_by: [no-invention, props, styling]
+---
+
+# Skill: spec-create
+
+## Purpose
+
+Produce a `.specs/<name>.md` that is complete enough for `spec-validator` to flip to `status: approved`. The user runs `/spec-create <name>` (optionally with `--figma <url>`); this skill drives the interaction.
+
+## When to invoke
+
+- The slash command `/spec-create` was used.
+- The user said "I need a new component" / "criar componente" but there is no `.specs/<name>.md` yet, and `/component-create` was about to fail because of that.
+
+## Inputs & mode
+
+- `<name>` (kebab-case) — **required in Mode B; optional in Mode A.** In Mode A (Figma), when `<name>` is omitted the name is derived from the frame's component name (normalized to kebab) and **confirmed** with the user; a passed `<name>` **overrides** the frame. See **Name resolution** in the Mode A section.
+- The **mode** is chosen by input:
+  - **Mode A — Figma-driven:** `--figma <url>` is present. The frame is the source of truth.
+  - **Mode B — Name + Category:** no `--figma`. The user is building without a design; `--category <name>` is required (ask + confirm if missing). This mode is **more blocking** — see below.
+
+Confirm the mode with the user before drafting. If it's ambiguous which one they want, ask.
+
+## Workflow — shared steps
+
+1. **Argument parsing & name resolution.** Parse the flags. A passed `<name>` must be kebab-case (reject otherwise) and always **wins** (explicit override). If `<name>` is absent: in **Mode B** reject (no frame to derive from); in **Mode A** defer — the name is resolved from the frame in **Name resolution** below, *before* any file path is computed. Only once the name is known: reject if `.specs/<name>.md` already exists with `status ∈ {approved, implemented, locked}` (the user is editing the wrong file) and ask for a different name.
+2. **Category.** Use the taxonomy in `.specs/_template.md` frontmatter. State the inferred/received category and **ask the user to confirm** (mandatory in Mode B — never assume).
+3. **Structure decision.** Call `structure-decide` with the regions/answers. Default to `monolithic` when in doubt.
+4. **Write the spec.** Copy `.specs/_template.md` to `.specs/<name>.md`, fill every section, frontmatter `status: draft`, `stability: preview` (a new component ships as preview until the owner marks it GA), `template: 2`, `created`/`last_updated` = today, no `checksum`. Template 2 adds four required sections — `## Internationalization` (every built-in string as a message key with its English source and override prop; `Intl` for dates, numbers, plurals), `## Right-to-left` (logical utilities, mirrored icons, arrow keys, `<bdi>` around user data), `## Responsive` (container queries, narrow-container behaviour, touch targets, 320 px reflow) and `## Performance` (gzip budget, runtime budget, lazy parts). No template placeholder line may survive (`check:spec-template` and `enforce-spec-exists` reject it). Every spec created on or after 2026-11-12 must be on template 2; never add `template: 2` to an older spec without filling the four sections.
+
+   What each section must hold, so the later gates pass:
+   - `## When to use`, `## When NOT to use` (naming the sibling to use instead) and `## Related` are filled: the catalog extracts them (`useWhen`, `avoidWhen`, `related`), the MCP answers `suggest_component` from them, and the `/component-new` usage check fails when a fresh agent cannot find the component from its intent.
+   - Props, events, slots and models follow [`prop-vocabulary.md`](../../rules/prop-vocabulary.md), [`emits.md`](../../rules/emits.md) and [`event-payloads.md`](../../rules/event-payloads.md) (activation events are `(event, item?)`, event first). A list-showing component takes the list state contract and an `options` / `items` prop, an action control takes `disabledReason`, and a root stays within 20 props and 5 models ([`CODE_QUALITY.md`](../../docs/CODE_QUALITY.md) § 3.4, 3.6, 3.7, 3.9).
+   - `## Internationalization` keys use the camelCase component name as namespace (`feedbackReasonDialog.title`; shared words in `common`, [`naming.md`](../../rules/naming.md) § 13). The build adds every key to all three catalogs, `packages/webkit/src/locales/en.ts`, `pt-BR.ts` and `es.ts`, which `packages/webkit/test/standards/i18n-catalogs.test.mjs` holds to the same keys and placeholders.
+   - `## Performance` names the gzip budget that becomes the component's `.size-limit.json` entry ([`bundle-budget.md`](../../rules/bundle-budget.md)).
+   - `## Examples` starts with Default (the file `default.vue`), then one composite example per axis (`variants.vue`, `sizes.vue`) and the state examples; names follow [`naming.md`](../../rules/naming.md) § 4. `examples.json` later ships at least this many (`check-complete`).
+   - Sample text in `## Usage` and the examples follows [`example-data.md`](../../rules/example-data.md) (`example.com`, Acme, no national formats).
+5. **Echo.** Print the path. Tell the user to review it, then run `/component-create <name>` (which calls `spec-validator`) or set `status: approved` and re-run.
+
+## Mode A — Figma-driven (`--figma <url>`)
+
+- **Name resolution.** If the user passed `<name>`, use it verbatim (explicit override). Otherwise take the frame's component name from `figma-extract`'s `component_name` and **normalize it to kebab** per [`naming.md`](../../rules/naming.md) (Pascal/camel → kebab; drop variant/state/version qualifiers like `Variant=Primary` or `v2`; strip emojis, slashes, spaces). **Propose the normalized name and ask the user to confirm** — never bake the raw Figma name in (see [`migration.md`](../../rules/migration.md)). If the frame yields no usable name, ask the user for one (as in Mode B). Resolve the name **before** computing the `.specs/<name>.md` path and its collision check.
+- **Figma discovery.** Delegate to `figma-extract` via the `figma-extractor` sub-agent. Use the returned JSON to pre-populate the Tokens section.
+- **Token mapping.** Run `token-map` against the Figma output and TOKENS.md. Populate the Tokens table; flag Theme gaps.
+- **Confirm, don't assume.** Show the extracted props/regions/states/tokens and ask the user to confirm/correct.
+- **Ask only where the frame is silent:** behavior, keyboard map, focus/scroll-lock, event payloads, the example list.
+- A genuinely un-expressible section may stay `TBD` + `status: draft` (documented as a Figma gap).
+
+## Mode B — Name + Category (no Figma, blocking)
+
+There is no ground truth, so **ask for everything and infer nothing.**
+
+- **Always ask, one at a time,** in this order — never skip, never pre-fill: Purpose (1–3 sentences) → When to use / When NOT to use / Related → Props → Events → Slots → Sub-components (only if `structure: composition`) → States → Motion & Animations → Accessibility (focus trap? keyboard map? aria?) → Internationalization → Right-to-left → Responsive → Performance → Examples. Under `/component-new` there is no human to ask: the request issue and the step-2 research notes are the answers, and a question they cannot answer is `BLOCKED:`.
+  - **Props:** name, type literal/primitive, default, required, JSDoc one-liner. Repeat until the user says done. Default rule: an optional renderable string defaults to `''`, not `undefined`; reserve unquoted `undefined` for props where absence ≠ empty (`open`, `modelValue`, `src`); never record the quoted string `'undefined'`. See the Props rules comment in `.specs/_template.md`.
+- **Tokens are mapped, never invented.** For every visual choice, map to a TOKENS.md token and **confirm it with the user**. A value with no token is a Theme gap the user must acknowledge — do not substitute a raw value.
+- **No silent `TBD`.** If the user leaves a mandatory section unanswered, emit `BLOCKED: <section> unanswered` and write nothing. The manual path never produces a half-spec.
+
+## Outputs
+
+- `.specs/<name>.md` with `status: draft`.
+- No component code, no exports entry, no example files.
+
+## Rules
+
+- Do **not** invent props/events/slots/tokens that the user (Mode B) or the frame (Mode A) did not state.
+- Do **not** mark `status: approved` from this skill — that is `spec-validator`'s job and requires a real checksum.
+- Never edit a spec with `status ∈ {approved, implemented, locked}`.
+- **`TBD` is Mode-A only.** In Mode A, a section the frame cannot express may stay `TBD` + `status: draft`. In **Mode B there is no `TBD`** — an unanswered mandatory section means `BLOCKED:` and no write.
+
+## Fallbacks
+
+- **Mode A, Figma MCP failure:** do not silently infer. Tell the user the frame could not be read and offer to switch to **Mode B** (answer each section by hand) — do not "infer tokens from intent".
+- **Mode B, user refuses/does not know a mandatory section:** emit `BLOCKED: <section> unanswered` and write nothing. The manual path never produces a half-spec.
+
+## Definition of Done
+
+- [ ] `.specs/<name>.md` exists.
+- [ ] Frontmatter passes `_schema.json`.
+- [ ] Every body section is present (some may be `TBD`, never the four template-2 sections).
+- [ ] Frontmatter has `template: 2`; `## Internationalization`, `## Right-to-left`, `## Responsive` and `## Performance` are filled.
+- [ ] The Constraints — DO NOT block is copied verbatim from the template.
+- [ ] `## When to use` and `## When NOT to use` are filled; `## Examples` starts with Default.
+- [ ] The user has been told the next step (`/component-create <name>`, or step 4 of `/component-new`).

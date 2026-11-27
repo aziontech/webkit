@@ -64,7 +64,7 @@
     "build:types": "node scripts/build-types.mjs",
     "check:migrations": "node scripts/check-migrations.mjs",
     "check:api-diff": "node scripts/check-api-diff.mjs",
-    "test:hooks": "node ../../.claude/hooks/test/run.mjs",
+    "test:hooks": "node ../../contributing/hooks/test/run.mjs",
     "check:cited-names": "node scripts/check-cited-names.mjs",
     "test:consume": "node scripts/test-consume.mjs",
     "check:consumer-types": "node scripts/check-consumer-types.mjs",
@@ -284,6 +284,10 @@
     "./prompt-input-context-picker": {
       "types": "./types/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue.d.ts",
       "default": "./src/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue"
+    },
+    "./prompt-input-access-picker": {
+      "types": "./types/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue.d.ts",
+      "default": "./src/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue"
     },
     "./prompt-input-tools": {
       "types": "./types/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue.d.ts",
@@ -2841,6 +2845,9 @@
       ],
       "prompt-input-context-picker": [
         "./types/components/ai/prompt-input/prompt-input-context-picker/prompt-input-context-picker.vue.d.ts"
+      ],
+      "prompt-input-access-picker": [
+        "./types/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue.d.ts"
       ],
       "prompt-input-tools": [
         "./types/components/ai/prompt-input/prompt-input-tools/prompt-input-tools.vue.d.ts"

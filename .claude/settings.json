@@ -39,19 +39,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-tokens.mjs"
+            "command": "node contributing/hooks/validate-tokens.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-references.mjs"
+            "command": "node contributing/hooks/validate-references.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-authoring.mjs"
+            "command": "node contributing/hooks/validate-authoring.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-naming.mjs"
+            "command": "node contributing/hooks/validate-naming.mjs"
           }
         ]
       },
@@ -60,11 +60,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/enforce-component-create.mjs"
+            "command": "node contributing/hooks/enforce-component-create.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/enforce-spec-exists.mjs"
+            "command": "node contributing/hooks/enforce-spec-exists.mjs"
           }
         ]
       }
@@ -75,15 +75,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-spec-compliance.mjs"
+            "command": "node contributing/hooks/validate-spec-compliance.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/enforce-test-exists.mjs"
+            "command": "node contributing/hooks/enforce-test-exists.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-authoring-docs.mjs"
+            "command": "node contributing/hooks/validate-authoring-docs.mjs"
           }
         ]
       }

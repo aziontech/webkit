@@ -132,7 +132,6 @@
           :label="tag"
           severity="neutral"
           size="small"
-          rounded
         />
       </div>
     </div>

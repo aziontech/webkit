@@ -3,7 +3,7 @@ name: subheader
 category: layout
 structure: monolithic
 status: implemented
-checksum: ace7bf07628d5ddbd6ec44d753edb23c8c81433ef52afded515c1815550fb26d
+checksum: 3489bd4583d18f527d2f4bf744f3082069944aa316c612819faa5b47addb8441
 spec_version: 7
 template: 2
 created: 2026-11-10
@@ -73,7 +73,7 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 | ------------- | --------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------- |
 | `title`       | `string`              | `—`        | true     | The band title, rendered as an h2.                                                                              |
 | `description` | `string`              | `''`       | false    | One sentence under the title.                                                                                   |
-| `size`        | `'small' \| 'medium'` | `'medium'` | false    | Heading scale of the title (subset: no `large`).                                                                |
+| `size`        | `'small' \| 'medium'` | `'medium'` | false    | Kept for compatibility: in the console type set (CT-1) both sizes render the title at 14px medium.              |
 | `anchor`      | `string`              | `''`       | false    | Id of the h2 that a hash link targets; when set, a copy-link button appears beside the title on hover or focus. |
 
 ## Events
@@ -97,21 +97,20 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 
 ## Motion & Animations
 
-| Trigger                      | Animation / Transition                     | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
-| ---------------------------- | ------------------------------------------ | ------------------------------------------------- | ------------------------------- |
-| heading hover / focus-within | `transition-opacity duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| Trigger                      | Animation / Transition                     | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
+| ---------------------------- | ------------------------------------------ | ------------------------------------------------------ | ------------------------------- |
+| heading hover / focus-within | `transition-opacity duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region         | Token (DESIGN.md)                                               |
-| -------------- | --------------------------------------------------------------- |
-| title (medium) | `.text-heading-xs` · `var(--text-default)`                      |
-| title (small)  | `.text-heading-2xs` · `var(--text-default)`                     |
-| description    | `.text-body-sm` · `var(--text-muted)`                           |
-| inline padding | none: the title starts on the same edge as the content it heads |
-| row gap        | `var(--spacing-md)`                                             |
-| actions gap    | `var(--spacing-xs)`                                             |
-| scroll margin  | `var(--spacing-xl)`                                             |
+| Region         | Token (TOKENS.md)                                                                         |
+| -------------- | ----------------------------------------------------------------------------------------- |
+| title          | `.text-title-sm` (14px medium, both sizes; console type set CT-1) · `var(--text-default)` |
+| description    | `.text-body-sm` · `var(--text-muted)`                                                     |
+| inline padding | none: the title starts on the same edge as the content it heads                           |
+| row gap        | `var(--spacing-md)`                                                                       |
+| actions gap    | `var(--spacing-xs)`                                                                       |
+| scroll margin  | `var(--spacing-xl)`                                                                       |
 
 ## Theme gaps
 
@@ -171,13 +170,13 @@ _none_
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
 - Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

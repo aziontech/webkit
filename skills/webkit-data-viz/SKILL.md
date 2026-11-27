@@ -2,7 +2,7 @@
 name: webkit-data-viz
 description: The token adapter that maps charts onto @aziontech/theme — every series color derived from the --color-* families (never hex), computed tokens re-read on a data-theme change so a canvas re-themes (SVG re-themes for free), and the chart's loading/empty/error surface rendered with webkit components. For chart-form and palette theory, use the generic dataviz skill; this skill covers only mapping that onto theme tokens. Use when building or reviewing a chart, dashboard, or KPI tile in a webkit app.
 status: active
-last_updated: 2026-11-21
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-tokens, webkit-component-states, ui-verify]
 ---
@@ -13,10 +13,10 @@ enforced_by: [webkit-tokens, webkit-component-states, ui-verify]
 
 A chart muddy in one theme, or spinning forever on an empty dataset, is broken the same way a
 mis-tokened button is — and Azion Console is an observability product, so charts are a primary
-surface, not decoration. This skill is the **token adapter**: it takes the charting decisions and
+surface, not decoration. This pattern is the **token adapter**: it takes the charting decisions and
 realizes them in `@aziontech/theme`. **For chart-form (which form answers which question) and palette
 theory (categorical / sequential / diverging, contrast math, color-blind pairing), see the generic
-`dataviz` skill; this skill covers only mapping that onto `@aziontech/theme` tokens** — reaching for
+`dataviz` skill; this pattern covers only mapping that onto `@aziontech/theme` tokens** — reaching for
 the shipped chart components first (`Chart`, `DonutChart`, `StatTile`, `ChartCard`), taking every
 color from the validated `--chart-*` role (never hex, never a hand-picked `--color-*` step),
 re-reading computed tokens on a `data-theme` change when a canvas library is unavoidable, and
@@ -24,7 +24,7 @@ rendering the chart's loading / empty / error surface with webkit components.
 
 ## How to use
 
-- `/webkit-data-viz` — apply the token mapping to any chart, dashboard, or KPI tile you build in this
+- [Charts and figures](../webkit-data-viz/SKILL.md) — apply the token mapping to any chart, dashboard, or KPI tile you build in this
   conversation. Pick the form and the palette **kind** with the generic `dataviz` skill first, then map
   it onto tokens here.
 - `/webkit-data-viz <file>` — review the file's charts and report, per gap: the quoted line, the token
@@ -156,7 +156,7 @@ A chart fetches, so it owns the full state surface, rendered **in the chart's ow
 blank rectangle): **loading** → `Skeleton` sized to the chart area, reserving the layout so it doesn't
 reflow; **empty** → `EmptyState` ("No requests in this window", + a range/filter action); **error** →
 a `Alert severity="danger"` with what failed and a retry. The trigger comes from the consuming app's
-data layer; webkit ships the rendering of each state. Full matrix in `/webkit-ui-states`.
+data layer; webkit ships the rendering of each state. Full matrix in [Loading, empty and error states](../webkit-ui-states/SKILL.md).
 
 ## Numbers — tabular figures, deltas read good or bad
 
@@ -292,12 +292,12 @@ For `/webkit-data-viz <file>`, list gaps grouped by chart. Each:
 
 End with: `charts token-mapped + complete` or `N gaps — fix before ship`.
 
-## Definition of Done
+## How to check it works
 
-- [ ] Every color is a `--chart-*` token; the palette kind (chosen with the generic `dataviz` skill)
-      is realized via the role; status tokens used for status only.
-- [ ] SVG marks pass `var()` directly; canvas marks re-read computed tokens on a `data-theme` change.
-- [ ] Loading (`Skeleton`), empty (`EmptyState`), and error (`Alert`) render in the chart's box.
-- [ ] `tabular-nums` on every stacked/updating figure.
-- [ ] Verified in light and dark (`/webkit-ui-verify` screenshots both).
-- [ ] Form and palette chosen with the generic `dataviz` skill before token mapping.
+- Every color is a `--chart-*` token; the palette kind (chosen with the generic `dataviz` skill)
+  is realized via the role; status tokens used for status only.
+- SVG marks pass `var()` directly; canvas marks re-read computed tokens on a `data-theme` change.
+- Loading (`Skeleton`), empty (`EmptyState`), and error (`Alert`) render in the chart's box.
+- `tabular-nums` on every stacked/updating figure.
+- Verified in light and dark (`/webkit-ui-verify` screenshots both).
+- Form and palette chosen with the generic `dataviz` skill before token mapping.

@@ -6,7 +6,7 @@ import Ends from '../../../../examples/doc-previous-next/ends.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocPreviousNext from './doc-previous-next.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
+// contributing/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
 // edge-anchoring and the chevron's hover travel emit nothing here — a computed-style or
 // position assertion would read the same value whether the layout is right or absent.
 // Those belong to the visual gate. What is real without CSS: which sides render, the

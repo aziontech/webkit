@@ -11,7 +11,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const findings = checkDocsMarkdown(REPO)
   if (findings.length) {
     process.stderr.write(
-      `✖ ${findings.length} docs Markdown finding(s) (.claude/rules/authoring-docs.md § Rendered docs):\n` +
+      `✖ ${findings.length} docs Markdown finding(s) (contributing/rules/authoring-docs.md § Rendered docs):\n` +
         findings
           .map(
             (finding) => `  ${finding.path}:${finding.line} [${finding.rule}] ${finding.message}`

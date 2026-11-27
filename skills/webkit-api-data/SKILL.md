@@ -2,7 +2,7 @@
 name: webkit-api-data
 description: Showing API data correctly on @aziontech/webkit screens — references rendered by name (never a bare ID) with one resolution order and a visible unresolved state, remote pickers on Select / MultiSelect (server search, loading, selected values that are not in the loaded page), data freshness (revalidate on open, on focus and after a save; no session-long cache), records typed from the API contract with one formatter per shape, codes turned into text, and server-owned lists (useCollection server mode, a default order that shows what the person is looking for). Use when a screen lists, edits or summarizes resources that come from an API, especially resources that point at other resources.
 status: active
-last_updated: 2026-11-23
+last_updated: 2026-11-25
 scope: general
 enforced_by: [webkit-api-data, webkit-component-states, ui-verify, review]
 ---
@@ -18,9 +18,9 @@ hides on page 3, a state code reaches the reader as `pending_approval`. Each of 
 small bug and each comes back on the next screen, because the screen rebuilt something the API (or one
 shared module) should own.
 
-The contract is rule [`webkit-api-data`](../../rules/webkit-api-data.md). This page is how to meet it
+The contract is rule [[Showing API data](../webkit-api-data/SKILL.md)](../../rules/webkit-api-data.md). This page is how to meet it
 with WebKit pieces. How the request reaches the API (proxy, token, status codes) is
-[`webkit-azion-api`](../webkit-azion-api/SKILL.md).
+[[Calling the Azion API](../webkit-azion-api/SKILL.md)](../webkit-azion-api/SKILL.md).
 
 ## When to use
 
@@ -31,7 +31,7 @@ with WebKit pieces. How the request reaches the API (proxy, token, status codes)
 
 ## When not to use
 
-- A field holds free text or a value the person types (a name, a description): `/webkit-form` covers it.
+- A field holds free text or a value the person types (a name, a description): [Forms](../webkit-form/SKILL.md) covers it.
 - The screen shows only static content with no API behind it.
 
 ## 1. One data layer between the API and the screen

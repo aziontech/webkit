@@ -184,7 +184,7 @@ jobs:
                   >
                     {{ index + 1 }}
                   </span>
-                  <h3 class="min-w-0 text-heading-xs text-(--text-default)">{{ step.title }}</h3>
+                  <h3 class="min-w-0 text-title-sm text-(--text-default)">{{ step.title }}</h3>
                 </div>
                 <p class="text-pretty text-body-sm text-(--text-muted)">{{ step.description }}</p>
                 <div class="mt-(--spacing-2xs) min-w-0">

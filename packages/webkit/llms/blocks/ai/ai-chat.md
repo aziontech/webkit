@@ -1698,6 +1698,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
   import IconButton from '@aziontech/webkit/icon-button'
   import { computed, ref } from 'vue'
 
+  import { useWideScreen } from '../composables/use-wide-screen'
   import { sampleThreads } from '../sample'
   import AiChatRemoveDialog from './ai-chat-remove-dialog.vue'
 
@@ -1716,6 +1717,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
     action: [event: MouseEvent | KeyboardEvent, action: AiChatHeaderAction]
   }>()
 
+  const wide = useWideScreen()
   const title = computed(
     () =>
       sampleThreads.find((thread) => thread.id === props.conversationKey)?.title ?? 'AI assistant'
@@ -1760,7 +1762,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
           icon="az az-history"
           :aria-label="historyOpen ? 'Hide conversation history' : 'Show conversation history'"
           :aria-expanded="historyOpen"
-          aria-controls="ai-chat-history"
+          :aria-controls="historyOpen && wide ? 'ai-chat-history' : undefined"
           variant="ghost"
           size="medium"
           @click="emit('toggle-history', $event)"
@@ -2507,7 +2509,7 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
       class="mx-auto flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-md) max-md:flex-1"
     >
       <div class="flex items-center justify-center max-md:flex-1 md:pb-(--spacing-sm)">
-        <h2 class="text-center text-heading-lg text-(--text-default)">What can I help with?</h2>
+        <h2 class="text-center text-title-md text-(--text-default)">What can I help with?</h2>
       </div>
       <div class="flex md:order-last md:justify-center">
         <SuggestionGroup

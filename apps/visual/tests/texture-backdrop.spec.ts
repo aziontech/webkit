@@ -28,7 +28,7 @@ async function expectNoGraphicOnTexture(page: Page) {
   const found = await page.evaluate(findGraphicsOnTexture)
   expect(
     found.map((hit) => `${hit.graphic} on ${hit.texture} (${hit.area}px²)`),
-    'a chart, diagram, map or stat lies on a texture: a texture is a backdrop for text only (.claude/rules/styling.md)'
+    'a chart, diagram, map or stat lies on a texture: a texture is a backdrop for text only (contributing/rules/styling.md)'
   ).toEqual([])
 }
 

@@ -269,7 +269,7 @@
                     <Tag
                       v-if="isLive(row, step)"
                       :label="t.live"
-                      variant="highlight"
+                      variant="primary"
                       size="small"
                     />
                   </span>

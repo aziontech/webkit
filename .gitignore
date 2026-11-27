@@ -75,7 +75,7 @@ yarn.lock
 
 CLAUDE.md
 # Claude Code — personal state and runtime caches (ignored)
-# Versioned in .claude/: settings.json, agents/, hooks/, commands/, skills/, rules/, docs/
+# .claude/ holds only settings.json and links into contributing/ (the Claude Code adapter)
 .claude/settings.local.json
 .claude/launch.json
 .claude/sessions/

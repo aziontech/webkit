@@ -8,7 +8,7 @@ import Slots from '../../../../examples/doc-page-header/slots.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocPageHeader, { type DocPageHeaderAction } from './doc-page-header.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
+// contributing/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
 // closing rule, the column layout and the meta line's left compensation emit nothing here —
 // the visual gate owns those. What is real without CSS: which regions render, the heading
 // level, the date formatting (pure JS), the time element's machine-readable value, which

@@ -7,6 +7,7 @@ import { createHighlighter, type Highlighter } from 'shiki'
 import { previewPair } from '../../../packages/theme/src/tokens/contrast-pairs.js'
 import { tokenPurpose } from '../../../packages/theme/src/tokens/token-purpose.js'
 import { FOUNDATIONS } from '../src/lib/foundations.ts'
+import { PATTERNS } from '../src/lib/patterns.ts'
 import { spacedTitle } from '../src/lib/words.ts'
 import {
   type Catalog,
@@ -50,12 +51,13 @@ const REPOSITORY_LINK =
   /^https:\/\/github\.com\/aziontech\/webkit\/(blob|tree)\/main\/([^#?]+)(#.*)?$/
 const ABSOLUTE_HREF = /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i
 
-const PAGE_OF_FILE = new Map(
-  FOUNDATIONS.filter((page) => page.markdown).map((page) => [
-    page.markdown,
-    `/foundations/${page.slug}`
-  ])
-)
+const PAGE_OF_FILE = new Map([
+  ...FOUNDATIONS.filter((page) => page.markdown).map(
+    (page) => [page.markdown, `/foundations/${page.slug}`] as [string, string]
+  ),
+  ...PATTERNS.map((page) => [page.markdown, `/patterns/${page.slug}`] as [string, string]),
+  ['packages/webkit/docs/AI.md', '/ai']
+])
 
 function repositoryHref(href: string): string {
   const link = REPOSITORY_LINK.exec(href)
@@ -398,7 +400,8 @@ function headingsOf(parts: DocPart[]): DocHeading[] {
   }))
 }
 
-const TOOLING_SECTION = /^(enforcement|how it is checked)$/i
+const TOOLING_SECTION =
+  /^(enforcement|enforcement \(honest\)|how it is checked|how to use|when to invoke|review output)$/i
 
 export function dropToolingSections(source: string): string {
   const kept: string[] = []
@@ -640,6 +643,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     blocks,
     llmsTxt: existsSync(join(LLMS, 'llms.txt')),
     foundationLlms: foundationLlms(llms, foundationSlugs),
+    patternLlms: Object.fromEntries(PATTERNS.map((page) => [page.slug, `/${page.markdown}`])),
     version: (catalog.webkitVersion as string) ?? ''
   }
 }

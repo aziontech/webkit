@@ -5,40 +5,24 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Tag
-      label="Neutral"
+      label="Inactive"
       severity="neutral"
     />
     <Tag
-      label="Primary"
-      variant="primary"
-    />
-    <Tag
-      label="Accent"
-      variant="accent"
-    />
-    <Tag
-      label="Success"
-      severity="success"
-    />
-    <Tag
-      label="Warning"
-      severity="warning"
-    />
-    <Tag
-      label="Danger"
-      severity="danger"
-    />
-    <Tag
-      label="Info"
+      label="Admin"
       severity="info"
     />
     <Tag
-      label="Contrast"
-      variant="contrast"
+      label="Active"
+      severity="success"
     />
     <Tag
-      label="Highlight"
-      variant="highlight"
+      label="Pending"
+      severity="warning"
+    />
+    <Tag
+      label="Blocked"
+      severity="danger"
     />
   </div>
 </template>

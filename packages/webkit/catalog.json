@@ -246,6 +246,7 @@
    "--color-blue-100",
    "--color-blue-200",
    "--color-blue-300",
+   "--color-blue-350",
    "--color-blue-400",
    "--color-blue-50",
    "--color-blue-500",
@@ -387,6 +388,7 @@
    "--danger-border",
    "--danger-foreground",
    "--danger-mark",
+   "--danger-mask",
    "--direction-sign",
    "--drop-shadow-2xl",
    "--drop-shadow-lg",
@@ -575,6 +577,7 @@
    "--success-border",
    "--success-foreground",
    "--success-mark",
+   "--success-mask",
    "--text-2xl",
    "--text-2xl--line-height",
    "--text-3xl",
@@ -795,6 +798,11 @@
    "--text-title-md-letter-spacing",
    "--text-title-md-line-height",
    "--text-title-md-text-wrap-style",
+   "--text-title-nested-font-size",
+   "--text-title-nested-font-weight",
+   "--text-title-nested-letter-spacing",
+   "--text-title-nested-line-height",
+   "--text-title-nested-text-wrap-style",
    "--text-title-sm-font-size",
    "--text-title-sm-font-weight",
    "--text-title-sm-letter-spacing",
@@ -822,6 +830,7 @@
    "--warning-border",
    "--warning-foreground",
    "--warning-mark",
+   "--warning-mask",
    "--z-control",
    "--z-control-overlay"
   ],
@@ -866,6 +875,7 @@
    "text-tag-sm",
    "text-title-lg",
    "text-title-md",
+   "text-title-nested",
    "text-title-sm"
   ],
   "groups": {
@@ -1098,6 +1108,7 @@
     "--color-blue-100",
     "--color-blue-200",
     "--color-blue-300",
+    "--color-blue-350",
     "--color-blue-400",
     "--color-blue-50",
     "--color-blue-500",
@@ -1242,7 +1253,8 @@
     "--danger",
     "--danger-border",
     "--danger-foreground",
-    "--danger-mark"
+    "--danger-mark",
+    "--danger-mask"
    ],
    "direction": [
     "--direction-sign"
@@ -1472,7 +1484,8 @@
     "--success",
     "--success-border",
     "--success-foreground",
-    "--success-mark"
+    "--success-mark",
+    "--success-mask"
    ],
    "text": [
     "--text-2xl",
@@ -1695,6 +1708,11 @@
     "--text-title-md-letter-spacing",
     "--text-title-md-line-height",
     "--text-title-md-text-wrap-style",
+    "--text-title-nested-font-size",
+    "--text-title-nested-font-weight",
+    "--text-title-nested-letter-spacing",
+    "--text-title-nested-line-height",
+    "--text-title-nested-text-wrap-style",
     "--text-title-sm-font-size",
     "--text-title-sm-font-weight",
     "--text-title-sm-letter-spacing",
@@ -1727,7 +1745,8 @@
     "--warning",
     "--warning-border",
     "--warning-foreground",
-    "--warning-mark"
+    "--warning-mark",
+    "--warning-mask"
    ],
    "z": [
     "--z-control",
@@ -2252,6 +2271,13 @@
     "dark": "#22C55E66",
     "purpose": "The edge of a success box."
    },
+   "--success-mask": {
+    "group": "success",
+    "type": "color",
+    "light": "#22C55E1A",
+    "dark": "#22C55E1A",
+    "purpose": "The soft tint behind a success alert; text on it stays --text-default, the icon --success-mark."
+   },
    "--success-foreground": {
     "group": "success",
     "type": "color",
@@ -2280,6 +2306,13 @@
     "dark": "#F7BD0880",
     "purpose": "The edge of a warning box."
    },
+   "--warning-mask": {
+    "group": "warning",
+    "type": "color",
+    "light": "#F7BD0833",
+    "dark": "#F7BD081A",
+    "purpose": "The soft tint behind a warning alert; text on it stays --text-default, the icon --warning-mark."
+   },
    "--warning-foreground": {
     "group": "warning",
     "type": "color",
@@ -2307,6 +2340,13 @@
     "light": "#E74B4B",
     "dark": "#E74B4B",
     "purpose": "The edge of a danger box and the outline of an invalid field."
+   },
+   "--danger-mask": {
+    "group": "danger",
+    "type": "color",
+    "light": "#E51A1A1A",
+    "dark": "#E51A1A33",
+    "purpose": "The soft tint behind a error alert; text on it stays --text-default, the icon --danger-mark."
    },
    "--danger-foreground": {
     "group": "danger",
@@ -2347,7 +2387,7 @@
     "group": "info",
     "type": "color",
     "light": "#0072F5",
-    "dark": "#3392FF",
+    "dark": "#4C9FFF",
     "purpose": "An info mark standing on the page: the status dot, the outcome disc."
    },
    "--illustration-ground": {
@@ -3384,6 +3424,18 @@
      "letter-spacing": "0"
     },
     "purpose": "The title of a popover, card, alert or toast, medium weight."
+   },
+   "text-title-nested": {
+    "group": "typography",
+    "type": "typography",
+    "value": {
+     "text-wrap-style": "balance",
+     "font-size": "0.875rem",
+     "line-height": "1.375",
+     "font-weight": "600",
+     "letter-spacing": "0"
+    },
+    "purpose": "The page title of a deeper console page (detail, settings, create step): 14px, semibold."
    },
    "text-label-lg": {
     "group": "typography",
@@ -5689,6 +5741,7 @@
     "@aziontech/webkit/prompt-input-dictate-button",
     "@aziontech/webkit/prompt-input-model-picker",
     "@aziontech/webkit/prompt-input-context-picker",
+    "@aziontech/webkit/prompt-input-access-picker",
     "@aziontech/webkit/prompt-input-tools"
    ],
    "models": [
@@ -5873,7 +5926,6 @@
      "notes": "Constraint text under everything; referenced by `aria-describedby`."
     }
    ],
-   "stability": "preview",
    "surface": "app",
    "examplesFile": "catalog/examples/prompt-input.json",
    "docsFile": "catalog/components/prompt-input.json"
@@ -6066,7 +6118,6 @@
      "notes": "Constraint text under everything; referenced by `aria-describedby`."
     }
    ],
-   "stability": "preview",
    "surface": "app",
    "docsFile": "catalog/components/prompt-input-root.json"
   },
@@ -6079,7 +6130,6 @@
    "models": [
     "modelValue"
    ],
-   "stability": "preview",
    "surface": "app"
   },
   "prompt-input-dictate-button": {
@@ -6091,7 +6141,6 @@
    "models": [
     "listening"
    ],
-   "stability": "preview",
    "surface": "app"
   },
   "prompt-input-model-picker": {
@@ -6103,9 +6152,9 @@
    "attached": false,
    "models": [
     "modelValue",
-    "mode"
+    "mode",
+    "favoriteKeys"
    ],
-   "stability": "preview",
    "surface": "app"
   },
   "prompt-input-context-picker": {
@@ -6118,7 +6167,18 @@
    "models": [
     "modelValue"
    ],
-   "stability": "preview",
+   "surface": "app"
+  },
+  "prompt-input-access-picker": {
+   "import": "@aziontech/webkit/prompt-input-access-picker",
+   "target": "./src/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue",
+   "kind": "subcomponent",
+   "parent": "prompt-input",
+   "treeShakeableImport": "@aziontech/webkit/prompt-input-access-picker",
+   "attached": false,
+   "models": [
+    "modelValue"
+   ],
    "surface": "app"
   },
   "prompt-input-tools": {
@@ -6131,7 +6191,6 @@
    "models": [
     "modelValue"
    ],
-   "stability": "preview",
    "surface": "app"
   },
   "prompt-queue": {
@@ -7019,7 +7078,7 @@
    "props": [
     {
      "name": "options",
-     "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean }`)",
+     "type": "`ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean; icon?: string }`)",
      "default": "[]",
      "required": "false",
      "doc": "Segmented choices shown as a mutually exclusive group."
@@ -7065,6 +7124,13 @@
      "default": "''",
      "required": "false",
      "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out."
+    },
+    {
+     "name": "showLabels",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows each option's label beside its icon. Set false for icon-only segments: the label stays as the option's accessible name and its hover title."
     },
     {
      "name": "modelValue",
@@ -8973,10 +9039,10 @@
     },
     {
      "name": "variant",
-     "type": "'primary' | 'accent' | 'contrast' | 'highlight'",
+     "type": "'primary' | 'accent' | 'contrast'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`)."
+     "doc": "Emphasis look of the tag surface and label, used when `severity` is not set: `primary` (the logo orange, one value per list), `accent` and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`)."
     },
     {
      "name": "severity",
@@ -8991,13 +9057,6 @@
      "default": "'medium'",
      "required": "false",
      "doc": "Size token; `medium` is 24px tall, `small` is 20px."
-    },
-    {
-     "name": "rounded",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Pill shape when true."
     },
     {
      "name": "icon",
@@ -12009,7 +12068,7 @@
      "type": "TableColumn[]",
      "default": "[]",
      "required": "false",
-     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, type?, resizable?, hideable?, narrow?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; Until the first measurement (and while loading placeholders draw) the column holds its floor, so a loading table on a phone shows the same columns it shows once loaded. `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `type: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`. **`narrow: false`** drops the column (its header, its cells and its loading placeholders) while the table's own box is narrower than `var(--container-sm)`, for a column whose value the principal cell already repeats there in a phone summary line; the column comes back in a wider box."
+     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, type?, resizable?, hideable?, narrow?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; Until the first measurement (and while loading placeholders draw) the column holds its floor, so a loading table on a phone shows the same columns it shows once loaded. `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `type: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **Every column is resizable by default**: its header carries a live mouse/touch drag-to-resize handle (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing); **`resizable: false`** opts a column out. On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns never resize. When a drag that moved ends, the table emits `column-resize` with that column's id and new width; a click on the handle that does not move emits nothing. To keep the width, the app saves it and passes it back as the column's `width`; only the dragged columns get one, so the others stay flexible and the table still fills a wider screen. `useCollection` does this by default (its stored preferences). **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`. **`narrow: false`** drops the column (its header, its cells and its loading placeholders) while the table's own box is narrower than `var(--container-sm)`, for a column whose value the principal cell already repeats there in a phone summary line; the column comes back in a wider box."
     },
     {
      "name": "rowKey",
@@ -12201,6 +12260,11 @@
      "name": "reorder",
      "payload": "(event: KeyboardEvent | PointerEvent, payload: { from: number; to: number; row: TRow })",
      "notes": "`reorderable`: a row moved from index `from` to index `to` of `data`."
+    },
+    {
+     "name": "column-resize",
+     "payload": "(event: MouseEvent | TouchEvent, column: { id: string; width: number })",
+     "notes": "A drag of a column's resize handle ended after moving; `column` is the column id and its new width in px. The table keeps the width for the session; to keep it across reloads save it and pass it back as the column's `width` (`useCollection` does, under `preferences.storageKey`)."
     }
    ],
    "slots": [
@@ -17828,7 +17892,7 @@
     {
      "name": "change",
      "payload": "number",
-     "notes": "Commit signal: emitted from the native `change` event — on pointer release after a drag, and after each keyboard step — with the committed value. Lets the consumer persist once per interaction instead of once per drag frame (`update:modelValue` fires continuously). A value event, so no DOM event in the payload (see `.claude/rules/event-payloads.md`). Not emitted while `disabled` or `readonly`."
+     "notes": "Commit signal: emitted from the native `change` event — on pointer release after a drag, and after each keyboard step — with the committed value. Lets the consumer persist once per interaction instead of once per drag frame (`update:modelValue` fires continuously). A value event, so no DOM event in the payload (see `contributing/rules/event-payloads.md`). Not emitted while `disabled` or `readonly`."
     }
    ],
    "surface": "app",
@@ -20262,7 +20326,7 @@
      "type": "'small' | 'medium' | 'large'",
      "default": "'medium'",
      "required": "false",
-     "doc": "Heading scale of the title."
+     "doc": "`small` marks a deeper page (14px semibold title); `medium` and `large` are 16px"
     },
     {
      "name": "titleId",
@@ -20335,7 +20399,7 @@
      "type": "'small' | 'medium'",
      "default": "'medium'",
      "required": "false",
-     "doc": "Heading scale of the title (subset: no `large`)."
+     "doc": "Kept for compatibility: in the console type set (CT-1) both sizes render the title at 14px medium."
     },
     {
      "name": "anchor",
@@ -37387,7 +37451,7 @@
    "source": "blocks/detail/detail-domains-card/detail-domains-card.vue",
    "surface": "app",
    "kind": "fragment",
-   "summary": "The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.",
+   "summary": "The domains card of a resource settings tab: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `TableCellActions` and `Button`.",
    "intents": [
     "domains section",
     "domains card",
