@@ -8,6 +8,10 @@ body {
   color: var(--text-default);
 }
 
+[data-route-focus]:focus {
+  outline: none;
+}
+
 .azion {
   font-family: Rubik, ui-sans-serif, system-ui, sans-serif;
   text-rendering: optimizelegibility;

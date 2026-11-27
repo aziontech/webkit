@@ -25,6 +25,7 @@ export function useRouteFocus(): Readonly<Ref<string>> {
         const target = focusTarget(route.hash)
         if (target) {
           if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1')
+          target.setAttribute('data-route-focus', '')
           target.focus({ preventScroll: true })
         }
         const heading = document.querySelector('#main h1')?.textContent?.trim()
