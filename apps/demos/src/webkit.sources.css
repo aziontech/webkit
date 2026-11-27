@@ -64,10 +64,12 @@
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/autosize.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/box-focus.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/classes.ts";
+@source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/favorite-keys.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/references.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/lib/tool-keys.ts";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-add-menu.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-menu-list.vue";
+@source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-model-dialog.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-references.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/parts/prompt-input-send.vue";
 @source "../node_modules/@aziontech/webkit/src/components/ai/prompt-input/prompt-input-access-picker/prompt-input-access-picker.vue";

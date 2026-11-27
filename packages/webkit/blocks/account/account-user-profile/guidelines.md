@@ -1,6 +1,6 @@
 # User profile
 
-One page for an Azion user's profile and every personal setting: what they did on the platform (metrics, a year of daily contributions and the history behind them) and how their account is set up (profile, security, notifications and preferences). It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+One page for an Azion user's profile and every personal setting: their platform activity and how their account is set up. It is the body of `ConsoleLayout`'s default slot; the layout owns the rail, the header and the `main`.
 
 ## When to use
 

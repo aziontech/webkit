@@ -57,7 +57,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [AccountPaymentMethodCard (account/account-payment-method-card)](blocks/account/account-payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
 - [AccountPersonalTokens (account/account-personal-tokens)](blocks/account/account-personal-tokens.md): The Personal tokens page of the account settings.
 - [AccountTeamPermissions (account/account-team-permissions)](blocks/account/account-team-permissions.md): Who can do what in the account.
-- [AccountUserProfile (account/account-user-profile)](blocks/account/account-user-profile.md): Preview. One page for an Azion user's profile and every personal setting: what they did on the platform (metrics, a year of daily contributions and the history behind them) and how their account is set up (profile, security, n…
+- [AccountUserProfile (account/account-user-profile)](blocks/account/account-user-profile.md): Preview. One page for an Azion user's profile and every personal setting: their platform activity and how their account is set up.
 - [AccountUsers (account/account-users)](blocks/account/account-users.md): Who can sign in to the account, with which role and through which teams.
 
 ## Blocks: Ai

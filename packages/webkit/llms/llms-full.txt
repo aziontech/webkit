@@ -3330,7 +3330,7 @@ What each prop and event does, and the go-live code: [blocks/account/account-tea
 
 # AccountUserProfile (`account/account-user-profile`)
 
-> One page for an Azion user's profile and personal settings, a page body for ConsoleLayout's default slot.
+> An Azion user's profile and personal settings, the body of ConsoleLayout's default slot.
 
 - Surface: app
 - Source: `blocks/account/account-user-profile/account-user-profile.vue` in `@aziontech/webkit`
@@ -3341,9 +3341,9 @@ What each prop and event does, and the go-live code: [blocks/account/account-tea
 
 ## Asked as
 
-user profile; developer profile; my profile; profile settings; personal settings; contribution graph; platform contributions; contribution history; notification preferences; security settings; perfil do usuário; configurações de perfil; contribuições na plataforma; preferências de notificação
+user profile; my profile; profile settings; personal settings; contribution graph; platform contributions; notification preferences; security settings; perfil do usuário; configurações de perfil; contribuições na plataforma; preferências de notificação
 
-One page for an Azion user's profile and every personal setting: what they did on the platform (metrics, a year of daily contributions and the history behind them) and how their account is set up (profile, security, notifications and preferences). It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+One page for an Azion user's profile and every personal setting: their platform activity and how their account is set up. It is the body of `ConsoleLayout`'s default slot; the layout owns the rail, the header and the `main`.
 
 ## When to use
 
