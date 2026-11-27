@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 10
-checksum: f47322100c7ac9a1734826f4cdd7e5c086d120d245291b446b306759a5a2c10b
+checksum: a30c029fc3bc2d3b893149e8db398bf1618806b95c3d126d754aac84b2e5339d
 created: 2026-05-22
 last_updated: 2026-11-20
 ---
@@ -50,8 +50,8 @@ The compound import leads: every part hangs off the root (`Drawer.Trigger`, `Dra
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Button from '@aziontech/webkit/button'
-  import Drawer from '@aziontech/webkit/drawer'
+  import Button from '@aziontech/ui/button'
+  import Drawer from '@aziontech/ui/drawer'
 
   const open = ref(false)
 </script>
@@ -92,16 +92,16 @@ The compound import leads: every part hangs off the root (`Drawer.Trigger`, `Dra
 </template>
 ```
 
-Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/drawer-trigger`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/drawer-header`, `drawer-body`, `drawer-footer` for the regions, which resolve to the shared Panel files). There is no portal or overlay part: `drawer-content` renders both.
+Tree-shaking: `@aziontech/ui/drawer-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/ui/drawer-trigger`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/ui/drawer-header`, `drawer-body`, `drawer-footer` for the regions, which resolve to the shared Panel files). There is no portal or overlay part: `drawer-content` renders both.
 
 ## Sub-components
 
-- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header`, `Drawer.Body` and `Drawer.Footer`, each importable on its own as `@aziontech/webkit/drawer-header`, `drawer-body` and `drawer-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat).
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header`, `Drawer.Body` and `Drawer.Footer`, each importable on its own as `@aziontech/ui/drawer-header`, `drawer-body` and `drawer-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/ui/drawer`; the root alone is `@aziontech/ui/drawer-root`. The parts stay in the root folder (flat).
 - `drawer-close.vue` — Public sub-component `drawer-close`: the close (X) `IconButton`. `Drawer.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the drawer.
 - `drawer-content.vue` — Public sub-component `drawer-content`: the drawer itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay while `modal` (`aria-hidden`, `drawer-content__backdrop` test id; a click on it closes the drawer when `dismissible`) and the `role="dialog"` panel, traps focus and scroll-locks the page while `modal`, and restores focus on close.
 - `drawer-description.vue` — Public sub-component `drawer-description`.
 - `drawer-title.vue` — Public sub-component `drawer-title`.
-- `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
+- `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is an Azion UI `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
 
 - Test ids: each part falls back to its own name (`drawer-trigger`, `drawer-content`, `drawer-title`, `drawer-description`, `drawer-close`, and `panel-header`, `panel-body`, `panel-footer` for the shared regions), and a `data-testid` passed to the part wins; the root's `data-testid` does not rename the parts. The inner overlay and shell of `drawer-content` are `drawer-content__backdrop`, `__portal` and `__panel-shell`. The close button `Drawer.Content` adds while `closable` belongs to the root: `drawer__close`, or `<root test id>__close`.
 
@@ -197,7 +197,7 @@ No element sets an inline `transition`, so `motion-reduce:transition-none` wins 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

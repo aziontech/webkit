@@ -3,11 +3,11 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { test } from 'node:test'
 
-import { readCatalog, SPECS, WEBKIT } from '../plugins/paths.ts'
+import { readCatalog, SPECS, AZION_UI } from '../plugins/paths.ts'
 
 type ExampleFile = { component: string; examples: { name: string; summary?: string }[] }
 
-const EXAMPLES = join(WEBKIT, 'examples')
+const EXAMPLES = join(AZION_UI, 'examples')
 const catalog = readCatalog()
 
 const files = readdirSync(EXAMPLES)

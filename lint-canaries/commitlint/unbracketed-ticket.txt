@@ -1,1 +1,1 @@
-ENG-1231 fix(webkit): focus ring
+ENG-1231 fix(ui): focus ring

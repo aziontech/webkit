@@ -2,7 +2,7 @@
 name: spec-creator
 description: Isolated sub-agent that drafts a `.specs/<name>.md` interactively. Output: a single `.md` file with `status: draft`. Never writes component code.
 status: active
-scope: webkit
+scope: ui
 ---
 
 # Agent: spec-creator

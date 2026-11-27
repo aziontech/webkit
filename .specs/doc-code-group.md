@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 88e0c89d8fa817d7d0530a5bfca162a59c4c7630e85292b7d6be620158b7a0f3
+checksum: 730dcf8f653f8bb9be0fcab1934372b841e485c96892054bda6a0d1b41066895
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -39,21 +39,21 @@ One or more code samples of the same thing in different languages or package man
 - Do: keep `code` to what the reader runs or pastes; the copy control copies exactly that. A leading `$ ` prompt is drawn but never copied.
 - Do: put what the command prints in the sample's `output` (`{ language: 'bash', code: 'curl -I https://<your-azion-domain>', output: 'HTTP/2 200' }`), or say it in prose.
 - Do: show a standalone printout (a deploy log) with `type="output"`.
-- Don't: write output into `code` — never `curl -I https://example.com\n# HTTP/2 200`, never `$ azion version\nAzion CLI 4.23.0`. The lint `webkit/no-output-in-command` warns on it.
+- Don't: write output into `code` — never `curl -I https://example.com\n# HTTP/2 200`, never `$ azion version\nAzion CLI 4.23.0`. The lint `azion-ui/no-output-in-command` warns on it.
 - Don't: turn the label header off on a docs page.
 
 ## Usage
 
 ```vue
 <script setup>
-  import DocCodeGroup from '@aziontech/webkit/doc-code-group'
+  import DocCodeGroup from '@aziontech/ui/doc-code-group'
 </script>
 
 <template>
   <DocCodeGroup
     :samples="[
-      { label: 'npm', language: 'bash', code: 'npm install @aziontech/webkit' },
-      { label: 'pnpm', language: 'bash', code: 'pnpm add @aziontech/webkit' }
+      { label: 'npm', language: 'bash', code: 'npm install @aziontech/ui' },
+      { label: 'pnpm', language: 'bash', code: 'pnpm add @aziontech/ui' }
     ]"
   />
 </template>
@@ -137,7 +137,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

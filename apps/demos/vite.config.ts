@@ -1,13 +1,13 @@
 import { fileURLToPath } from 'node:url'
 
-import webkit from '@aziontech/webkit/vite-plugin'
+import azionUi from '@aziontech/ui/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [
-    webkit(),
+    azionUi(),
     vue({ template: { transformAssetUrls: { includeAbsolute: false } } }),
     tailwindcss()
   ],

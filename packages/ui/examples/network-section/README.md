@@ -1,0 +1,56 @@
+# NetworkSection
+
+A framed section that makes the case for Azion's distributed infrastructure: a headline over an animated world map, a lead line, a few infrastructure claims as pills, and a floor that backs the claim up: client quotes, network benefits or headline figures. The Home page uses it.
+
+The headline sits at the top and the claims at the bottom, so the map shows between them. On phones the map moves into its own box between the headline and the claims, so no text ever sits on it.
+
+The band is the `NetworkSection` component from `@aziontech/ui/network-section`; it composes `Module`, `RegistrationFrame`, `NetworkMap`, `ModuleHeader`, and, on the floor, `CardGrid` with a `Quote` per client or a `FeatureItem` per benefit, or `Stats` for figures. `variant` picks the floor: `outcomes` (the default), `benefits` or `stats`.
+
+## Examples
+
+### Client quotes
+
+The Home page and every solution page: four client outcomes, each a quote with its figure highlighted and signed by the client's logo. Dafiti and Fourbank are drawn in one ink that follows the theme; MadeiraMadeira and Renner keep their brand colors.
+
+Example: [`site-client-quotes.vue`](./site-client-quotes.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
+
+- `eyebrow` is the short overline above the headline.
+- `title` is the headline over the map.
+- `claimsEyebrow` is the overline sentence above the claims.
+- `claims` are the network figures drawn as pills. A claim given as `{ label, mobile: false }` stays off phones.
+- `anchor` sets the band's id, so a page can link to it with a `#hash`.
+- With `variant` set to `stats`, `stats[]` fill the floor with headline figures, each a `value`, a `label` and an optional `prefix` and `suffix`.
+- `outcomes[]` fill the floor, one column each: two to four fill the row. `highlights` are phrases of `text` kept in full color, copied exactly.
+- `logoTreatment` is `color` or `monochrome` (one ink that follows the theme). Empty means `color`.
+
+Example:
+
+Site JSON: [`site-client-quotes.json`](./site-client-quotes.json)
+
+<hr
+  style={{
+    margin: 'var(--spacing-2xl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Benefits
+
+Three network benefits on the floor, each an icon, a title and one sentence.
+
+Example: [`site-benefits.vue`](./site-benefits.vue)
+
+##### Use it on the site
+
+Same entry, with `variant` set to `benefits` and `benefits[]` in place of `outcomes[]`:
+
+- `benefits[]` fill the floor on up to three columns: three fill one row, four split 2 × 2. Each has an `icon` (required, an Azion icon class), a `title` and a `description`.
+
+Example:
+
+Site JSON: [`site-benefits.json`](./site-benefits.json)

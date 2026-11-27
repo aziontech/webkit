@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 8fa57c02959e2d2175b67e3eb1af8d79c33417076930814fb54f254fa8406df2
+checksum: 63446a303a1dda820b2bd8a29dcb85dd1ad2100bbba3da94e27954511ea2cc98
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -49,7 +49,7 @@ One reading against a known range, drawn as a half-circle dial with the value un
 
 ```vue
 <script setup>
-  import GaugeChart from '@aziontech/webkit/gauge-chart'
+  import GaugeChart from '@aziontech/ui/gauge-chart'
 
 </script>
 
@@ -66,7 +66,7 @@ With bands, when the reading means a state (the arc takes the color of the band 
 
 ```vue
 <script setup>
-  import GaugeChart from '@aziontech/webkit/gauge-chart'
+  import GaugeChart from '@aziontech/ui/gauge-chart'
 
   const thresholds = [
     { value: 0, severity: 'success', label: 'Healthy' },
@@ -85,7 +85,7 @@ With bands, when the reading means a state (the arc takes the color of the band 
 </template>
 ```
 
-**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `GaugeChart` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+**Three ways in** (decision RV-C2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `GaugeChart` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
 
 ```mdx
 <GaugeChart aria-label="Cache hit ratio" value={74} label="Cache hit ratio, %" />
@@ -220,7 +220,7 @@ _No events — the gauge is a read-out; wrap it in a link or button to make it i
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

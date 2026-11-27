@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Kbd from '@aziontech/webkit/kbd'
-  import Table from '@aziontech/webkit/table'
+  import Kbd from '@aziontech/ui/kbd'
+  import Table from '@aziontech/ui/table'
   import { computed } from 'vue'
 
   import { messages } from '../lib/i18n'

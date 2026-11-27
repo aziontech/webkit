@@ -1,5 +1,5 @@
 # External links of the built docs site (apps/docs/dist). Internal links are checked by
-# scripts/check-links.mjs. Run: pnpm --filter @aziontech/webkit-docs run check:external-links
+# scripts/check-links.mjs. Run: pnpm --filter @aziontech/ui-docs run check:external-links
 # after pnpm build:docs.
 
 scheme = ["https", "http"]

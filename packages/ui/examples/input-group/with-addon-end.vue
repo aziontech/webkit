@@ -1,0 +1,16 @@
+<script setup>
+  import InputGroup from '@aziontech/ui/input-group'
+</script>
+
+<template>
+  <InputGroup
+    dir="ltr"
+    class="w-full max-w-(--container-xs)"
+  >
+    <InputGroup.Input
+      aria-label="Domain"
+      placeholder="domain"
+    />
+    <InputGroup.Addon>.com</InputGroup.Addon>
+  </InputGroup>
+</template>

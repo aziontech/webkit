@@ -5,7 +5,7 @@ import { test } from 'node:test'
 import { buildIndex } from '../plugins/content.ts'
 
 const catalog = JSON.parse(
-  readFileSync(new URL('../../../packages/webkit/catalog.json', import.meta.url), 'utf8')
+  readFileSync(new URL('../../../packages/ui/catalog.json', import.meta.url), 'utf8')
 )
 
 test('the docs index marks preview components and blocks, and everything else GA', () => {

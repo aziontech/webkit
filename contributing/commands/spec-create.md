@@ -1,5 +1,5 @@
 ---
-description: Draft a `.specs/<name>.md` for a new webkit component interactively. Status starts at `draft`; review the file, mark `status: approved`, then run `/component-create <name>`.
+description: Draft a `.specs/<name>.md` for a new Azion UI component interactively. Status starts at `draft`; review the file, mark `status: approved`, then run `/component-create <name>`.
 argument-hint: [<name>] [--category <category>] [--figma <url>]
 ---
 

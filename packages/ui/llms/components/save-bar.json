@@ -1,0 +1,94 @@
+{
+ "name": "save-bar",
+ "binding": "SaveBar",
+ "import": "@aziontech/ui/save-bar",
+ "treeShakeableImport": "@aziontech/ui/save-bar",
+ "category": "layout",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown; `fade` closes a wizard step with no border or surface, the step content fading into the canvas above Back and Next; `centered` floats the actions as a raised card centred over the bottom of a create page, always shown.",
+ "setup": null,
+ "useWhen": [
+  "A settings page whose changes are staged and saved together: show the floating bar while the form is dirty or saving.",
+  "A create page or account form with one Save for the whole page (`plain`).",
+  "A full-page wizard step: Back in `leading`, the step's primary action in `actions` (`fade`).",
+  "A create page (Create Team, Create Zone, Create Function): Cancel and Create in a raised card centred at the bottom of the form, over the content, at every width (`centered`). This is the design sample's create-page footer; use it instead of a full-width `floating` bar there."
+ ],
+ "avoidWhen": [
+  "A card that saves on its own → put the actions in the card footer.",
+  "A drawer or dialog form → use the `PanelFooter` of `drawer` or `dialog`.",
+  "A one-off confirmation → use `confirm-dialog`."
+ ],
+ "related": [
+  "`button` — the actions: an outlined Discard or Cancel, then a primary Save with `loading` while it runs.",
+  "`settings-group` — the bands the bar saves.",
+  "`confirm-dialog` — the guard shown when someone leaves with unsaved changes."
+ ],
+ "bestPractices": [
+  "Render the floating bar with `v-if=\"dirty || saving\"` inside a `Transition`, so it slides in when the first change is made.",
+  "Say what changed and when it takes effect in the status sentence; keep it to one line.",
+  "Disable Discard and set `loading` on Save while saving.",
+  "Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant=\"centered\"`.",
+  "`floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.",
+  "Listen to `save` to give the page `⌘ S` (`Ctrl S` off Apple): run the same save as the Save button, and do nothing when the form has no unsaved changes. Show the shortcut on Save with `Kbd` and `aria-keyshortcuts=\"Meta+S Control+S\"` (the console keyboard standard, `rules/azion-ui-keyboard.md`)."
+ ],
+ "props": [
+  {
+   "name": "variant",
+   "type": "'floating' | 'docked' | 'plain' | 'fade' | 'centered'",
+   "default": "'floating'",
+   "required": "false",
+   "doc": "How the bar sits at the bottom of its scroll region. See the variant table below."
+  },
+  {
+   "name": "column",
+   "type": "'full' | 'form' | 'focused'",
+   "default": "'full'",
+   "required": "false",
+   "doc": "Lines the content of a `floating` or `docked` bar up with the page column above it (`layout-column-form` / `layout-column-focused`); the bar's border and fill still span the region. Ignored by `plain`, `fade` and `centered`."
+  }
+ ],
+ "events": [
+  {
+   "name": "save",
+   "payload": "(event: KeyboardEvent)",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The status sentence on the left, such as You have unsaved changes."
+  },
+  {
+   "name": "leading",
+   "scope": "—",
+   "notes": "Replaces the whole leading region (the info icon and the sentence) with your own content, such as a `StatusIndicator` (Saving…, Saved) or an unsaved-changes count. Takes precedence over `default`."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Discard or Cancel, then Save, on the right."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Floating",
+   "file": "examples/save-bar/default.vue"
+  },
+  {
+   "name": "Docked",
+   "file": "examples/save-bar/docked.vue"
+  },
+  {
+   "name": "Plain",
+   "file": "examples/save-bar/plain.vue"
+  }
+ ],
+ "docs": "components/save-bar.md"
+}

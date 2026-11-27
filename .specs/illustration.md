@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: ed6b90846fbfdf45b1830ff79fde018d9a44786b099a83ccf9d711c8674a7bf0
+checksum: efd0f5f6605899e1c8370cfbd5a7cc5fcde1b414b6bbf6a89143b4117805f25e
 created: 2026-08-05
 last_updated: 2026-11-23
 ---
@@ -54,7 +54,7 @@ export follows light and dark like the rest of the page.
 - Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is hidden from assistive tech, which keeps screen readers out of a graphic that adds nothing.
 - Size the illustration from the call site with a class. The root is `w-full` at the canvas aspect ratio, so a narrower column simply gets a smaller scene.
 - Pick the scene that draws the claim next to it, not the one whose filename matches the page title.
-- Find the names in `llms/foundations/illustrations.md` (installed under `node_modules/@aziontech/webkit/llms/`), the MCP tool `list_assets` (`kind: "illustration"`) or the Assets example. Never guess a name from a file name or a page title: an unknown name renders the placeholder.
+- Find the names in `llms/foundations/illustrations.md` (installed under `node_modules/@aziontech/ui/llms/`), the MCP tool `list_assets` (`kind: "illustration"`) or the Assets example. Never guess a name from a file name or a page title: an unknown name renders the placeholder.
 - To add a scene, export the frame from the Figma assets library (592×300 for a scene, the tile's own size for a tile or crop), drop the `.svg` into `src/assets/illustrations/`, and register it in `registry.ts`. The test fails while a drawing in the folder is unregistered. Never hand-draw one.
 - Leave `<Illustration />` unnamed where a scene is still being drawn: the placeholder frame reserves the space and reads as unfinished on the screen, which is louder than a gap nobody notices.
 
@@ -62,7 +62,7 @@ export follows light and dark like the rest of the page.
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
+  import Illustration from '@aziontech/ui/illustration'
 </script>
 
 <template>
@@ -87,7 +87,7 @@ import) when an image, not an inline themed scene, is wanted.
 
 ```vue
 <script setup>
-  import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
+  import ddosProtection from '@aziontech/ui/assets/ddos-protection.svg'
 </script>
 
 <template>
@@ -98,7 +98,7 @@ import) when an image, not an inline themed scene, is wanted.
 </template>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<Illustration>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site draws it as the `Illustration` scene.
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as the `<Illustration>` tag `DocMarkdown` mounts (braced attribute values are JSON). The site draws it as the `Illustration` scene.
 
 ## Props
 
@@ -182,7 +182,7 @@ export palette in `src/assets/illustrations/palette.ts`. Each role aliases a glo
 - Assets — composite story rendering every registered scene side-by-side, one per drawing in the folder. **Justified addition:** `name` is the whole public API and its valid values are a closed registry, so the story is the only place a consumer can see what `name` accepts. A Controls dropdown alone would not show them together.
 - Labeled — the accessible-name form (an args delta of `ariaLabel`).
 - Placeholder — the fallback frame, rendered by an unnamed `Illustration`. **Justified addition:** it is a rendered state of the component (see § States), not a variant, and it is the one thing in the component a consumer cannot reach from the `name` dropdown — every option in that list resolves to a scene.
-- Files — the drawings that also ship as files, each imported by its final name from `@aziontech/webkit/assets/` and rendered as an image. **Justified addition:** the file import is a second way to use a drawing that neither Controls nor `Assets` shows, and the import path is the one thing a consumer has to know to use one.
+- Files — the drawings that also ship as files, each imported by its final name from `@aziontech/ui/assets/` and rendered as an image. **Justified addition:** the file import is a second way to use a drawing that neither Controls nor `Assets` shows, and the import path is the one thing a consumer has to know to use one.
 - Markdown — an `<Illustration name="…" />` tag rendered by `DocMarkdown` inside `DocProse`. Justified: the docs channel (RV-K2-1).
 
 There is no `Types` or `Sizes` story: the root declares neither `kind` nor `size`. There are no `Loading` / `Disabled` stories: the component declares neither prop (see § States).
@@ -194,7 +194,7 @@ There is no `Types` or `Sizes` story: the root declares neither `kind` nor `size
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

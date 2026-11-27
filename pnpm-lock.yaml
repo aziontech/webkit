@@ -118,9 +118,9 @@ importers:
       '@aziontech/theme':
         specifier: workspace:*
         version: link:../../packages/theme
-      '@aziontech/webkit':
+      '@aziontech/ui':
         specifier: workspace:*
-        version: link:../../packages/webkit
+        version: link:../../packages/ui
       '@tanstack/ai':
         specifier: 1.5.0
         version: 1.5.0(zod@4.6.7)
@@ -155,9 +155,9 @@ importers:
       '@aziontech/theme':
         specifier: workspace:*
         version: link:../../packages/theme
-      '@aziontech/webkit':
+      '@aziontech/ui':
         specifier: workspace:*
-        version: link:../../packages/webkit
+        version: link:../../packages/ui
       vue:
         specifier: '>=3.5.42 <4'
         version: 3.5.43(typescript@6.0.3)
@@ -258,7 +258,7 @@ importers:
         specifier: '>=3.2.5 <3.3.12 || >=3.3.15 <4.0.0'
         version: 3.3.8(typescript@6.0.3)
 
-  packages/webkit:
+  packages/ui:
     dependencies:
       '@tanstack/vue-table':
         specifier: ^8.21.3
@@ -358,11 +358,11 @@ importers:
         specifier: '>=3.2.5 <3.3.12 || >=3.3.15 <4.0.0'
         version: 3.3.8(typescript@6.0.3)
 
-  packages/webkit-mcp:
+  packages/ui-mcp:
     dependencies:
-      '@aziontech/webkit':
+      '@aziontech/ui':
         specifier: workspace:^
-        version: link:../webkit
+        version: link:../ui
       '@modelcontextprotocol/sdk':
         specifier: ^1.31.0
         version: 1.32.1(@cfworker/json-schema@4.1.6)(zod@4.6.7)

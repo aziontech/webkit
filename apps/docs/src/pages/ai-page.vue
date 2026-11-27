@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
   import { useHead } from '@unhead/vue'
   import { computed } from 'vue'
 
@@ -25,7 +25,7 @@
   ])
 
   useHead({
-    title: computed(() => `${t.value.forAi} — WebKit`),
+    title: computed(() => `${t.value.forAi} — Brand`),
     meta: [{ name: 'description', content: computed(() => t.value.aiPageSummary) }]
   })
 </script>

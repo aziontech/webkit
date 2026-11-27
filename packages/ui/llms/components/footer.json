@@ -1,0 +1,127 @@
+{
+ "name": "footer",
+ "binding": "Footer",
+ "import": "@aziontech/ui/footer",
+ "treeShakeableImport": "@aziontech/ui/footer-root",
+ "category": "layout",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/ui/footer-column",
+  "@aziontech/ui/footer-link"
+ ],
+ "purpose": "Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`. A canvas-colored shell of two bands divided by a hairline rule. Matches the Azion UI Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Two bands.** Top to bottom: the link columns, then the bottom bar. The bottom bar is one row, as azion.com draws it: the brand at the start, the social icons after it, and the status indicator with the language select at the end. There is no separate brand band: the brand sits at the start of the bar at every width, at the 18px height `AppHeaderBrand` gives the header's mark. **Three placements, chosen with `variant`.** - `content` is the default: the bands run full bleed across whatever zone holds the footer and the footer draws no rule above itself. Every band carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. - `site` closes a marketing page and mirrors the site header: it spans the full width of the page with no side rules, opens on a plain full-width top rule with no corner marks, the same clean line as the header's, and insets its content to the header's own measure (`--layout-measure-site-header`), so the first column title and the brand line up under the header's brand at every width. The inset is one custom property (`--footer-inset`, `max(0%, (100% - measure) / 2)`) set on the root and added to each band's own padding, so the band rules stay full width. - `console` is the slim bar under a console page: one row with a top rule, the brand (and any social buttons) at the start, the links of each `Footer.Column` inline after it — the column title becomes the visually hidden name of its `nav` — and the status and language at the end. It wraps onto a second row when the zone is narrow. **Responsive.** The column grid folds from four columns to the 2×2 mobile grid below `md` (768px). The bottom bar stacks below `md`: the brand and the social icons on the first line, the status and the language at the two ends of the second. From `md` it is one row, its two clusters at the two ends, and it wraps instead of clipping when the zone is narrower than both together. All of it is CSS, so the server HTML and the hydrated page are the same tree. Content (links, labels, languages, status, brand) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
+ "setup": null,
+ "useWhen": [
+  "Use Footer to compose a footer in product, docs or the console.",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).",
+  "The page-level footer of a site or application, paired with `AppHeader`.",
+  "Grouped navigation links at the bottom of the page plus a brand/social/status bar."
+ ],
+ "avoidWhen": [
+  "The bottom area of a panel, table, sidebar, or overlay → use that component's own footer part (`panel-footer`, `table-footer`, `sidebar-footer`, `popover-footer`).",
+  "A single standalone link inside body content → use `link` instead of `Footer.Link`."
+ ],
+ "related": [
+  "`app-header` — the top-of-page chrome counterpart; the `site` placement spans the page the way the site header does, and the brand takes the header brand's height.",
+  "`brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.",
+  "`site-footer-section` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer-section` for a site page fed from section JSON and `Footer` when composing the bands by hand.",
+  "`registration-frame` — draws the plain top rule in the `site` and `console` placements (no corner marks)."
+ ],
+ "bestPractices": [
+  "Compose every band from existing DS components (`Brand`, `IconButton variant=\"ghost\" size=\"small\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
+  "Put `Brand size=\"small\"` in the `brand` slot and make it the home link with `homeHref` (`home-href=\"/\"`) instead of wrapping it in a hand-made anchor: the footer owns the link's focus ring and hover. The footer sizes the mark to the header's 18px.",
+  "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
+  "Give every social `IconButton` an `aria-label`; the footer cannot name them for you.",
+  "Keep the social `IconButton`s at `size=\"small\"`: a 28px box keeps the brand and seven icons beside the status pair on one row from `md`.",
+  "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own.",
+  "In `console`, give each column only a few short links (Docs, Status, Legal); the column title is still required, because it names the `nav` for assistive tech.",
+  "Pick the placement from the page: `site` under a marketing page whose header is `SiteHeaderSection`, `console` under a console page, `content` — the default — anywhere else."
+ ],
+ "props": [
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`)."
+  },
+  {
+   "name": "variant",
+   "type": "'content' | 'site' | 'console'",
+   "default": "'content'",
+   "required": "false",
+   "doc": "Where the footer sits: `content` (the default) runs the bands full bleed across the zone that holds it; `site` spans the page like the site header, opening on a plain full-width rule, like the header's, and insetting its content to the header measure; `console` is one slim bar under a console page, the brand and the links of each column on one line with the status and language at its end."
+  },
+  {
+   "name": "homeHref",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "When set, the brand slot renders inside one home link to this URL, with the focus ring and the hover of a link."
+  },
+  {
+   "name": "homeAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the home link. Empty uses the locale catalog (`Azion home`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Root: the `Footer.Column` items; a 2-column grid that becomes 4 columns at `md`, or one inline row in `console`."
+  },
+  {
+   "name": "brand",
+   "scope": "—",
+   "notes": "Root: the brand lockup that opens the bottom bar, its mark sized to 18px; inside the home link when `homeHref` is set."
+  },
+  {
+   "name": "social",
+   "scope": "—",
+   "notes": "Root: the social icon buttons, after the brand at the start of the bottom bar."
+  },
+  {
+   "name": "status",
+   "scope": "—",
+   "notes": "Root: the system status indicator, at the end of the bottom bar."
+  },
+  {
+   "name": "language",
+   "scope": "—",
+   "notes": "Root: the language select, after the status."
+  },
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "`footer-column`: its `Footer.Link` items."
+  },
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "`footer-link`: the link label."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/footer/default.vue"
+  },
+  {
+   "name": "SitePlacement",
+   "file": "examples/footer/site-placement.vue"
+  },
+  {
+   "name": "Console",
+   "file": "examples/footer/console.vue"
+  }
+ ],
+ "docs": "components/footer.md"
+}

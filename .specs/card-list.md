@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 65ae5c3eff5be51ce5b03658b78c5246a0964184f5c3a0d24592d6c54872e07b
+checksum: 736a7fd90741b19f5807e1c38785e0aaaa0992b8eef281b89d388c1d8c8933d6
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -47,7 +47,7 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 
 ```vue
 <script setup>
-  import CardList from '@aziontech/webkit/card-list'
+  import CardList from '@aziontech/ui/card-list'
 
   const items = [
     { id: 'a', name: 'storefront', domain: 'shop.example.com' },
@@ -73,7 +73,7 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 | `loading`       | `boolean`                          | `false`  | false    | Shows placeholder cards and sets aria-busy while true.                 |
 | `ariaLabel`     | `string`                           | `''`     | false    | Accessible name of the list. Empty uses the locale catalog.            |
 
-The component is generic over the item: `TItem extends object`, inferred from `items` (default `Record<string, unknown>`), so the `header` and `default` slots receive `item` typed as the consumer's own interface. Types (exported from `@aziontech/webkit/card-list`): `CardListSelectionMode = 'none' | 'single' | 'multiple'`; `CardListItemSlotProps<TItem> = { item: TItem; index: number; selected: boolean }`.
+The component is generic over the item: `TItem extends object`, inferred from `items` (default `Record<string, unknown>`), so the `header` and `default` slots receive `item` typed as the consumer's own interface. Types (exported from `@aziontech/ui/card-list`): `CardListSelectionMode = 'none' | 'single' | 'multiple'`; `CardListItemSlotProps<TItem> = { item: TItem; index: number; selected: boolean }`.
 
 ## v-model
 
@@ -175,7 +175,7 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

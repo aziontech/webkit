@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: e5527f9859270b217a7409266d7e47ae2dc374d31fa6c52e4bdc97dda8008fe3
+checksum: 8e280357fec5ca4435177b32aa7731ba02d1641dc99aec65344712c27104dbc2
 created: 2026-06-02
 last_updated: 2026-11-23
 ---
@@ -52,8 +52,8 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 ```vue
 <script setup>
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
 </script>
 
 <template>
@@ -146,7 +146,7 @@ The panel is positioned with the standalone **`translate`** property, never `top
 - Touch: a long-press (500 ms `pointerdown` with `pointerType` `touch`) opens the tooltip; it hides 1.5 s after the finger lifts. A mouse press never opens it.
 - Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. `Escape` is taken only while the tooltip is open: closing removes the trigger's `aria-describedby` at once, and a page that reads open overlays (`useEscapeToCancel`) counts a tooltip only while a control still points to it, so the next `Escape` reaches the page even while the leave animation runs. A tooltip closed by `Escape` stays closed while the pointer rests on the trigger (a browser fires `mouseenter` when the panel disappears under a still pointer); it opens on hover again only after the pointer leaves the trigger and comes back, and on the next focus as usual. Tests: `tooltip.test.ts` › keyboard map (spec).
 - Nested overlays: while open, the tooltip joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (it never takes focus, so it does not pause a dialog's focus trap). Inside a `Dialog`, `Drawer` or `Popover`, the first `Escape` closes only the tooltip; the next one reaches the host. Tests: `tooltip.test.ts` › inside an open Dialog, Escape closes only the tooltip.
-- ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into a WebKit `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
+- ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into an Azion UI `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
 - `motion-reduce:animate-none` on the panel; reduced-motion users get instant show/hide.
 - Touch target ≥40×40 px on the trigger (the consumer's responsibility — flag in docs).
@@ -162,7 +162,7 @@ The panel is positioned with the standalone **`translate`** property, never `top
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

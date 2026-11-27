@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Tooltip from '@aziontech/webkit/tooltip'
+  import Button from '@aziontech/ui/button'
+  import Tooltip from '@aziontech/ui/tooltip'
 
   import { messages } from '../lib/i18n'
   import { settings } from '../lib/settings'

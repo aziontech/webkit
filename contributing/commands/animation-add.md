@@ -1,6 +1,6 @@
 # /animation-add <name> [component]
 
-Scaffold a **new** webkit animation in the one correct place — the semantic animation
+Scaffold a **new** Azion UI animation in the one correct place — the semantic animation
 catalog — so components never ship a component-local `@keyframes` or an off-catalog
 `animate-[…]`. Triggered by hand, or pointed at by `validate-spec-compliance` when a
 component uses an `animate-*` that is not yet in the catalog.
@@ -12,7 +12,7 @@ Run the **animation-add** skill (`contributing/skills/animation-add/SKILL.md`). 
    sibling `keyframes.js`, using the `duration` / `curve` tokens from `animate.js` — published as `@aziontech/theme/animations` — (never a raw ms / cubic-bezier literal).
 2. Records a **Theme gaps** row in the component's `.specs/<component>.md` (when a
    component is given) so the addition is tracked.
-3. Regenerates the catalog (`pnpm --filter @aziontech/webkit build:catalog`) so
+3. Regenerates the catalog (`pnpm --filter @aziontech/ui build:catalog`) so
    `tokens.animations` includes `<name>` and the compliance cross-check passes.
 4. Reminds you to pair the class with `motion-reduce:*` in the component.
 

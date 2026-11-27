@@ -7,14 +7,14 @@ spec_version: 11
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-17
-checksum: 886f463a755a52b9188e29132aa011449de0b236c0e8465d52f9bb7f39109e82
+checksum: acd7ca9e6c8ebb1cc88d1ef91ecd8d98f3af31ed02bf60895ae307b6658b2066
 ---
 
 # MediaSplitSection — Component Spec
 
 ## Purpose
 
-One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the webkit scene assets. The media is required and is a drawn asset: an illustration (a name of the illustration registry) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
+One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the Azion UI scene assets. The media is required and is a drawn asset: an illustration (a name of the illustration registry) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
 
 ## When to use
 
@@ -48,7 +48,7 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 
 ```vue
 <script setup>
-  import MediaSplitSection from '@aziontech/webkit/media-split-section'
+  import MediaSplitSection from '@aziontech/ui/media-split-section'
 </script>
 
 <template>
@@ -74,7 +74,7 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 | `orientation`           | `MediaSplitSectionOrientation` | `'horizontal'` | false    | Axis the band splits on; `vertical` stacks the media under the copy for a wide scene.                                                                                                                                               |
 | `texture`               | `TextureVariant`               | `'pixelate'`   | false    | Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`.                                                                                                                                           |
 | `linked`                | `boolean`                      | `true`         | false    | Links the whole band to a lone action; turn it off when the media holds controls of its own.                                                                                                                                        |
-| `scene`                 | `MediaSplitSectionScene`       | `undefined`    | false    | Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset other than `Diagram` and the props bound onto it; wins over every other media.                                                                   |
+| `scene`                 | `MediaSplitSectionScene`       | `undefined`    | false    | Scene drawn in the media cell, `{ component, props? }` naming an Azion UI scene asset other than `Diagram` and the props bound onto it; wins over every other media.                                                                   |
 | `widget`                | `ConsoleMockupName`            | `undefined`    | false    | Name of the product console widget drawn in the media cell when no scene is set.                                                                                                                                                    |
 | `illustration`          | `string`                       | `''`           | false    | Registry name of the illustration drawn in the media cell when neither a scene nor a widget is set.                                                                                                                                 |
 | `illustrationAriaLabel` | `string`                       | `''`           | false    | Accessible name of the illustration; empty keeps it decorative.                                                                                                                                                                     |
@@ -168,7 +168,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

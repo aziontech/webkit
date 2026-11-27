@@ -1,0 +1,107 @@
+{
+ "name": "empty-state",
+ "binding": "EmptyState",
+ "import": "@aziontech/ui/empty-state",
+ "treeShakeableImport": "@aziontech/ui/empty-state",
+ "category": "feedback",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Centered placeholder shown when a resource list or section has no content yet. Stacks an optional standardized adornment, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. The adornment is a standardized, size-scaled featured-icon tile driven by the `icon` prop; the consumer may instead supply custom content via the `icon` slot, or omit both for no adornment. Unlike `Alert`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background.",
+ "setup": null,
+ "useWhen": [
+  "A list, table or section that has no items yet, with a first action that fills it.",
+  "A search or filter that returned nothing, with an action to clear it."
+ ],
+ "avoidWhen": [
+  "The data is still loading → use `skeleton`.",
+  "An inline warning or error about content that is present → use `alert`.",
+  "The empty body of a data-driven `table` → use the `table` `empty` slot, which already renders this block by default."
+ ],
+ "related": [
+  "`skeleton` — the loading placeholder shown before the empty state is known.",
+  "`alert` — inline severity banner, not a zero-data block.",
+  "`table` — renders an empty-state block in its `empty` slot.",
+  "`button` — the usual content of the `actions` slot."
+ ],
+ "bestPractices": [
+  "`title` is required. Say what is missing (\"No domains yet\"), not that something went wrong.",
+  "Keep the `actions` slot to one primary action, plus an optional documentation link.",
+  "Leave the actions at their own width, centred, on every screen size (the design sample's look). Do not add `w-full` to a button in the slot to make it span a phone screen.",
+  "Use the `icon` prop for the standard featured-icon tile. Use the `icon` slot only for custom art, and omit both when the context already explains the state.",
+  "Use `bordered` when the block sits directly on the page. Leave it off inside a card or panel that already has a border, and use `size=\"small\"` there."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Primary heading announcing the empty resource."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting body copy below the title."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Azion icon class for the standardized adornment (e.g. `az az-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together."
+  },
+  {
+   "name": "bordered",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "icon",
+   "scope": "—",
+   "notes": "Custom adornment centered above the title, rendered inside an `aria-hidden` container. Overrides the `icon` prop's featured-icon tile. When neither this slot nor the `icon` prop is provided, no adornment renders."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Action area below the description; consumer composes buttons and the documentation link."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [
+  {
+   "kind": "icons",
+   "page": "foundations/icons.md"
+  }
+ ],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/empty-state/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/empty-state/sizes.vue"
+  },
+  {
+   "name": "Icon",
+   "file": "examples/empty-state/icon.vue"
+  }
+ ],
+ "docs": "components/empty-state.md"
+}

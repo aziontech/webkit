@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 4
 template: 2
-checksum: 41511c38a1f0b1f3e688752862b59b1f959a58838f3ce02129100bd545bc4f44
+checksum: ed00772a3054879a1b8eeaae91543b40559ef0de470786029875464ce952f3f3
 created: 2026-09-22
 last_updated: 2026-11-25
 ---
@@ -57,7 +57,7 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 
 ```vue
 <script setup>
-  import Carousel from '@aziontech/webkit/carousel'
+  import Carousel from '@aziontech/ui/carousel'
 </script>
 
 <template>
@@ -79,7 +79,7 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 </template>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<Carousel>` tag `DocMarkdown` mounts (braced attribute values are JSON); each slide is a `<CarouselItem>` tag holding other tags (a `<Quote />`, a `<Card />`), and `DocMarkdown` adds the previous and next controls. The site places it through `card-carousel-section`; the `header` slot stays Vue.
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as the `<Carousel>` tag `DocMarkdown` mounts (braced attribute values are JSON); each slide is a `<CarouselItem>` tag holding other tags (a `<Quote />`, a `<Card />`), and `DocMarkdown` adds the previous and next controls. The site places it through `card-carousel-section`; the `header` slot stays Vue.
 
 ## Sub-components
 
@@ -199,7 +199,7 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

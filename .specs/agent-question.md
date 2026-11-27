@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: 034e861fff98e2ed108b4c303eb31af05e6b6ce488b358c795e4474f30a4b05c
+checksum: 73298da412526e4729a34769f4aa9ccd70469e8ba9541040aee461bc2953ac50
 created: 2026-11-19
 last_updated: 2026-11-22
 ---
@@ -70,7 +70,7 @@ focus to its heading when the owner wants to bring the reader to it.
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import AgentQuestion from '@aziontech/webkit/agent-question'
+  import AgentQuestion from '@aziontech/ui/agent-question'
 
   const answer = ref('')
   const status = ref('pending')
@@ -212,7 +212,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/agent-question/`:_
+_Examples in `packages/ui/examples/agent-question/`:_
 
 - Default — a `choice` question with two options and Skip; Submit sends, then the card shows the answer.
 - Types — the three answer controls side by side: `choice`, `text`, `confirm`. Justified: `type` picks the control, so this is the composite example of the axis.
@@ -226,7 +226,7 @@ _Examples in `packages/webkit/examples/agent-question/`:_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

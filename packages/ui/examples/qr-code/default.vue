@@ -1,0 +1,33 @@
+<script setup>
+  import CopyButton from '@aziontech/ui/copy-button'
+  import QrCode from '@aziontech/ui/qr-code'
+
+  const account = 'jane.doe@example.com'
+  const secret = 'JBSWY3DPEHPK3PXP'
+  const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-(--spacing-md)">
+    <QrCode
+      :value="uri"
+      :aria-label="`QR code to add ${account} to an authenticator app`"
+    />
+    <div class="flex flex-col gap-(--spacing-2xs)">
+      <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>
+      <div class="flex items-center gap-(--spacing-xs)">
+        <code
+          class="text-label-code-sm text-(--text-default)"
+          dir="ltr"
+          >{{ secret.match(/.{1,4}/g).join(' ') }}</code
+        >
+        <CopyButton
+          :value="secret"
+          aria-label="Copy setup key"
+          copied-label="Setup key copied"
+          size="small"
+        />
+      </div>
+    </div>
+  </div>
+</template>

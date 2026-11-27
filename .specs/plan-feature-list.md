@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 2f956a4e1a8c8fe1f91fca0ec16f8fef0de81b00344a5cd6e4c294c6805995d8
+checksum: bb5b385ce63018fd2efcf047f33439c67db5035c77f24c2ad48abc3c0b60e8d3
 created: 2026-11-12
 last_updated: 2026-11-18
 ---
@@ -49,7 +49,7 @@ The features a plan, product or upgrade includes, each behind a check mark, in o
 
 ```vue
 <script setup>
-  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
+  import PlanFeatureList from '@aziontech/ui/plan-feature-list'
 
   const features = [
     { label: 'Unlimited Applications' },
@@ -68,7 +68,7 @@ The features a plan, product or upgrade includes, each behind a check mark, in o
 </template>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). From a docs page it is the `<PlanFeatureList items={[…]} />` tag `DocMarkdown` mounts. From the site's page JSON it is the `PlanFeatureList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it).
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). From a docs page it is the `<PlanFeatureList items={[…]} />` tag `DocMarkdown` mounts. From the site's page JSON it is the `PlanFeatureList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it).
 
 ## Props
 
@@ -160,7 +160,7 @@ No built-in strings: every visible text comes from `items`, and the accessible n
 Self-review by the lane agent acting as `spec-reviewer` (`contributing/agents/spec-reviewer.md`), 2026-11-12:
 
 1. Naming — `plan-feature-list`, kebab, singular concept, flat export `./plan-feature-list`; no collision in `catalog.json` (the marketing `feature-*` sections are page bands, not lists). Pass.
-2. Reuse — `item` rows carry padding and a media slot for navigable rows; `key-value-list` is label/value; `outcome-icon` states an outcome; `pricing-card` / `pricing-plans-section` are site sections with their own lists. No export draws an included-feature list; the design sample (`console/pages/account/panels/Billing.vue`, `components/billing/PlanUpgradeDrawer.vue`) and WebKit's own `account/account-change-plan-drawer` block hand-write it three times. Pass.
+2. Reuse — `item` rows carry padding and a media slot for navigable rows; `key-value-list` is label/value; `outcome-icon` states an outcome; `pricing-card` / `pricing-plans-section` are site sections with their own lists. No export draws an included-feature list; the design sample (`console/pages/account/panels/Billing.vue`, `components/billing/PlanUpgradeDrawer.vue`) and Azion UI's own `account/account-change-plan-drawer` block hand-write it three times. Pass.
 3. Prop vocabulary — `items` (data), `columns` (same name and meaning as `key-value-list`), `ariaLabel`. No banned alias. Pass.
 4. States — static list; empty renders nothing, stated. Pass.
 5. Internationalization — no built-in strings. Pass.
@@ -179,7 +179,7 @@ Verdict: approve.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

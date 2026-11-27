@@ -1,0 +1,84 @@
+{
+ "name": "skeleton",
+ "binding": "Skeleton",
+ "import": "@aziontech/ui/skeleton",
+ "treeShakeableImport": "@aziontech/ui/skeleton",
+ "category": "feedback",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use Skeleton when a region with a known shape (text, table rows, cards, avatars) is still loading — the default answer to 'show a loading state'. For an inline busy mark use Spinner, for work with a measurable amount use Progress, and for a generative AI answer use ResponseLoading. A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).",
+ "setup": null,
+ "useWhen": [
+  "Content is loading and its final layout is known: text lines, cards, media blocks.",
+  "Avatar and icon placeholders, with `variant=\"circle\"`."
+ ],
+ "avoidWhen": [
+  "The duration is unknown and no layout is reserved → use `progress` with `indeterminate`, or `spinner`.",
+  "Rows in a data-driven `table` → use the `table` `loading` prop, which renders aligned skeleton rows.",
+  "Loading finished with no data → use `empty-state`.",
+  "A settled state such as Active or Failed → use `status-indicator`."
+ ],
+ "related": [
+  "`progress` — measured or indeterminate progress of a task, not a placeholder.",
+  "`spinner` — compact busy glyph for buttons and inline status.",
+  "`empty-state` — what replaces the skeleton when the request returns nothing.",
+  "`table` — its `loading` prop renders skeleton rows for you."
+ ],
+ "bestPractices": [
+  "Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.",
+  "For `variant=\"circle\"`, set `width` and `height` to the same value.",
+  "The skeleton is `aria-hidden`. Mark the container you own with `aria-busy=\"true\"` while it loads.",
+  "Keep `animated` on (the default). The shimmer already turns off under reduced motion; use `:animated=\"false\"` only for static captures."
+ ],
+ "props": [
+  {
+   "name": "variant",
+   "type": "'rectangle' | 'circle'",
+   "default": "'rectangle'",
+   "required": "false",
+   "doc": "Geometry: a rounded rectangular block (`rectangle`) or a circle."
+  },
+  {
+   "name": "width",
+   "type": "string",
+   "default": "'100%'",
+   "required": "false",
+   "doc": "CSS width (any length); a rectangle never grows past its container."
+  },
+  {
+   "name": "height",
+   "type": "string",
+   "default": "'1rem'",
+   "required": "false",
+   "doc": "CSS height (any length); for a circle, set equal to `width`."
+  },
+  {
+   "name": "animated",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shimmer while loading; suppressed under reduced motion."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/skeleton/default.vue"
+  },
+  {
+   "name": "Variants",
+   "file": "examples/skeleton/variants.vue"
+  },
+  {
+   "name": "OnSurfaces",
+   "file": "examples/skeleton/on-surfaces.vue"
+  }
+ ],
+ "docs": "components/skeleton.md"
+}

@@ -3,7 +3,7 @@
 
   import ComponentGrid from '../components/component-grid.vue'
 
-  useHead({ title: 'Components — WebKit' })
+  useHead({ title: 'Components — Brand' })
 </script>
 
 <template>

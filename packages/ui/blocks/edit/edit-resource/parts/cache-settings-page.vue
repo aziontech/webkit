@@ -1,0 +1,330 @@
+<script setup lang="ts">
+  import Card from '@aziontech/ui/card'
+  import FieldError from '@aziontech/ui/field-error'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item'
+  import NumberInput from '@aziontech/ui/number-input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Select, { type SelectOptionItem } from '@aziontech/ui/select'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import { useLocale } from '@aziontech/ui/use-locale'
+
+  import { ttlDuration } from '../lib/ttl-duration'
+  import {
+    sampleCacheBrowserBehaviors as browserBehaviors,
+    sampleCacheEdgeBehaviors as edgeBehaviors,
+    sampleCacheTopologies as topologies
+  } from '../sample'
+  import { provideCacheSettings } from '../use-cache-settings'
+  import CacheKeyGroup from './cache-key-group.vue'
+  import SettingsSaveBar from './settings-save-bar.vue'
+
+  const labelOf = (options: SelectOptionItem[]) => (value: string) =>
+    options.find((option) => option.value === value)?.label ?? value
+
+  const { form, saving, dirty, errors, clear, save, discard, leave } = provideCacheSettings()
+
+  const { formatNumber } = useLocale()
+  const duration = (seconds: number | null | undefined) => ttlDuration(seconds, formatNumber)
+</script>
+
+<template>
+  <div class="flex min-h-0 min-w-0 flex-1 flex-col">
+    <form
+      class="flex min-h-0 min-w-0 flex-1 flex-col"
+      aria-label="Cache settings"
+      novalidate
+      @submit.prevent="save"
+    >
+      <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
+        <PageHeader
+          title="Cache settings"
+          description="How static-assets is cached at the edge and in browsers. Rules of storefront-app pick it with the Set cache policy behavior."
+          size="small"
+        />
+
+        <fieldset class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0">
+          <legend class="sr-only">Cache settings</legend>
+
+          <SettingsGroup
+            label="General"
+            hint="Names the cache setting in the rules that reference it."
+            anchor="general"
+          >
+            <Card :padded="false">
+              <template #default>
+                <Item.List>
+                  <TransitionGroup
+                    enter-active-class="animate-content-enter motion-reduce:animate-none"
+                  >
+                    <SettingsRow
+                      key="name"
+                      title="Name"
+                      description="What the Set cache policy behavior of a rule picks from its list."
+                    >
+                      <Input
+                        id="cache-name"
+                        v-model="form.name"
+                        size="large"
+                        class="w-full"
+                        aria-label="Name"
+                        placeholder="static-assets"
+                        autocomplete="off"
+                        required
+                        :invalid="!!errors.name"
+                        :aria-describedby="errors.name ? 'cache-name-message' : undefined"
+                        :readonly="saving"
+                        @update:model-value="clear('name')"
+                      />
+                      <FieldError
+                        v-if="errors.name"
+                        id="cache-name-message"
+                        >{{ errors.name.message }}</FieldError
+                      >
+                    </SettingsRow>
+                  </TransitionGroup>
+                </Item.List>
+              </template>
+            </Card>
+          </SettingsGroup>
+          <SettingsGroup
+            label="Browser cache"
+            hint="How long the visitor's browser may reuse a response before asking again."
+            anchor="browser-cache"
+          >
+            <Card :padded="false">
+              <template #default>
+                <Item.List>
+                  <TransitionGroup
+                    enter-active-class="animate-content-enter motion-reduce:animate-none"
+                  >
+                    <SettingsRow
+                      key="browserBehavior"
+                      title="Behavior"
+                      description="Honoring the origin passes its Cache-Control through. Overriding replaces it with the time set here."
+                    >
+                      <Select
+                        v-model="form.browserBehavior"
+                        size="large"
+                        class="w-full"
+                        :display-value="labelOf(browserBehaviors)"
+                        :readonly="saving"
+                      >
+                        <Select.Trigger aria-label="Browser cache behavior" />
+                        <Select.Content>
+                          <Select.Item
+                            v-for="option in browserBehaviors"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </Select.Item>
+                        </Select.Content>
+                      </Select>
+                    </SettingsRow>
+                    <SettingsRow
+                      v-if="form.browserBehavior === 'override'"
+                      key="browserMaxAge"
+                      title="Maximum TTL in seconds"
+                      description="Up to 1 year (31,536,000 seconds)."
+                      :depth="1"
+                    >
+                      <NumberInput
+                        id="cache-browserMaxAge"
+                        v-model="form.browserMaxAge"
+                        size="large"
+                        class="w-full"
+                        :min="0"
+                        :max="31536000"
+                        aria-label="Browser maximum TTL in seconds"
+                        aria-describedby="cache-browserMaxAge-duration"
+                        :readonly="saving"
+                      />
+                      <p
+                        id="cache-browserMaxAge-duration"
+                        class="text-body-xs text-(--text-muted)"
+                        data-testid="cache-settings__browser-duration"
+                      >
+                        {{ duration(form.browserMaxAge) }}
+                      </p>
+                    </SettingsRow>
+                  </TransitionGroup>
+                </Item.List>
+              </template>
+            </Card>
+          </SettingsGroup>
+          <SettingsGroup
+            label="Edge cache"
+            hint="How long the edge may serve a stored response before it asks the origin again."
+            anchor="edge-cache"
+          >
+            <Card :padded="false">
+              <template #default>
+                <Item.List>
+                  <TransitionGroup
+                    enter-active-class="animate-content-enter motion-reduce:animate-none"
+                  >
+                    <SettingsRow
+                      key="edgeBehavior"
+                      title="Behavior"
+                      description="Overriding sets the time the edge keeps each object, from 60 seconds up."
+                    >
+                      <Select
+                        v-model="form.edgeBehavior"
+                        size="large"
+                        class="w-full"
+                        :display-value="labelOf(edgeBehaviors)"
+                        :readonly="saving"
+                      >
+                        <Select.Trigger aria-label="Edge cache behavior" />
+                        <Select.Content>
+                          <Select.Item
+                            v-for="option in edgeBehaviors"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </Select.Item>
+                        </Select.Content>
+                      </Select>
+                    </SettingsRow>
+                    <SettingsRow
+                      v-if="form.edgeBehavior === 'override'"
+                      key="edgeMaxAge"
+                      title="Maximum TTL in seconds"
+                      description="From 1 minute (60 seconds) to 1 year (31,536,000 seconds)."
+                      :depth="1"
+                    >
+                      <NumberInput
+                        id="cache-edgeMaxAge"
+                        v-model="form.edgeMaxAge"
+                        size="large"
+                        class="w-full"
+                        :min="0"
+                        :max="31536000"
+                        aria-label="Edge maximum TTL in seconds"
+                        :readonly="saving"
+                        :invalid="Boolean(errors.edgeMaxAge)"
+                        :aria-describedby="
+                          errors.edgeMaxAge
+                            ? 'cache-edgeMaxAge-duration cache-edgeMaxAge-message'
+                            : 'cache-edgeMaxAge-duration'
+                        "
+                        @update:model-value="clear('edgeMaxAge')"
+                      />
+                      <p
+                        id="cache-edgeMaxAge-duration"
+                        class="text-body-xs text-(--text-muted)"
+                        data-testid="cache-settings__edge-duration"
+                      >
+                        {{ duration(form.edgeMaxAge) }}
+                      </p>
+                      <FieldError
+                        v-if="errors.edgeMaxAge"
+                        id="cache-edgeMaxAge-message"
+                        >{{ errors.edgeMaxAge.message }}</FieldError
+                      >
+                    </SettingsRow>
+                    <SettingsRow
+                      key="staleCache"
+                      title="Stale cache"
+                      description="Keep serving the expired object while the origin is unreachable, instead of answering with an error."
+                      variant="compact"
+                    >
+                      <Switch
+                        v-model="form.staleCache"
+                        aria-label="Stale cache"
+                        :readonly="saving"
+                      />
+                    </SettingsRow>
+                    <SettingsRow
+                      key="largeFileCache"
+                      title="Large file optimization"
+                      description="Fetch and cache large objects in fragments, so a partial request does not wait for the whole file."
+                      variant="compact"
+                    >
+                      <Switch
+                        v-model="form.largeFileCache"
+                        aria-label="Large file optimization"
+                        :readonly="saving"
+                      />
+                    </SettingsRow>
+                    <SettingsRow
+                      v-if="form.largeFileCache"
+                      key="largeFileOffset"
+                      title="Fragment size in kB"
+                      description="Each fragment requested from the origin. 1024 kB is the default."
+                      :depth="1"
+                    >
+                      <NumberInput
+                        id="cache-largeFileOffset"
+                        v-model="form.largeFileOffset"
+                        size="large"
+                        class="w-full"
+                        :min="1"
+                        aria-label="Fragment size in kilobytes"
+                        :readonly="saving"
+                      />
+                    </SettingsRow>
+                    <SettingsRow
+                      key="tieredCache"
+                      title="Tiered cache"
+                      description="Add a second cache layer between the edge and your origin, so an edge miss can still be answered without reaching it."
+                      variant="compact"
+                    >
+                      <Switch
+                        v-model="form.tieredCache"
+                        aria-label="Tiered cache"
+                        :readonly="saving"
+                      />
+                    </SettingsRow>
+                    <SettingsRow
+                      v-if="form.tieredCache"
+                      key="tieredTopology"
+                      title="Topology"
+                      description="Where the second layer sits. Pin a region only when the origin is fixed to one."
+                      :depth="1"
+                    >
+                      <Select
+                        v-model="form.tieredTopology"
+                        size="large"
+                        class="w-full"
+                        :display-value="labelOf(topologies)"
+                        :readonly="saving"
+                      >
+                        <Select.Trigger aria-label="Tiered cache topology" />
+                        <Select.Content>
+                          <Select.Item
+                            v-for="option in topologies"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </Select.Item>
+                        </Select.Content>
+                      </Select>
+                    </SettingsRow>
+                  </TransitionGroup>
+                </Item.List>
+              </template>
+            </Card>
+          </SettingsGroup>
+          <CacheKeyGroup />
+        </fieldset>
+      </div>
+
+      <SettingsSaveBar
+        :visible="dirty || saving"
+        :guard="leave"
+        :saving="saving"
+        @save="save"
+        @discard="discard"
+      >
+        Cache settings changed.
+        <span class="text-(--text-muted)">Saving deploys storefront-app to Production.</span>
+      </SettingsSaveBar>
+    </form>
+  </div>
+</template>

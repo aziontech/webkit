@@ -1,0 +1,52 @@
+{
+  "id": "detail/detail-dns-zone",
+  "name": "DetailDnsZone",
+  "title": "Blocks/Detail/DetailDnsZone",
+  "surface": "app",
+  "summary": "A DNS zone detail page, opened from its index: a full-bleed tab bar with Main settings and Records over a scrolling tab panel. Main settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a hint glyph over a flush `Card` of `ItemList` rows. Name and Domain Name are required `Input`s that show a required `FieldError` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroupRoot` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (`PropertyFilter` over Name, Type, Policy and Value, Refresh, Download CSV and `CollectionPreferences`, all driven by `useCollection`) and a records table paginated at 10: the value cell pins a copy button, Weight and Description stay blank when they do not apply, the row menu carries Edit and Delete, and the empty slot separates no records (Add Record, Import zone file) from no match (Clear filters). Built from `PageHeader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `SaveBar`, `Tabs`, `Card`, `ItemList`, `Input`, `InputGroupRoot`, `CopyButton`, `Switch`, `FieldError`, `Button`, `PropertyFilter`, `CollectionPreferences`, `DataTable` and `EmptyState`. A page body for ConsoleLayout.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "dns zone",
+    "dns records",
+    "record table",
+    "zone detail",
+    "nameservers",
+    "dnssec",
+    "records list",
+    "zona dns",
+    "registros dns",
+    "tabela de registros",
+    "import zone file",
+    "zone file",
+    "bind import",
+    "import dns records",
+    "importar arquivo de zona",
+    "importar registros dns"
+  ],
+  "skills": ["azion-ui-tables", "azion-ui-form", "azion-ui-navigation"],
+  "primary": {
+    "name": "MainSettings",
+    "file": "detail-dns-zone.vue"
+  },
+  "files": [
+    "sample.ts",
+    "dns-zone-policy.ts",
+    "parts/dns-zone-records-tab.vue",
+    "parts/dns-zone-settings-tab.vue"
+  ],
+  "variants": [
+    {
+      "name": "Records",
+      "summary": "The Records tab with the zone’s one A record, the ID column hidden by default.",
+      "file": "variants/records.vue"
+    },
+    {
+      "name": "ImportZoneFile",
+      "summary": "The Records tab with Import zone file open: a large `Drawer` that takes one BIND zone file from a `FileDropzone` (or Browse files) or pasted into a `Textarea`, parses it once typing pauses ($ORIGIN, $TTL with units, inherited names, quoted TXT) and previews every line in a `DataTable` paginated at 10 with its line number, name, type, value and a Ready, Skipped or Error `Tag`, the reason under the value. A polite status line counts ready, skipped and errors; errors raise a danger `Alert` saying the ready records still import. The SOA, the apex NS and unsupported types are skipped with their reason; a bad address or a missing value is an error. Import N records adds the ready ones to the table and reports through a toast that counts what was left out.",
+      "file": "variants/import-zone-file.vue"
+    }
+  ]
+}

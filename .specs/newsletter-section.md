@@ -6,7 +6,7 @@ status: implemented
 spec_version: 9
 created: 2026-11-05
 last_updated: 2026-11-17
-checksum: 491c191080c009a48261e4853f3199f760f31c2e2c863ac157c95cfd1277507f
+checksum: 503fc8ec03755602a5f1867c326be14615fab0e8f34f049c3065149087491072
 template: 2
 ---
 
@@ -37,13 +37,13 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 - Set `loading` while the address is sent, then `submitted` or `failed` with the outcome.
 - Keep `description` to one sentence; it is set as the large headline.
 - Write `form.invalidMessage` with an example address so the fix is obvious.
-- Place it last on the page, right above `site-footer-section`, after a hatched `spacer`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `Spacer` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
+- Place it last on the page, right above `site-footer-section`, after a hatched `spacer`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `Spacer` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `azion-ui/no-gap-after-closing-section` flags the doubled close.
 
 ## Usage
 
 ```vue
 <script setup>
-  import NewsletterSection from '@aziontech/webkit/newsletter-section'
+  import NewsletterSection from '@aziontech/ui/newsletter-section'
   import { ref } from 'vue'
 
   const loading = ref(false)
@@ -194,7 +194,7 @@ The ask, the button label and every message are props from the page JSON (`title
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -331,28 +331,28 @@ group('lib: animation extraction', () => {
 })
 
 group('lib: component path resolution', () => {
-  test('resolveSpecForComponentPath maps webkit-layer .vue', () => {
+  test('resolveSpecForComponentPath maps azion-ui-layer .vue', () => {
     const r = resolveSpecForComponentPath(
-      resolve(ROOT, 'packages/webkit/src/components/feedback/tooltip/tooltip.vue'),
+      resolve(ROOT, 'packages/ui/src/components/feedback/tooltip/tooltip.vue'),
       ROOT
     )
     assertEqual(r?.category, 'feedback')
     assertEqual(r?.name, 'tooltip')
   })
-  test('resolveSpecForComponentPath returns null for non-webkit paths', () => {
+  test('resolveSpecForComponentPath returns null for non-azion-ui paths', () => {
     assertEqual(resolveSpecForComponentPath(resolve(ROOT, 'random/file.vue'), ROOT), null)
   })
 })
 
 // Every component has a spec since #1148, so the shipped whitelist is empty; the bypass is
 // exercised against a fixture root that lists one component.
-const LEGACY_ROOT = mkdtempSync(join(tmpdir(), 'webkit-legacy-'))
+const LEGACY_ROOT = mkdtempSync(join(tmpdir(), 'azion-ui-legacy-'))
 mkdirSync(resolve(LEGACY_ROOT, 'contributing/hooks/lib'), { recursive: true })
 writeFileSync(
   resolve(LEGACY_ROOT, 'contributing/hooks/lib/legacy-components.json'),
   JSON.stringify([{ category: 'action', name: 'button' }])
 )
-const MISSING_SPEC_VUE = 'packages/webkit/src/components/feedback/no-such-widget/no-such-widget.vue'
+const MISSING_SPEC_VUE = 'packages/ui/src/components/feedback/no-such-widget/no-such-widget.vue'
 
 group('lib: legacy whitelist', () => {
   test('the shipped whitelist is empty', () => {
@@ -386,7 +386,7 @@ group('hook: enforce-spec-exists.mjs', () => {
     const r = runHook('contributing/hooks/enforce-spec-exists.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/button.vue')
+        file_path: resolve(ROOT, 'packages/ui/src/components/action/button/button.vue')
       }
     })
     assertEqual(r.code, 0)
@@ -397,7 +397,7 @@ group('hook: enforce-spec-exists.mjs', () => {
       {
         tool_name: 'Write',
         tool_input: {
-          file_path: resolve(LEGACY_ROOT, 'packages/webkit/src/components/action/button/button.vue')
+          file_path: resolve(LEGACY_ROOT, 'packages/ui/src/components/action/button/button.vue')
         }
       },
       LEGACY_ROOT
@@ -434,7 +434,7 @@ group('hook: validate-spec-compliance.mjs', () => {
     const r = runHook('contributing/hooks/validate-spec-compliance.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/button.vue')
+        file_path: resolve(ROOT, 'packages/ui/src/components/action/button/button.vue')
       }
     })
     assertEqual(r.code, 0)
@@ -448,7 +448,7 @@ group('hook: validate-spec-compliance.mjs', () => {
   })
 })
 
-const MOTION_ROOT = mkdtempSync(join(tmpdir(), 'webkit-motion-'))
+const MOTION_ROOT = mkdtempSync(join(tmpdir(), 'azion-ui-motion-'))
 const motionSpec = (rows) =>
   [
     '---',
@@ -466,7 +466,7 @@ const motionSpec = (rows) =>
     ''
   ].join('\n')
 const motionVue = (cls) => `<template><div class="${cls}"></div></template>\n`
-const MOTION_DIR = 'packages/webkit/src/components/overlay/demo-panel'
+const MOTION_DIR = 'packages/ui/src/components/overlay/demo-panel'
 const writeMotion = (rel, text) => {
   const abs = resolve(MOTION_ROOT, rel)
   mkdirSync(dirname(abs), { recursive: true })
@@ -474,7 +474,7 @@ const writeMotion = (rel, text) => {
   return abs
 }
 writeMotion(
-  'packages/webkit/catalog.json',
+  'packages/ui/catalog.json',
   JSON.stringify({ tokens: { animations: ['fade-in', 'fade-out', 'page-enter'] } })
 )
 const motionOf = (abs) =>
@@ -538,7 +538,7 @@ group('lib: spec-compliance animations per part', () => {
       motionSpec(['| open | `animate-fade-in` | semantic | `motion-reduce:animate-none` |'])
     )
     const chip = writeMotion(
-      'packages/webkit/src/components/overlay/demo-chip/demo-chip.vue',
+      'packages/ui/src/components/overlay/demo-chip/demo-chip.vue',
       motionVue('flex')
     )
     assertEqual(motionOf(chip), ['Animation classes in spec but missing in .vue: animate-fade-in'])
@@ -546,7 +546,7 @@ group('lib: spec-compliance animations per part', () => {
 })
 
 group('lib: spec-compliance animations in private parts', () => {
-  const dir = 'packages/webkit/src/components/overlay'
+  const dir = 'packages/ui/src/components/overlay'
   const importing = (from, cls = 'flex') =>
     `<script setup>\n  import Part from '${from}'\n</script>\n${motionVue(cls)}`
   const rows = ['| open | `animate-fade-in` | semantic | `motion-reduce:animate-none` |']
@@ -594,10 +594,7 @@ group('hook: validate-authoring.mjs comments', () => {
       tool_input: { file_path: resolve(ROOT, rel), content }
     })
   test('a prose comment in a component blocks (exit 2)', () => {
-    const r = write(
-      'packages/webkit/src/components/action/button/zz.ts',
-      '// why\nexport const a = 1'
-    )
+    const r = write('packages/ui/src/components/action/button/zz.ts', '// why\nexport const a = 1')
     assertEqual(r.code, 2)
     assertTrue(r.stderr.includes('prose-comment'), 'names the check')
   })
@@ -617,10 +614,10 @@ group('hook: validate-authoring.mjs comments', () => {
       '</script>',
       '<template><div /></template>'
     ].join('\n')
-    assertEqual(write('packages/webkit/src/components/action/button/zz.vue', sfc).code, 0)
+    assertEqual(write('packages/ui/src/components/action/button/zz.vue', sfc).code, 0)
   })
   test('test files are out of scope (exit 0)', () => {
-    assertEqual(write('packages/webkit/src/components/action/button/zz.test.ts', '// ok\n').code, 0)
+    assertEqual(write('packages/ui/src/components/action/button/zz.test.ts', '// ok\n').code, 0)
   })
 })
 
@@ -633,7 +630,7 @@ group('hook: validate-authoring.mjs texture backdrop', () => {
   const example = (scene) =>
     [
       '<script setup>',
-      "  import ConsoleShowcaseSection from '@aziontech/webkit/console-showcase-section'",
+      "  import ConsoleShowcaseSection from '@aziontech/ui/console-showcase-section'",
       '</script>',
       '<template>',
       `  <ConsoleShowcaseSection${scene}>`,
@@ -642,7 +639,7 @@ group('hook: validate-authoring.mjs texture backdrop', () => {
       '</template>'
     ].join('\n')
   test('a chart on a textured band in an example blocks (exit 2)', () => {
-    const r = write('packages/webkit/examples/chart/zz.vue', example(' title="Firewall"'))
+    const r = write('packages/ui/examples/chart/zz.vue', example(' title="Firewall"'))
     assertEqual(r.code, 2)
     assertTrue(r.stderr.includes('texture-backdrop:graphic-on-texture'), 'names the check')
   })
@@ -652,13 +649,10 @@ group('hook: validate-authoring.mjs texture backdrop', () => {
       props: { title: 'Firewall' },
       scenes: { scene: { component: 'Chart' } }
     })
-    assertEqual(write('packages/webkit/examples/chart/zz.json', entry).code, 2)
+    assertEqual(write('packages/ui/examples/chart/zz.json', entry).code, 2)
   })
   test('the diagram layout, which paints no texture, passes (exit 0)', () => {
-    assertEqual(
-      write('packages/webkit/examples/chart/zz.vue', example(' variant="diagram"')).code,
-      0
-    )
+    assertEqual(write('packages/ui/examples/chart/zz.vue', example(' variant="diagram"')).code, 0)
   })
 })
 
@@ -667,7 +661,7 @@ group('hook: validate-authoring.mjs slot presence', () => {
     runHook('contributing/hooks/validate-authoring.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/zz.vue'),
+        file_path: resolve(ROOT, 'packages/ui/src/components/action/button/zz.vue'),
         content
       }
     })
@@ -713,7 +707,7 @@ group('hook: validate-authoring.mjs built-in strings', () => {
     ].join('\n')
   test('a literal aria-label in a component template blocks (exit 2)', () => {
     const r = write(
-      'packages/webkit/src/components/action/button/zz.vue',
+      'packages/ui/src/components/action/button/zz.vue',
       sfc('<button aria-label="Close dialog" />')
     )
     assertEqual(r.code, 2)
@@ -721,7 +715,7 @@ group('hook: validate-authoring.mjs built-in strings', () => {
   })
   test('an English prop default blocks (exit 2)', () => {
     const r = write(
-      'packages/webkit/src/components/action/button/zz.vue',
+      'packages/ui/src/components/action/button/zz.vue',
       sfc('<span />', "\n    label: 'Save changes'\n")
     )
     assertEqual(r.code, 2)
@@ -729,15 +723,14 @@ group('hook: validate-authoring.mjs built-in strings', () => {
   })
   test('a catalog-bound label passes (exit 0)', () => {
     const r = write(
-      'packages/webkit/src/components/action/button/zz.vue',
+      'packages/ui/src/components/action/button/zz.vue',
       sfc('<button :aria-label="t(\'dialog.close\')" />')
     )
     assertEqual(r.code, 0)
   })
   test('examples are product copy and out of scope (exit 0)', () => {
     assertEqual(
-      write('packages/webkit/examples/button/zz.vue', sfc('<button aria-label="Close dialog" />'))
-        .code,
+      write('packages/ui/examples/button/zz.vue', sfc('<button aria-label="Close dialog" />')).code,
       0
     )
   })
@@ -748,7 +741,7 @@ group('hook: validate-references.mjs', () => {
     const r = runHook('contributing/hooks/validate-references.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/zz.figma.ts'),
+        file_path: resolve(ROOT, 'packages/ui/src/components/action/button/zz.figma.ts'),
         content: "import figma from 'figma'"
       }
     })
@@ -758,7 +751,7 @@ group('hook: validate-references.mjs', () => {
     const r = runHook('contributing/hooks/validate-references.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/zz.ts'),
+        file_path: resolve(ROOT, 'packages/ui/src/components/action/button/zz.ts'),
         content: "import figma from 'figma'"
       }
     })
@@ -766,7 +759,7 @@ group('hook: validate-references.mjs', () => {
   })
 })
 
-const INTEGRITY_ROOT = mkdtempSync(join(tmpdir(), 'webkit-integrity-'))
+const INTEGRITY_ROOT = mkdtempSync(join(tmpdir(), 'azion-ui-integrity-'))
 const INTEGRITY_BODY = '\n# Gadget\n\n## Purpose\n\nA gadget.\n'
 const integritySpec = (
   status,
@@ -790,7 +783,7 @@ const writeIntegritySpec = (text) => {
   writeFileSync(resolve(INTEGRITY_ROOT, '.specs/gadget.md'), text)
   return resolve(INTEGRITY_ROOT, '.specs/gadget.md')
 }
-const GADGET_VUE = 'packages/webkit/src/components/content/gadget/gadget.vue'
+const GADGET_VUE = 'packages/ui/src/components/content/gadget/gadget.vue'
 const kindsOf = (errors) => errors.map((e) => e.kind)
 
 group('lib: spec-integrity (shared by enforce-spec-exists and check-spec-integrity)', () => {

@@ -1,0 +1,37 @@
+<script setup>
+  import MultiSelectContent from '@aziontech/ui/multi-select-content'
+  import MultiSelectItem from '@aziontech/ui/multi-select-item'
+  import MultiSelectRoot from '@aziontech/ui/multi-select-root'
+  import MultiSelectTrigger from '@aziontech/ui/multi-select-trigger'
+  import { ref } from 'vue'
+
+  const value = ref([])
+  const options = [
+    { value: 'a', label: 'Option A' },
+    { value: 'b', label: 'Option B' }
+  ]
+  const sizes = ['small', 'medium', 'large']
+</script>
+
+<template>
+  <div class="flex w-full max-w-70 flex-col gap-(--spacing-md)">
+    <MultiSelectRoot
+      :aria-label="`Option, ${s}`"
+      v-for="s in sizes"
+      :key="s"
+      v-model="value"
+      :size="s"
+      :placeholder="s.charAt(0).toUpperCase() + s.slice(1)"
+    >
+      <MultiSelectTrigger />
+      <MultiSelectContent>
+        <MultiSelectItem
+          v-for="o in options"
+          :key="o.value"
+          :value="o.value"
+          >{{ o.label }}</MultiSelectItem
+        >
+      </MultiSelectContent>
+    </MultiSelectRoot>
+  </div>
+</template>

@@ -8,12 +8,7 @@
     },
     {
       "label": "A published package depends on another workspace package with a caret range: pnpm publishes workspace:^ as ^x.y.z",
-      "packages": [
-        "@aziontech/icons",
-        "@aziontech/theme",
-        "@aziontech/webkit",
-        "@aziontech/webkit-mcp"
-      ],
+      "packages": ["@aziontech/icons", "@aziontech/theme", "@aziontech/ui", "@aziontech/ui-mcp"],
       "dependencies": ["$LOCAL"],
       "dependencyTypes": ["prod"],
       "pinVersion": "workspace:^"

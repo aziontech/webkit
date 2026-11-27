@@ -7,7 +7,7 @@ spec_version: 9
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: fce46935c4c884608291cef4fecc3af4c08717ffffc115146de90374434fd93a
+checksum: 28b4adf2e205e252c0451da629eb2e16728e90848c54c9b8b5d0ad46919bfe2b
 ---
 
 # ListingIndexSection — Component Spec
@@ -46,7 +46,7 @@ The full, browsable listing of a page such as the Careers jobs list: a headline 
 
 ```vue
 <script setup>
-  import ListingIndexSection from '@aziontech/webkit/listing-index-section'
+  import ListingIndexSection from '@aziontech/ui/listing-index-section'
 </script>
 
 <template>
@@ -220,7 +220,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Link from '@aziontech/webkit/link'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Link from '@aziontech/ui/link'
   import { useHead } from '@unhead/vue'
   import { computed } from 'vue'
 
@@ -9,7 +9,7 @@
   import { searchOpen } from '../lib/search-open'
 
   const t = messages
-  useHead({ title: 'Not found — WebKit' })
+  useHead({ title: 'Not found — Brand' })
 
   const sections = computed(() => [
     { to: '/components', label: t.value.components },

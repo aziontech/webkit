@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-25
-checksum: 9a5d0a13e4a7b6ea1f3f45fcce53563a9f7dedb0e42262cfdd25f8e020b9354a
+checksum: ac00cec9c3aaa88cd16cf41dc49ccbd6d738c54be338c2b090019eaaafefbfee
 ---
 
 # ContactHubSection — Component Spec
@@ -43,7 +43,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 ```vue
 <script setup>
-  import ContactHubSection from '@aziontech/webkit/contact-hub-section'
+  import ContactHubSection from '@aziontech/ui/contact-hub-section'
 </script>
 
 <template>
@@ -142,7 +142,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -1,1 +1,1 @@
-export * from '../../../packages/webkit/src/eslint-plugin/lib/signature-checks.js'
+export * from '../../../packages/ui/src/eslint-plugin/lib/signature-checks.js'

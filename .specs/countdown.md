@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 2
 template: 2
-checksum: b0fc95ca319bd865414bf32bc137c36f1894ae2972080f9222001ee7f2b66dd7
+checksum: f27078adc250a052c45ca5c6aa46531b29361c30ed683af645b210aaff186ea0
 created: 2026-11-23
 last_updated: 2026-11-23
 ---
@@ -54,8 +54,8 @@ Countdown shows the time left until a deadline as a compact tag: the SLA badge o
 
 ```vue
 <script setup>
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import Countdown from '@aziontech/webkit/countdown'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import Countdown from '@aziontech/ui/countdown'
 </script>
 
 <template>
@@ -143,7 +143,7 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 - Keyboard map: none (no interactive element).
 - ARIA: no role and no `aria-label`. The visible phrase with narrow units (`Due in 2h 15m`) is `aria-hidden`, and beside it a visually hidden (`sr-only`) span carries the same phrase with long units (`unitDisplay: 'long'`: `Due in 2 hours 15 minutes`), so a screen reader never reads `m` as meters; a relative phrase (`Due tomorrow`) and `Paused` are the same in both. A screen reader hears `First reply: Due in 2 hours 15 minutes`. The icon is `aria-hidden`. Both spans sit in a `time` element whose `datetime` is the ISO 8601 UTC deadline.
 - Never colour only: each state changes the icon (clock, triangle, circle alert, pause) and the words (`Due in`, `Overdue by`, `Paused`), so it reads in forced colours and for colour-blind people.
-- Contrast ≥4.5:1 (text) / ≥3:1 (icons): `Tag`'s neutral, warning and danger pairs are documented token pairs (`rules/webkit-tokens.md` § Contrast).
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons): `Tag`'s neutral, warning and danger pairs are documented token pairs (`rules/azion-ui-tokens.md` § Contrast).
 - `motion-reduce:*`: no motion.
 - Touch target: not interactive.
 
@@ -198,7 +198,7 @@ The root is a `Tag`; its `data-severity` and `data-size` come from Tag.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/primitives/animations/animate.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

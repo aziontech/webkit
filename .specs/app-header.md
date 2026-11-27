@@ -7,7 +7,7 @@ spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: a8a66a12f4cb9487a6b7a8e594527b795eca1720dc8f12e961dc1e4fb1b4b412
+checksum: ae57dd1241ab7b749fccd2be9ad357b4dec24422a7a0a9d29c820aabf7bc70b4
 created: 2026-05-23
 last_updated: 2026-11-21
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-21
 
 ## Purpose
 
-Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit AppHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in.
+Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Azion UI AppHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in.
 
 The bar has two placements, chosen with `variant`, and the only difference is where the inset is measured from. `content` is the default and the one every app shell wants: the bar runs full bleed across whatever zone holds it — a content zone beside a rail, or the whole window when nothing sits beside it — insetting its regions by the page boundary (`--layout-boundary-inline`) so the first region opens on the same vertical as the page content. It reads the token the page reads, so retuning the boundary moves both.
 
@@ -51,20 +51,20 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 - Keep the default `variant="content"` for app shells; use `variant="site"` only on framed marketing pages.
 - Group the menu trigger and the brand in `AppHeader.Container` so they stay together and never shrink.
 - Make the logo the home link with `href` on `AppHeader.Brand` (`<AppHeader.Brand href="/" aria-label="Azion home">`) instead of wrapping it in a hand-made anchor: the brand owns the focus ring, the hover affordance and the hit area. Empty `aria-label` names the link from the locale catalog (`Azion home`).
-- Put the signed-in account at the end with `AppHeaderAccount` (`import AppHeaderAccount from '@aziontech/webkit/app-header-account'`, then `<AppHeaderAccount :name="account.name" :src="account.src" />`) instead of a hand-made button around an `Avatar`: the part owns the focus ring, the hover affordance and the accessible name. To open the account menu, place it in `DropdownMenu.Trigger`, which forwards the menu state onto it.
+- Put the signed-in account at the end with `AppHeaderAccount` (`import AppHeaderAccount from '@aziontech/ui/app-header-account'`, then `<AppHeaderAccount :name="account.name" :src="account.src" />`) instead of a hand-made button around an `Avatar`: the part owns the focus ring, the hover affordance and the accessible name. To open the account menu, place it in `DropdownMenu.Trigger`, which forwards the menu state onto it.
 - Name the product beside the mark with `label` on `AppHeader.Brand` (`label="Docs"`, `label="Console"`) instead of a `Tag` or a hand-made span: the brand draws the one product lockup every Azion header shares.
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
-- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `AppHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`).
+- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `AppHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `azion-ui/require-header-search`).
 
 ## Usage
 
 ```vue
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
-  import AppHeader from '@aziontech/webkit/app-header'
-  import IconButton from '@aziontech/webkit/icon-button'
+  import Brand from '@aziontech/ui/brand'
+  import Button from '@aziontech/ui/button'
+  import AppHeader from '@aziontech/ui/app-header'
+  import IconButton from '@aziontech/ui/icon-button'
 </script>
 
 <template>
@@ -113,7 +113,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 
 - `app-header-brand.vue` — `AppHeader.Brand`. Brand slot wrapper sized for Azion logo SVGs (default / min). Props `href?: string` (default `''`; when set the brand renders as an anchor to it, and `data-link` on the root carries the link styling: a 40px minimum hit area (44px on `pointer: coarse`), the `--ring-color` focus ring offset against `--bg-surface`, and an opacity hover with a `motion-reduce` fallback; empty renders the plain `div`, unchanged), `ariaLabel?: string` (default `''`; the link's accessible name, written `aria-label="…"` by the consumer; empty with `href` set uses the locale catalog `appHeader.home`, `Azion home` in English) and `label?: string` (default `''`; the product name drawn after the slotted mark as an uppercase label in `.text-overline-sm`, `--text-muted`, inside a `--border-muted` hairline box with `--shape-control` corners and `--spacing-2xs` inline padding, `--spacing-xs` from the mark; `data-label` on the root and `${testId}__label` on the label; empty draws nothing and leaves the part unchanged). With `href` set and no `ariaLabel`, a label names the link from the locale catalog `appHeader.productHome` (`Azion {product} home`, e.g. `Azion Docs home`) instead of `appHeader.home`. No events.
 
-- `app-header-account.vue` — `AppHeaderAccount`, a **companion part**: exported on its own as `@aziontech/webkit/app-header-account` and not attached to the compound, because it composes `Avatar` (and its class merging), which would add about 12 KB to every `AppHeader` import. The account control at the end of the bar: a native `button` that draws the signed-in account as a medium square `Avatar` (initials from `name`, or the photo from `src`). Props `name?: string` (default `''`; the avatar's initials, the first letters of its first and last words), `src?: string` (default `''`; the photo URL, replacing the initials) and `ariaLabel?: string` (default `''`; the control's accessible name, written `aria-label="…"`; empty uses the locale catalog `appHeader.account`, `Account menu` in English). Event `click: [event: MouseEvent]` when it is activated. It owns the `--ring-color` focus ring offset against `--bg-surface`, corners on `--shape-button` (the square avatar's corner, so the ring follows the avatar) and an opacity hover with a `motion-reduce` fallback. Inside `DropdownMenu.Trigger` it receives the trigger's `aria-haspopup`, `aria-expanded` and `aria-controls` and opens the menu, as shadcn's and Supabase's account menus put the avatar in the menu trigger.
+- `app-header-account.vue` — `AppHeaderAccount`, a **companion part**: exported on its own as `@aziontech/ui/app-header-account` and not attached to the compound, because it composes `Avatar` (and its class merging), which would add about 12 KB to every `AppHeader` import. The account control at the end of the bar: a native `button` that draws the signed-in account as a medium square `Avatar` (initials from `name`, or the photo from `src`). Props `name?: string` (default `''`; the avatar's initials, the first letters of its first and last words), `src?: string` (default `''`; the photo URL, replacing the initials) and `ariaLabel?: string` (default `''`; the control's accessible name, written `aria-label="…"`; empty uses the locale catalog `appHeader.account`, `Account menu` in English). Event `click: [event: MouseEvent]` when it is activated. It owns the `--ring-color` focus ring offset against `--bg-surface`, corners on `--shape-button` (the square avatar's corner, so the ring follows the avatar) and an opacity hover with a `motion-reduce` fallback. Inside `DropdownMenu.Trigger` it receives the trigger's `aria-haspopup`, `aria-expanded` and `aria-controls` and opens the menu, as shadcn's and Supabase's account menus put the avatar in the menu trigger.
 
 ## Props
 
@@ -211,7 +211,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -2,8 +2,8 @@ import type {
   FlowDiagramBindOption,
   FlowDiagramNodeData,
   FlowDiagramNodeField
-} from '@aziontech/webkit/flow-diagram-root'
-import { toast } from '@aziontech/webkit/toast'
+} from '@aziontech/ui/flow-diagram-root'
+import { toast } from '@aziontech/ui/toast'
 import { computed, type ComputedRef, onScopeDispose, reactive, readonly, type Ref, ref } from 'vue'
 
 /** A slot of the topology that a resource can be bound to. */

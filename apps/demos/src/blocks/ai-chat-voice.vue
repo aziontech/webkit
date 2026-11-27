@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Button from '@aziontech/ui/button'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { ref } from 'vue'
 
   const emit = defineEmits<{

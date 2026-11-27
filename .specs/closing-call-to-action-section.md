@@ -6,7 +6,7 @@ status: implemented
 spec_version: 9
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 2fe915b77fc7dd8a55b3f5a4a5976b7659c93da1cf2f347d902909f39d9fe6c1
+checksum: 0a406e262d19983fbd441fdf1c3cda1df311a63d241ef6cc08f55a014dada9f8
 template: 2
 ---
 
@@ -37,7 +37,7 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 
 ## Best practices
 
-- Place it last on the page, right above `site-footer-section`, after a hatched `spacer`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `Spacer` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
+- Place it last on the page, right above `site-footer-section`, after a hatched `spacer`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `Spacer` and no closing `RegistrationFrame` + `Texture` (the `shell/shell-site` close is for a page that ends on any other band). `azion-ui/no-gap-after-closing-section` flags the doubled close.
 - Set `anchor: 'contact'` so the page's contact links scroll to the close.
 - Use `variant: 'frame'` (no copy) to close a page that ends on a band with its own actions (a listing, a legal page); `site-page` draws no gap before it.
 - Turn `hatch` off only on a closing band that another closing band follows directly; the last one keeps the frame.
@@ -50,7 +50,7 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 
 ```vue
 <script setup>
-  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
+  import ClosingCallToActionSection from '@aziontech/ui/closing-call-to-action-section'
 </script>
 
 <template>
@@ -177,7 +177,7 @@ One built-in string pair: the typed line's pause control reads `common.pauseAnim
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -3,7 +3,7 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: fc2ef673e0396990a427cad0a8bcfade8602e988e938876801538998b7af9d1b
+checksum: cec23b33eb406ac3445fd2f3f4e7566030c15359359d0d2736ed135ba20764ee
 spec_version: 9
 template: 2
 created: 2026-11-10
@@ -41,7 +41,7 @@ The heading that opens a console page: an h1 in the console type set: 16px mediu
 ## Best practices
 
 - One PageHeader per page; it renders the page's only h1.
-- Put the Documentation link first and the create action on the outer edge. Every action is `size="medium"`, so the row keeps one height; the create action is `variant="primary"`, Documentation and the others `variant="outline"` (`webkit/consistent-header-action-size`).
+- Put the Documentation link first and the create action on the outer edge. Every action is `size="medium"`, so the row keeps one height; the create action is `variant="primary"`, Documentation and the others `variant="outline"` (`azion-ui/consistent-header-action-size`).
 - Do not set `class="w-full"` on the action buttons; the header makes them full width on a phone.
 - Set `titleId` when a form or landmark names itself with `aria-labelledby`.
 - `breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
@@ -54,11 +54,11 @@ The heading that opens a console page: an h1 in the console type set: 16px mediu
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import Button from '@aziontech/webkit/button'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Breadcrumb from '@aziontech/ui/breadcrumb'
+  import Button from '@aziontech/ui/button'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
   import { ref } from 'vue'
 
   const tab = ref('overview')
@@ -181,7 +181,7 @@ _none_
 
 - Visible focus: owned by the controls in the `actions` slot.
 - Keyboard map: `Tab` moves through the actions in DOM order; the header itself is not interactive.
-- ARIA: the root is a `header` element and the title is the page's only `h1`. The `h1` carries `tabindex="-1"` and no focus ring (`outline-none`): it is not a tab stop, but a router or a page can move focus to it on navigation so a screen reader announces the page (the console keyboard standard, `rules/webkit-keyboard.md`); it is a heading, not a control, so it draws no ring; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
+- ARIA: the root is a `header` element and the title is the page's only `h1`. The `h1` carries `tabindex="-1"` and no focus ring (`outline-none`): it is not a tab stop, but a router or a page can move focus to it on navigation so a screen reader announces the page (the console keyboard standard, `rules/azion-ui-keyboard.md`); it is a heading, not a control, so it draws no ring; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
 - Keyboard map with regions: `Tab` reaches the breadcrumb links, then the actions, then the tabs (which own their arrow-key model).
 - Contrast ≥4.5:1 for the title and the muted description.
 - Touch target: the actions keep the Button sizes; on a phone they stretch to full width.
@@ -228,7 +228,7 @@ No built-in strings: the title, description and every region come from the consu
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

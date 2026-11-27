@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Link from '@aziontech/webkit/link'
-  import { toast } from '@aziontech/webkit/toast'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import ConfirmDialog from '@aziontech/ui/confirm-dialog'
+  import Link from '@aziontech/ui/link'
+  import { toast } from '@aziontech/ui/toast'
   import { computed, watch } from 'vue'
 
   import { sampleResourceName } from './delete-dialog.sample'

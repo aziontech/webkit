@@ -3,7 +3,7 @@ name: figma-extract
 description: Pull design tokens, regions, and states from a Figma frame via the Figma MCP. Pure read; emits a structured JSON blob the rest of the pipeline consumes.
 status: active
 last_updated: 2026-07-23
-scope: webkit
+scope: ui
 enforced_by: [dependencies, migration]
 ---
 
@@ -67,7 +67,7 @@ Output the behavior structurally; do not paraphrase Figma's documentation into t
 
 ## Migration fidelity
 
-Surface the frame's component name **raw** as `component_name` (e.g. `HeaderNavigationMenuItem`, `Tabs/Variant=Primary`) for traceability and so `spec-create` can *propose* a normalized kebab name from it. Do **not** kebab or rewrite it here, and never bake a raw Figma name into a decision: the canonical name is the normalized kebab that `spec-create` confirms with the user, and our naming (`kind`, `size`, kebab-case files) always takes precedence — see [`migration.md`](../../rules/migration.md). If the frame carries no usable component name, emit `component_name: null` — `spec-create` then asks the user.
+Surface the frame's component name **raw** as `component_name` (e.g. `HeaderNavigationMenuItem`, `Tabs/Variant=Primary`) for traceability and so `spec-create` can _propose_ a normalized kebab name from it. Do **not** kebab or rewrite it here, and never bake a raw Figma name into a decision: the canonical name is the normalized kebab that `spec-create` confirms with the user, and our naming (`kind`, `size`, kebab-case files) always takes precedence — see [`migration.md`](../../rules/migration.md). If the frame carries no usable component name, emit `component_name: null` — `spec-create` then asks the user.
 
 ## Fallbacks
 

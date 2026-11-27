@@ -6,12 +6,12 @@ The set of Conventional Commit `type`s and the **release effect** of each one ar
 
 The list of accepted types and the type→release-effect must be **identical** at these four points:
 
-| File | What it defines |
-|---|---|
-| [`commitlint.config.js`](../../commitlint.config.js) (`type-enum`) | which types pass `commit-msg` |
+| File                                                                                                                     | What it defines                                            |
+| ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| [`commitlint.config.js`](../../commitlint.config.js) (`type-enum`)                                                       | which types pass `commit-msg`                              |
 | [`release-please-config.json`](../../release-please-config.json) (stock `release-type: node`, **no** bump customization) | which types actually release, per release-please semantics |
-| [`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention | the type → release-effect table, documented for humans |
-| [`pr-open.md`](../commands/pr-open.md) + [`branch-create.md`](../commands/branch-create.md) | the list of types the flows infer/offer |
+| [`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention                                                           | the type → release-effect table, documented for humans     |
+| [`pr-open.md`](../commands/pr-open.md) + [`branch-create.md`](../commands/branch-create.md)                              | the list of types the flows infer/offer                    |
 
 ## Canonical set (today — release-please semantics)
 
@@ -28,7 +28,7 @@ The list of accepted types and the type→release-effect must be **identical** a
 - **Releasable units.** Stock release-please opens/updates a Release PR only for `feat`, `fix` and `deps` commits — plus anything marked breaking. Other types never trigger or bump a release by themselves. (`deps` is not in our commitlint enum; dependency bumps here land as `ci`/`chore` and therefore do not release.)
 - **No per-type bump config.** Unlike semantic-release's `releaseRules`, release-please cannot map `chore` → patch. If a change must ship, give it a releasing type (`fix`/`feat`) — do not invent config that does not exist.
 - **Squash-merge means the PR title is the commit.** Merges to `main` are squash merges (#795), so release-please parses the **PR title** as the conventional commit. The title must be commitlint-valid and carry the intended type; a breaking change belongs in the title as `!` — a `BREAKING CHANGE:` footer buried in the squashed body's bullet list is easy to lose.
-- **Path filtering per package.** A commit counts toward a package's release only if it touches files under that package's path ([`release-please-config.json`](../../release-please-config.json)`#packages`). A `fix(webkit)` that only edits theme files bumps nothing for webkit.
+- **Path filtering per package.** A commit counts toward a package's release only if it touches files under that package's path ([`release-please-config.json`](../../release-please-config.json)`#packages`). A `fix(ui)` that only edits theme files bumps nothing for Azion UI.
 - **`Release-As:` footer** overrides the computed version when an explicit version is required.
 - **The Release PR is the release.** Merging a `feat`/`fix` updates the pending Release PR; merging the Release PR bumps versions, tags, and triggers the `publish-*.yml` publish workflows via `release: published`.
 

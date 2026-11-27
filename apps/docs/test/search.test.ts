@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
-import { matchCommand } from '../../../packages/webkit/src/components/overlay/command/command-match.ts'
+import { matchCommand } from '../../../packages/ui/src/components/overlay/command/command-match.ts'
 import { buildIndex } from '../plugins/content.ts'
 import { searchKeywords } from '../src/lib/search.ts'
 import { groupLabel, spacedTitle, tokenGroupTitle } from '../src/lib/words.ts'

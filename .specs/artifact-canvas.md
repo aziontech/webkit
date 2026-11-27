@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 5
 template: 2
-checksum: 05ed5139498d6985cb4c65a0eae176d42dfee0250f5e1deebbbb78065e0c2d3c
+checksum: 45336ef34d83f66baf11ee6b7a513b08f5c49d93fca902720201686b407adb69
 created: 2026-11-11
 last_updated: 2026-11-17
 ---
@@ -50,9 +50,9 @@ The side panel that shows one generated artifact in full next to the conversatio
 
 ```vue
 <script setup>
-  import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import Resizable from '@aziontech/webkit/resizable'
+  import ArtifactCanvas from '@aziontech/ui/artifact-canvas'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import Resizable from '@aziontech/ui/resizable'
   import { ref } from 'vue'
 
   const versions = ['SELECT * FROM orders;', 'SELECT id, total FROM orders;']
@@ -212,7 +212,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

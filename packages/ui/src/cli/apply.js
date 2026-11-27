@@ -1,0 +1,268 @@
+import { spawnSync } from 'node:child_process'
+import {
+  chmodSync,
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from 'node:fs'
+import { dirname, join } from 'node:path'
+
+import { spliceFragment } from './bundle.js'
+import { gitState, huskyBin } from './plan.js'
+
+function ensureDir(filePath) {
+  mkdirSync(dirname(filePath), { recursive: true })
+}
+
+function readJsonStrict(path) {
+  if (!existsSync(path)) return null
+  const raw = readFileSync(path, 'utf8')
+  try {
+    return JSON.parse(raw)
+  } catch (err) {
+    throw new Error(
+      `${path} exists but is not valid JSON (${err.message}); refusing to overwrite it.`
+    )
+  }
+}
+
+function writeJson(path, value) {
+  ensureDir(path)
+  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, 'utf8')
+}
+
+function mergePreserve(target, patch) {
+  let changed = false
+  for (const [key, value] of Object.entries(patch)) {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if (!target[key] || typeof target[key] !== 'object' || Array.isArray(target[key])) {
+        target[key] = {}
+        changed = true
+      }
+      if (mergePreserve(target[key], value)) changed = true
+    } else if (!(key in target)) {
+      target[key] = value
+      changed = true
+    }
+  }
+  return changed
+}
+
+function applyAddDep(projectDir, action) {
+  const pkgPath = join(projectDir, 'package.json')
+  let pkg
+  try {
+    pkg = readJsonStrict(pkgPath) || {}
+  } catch (err) {
+    return { action, result: 'error', detail: err.message }
+  }
+  const { dev } = action
+  const field = dev ? 'devDependencies' : 'dependencies'
+  pkg[field] = pkg[field] || {}
+  const current = pkg[field][action.dep]
+  if (current && (current === action.version || current !== action.replace)) {
+    return {
+      action,
+      result: 'skipped',
+      detail: `${field}.${action.dep}@${current} kept (Azion UI needs ${action.version})`
+    }
+  }
+  pkg[field][action.dep] = action.version
+  writeJson(pkgPath, pkg)
+  return {
+    action,
+    result: 'written',
+    detail: `${field}.${action.dep}@${action.version}${current ? ` (was ${current}, older than Azion UI needs)` : ''}`
+  }
+}
+
+function applyWrite(projectDir, action) {
+  const target = join(projectDir, action.path)
+  if (action.skipIfExists && existsSync(target)) {
+    return { action, result: 'skipped', detail: `${action.path} exists` }
+  }
+  ensureDir(target)
+  writeFileSync(target, action.content, 'utf8')
+  return {
+    action,
+    result: 'written',
+    detail: action.note ? `${action.path} (${action.note})` : action.path
+  }
+}
+
+function applyMergeJson(projectDir, action) {
+  const target = join(projectDir, action.path)
+  let current
+  try {
+    current = readJsonStrict(target) || {}
+  } catch (err) {
+    return { action, result: 'error', detail: err.message }
+  }
+  const changed = mergePreserve(current, action.merge)
+  if (!changed) {
+    return { action, result: 'skipped', detail: `${action.path} already has ${action.description}` }
+  }
+  writeJson(target, current)
+  return { action, result: 'merged', detail: `${action.path}: ${action.description}` }
+}
+
+function applyAppend(projectDir, action) {
+  const target = join(projectDir, action.path)
+  const existing = existsSync(target) ? readFileSync(target, 'utf8') : ''
+  if (action.marker && existing.includes(action.marker)) {
+    return { action, result: 'skipped', detail: `${action.path} already contains marker` }
+  }
+  ensureDir(target)
+  const next = existing
+    ? `${existing}${existing.endsWith('\n') ? '' : '\n'}${action.content}`
+    : action.content
+  writeFileSync(target, next, 'utf8')
+  if (action.mode) {
+    try {
+      chmodSync(target, action.mode)
+    } catch {}
+  }
+  return { action, result: 'appended', detail: action.path }
+}
+
+function applyPatchEntry(projectDir, action) {
+  const target = join(projectDir, action.path)
+  if (!existsSync(target)) {
+    return { action, result: 'skipped', detail: `${action.path} missing` }
+  }
+  const src = readFileSync(target, 'utf8')
+  const missing = action.imports.filter((line) => {
+    const named = line.match(/import\s*\{\s*([A-Za-z_$][\w$]*)\s*\}/)?.[1]
+    if (named) return !new RegExp(`\\b${named}\\b`).test(src)
+    const spec = line.match(/['"]([^'"]+)['"]/)?.[1]
+    if (!spec) return !src.includes(line)
+    const escaped = spec.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    return !new RegExp(`^\\s*import\\s+['"]${escaped}['"]`, 'm').test(src)
+  })
+  if (!missing.length) {
+    return {
+      action,
+      result: 'skipped',
+      detail: `${action.path} already has the design-system imports`
+    }
+  }
+  writeFileSync(target, `${missing.join('\n')}\n${src}`, 'utf8')
+  return {
+    action,
+    result: 'merged',
+    detail: `${action.path}: added ${missing.map((l) => l.match(/['"]([^'"]+)['"]/)?.[1] || l).join(', ')}`
+  }
+}
+
+function applyRemoveStarter(projectDir, action) {
+  const target = join(projectDir, action.path)
+  const src = existsSync(target) ? readFileSync(target, 'utf8') : ''
+  if (!src.includes(action.line)) {
+    return {
+      action,
+      result: 'skipped',
+      detail: `${action.path} no longer imports the starter stylesheet`
+    }
+  }
+  const lines = src.split('\n')
+  const at = lines.indexOf(action.line)
+  if (lines.some((l) => l.trim() === action.replacement)) lines.splice(at, 1)
+  else lines[at] = action.replacement
+  writeFileSync(target, lines.join('\n'), 'utf8')
+  for (const rel of action.files) rmSync(join(projectDir, rel), { force: true })
+  return {
+    action,
+    result: 'merged',
+    detail: `${action.path}: replaced the starter stylesheet import with ${action.replacement.match(/['"]([^'"]+)['"]/)?.[1]} and removed ${action.files.join(', ')}`
+  }
+}
+
+function applyFence(projectDir, action) {
+  const target = join(projectDir, action.path)
+  const existed = existsSync(target)
+  const existing = existed ? readFileSync(target, 'utf8') : ''
+  const next = spliceFragment(existing, action.content, { start: action.start, end: action.end })
+  if (existed && next === existing) {
+    return { action, result: 'skipped', detail: `${action.path} already up to date` }
+  }
+  ensureDir(target)
+  writeFileSync(target, next, 'utf8')
+  return { action, result: existed ? 'merged' : 'written', detail: action.path }
+}
+
+function applyCopy(projectDir, action) {
+  const target = join(projectDir, action.to)
+  if (existsSync(target)) {
+    return { action, result: 'skipped', detail: `${action.to} exists` }
+  }
+  if (!existsSync(action.from)) {
+    return { action, result: 'skipped', detail: `template missing: ${action.from}` }
+  }
+  ensureDir(target)
+  copyFileSync(action.from, target)
+  return { action, result: 'written', detail: action.to }
+}
+
+function applyCopyStamped(projectDir, action) {
+  const target = join(projectDir, action.to)
+  const existed = existsSync(target)
+  ensureDir(target)
+  writeFileSync(target, action.content, 'utf8')
+  return { action, result: existed ? 'merged' : 'written', detail: action.to }
+}
+
+function applyActivateHooks(projectDir, action) {
+  const bin = huskyBin(projectDir)
+  if (!bin) {
+    return {
+      action,
+      result: 'advised',
+      detail:
+        'husky is not installed yet — run your package manager install (its "prepare" script runs husky) to activate .husky/pre-commit.'
+    }
+  }
+  const proc = spawnSync(process.execPath, [bin], { cwd: projectDir, encoding: 'utf8' })
+  const output = `${proc.stdout || ''}${proc.stderr || ''}`.trim()
+  if (proc.status !== 0 || output || !gitState(projectDir).huskyActive) {
+    return {
+      action,
+      result: 'error',
+      detail: `husky could not activate the git hooks${output ? ` (${output})` : ''} — run \`npx husky\` and check \`git config core.hooksPath\`.`
+    }
+  }
+  return { action, result: 'written', detail: 'git hooks activated (core.hooksPath = .husky/_)' }
+}
+
+function applyReportOnly(action) {
+  return { action, result: action.reportResult || 'skipped', detail: action.detail }
+}
+
+const APPLIERS = {
+  'add-dep': applyAddDep,
+  write: applyWrite,
+  'merge-json': applyMergeJson,
+  append: applyAppend,
+  copy: applyCopy,
+  'copy-stamped': applyCopyStamped,
+  'patch-entry': applyPatchEntry,
+  'remove-starter': applyRemoveStarter,
+  fence: applyFence,
+  'activate-hooks': applyActivateHooks,
+  advise: (projectDir, action) => ({ action, result: 'advised', detail: action.message }),
+  report: (projectDir, action) => applyReportOnly(action)
+}
+
+function applyAction(projectDir, action) {
+  const apply = Object.hasOwn(APPLIERS, action.type) ? APPLIERS[action.type] : null
+  if (!apply) return { action, result: 'skipped', detail: `unknown action type: ${action.type}` }
+  return apply(projectDir, action)
+}
+
+export function applyPlan(projectDir, plan) {
+  return plan.map((action) => applyAction(projectDir, action))
+}
+
+export { readJsonStrict }

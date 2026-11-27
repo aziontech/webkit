@@ -1,0 +1,130 @@
+{
+ "name": "textarea",
+ "binding": "Textarea",
+ "import": "@aziontech/ui/textarea",
+ "treeShakeableImport": "@aziontech/ui/textarea",
+ "category": "input",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Collects multi-line free-form text from the user. Sibling of `input` in the `input` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
+ "setup": null,
+ "useWhen": [
+  "Capture multiple lines of free-form text (descriptions, comments, messages)."
+ ],
+ "avoidWhen": [
+  "The value is a single line → use `input`.",
+  "The value is strictly numeric → use `number-input`."
+ ],
+ "related": [
+  "`input` — single-line sibling with the same field API."
+ ],
+ "bestPractices": [
+  "Give it a sensible default size; avoid auto-growing beyond the viewport.",
+  "Set `autoResize` on a field whose length varies a lot (a prompt, a comment, a commit message): it starts at `minRows` lines and grows as the person types. Always set `maxRows` with it, so a long paste scrolls inside the field instead of pushing the page down.",
+  "`autoResize` turns the drag handle off; pick one or the other, never both.",
+  "Wrap it in a `Field` for the label, description and error.",
+  "Set `monospace` on a value that is code: a pasted zone file, a certificate, a JSON or YAML snippet, a list of IPs. Pair it with `:spellcheck=\"false\"`. Prose (a description, a message) stays in the sans face.",
+  "A value people edit as code with highlighting and line numbers belongs in `CodeEditor`; `monospace` is for a plain paste box.",
+  "Do not restyle a read-only textarea (dashed border, transparent fill): it is the same filled field, made non-editable; the reason belongs in the field's description."
+ ],
+ "props": [
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder shown when the field is empty."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Applies invalid styling and sets `aria-invalid`."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field as required and sets `aria-required`."
+  },
+  {
+   "name": "resize",
+   "type": "'vertical' | 'horizontal' | 'both' | 'none'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior."
+  },
+  {
+   "name": "monospace",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Sets the value and placeholder in the monospace code face (`.text-body-code-sm`) with `wrap=\"off\"`: each line stays whole and the field scrolls sideways, so a record or a key never breaks across lines for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`."
+  },
+  {
+   "name": "autoResize",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Grows the field with its content instead of a fixed height (`data-auto-resize`): CSS `field-sizing: content`, with a measured height where the browser lacks it. Turns the drag handle off."
+  },
+  {
+   "name": "minRows",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Lines the field shows when empty while `autoResize` is on. Ignored without `autoResize`."
+  },
+  {
+   "name": "maxRows",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Lines the field grows to before it scrolls while `autoResize` is on (`data-max-rows`); `0` sets no limit. Ignored without `autoResize`."
+  },
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/textarea/default.vue"
+  },
+  {
+   "name": "Disabled",
+   "file": "examples/textarea/disabled.vue"
+  },
+  {
+   "name": "Invalid",
+   "file": "examples/textarea/invalid.vue"
+  }
+ ],
+ "docs": "components/textarea.md"
+}

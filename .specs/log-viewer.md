@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 8f8b1dda78cb0149375a838a6a764cd425d1afb4904432be3c9037607553a152
+checksum: 35b30d84082f732fcc34d9239c2bc2864f4b2e990268465ea7991a906d188319
 created: 2026-05-26
 last_updated: 2026-11-18
 ---
@@ -36,7 +36,7 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 - Rows of structured records with columns, sorting or paging → use `table`.
 - The steps of a form or setup the person moves through (no log under each step) → use `stepper`.
 - The timed spans of one request or invocation → use `trace`.
-- In a docs Markdown page or the site's page JSON. LogViewer is app-only (decision RV-C2-1, rule `webkit-content-channels`): it views a live run log (search, level filter, follow), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site shows sample output as a code fence or `CodeBlock`.
+- In a docs Markdown page or the site's page JSON. LogViewer is app-only (decision RV-C2-1, rule `azion-ui-content-channels`): it views a live run log (search, level filter, follow), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site shows sample output as a code fence or `CodeBlock`.
 
 ## Related
 
@@ -60,7 +60,7 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import LogViewer from '@aziontech/webkit/log-viewer'
+  import LogViewer from '@aziontech/ui/log-viewer'
 
   const lines = [
     {
@@ -96,11 +96,11 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 </template>
 ```
 
-`@aziontech/webkit/log-viewer` is the compound (the root with `Header`, `Content`, `Footer` and `Steps` attached). For tree-shaking, import the root alone from `@aziontech/webkit/log-viewer-root` and each part from `@aziontech/webkit/log-viewer-header`, `log-viewer-content`, `log-viewer-footer` and `log-viewer-steps`.
+`@aziontech/ui/log-viewer` is the compound (the root with `Header`, `Content`, `Footer` and `Steps` attached). For tree-shaking, import the root alone from `@aziontech/ui/log-viewer-root` and each part from `@aziontech/ui/log-viewer-header`, `log-viewer-content`, `log-viewer-footer` and `log-viewer-steps`.
 
 ```vue
 <script setup>
-  import LogViewer from '@aziontech/webkit/log-viewer'
+  import LogViewer from '@aziontech/ui/log-viewer'
 
   const steps = [
     { id: 'build', title: 'Build', status: 'success', duration: '9s', lines: buildLines },
@@ -120,10 +120,10 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 
 ## Sub-components
 
-LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `LogViewer.Content`, `LogViewer.Footer`, `LogViewer.Steps`, via `index.ts`) and individually importable (each from its own `@aziontech/webkit/log-viewer-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
+LogViewer ships its sub-components attached to the root (`LogViewer.Header`, `LogViewer.Content`, `LogViewer.Footer`, `LogViewer.Steps`, via `index.ts`) and individually importable (each from its own `@aziontech/ui/log-viewer-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
 - `log-viewer-header.vue` (`LogViewer.Header`) — Default 48px toolbar: line count, the level filter and a search field. The level filter is one toggle per entry of `levels` (a dot in the level colour, the level name, its line count); with `levels` empty it offers the `warn` toggle alone while the log has a warning line, so the warnings shortcut is the same control, never a second one. Every toggle is the same native button: 32 px tall with a 44 px hit area on coarse pointers, `.text-label-sm`, the count in tabular numbers; the line count uses the same font. The line count and the toggles sit on one row that scrolls sideways (no visible scrollbar) when it does not fit, so a phone never wraps them into a second row. When `copyable` is set and the log is neither loading nor in error, the copy control (a `CopyButton`, `__copy` under the root test id) sits at the end of the `end` row, beside the search, so the log body keeps its full width on a phone. While `loading`, the line count gives way to a `Skeleton` (`__line-count-loading`), the level filter is hidden and the search is disabled, so the toolbar never describes lines the reader cannot see. Slots: `start`, `end`, `search`.
-- `log-viewer-content.vue` (`LogViewer.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and, when no `LogViewer.Header` is composed, the copy-to-clipboard control (a `CopyButton` pinned top-right in a column of its own beside the log body, so no line runs under it, shown when `copyable` is set; while it shows, `data-copyable` keeps the body at least as tall as the button and its two insets, so a one-line log never pushes the button onto the frame's bottom rule). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). When `error` is set, it replaces the body with a danger `Alert` holding the message. With no line to show, it renders the package `EmptyState` (small): "No log lines yet." for an empty log, "No line matches “query”" with a Clear search action for a search with no result, and "No log lines match the current filters." for a level or warnings filter with no result. Slot: `empty` (replaces the EmptyState).
+- `log-viewer-content.vue` (`LogViewer.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and, when no `LogViewer.Header` is composed, the copy-to-clipboard control (a `CopyButton` pinned top-right in a column of its own beside the log body, so no line runs under it, shown when `copyable` is set; while it shows, `data-copyable` keeps the body at least as tall as the button and its two insets, so a one-line log never pushes the button onto the frame's bottom rule). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/ui/spinner`) and the `loadingLabel` text (`role="status"`). When `error` is set, it replaces the body with a danger `Alert` holding the message. With no line to show, it renders the package `EmptyState` (small): "No log lines yet." for an empty log, "No line matches “query”" with a Clear search action for a search with no result, and "No log lines match the current filters." for a level or warnings filter with no result. Slot: `empty` (replaces the EmptyState).
 - `log-viewer-footer.vue` (`LogViewer.Footer`) — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
 - `log-viewer-steps.vue` (`LogViewer.Steps`) — A run with known steps, standalone (it renders its own `LogViewer` per step and needs no parent `LogViewer`). An optional toolbar row (`__toolbar`, shown when the `header` slot is filled or `viewSwitch` is on) holds the `header` slot at the start and, with `viewSwitch`, a `ToggleGroup` (`__view-switch`, named `Log view`) switching **Phased** and **Complete** at the end. Phased renders an `Accordion` (`type="single"`, collapsible) with one item per step (`__step`, `data-status`): the trigger shows the status glyph (success: a success check; error: a danger cross; skipped: a muted minus; running: a `Spinner`; pending: a dashed circle), the status in words for assistive technology (`sr-only`), the title, the `step-meta` slot (it keeps its width, so a Tag there is never squeezed; the description truncates instead), the description (danger text on error, a shimmer while running) and the duration; the panel holds a borderless `LogViewer` + `LogViewer.Content` over the step's lines, loading with `Waiting to start…` while the step is pending, and the `step-empty` slot in place of the empty state (a skipped step defaults to `Never ran.`). Complete renders every step's lines as one borderless `LogViewer` (`__complete`; line ids are prefixed with the step id). With `progress`, a flush, small, flat `Progress` (`__progress`, named `Run progress`) sits on the bottom edge; its value is the share of steps that succeeded. Props: `steps?: LogViewerStep[]` (default `[]`), `copyable?: boolean` (default `true`, forwarded to each log), `viewSwitch?: boolean` (default `true`), `progress?: boolean` (default `false`). Models: `v-model:view` (`LogViewerStepsView` = `'phased' | 'complete'`, default `'phased'`), `v-model:open-step` (`string`, the id of the open step; unbound, the running step opens, else the one in error, else none). Slots: `header`, `step-meta({ step })`, `step-empty({ step })`. Test ids: `log-viewer-steps` (a consumer `data-testid` wins) and `__toolbar`, `__view-switch`, `__step`, `__complete`, `__progress` under it.
 
@@ -332,7 +332,7 @@ the height of a single row the moment the root stopped stretching.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Item from '@aziontech/webkit/item-root'
+  import Item from '@aziontech/ui/item-root'
 
   import { titleCase } from '../../lib/nav'
   import { copyValue } from '../../lib/tokens'

@@ -154,5 +154,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     spa: values.spa
   })
   const scheme = tlsFromEnv() ? 'https' : 'http'
-  console.log(`WebKit ${values.root ?? 'docs'} on ${scheme}://localhost:${server.address().port}`)
+  console.log(`Azion UI ${values.root ?? 'docs'} on ${scheme}://localhost:${server.address().port}`)
 }

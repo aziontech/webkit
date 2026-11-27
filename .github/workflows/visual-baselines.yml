@@ -64,13 +64,13 @@ jobs:
 
       - name: Regenerate baselines
         if: ${{ github.event.inputs.update_baselines == 'true' }}
-        run: pnpm --filter @aziontech/webkit-visual exec playwright test --update-snapshots=all ${GREP:+--grep "$GREP"}
+        run: pnpm --filter @aziontech/ui-visual exec playwright test --update-snapshots=all ${GREP:+--grep "$GREP"}
         env:
           GREP: ${{ github.event.inputs.grep }}
 
       - name: Compare against the committed baselines
         if: ${{ github.event.inputs.update_baselines != 'true' }}
-        run: pnpm --filter @aziontech/webkit-visual exec playwright test ${GREP:+--grep "$GREP"}
+        run: pnpm --filter @aziontech/ui-visual exec playwright test ${GREP:+--grep "$GREP"}
         env:
           GREP: ${{ github.event.inputs.grep }}
 

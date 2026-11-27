@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-18
-checksum: f66e726157c709a901761b99f295e746ace26d959e8c7a2e6d905e86d8fb4166
+checksum: eb0532165ead5d9fa467307e75cc8b5fcc523758d5fec3d144493122bdf6f45a
 ---
 
 # LogoWallSection — Component Spec
@@ -34,7 +34,7 @@ The customers band: a section title over a framed logo wall of linked client mar
 ## Best practices
 
 - Eight or nine logos fill the rectangle wall beside the aside.
-- Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `ThirdPartyLogo`.
+- Pass client registry entries (`@aziontech/ui/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `ThirdPartyLogo`.
 - Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `knockout` for a black mark on a coloured fill, `color` for a colour mark, and `artwork: 'light'` for a reversed mark that must flip on the light theme; give a `logoLight` file instead when the light theme needs a different drawing.
 - Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.
 - Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`.
@@ -43,7 +43,7 @@ The customers band: a section title over a framed logo wall of linked client mar
 
 ```vue
 <script setup>
-  import LogoWallSection from '@aziontech/webkit/logo-wall-section'
+  import LogoWallSection from '@aziontech/ui/logo-wall-section'
 </script>
 
 <template>
@@ -171,7 +171,7 @@ No built-in strings: the title, the quote, the client names and the action label
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

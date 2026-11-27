@@ -1,4 +1,4 @@
-import { copyText as writeClipboard } from '@aziontech/webkit/utils/clipboard'
+import { copyText as writeClipboard } from '@aziontech/ui/utils/clipboard'
 
 import { cached, keys } from './route-data'
 import type { BlockIndexItem, ComponentDoc, ComponentIndexItem, Highlighted, Row } from './types'
@@ -67,7 +67,7 @@ export function blockMarkdown(block: BlockIndexItem, summary: string): string {
     `# ${block.title}`,
     summary,
     ...(block.stability === 'preview' ? [PREVIEW_LINE] : []),
-    '```bash\n' + `npx @aziontech/webkit add ${block.id}` + '\n```'
+    '```bash\n' + `npx @aziontech/ui add ${block.id}` + '\n```'
   ]
   for (const state of block.states) {
     const source = cached<Highlighted>(keys.blockSource(block.dir, state.file))

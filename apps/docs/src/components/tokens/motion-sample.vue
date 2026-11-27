@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import IconButton from '@aziontech/webkit/icon-button'
+  import IconButton from '@aziontech/ui/icon-button'
   import { computed, ref } from 'vue'
 
   import { format, messages } from '../../lib/i18n'

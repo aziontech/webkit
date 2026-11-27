@@ -23,11 +23,11 @@
   const styles = computed(() => cached<Component>(keys.frameStyles(`examples/${dir.value}`)))
 
   useHead({
-    title: computed(() => (dir.value ? `${dir.value}: ${example.value} — WebKit` : 'WebKit'))
+    title: computed(() => (dir.value ? `${dir.value}: ${example.value} — Brand` : 'Brand'))
   })
 
   function onMessage(event: MessageEvent) {
-    if (event.origin !== location.origin || event.data?.source !== 'webkit-docs') return
+    if (event.origin !== location.origin || event.data?.source !== 'azion-ui-docs') return
     if (event.data.theme === 'dark' || event.data.theme === 'light')
       settings.theme = event.data.theme
     if (event.data.dir === 'ltr' || event.data.dir === 'rtl') settings.dir = event.data.dir

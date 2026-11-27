@@ -1,0 +1,89 @@
+{
+ "name": "photo-marquee-section",
+ "binding": "PhotoMarqueeSection",
+ "import": "@aziontech/ui/photo-marquee-section",
+ "treeShakeableImport": "@aziontech/ui/photo-marquee-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header` and `registration-frame`.",
+ "setup": null,
+ "useWhen": [
+  "Use PhotoMarqueeSection for a decorative moving strip of photos.",
+  "To show a place or a team in pictures without a grid."
+ ],
+ "avoidWhen": [
+  "For quotes → use `recognition-marquee-section`."
+ ],
+ "related": [
+  "`recognition-marquee-section` — the sibling strip of quotes with the same loop."
+ ],
+ "bestPractices": [
+  "Give every photo its `width` and `height` so the strip reserves each slot before the picture loads.",
+  "Leave `duration` at `0` to let the strip pace itself (ten seconds per photo)."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Paragraph beside the headline."
+  },
+  {
+   "name": "descriptionWidth",
+   "type": "PhotoMarqueeSectionDescriptionWidth",
+   "default": "'narrow'",
+   "required": "false",
+   "doc": "Width the description is capped at: `narrow` or `wide`."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the scrolling region."
+  },
+  {
+   "name": "duration",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Seconds one loop of the strip takes; `0` paces it at ten seconds per photo."
+  },
+  {
+   "name": "photos",
+   "type": "PhotoMarqueeSectionPhoto[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The photographs, in order; each is `{ src, alt, width, height }`."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/photo-marquee-section/default.vue"
+  }
+ ],
+ "docs": "components/photo-marquee-section.md"
+}

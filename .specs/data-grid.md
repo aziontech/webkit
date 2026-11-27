@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 3f0c89990e3d4acb53f72520a31a2596fc5470f4f8b7423cc06ce7001583bd8f
+checksum: 4d7a38cb4d160156288a22189e30d0d2497e7b10c9bb8e2b0d9da5cc189554c5
 created: 2026-11-15
 last_updated: 2026-11-20
 ---
@@ -56,8 +56,8 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import DataGrid from '@aziontech/webkit/data-grid'
+  import Button from '@aziontech/ui/button'
+  import DataGrid from '@aziontech/ui/data-grid'
   import { ref } from 'vue'
 
   const rows = ref([
@@ -274,7 +274,7 @@ This component has no `variant`/`size`, so the canonical Types/Sizes examples do
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

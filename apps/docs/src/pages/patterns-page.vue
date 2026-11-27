@@ -7,7 +7,7 @@
   import { PATTERN_GROUPS, PATTERNS } from '../lib/patterns'
 
   const t = messages
-  useHead({ title: 'Patterns — WebKit' })
+  useHead({ title: 'Patterns — Brand' })
 
   const groups = computed(() =>
     PATTERN_GROUPS.map((group) => ({

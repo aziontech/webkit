@@ -1,0 +1,97 @@
+#!/usr/bin/env node
+
+import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { dirname, join, relative, resolve } from 'node:path'
+
+import {
+  docFileKind,
+  scanDoc,
+  MESSAGES
+} from '../../../contributing/hooks/lib/authoring-docs-checks.mjs'
+
+const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
+const ROOT = resolve(SCRIPT_DIR, '../../..')
+const BASELINE = join(SCRIPT_DIR, 'authoring-docs-baseline.json')
+const DIRS = ['contributing/skills', 'contributing/agents', 'skills', 'agents']
+
+function walk(dir) {
+  const out = []
+  if (!existsSync(dir)) return out
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name)
+    if (e.isDirectory()) out.push(...walk(p))
+    else if (e.name.endsWith('.md')) out.push(p)
+  }
+  return out
+}
+
+function currentViolations() {
+  const keys = []
+  for (const base of DIRS) {
+    for (const abs of walk(join(ROOT, base))) {
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      if (!docFileKind(rel)) continue
+      const content = readFileSync(abs, 'utf-8')
+      for (const v of scanDoc(rel, content)) keys.push(`${rel}::doc:${v.id}`)
+    }
+  }
+  return keys.sort()
+}
+
+const update = process.argv.includes('--update')
+const current = currentViolations()
+
+if (update) {
+  writeFileSync(BASELINE, JSON.stringify(current, null, 2) + '\n')
+  console.log(`authoring-docs-baseline.json updated: ${current.length} known violations recorded.`)
+  process.exit(0)
+}
+
+let baseline = []
+try {
+  baseline = JSON.parse(readFileSync(BASELINE, 'utf-8'))
+} catch {
+  console.error(
+    'No authoring-docs-baseline.json — run `node scripts/check-authoring-docs.mjs --update` once.'
+  )
+  process.exit(1)
+}
+
+function counts(keys) {
+  const m = new Map()
+  for (const k of keys) m.set(k, (m.get(k) ?? 0) + 1)
+  return m
+}
+const baseCounts = counts(baseline)
+const currCounts = counts(current)
+const introduced = []
+for (const [k, n] of currCounts) {
+  const extra = n - (baseCounts.get(k) ?? 0)
+  for (let i = 0; i < extra; i++) introduced.push(k)
+}
+const fixed = []
+for (const [k, n] of baseCounts) {
+  const gone = n - (currCounts.get(k) ?? 0)
+  for (let i = 0; i < gone; i++) fixed.push(k)
+}
+
+if (fixed.length) {
+  console.log(`\n↓ ${fixed.length} baseline violation(s) fixed — prune with update:authoring-docs:`)
+  for (const k of fixed) console.log(`  - ${k}`)
+}
+
+if (introduced.length) {
+  console.error(`\n✖ ${introduced.length} NEW skill/agent doc-standard violation(s) — blocked:\n`)
+  for (const k of introduced) {
+    const [file, id] = k.split('::doc:')
+    console.error(`  ${file}\n    [${id}] ${MESSAGES[id] ?? id}`)
+  }
+  console.error(
+    '\nFix per contributing/rules/authoring-docs.md. Re-baselining is only for a reviewed exception.'
+  )
+  process.exit(1)
+}
+
+console.log(`✓ authoring-docs ratchet: ${current.length} known violations, 0 new.`)
+process.exit(0)

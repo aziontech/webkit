@@ -3,7 +3,7 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: f32e3fa44299e213cef64bf744250f1a6502423196226c52f32c46954867c3e4
+checksum: 78caca5d722b7269045424c6e33275169743f8e69b8fa0552240b9646de38b4a
 spec_version: 14
 template: 2
 created: 2026-11-10
@@ -56,7 +56,7 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Tree from '@aziontech/webkit/tree'
+  import Tree from '@aziontech/ui/tree'
 
   const expanded = ref(['assets'])
   const items = [
@@ -290,7 +290,7 @@ Decisions taken in this draft that a reviewer should confirm before approval:
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

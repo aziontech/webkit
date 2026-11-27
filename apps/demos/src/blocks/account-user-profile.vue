@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import Button from '@aziontech/webkit/button'
-  import Kbd from '@aziontech/webkit/kbd'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tabs from '@aziontech/webkit/tabs'
+  import Alert from '@aziontech/ui/alert'
+  import Button from '@aziontech/ui/button'
+  import Kbd from '@aziontech/ui/kbd'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tabs from '@aziontech/ui/tabs'
   import { computed, nextTick, ref, watch } from 'vue'
 
   import ProfileAbout from './account-user-profile-profile-about.vue'

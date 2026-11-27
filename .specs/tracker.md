@@ -6,7 +6,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: 23a1f02e5ac9e0450d2fd957e58ff699f34fab2464bfa5a80ca61303654ef1d0
+checksum: 11b506e26655b39cd3026e5201ab1bc45d0810dd3c489803e1a6222da7b2f8e1
 ---
 
 # Tracker — Component Spec
@@ -46,7 +46,7 @@ A status strip: one block per period — a day, an hour, a deployment — colore
 
 ```vue
 <script setup>
-  import Tracker from '@aziontech/webkit/tracker'
+  import Tracker from '@aziontech/ui/tracker'
 </script>
 
 <template>
@@ -65,7 +65,7 @@ A status strip: one block per period — a day, an hour, a deployment — colore
 </template>
 ```
 
-**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `Tracker` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+**Three ways in** (decision RV-C2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `Tracker` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
 
 ```mdx
 <Tracker aria-label="Uptime" items={[{ "severity": "success", "label": "Nov 1 · Operational" }]} />
@@ -173,7 +173,7 @@ _None of its own._ The active index above is the only emit.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

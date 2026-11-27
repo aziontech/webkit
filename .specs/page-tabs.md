@@ -3,7 +3,7 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: 060c2a05923f2eedf8e773cf8ade96df14ab837b6e7ed10b58dcdfe079600032
+checksum: 66b9d6a132c22db2eeb56046b265221e0525301611d0e9e0b489f9f0bb22ee38
 spec_version: 8
 template: 2
 created: 2026-11-10
@@ -45,9 +45,9 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
+  import Button from '@aziontech/ui/button'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
   import { ref } from 'vue'
 
   const activeTab = ref('overview')
@@ -165,7 +165,7 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

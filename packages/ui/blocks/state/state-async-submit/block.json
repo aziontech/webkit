@@ -1,0 +1,46 @@
+{
+  "id": "state/state-async-submit",
+  "name": "StateAsyncSubmit",
+  "title": "Blocks/State/StateAsyncSubmit",
+  "surface": "app",
+  "summary": "The async counterpart of the server rejection in the SectionRejected state of the `state/state-form-validation` block: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card of `detail/detail-deployment-logs` (`Card`, `StatusIndicator`, `LogViewer` with its `LogViewer.Steps` steps and progress bar, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "async submit",
+    "long running action",
+    "background job status",
+    "deploy in progress",
+    "async deploy result",
+    "operation status",
+    "envio assíncrono",
+    "ação demorada",
+    "status da operação",
+    "result reaches me later"
+  ],
+  "skills": ["azion-ui-errors", "azion-ui-states", "azion-ui-form"],
+  "primary": {
+    "name": "Idle",
+    "file": "state-async-submit.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Running",
+      "summary": "Mid-run: the progress toast reads Deploying web-app…, the heading reads Deploying, and the logs card streams under the Building status.",
+      "file": "variants/running.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Edit and Redeploy, no toast repeats it while the page is on screen (a hidden page gets the permanent failure toast), and the logs card stays open on the failed step with the Phased or Complete switch.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "Success",
+      "summary": "The run is live: the heading reads Deployed and the success Alert names the new address with Edit, Redeploy and Open service, no toast repeats it while the page is on screen, and the logs card is gone.",
+      "file": "variants/success.vue"
+    }
+  ]
+}

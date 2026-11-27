@@ -1,0 +1,210 @@
+{
+ "name": "code-editor",
+ "binding": "CodeEditor",
+ "import": "@aziontech/ui/code-editor",
+ "treeShakeableImport": "@aziontech/ui/code-editor",
+ "category": "code",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use CodeEditor only when the person edits the code (its diff mode is for editing one side beside the original); to show code, config or JSON the person reads or copies, including read-only diffs, use CodeBlock, and for build, deploy or runtime log lines use LogViewer. An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.",
+ "setup": null,
+ "useWhen": [
+  "Editing a function, a script, a SQL query, a JSON or YAML document inside the product.",
+  "Editing code beside the version it changes (diff mode): the saved version stays on the left, read-only, and the edit happens on the right, for example a function changed before a deploy.",
+  "Code that the server validates: the diagnostics come back as `markers` and show on their lines and in a list.",
+  "A JSON document with a known shape (a function's argument schema, a configuration file): pass its JSON Schema as `schema` and Monaco checks the document against it as the user types.",
+  "A read-only view of code that still needs the editor's navigation (find, folding) once Monaco is loaded."
+ ],
+ "avoidWhen": [
+  "Showing a snippet to copy, with tabs and a file name → use `code-block`.",
+  "Showing a read-only change between two versions (what a release or a revert changes, a configuration before and after) → use `code-block` with the tab's `original`; diff mode is for editing beside the original, not for reviewing a change nobody edits.",
+  "A one-line value such as a header, a regex or a path → use `input` inside a `field`.",
+  "Free prose or a description → use `textarea`.",
+  "A stream of log lines → use `log-viewer`.",
+  "A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both).",
+  "In a docs Markdown page or the site's page JSON. CodeEditor is app-only (decision RV-C2-1, rule `azion-ui-content-channels`): the person edits code in it, so it has no `DocMarkdown` tag and no page JSON entry. A docs page shows code as a code fence (`DocCodeGroup`); the site uses `CodeBlock`."
+ ],
+ "related": [
+  "`code-block` — read-only snippets with copy; same syntax colour tokens.",
+  "`textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.",
+  "`field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.",
+  "`toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.",
+  "`log-viewer` — output of a run next to the editor."
+ ],
+ "bestPractices": [
+  "Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.",
+  "Pass `loader` from the app so Monaco is code-split and never part of the Azion UI bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.",
+  "Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.",
+  "Function calls are coloured for you (JavaScript and TypeScript, with `--code-syntax-function`); do not register your own Monarch grammar for that.",
+  "Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.",
+  "Pass a JSON Schema as `schema` for a JSON document with a known shape, and listen to `markers-change` to show the first problem in a `Field.Error`; keep `markers` for what only the server knows.",
+  "Set `:bordered=\"false\"` when the editor fills a pane that already frames it (a resizable pane, a full-page function editor, a drawer body); keep the default frame inside a form.",
+  "Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.",
+  "Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.",
+  "In diff mode, `original` is the left side and `v-model` the right side, which stays editable. A diff nobody edits is a `code-block` with `original`, which marks every added and removed line without loading an editor."
+ ],
+ "props": [
+  {
+   "name": "language",
+   "type": "string",
+   "default": "'plaintext'",
+   "required": "false",
+   "doc": "Monaco language id (`javascript`, `typescript`, `json`, `sql`, `lua`, `yaml`…). The fallback ignores it."
+  },
+  {
+   "name": "loader",
+   "type": "() => Promise<CodeEditorMonaco>",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Loads Monaco lazily; without it the plain editor is the editor."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The code can be read, selected and copied but not changed."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Locks the editor; it leaves the tab order."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Paints the danger border; also set by a surrounding `Field`."
+  },
+  {
+   "name": "diff",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows `original` beside the value as a side-by-side diff."
+  },
+  {
+   "name": "original",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The left side of the diff."
+  },
+  {
+   "name": "markers",
+   "type": "CodeEditorMarker[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Diagnostics shown on their lines and in the problems list."
+  },
+  {
+   "name": "height",
+   "type": "string",
+   "default": "'16rem'",
+   "required": "false",
+   "doc": "CSS height of the editing area."
+  },
+  {
+   "name": "fill",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Fills a flex column instead of using `height`."
+  },
+  {
+   "name": "bordered",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draws the frame: border, corner radius and an offset focus ring. Off, the editor sits flush in its pane."
+  },
+  {
+   "name": "showLineNumbers",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the line-number gutter."
+  },
+  {
+   "name": "padLineNumbers",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Zero-pads line numbers to two digits (01, 02…), as the console's full-page function and arguments editors do."
+  },
+  {
+   "name": "path",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Model path for Monaco language services (`index.ts`, `args.json`)."
+  },
+  {
+   "name": "schema",
+   "type": "Record<string, unknown>",
+   "default": "undefined",
+   "required": "false",
+   "doc": "JSON Schema the value is checked against when `language` is `json` and Monaco is loaded."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name when no `Field` label names it. Empty uses the locale catalog."
+  },
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "ready",
+   "payload": "unknown",
+   "notes": "Monaco mounted; the payload is the editor instance (for actions)."
+  },
+  {
+   "name": "load-error",
+   "payload": "unknown",
+   "notes": "The loader rejected; the plain editor stays."
+  },
+  {
+   "name": "markers-change",
+   "payload": "CodeEditorMarker[]",
+   "notes": "The diagnostics Monaco's language services (JSON syntax and `schema`, TypeScript) put on the value, as markers sorted by line, each time they change. The `markers` prop is not echoed back; the plain editor never fires it."
+  }
+ ],
+ "slots": [
+  {
+   "name": "toolbar",
+   "scope": "—",
+   "notes": "A bar above the editing area: a document switch, the file name, a Format or Run action."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/code-editor/default.vue"
+  },
+  {
+   "name": "Monaco",
+   "file": "examples/code-editor/monaco.vue"
+  },
+  {
+   "name": "WithToolbar",
+   "file": "examples/code-editor/with-toolbar.vue"
+  }
+ ],
+ "docs": "components/code-editor.md"
+}

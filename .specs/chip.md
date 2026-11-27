@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: f2b054c14a28ad925ee100c38c15dcbfe1874886e7ee6a8422c0432d6955d5a6
+checksum: aaa33808b3ddb928aa431991d0e0f530e76377fb5cee0fa774cc8a7dfaf31b04
 created: 2026-06-23
 last_updated: 2026-11-25
 ---
@@ -64,7 +64,7 @@ A Chip is a compact, pill-shaped token that labels a discrete value the user has
 
 ```vue
 <script setup>
-  import Chip from '@aziontech/webkit/chip'
+  import Chip from '@aziontech/ui/chip'
 </script>
 
 <template>
@@ -102,7 +102,7 @@ A selectable chip is a toggle whose state is the `selected` model; it keeps that
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Chip from '@aziontech/webkit/chip'
+  import Chip from '@aziontech/ui/chip'
 
   const production = ref(true)
   const staging = ref(false)
@@ -242,7 +242,7 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

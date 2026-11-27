@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import FieldError from '@aziontech/webkit/field-error'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import MarkdownEditor, { type MarkdownEditorMention } from '@aziontech/webkit/markdown-editor'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import { useFilePicker } from '@aziontech/webkit/use-file-picker'
+  import FieldError from '@aziontech/ui/field-error'
+  import FileTokenGroup from '@aziontech/ui/file-token-group'
+  import IconButton from '@aziontech/ui/icon-button'
+  import MarkdownEditor, { type MarkdownEditorMention } from '@aziontech/ui/markdown-editor'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import { useFilePicker } from '@aziontech/ui/use-file-picker'
   import { computed } from 'vue'
 
   export interface TicketDescriptionFieldProps {

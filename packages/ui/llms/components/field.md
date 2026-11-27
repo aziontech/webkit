@@ -1,0 +1,200 @@
+# Field
+
+> One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`, `RadioGroup`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. One anatomy serves every control, so there is no per-control field wrapper.
+
+- Import: `import FieldRoot from '@aziontech/ui/field-root'`
+- Compound import (dot notation, not tree-shakeable): `import Field from '@aziontech/ui/field'`
+- Category: input · Surface: app · Structure: composition
+- API as JSON: [field.json](field.json)
+
+## When to use
+
+- Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Field.Description and Field.Error also work alone, under a control that is not inside a Field; for an optional explanation beside a label (a click-open note) use Hint; information needed to fill the field goes in Field.Description.
+- Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.
+- A checkbox, radio or switch with its label beside it (`orientation="horizontal"`).
+- A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup variant="card"`, never a radio inside a `Field.Label`.
+- A group of related controls under one caption (`Field.Set` + `Field.Legend`), or a form section (`Field.Group`).
+
+## Do
+
+- Put the state on the `Field`, not on the control: `<Field invalid>` sets `aria-invalid` on the control and the invalid tone on `Field.Description`.
+- Set `required` on the `Field` from the first render, never only after a submit: it shows the Required marker on `Field.Label` and sets `required` on the control, and nothing turns a warning colour. A required field submitted empty is `invalid`, with a `Field.Error` that says what to enter; it turns red only then.
+- Let the Field own the ids. Pass an explicit `id` on the control and `for` on `Field.Label` only when another part of the page needs the id (focusing the first invalid field, an error summary link).
+- Render `Field.Description` for guidance and `Field.Error` for a validation message; both are announced through `aria-describedby`. `Field.Error` has `role="alert"`, so render it only when there is an error.
+- Choice cards: `<Field.Label><Field orientation="horizontal">control + Field.Content</Field></Field.Label>`. Never nest a choice card inside another `Field`; group cards with `Field.Set`.
+- Use `orientation="responsive"` for settings rows that stack in a narrow container and sit side by side in a wide one; it follows the nearest container (a `Field.Group`, a Card, a dialog or drawer body).
+
+## Don’t
+
+- A control with no visible label inside a toolbar or a table cell → render the control alone with an `aria-label`.
+- A group of mutually exclusive cards with icons → use `radio-group` with `type="card"`.
+- A static key/value read-out → use `key-value-list`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [input-group](input-group.md) — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.
+- [phone-input](phone-input.md), `password-requirements` — a phone number control and the live password rules row, each placed inside a `Field`.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `orientation` | `'vertical' \| 'horizontal' \| 'responsive'` | `'vertical'` | false | Layout axis: label above the control, beside it, or beside it once the enclosing container (a FieldGroup, Card, drawer or dialog body) is wide enough. |
+| `invalid` | `boolean` | `false` | false | Marks the field invalid: the control sets aria-invalid and FieldDescription switches to the invalid tone. |
+| `disabled` | `boolean` | `false` | false | Disables the wrapped control and dims the field. |
+| `required` | `boolean` | `false` | false | Shows the Required marker on FieldLabel and sets required on the wrapped control. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | `Field.Label`, the control, `Field.Description`, `Field.Error` (or `Field.Content` beside the control in a horizontal field). |
+
+## Sub-component imports
+
+- `@aziontech/ui/field-label`
+- `@aziontech/ui/field-description`
+- `@aziontech/ui/field-error`
+- `@aziontech/ui/field-group`
+- `@aziontech/ui/field-set`
+- `@aziontech/ui/field-legend`
+- `@aziontech/ui/field-content`
+- `@aziontech/ui/field-title`
+- `@aziontech/ui/field-separator`
+
+## Sub-components
+
+The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts), `requiredId` (id of the hidden "Required" text in `Field.Label`) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
+
+- `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (a lone `*`, hidden from assistive tech) and, in a required Field, a `hidden` "Required" text (`requiredId`) when the Field is `required` or its own `required` prop is set (for a label set apart from its control, outside any Field), and a `Hint` glyph when `hint` is set. When it wraps a `Field` it becomes a selectable card (border, padding, hover, focus ring, selected tokens when the control inside is `data-checked`).
+  - Props: `hint` (`string`, default `''`) — short explanation, one to three sentences, in a `Hint` glyph that opens it on click. Clicking the glyph never toggles or focuses the labelled control.
+  - Events: _none_.
+  - Slots: `default` — label text, or a horizontal `Field` for a choice card.
+- `field-description/field-description.vue` — guidance line in the label-sm text style; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (`--text-danger`, only when no `Field.Error` is mounted) > `helper` (`--text-muted`). A required field keeps the helper tone: the Required marker on `Field.Label` says it is required, and no control shows a warning colour for it.
+  - Props: _none_. Events: _none_. Slots: `default`.
+- `field-error/field-error.vue` — validation message in `--text-danger` led by an `az az-circle-alert` icon (`aria-hidden`, test id `${testId}__icon`), with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
+  - Props: _none_. Events: _none_. Slots: `default`.
+- `field-group/field-group.vue` — vertical stack of fields; it is a `@container/field-group`, one of the containers `orientation="responsive"` can follow.
+  - Props: _none_. Events: _none_. Slots: `default`.
+- `field-set/field-set.vue` — native `<fieldset>` without browser chrome, for a group of related fields or choices.
+  - Props: _none_. Events: _none_. Slots: `default`.
+- `field-legend/field-legend.vue` — native `<legend>` captioning a `Field.Set`.
+  - Props: `type` (`'legend' \| 'label'`, default `'legend'`) — `legend` titles a section, `label` matches a `Field.Label` for a group of choices.
+  - Events: _none_. Slots: `default`.
+- `field-content/field-content.vue` — column that holds the label/title and descriptions beside a control in a horizontal Field.
+  - Props: _none_. Events: _none_. Slots: `default`.
+- `field-title/field-title.vue` — title inside a choice card; registers its id with the Field so the card's `Checkbox` or `Switch` is named by it through `aria-labelledby` (the wrapping `Field.Label` makes the whole card the click target).
+  - Props: _none_. Events: _none_. Slots: `default`.
+- `field-separator/field-separator.vue` — horizontal rule between fields, with optional centred text.
+  - Props: _none_. Events: _none_. Slots: `default` — optional text.
+
+## States
+
+- Visual states: `default`, `disabled`, `invalid`, `required`
+- `data-orientation`: `vertical` | `horizontal` | `responsive`
+- `data-invalid`, `data-disabled`, `data-required` mirror the props on the root; `data-invalid` is also set while a `Field.Error` is mounted
+- `data-slot` identifies every part (`field`, `field-label`, `field-description`, `field-error`, `field-group`, `field-set`, `field-legend`, `field-content`, `field-title`, `field-separator`)
+- Responsive: `orientation="responsive"` queries the nearest container (`@md:`), not only `Field.Group`: inside a Card, a drawer or dialog body (`@container/panel`), a settings section or a `Field.Group` it stacks the label above the control in a narrow box and puts them side by side from `@md`. With no container ancestor it stays vertical.
+
+## Accessibility
+
+- Visible focus: the control keeps its own ring; a choice card shows `has-[:focus-visible]:ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` around the whole card.
+- Keyboard map: the Field adds no keys; `Tab` reaches the control, and clicking `Field.Label` focuses or toggles it.
+- ARIA: root `role="group"`; `Field.Label` `for` → control `id`; control `aria-describedby` → every mounted `Field.Description` and `Field.Error` id; control `aria-invalid` when the Field is `invalid` or a `Field.Error` is mounted; `required` / `aria-required` when it is `required`; `Field.Error` `role="alert"`; `Field.Set` is a native `fieldset` named by its `legend`; the `*` is `aria-hidden`; a control whose role cannot take `aria-required` (DatePicker, DateRangePicker, FileDropzone, TagEditor) adds `requiredId` to its `aria-describedby`.
+- Contrast ≥4.5:1 for label, description and error text in every tone, including disabled.
+- `motion-reduce:transition-none` on the choice card transition.
+- Touch target: the whole choice card is the target; a horizontal Field's label extends the control's target.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import { ref } from 'vue'
+
+  const email = ref('')
+</script>
+
+<template>
+  <Field class="max-w-(--container-xs)">
+    <Field.Label>Email</Field.Label>
+    <Input
+      v-model="email"
+      type="email"
+      autocomplete="email"
+      placeholder="you@example.com"
+    />
+    <Field.Description>We'll never share your email.</Field.Description>
+  </Field>
+</template>
+```
+
+### DescriptionAndError
+
+```vue
+<script setup>
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import { computed, ref } from 'vue'
+
+  const slug = ref('My Project')
+  const invalid = computed(() => !/^[a-z0-9-]+$/.test(slug.value))
+</script>
+
+<template>
+  <Field
+    required
+    :invalid="invalid"
+    class="max-w-(--container-xs)"
+  >
+    <Field.Label>Project slug</Field.Label>
+    <Input
+      v-model="slug"
+      :spellcheck="false"
+      autocomplete="off"
+    />
+    <Field.Description>Used in the project URL.</Field.Description>
+    <Field.Error v-if="invalid">Use lowercase letters, numbers and hyphens only.</Field.Error>
+  </Field>
+</template>
+```
+
+### Horizontal
+
+```vue
+<script setup>
+  import Checkbox from '@aziontech/ui/checkbox'
+  import Field from '@aziontech/ui/field'
+  import Switch from '@aziontech/ui/switch'
+  import { ref } from 'vue'
+
+  const terms = ref(false)
+  const notifications = ref(true)
+</script>
+
+<template>
+  <Field.Group class="max-w-(--container-xs)">
+    <Field orientation="horizontal">
+      <Checkbox
+        v-model="terms"
+        name="terms"
+      />
+      <Field.Content>
+        <Field.Label>Accept the terms of service</Field.Label>
+        <Field.Description>You can withdraw consent at any time.</Field.Description>
+      </Field.Content>
+    </Field>
+    <Field orientation="horizontal">
+      <Switch v-model="notifications" />
+      <Field.Content>
+        <Field.Label>Email notifications</Field.Label>
+        <Field.Description>Deploy results and billing alerts.</Field.Description>
+      </Field.Content>
+    </Field>
+  </Field.Group>
+</template>
+```

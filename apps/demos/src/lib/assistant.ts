@@ -1,5 +1,5 @@
-import type { SourcesItem } from '@aziontech/webkit/sources'
-import type { SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+import type { SourcesItem } from '@aziontech/ui/sources'
+import type { SuggestionGroupItem } from '@aziontech/ui/suggestion-group'
 
 export type Answer = {
   reasoning: string

@@ -20,7 +20,7 @@
 
 Monochrome icons ship as a **woff2 icon font** with matching CSS classes, so they take the text colour and work in plain HTML, Vue, React or any web project. A woff2 glyph has one colour, so multicolour logos ship separately as `background-image` CSS classes (`<i class="az-color az-google"></i>`) and as inline SVG strings. See [Colored icons](#colored-icons).
 
-Every icon is documented in [`src/icons.json`](src/icons.json): its group and category, what the drawing shows, what it stands for, the Azion product it belongs to, and the old classes `webkit migrate` rewrites to it. The build fails when an icon has no entry or an entry breaks a naming rule. The full reference generated from it is [`docs/ICONS.md`](docs/ICONS.md); it ships as `dist/ICONS.md`, and the JSON as `@aziontech/icons/manifest`. The docs site shows the same groups on its Icons page.
+Every icon is documented in [`src/icons.json`](src/icons.json): its group and category, what the drawing shows, what it stands for, the Azion product it belongs to, and the old classes `azion-ui migrate` rewrites to it. The build fails when an icon has no entry or an entry breaks a naming rule. The full reference generated from it is [`docs/ICONS.md`](docs/ICONS.md); it ships as `dist/ICONS.md`, and the JSON as `@aziontech/icons/manifest`. The docs site shows the same groups on its Icons page.
 
 ---
 
@@ -36,10 +36,10 @@ Every icon belongs to one of three groups, so it is always clear whether an icon
 
 Rules that keep the names honest (checked by `scripts/check-manifest.mjs` on every build):
 
-- **A product icon is named after the product**, as WebKit and the console name it: `functions` for Functions, `sql-database` for SQL Database, `waf` for WAF.
+- **A product icon is named after the product**, as Azion UI and the console name it: `functions` for Functions, `sql-database` for SQL Database, `waf` for WAF.
 - **`edge-` stays only where the name still carries it**: the products Edge DNS and Edge Pulse, and the Orchestrator features Edge Nodes, Edge Services and Edge Libraries. Edge Orchestrator is now Orchestrator (`az-orchestrator`).
 - **A feature names its product**: Domains belongs to Workloads, Rules Engine to Applications, Tiered Cache to Cache.
-- **Every official Azion product and Solution has an icon; CI blocks otherwise.** The lists come from azioncorp's `product-naming.md` (Product Catalog) and `solutions.md`, stored as [`azion-products.json`](../webkit/test/catalog/azion-products.json) and [`azion-solutions.json`](../webkit/test/catalog/azion-solutions.json). The `toolkit` CI job (it runs on every PR, also one that touches only this package) fails when one of them has no SVG in `src/svg-raw/az/`, no entry in `src/icons.json` with that product or Solution name, or no `az az-<name>` glyph in a fresh font build. When the taxonomy changes, update the JSON first, then add the icon. Official abbreviations are allowed where the catalog gives one (`waf` for Web Application Firewall (WAF)), and an icon may not name a deprecated product (Edge Orchestrator is Orchestrator).
+- **Every official Azion product and Solution has an icon; CI blocks otherwise.** The lists come from azioncorp's `product-naming.md` (Product Catalog) and `solutions.md`, stored as [`azion-products.json`](../azion-ui/test/catalog/azion-products.json) and [`azion-solutions.json`](../azion-ui/test/catalog/azion-solutions.json). The `toolkit` CI job (it runs on every PR, also one that touches only this package) fails when one of them has no SVG in `src/svg-raw/az/`, no entry in `src/icons.json` with that product or Solution name, or no `az az-<name>` glyph in a fresh font build. When the taxonomy changes, update the JSON first, then add the icon. Official abbreviations are allowed where the catalog gives one (`waf` for Web Application Firewall (WAF)), and an icon may not name a deprecated product (Edge Orchestrator is Orchestrator).
 - **Every drawing keeps its proportions on the 14×14 canvas; the build blocks otherwise.** An SVG is `width="14" height="14"` with no other `viewBox`, no `preserveAspectRatio`, no transform that scales x and y differently, and nothing drawn outside the canvas. A drawing whose bounding box is less than 0.6 as wide as tall (or the reverse) fails unless it is listed with its reason in `INTENTIONALLY_NON_SQUARE` ([`scripts/lib/svg-geometry.mjs`](scripts/lib/svg-geometry.mjs)): a minus, an ellipsis, a caret. `check-svg.mjs` runs it on every build and `test/svg-geometry.test.mjs` in CI. A shape it cannot judge, such as a shield drawn narrower than `az-shield`, still needs a look on the Icons page.
 - **Interface glyphs take [Lucide](https://lucide.dev/icons) names** (`az-x`, `az-menu`, `az-settings`, `az-chevron-down`); brands are spelled out (`az-javascript`, `az-x-brand`).
 - **Names say what the icon is**, never how the file was made: no `-alt`, `-logo`, `-icon`, and no class prefix inside the name.
@@ -64,7 +64,7 @@ import '@aziontech/icons'
 
 The colour logos (`az-color az-<name>`) are not in the default entry: they are SVG images inlined in CSS, about 85 KB gzip for the whole set, so an app pays only for the logos it uses.
 
-- **With WebKit** (Tailwind v4 and `@aziontech/webkit/styles`, as `npx @aziontech/webkit init` sets up): nothing to add. The WebKit stylesheet imports `@aziontech/icons/azionicons-color-utilities`, where each logo is a Tailwind utility, so Tailwind compiles a logo only when your sources or the WebKit files you import name its class.
+- **With Azion UI** (Tailwind v4 and `@aziontech/ui/styles`, as `npx @aziontech/ui init` sets up): nothing to add. The Azion UI stylesheet imports `@aziontech/icons/azionicons-color-utilities`, where each logo is a Tailwind utility, so Tailwind compiles a logo only when your sources or the Azion UI files you import name its class.
 - **Any other Tailwind v4 app:** `@import '@aziontech/icons/azionicons-color-utilities';` in the stylesheet Tailwind compiles.
 - **Without Tailwind, or to show every logo** (an icon gallery, logos named only in fetched data): `import '@aziontech/icons/azionicons-color'`, the whole set. With Tailwind, a logo named only in runtime data can also be listed with `@source inline("az-google az-react");`.
 
@@ -96,7 +96,7 @@ import manifest from '@aziontech/icons/manifest' // → dist/icons.json (the doc
 
 ## Old names (WebKit 5)
 
-Until WebKit 6 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and the PrimeIcons `pi pi-<name>`. In 6.0, the one clean break, they are all gone: `ai` read as "artificial intelligence" and `cor` is Portuguese, so the base classes are `az` and `az-color`; product icons take today's product names (`ai ai-edge-functions` → `az az-functions`, `ai ai-edge-storage` → `az az-object-storage`); interface glyphs take Lucide names (`pi pi-times` → `az az-x`). Run `npx @aziontech/webkit migrate` to rewrite an app; the full map is `src/cli/migrations/v6-icons.json` in `@aziontech/webkit`, and the renames are listed in [`docs/ICONS.md`](docs/ICONS.md) (section "Old names").
+Until Azion UI 6 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and the PrimeIcons `pi pi-<name>`. In 6.0, the one clean break, they are all gone: `ai` read as "artificial intelligence" and `cor` is Portuguese, so the base classes are `az` and `az-color`; product icons take today's product names (`ai ai-edge-functions` → `az az-functions`, `ai ai-edge-storage` → `az az-object-storage`); interface glyphs take Lucide names (`pi pi-times` → `az az-x`). Run `npx @aziontech/ui migrate` to rewrite an app; the full map is `src/cli/migrations/v6-icons.json` in `@aziontech/ui`, and the renames are listed in [`docs/ICONS.md`](docs/ICONS.md) (section "Old names").
 
 ---
 
@@ -150,7 +150,7 @@ A colored icon needs **two** classes, exactly like a monochrome one: the base cl
 
 ### 1. As a CSS class (recommended — use it like a font icon)
 
-Importing `@aziontech/icons/azionicons-color` registers an `.az-color.az-<name>` rule for each colored icon; with WebKit's stylesheet (or `azionicons-color-utilities` in a Tailwind v4 stylesheet) Tailwind registers the rule of each logo your sources name ([Usage](#usage)). It sizes to `1em`, so it drops into the same `<i>` markup as a font icon:
+Importing `@aziontech/icons/azionicons-color` registers an `.az-color.az-<name>` rule for each colored icon; with Azion UI's stylesheet (or `azionicons-color-utilities` in a Tailwind v4 stylesheet) Tailwind registers the rule of each logo your sources name ([Usage](#usage)). It sizes to `1em`, so it drops into the same `<i>` markup as a font icon:
 
 ```html
 <i class="az-color az-google"></i>
@@ -366,7 +366,7 @@ npm run publish
 
 ### Third-party marks
 
-Brand glyphs are trademarks of their owners and are included only to refer to their products. Where each one comes from, and under which terms, is recorded in `packages/webkit/src/assets/logos/SOURCES.md` in the WebKit repository.
+Brand glyphs are trademarks of their owners and are included only to refer to their products. Where each one comes from, and under which terms, is recorded in `packages/ui/src/assets/logos/SOURCES.md` in the Azion UI repository.
 
 - `az az-nitro` is drawn from the Nitro icon (https://github.com/nitrojs/nitro), MIT License:
 

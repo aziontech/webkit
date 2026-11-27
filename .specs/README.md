@@ -1,6 +1,6 @@
 # `.specs/` — Component specs
 
-This directory holds one Markdown spec per webkit-layer component. **A spec is a contract.** It is reviewed and approved **before any code is written**, and once approved it is the single source of truth that every sub-agent in `/component-create` must obey 1-to-1.
+This directory holds one Markdown spec per azion-ui-layer component. **A spec is a contract.** It is reviewed and approved **before any code is written**, and once approved it is the single source of truth that every sub-agent in `/component-create` must obey 1-to-1.
 
 ## Why specs exist
 
@@ -15,7 +15,7 @@ Specs collapse that latitude. The agent stops being an author and becomes a tran
 | `_template.md` | Canonical template — copy this to start a new spec. Defines the mandatory frontmatter + 9 body sections. |
 | `_schema.json` | JSON Schema (Draft 2020-12) for the frontmatter. Validated by Ajv inside `spec-validator` and `enforce-spec-exists.mjs`. |
 | `__fixtures__/` | Intentionally invalid specs used by the hook test suite. Their presence must make `spec-validator` fail. |
-| `<name>.md` | One per component (e.g. `button.md`, `dialog.md`). Created by `/spec-create` or bulk-migrated via `node scripts/migrate-webkit-specs.mjs`. |
+| `<name>.md` | One per component (e.g. `button.md`, `dialog.md`). Created by `/spec-create` or bulk-migrated via `node scripts/migrate-azion-ui-specs.mjs`. |
 
 ## Lifecycle
 

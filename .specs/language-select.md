@@ -7,14 +7,14 @@ spec_version: 2
 template: 2
 created: 2026-11-19
 last_updated: 2026-11-22
-checksum: 9c0f7591969dcce08023fd4e5591d220a25700e52d9c499fef1b69ca4c7d9b95
+checksum: d9d35c946c036b4757c64c21a2234832dbc0e44a2f9f1b8e6ee1b5ff8941671f
 ---
 
 # LanguageSelect — Component Spec
 
 ## Purpose
 
-A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the language named in itself (`English`, `Português (Brasil)`, `Español`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant="outline"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant="ghost"`, round flag and the tag in capitals such as `EN` or `PT-BR`, no border until hover) for a header, a toolbar or a footer. It offers the languages WebKit ships catalogs for and takes the consumer's own list through `options`.
+A searchable picker for the interface language, built like the country picker inside `phone-input`: every option is a BCP 47 language tag (`en`, `pt-BR`, `es`, `en-GB`), shown with its country's round flag and the language named in itself (`English`, `Português (Brasil)`, `Español`), and a search box at the top of the list filters by name, tag or country. `v-model` holds the BCP 47 tag of the picked option, ready to hand to `ConfigProvider`'s `locale`. It comes in two forms: the full field (`variant="outline"`, round flag and name, field-sized) for a form or a settings page, and the compact switcher (`variant="ghost"`, round flag and the tag in capitals such as `EN` or `PT-BR`, no border until hover) for a header, a toolbar or a footer. It offers the languages Azion UI ships catalogs for and takes the consumer's own list through `options`.
 
 ## When to use
 
@@ -25,7 +25,7 @@ A searchable picker for the interface language, built like the country picker in
 
 - Two or three languages that must stay visible side by side on a toolbar → use `toggle-group`.
 - Picking a country (for a phone number, an address) → use `phone-input` or `select`.
-- Setting the language of WebKit's own strings → that is `config-provider`'s `locale`; bind this picker's `v-model` to it.
+- Setting the language of Azion UI's own strings → that is `config-provider`'s `locale`; bind this picker's `v-model` to it.
 
 ## Related
 
@@ -49,10 +49,10 @@ A searchable picker for the interface language, built like the country picker in
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import ConfigProvider from '@aziontech/webkit/config-provider'
-  import LanguageSelect from '@aziontech/webkit/language-select'
-  import { es } from '@aziontech/webkit/locales/es'
-  import { ptBR } from '@aziontech/webkit/locales/pt-BR'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import LanguageSelect from '@aziontech/ui/language-select'
+  import { es } from '@aziontech/ui/locales/es'
+  import { ptBR } from '@aziontech/ui/locales/pt-BR'
 
   const locale = ref('en-US')
 </script>
@@ -75,7 +75,7 @@ A searchable picker for the interface language, built like the country picker in
 
 | Prop                | Type                             | Default                                  | Required | JSDoc                                                                                                                                                                                                                                                                                          |
 | ------------------- | -------------------------------- | ---------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `options`           | `LanguageSelectOption[]`         | (the languages WebKit ships — see Notes) | false    | Languages offered, in order: `{ value, label?, country? }` where `value` is a BCP 47 tag, `label` the language named in itself (derived from the tag when omitted), and `country` the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region, else its likely region, when omitted). |
+| `options`           | `LanguageSelectOption[]`         | (the languages Azion UI ships — see Notes) | false    | Languages offered, in order: `{ value, label?, country? }` where `value` is a BCP 47 tag, `label` the language named in itself (derived from the tag when omitted), and `country` the ISO 3166-1 alpha-2 code of the flag (taken from the tag's region, else its likely region, when omitted). |
 | `variant`           | `'outline' \| 'ghost'`           | `'outline'`                              | false    | Trigger look: `outline` is the full field (round flag and name) for forms and settings; `ghost` is the compact switcher (round flag and the BCP 47 tag in capitals, such as EN or PT-BR, no border until hover) for a header, a toolbar or a footer.                                           |
 | `placeholder`       | `string`                         | `''`                                     | false    | Trigger text while no language is picked. Empty uses the locale catalog (`Language`).                                                                                                                                                                                                          |
 | `size`              | `'small' \| 'medium' \| 'large'` | `'medium'`                               | false    | Size token forwarded to the Select trigger. Heights: small=28px, medium=32px, large=40px.                                                                                                                                                                                                      |
@@ -84,7 +84,7 @@ A searchable picker for the interface language, built like the country picker in
 | `searchPlaceholder` | `string`                         | `''`                                     | false    | Placeholder and accessible name of the search box. Empty uses the locale catalog (`Search language`).                                                                                                                                                                                          |
 | `emptyTitle`        | `string`                         | `''`                                     | false    | Shown in the list when no language matches the search. Empty uses the locale catalog (`No language found.`).                                                                                                                                                                                   |
 
-Notes on the built-in `options`: `[{ value: 'en', label: 'English' }, { value: 'pt-BR', label: 'Português (Brasil)' }, { value: 'es', label: 'Español' }]`, the three locales `@aziontech/webkit/locales/*` ships under those same tags (English is built in). `ConfigProvider` finds a catalog by the tag, then by the tag cut from the right (`en-GB` → `en`), then by the language, so a regional variant reads its language's catalog unless it registers its own. `LanguageSelectOption` and `LanguageSelectVariant` are exported from the component. The flag comes from `country`, else the tag's two-letter region (`pt-BR`, `fr-CA`), else the tag's likely region (`Intl.Locale.prototype.maximize`: `en` → `US`); a tag none of these resolves shows no flag. An option with no `label` is named by `Intl.DisplayNames` in its own language, first letter upper-cased (`fr-CA` → `Français (Canada)`).
+Notes on the built-in `options`: `[{ value: 'en', label: 'English' }, { value: 'pt-BR', label: 'Português (Brasil)' }, { value: 'es', label: 'Español' }]`, the three locales `@aziontech/ui/locales/*` ships under those same tags (English is built in). `ConfigProvider` finds a catalog by the tag, then by the tag cut from the right (`en-GB` → `en`), then by the language, so a regional variant reads its language's catalog unless it registers its own. `LanguageSelectOption` and `LanguageSelectVariant` are exported from the component. The flag comes from `country`, else the tag's two-letter region (`pt-BR`, `fr-CA`), else the tag's likely region (`Intl.Locale.prototype.maximize`: `en` → `US`); a tag none of these resolves shows no flag. An option with no `label` is named by `Intl.DisplayNames` in its own language, first letter upper-cased (`fr-CA` → `Français (Canada)`).
 
 ## v-model
 
@@ -179,9 +179,9 @@ _none_ — motion is owned by `Select` (trigger colour transitions and the dropd
 
 ## Examples
 
-The examples in `packages/webkit/examples/language-select/` render on the docs site (`/components/language-select`):
+The examples in `packages/ui/examples/language-select/` render on the docs site (`/components/language-select`):
 
-- Default — the full field with the built-in languages inside a `Field` with a `Field.Label` (a settings form), wired to a `ConfigProvider` so a line of WebKit text under it changes language.
+- Default — the full field with the built-in languages inside a `Field` with a `Field.Label` (a settings form), wired to a `ConfigProvider` so a line of Azion UI text under it changes language.
 - Variants — `variant="ghost"` in a header row beside a search trigger and an outlined icon button, next to the `outline` field: where each form belongs.
 - Options — a consumer list of languages and regional variants, each named in its own language (`en`, `en-CA`, `en-GB`, `es`, `es-AR`, … `pt-PT`), some with no `label` so the component names them; justified because `options`, the derived label, the short code and the flag-from-region rule change what the picker offers.
 - Right-to-left — the compact switcher and the field under `dir="rtl"` with `ar-SA` picked; justified because the flag, the code and the name swap sides and the code keeps its order.
@@ -195,7 +195,7 @@ The examples in `packages/webkit/examples/language-select/` render on the docs s
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

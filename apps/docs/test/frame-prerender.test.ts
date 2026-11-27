@@ -5,14 +5,14 @@ import { test } from 'node:test'
 import { fileURLToPath } from 'node:url'
 
 import { exampleFrameRoutes } from '../plugins/content.ts'
-import { walk, WEBKIT } from '../plugins/paths.ts'
+import { walk, AZION_UI } from '../plugins/paths.ts'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const source = (file: string) => readFileSync(resolve(HERE, '..', file), 'utf8')
 
 test('every example has its own prerendered frame route', () => {
   const routes = exampleFrameRoutes()
-  const files = walk(join(WEBKIT, 'examples'), (name) => name === 'examples.json').flatMap(
+  const files = walk(join(AZION_UI, 'examples'), (name) => name === 'examples.json').flatMap(
     (file) => (JSON.parse(readFileSync(file, 'utf8')) as { examples: unknown[] }).examples
   )
   assert.equal(routes.length, files.length)

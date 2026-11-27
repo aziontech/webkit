@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// PreToolUse hook: blocks Write/Edit/MultiEdit on packages/webkit/src/components/**
+// PreToolUse hook: blocks Write/Edit/MultiEdit on packages/ui/src/components/**
 // (excluding test files — the same tokenChecksApply scope the CI ratchet uses)
 // when the content violates TOKENS.md /
 // COMPONENT_REQUIREMENTS.md rules: hex/rgb/hsl colors, Tailwind palette, raw
@@ -97,14 +97,14 @@ async function main() {
   const violations = findViolations(newContents, baseline, checks)
   if (violations.length === 0) process.exit(0)
 
-  const lines = [`Webkit token validation blocked ${tool} on ${relPath}.`, '']
+  const lines = [`Azion UI token validation blocked ${tool} on ${relPath}.`, '']
   for (const v of violations) {
     lines.push(`  [${v.id}] ${v.message}`)
     lines.push(`    Found: ${v.samples.join(', ')}`)
   }
   lines.push('')
   lines.push(
-    'Sources of truth: contributing/docs/TOKENS.md and contributing/docs/COMPONENT_REQUIREMENTS.md § "Webkit Layer Pattern (in-depth)".'
+    'Sources of truth: contributing/docs/TOKENS.md and contributing/docs/COMPONENT_REQUIREMENTS.md § "Azion UI Layer Pattern (in-depth)".'
   )
   lines.push(
     'Workflow: /spec-create then /component-create. The orchestrator runs token-mapper which resolves Figma variables to TOKENS.md classes / var(--*) tokens; the catalog mirror lives at contributing/docs/TOKENS.md.'

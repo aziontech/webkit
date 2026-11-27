@@ -1,7 +1,7 @@
-# WebKit docs site
+# Azion UI docs site
 
-`@aziontech/webkit-docs` is the documentation site for `@aziontech/webkit`. Every component, block and foundation page is rendered from the files in this
-repository, with the code beside it. It is built with WebKit itself (`AppHeader`, `Sidebar`,
+`@aziontech/ui-docs` is the documentation site for `@aziontech/ui`. Every component, block and foundation page is rendered from the files in this
+repository, with the code beside it. It is built with Azion UI itself (`AppHeader`, `Sidebar`,
 `Menu`, `Command`, `DocPageHeader`, `DocProse`, `DocTableOfContents`, `CodeBlock`, `Table`,
 `ThemeSwitcher`…), the theme from `@aziontech/theme` and the Rubik font, in light and dark, with a
 right-to-left toggle and a language switch (English, Português, Español) through `ConfigProvider`.
@@ -20,16 +20,16 @@ Nothing is copied into this app. Add a file in the package and its page appears 
 
 | Page                      | Source                                                                                                                                                                                                                                                                                                                                                                                                             |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `/components/<name>`      | `packages/webkit/catalog.json` (every `kind: "component"` entry, plus any `examples/*/examples.json` that names another entry): summary, import, when to use / not, related, props, events, slots, subcomponents, best practices.                                                                                                                                                                                  |
-| Examples on that page     | `packages/webkit/examples/<dir>/examples.json` and each `.vue` it lists, loaded with `import.meta.glob`: the SFC mounts live and its source is shown beside it, highlighted with Shiki at build time; alone at `/frame/example/<dir>/<file>/`.                                                                                                                                                                     |
+| `/components/<name>`      | `packages/ui/catalog.json` (every `kind: "component"` entry, plus any `examples/*/examples.json` that names another entry): summary, import, when to use / not, related, props, events, slots, subcomponents, best practices.                                                                                                                                                                                      |
+| Examples on that page     | `packages/ui/examples/<dir>/examples.json` and each `.vue` it lists, loaded with `import.meta.glob`: the SFC mounts live and its source is shown beside it, highlighted with Shiki at build time; alone at `/frame/example/<dir>/<file>/`.                                                                                                                                                                         |
 | Accessibility, RTL, Don't | The `Accessibility (WCAG 2.1 AA)`, `Right-to-left` and `Constraints — DO NOT` sections of `.specs/<name>.md`.                                                                                                                                                                                                                                                                                                      |
-| `/blocks/<id>`            | `packages/webkit/blocks/**/block.json` (primary and variants), each state's `.vue` (live, in an iframe at `/frame/block/<id>/<state>/` with 375 / 768 / 1280 / full widths and a drag handle), its source, `guidelines.md` and `npx @aziontech/webkit add <id>`.                                                                                                                                                   |
-| `/foundations/*`          | Token pages read `packages/theme/dist/globals.css` (the `@theme` block and the light and dark theme blocks), `catalog.json` `tokens`, the responsive steps of `packages/theme/src/tokens/semantic/spacings.data.js` and the job table of `rules/webkit-tokens.md` (the Usage column); the prose comes from `packages/webkit/README.md` and `rules/webkit-*.md`. Every table follows the token table pattern below. |
-| `/assets/icons`           | `packages/webkit/catalog/assets/icons.json`: every Azion and colored class, searchable, copied on select.                                                                                                                                                                                                                                                                                                          |
+| `/blocks/<id>`            | `packages/ui/blocks/**/block.json` (primary and variants), each state's `.vue` (live, in an iframe at `/frame/block/<id>/<state>/` with 375 / 768 / 1280 / full widths and a drag handle), its source, `guidelines.md` and `npx @aziontech/ui add <id>`.                                                                                                                                                           |
+| `/foundations/*`          | Token pages read `packages/theme/dist/globals.css` (the `@theme` block and the light and dark theme blocks), `catalog.json` `tokens`, the responsive steps of `packages/theme/src/tokens/semantic/spacings.data.js` and the job table of `rules/azion-ui-tokens.md` (the Usage column); the prose comes from `packages/ui/README.md` and `rules/azion-ui-*.md`. Every table follows the token table pattern below. |
+| `/assets/icons`           | `packages/ui/catalog/assets/icons.json`: every Azion and colored class, searchable, copied on select.                                                                                                                                                                                                                                                                                                              |
 | `/components`             | Every component grouped by category, each card rendering its first example live (loaded when it scrolls into view) with its name linking to its page.                                                                                                                                                                                                                                                              |
-| `/assets`                 | The `Brand` lockups and every name in `packages/webkit/catalog/assets/illustrations.json`, drawn with `Illustration`.                                                                                                                                                                                                                                                                                              |
-| Search (⌘K / Ctrl+K)      | A client-side index of every component, block and foundation page (title and summary), served by WebKit's `Command`.                                                                                                                                                                                                                                                                                               |
-| Copy for AI               | Builds Markdown from the page data (summary, import, API tables, every example's source). When `packages/webkit/llms/` exists at build time, the matching `.md` there is copied instead and linked as "View as Markdown".                                                                                                                                                                                          |
+| `/assets`                 | The `Brand` lockups and every name in `packages/ui/catalog/assets/illustrations.json`, drawn with `Illustration`.                                                                                                                                                                                                                                                                                                  |
+| Search (⌘K / Ctrl+K)      | A client-side index of every component, block and foundation page (title and summary), served by Azion UI's `Command`.                                                                                                                                                                                                                                                                                             |
+| Copy for AI               | Builds Markdown from the page data (summary, import, API tables, every example's source). When `packages/ui/llms/` exists at build time, the matching `.md` there is copied instead and linked as "View as Markdown".                                                                                                                                                                                              |
 
 The data side is a Vite plugin, `plugins/docs-plugin.ts`:
 
@@ -37,7 +37,7 @@ The data side is a Vite plugin, `plugins/docs-plugin.ts`:
 - `virtual:docs-component-loaders` / `virtual:docs-component:<name>` — one lazy chunk per component
   with the full catalog entry and the rendered spec sections.
 - `virtual:docs-tokens` — the token groups parsed from the theme.
-- `virtual:docs-assets` — the icon classes and illustration names from `packages/webkit/catalog/assets/`.
+- `virtual:docs-assets` — the icon classes and illustration names from `packages/ui/catalog/assets/`.
 - `?highlight` — any file imported with it becomes `{ code, html }` (Shiki,
   `github-light-high-contrast` and `github-dark-high-contrast` through CSS variables, so the theme switch needs no re-highlighting).
 - `?markdown` — any Markdown file becomes `{ title, parts }` (markdown-it + Shiki); a part is
@@ -46,12 +46,12 @@ The data side is a Vite plugin, `plugins/docs-plugin.ts`:
 A router guard (`src/lib/data.ts`, `preloadRoute`) loads the chunks a route needs before it
 renders, so server rendering and hydration see the same data.
 
-Examples and blocks import every image they show from `@aziontech/webkit/assets/<file>`. The one
+Examples and blocks import every image they show from `@aziontech/ui/assets/<file>`. The one
 folder of media the docs site serves itself is `public/thumbnails/blocks/`: the `/blocks` cards show a
 384×240 WebP of each block's primary state in light and dark, cut from its visual baseline
 (`apps/visual/baselines/blocks/<id>/*--<theme>-1280.png`). After a block is added or its baselines are
-regenerated, run `pnpm --filter @aziontech/webkit-docs generate:block-thumbnails` and commit the files;
-`test/block-thumbnails.test.ts` fails when a block has none. `packages/webkit/llms/` is served at `/llms/` and its `llms.txt` at
+regenerated, run `pnpm --filter @aziontech/ui-docs generate:block-thumbnails` and commit the files;
+`test/block-thumbnails.test.ts` fails when a block has none. `packages/ui/llms/` is served at `/llms/` and its `llms.txt` at
 `/llms.txt`; component, block and foundation pages link their `.md` as "View as Markdown".
 
 ## Token table pattern
@@ -98,7 +98,7 @@ usage section, **When to use** / **When not to use**, which carries no check or 
 
 Each card follows the common Do/Don't pattern (Polaris, Atlassian, Primer, Carbon): a coloured top
 edge, the label with its check or cross icon in the header, then the example. The colours are the
-documented status marks on a surface (`rules/webkit-tokens.md` § Contrast): the edge and the icon
+documented status marks on a surface (`rules/azion-ui-tokens.md` § Contrast): the edge and the icon
 are `--success-mark` for Do and `--danger-mark` for Don't, which pass WCAG 2.1 (at least 4.4:1 on
 the surfaces) and APCA Lc 45 for an icon in light and dark. Never colour the icon with
 `--success-foreground` / `--danger-foreground`: those are the text on the pale status fill, near
@@ -135,8 +135,8 @@ each page once.
 
 How it is checked:
 
-- `pnpm --filter @aziontech/webkit check:docs-markdown` (the `docs-markdown` gate and the `toolkit`
-  CI job; engine `packages/webkit/scripts/lib/docs-markdown.mjs`) fails a pair heading or list
+- `pnpm --filter @aziontech/ui check:docs-markdown` (the `docs-markdown` gate and the `toolkit`
+  CI job; engine `packages/ui/scripts/lib/docs-markdown.mjs`) fails a pair heading or list
   label other than Do / Don't in `rules/`, `skills/`, `.specs/` and every block `guidelines.md`,
   and a task list in a page the site renders.
 - `pnpm test:docs` (`test/content.test.ts`, same gate and job) proves the pipeline drops comments,
@@ -182,15 +182,15 @@ script-src 'self'` plus the `sha256` hash of each inline script the page carries
 
 ## Performance and external links
 
-`pnpm --filter @aziontech/webkit-docs run check:lighthouse` (after `pnpm build:docs` and
+`pnpm --filter @aziontech/ui-docs run check:lighthouse` (after `pnpm build:docs` and
 `pnpm build:demos`) serves both sites compressed over HTTP/2 and runs Lighthouse 12.8.2 three
 times on the docs home, `/components/button` (mobile profile) and the demos `/resources`
 (desktop profile). The median must have LCP at most 2.5 s, CLS at most 0.1 and TBT at most
 200 ms, and the accessibility score must be 100; a failing node counts only when no entry of
-`packages/webkit/src/test/a11y-accepted.json` covers its rule, theme and selector.
+`packages/ui/src/test/a11y-accepted.json` covers its rule, theme and selector.
 `LIGHTHOUSE_OUT=<dir>` keeps the reports.
 
-`pnpm --filter @aziontech/webkit-docs run check:external-links` runs `lychee` over the built
+`pnpm --filter @aziontech/ui-docs run check:external-links` runs `lychee` over the built
 pages: `lychee.toml` for every external link, `lychee-bot-blocked.toml` for the hosts that block
 automated clients, where a 403 or 429 is accepted. It needs `lychee` on `PATH` and the network.
 
@@ -205,9 +205,9 @@ browser is idle.
 error, uncaught exception or same-origin request that answers 4xx/5xx, and runs axe (WCAG 2.1 A and
 AA) on the index pages and one route in every eight (`SMOKE_AXE_EVERY`), in dark and light, with
 transitions off. A violation inside a live example or block frame whose rule
-`packages/webkit/src/test/a11y-known.json` already lists for that source file is counted as known
-WebKit debt instead of failing (the list only shrinks, so these expire as WebKit fixes them);
-the same goes for a finding of a WebKit component used anywhere
+`packages/ui/src/test/a11y-known.json` already lists for that source file is counted as known
+Azion UI debt instead of failing (the list only shrinks, so these expire as Azion UI fixes them);
+the same goes for a finding of an Azion UI component used anywhere
 (`COMPONENT_KNOWN` in `scripts/test-smoke.mjs`: `Table`, `NavigationMenu`) while `a11y-known.json` still
 lists it for that component's example. Everything else fails. `SMOKE_ONLY=/blocks` limits it to matching routes. It needs a Playwright Chromium; in this repository's container:
 

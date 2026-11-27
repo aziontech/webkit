@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: 435c0f53d33f5b933a8445023078145de9aaed040ff2c60fdf96a2e8ae3f8e3b
+checksum: c355e97e417583cee7fe8d6a23884eaf197f4668ff462051648645d641896c8b
 created: 2026-11-24
 last_updated: 2026-11-25
 ---
@@ -52,7 +52,7 @@ Unlike `Tracker` (a 1D status strip of discrete severities for uptime) or `Chart
 
 ```vue
 <script setup lang="ts">
-  import ContributionGraph from '@aziontech/webkit/contribution-graph'
+  import ContributionGraph from '@aziontech/ui/contribution-graph'
   import { ref } from 'vue'
 
   const selectedDate = ref<string | null>(null)
@@ -196,7 +196,7 @@ _No slots._
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/primitives/animations/animate.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

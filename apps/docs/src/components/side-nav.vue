@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
+  import SidebarMenuRoot from '@aziontech/ui/sidebar-menu-root'
   import {
     type ComponentPublicInstance,
     computed,

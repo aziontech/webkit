@@ -1,16 +1,16 @@
 # `contributing/hooks/`
 
-`PreToolUse`/`PostToolUse` hooks for the Azion Webkit monorepo. Wired up in [`.claude/settings.json`](../../.claude/settings.json). Each hook runs around the matching tool call and can either approve (exit 0) or block (exit 2) the operation.
+`PreToolUse`/`PostToolUse` hooks for the Azion UI monorepo. Wired up in [`.claude/settings.json`](../../.claude/settings.json). Each hook runs around the matching tool call and can either approve (exit 0) or block (exit 2) the operation.
 
 The hooks fail open on unexpected errors (invalid JSON input, missing files, etc.) — they never silently break the workflow.
 
-Hooks do not own their logic: the checks live in **shared engines** ([`lib/`](./lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/lib/*.js`](../../packages/webkit/src/eslint-plugin/lib/), plus the DS-internal `_lib/spec-compliance-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
+Hooks do not own their logic: the checks live in **shared engines** ([`lib/`](./lib/) shims re-exporting [`packages/ui/src/eslint-plugin/lib/*.js`](../../packages/ui/src/eslint-plugin/lib/), plus the DS-internal `_lib/spec-compliance-checks.mjs`) that the CI ratchet ([`packages/ui/scripts/check-authoring.mjs`](../../packages/ui/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./lib/standards.mjs) and asserted in CI by [`packages/ui/test/standards/invariant.test.mjs`](../../packages/ui/test/standards/invariant.test.mjs).
 
 ## Hooks
 
 ### [`validate-tokens.mjs`](./validate-tokens.mjs)
 
-Blocks `Write`/`Edit`/`MultiEdit` on `.vue` / `.css` / `.scss` / `.ts` files under `packages/webkit/src/components/**` when the **new** content introduces any of:
+Blocks `Write`/`Edit`/`MultiEdit` on `.vue` / `.css` / `.scss` / `.ts` files under `packages/ui/src/components/**` when the **new** content introduces any of:
 
 - Hex/RGB/HSL colors
 - Tailwind palette names (`bg-gray-500`, `text-violet-600`, ...)
@@ -27,7 +27,7 @@ Pre-existing violations in the baseline file are **not** retroactively blocked �
 
 Blocks `Write`/`Edit`/`MultiEdit` on any `.vue` / `.ts` / `.js` / `.mjs` / `.cjs` / `.tsx` / `.jsx` file when the **new** content introduces an import whose target does not exist:
 
-- `@aziontech/webkit/<subpath>` not present in `packages/webkit/package.json#exports`
+- `@aziontech/ui/<subpath>` not present in `packages/ui/package.json#exports`
 - Relative path with no matching file (`.vue`/`.ts`/`.js`/`/index.*` fallbacks all tried)
 - Bare npm package not installed in any `node_modules/` of the monorepo
 - `@aziontech/*` workspace that does not exist under `packages/`
@@ -44,22 +44,22 @@ Blocks `Write`/`Edit`/`MultiEdit` when the resulting file introduces a construct
 - A composable returning `reactive()` state or authored as `.js`
 - `@deprecated` without a named replacement + removal version
 - A prose comment (`prose-comment`) in any non-test source under `packages/` — only component API JSDoc and tool directives are allowed ([`comments`](../rules/comments.md)); blocks when the count grows
-- A built-in string typed in a component (`i18n:hardcoded-ui-string`, `i18n:hardcoded-default-string`): a literal UI text attribute in a `src/components/**/*.vue` template, or an English prop default; the text goes to `src/locales/*.ts` ([`webkit-strings`](../../rules/webkit-strings.md)); blocks when the count grows
+- A built-in string typed in a component (`i18n:hardcoded-ui-string`, `i18n:hardcoded-default-string`): a literal UI text attribute in a `src/components/**/*.vue` template, or an English prop default; the text goes to `src/locales/*.ts` ([`azion-ui-strings`](../../rules/azion-ui-strings.md)); blocks when the count grows
 
-Engine: [`lib/authoring-checks.mjs`](./lib/authoring-checks.mjs) → [`packages/webkit/src/eslint-plugin/lib/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/lib/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`require-authoring-standards`) run. The string check is [`_lib/built-in-strings.mjs`](./lib/built-in-strings.mjs) → [`packages/webkit/src/eslint-plugin/lib/built-in-strings.js`](../../packages/webkit/src/eslint-plugin/lib/built-in-strings.js), shared with `scripts/check-authoring.mjs`.
+Engine: [`lib/authoring-checks.mjs`](./lib/authoring-checks.mjs) → [`packages/ui/src/eslint-plugin/lib/authoring-checks.js`](../../packages/ui/src/eslint-plugin/lib/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`require-authoring-standards`) run. The string check is [`_lib/built-in-strings.mjs`](./lib/built-in-strings.mjs) → [`packages/ui/src/eslint-plugin/lib/built-in-strings.js`](../../packages/ui/src/eslint-plugin/lib/built-in-strings.js), shared with `scripts/check-authoring.mjs`.
 
 ### [`enforce-component-create.mjs`](./enforce-component-create.mjs)
 
-Blocks the **first** `Write` that creates a new `.vue` under `packages/webkit/src/components/<category>/<name>/` when the session transcript shows no reference to the spec-driven pipeline. Forces the agent to run `/spec-create` then `/component-create`, which load the orchestrator at [`../commands/component-create.md`](../commands/component-create.md) and the focused skills under [`../skills/`](../skills/).
+Blocks the **first** `Write` that creates a new `.vue` under `packages/ui/src/components/<category>/<name>/` when the session transcript shows no reference to the spec-driven pipeline. Forces the agent to run `/spec-create` then `/component-create`, which load the orchestrator at [`../commands/component-create.md`](../commands/component-create.md) and the focused skills under [`../skills/`](../skills/).
 
 ### [`enforce-spec-exists.mjs`](./enforce-spec-exists.mjs)
 
-PreToolUse hook on `Write` of any `packages/webkit/src/components/<category>/<name>/<file>.vue`. Blocks when:
+PreToolUse hook on `Write` of any `packages/ui/src/components/<category>/<name>/<file>.vue`. Blocks when:
 
 - `.specs/<name>.md` is missing.
 - The spec's `status` is not `approved` or `implemented` (drafts cannot drive code generation; locked specs require a `spec_version` bump).
 - The body sha256 does not match the frontmatter `checksum` (tamper detection).
-- The spec is on `template: 2` (or was created on or after 2026-11-12) and one of `## Internationalization`, `## Right-to-left`, `## Responsive`, `## Performance` is missing, empty, `TBD` or still a template placeholder (`templateSectionErrors` in [`_lib/spec.mjs`](./lib/spec.mjs); the CI twin is `pnpm --filter @aziontech/webkit run check:spec-template`).
+- The spec is on `template: 2` (or was created on or after 2026-11-12) and one of `## Internationalization`, `## Right-to-left`, `## Responsive`, `## Performance` is missing, empty, `TBD` or still a template placeholder (`templateSectionErrors` in [`_lib/spec.mjs`](./lib/spec.mjs); the CI twin is `pnpm --filter @aziontech/ui run check:spec-template`).
 
 Bypassed for components on the legacy whitelist ([`lib/legacy-components.json`](./lib/legacy-components.json)).
 
@@ -78,7 +78,7 @@ Bypassed for legacy components (same whitelist). Shared parser library: [`lib/sp
 
 ### [`enforce-test-exists.mjs`](./enforce-test-exists.mjs)
 
-PostToolUse hook on `Write` of a **root** component `.vue` (`packages/webkit/src/components/<category>/<name>/<name>.vue` — file name equals its folder). Warns (exit 2, surfaced to the agent) when the co-located `<name>.test.ts` is missing, so every component ships the browser-mode functional suite mandated by [`../rules/testing.md`](../rules/testing.md). PostToolUse (not Pre) so it never deadlocks `/component-create`, which writes the `.vue` before a test can exist. Composition sub-components are skipped (tested through their root). Bypassed for legacy components (same whitelist).
+PostToolUse hook on `Write` of a **root** component `.vue` (`packages/ui/src/components/<category>/<name>/<name>.vue` — file name equals its folder). Warns (exit 2, surfaced to the agent) when the co-located `<name>.test.ts` is missing, so every component ships the browser-mode functional suite mandated by [`../rules/testing.md`](../rules/testing.md). PostToolUse (not Pre) so it never deadlocks `/component-create`, which writes the `.vue` before a test can exist. Composition sub-components are skipped (tested through their root). Bypassed for legacy components (same whitelist).
 
 ## Adding a new hook
 

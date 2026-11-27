@@ -1,9 +1,9 @@
 ---
 name: component-scaffold
-description: Write the `.vue` file(s) for a component, plus the entry in `packages/webkit/package.json#exports`. Strictly spec-bound — every prop/event/slot must come from the spec. For composition pattern, each sub-component lives in its own folder.
+description: Write the `.vue` file(s) for a component, plus the entry in `packages/ui/package.json#exports`. Strictly spec-bound — every prop/event/slot must come from the spec. For composition pattern, each sub-component lives in its own folder.
 status: active
 last_updated: 2026-11-23
-scope: webkit
+scope: ui
 enforced_by: [no-invention, compound-api, styling, testing]
 ---
 
@@ -13,11 +13,11 @@ enforced_by: [no-invention, compound-api, styling, testing]
 
 Convert an approved `.specs/<name>.md` into:
 
-- `packages/webkit/src/components/<category>/<name>/<name>.vue` (TypeScript, JSDoc on every public prop).
+- `packages/ui/src/components/<category>/<name>/<name>.vue` (TypeScript, JSDoc on every public prop).
 - (Composition only) **One folder per sub-component** under the root component directory — `<name>/<name>-<part>/<name>-<part>.vue`. The full file name is preserved (`dialog-trigger.vue`, not `index.vue`) so error traces and editor breadcrumbs are unambiguous.
-- (Composition only) `packages/webkit/src/components/<category>/<name>/injection-key.ts` at the root level (shared by every sub-component).
-- (Composition only) `packages/webkit/src/components/<category>/<name>/index.ts` — the **compound API** that attaches every sub-component to the root (`<Root.Part>`) via `Object.assign`; because it is a `.ts` file, `vue-tsc` generates the adjacent `index.d.ts` (do not hand-write it — `.d.ts` is gitignored). See [`contributing/rules/compound-api.md`](../../rules/compound-api.md).
-- New entry/entries in `packages/webkit/package.json#exports` — one per public component (root + each public sub-component). The public path keeps the short, flat form (`./dialog-trigger`) regardless of the folder nesting. For composition, the **root** export points at `index.ts` (the compound), **plus** a standalone `./<name>-root` export pointing at the root `.vue` for tree-shaking — see [`contributing/rules/compound-api.md`](../../rules/compound-api.md) and [`contributing/rules/imports.md`](../../rules/imports.md).
+- (Composition only) `packages/ui/src/components/<category>/<name>/injection-key.ts` at the root level (shared by every sub-component).
+- (Composition only) `packages/ui/src/components/<category>/<name>/index.ts` — the **compound API** that attaches every sub-component to the root (`<Root.Part>`) via `Object.assign`; because it is a `.ts` file, `vue-tsc` generates the adjacent `index.d.ts` (do not hand-write it — `.d.ts` is gitignored). See [`contributing/rules/compound-api.md`](../../rules/compound-api.md).
+- New entry/entries in `packages/ui/package.json#exports` — one per public component (root + each public sub-component). The public path keeps the short, flat form (`./dialog-trigger`) regardless of the folder nesting. For composition, the **root** export points at `index.ts` (the compound), **plus** a standalone `./<name>-root` export pointing at the root `.vue` for tree-shaking — see [`contributing/rules/compound-api.md`](../../rules/compound-api.md) and [`contributing/rules/imports.md`](../../rules/imports.md).
 - The starter `<name>.test.ts` next to the root `.vue` (step 6): `enforce-test-exists.mjs` blocks a root `.vue` without one.
 
 Nothing else. The full test, the examples, the `.size-limit.json` entry, the locale keys, the Code Connect file, and the validation pass are later steps of `/component-create` and `/component-new`.
@@ -25,7 +25,7 @@ Nothing else. The full test, the examples, the `.size-limit.json` entry, the loc
 **Folder layout — composition pattern (canonical, one folder per part):**
 
 ```
-packages/webkit/src/components/<category>/<name>/
+packages/ui/src/components/<category>/<name>/
 ├── <name>.vue                          # root
 ├── <name>.test.ts                      # the root's test (testing.md)
 ├── index.ts                            # compound (Object.assign → <Name>.Trigger, ...); vue-tsc emits index.d.ts at publish
@@ -48,7 +48,7 @@ Part words come from the closed list in [`contributing/rules/naming.md`](../../r
 **Folder layout — monolithic (unchanged):**
 
 ```
-packages/webkit/src/components/<category>/<name>/
+packages/ui/src/components/<category>/<name>/
 ├── <name>.vue
 └── <name>.test.ts
 ```
@@ -64,7 +64,7 @@ packages/webkit/src/components/<category>/<name>/
 - The full text of `.specs/<name>.md` (verbatim).
 - The Constraints block (verbatim).
 - [`contributing/rules/no-invention.md`](../../rules/no-invention.md), [`contributing/rules/compound-api.md`](../../rules/compound-api.md) (composition only), the construction rules the orchestrator injects (`component-structure`, `props`, `emits`, `event-payloads`, `slots`, `v-model`, `root-element`, `styling`, `testid`, `accessibility`, `comments`), [`contributing/docs/CODE_QUALITY.md`](../../docs/CODE_QUALITY.md) § 3, [`contributing/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`contributing/docs/TOKENS.md`](../../docs/TOKENS.md).
-- The reference components for cross-reference (read-only): `button`, `icon-button` and `pricing-card`. Find them through the webkit MCP (`get_component` for the contract, `get_import` for the source its `target` points at); never hardcode a source path, because a component can move between category folders.
+- The reference components for cross-reference (read-only): `button`, `icon-button` and `pricing-card`. Find them through the Azion UI MCP (`get_component` for the contract, `get_import` for the source its `target` points at); never hardcode a source path, because a component can move between category folders.
 
 ## Workflow
 
@@ -74,7 +74,7 @@ packages/webkit/src/components/<category>/<name>/
    ```vue
    <script setup lang="ts">
      import { computed, useAttrs } from 'vue'
-     import { cn } from '@aziontech/webkit/utils/cn'
+     import { cn } from '@aziontech/ui/utils/cn'
 
      defineOptions({ name: 'PascalName', inheritAttrs: false })
 
@@ -137,13 +137,13 @@ packages/webkit/src/components/<category>/<name>/
 
    `<name>` in the `testId` fallback is the component's own kebab name (`'button'`; a part `'dialog-header'`), never a category-prefixed id; inner parts a test must reach are `` `${testId}__<part>` `` ([`testid.md`](../../rules/testid.md)). Spacing comes from the semantic scale (`--spacing-2xs` … `--spacing-2xl`); the primitive `--spacing-1` … `--spacing-96` is forbidden in components ([`TOKENS.md`](../../docs/TOKENS.md)).
 
-   `cn` from `@aziontech/webkit/utils/cn` merges the consumer `class` so it wins over internal token choices ([`root-element.md`](../../rules/root-element.md)); its first argument is one flat literal or the `ROOT_CLASS` constant, never a class map.
+   `cn` from `@aziontech/ui/utils/cn` merges the consumer `class` so it wins over internal token choices ([`root-element.md`](../../rules/root-element.md)); its first argument is one flat literal or the `ROOT_CLASS` constant, never a class map.
 
    **A component named after a native tag** (`Button`, `Table`, `Input`) cannot render `<component :is="'button'">` inside itself: the tag resolves to the component and recurses. Render its root through a small functional root that calls `h(tag, attrs, slots)` ([`CODE_QUALITY.md`](../../docs/CODE_QUALITY.md) § 3.3). A link-or-button root reuses the shared `useButtonRoot` composable (`src/composables/use-button-root`, which Button, IconButton and HighlightButton share) instead of writing its own.
 
    **Size and extension points.** Stay within the limits of [`CODE_QUALITY.md`](../../docs/CODE_QUALITY.md) § 3.1 (`.vue` 400 lines, `<script setup>` 200, function 60 lines and complexity 12, 200 characters a line, 20 props and 5 models a root); `check:maintainability` fails over them, with no exemption. Over a limit, split by feature (§ 3.2: `composables/use-<name>-<feature>.ts`, `parts/`, `lib/`). Ship the extension points of § 3.5: `data-slot="<part>"` on every part, exported `<Component>Props` and variant unions, and (composition) the exported context composable and context type.
 
-   **Native controls and widget roles have an owner.** A native control (`button`, `input`, `select`, `textarea`, …) or an ARIA widget role rendered by a new component needs the component's folder listed as an owner of that element in `packages/webkit/src/eslint-plugin/owners.json`, or `webkit/no-unowned-element` fails (CQ-E9). Prefer composing the existing owner (`Button`, `Input`, …) over adding one.
+   **Native controls and widget roles have an owner.** A native control (`button`, `input`, `select`, `textarea`, …) or an ARIA widget role rendered by a new component needs the component's folder listed as an owner of that element in `packages/ui/src/eslint-plugin/owners.json`, or `azion-ui/no-unowned-element` fails (CQ-E9). Prefer composing the existing owner (`Button`, `Input`, …) over adding one.
 
    Never write a `<style>` block. Never declare a `.css`/`.scss` file inside the component directory. Never declare any JavaScript variable that holds a class string (`const variantClasses = {...}`, `const sharedClasses = [...]`, etc.). Variants are HTML data-attributes, not JS dictionaries.
 
@@ -153,7 +153,7 @@ packages/webkit/src/components/<category>/<name>/
 
 3. **(Composition only) Write each sub-component into its own folder.** For each sub-component `<name>-<part>` listed in the spec's Sub-components section, create:
 
-   - `packages/webkit/src/components/<category>/<name>/<name>-<part>/<name>-<part>.vue`
+   - `packages/ui/src/components/<category>/<name>/<name>-<part>/<name>-<part>.vue`
 
    Inside the `.vue`:
    - `defineOptions({ name: '<PascalRoot><PascalPart>', inheritAttrs: false })`.
@@ -165,7 +165,7 @@ packages/webkit/src/components/<category>/<name>/
 4. **(Composition only) Write `injection-key.ts`** at the **root** level of the component (sibling of `<name>.vue`, **not** inside any sub-component folder). Replace `Dialog` with the PascalCase name of your component:
 
    ```ts
-   // packages/webkit/src/components/<category>/<name>/injection-key.ts
+   // packages/ui/src/components/<category>/<name>/injection-key.ts
    import type { InjectionKey, Ref } from 'vue'
 
    export interface DialogContext {
@@ -195,7 +195,7 @@ export default Object.assign(Dialog, {
 
 **The index is `.ts`, not `.js`** — `vue-tsc` cannot derive declarations from a plain `.js` (no `allowJs`), so `<Dialog.Trigger>` would be untyped. **Do not hand-write `index.d.ts`** — it is gitignored and generated at publish time (by the publish workflow), not in dev. The package is consumed as source (the exports map points at `./src/...`, and `.vue` files already import `.ts` like `injection-key.ts`), so the consumer transpiles `index.ts` the same way.
 
-5. **Update `packages/webkit/package.json#exports`** — add one entry per public component (the compound root, the standalone root, and each public sub-component). The **public export path stays flat** (`./<name>-<part>`, never `./<category>/<name>`) so consumers don't see the folder nesting; only the right-hand side changes. Write each entry with its source target, then run `pnpm --filter @aziontech/webkit build:exports`: it rewrites every entry into the typed shape (`{ "types": "./types/components/<category>/<name>/<name>.vue.d.ts", "default": "./src/components/<category>/<name>/<name>.vue" }`) and refreshes `typesVersions`. The `exports` gate (`build-exports.mjs --check`) fails until it has run.
+5. **Update `packages/ui/package.json#exports`** — add one entry per public component (the compound root, the standalone root, and each public sub-component). The **public export path stays flat** (`./<name>-<part>`, never `./<category>/<name>`) so consumers don't see the folder nesting; only the right-hand side changes. Write each entry with its source target, then run `pnpm --filter @aziontech/ui build:exports`: it rewrites every entry into the typed shape (`{ "types": "./types/components/<category>/<name>/<name>.vue.d.ts", "default": "./src/components/<category>/<name>/<name>.vue" }`) and refreshes `typesVersions`. The `exports` gate (`build-exports.mjs --check`) fails until it has run.
 
    The **composition root** points at `index.ts` (the compound); monolithic roots point at `<name>.vue`. Composition also gets a **standalone `./<name>-root`** key pointing straight at the root `.vue` — the tree-shaking path, since the compound `index.ts` retains every sub-component through `Object.assign` (see [`contributing/rules/compound-api.md`](../../rules/compound-api.md)):
 
@@ -218,7 +218,7 @@ export default Object.assign(Dialog, {
 6. **Write the starter test** `<name>.test.ts` next to the root `.vue`, using the template below. Fill the root's **required** props (spec Props with no default) so the render doesn't throw. This is a **FLOOR** — render + `data-testid` fallback + consumer override + axe. It uses `render(Component)` directly because the examples are written later (`examples/<name>/`); the author expands it (every event with payload, `disabled`/`loading` suppression, `v-model`, ARIA/`data-state`, keyboard, the `dir="rtl"` case, and the examples as fixtures) per [`contributing/rules/testing.md`](../../rules/testing.md). [`enforce-test-exists.mjs`](../../hooks/enforce-test-exists.mjs) blocks the root `.vue` while this file is missing, so write it in the same step.
 
    ```ts
-   // packages/webkit/src/components/<category>/<name>/<name>.test.ts
+   // packages/ui/src/components/<category>/<name>/<name>.test.ts
    import { render } from '@testing-library/vue'
    import { describe, expect, it } from 'vitest'
 
@@ -289,7 +289,7 @@ export default Object.assign(Dialog, {
   data-[state=open]:animate-popup-scale-in data-[state=closed]:animate-popup-scale-out
   motion-reduce:data-[state=open]:animate-none motion-reduce:data-[state=closed]:animate-none
   ```
-- Loading indicators reuse `@aziontech/webkit/spinner` (see the reuse-audit output) and carry `aria-hidden="true"` + `motion-reduce:animate-none`.
+- Loading indicators reuse `@aziontech/ui/spinner` (see the reuse-audit output) and carry `aria-hidden="true"` + `motion-reduce:animate-none`.
 - Set `--popup-origin` per instance when using `animate-popup-scale-*`, anchored to the trigger:
   ```html
   :style="{ '--popup-origin': originFromTrigger }"
@@ -308,7 +308,7 @@ export default Object.assign(Dialog, {
 - [ ] Composition: every sub-component is **its own folder** under the component root — `<name>/<name>-<part>/<name>-<part>.vue`.
 - [ ] Composition: `injection-key.ts` written at the root level (sibling of `<name>.vue`), not inside any sub-component folder. Root imports it via `./injection-key`; sub-components via `../injection-key`.
 - [ ] Composition: `index.ts` written at the root level (sibling of `<name>.vue`), attaching every sub-component to the root via `Object.assign` (no hand-written `index.d.ts` — vue-tsc generates it at publish). Member names mirror the spec's anatomy (no invented `Trigger`/`Content` on a non-overlay component).
-- [ ] New entries added to `packages/webkit/package.json#exports`. Public paths stay flat (`./<name>-<part>`); right-hand paths reflect the folder nesting. The composition root export points at `index.ts`; a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). `build:exports` has run, so every entry has the typed shape.
+- [ ] New entries added to `packages/ui/package.json#exports`. Public paths stay flat (`./<name>-<part>`); right-hand paths reflect the folder nesting. The composition root export points at `index.ts`; a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). `build:exports` has run, so every entry has the typed shape.
 - [ ] A class string over 200 characters is a `ROOT_CLASS` constant of `+`-joined literals; no file, script, function, line, prop or model count over the CODE_QUALITY.md § 3.1 limits.
 - [ ] Every part carries `data-slot`; `<Component>Props`, the variant unions and (composition) the context composable and type are exported.
 - [ ] Every native control or widget role the component renders has its owner entry in `owners.json`.

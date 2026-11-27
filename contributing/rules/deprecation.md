@@ -28,14 +28,14 @@ For a whole component:
 
 ## 6.0 is the clean break
 
-WebKit 6.0 is the one **clean-break major**: every name marked `@deprecated` before it, and every rename made for it, is removed outright in 6.0 — no alias, no "Removed in 7.0". Apps migrate once, with [`MIGRATION_V6.md`](../../packages/webkit/MIGRATION_V6.md) and `npx @aziontech/webkit migrate v6` (maps in `packages/webkit/src/cli/migrations/v6*.json`). **From 6.0 on**, the lifecycle above applies to every public part: mark → at least one major → remove. The only names 6.0 still resolves are **data aliases** read from external content (a site page's old section `_id`, an old `Illustration` scene name, a Markdown `<CardGroup cols>`), kept so stored page data keeps rendering; they carry no `@deprecated` tag and no removal version.
+Azion UI 6.0 is the one **clean-break major**: every name marked `@deprecated` before it, and every rename made for it, is removed outright in 6.0 — no alias, no "Removed in 7.0". Apps migrate once, with [`MIGRATION_V6.md`](../../packages/ui/MIGRATION_V6.md) and `npx @aziontech/ui migrate v6` (maps in `packages/ui/src/cli/migrations/v6*.json`). **From 6.0 on**, the lifecycle above applies to every public part: mark → at least one major → remove. The only names 6.0 still resolves are **data aliases** read from external content (a site page's old section `_id`, an old `Illustration` scene name, a Markdown `<CardGroup cols>`), kept so stored page data keeps rendering; they carry no `@deprecated` tag and no removal version.
 
 ## Preview parts — the cycle starts at GA
 
 A new component or block ships as **preview** (`stability: preview` in its spec frontmatter or `block.json`) until the owner marks it **GA** by hand (`stability: ga`, or no field). Everything that existed on 2026-11-23 is GA. The lifecycle above applies **from GA on**:
 
 - A **preview** part's API (props, events, slots, models, parts, exports) may change in a **minor** release, with no `@deprecated` step and no codemod. Name the change in the commit body (`Preview API change: <Name> renames <old> to <new>.`), so it reaches the changelog. Mark nothing `!` or `BREAKING CHANGE:` for it; `check-api-diff.mjs` and `check-migrations.mjs` exempt it.
-- **Promoting** preview → GA is its own PR, `feat(webkit): promote <Name> to GA`, approved by the owner. From that commit the API is frozen.
+- **Promoting** preview → GA is its own PR, `feat(ui): promote <Name> to GA`, approved by the owner. From that commit the API is frozen.
 - **Demoting** GA → preview is not allowed once the part is in a published release: `check-api-diff.mjs` fails it, because it would unfreeze a stable API without a deprecation cycle. A part that was never released (not an export of `origin/main`) may still be set to preview (LC-05).
 
 ## Tag details
@@ -56,7 +56,7 @@ A new component or block ships as **preview** (`stability: preview` in its spec 
 
 ## Enforcement
 
-- **`webkit/no-deprecated-component`** (ESLint, `error` in `recommended`) flags a consumer importing a component marked deprecated in the catalog.
+- **`azion-ui/no-deprecated-component`** (ESLint, `error` in `recommended`) flags a consumer importing a component marked deprecated in the catalog.
 - **release-please** maps the bump; a `BREAKING CHANGE:` footer / `!` produces the `major` (see [`release-types.md`](./release-types.md)).
 - **`catalog.json`** records `deprecated` per part; `build-catalog.mjs` stamps it and the MCP surfaces it. It records `stability: preview` the same way, and the docs site shows a Preview tag.
 - **`check-api-diff.mjs`** (`api-diff` gate) exempts a preview part from the breaking marker and the migration, and fails a GA → preview change; **`check-migrations.mjs`** exempts a preview part or block from the codemod requirement. Pinned in `check-api-diff.test.mjs` and `check-migrations.test.mjs`.

@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 10b671da3da6e44f4d04a8bc78facb09dedecbd297836839a159d893d2827fb3
+checksum: c8db26374c8a47a15a4424ea8a6f07026208cf323a561259cf314550a2ec5355
 created: 2026-08-22
 last_updated: 2026-11-24
 ---
@@ -42,7 +42,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 ```vue
 <script setup>
-  import DocCard from '@aziontech/webkit/doc-card'
+  import DocCard from '@aziontech/ui/doc-card'
 </script>
 
 <template>
@@ -145,7 +145,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

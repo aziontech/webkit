@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 7547bd823d81f6a7a0898ba463a1da142b3540722b4da3d35fe9cce50370264c
+checksum: f984d4940b7ffa91ba5092a096ec1842e3fbfdba6c07d9a83006f9d72e41490a
 created: 2026-09-22
 last_updated: 2026-11-24
 ---
@@ -47,7 +47,7 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 
 ```vue
 <script setup>
-  import Embed from '@aziontech/webkit/embed'
+  import Embed from '@aziontech/ui/embed'
 </script>
 
 <template>
@@ -59,7 +59,7 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 </template>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). From a docs page it is the `<Embed src="…" title="…" />` tag `DocMarkdown` mounts. From the site's page JSON it is the `Embed` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it).
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). From a docs page it is the `<Embed src="…" title="…" />` tag `DocMarkdown` mounts. From the site's page JSON it is the `Embed` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it).
 
 ## Props
 
@@ -125,7 +125,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

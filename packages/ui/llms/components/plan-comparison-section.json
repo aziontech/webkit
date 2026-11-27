@@ -1,0 +1,115 @@
+{
+ "name": "plan-comparison-section",
+ "binding": "PlanComparisonSection",
+ "import": "@aziontech/ui/plan-comparison-section",
+ "treeShakeableImport": "@aziontech/ui/plan-comparison-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'plan-comparison-section', props }` entry and binds `props` straight onto it — and it composes `module`, `select`, `input`, `button`, `hint`, `tooltip`, `eyebrow`, `tag` and `link`.",
+ "setup": null,
+ "useWhen": [
+  "Use PlanComparisonSection for a feature matrix across plans or support tiers: on Pricing under the plan cards, product by product, and on Support with one column per support tier."
+ ],
+ "avoidWhen": [
+  "To compare Azion with one competitor → use `competitor-comparison-section`.",
+  "For price cards with a billing-period toggle → use `pricing-plans-section`."
+ ],
+ "related": [
+  "`pricing-plans-section` — the plan cards this matrix sits under.",
+  "`competitor-comparison-section` — Azion against one competitor."
+ ],
+ "bestPractices": [
+  "Give every plan a stable `id`; the narrow-screen picker selects by it.",
+  "Mark one plan `highlighted`; it gets the accent bar, the secondary button and opens the picker.",
+  "Give every row's `values` one entry per plan, in plan order.",
+  "Use a row's `hint` to define the term its label names; it opens in a `hint` note beside the label, so it can run to a sentence or two.",
+  "Set `includedLabel` and `excludedLabel` to the page's words; left empty, the marks read the locale's Included and Not included."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
+   "name": "caption",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Screen-reader caption naming the table."
+  },
+  {
+   "name": "columnLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Heading of the feature column, shown from the large breakpoint up."
+  },
+  {
+   "name": "pickerAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the plan picker shown below the large breakpoint."
+  },
+  {
+   "name": "includedLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Tooltip and screen-reader text of an included cell; empty uses the locale catalog (`Included`)."
+  },
+  {
+   "name": "excludedLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Tooltip and screen-reader text of a not-included cell; empty uses the locale catalog (`Not included`)."
+  },
+  {
+   "name": "plans",
+   "type": "PlanComparisonSectionPlan[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped."
+  },
+  {
+   "name": "sections",
+   "type": "PlanComparisonSectionSection[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a `hint` note."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ModuleHeaderAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Band links",
+   "file": "examples/plan-comparison-section/band-links.vue"
+  },
+  {
+   "name": "Hints and marks",
+   "file": "examples/plan-comparison-section/hints-and-marks.vue"
+  },
+  {
+   "name": "Support tiers",
+   "file": "examples/plan-comparison-section/support-tiers.vue"
+  }
+ ],
+ "docs": "components/plan-comparison-section.md"
+}

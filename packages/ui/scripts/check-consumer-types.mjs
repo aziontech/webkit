@@ -1,0 +1,175 @@
+#!/usr/bin/env node
+
+import { execFileSync } from 'node:child_process'
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+
+import { _internals as initPlan } from '../src/cli/plan.js'
+import { VUE_TSC_KNOWN_GOOD } from '../src/cli/toolchain.js'
+import { buildWorkspace, packWorkspace, runLogged as run } from './lib/consumer-app.mjs'
+
+const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
+const PKG = resolve(SCRIPT_DIR, '..')
+const ROOT = resolve(PKG, '..', '..')
+export const CREATE_VITE = 'create-vite@9.3.4'
+
+export const APP_VUE = `<script setup lang="ts">
+  import Button, { type ButtonVariant, type ButtonProps } from '@aziontech/ui/button'
+  import HeroSection from '@aziontech/ui/hero-section'
+  import SiteHeaderSection from '@aziontech/ui/site-header-section'
+  import Table from '@aziontech/ui/table'
+  import ConfigProvider from '@aziontech/ui/config-provider'
+  import { toast } from '@aziontech/ui/toast'
+  import { useCollection } from '@aziontech/ui/use-collection'
+  import { cn } from '@aziontech/ui/utils/cn'
+
+  interface Edge {
+    id: string
+    name: string
+  }
+
+  const collection = useCollection<Edge>({
+    items: [{ id: '1', name: 'storefront' }],
+    pagination: { pageSize: 10 }
+  })
+  const notify = (): void => {
+    toast.success('Saved')
+  }
+  const heroClass = cn('a', 'b')
+  const saveVariant: ButtonVariant = 'secondary'
+  const saveProps: ButtonProps = { variant: saveVariant, label: 'Save' }
+</script>
+
+<template>
+  <ConfigProvider>
+    <SiteHeaderSection :menus="[]" />
+    <!-- @vue-expect-error -->
+    <SiteHeaderSection />
+    <HeroSection title="Ship" eyebrow="https://www.azion.com" :class="heroClass" />
+    <Table>
+      <Table.Body>
+        <Table.Row v-for="edge in collection.items.value" :key="edge.id">
+          <Table.Cell>{{ edge.name }}</Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table>
+    <Button v-bind="saveProps" @click="notify" />
+  </ConfigProvider>
+</template>
+`
+
+export const MAIN_TS = `import { createApp } from 'vue'
+import { createMemoryHistory, createRouter } from 'vue-router'
+import '@aziontech/icons'
+import '@aziontech/theme'
+import '@aziontech/theme/fonts.css'
+import '@aziontech/ui/styles'
+import { ToastPlugin } from '@aziontech/ui/toast'
+import App from './App.vue'
+
+const router = createRouter({ history: createMemoryHistory(), routes: [] })
+
+createApp(App).use(router).use(ToastPlugin).mount('#app')
+`
+
+export const PROBE_TS = `import { useCollection } from '@aziontech/ui/use-collection'
+
+// @ts-expect-error
+useCollection({ items: [1, 2] })
+`
+
+export function allExportsModule(exportsMap) {
+  const lines = Object.entries(exportsMap)
+    .filter(([, entry]) => entry && typeof entry === 'object' && entry.types)
+    .map(([key], i) => `export type * as e${i} from '@aziontech/ui/${key.slice(2)}'`)
+  return `${lines.join('\n')}\n`
+}
+
+export function sourceFilesInProgram(fileList) {
+  return fileList
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => /node_modules[\\/]@aziontech[\\/]ui[\\/]/.test(line))
+    .filter((line) => !line.endsWith('.d.ts'))
+}
+
+function fail(message) {
+  console.error(`\n✖ consumer-types: ${message}`)
+  process.exit(1)
+}
+
+function main() {
+  const keep = process.argv.includes('--keep')
+  if (!process.argv.includes('--skip-build')) buildWorkspace(ROOT)
+
+  const work = mkdtempSync(join(tmpdir(), 'azion-ui-consumer-types-'))
+  const tarballs = packWorkspace(ROOT, join(work, 'tarballs'))
+
+  run(
+    'npm',
+    [
+      'create',
+      CREATE_VITE.replace('create-', ''),
+      '--',
+      'app',
+      '--template',
+      'vue-ts',
+      '--no-interactive'
+    ],
+    work
+  )
+  const app = join(work, 'app')
+  if (!existsSync(join(app, 'tsconfig.app.json')))
+    fail('create-vite did not write the vue-ts template')
+
+  const appPkgPath = join(app, 'package.json')
+  const appPkg = JSON.parse(readFileSync(appPkgPath, 'utf8'))
+  if (appPkg.scripts?.build !== 'vue-tsc -b && vite build') {
+    fail(`the template build script changed: ${appPkg.scripts?.build}`)
+  }
+  appPkg.dependencies = {
+    ...appPkg.dependencies,
+    '@aziontech/ui': `file:${tarballs.azionUiTgz}`,
+    '@aziontech/theme': `file:${tarballs.themeTgz}`,
+    '@aziontech/icons': `file:${tarballs.iconsTgz}`,
+    'vue-router': '^5.5.0'
+  }
+  appPkg.devDependencies = {
+    ...appPkg.devDependencies,
+    ...Object.fromEntries(initPlan.STYLE_DEV_DEPS.map(({ dep, version }) => [dep, version])),
+    'vue-tsc': VUE_TSC_KNOWN_GOOD
+  }
+  writeFileSync(appPkgPath, `${JSON.stringify(appPkg, null, 2)}\n`)
+  writeFileSync(join(app, 'postcss.config.mjs'), initPlan.postcssConfig())
+
+  const azionUiPkg = JSON.parse(readFileSync(join(PKG, 'package.json'), 'utf8'))
+  writeFileSync(join(app, 'src/App.vue'), APP_VUE)
+  writeFileSync(join(app, 'src/main.ts'), MAIN_TS)
+  writeFileSync(join(app, 'src/probe.ts'), PROBE_TS)
+  writeFileSync(join(app, 'src/all-exports.ts'), allExportsModule(azionUiPkg.exports))
+
+  run('npm', ['install', '--no-audit', '--no-fund'], app)
+  run('npm', ['run', 'build'], app)
+
+  const listed = execFileSync(
+    'npx',
+    ['vue-tsc', '-p', 'tsconfig.app.json', '--noEmit', '--listFilesOnly'],
+    { cwd: app, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }
+  )
+  const sources = sourceFilesInProgram(listed)
+  if (sources.length) {
+    fail(
+      `the consumer program type-checks ${sources.length} Azion UI source file(s); every export must resolve to types/:\n  ${sources.slice(0, 10).join('\n  ')}`
+    )
+  }
+
+  console.log(
+    `\n✓ consumer-types: a fresh ${CREATE_VITE} vue-ts app builds with the packed tarballs; ${Object.keys(azionUiPkg.exports).length} exports, declaration-only program.`
+  )
+  if (keep) console.log(`  workdir kept: ${work}`)
+  else rmSync(work, { recursive: true, force: true })
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) main()

@@ -1,0 +1,23 @@
+<script setup>
+  import Card from '@aziontech/ui/card'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+</script>
+
+<template>
+  <Card
+    title="Subscription plan"
+    class="max-w-(--container-xs)"
+  >
+    <template #default>
+      <KeyValueList
+        variant="split"
+        aria-label="Subscription plan"
+      >
+        <KeyValueList.Item label="Plan price">$0.00 / month</KeyValueList.Item>
+        <KeyValueList.Item label="Billing period">Nov 1, 2026 to Nov 30, 2026</KeyValueList.Item>
+        <KeyValueList.Item label="Next invoice">Dec 1, 2026</KeyValueList.Item>
+        <KeyValueList.Item label="Payment method" />
+      </KeyValueList>
+    </template>
+  </Card>
+</template>

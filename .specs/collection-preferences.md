@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 790f080a0ee89e4120ab07ed0ea26b7cfabf556b8d416822d0b55e92cc017252
+checksum: f570f95584538e099170e0a1e106f507b800657653e2d49663c19761e54a7b58
 created: 2026-11-11
 last_updated: 2026-11-25
 ---
@@ -45,7 +45,7 @@ It is the one column chooser of a table. Placed in a DataTable's `toolbar` slot 
 
 ```vue
 <script setup>
-  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import CollectionPreferences from '@aziontech/ui/collection-preferences'
   import { ref } from 'vue'
 
   const columns = [
@@ -181,7 +181,7 @@ _none_ — the open and close motion is owned by `dialog` and `drawer`.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

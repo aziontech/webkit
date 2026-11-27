@@ -1,0 +1,119 @@
+{
+ "name": "settings-group",
+ "binding": "SettingsGroup",
+ "import": "@aziontech/ui/settings-group",
+ "treeShakeableImport": "@aziontech/ui/settings-group",
+ "category": "layout",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A band of a settings page: an h2 with a `Hint` glyph that opens the one-sentence guidance on click, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.",
+ "setup": null,
+ "useWhen": [
+  "Use SettingsGroup for a band of a settings page whose body is SettingsRow rows; any other band heading is a Subheader.",
+  "Every settings page and create page: a resource's Settings tab, Account Settings, a create form, a create drawer.",
+  "An Advanced band that starts closed (`collapsible`)."
+ ],
+ "avoidWhen": [
+  "A band whose heading carries a description line and actions → use `subheader`.",
+  "The page title → use `page-header`.",
+  "A disclosure list of several independent panels → use `accordion`."
+ ],
+ "related": [
+  "`settings-row` — the rows inside the band's card.",
+  "`card` — the flush (`:padded=\"false\"`) surface the rows sit on.",
+  "`hint` — the guidance glyph beside the title.",
+  "`subheader` — the band heading with a description and actions. Pick by content: a settings band of `SettingsRow`s (a Hint, a gutter copy-link, an optional disclosure) is `SettingsGroup`; a console band heading with a description and its own actions is `Subheader`; a marketing section heading is `module-header`. The three share the h2 and the copy-link anchor; folding SettingsGroup's heading onto Subheader is a planned refactor, not a behaviour change."
+ ],
+ "bestPractices": [
+  "One sentence of guidance in `hint`; the title names the band in one or two words.",
+  "Set `anchor` on bands people link to.",
+  "Use `collapsible` only for an Advanced band whose defaults are right for most people; it starts closed.",
+  "Stack the bands inside one form column (`layout-column-form`); the first band takes no top margin."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The group heading, rendered as an h2."
+  },
+  {
+   "name": "hint",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One-sentence guidance in a click-open Hint note beside the label."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus."
+  },
+  {
+   "name": "collapsible",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Turns the label into a disclosure that folds the band body."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Glyph shown before the label of a collapsible band (e.g. `az az-settings`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The band body, usually a flush Card of SettingsRow rows."
+  },
+  {
+   "name": "label",
+   "scope": "—",
+   "notes": "Rich label content; replaces the `label` prop text in the h2."
+  },
+  {
+   "name": "info",
+   "scope": "—",
+   "notes": "An affordance beside the heading, after the `hint` glyph and outside the h2 and the disclosure button: a help button that opens the page's `HelpPanel`. Clicking it never folds the band."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [
+  {
+   "kind": "icons",
+   "page": "foundations/icons.md"
+  }
+ ],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/settings-group/default.vue"
+  },
+  {
+   "name": "Stacked",
+   "file": "examples/settings-group/stacked.vue"
+  },
+  {
+   "name": "Collapsible",
+   "file": "examples/settings-group/collapsible.vue"
+  }
+ ],
+ "docs": "components/settings-group.md"
+}

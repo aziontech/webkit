@@ -51,7 +51,7 @@ overrides:
 
 auditConfig:
   # Each ignored advisory names its package, why it is ignored and the date to review it by;
-  # packages/webkit/test/standards/supply-chain.test.mjs fails once a date has passed.
+  # packages/ui/test/standards/supply-chain.test.mjs fails once a date has passed.
   ignoreGhsas:
     # braces <= 3.0.3, dev-only (build tooling); withdrawn by GitHub. Review by 2027-02-24.
     - GHSA-vfj7-8cjw-p6xm

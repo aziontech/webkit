@@ -10,7 +10,7 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(HERE, '../../..')
 const BASELINES = join(ROOT, 'apps/visual/baselines/blocks')
 const PUBLIC = resolve(HERE, '../public')
-const CATALOG = join(ROOT, 'packages/webkit/catalog.json')
+const CATALOG = join(ROOT, 'packages/ui/catalog.json')
 
 const SOURCE = { width: 1280, height: 800 }
 const THEMES = ['light', 'dark']

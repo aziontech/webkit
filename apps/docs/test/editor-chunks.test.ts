@@ -51,7 +51,7 @@ test('a module from monaco-editor marks its chunk as an editor chunk', () => {
     )
   )
   assert.ok(!isEditorModule('\0rolldown/runtime.js'))
-  assert.ok(!isEditorModule('/repo/packages/webkit/src/components/code/code-editor/monaco.ts'))
+  assert.ok(!isEditorModule('/repo/packages/ui/src/components/code/code-editor/monaco.ts'))
 })
 
 test('Monaco reached only through import() passes', () => {

@@ -1,7 +1,7 @@
 import type {
   ConversationHistoryItem,
   ConversationHistoryProject
-} from '@aziontech/webkit/conversation-history'
+} from '@aziontech/ui/conversation-history'
 import { ref } from 'vue'
 
 export const copilotHistoryNow = '2026-11-19T12:00:00Z'

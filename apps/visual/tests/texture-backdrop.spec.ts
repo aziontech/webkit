@@ -9,10 +9,7 @@ import { findGraphicsOnTexture } from './texture-backdrop'
 
 const WIDTHS = [390, 1280]
 
-const EXAMPLES = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  '../../../packages/webkit/examples'
-)
+const EXAMPLES = resolve(dirname(fileURLToPath(import.meta.url)), '../../../packages/ui/examples')
 
 const TEXTURED = /Texture|Backdrop|Section|SitePage|Hero\b|MediaSplit|MediaTabs|MediaScroll|_id/
 

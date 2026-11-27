@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Card from '@aziontech/webkit/card'
-  import Item from '@aziontech/webkit/item'
-  import SettingsGroup from '@aziontech/webkit/settings-group'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import Switch from '@aziontech/webkit/switch'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import Card from '@aziontech/ui/card'
+  import Item from '@aziontech/ui/item'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import SettingsRow from '@aziontech/ui/settings-row'
+  import Switch from '@aziontech/ui/switch'
+  import ThemeSwitcher from '@aziontech/ui/theme-switcher'
 
   import type { UserProfilePreferences } from './account-user-profile.user-profile-model'
 

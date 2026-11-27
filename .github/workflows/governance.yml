@@ -19,7 +19,7 @@ jobs:
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
-      webkit: ${{ steps.filter.outputs.webkit }}
+      ui: ${{ steps.filter.outputs.ui }}
       tests: ${{ steps.filter.outputs.tests }}
       visual: ${{ steps.filter.outputs.visual }}
       baselines: ${{ steps.filter.outputs.baselines }}
@@ -33,16 +33,16 @@ jobs:
         id: filter
         with:
           filters: |
-            webkit:
-              - 'packages/webkit/**'
-              - 'packages/webkit-mcp/**'
+            ui:
+              - 'packages/ui/**'
+              - 'packages/ui-mcp/**'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
               - '.syncpackrc.json'
             tests:
-              - 'packages/webkit/**'
+              - 'packages/ui/**'
             visual:
-              - 'packages/webkit/**'
+              - 'packages/ui/**'
               - 'packages/theme/**'
               - 'packages/icons/**'
               - 'apps/docs/**'
@@ -52,7 +52,7 @@ jobs:
             baselines:
               - 'apps/visual/baselines/**'
             canary:
-              - 'packages/webkit/**'
+              - 'packages/ui/**'
               - 'lint-canaries/**'
               - 'eslint.config.js'
               - 'commitlint.config.js'
@@ -86,7 +86,7 @@ jobs:
   security:
     name: Security scans
     needs: changes
-    if: needs.changes.outputs.webkit == 'true'
+    if: needs.changes.outputs.ui == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -179,7 +179,7 @@ jobs:
   lint:
     name: Lint and format
     needs: changes
-    if: needs.changes.outputs.webkit == 'true'
+    if: needs.changes.outputs.ui == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -199,21 +199,21 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run ESLint (zero warnings policy)
-        run: pnpm run lint:webkit
+        run: pnpm run lint:ui
 
       - name: Quality lint — no line over 200 characters and the full accessibility lint in components, blocks and examples (no baseline)
-        run: pnpm --filter @aziontech/webkit run lint:quality
+        run: pnpm --filter @aziontech/ui run lint:quality
 
       - name: Run Stylelint
-        run: pnpm run lint:webkit:style
+        run: pnpm run lint:ui:style
 
       - name: Prettier check (fail on diff)
-        run: pnpm run check:webkit:format
+        run: pnpm run check:ui:format
 
   types:
     name: Types and type coverage
     needs: changes
-    if: needs.changes.outputs.webkit == 'true'
+    if: needs.changes.outputs.ui == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -236,25 +236,25 @@ jobs:
         run: pnpm build:icons
 
       - name: TypeScript check
-        run: pnpm run typecheck:webkit
+        run: pnpm run typecheck:ui
 
       - name: Tests TypeScript check
-        run: pnpm run typecheck:webkit:tests
+        run: pnpm run typecheck:ui:tests
 
       - name: Docs site TypeScript check
         run: pnpm run typecheck:docs
 
       - name: Type coverage (enforce 95% threshold)
-        run: pnpm run check:webkit:type-coverage
+        run: pnpm run check:ui:type-coverage
 
       - name: SFC type coverage — the any count in component SFCs does not grow
-        run: pnpm --filter @aziontech/webkit run check:sfc-type-coverage
+        run: pnpm --filter @aziontech/ui run check:sfc-type-coverage
 
   build:
     name: Build
     runs-on: ubuntu-latest
     needs: [changes, lint, types]
-    if: needs.changes.outputs.webkit == 'true'
+    if: needs.changes.outputs.ui == 'true'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -274,17 +274,17 @@ jobs:
 
       - name: Assert no test files leak into the tarball
         run: pnpm check:pack
-        working-directory: packages/webkit
+        working-directory: packages/ui
 
       - name: Build the icon font
         run: pnpm build:icons
 
       - name: Bundle budget
         run: pnpm run check:size
-        working-directory: packages/webkit
+        working-directory: packages/ui
 
-      - name: Package lint — publint on the packed theme, icons and webkit, arethetypeswrong on theme (esm-only) and icons
-        run: pnpm --filter @aziontech/webkit run check:package-lint
+      - name: Package lint — publint on the packed theme, icons and ui, arethetypeswrong on theme (esm-only) and icons
+        run: pnpm --filter @aziontech/ui run check:package-lint
 
   site:
     name: Build docs site and demos
@@ -352,7 +352,7 @@ jobs:
       - name: Check that every external docs link resolves (lychee; bot-blocking hosts may answer 403 or 429)
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: pnpm --filter @aziontech/webkit-docs run check:external-links
+        run: pnpm --filter @aziontech/ui-docs run check:external-links
 
       - name: Build the demos
         run: pnpm build:demos
@@ -360,7 +360,7 @@ jobs:
       - name: Lighthouse — accessibility 100, LCP at most 2.5 s, CLS at most 0.1, TBT at most 200 ms (docs home, one component page, one demo)
         env:
           LIGHTHOUSE_OUT: ${{ runner.temp }}/lighthouse
-        run: pnpm --filter @aziontech/webkit-docs run check:lighthouse
+        run: pnpm --filter @aziontech/ui-docs run check:lighthouse
 
       - name: Upload the Lighthouse reports
         if: ${{ !cancelled() }}
@@ -381,7 +381,7 @@ jobs:
 
   # Runs on every PR (no path filter): these gates are the machine half of the AI flow
   # (contributing/commands/component-new.md) and finish in under a minute. Locally:
-  # pnpm --filter @aziontech/webkit run gates
+  # pnpm --filter @aziontech/ui run gates
   toolkit:
     name: Toolkit tests and catalog drift
     needs: changes
@@ -411,57 +411,60 @@ jobs:
         run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint --verbose
 
       - name: Catalog is in sync (no drift from exports/specs)
-        run: pnpm --filter @aziontech/webkit check:catalog
+        run: pnpm --filter @aziontech/ui check:catalog
 
       - name: No spec in status draft (.specs/_template.md excepted)
-        run: pnpm --filter @aziontech/webkit run check:spec-status
+        run: pnpm --filter @aziontech/ui run check:spec-status
 
       - name: Spec integrity — every spec approved or beyond, shipped components implemented, body checksum matches
-        run: pnpm --filter @aziontech/webkit run check:spec-integrity
+        run: pnpm --filter @aziontech/ui run check:spec-integrity
 
       - name: Spec template — specs on template 2 fill Internationalization, Right-to-left, Responsive and Performance
-        run: pnpm --filter @aziontech/webkit run check:spec-template
+        run: pnpm --filter @aziontech/ui run check:spec-template
 
       - name: Blocks — every block has intents, real skills and a lint-clean SFC
-        run: pnpm --filter @aziontech/webkit run check:blocks
+        run: pnpm --filter @aziontech/ui run check:blocks
 
-      - name: Examples — every example passes the lint `webkit init` installs (strict preset), ratcheted by a baseline
-        run: pnpm --filter @aziontech/webkit run check:examples-lint
+      - name: Examples — every example passes the lint `azion-ui init` installs (strict preset), ratcheted by a baseline
+        run: pnpm --filter @aziontech/ui run check:examples-lint
 
       - name: Cited names — skills, rules and blocks only cite exports that exist
-        run: pnpm --filter @aziontech/webkit run check:cited-names
+        run: pnpm --filter @aziontech/ui run check:cited-names
 
       - name: Naming — kebab-case English ids, block ids match folders, no synonyms or retired v6 names
-        run: pnpm --filter @aziontech/webkit run check:naming
+        run: pnpm --filter @aziontech/ui run check:naming
+
+      - name: No old library name — the package is @aziontech/ui
+        run: pnpm --filter @aziontech/ui run check:old-name
 
       - name: Declarations for the runtime .js modules are in sync
-        run: pnpm --filter @aziontech/webkit run check:js-dts
+        run: pnpm --filter @aziontech/ui run check:js-dts
 
       - name: Every source export declares types (types condition into types/)
-        run: pnpm --filter @aziontech/webkit run check:exports
+        run: pnpm --filter @aziontech/ui run check:exports
 
       - name: Marketing and docs inventory — no marketing or docs item leaves unrecorded
-        run: pnpm --filter @aziontech/webkit run check:marketing-inventory
+        run: pnpm --filter @aziontech/ui run check:marketing-inventory
 
       - name: Public API changes have a codemod entry (removed or renamed export, block, prop or value)
-        run: pnpm --filter @aziontech/webkit run check:migrations
+        run: pnpm --filter @aziontech/ui run check:migrations
 
       - name: Public API diff against the base branch — breaking needs "!" in the PR title and a migration, any change bumps spec_version
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
-        run: pnpm --filter @aziontech/webkit run check:api-diff
+        run: pnpm --filter @aziontech/ui run check:api-diff
 
       - name: Hook tests (spec, authoring and reference hooks)
-        run: pnpm --filter @aziontech/webkit run test:hooks
+        run: pnpm --filter @aziontech/ui run test:hooks
 
       - name: Build the icon font
         run: pnpm build:icons
 
       - name: Toolkit unit tests (ESLint rules, catalog queries, CLI, stylelint config)
-        run: pnpm --filter @aziontech/webkit test:toolkit
+        run: pnpm --filter @aziontech/ui test:toolkit
 
-      - name: MCP server tests (@aziontech/webkit-mcp over stdio)
-        run: pnpm --filter @aziontech/webkit-mcp test
+      - name: MCP server tests (@aziontech/ui-mcp over stdio)
+        run: pnpm --filter @aziontech/ui-mcp test
 
       - name: Theme tests (device contract, container scale in @theme, CSS types, shipped font files)
         run: pnpm --filter @aziontech/theme test
@@ -473,28 +476,28 @@ jobs:
         run: pnpm --filter @aziontech/icons check:manifest
 
       - name: Server rendering — every block and example renders with vue/server-renderer in Node
-        run: pnpm --filter @aziontech/webkit test:ssr
+        run: pnpm --filter @aziontech/ui test:ssr
 
       - name: Construction-standard ratchet (no new authoring violations)
-        run: pnpm --filter @aziontech/webkit run check:authoring
+        run: pnpm --filter @aziontech/ui run check:authoring
 
       - name: Every component has its test (testing.md)
-        run: pnpm --filter @aziontech/webkit run check:tests
+        run: pnpm --filter @aziontech/ui run check:tests
 
       - name: Every component is complete — exports, -root, size budget, examples, visual baseline, spec status (ratcheted by a baseline)
-        run: pnpm --filter @aziontech/webkit run check:complete
+        run: pnpm --filter @aziontech/ui run check:complete
 
       - name: No new look-alike components — two components that do the same job without reusing each other (ratcheted by a baseline)
-        run: pnpm --filter @aziontech/webkit run check:look-alikes
+        run: pnpm --filter @aziontech/ui run check:look-alikes
 
       - name: No copy-pasted code in components or inside a block (jscpd, no baseline)
-        run: pnpm --filter @aziontech/webkit run check:duplication
+        run: pnpm --filter @aziontech/ui run check:duplication
 
       - name: Maintainability — no file, script block, function, line, prop or model count over the CODE_QUALITY.md 3.1 limits (no baseline)
-        run: pnpm --filter @aziontech/webkit run check:maintainability
+        run: pnpm --filter @aziontech/ui run check:maintainability
 
       - name: Type assertions — no as never or as unknown as, and the assertion count does not grow
-        run: pnpm --filter @aziontech/webkit run check:assertions
+        run: pnpm --filter @aziontech/ui run check:assertions
 
       - name: Install typos (pinned release binary, checksum verified)
         env:
@@ -512,15 +515,15 @@ jobs:
         run: pnpm run check:spelling
 
       - name: Size budgets only ratchet down (each raised entry needs its own Budget-raise line)
-        run: pnpm --filter @aziontech/webkit run check:size-ratchet
+        run: pnpm --filter @aziontech/ui run check:size-ratchet
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
 
       - name: Authoring docs ratchet (no new out-of-standard skill or agent docs)
-        run: pnpm --filter @aziontech/webkit run check:authoring-docs
+        run: pnpm --filter @aziontech/ui run check:authoring-docs
 
       - name: Docs Markdown — one Do / Don't vocabulary, no task list in a rendered page
-        run: pnpm --filter @aziontech/webkit run check:docs-markdown
+        run: pnpm --filter @aziontech/ui run check:docs-markdown
 
       - name: Docs Markdown pipeline tests (HTML comments dropped, task lists plain, pair words)
         run: pnpm test:docs
@@ -549,12 +552,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Init + build a bare consumer app
-        run: pnpm --filter @aziontech/webkit run test:consume
+        run: pnpm --filter @aziontech/ui run test:consume
 
   consumer-types:
     name: Consumer TypeScript build (fresh vue-ts app, packed tarballs)
     needs: changes
-    if: needs.changes.outputs.webkit == 'true' || needs.changes.outputs.visual == 'true'
+    if: needs.changes.outputs.ui == 'true' || needs.changes.outputs.visual == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -575,7 +578,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Pack, install into a fresh vue-ts app, run its npm run build
-        run: pnpm --filter @aziontech/webkit run check:consumer-types
+        run: pnpm --filter @aziontech/ui run check:consumer-types
 
   tests:
     name: Vitest browser (shard ${{ matrix.shard }}/4)
@@ -612,14 +615,14 @@ jobs:
 
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
-        working-directory: packages/webkit
+        working-directory: packages/ui
 
       - name: Build the icon font
         run: pnpm build:icons
 
       - name: Run tests (shard ${{ matrix.shard }})
         run: pnpm exec vitest run --shard=${{ matrix.shard }}/4
-        working-directory: packages/webkit
+        working-directory: packages/ui
 
   visual:
     name: Visual tests, styled (shard ${{ matrix.shard }}/4)
@@ -658,7 +661,7 @@ jobs:
           path: apps
 
       - name: Run visual tests (shard ${{ matrix.shard }}/4)
-        run: pnpm --filter @aziontech/webkit-visual exec playwright test --shard=${{ matrix.shard }}/4
+        run: pnpm --filter @aziontech/ui-visual exec playwright test --shard=${{ matrix.shard }}/4
 
       - name: Upload the report on failure or when baselines change
         id: report

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Tag from '@aziontech/webkit/tag'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   /** One gate of the production checklist. */

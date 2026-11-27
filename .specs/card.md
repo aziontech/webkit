@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: e4286608814678d130bd8bedbf7abdaa726723cbb84c8b2f55fe31a5a42a98da
+checksum: ed9481f1e87e0ccae98167ac3a0dd35dbe9fd1dda86eb95527abadd0e1ddee53
 created: 2026-05-22
 last_updated: 2026-11-21
 ---
@@ -58,8 +58,8 @@ A bordered surface that groups related content under a title, with a header, a b
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
 </script>
 
 <template>
@@ -83,7 +83,7 @@ A bordered surface that groups related content under a title, with a header, a b
 </template>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). Markdown writes `<Card>`, which renders `DocCard` (a docs piece). From the site's page JSON it is the `Card` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); the body is a text child, and the `header`, `header-actions` and `footer` slots stay Vue.
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). Markdown writes `<Card>`, which renders `DocCard` (a docs piece). From the site's page JSON it is the `Card` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); the body is a text child, and the `header`, `header-actions` and `footer` slots stay Vue.
 
 ## Props
 
@@ -190,7 +190,7 @@ A bordered surface that groups related content under a title, with a header, a b
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

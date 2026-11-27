@@ -1,17 +1,17 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/ui/button'
   import type {
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
-  } from '@aziontech/webkit/prompt-input'
-  import PromptInputAccessPicker from '@aziontech/webkit/prompt-input-access-picker'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
-  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
-  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  } from '@aziontech/ui/prompt-input'
+  import PromptInputAccessPicker from '@aziontech/ui/prompt-input-access-picker'
+  import PromptInputAttachButton from '@aziontech/ui/prompt-input-attach-button'
+  import PromptInputContextPicker from '@aziontech/ui/prompt-input-context-picker'
+  import PromptInputDictateButton from '@aziontech/ui/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/ui/prompt-input-model-picker'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { nextTick, ref } from 'vue'
 
   import {

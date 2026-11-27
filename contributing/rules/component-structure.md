@@ -4,7 +4,7 @@ Two components should differ only in what they _do_, never in how their files ar
 
 ## Folder layout
 
-A component named `<name>` in category `<category>` lives at `packages/webkit/src/components/<category>/<name>/` and contains, as needed:
+A component named `<name>` in category `<category>` lives at `packages/ui/src/components/<category>/<name>/` and contains, as needed:
 
 ```
 <category>/<name>/
@@ -20,9 +20,9 @@ A component named `<name>` in category `<category>` lives at `packages/webkit/sr
 ```
 
 - **One component per `.vue` file**, named in kebab; the file name is the canonical name (see [`naming.md`](./naming.md)).
-- **Category lives in the folder, never in the public import** (`@aziontech/webkit/<name>`, flat — see [`imports.md`](./imports.md)).
-- **Co-locate** what only this component uses (its composables, its `injection-key.ts`, its sub-components). Promote to [`src/composables/`](../../packages/webkit/src/composables/) only when a second component needs it.
-- **No per-component `package.json`** — exports are declared once in the root `packages/webkit/package.json#exports` (see [`compound-api.md`](./compound-api.md)).
+- **Category lives in the folder, never in the public import** (`@aziontech/ui/<name>`, flat — see [`imports.md`](./imports.md)).
+- **Co-locate** what only this component uses (its composables, its `injection-key.ts`, its sub-components). Promote to [`src/composables/`](../../packages/ui/src/composables/) only when a second component needs it.
+- **No per-component `package.json`** — exports are declared once in the root `packages/ui/package.json#exports` (see [`compound-api.md`](./compound-api.md)).
 
 ## Internal names
 
@@ -46,7 +46,7 @@ Every `<script setup lang="ts">` reads top-to-bottom in this fixed order. Omit a
 <script setup lang="ts">
   // 1. imports
   import { computed, useAttrs } from 'vue'
-  import { cn } from '@aziontech/webkit/utils/cn'
+  import { cn } from '@aziontech/ui/utils/cn'
 
   // 2. defineOptions — name (PascalCase) + inheritAttrs
   defineOptions({ name: 'Chip', inheritAttrs: false })

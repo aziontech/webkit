@@ -17,7 +17,7 @@ export function specFiles(specsDir) {
 function componentShipped(frontmatter, repoRoot) {
   if (!frontmatter?.name || !frontmatter?.category) return false
   return existsSync(
-    resolve(repoRoot, 'packages/webkit/src/components', frontmatter.category, frontmatter.name)
+    resolve(repoRoot, 'packages/ui/src/components', frontmatter.category, frontmatter.name)
   )
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Link from '@aziontech/webkit/link'
+  import Link from '@aziontech/ui/link'
 
   import { messages } from '../lib/i18n'
 

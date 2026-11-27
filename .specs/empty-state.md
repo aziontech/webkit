@@ -7,7 +7,7 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 1b4cc46763ee3d30998fa73aed09337029b71054cd226f1808c33793ad7bfa54
+checksum: 839444ed6a87c778cde928736163130e8cefc9f39c3ca74586849e50e983bb3f
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -48,9 +48,9 @@ Centered placeholder shown when a resource list or section has no content yet. S
 
 ```vue
 <script setup>
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Button from '@aziontech/webkit/button'
-  import Link from '@aziontech/webkit/link'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Button from '@aziontech/ui/button'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>
@@ -172,7 +172,7 @@ _none_ — the title now uses `heading` tokens at every size (`.text-heading-2xs
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

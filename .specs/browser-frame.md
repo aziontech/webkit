@@ -6,19 +6,19 @@ status: implemented
 spec_version: 3
 created: 2026-10-20
 last_updated: 2026-11-25
-checksum: 7fc5fe800f2b189d1b123558da9385d5ca8658355bb930fe63dd03839f37a2eb
+checksum: 121c5af8104762f0012f6d43bea252ad42cab9afd2fabda90d3a9d04bb6fdd74
 ---
 
 # BrowserFrame — Component Spec
 
 ## Purpose
 
-A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.
+A browser window that renders live Azion UI components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.
 
 ## When to use
 
 - Use BrowserFrame to run real components inside a resizable device viewport (docs, stories); for a screenshot or clip in documentation use DocFrame, for third-party iframe content use Embed.
-- Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.
+- Showing a real screen — a site band, a console page, a template — built from Azion UI components, at a device size you choose.
 - Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.
 - Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.
 - Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`.
@@ -30,7 +30,7 @@ A browser window that renders live webkit components inside a viewport of its ow
 - For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.
 - For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.
 - For a framed page section or grid cell → use `registration-frame`.
-- In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `webkit-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself.
+- In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `azion-ui-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself.
 
 ## Related
 
@@ -52,9 +52,9 @@ A browser window that renders live webkit components inside a viewport of its ow
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import BrowserFrame from '@aziontech/webkit/browser-frame'
-  import ModuleHeader from '@aziontech/webkit/module-header'
-  import Button from '@aziontech/webkit/button'
+  import BrowserFrame from '@aziontech/ui/browser-frame'
+  import ModuleHeader from '@aziontech/ui/module-header'
+  import Button from '@aziontech/ui/button'
 
   const width = ref(768)
   const height = ref(1024)
@@ -203,7 +203,7 @@ Resizing itself is not animated — the size follows the pointer or key press im
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

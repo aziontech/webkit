@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: c8c015f8269a056a6711e5a08ec36206f9de30e76b641711f9719ccd9f804b27
+checksum: 65450e0841cfc06a827c8ac59e06b68622fafe7baea56eafbf28d406083c856d
 created: 2026-10-23
 last_updated: 2026-11-25
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-25
 
 ## Purpose
 
-Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
+Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real Azion UI components inside an internal `ConsoleMockupShell` frame (not exported), that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
 
 ## When to use
 
@@ -26,7 +26,7 @@ Draws one of the **official console widgets**: a scaled, inert mock of an Azion 
 
 ## When NOT to use
 
-- The screen you need is not in the registry → add it to the registry inside WebKit (drawn in the internal `ConsoleMockupShell` frame). Do not approximate it at the call site.
+- The screen you need is not in the registry → add it to the registry inside Azion UI (drawn in the internal `ConsoleMockupShell` frame). Do not approximate it at the call site.
 - A live, working screen at a device size → use `browser-frame`.
 - A static product concept drawing → use `illustration`.
 - A screenshot or clip in documentation → use `doc-frame`.
@@ -49,7 +49,7 @@ Draws one of the **official console widgets**: a scaled, inert mock of an Azion 
 
 ```vue
 <script setup>
-  import ConsoleMockup from '@aziontech/webkit/console-mockup'
+  import ConsoleMockup from '@aziontech/ui/console-mockup'
 </script>
 
 <template>
@@ -59,7 +59,7 @@ Draws one of the **official console widgets**: a scaled, inert mock of an Azion 
 </template>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<ConsoleMockup>` tag `DocMarkdown` mounts (braced attribute values are JSON), set in a framed 16:9 box because the mockup fills its container. The site draws it as the `ConsoleMockup` scene.
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as the `<ConsoleMockup>` tag `DocMarkdown` mounts (braced attribute values are JSON), set in a framed 16:9 box because the mockup fills its container. The site draws it as the `ConsoleMockup` scene.
 
 ## Props
 
@@ -83,7 +83,7 @@ Which widget takes which prop:
 
 - Every widget takes `active`.
 - `cursor` reaches every widget through the root's context, not as a forwarded prop; the fragments that act their beat with a collaborator cursor hide it when it is off, and the beat itself still plays.
-- A plating prop (`variant`, `chrome`, `width`, `fade` other than `'none'`, `texture` other than `'none'`, `tab`, `autoplayInterval`) set on a widget that does not declare it has no effect and warns in development: `[webkit] <ConsoleMockup name="…">: variant, chrome have no effect on this widget …`.
+- A plating prop (`variant`, `chrome`, `width`, `fade` other than `'none'`, `texture` other than `'none'`, `tab`, `autoplayInterval`) set on a widget that does not declare it has no effect and warns in development: `[azion-ui] <ConsoleMockup name="…">: variant, chrome have no effect on this widget …`.
 - Fragments but `function-code` and `functions-start` (56) take `variant`, and `chrome` while they are framed. The root draws a framed fragment in a `ConsoleMockupShell` window (console bar titled with the fragment's module, a bottom fade from 80%, a `var(--spacing-lg)` body padding) at a 468 design width (428 below `md`), and the fragment inside scales once to the window's body. The window body resets `--console-mockup-fade-color` to `var(--bg-canvas)` and `--console-mockup-fade-start` to its initial value, so every fade the fragment plays (bottom at rest, top and bottom on the beat) ends on the window's own fill. Framed by default (25): `application-cache`, `application-rule`, `applications-device-group`, `bot-manager-rule`, `data-stream-connector`, `data-stream-sampling`, `data-stream-source`, `edge-dns-dnssec`, `edge-dns-nameserver`, `edge-dns-record`, `firewall-function`, `firewall-rules-order`, `image-processor-events`, `image-processor-rule`, `kv-store-key`, `load-balancer-method`, `network-shield-ip-list`, `network-shield-rule`, `object-storage-access`, `real-time-events-filter`, `real-time-events-log`, `real-time-events-volume`, `real-time-metrics-dashboard`, `waf-allowed-rule`, `waf-firewall-rule`. The other 31 are bare by default.
 - Fragments (57, every fragment but `function-code`) take `hovered`: `ai-inference-function`, `ai-inference-model`, `ai-inference-template`, `application-accelerator-cookie`, `application-accelerator-method`, `application-accelerator-query-string`, `application-cache`, `application-function`, `application-rule`, `applications-create-method`, `applications-device-group`, `applications-rule-phases`, `bot-manager-metrics`, `bot-manager-rule`, `bot-manager-traffic`, `data-stream-connector`, `data-stream-sampling`, `data-stream-source`, `ddos-firewall-modules`, `ddos-http-events`, `ddos-requests-metric`, `edge-dns-dnssec`, `edge-dns-nameserver`, `edge-dns-record`, `firewall-function`, `firewall-modules`, `firewall-rules-order`, `functions-start`, `image-processor-events`, `image-processor-module`, `image-processor-rule`, `kv-store-function`, `kv-store-key`, `kv-store-security-list`, `load-balancer-address`, `load-balancer-method`, `load-balancer-origins`, `network-shield-ip-list`, `network-shield-lists`, `network-shield-rule`, `object-storage-access`, `object-storage-browser`, `object-storage-buckets`, `real-time-events-filter`, `real-time-events-log`, `real-time-events-volume`, `real-time-metrics-dashboard`, `real-time-metrics-filter`, `real-time-metrics-panel`, `sql-database-query`, `sql-database-row`, `sql-database-table`, `waf-allowed-rule`, `waf-firewall-rule`, `waf-threat`, `workload-deploy`, `workload-domain`. `function-code` takes `active` only.
 - `workloads-list`, `workload-topology`, `workload-domains`, `workload-topology-chain`, `workload-rollout-rows` take `variant`, `chrome`, `width`, `fade`; `workload-deploy-logs` adds `autoplayInterval`; `workload-deployments` takes `width` and `fade`.
@@ -133,7 +133,7 @@ No keyframe animation runs in the root or in any widget: every motion above is a
 | framed fragment window body padding | `var(--spacing-lg)` |
 | framed fragment fade color          | `var(--bg-canvas)`  |
 
-The root's own tokens are the padding and fade color of the window it draws around a framed fragment; the window itself is a `ConsoleMockupShell` and draws with its tokens. Each widget draws with the tokens of the webkit components it is composed of, plus `var(--bg-canvas)`, `var(--bg-surface)`, `var(--border-default)`, `var(--text-default)`, `var(--text-muted)`, `var(--shape-card)` and `var(--shape-control)` on its own surfaces.
+The root's own tokens are the padding and fade color of the window it draws around a framed fragment; the window itself is a `ConsoleMockupShell` and draws with its tokens. Each widget draws with the tokens of the Azion UI components it is composed of, plus `var(--bg-canvas)`, `var(--bg-surface)`, `var(--border-default)`, `var(--text-default)`, `var(--text-muted)`, `var(--shape-card)` and `var(--shape-control)` on its own surfaces.
 
 ## Theme gaps
 
@@ -195,7 +195,7 @@ There is no `Sizes` story (no `size` prop) and no `Loading` / `Disabled` story (
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

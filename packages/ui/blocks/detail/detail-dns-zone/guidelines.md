@@ -1,0 +1,190 @@
+# Record table
+
+The detail page of a resource that owns a long list of records, here a DNS zone. The user arrives from the zones index to do one of two jobs: adjust the zone itself (name, nameservers, DNSSEC, status) and save, or find, add, edit and delete the records the zone answers with. A tab bar splits the two jobs so the settings form and the records table never share a scroll. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
+
+## When to use
+
+- A resource has its own settings and also owns many child records that need search, filters, sorting and paging (DNS records, firewall entries, list items).
+- Users copy values out of the resource into another system (nameservers, DNSSEC digests) and need a copy control next to each value.
+- Child records are added from inside the resource, so the action reads `Add <Module>`.
+
+## When not to use
+
+- The child list is short and needs no search or filters: use `detail/detail-domains-card` inside a settings section.
+- A first-level list reached from the sidebar: use `view/view-table`.
+- A resource whose detail page is an overview with several tabs and no dominant record list: use `detail/detail-resource`.
+- Settings only, with no child records: use `edit/edit-resource`.
+
+## Building blocks
+
+### A. Tab bar — `PageTabs`, `Tabs` (required)
+
+A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/azion-ui-navigation`.
+
+### B. Settings sections — `SettingsGroup`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
+
+Main settings is a form in the form column with four `SettingsGroup` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/azion-ui-form`.
+
+### C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
+
+Values the user copies elsewhere (the three nameservers, and the key tag, algorithm, digest type and digest) are read-only large `monospace` `Input`s inside an `InputGroupRoot` that ends with a transparent `CopyButton`. Their rows set `stackable`, so on a phone a long digest moves under its copy at full width instead of sharing the row. A helper line under the nameservers says where to paste them.
+
+### D. Toggles — `Switch` (required)
+
+Enable DNSSEC and Active are compact `SettingsRow`s whose control is a `Switch`. The DNSSEC key rows appear only while DNSSEC is on.
+
+### E. Save bar — `SaveBar`, `Button` (required)
+
+A docked `SaveBar` slides up at the bottom of the form on the first edit, with the unsaved-changes label, an outlined Discard and a primary Save, both medium. While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or Discard restores the record.
+
+### F. Records heading — `PageHeader`, `Button` (required)
+
+The Records tab opens with a small `PageHeader` titled Records with a one-sentence description, and two outlined medium actions: Documentation and Add Record. Inside a resource no action is primary and the create verb is Add.
+
+### G. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
+
+One row above the table: a `PropertyFilter` ("Filter records") that takes free text or a property token (Name, Type, Policy, Value), then outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` for page size and visible columns. `useCollection` owns the filter, sort, page and column state: the filter rewinds to the first page, ID is hidden by default and Name cannot be hidden. It is the same recipe as `view/view-table`.
+
+### H. Records table — `Card`, `DataTable`, `TableCellId`, `TableCellLink`, `TableCellActions`, `Tag` (required)
+
+`Card :padded="false"` around `DataTable :bordered="false"` bound to `useCollection`'s `tableProps` (row key, sorting, pages of 10 and the column visibility) and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `TableCellId` ("Copy record ID") and Value is `TableCellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `TableCellActions` named after the record. Weight and Description stay blank when they do not apply; no dash, no "None".
+
+### I. Empty and no-match — `EmptyState`, `Button` (required)
+
+The table's `#empty` slot tells the two cases apart through `useCollection`'s `status`. A filter that matches nothing shows "No matching records" with Clear filters; a zone with no records shows "No records yet" with Add Record and Import zone file.
+
+### J. Row actions — `TableCellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
+
+`TableCellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
+
+### K. Load failure — `Alert` (optional)
+
+When `error` is set, a danger `Alert` with Retry takes the records table's place; the heading and the controls row stay, the controls disabled.
+
+### L. Shortcut keycap — `Kbd` (optional)
+
+A small `Kbd` (`aria-hidden`) inside the primary button shows its keyboard shortcut (⌘ S to save, ⌘ Enter to submit or run, Ctrl off Apple); the button carries the same keys in `aria-keyshortcuts`.
+
+## Data
+
+The page takes the zone, its records and both requests' state through props and emits every action; it fetches nothing and fakes no save or refresh. `DnsZoneDetailZone`, `DnsZoneDetailRecord`, `DnsZoneDetailSettings` and `DnsZoneDetailProps` are exported from `detail-dns-zone.vue`, and `sample.ts` holds the sample zone and record the page renders when `zone` or `records` is left out (the records never while `loading` or `error` is set). The settings form keeps its own draft; `zone` is the baseline Discard returns to, and a new `zone` resets the form to it.
+
+| Prop          | Type                           | What it does                                                                                                      |
+| ------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `zone`        | `DnsZoneDetailZone`            | Name, domain, DNSSEC and Active for the form, plus the nameservers and the DNSSEC key values to copy.             |
+| `records`     | `DnsZoneDetailRecord[]`        | The records table; the filter, the sort and the pages run on them in the browser. Pass `[]` for a zone with none. |
+| `loading`     | `boolean`                      | The records request is in flight: Refresh spins and the table shows its loading state.                            |
+| `error`       | `string`                       | Why the records failed to load, shown in a danger `Alert` with Retry in place of the table.                       |
+| `saving`      | `boolean`                      | The save is in flight: the form locks and Save spins.                                                             |
+| `importable`  | `boolean`                      | Shows Import zone file beside Add Record in the Records heading.                                                  |
+| `v-model:tab` | `'main-settings' \| 'records'` | The open tab.                                                                                                     |
+
+| Event        | Payload                      | When                                                                  |
+| ------------ | ---------------------------- | --------------------------------------------------------------------- |
+| `submit`     | `(event, values)`            | Save with a valid draft; `values` is name, domain, DNSSEC and Active. |
+| `discard`    | `(event)`                    | Discard; the draft is already back to `zone`.                         |
+| `create`     | `(event)`                    | Add Record, in the heading or the empty state.                        |
+| `import`     | `(event)`                    | Import zone file, in the heading or the empty state.                  |
+| `refresh`    | `(event)`                    | Refresh.                                                              |
+| `retry`      | `(event)`                    | Retry in the error alert.                                             |
+| `row-action` | `(event, { value, record })` | Edit or Delete in a row menu.                                         |
+
+To go live, render the page from a route that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import DetailDnsZone, { type DnsZoneDetailSettings } from './detail-dns-zone.vue'
+
+  const { zone, update } = useZone()
+  const { data: records, pending, error, refresh } = useZoneRecords()
+  const loadError = "Couldn't load the records. Check your connection and retry."
+  const saving = ref(false)
+
+  const save = async (_event: Event, values: DnsZoneDetailSettings) => {
+    saving.value = true
+    try {
+      await update(values)
+    } finally {
+      saving.value = false
+    }
+  }
+</script>
+
+<template>
+  <DetailDnsZone
+    v-if="zone"
+    :zone="zone"
+    :records="records ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    :saving="saving"
+    @submit="save"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
+## Do
+
+- Keep settings and records on separate tabs, each with its own scroll.
+- Show required errors only after a failed save, and clear each one when its field changes.
+- Make every copyable value read-only and pair it with a `CopyButton` whose label names the value.
+- Raise the save bar only when something changed, and keep it until Save lands or Discard restores the record.
+- Reuse the table view controls row and table recipe in the Records tab so filters, search and columns behave the same as on index pages.
+- Rewind pagination to the first page when the filter changes.
+- Tell an empty zone (Add Record, Import zone file) apart from a filter that matches nothing (Clear filters).
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
+
+## Don't
+
+- Don't put a primary or large Create button in the Records heading; it is `Add Record`, outlined.
+- Don't validate on first render or on blur; the form is quiet until Save.
+- Don't make nameservers or digests editable text the user could change by accident.
+- Don't save Main settings from a button inside each section; one save bar covers the whole form.
+- Don't let the records table scroll the page sideways.
+
+## Copy
+
+- **Tabs:** short nouns, e.g. "Main settings", "Records".
+- **Section titles:** a noun or a short instruction, e.g. "General", "Configure your nameserver".
+- **Row descriptions:** one sentence that ends with a period, e.g. "Give a unique and descriptive name to identify your zone."
+- **Required error:** "This field is required."
+- **Save bar:** the label states the fact, e.g. "You have unsaved changes."; buttons "Discard" and "Save".
+- **Records heading:** title "Records", description one sentence, e.g. "The authoritative records this zone answers with."; actions "Documentation" and "Add Record".
+- **Copy buttons:** name the value, e.g. "Copy nameserver 1", "Copy record value".
+- Follow `skills/azion-ui-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- The form is labeled "Zone settings" and its fieldset has a visually hidden legend with the same words.
+- Each `Input` has an `aria-label` matching its row title; an `Input` with an error points to its `FieldError` through `aria-describedby`.
+- Every icon-only control has an `aria-label` and a `Tooltip` with the same words; decorative icons carry `aria-hidden="true"`.
+- The property filter has an `aria-label` that matches its placeholder, "Filter records".
+- Focus order follows reading order: tabs, form fields, save bar; or heading actions, the property filter, toolbar, table, pagination.
+- Tab panel entrances respect reduced motion.
+- `⌘ S` (`Ctrl S` off Apple) saves the zone settings while the `SaveBar` shows unsaved changes, the same as Save, and stops the browser's own save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
+
+## States
+
+- MainSettings: the default `tab`, the Main settings tab with General, nameservers, DNSSEC and Status from `zone`; the save bar appears on the first edit and Save spins while `saving`.
+- Records: `tab="records"`, the Records tab with the zone's one A record from `records`, the ID column hidden by default; `loading` spins Refresh and loads the table, `error` swaps the table for a danger `Alert` with Retry, and `[]` shows No records yet.
+- ImportZoneFile: `importable` puts Import zone file beside Add Record; the page listens to `import` and opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `FieldError` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
+
+## Importing a zone file
+
+- Parse on the client shortly after the text stops changing (a 250 ms pause; a dropped file parses at once) and preview every line, ten per page, before anything is written; never import on drop.
+- Name the line number on every row, so the user can fix the file.
+- Skip with a reason what the zone manages itself (SOA, apex NS) and types it does not support; mark as errors only values that are wrong.
+- Import what is ready even when some lines fail, and say in the toast how many were left out.
+
+## Related
+
+- `view/view-table` — the index this page is opened from, and the source of the controls row recipe.
+- `edit/edit-resource` — the settings form and save bar pattern used by Main settings.
+- `detail/detail-domains-card` — a short related list inside a settings section.
+- `edit/edit-delete-dialog` — the dialog behind the row menu's Delete.
+- `SaveBar` — the unsaved-changes band; see `skills/azion-ui-form`.

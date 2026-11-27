@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: b5eafc606663b0c9cf856961b79b5789f4255f11e2c00c5d27945c6df1794c53
+checksum: 2798950c9b0f8c25c7f9648cd4d44c46b824469aa8c9d3f5ecf12fad997ed1fb
 created: 2026-11-12
 last_updated: 2026-11-22
 ---
@@ -31,7 +31,7 @@ The documentation chrome, composed once in the app: a sticky header (at the inli
 - `DocTableOfContents` — the outline rail; the registered headings and `outlineGroups` are bound onto it.
 - `DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header; an anchored level 2 or 3 heading registers itself as an outline entry.
 - `DocChangelogEntry` — each entry registers itself as a level 2 outline entry.
-- `useHeadingOutline` (`@aziontech/webkit/use-heading-navigation`) — the registration a custom heading calls to join the outline.
+- `useHeadingOutline` (`@aziontech/ui/use-heading-navigation`) — the registration a custom heading calls to join the outline.
 - `DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
 - `Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
 - `SearchTrigger`, `Command` — the header search and the palette it opens.
@@ -51,7 +51,7 @@ The documentation chrome, composed once in the app: a sticky header (at the inli
 
 ```vue
 <script setup lang="ts">
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/ui/doc-layout'
 
   const navigation: DocLayoutNavGroup[] = [
     {
@@ -72,9 +72,9 @@ A page (the route's component) is only its article; its anchored headings fill t
 
 ```vue
 <script setup lang="ts">
-  import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocProse from '@aziontech/webkit/doc-prose'
+  import DocHeading from '@aziontech/ui/doc-heading'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import DocProse from '@aziontech/ui/doc-prose'
 </script>
 
 <template>
@@ -223,7 +223,7 @@ A page (the route's component) is only its article; its anchored headings fill t
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

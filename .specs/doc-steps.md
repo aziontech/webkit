@@ -4,7 +4,7 @@ category: docs
 structure: composition
 status: implemented
 spec_version: 3
-checksum: cf4aaaa0438e02b67335d82afa521e9c61731c3318745c0d65a199fc9aced2ae
+checksum: 1fbebc5bc0f7709f3aa56146cf9ce7fedaf85415ae95b0bea20e35f8fd348089
 created: 2026-08-22
 last_updated: 2026-11-22
 ---
@@ -42,7 +42,7 @@ The ordered walkthrough from the docs frame: a column of `DocSteps.Step` childre
 
 ```vue
 <script setup>
-  import DocSteps from '@aziontech/webkit/doc-steps'
+  import DocSteps from '@aziontech/ui/doc-steps'
 </script>
 
 <template>
@@ -56,7 +56,7 @@ The ordered walkthrough from the docs frame: a column of `DocSteps.Step` childre
 </template>
 ```
 
-`@aziontech/webkit/doc-steps-root` is the root alone, without `Step` attached, for an app that
+`@aziontech/ui/doc-steps-root` is the root alone, without `Step` attached, for an app that
 only renders steps through `DocMarkdown`.
 
 ## Sub-components
@@ -120,7 +120,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

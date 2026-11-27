@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: a6e8922a032a45b967baf14b3de10eb702c4c2642a01e2d6a229cfbd6eee23ae
+checksum: f1314032d9d85f15e674dfab8a1720e6c1b25dbde7b2b1a35833b6e5dee08e34
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-16
 
 Use OverflowCount for the '+N' that opens the hidden items of a truncated list; a plain number attached to something else is a Badge.
 
-A small `+N` chip that stands for the items a slot cannot show, and opens a popover with the whole list. It replaces the design sample's `DomainOverflowPopover`, the overflow badge of `TagListCell` and `WorkloadCell`, and the Console Kit's `OverflowCountButton`. The popover follows the overflow rule of `webkit-ux-heuristics`: a summary line (`12 domains`, `10 of 34 domains` while paged), a search box once the list holds more than 7 items, a scrolling list, a **Load N more** footer while items remain, a no-match line quoting the query, and a polite status region that announces the summary. Closing it clears the query and the paging.
+A small `+N` chip that stands for the items a slot cannot show, and opens a popover with the whole list. It replaces the design sample's `DomainOverflowPopover`, the overflow badge of `TagListCell` and `WorkloadCell`, and the Console Kit's `OverflowCountButton`. The popover follows the overflow rule of `azion-ui-ux-heuristics`: a summary line (`12 domains`, `10 of 34 domains` while paged), a search box once the list holds more than 7 items, a scrolling list, a **Load N more** footer while items remain, a no-match line quoting the query, and a polite status region that announces the summary. Closing it clears the query and the paging.
 
 ## When to use
 
@@ -46,7 +46,7 @@ A small `+N` chip that stands for the items a slot cannot show, and opens a popo
 
 ```vue
 <script setup>
-  import OverflowCount from '@aziontech/webkit/overflow-count'
+  import OverflowCount from '@aziontech/ui/overflow-count'
 
   const domains = ['api.example.com', 'cdn.example.com', 'img.example.com']
 </script>
@@ -163,7 +163,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -1,6 +1,6 @@
 // Machine-readable registry pairing each standard (contributing/rules/<id>.md) with what enforces
-// it; the invariant test (packages/webkit/test/standards/invariant.test.mjs) fails CI when
-// they drift. scope: 'general' ships to consumer projects, 'webkit' is DS-internal. enforce[]
+// it; the invariant test (packages/ui/test/standards/invariant.test.mjs) fails CI when
+// they drift. scope: 'general' ships to consumer projects, 'ui' is DS-internal. enforce[]
 // surfaces: 'write-time' (hook), 'lint' (eslint-plugin rule), 'ci' (governance gate),
 // 'review' (mandatory approval). Semantics and full rule table: contributing/rules/README.md.
 
@@ -9,7 +9,7 @@ export const STANDARDS = [
   {
     id: 'no-invention',
     kind: 'foundational',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'write-time', by: 'enforce-spec-exists' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
@@ -31,12 +31,12 @@ export const STANDARDS = [
       { surface: 'lint', by: 'prefer-href-in-menu-node' },
       { surface: 'lint', by: 'no-deprecated-name' }
     ],
-    note: 'One machine source, lib/prop-vocabulary.mjs: its `aliases` block today in validate-spec-compliance and the check-authoring ratchet; its `staged` aliases, values, slots, event words and data attributes (the 6.0 standard) are reported by check-naming and validate-naming and block once NAMING_STAGED_BLOCKS flips. no-deprecated-name flags the renamed props on WebKit tags in consumer code from v6-props.json.'
+    note: 'One machine source, lib/prop-vocabulary.mjs: its `aliases` block today in validate-spec-compliance and the check-authoring ratchet; its `staged` aliases, values, slots, event words and data attributes (the 6.0 standard) are reported by check-naming and validate-naming and block once NAMING_STAGED_BLOCKS flips. no-deprecated-name flags the renamed props on Azion UI tags in consumer code from v6-props.json.'
   },
   {
     id: 'naming',
     kind: 'foundational',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'write-time', by: 'validate-naming' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
@@ -46,12 +46,12 @@ export const STANDARDS = [
       { surface: 'lint', by: 'no-deprecated-name' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'check-spelling (typos, root pnpm check:spelling, _typos.toml lists each accepted word with its reason) keeps every name and doc whole English words. One engine, packages/webkit/scripts/lib/naming-rules.mjs (RULES registry, one id per checkable rule of decisions N1-N18): check-naming runs it in CI (gate `naming`, toolkit job) and validate-naming write-time on the file a write produces (only added violations block). Enforced rules (export-kebab, block-id, export-synonym, export-retired) block now; staged rules are reported until the rename lanes merge, then NAMING_STAGED_BLOCKS flips. no-deprecated-name carries the old→new maps (src/cli/migrations/v6*.json, the ones webkit migrate applies) to consumer code. What a machine cannot decide is listed review-only in naming.md.'
+    note: 'check-spelling (typos, root pnpm check:spelling, _typos.toml lists each accepted word with its reason) keeps every name and doc whole English words. One engine, packages/ui/scripts/lib/naming-rules.mjs (RULES registry, one id per checkable rule of decisions N1-N18): check-naming runs it in CI (gate `naming`, toolkit job) and validate-naming write-time on the file a write produces (only added violations block). Enforced rules (export-kebab, block-id, export-synonym, export-retired) block now; staged rules are reported until the rename lanes merge, then NAMING_STAGED_BLOCKS flips. no-deprecated-name carries the old→new maps (src/cli/migrations/v6*.json, the ones azion-ui migrate applies) to consumer code. What a machine cannot decide is listed review-only in naming.md.'
   },
   {
     id: 'imports',
     kind: 'foundational',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'write-time', by: 'validate-references' },
       { surface: 'lint', by: 'no-unknown-import' },
@@ -66,7 +66,7 @@ export const STANDARDS = [
   {
     id: 'compound-api',
     kind: 'foundational',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'ci', by: 'catalog-drift' },
       { surface: 'ci', by: 'check-complete' },
@@ -100,7 +100,7 @@ export const STANDARDS = [
   {
     id: 'dependencies',
     kind: 'foundational',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'write-time', by: 'validate-references' },
       { surface: 'ci', by: 'type-check' },
@@ -111,7 +111,7 @@ export const STANDARDS = [
   {
     id: 'migration',
     kind: 'foundational',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'write-time', by: 'validate-tokens' },
       { surface: 'write-time', by: 'validate-references' },
@@ -124,7 +124,7 @@ export const STANDARDS = [
   {
     id: 'release-types',
     kind: 'foundational',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'ci', by: 'commitlint' },
       { surface: 'ci', by: 'check-api-diff' }
@@ -134,7 +134,7 @@ export const STANDARDS = [
   {
     id: 'git-workflow',
     kind: 'foundational',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'ci', by: 'commitlint' },
       { surface: 'ci', by: 'branch-protection' },
@@ -290,12 +290,12 @@ export const STANDARDS = [
       { surface: 'lint', by: 'require-authoring-standards' },
       { surface: 'ci', by: 'check-api-diff' }
     ],
-    note: 'check-api-diff diffs the public API of the base catalog.json with head: a removal or rename is breaking and needs "!" in the PR title plus a migration (a src/cli/migrations/ codemod entry or a new MIGRATION_V<N>.md line naming the component). 6.0 is the clean-break major: old names were removed outright (MIGRATION_V6.md + webkit migrate); the mark, one major, remove lifecycle applies from 6.0 on, and from GA on: a part with stability: preview is exempt from the breaking marker and the migration, and a GA → preview change fails.'
+    note: 'check-api-diff diffs the public API of the base catalog.json with head: a removal or rename is breaking and needs "!" in the PR title plus a migration (a src/cli/migrations/ codemod entry or a new MIGRATION_V<N>.md line naming the component). 6.0 is the clean-break major: old names were removed outright (MIGRATION_V6.md + azion-ui migrate); the mark, one major, remove lifecycle applies from 6.0 on, and from GA on: a part with stability: preview is exempt from the breaking marker and the migration, and a GA → preview change fails.'
   },
   {
     id: 'bundle-budget',
     kind: 'construction',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'ci', by: 'size-limit' },
       { surface: 'ci', by: 'check-complete' },
@@ -303,7 +303,7 @@ export const STANDARDS = [
       { surface: 'ci', by: 'package-size' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Budget of record lives in packages/webkit/.size-limit.json. scripts/check-size.mjs is the vue-aware gate: it compiles each budgeted entry with Vite + @vitejs/plugin-vue (vue externalized, minified) and fails the governance build job when the gzipped output exceeds its budget. scripts/check-complete.mjs fails a root component with no budget entry (current debt in complete-baseline.json, which only shrinks); scripts/check-size-ratchet.mjs fails a PR that raises a limit against its merge base unless each raised entry has its own Budget-raise: line with a reason, in the PR body or in packages/webkit/docs/reviews/size-budgets-*.md. scripts/check-css-size.mjs (same size gate) builds fixture apps wired the way webkit init wires them (the @aziontech/webkit/vite-plugin scan) and fails when their gzipped CSS exceeds packages/webkit/.size-limit-css.json. test/standards/package-size.test.mjs (toolkit tests) fails when the npm package itself (npm pack --dry-run, generated folders excluded) or an asset folder outgrows packages/webkit/scripts/package-size-budget.json, or when it ships a dev-only file.'
+    note: 'Budget of record lives in packages/ui/.size-limit.json. scripts/check-size.mjs is the vue-aware gate: it compiles each budgeted entry with Vite + @vitejs/plugin-vue (vue externalized, minified) and fails the governance build job when the gzipped output exceeds its budget. scripts/check-complete.mjs fails a root component with no budget entry (current debt in complete-baseline.json, which only shrinks); scripts/check-size-ratchet.mjs fails a PR that raises a limit against its merge base unless each raised entry has its own Budget-raise: line with a reason, in the PR body or in packages/ui/docs/reviews/size-budgets-*.md. scripts/check-css-size.mjs (same size gate) builds fixture apps wired the way azion-ui init wires them (the @aziontech/ui/vite-plugin scan) and fails when their gzipped CSS exceeds packages/ui/.size-limit-css.json. test/standards/package-size.test.mjs (toolkit tests) fails when the npm package itself (npm pack --dry-run, generated folders excluded) or an asset folder outgrows packages/ui/scripts/package-size-budget.json, or when it ships a dev-only file.'
   },
   {
     id: 'testing',
@@ -344,14 +344,14 @@ export const STANDARDS = [
   {
     id: 'authoring-docs',
     kind: 'foundational',
-    scope: 'webkit',
+    scope: 'ui',
     enforce: [
       { surface: 'write-time', by: 'validate-authoring-docs' },
       { surface: 'ci', by: 'check-authoring-docs' },
       { surface: 'ci', by: 'check-docs-markdown' },
       { surface: 'ci', by: 'visual' }
     ],
-    note: "Rendered docs (rules, foundation skills, block guidelines, specs) label every example pair Do / Don't, colour its icons with --success-mark / --danger-mark, carry no task list and print no HTML comment: check-docs-markdown + apps/docs/test/content.test.ts (toolkit job) and the visual do-dont spec (contrast, light and dark). Skills (contributing/skills + skills/) and agents (contributing/agents + adapters/claude/agents) carry conforming frontmatter (name==folder/filename, non-empty description, scope matching location; consumer skills webkit-* + status + last_updated) and no file-as-example refs. validate-authoring-docs blocks a new/edited doc write-time (exit 2); check-authoring-docs is the CI ratchet over all four populations; both share lib/authoring-docs-checks.mjs. scope=webkit: the standard about how the authoring/adoption bundle is shaped is DS-internal, even though the consumer skills it validates ship out."
+    note: "Rendered docs (rules, foundation skills, block guidelines, specs) label every example pair Do / Don't, colour its icons with --success-mark / --danger-mark, carry no task list and print no HTML comment: check-docs-markdown + apps/docs/test/content.test.ts (toolkit job) and the visual do-dont spec (contrast, light and dark). Skills (contributing/skills + skills/) and agents (contributing/agents + agents) carry conforming frontmatter (name==folder/filename, non-empty description, scope matching location; consumer skills azion-ui-* + status + last_updated) and no file-as-example refs. validate-authoring-docs blocks a new/edited doc write-time (exit 2); check-authoring-docs is the CI ratchet over all four populations; both share lib/authoring-docs-checks.mjs. scope=ui: the standard about how the authoring/adoption bundle is shaped is DS-internal, even though the consumer skills it validates ship out."
   }
 ]
 

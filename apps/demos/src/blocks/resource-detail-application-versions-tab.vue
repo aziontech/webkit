@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import type { TableColumn } from '@aziontech/webkit/data-table'
-  import DataTable from '@aziontech/webkit/data-table'
-  import DataTablePagination from '@aziontech/webkit/data-table-pagination'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Subheader from '@aziontech/webkit/subheader'
-  import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import type { TableColumn } from '@aziontech/ui/data-table'
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Subheader from '@aziontech/ui/subheader'
+  import TableCellTime from '@aziontech/ui/table-cell-time'
+  import Tag, { type TagSeverity } from '@aziontech/ui/tag'
 
   /** One version row of the Versions tab. */
   export interface ApplicationVersionRow {

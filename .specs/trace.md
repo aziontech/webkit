@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 334c259d09a054cde510f7d3b201a3ac0056b9601684ed769eaa43c2b603ab71
+checksum: 8da43a08f40fcfa8fb0c9674a661ab74c5a10e95feb50b536c738f16908a4d23
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -29,7 +29,7 @@ A span waterfall: one row per span of a run (a function invocation, a request th
 - Durations to compare across many items with no parent/child relation → use `bar-list` or `chart`.
 - Status history of a service over days → use `tracker`.
 - A hierarchy without time → use `tree`.
-- In a docs Markdown page or the site's page JSON. Trace is app-only (decision RV-C2-1, rule `webkit-content-channels`): it explores one run (expand, search, select a span for its details), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site explains where the time went with a `FlowDiagram` or a `Chart`.
+- In a docs Markdown page or the site's page JSON. Trace is app-only (decision RV-C2-1, rule `azion-ui-content-channels`): it explores one run (expand, search, select a span for its details), so it has no `DocMarkdown` tag and no page JSON entry. A docs page or the site explains where the time went with a `FlowDiagram` or a `Chart`.
 
 ## Related
 
@@ -56,7 +56,7 @@ A span waterfall: one row per span of a run (a function invocation, a request th
 
 ```vue
 <script setup>
-  import Trace from '@aziontech/webkit/trace'
+  import Trace from '@aziontech/ui/trace'
   import { ref } from 'vue'
 
   const spans = [
@@ -243,7 +243,7 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

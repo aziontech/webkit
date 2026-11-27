@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://aziontech.github.io/webkit/.specs/_schema.json",
-  "title": "Webkit Component Spec — frontmatter",
+  "title": "Azion UI Component Spec — frontmatter",
   "description": "Schema for the YAML frontmatter of every .specs/<name>.md. Body sections (Props/Events/Slots/...) are validated separately by contributing/hooks/lib/spec.mjs.",
   "type": "object",
   "additionalProperties": false,

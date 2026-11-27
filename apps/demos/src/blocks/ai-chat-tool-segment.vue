@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import AgentQuestion from '@aziontech/webkit/agent-question'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import ImageGallery from '@aziontech/webkit/image-gallery'
-  import ToolApproval from '@aziontech/webkit/tool-approval'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import AgentQuestion from '@aziontech/ui/agent-question'
+  import CodeBlock from '@aziontech/ui/code-block'
+  import ImageGallery from '@aziontech/ui/image-gallery'
+  import ToolApproval from '@aziontech/ui/tool-approval'
+  import ToolCall from '@aziontech/ui/tool-call'
   import {
     type AiChatQuestion,
     type AiChatTool,
@@ -16,7 +16,7 @@
     parsesAsJson,
     toolContentOf,
     toolStatusOf
-  } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/utils/ai-chat'
 
   defineProps<{
     call: AiChatToolCallPart

@@ -2,7 +2,7 @@
 name: code-connect-writer
 description: Isolated sub-agent that writes the <name>.figma.ts Code Connect mapping next to the .vue. Skips itself when @figma/code-connect is not installed.
 status: active
-scope: webkit
+scope: ui
 ---
 
 # Agent: code-connect-writer
@@ -13,10 +13,10 @@ You are the code-connect-writer sub-agent. You execute the code-connect-write sk
 
 ## What to do
 
-1. Check whether @figma/code-connect is in packages/webkit/package.json devDependencies. If absent, emit SKIPPED: @figma/code-connect not installed and exit.
+1. Check whether @figma/code-connect is in packages/ui/package.json devDependencies. If absent, emit SKIPPED: @figma/code-connect not installed and exit.
 2. Load the figma:figma-code-connect skill (mandatory prerequisite).
 3. Call get_context_for_code_connect on the spec's figma.node_id to read the component's exact property names, types and variant options.
-4. Write packages/webkit/src/components/<category>/<name>/<name>.figma.ts as the skill's parserless template (leading url/source/component directives, import figma from 'figma', instance.getString/getEnum/getBoolean/getSlot mappings, figma.code example), then run check:figma.
+4. Write packages/ui/src/components/<category>/<name>/<name>.figma.ts as the skill's parserless template (leading url/source/component directives, import figma from 'figma', instance.getString/getEnum/getBoolean/getSlot mappings, figma.code example), then run check:figma.
 
 ## What you may NOT do
 

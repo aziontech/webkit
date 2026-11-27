@@ -8,7 +8,7 @@ export const DOCS = 'http://localhost:4173'
 export const DEMOS = process.env.VISUAL_DEMOS_URL ?? 'http://localhost:4174'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
-const WEBKIT = join(ROOT, 'packages/webkit')
+const AZION_UI = join(ROOT, 'packages/ui')
 
 export type Theme = 'light' | 'dark'
 export type Mode = { theme: Theme; width: number; dir?: 'ltr' | 'rtl'; locale?: string }
@@ -32,7 +32,7 @@ export async function prepare(page: Page, mode: Mode, { freeze = false } = {}) {
   await page.addInitScript(
     ({ theme, dir, locale }) => {
       try {
-        for (const key of ['webkit-docs:', 'webkit-demos:']) {
+        for (const key of ['azion-ui-docs:', 'azion-ui-demos:']) {
           localStorage.setItem(`${key}theme`, theme)
           localStorage.setItem(`${key}dir`, dir)
           localStorage.setItem(`${key}locale`, locale)
@@ -82,14 +82,14 @@ function walk(dir: string, match: (name: string) => boolean, out: string[] = [])
 }
 
 export function exampleGroups(): ExampleGroup[] {
-  return walk(join(WEBKIT, 'examples'), (name) => name === 'examples.json').map((file) => {
+  return walk(join(AZION_UI, 'examples'), (name) => name === 'examples.json').map((file) => {
     const data = JSON.parse(readFileSync(file, 'utf8')) as {
       component: string
       examples: { name: string; file: string }[]
     }
     return {
       component: data.component,
-      dir: relative(join(WEBKIT, 'examples'), dirname(file)),
+      dir: relative(join(AZION_UI, 'examples'), dirname(file)),
       examples: data.examples
     }
   })
@@ -106,13 +106,13 @@ function slugify(value: string): string {
 export type Block = { id: string; states: { name: string; slug: string }[] }
 
 export function blocks(): Block[] {
-  return walk(join(WEBKIT, 'blocks'), (name) => name === 'block.json').map((file) => {
+  return walk(join(AZION_UI, 'blocks'), (name) => name === 'block.json').map((file) => {
     const manifest = JSON.parse(readFileSync(file, 'utf8')) as {
       id?: string
       primary: { name: string }
       variants?: { name: string }[]
     }
-    const dir = relative(join(WEBKIT, 'blocks'), dirname(file))
+    const dir = relative(join(AZION_UI, 'blocks'), dirname(file))
     return {
       id: manifest.id ?? dir,
       states: [manifest.primary, ...(manifest.variants ?? [])].map((state) => ({

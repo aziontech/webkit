@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: implemented
 spec_version: 6
-checksum: 375cca452da1034192f912b037d953fef102900272eb945dcba6c1c7547f24ba
+checksum: d91645996eed234b323bf2e795bbd2b9ab7b7584f0d46ce4564e1783c515382b
 created: 2026-06-25
 last_updated: 2026-11-21
 ---
@@ -49,7 +49,7 @@ Composition — one import of the root; every part is reached via dot-notation (
 
 ```vue
 <script setup>
-  import TransferList from '@aziontech/webkit/transfer-list'
+  import TransferList from '@aziontech/ui/transfer-list'
   import { ref } from 'vue'
 
   const model = ref([
@@ -79,7 +79,7 @@ Composition — one import of the root; every part is reached via dot-notation (
 </template>
 ```
 
-Each part is also a standalone import (`import TransferListSource from '@aziontech/webkit/transfer-list-source'`, …), and the root is published standalone (tree-shakeable) as `@aziontech/webkit/transfer-list-root` — the path to use when only a few parts are needed.
+Each part is also a standalone import (`import TransferListSource from '@aziontech/ui/transfer-list-source'`, …), and the root is published standalone (tree-shakeable) as `@aziontech/ui/transfer-list-root` — the path to use when only a few parts are needed.
 
 ## Sub-components
 
@@ -89,7 +89,7 @@ Each part is also a standalone import (`import TransferListSource from '@azionte
 
 <!-- Resulting layout (composition):
 
-  packages/webkit/src/components/data/transfer-list/
+  packages/ui/src/components/data/transfer-list/
   ├── transfer-list.vue
   ├── index.ts                    (entry: attaches TransferList.Source / TransferList.Target / TransferList.Controls)
   ├── injection-key.ts            (shared context: items, selection, move, double-click, loading)
@@ -104,11 +104,11 @@ Each part is also a standalone import (`import TransferListSource from '@azionte
 
   The compound `./transfer-list` entry (index.ts) attaches the sub-components for
   dot-notation (`TransferList.Source`, `TransferList.Target`, `TransferList.Controls`) and
-  re-exports them as named bindings from `@aziontech/webkit/transfer-list`. The root
+  re-exports them as named bindings from `@aziontech/ui/transfer-list`. The root
   is also published standalone (tree-shakeable) as `./transfer-list-root`, and each
   sub-component as a flat export (`./transfer-list-source`, `./transfer-list-target`,
   `./transfer-list-controls`). There is no per-component `package.json` — the root
-  `packages/webkit/package.json#exports` points every public path at source. -->
+  `packages/ui/package.json#exports` points every public path at source. -->
 
 ## Props
 
@@ -206,7 +206,7 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

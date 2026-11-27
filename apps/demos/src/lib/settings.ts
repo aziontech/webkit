@@ -1,6 +1,6 @@
 import { computed, reactive, ref, shallowRef, watch } from 'vue'
 
-type Catalog = (typeof import('@aziontech/webkit/locales/pt-BR'))['ptBR']
+type Catalog = (typeof import('@aziontech/ui/locales/pt-BR'))['ptBR']
 
 export type Theme = 'dark' | 'light' | 'system'
 export type ResolvedTheme = 'dark' | 'light'
@@ -21,7 +21,7 @@ export const catalogs = shallowRef<Record<string, Catalog>>({})
 
 export async function loadCatalog(locale: string) {
   if (locale !== 'pt-BR' || catalogs.value[locale]) return
-  const { ptBR } = await import('@aziontech/webkit/locales/pt-BR')
+  const { ptBR } = await import('@aziontech/ui/locales/pt-BR')
   catalogs.value = { ...catalogs.value, [locale]: ptBR }
 }
 
@@ -35,7 +35,7 @@ export const resolvedTheme = computed<ResolvedTheme>(() =>
   settings.theme === 'system' ? systemTheme.value : settings.theme
 )
 
-const KEY = 'webkit-demos:'
+const KEY = 'azion-ui-demos:'
 
 function read(name: string): string | null {
   try {

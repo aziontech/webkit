@@ -1,0 +1,156 @@
+{
+ "name": "story-index-section",
+ "binding": "StoryIndexSection",
+ "import": "@aziontech/ui/story-index-section",
+ "treeShakeableImport": "@aziontech/ui/story-index-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one select per facet (industry, solution, product) on one row, each starting with an option that clears it — then a grid of story cards and a load-more button that reveals the next page. Below `lg` the toolbar folds to the search field (with its shorter placeholder) and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-index-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `input`, `select`, `chip`, `button` and `empty-state`; the search, the facet selections, each select's own option search and the page count are local state, and facets can be seeded from the URL query.",
+ "setup": null,
+ "useWhen": [
+  "Use StoryIndexSection for a card grid of customer stories with search and facets."
+ ],
+ "avoidWhen": [
+  "For a closing row of three related stories → use `article-cards-section`.",
+  "For the full filterable list of articles or resources → use `article-index-section`.",
+  "For a filterable list of non-article rows (jobs) → use `listing-index-section`."
+ ],
+ "related": [
+  "`article-index-section` — the filterable list of articles or resources.",
+  "`empty-state` — the no-match state."
+ ],
+ "bestPractices": [
+  "Derive each facet's `options` from the values the items carry, so every option matches at least one story.",
+  "Give every item a `facets` entry per facet `id`; an item without one never matches a selection on that facet.",
+  "Pass `client.logo` as any image URL or imported asset (`import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'`); the card fits a mark of any intrinsic size, so do not pre-scale or crop it."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "items",
+   "type": "StoryIndexSectionItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The stories, in order; each is `{ id, href, client, category, description, facets?, target? }`; a story whose `target` is `_blank` opens in a new tab."
+  },
+  {
+   "name": "facets",
+   "type": "StoryIndexSectionFacet[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The facet selects, in order; each is `{ id, label, allLabel, options }`."
+  },
+  {
+   "name": "searchPlaceholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder of the search field; the field is omitted when this and `searchAriaLabel` are both empty."
+  },
+  {
+   "name": "searchShortPlaceholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Shorter placeholder of the search field below `lg`; empty uses `searchPlaceholder`."
+  },
+  {
+   "name": "searchAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the search field."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Message of the no-match state; the state renders only with it."
+  },
+  {
+   "name": "emptyActionLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the no-match state's button that clears every filter; no button renders without it."
+  },
+  {
+   "name": "linkLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Read cue at the foot of each card, also the lead of its accessible name."
+  },
+  {
+   "name": "moreLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the load-more button under the grid; without it every match is listed and no button renders."
+  },
+  {
+   "name": "pageSize",
+   "type": "number",
+   "default": "12",
+   "required": "false",
+   "doc": "Stories listed per page when `moreLabel` is set; the load-more button reveals the next page."
+  },
+  {
+   "name": "filterLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the filter button below `lg`; empty uses the locale catalog (`Filters`)."
+  },
+  {
+   "name": "seedFromQuery",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Seeds each facet on mount from the URL query parameter named by its `id` when the value is one of its options."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list of stories."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/story-index-section/default.vue"
+  },
+  {
+   "name": "NoResults",
+   "file": "examples/story-index-section/no-results.vue"
+  },
+  {
+   "name": "Paged",
+   "file": "examples/story-index-section/paged.vue"
+  }
+ ],
+ "docs": "components/story-index-section.md"
+}

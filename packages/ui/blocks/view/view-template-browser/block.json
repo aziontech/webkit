@@ -1,0 +1,61 @@
+{
+  "id": "view/view-template-browser",
+  "name": "ViewTemplateBrowser",
+  "title": "Blocks/View/ViewTemplateBrowser",
+  "surface": "app",
+  "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is an `IntegrationCard` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValueList` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/create-deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `IntegrationCard`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `KeyValueList` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "template browser",
+    "template gallery",
+    "template catalog",
+    "start from a template",
+    "browse templates",
+    "templates by framework",
+    "template preview",
+    "template readme",
+    "deploy a template",
+    "starter templates",
+    "galeria de templates",
+    "catálogo de templates",
+    "navegar templates",
+    "começar a partir de um template",
+    "pré-visualizar template",
+    "template marketplace",
+    "search templates",
+    "templates catalog",
+    "project templates",
+    "pick a template"
+  ],
+  "skills": ["azion-ui-lists", "azion-ui-create-surface", "azion-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "view-template-browser.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "Preview",
+      "summary": "The preview drawer open on Next.js Starter: details, the README and the Deploy entry into the deploy template flow.",
+      "file": "variants/preview.vue"
+    },
+    {
+      "name": "NoMatch",
+      "summary": "A search that matches no template: the filter keeps the token and a medium EmptyState offers Clear filters.",
+      "file": "variants/no-match.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The catalog is loading: the filter is disabled and two sections of skeleton tiles hold the layout.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The catalog failed to load: a danger Alert with Retry, and an EmptyState that points to Import from Git.",
+      "file": "variants/error.vue"
+    }
+  ]
+}

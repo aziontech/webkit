@@ -1,0 +1,292 @@
+import { type Component, defineAsyncComponent, markRaw } from 'vue'
+
+import { records, routeEntry, translateLegacyProps, without } from './lib/legacy-entries'
+
+export type SitePageSectionLoader = () => Promise<{ default: Component }>
+
+export const sitePageSections = {
+  'architecture-tabs-section': () =>
+    import('../../section/architecture-tabs-section/architecture-tabs-section.vue'),
+  'article-body-section': () =>
+    import('../../section/article-body-section/article-body-section.vue'),
+  'article-cards-section': () =>
+    import('../../section/article-cards-section/article-cards-section.vue'),
+  'article-highlight-section': () =>
+    import('../../section/article-highlight-section/article-highlight-section.vue'),
+  'article-index-section': () =>
+    import('../../section/article-index-section/article-index-section.vue'),
+  'capability-grid-section': () =>
+    import('../../section/capability-grid-section/capability-grid-section.vue'),
+  'card-carousel-section': () =>
+    import('../../section/card-carousel-section/card-carousel-section.vue'),
+  'client-mosaic-section': () =>
+    import('../../section/client-mosaic-section/client-mosaic-section.vue'),
+  'client-story-columns-section': () =>
+    import('../../section/client-story-columns-section/client-story-columns-section.vue'),
+  'client-quotes-section': () =>
+    import('../../section/client-quotes-section/client-quotes-section.vue'),
+  'cli-terminal-section': () =>
+    import('../../section/cli-terminal-section/cli-terminal-section.vue'),
+  'closing-call-to-action-section': () =>
+    import('../../section/closing-call-to-action-section/closing-call-to-action-section.vue'),
+  'newsletter-section': () => import('../../section/newsletter-section/newsletter-section.vue'),
+  'plan-comparison-section': () =>
+    import('../../section/plan-comparison-section/plan-comparison-section.vue'),
+  'competitor-comparison-section': () =>
+    import('../../section/competitor-comparison-section/competitor-comparison-section.vue'),
+  'compliance-logos-section': () =>
+    import('../../section/compliance-logos-section/compliance-logos-section.vue'),
+  'console-showcase-section': () =>
+    import('../../section/console-showcase-section/console-showcase-section.vue'),
+  'contact-hub-section': () => import('../../section/contact-hub-section/contact-hub-section.vue'),
+  'faq-section': () => import('../../section/faq-section/faq-section.vue'),
+  'feature-scroll-section': () =>
+    import('../../section/feature-scroll-section/feature-scroll-section.vue'),
+  'feature-tabs-section': () =>
+    import('../../section/feature-tabs-section/feature-tabs-section.vue'),
+  'feature-tiles-section': () =>
+    import('../../section/feature-tiles-section/feature-tiles-section.vue'),
+  'feature-widgets-section': () =>
+    import('../../section/feature-widgets-section/feature-widgets-section.vue'),
+  'hero-section': () => import('../../section/hero-section/hero-section.vue'),
+  'hero-form-section': () => import('../../section/hero-form-section/hero-form-section.vue'),
+  'investor-marks-section': () =>
+    import('../../section/investor-marks-section/investor-marks-section.vue'),
+  'job-posting-section': () => import('../../section/job-posting-section/job-posting-section.vue'),
+  'listing-index-section': () =>
+    import('../../section/listing-index-section/listing-index-section.vue'),
+  'listing-table-section': () =>
+    import('../../section/listing-table-section/listing-table-section.vue'),
+  'logo-wall-section': () => import('../../section/logo-wall-section/logo-wall-section.vue'),
+  'media-split-section': () => import('../../section/media-split-section/media-split-section.vue'),
+  'media-split-stack-section': () =>
+    import('../../section/media-split-stack-section/media-split-stack-section.vue'),
+  'network-section': () => import('../../section/network-section/network-section.vue'),
+  'photo-marquee-section': () =>
+    import('../../section/photo-marquee-section/photo-marquee-section.vue'),
+  'platform-directory-section': () =>
+    import('../../section/platform-directory-section/platform-directory-section.vue'),
+  'pricing-plans-section': () =>
+    import('../../section/pricing-plans-section/pricing-plans-section.vue'),
+  'process-scroll-section': () =>
+    import('../../section/process-scroll-section/process-scroll-section.vue'),
+  'recognition-marquee-section': () =>
+    import('../../section/recognition-marquee-section/recognition-marquee-section.vue'),
+  'copy-command-section': () =>
+    import('../../section/copy-command-section/copy-command-section.vue'),
+  'stats-section': () => import('../../section/stats-section/stats-section.vue'),
+  'story-index-section': () => import('../../section/story-index-section/story-index-section.vue'),
+  'subject-grid-section': () =>
+    import('../../section/subject-grid-section/subject-grid-section.vue'),
+  'template-gallery-section': () =>
+    import('../../section/template-gallery-section/template-gallery-section.vue'),
+  'customer-use-cases-section': () =>
+    import('../../section/customer-use-cases-section/customer-use-cases-section.vue')
+} satisfies Record<string, SitePageSectionLoader>
+
+export type SitePageSectionId = keyof typeof sitePageSections
+
+export type SitePageSectionProps = Record<string, unknown>
+
+/** A retired page-JSON section id and how its entry renders now. */
+export type SitePageSectionAlias = {
+  /** The section that renders the entry. */
+  target: SitePageSectionId
+  /** Maps the old section's props onto the target's props. */
+  props?: (props: SitePageSectionProps) => SitePageSectionProps
+}
+
+export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
+  'article-index-blog': {
+    target: 'article-index-section',
+    props: (p) => ({ ...p, filters: 'category-search' })
+  },
+  'article-index-resource-hub': {
+    target: 'article-index-section',
+    props: (p) => ({ ...p, filters: 'facets' })
+  },
+  'closing-call-to-action-agents': {
+    target: 'closing-call-to-action-section',
+    props: (p) => ({ ...p, variant: 'primary' })
+  },
+  'closing-call-to-action-templates': {
+    target: 'template-gallery-section',
+    props: (p) => ({ ...p, closing: true })
+  },
+  'code-split': {
+    target: 'media-split-section',
+    props: (p) => {
+      const action = p['primaryAction']
+      return action && typeof action === 'object'
+        ? { ...p, primaryAction: { variant: 'secondary', ...action } }
+        : p
+    }
+  },
+  'compare-support-tiers': {
+    target: 'plan-comparison-section',
+    props: (p) => (p['tiers'] === undefined ? p : { ...without(p, 'tiers'), plans: p['tiers'] })
+  },
+  'customer-spotlight': {
+    target: 'client-story-columns-section',
+    props: (p) => ({
+      ...without(p, 'items'),
+      reveal: 'hover',
+      cells: records(p['items']).map((cell) => ({
+        ...without(cell, 'description'),
+        story: cell['description']
+      }))
+    })
+  },
+  'hero-copy-on-top-art': {
+    target: 'hero-section',
+    props: (p) => ({ ...p, variant: 'copy-on-top-art' })
+  },
+  'hero-with-opening': {
+    target: 'hero-section',
+    props: (p) => ({
+      variant: 'title-band',
+      size: 'large',
+      ...p,
+      titleLength:
+        p['titleLength'] ??
+        ([p['titleHighlight'], p['title']].filter(Boolean).join(' ').length > 45 ? 'long' : 'short')
+    })
+  },
+  'resource-grid': {
+    target: 'capability-grid-section',
+    props: (p) => ({
+      ...p,
+      titleAlign: 'split',
+      items: records(p['items']).filter((item) => Boolean(item['title']))
+    })
+  },
+  'sticky-carousel': {
+    target: 'process-scroll-section',
+    props: (p) => ({
+      ...without(p, 'items', 'headerOffset'),
+      steps: records(p['items']),
+      pinned: true,
+      titleAlign: 'center',
+      ...(p['headerOffset'] ? { headerOffset: p['headerOffset'] } : {})
+    })
+  },
+  'sticky-scroll-code': { target: 'feature-scroll-section' },
+  'use-case-links': {
+    target: 'capability-grid-section',
+    props: (p) => ({ ...p, titleAlign: 'start' })
+  },
+  'client-mosaic-columns': { target: 'client-story-columns-section' },
+  'closing-call-to-action-newsletter': { target: 'newsletter-section' },
+  'compare-plans': { target: 'plan-comparison-section' },
+  'comparison-table': { target: 'competitor-comparison-section' },
+  'compliance-badges': { target: 'compliance-logos-section' },
+  'console-panel': { target: 'console-showcase-section' },
+  'hero-band': { target: 'hero-section' },
+  'hero-form': { target: 'hero-form-section' },
+  'listing-browser': { target: 'listing-index-section' },
+  'logo-wall-quote': { target: 'logo-wall-section' },
+  'media-split-band': { target: 'media-split-section' },
+  'media-split-stack': { target: 'media-split-stack-section' },
+  'section-command': { target: 'copy-command-section' },
+  'stats-band': { target: 'stats-section' },
+  'story-library': { target: 'story-index-section' },
+  'subject-library': { target: 'subject-grid-section' },
+  'use-cases': { target: 'customer-use-cases-section' },
+  'architecture-tabs': { target: 'architecture-tabs-section' },
+  'article-body': { target: 'article-body-section' },
+  'article-cards': { target: 'article-cards-section' },
+  'article-highlight': { target: 'article-highlight-section' },
+  'article-index': { target: 'article-index-section' },
+  'capability-grid': { target: 'capability-grid-section' },
+  'card-carousel': { target: 'card-carousel-section' },
+  'cli-terminal': { target: 'cli-terminal-section' },
+  'client-mosaic': { target: 'client-mosaic-section' },
+  'client-quotes': { target: 'client-quotes-section' },
+  'client-story-columns': { target: 'client-story-columns-section' },
+  'closing-call-to-action': { target: 'closing-call-to-action-section' },
+  'competitor-comparison': { target: 'competitor-comparison-section' },
+  'compliance-logos': { target: 'compliance-logos-section' },
+  'console-showcase': { target: 'console-showcase-section' },
+  'contact-hub': { target: 'contact-hub-section' },
+  'copy-command': { target: 'copy-command-section' },
+  'customer-use-cases': { target: 'customer-use-cases-section' },
+  'feature-scroll': { target: 'feature-scroll-section' },
+  'feature-tabs': { target: 'feature-tabs-section' },
+  'feature-tiles': { target: 'feature-tiles-section' },
+  'feature-widgets': { target: 'feature-widgets-section' },
+  'investor-marks': { target: 'investor-marks-section' },
+  'job-posting': { target: 'job-posting-section' },
+  'listing-index': { target: 'listing-index-section' },
+  'listing-table': { target: 'listing-table-section' },
+  'photo-marquee': { target: 'photo-marquee-section' },
+  'plan-comparison': { target: 'plan-comparison-section' },
+  'platform-directory': { target: 'platform-directory-section' },
+  'pricing-plans': { target: 'pricing-plans-section' },
+  'process-scroll': { target: 'process-scroll-section' },
+  'recognition-marquee': { target: 'recognition-marquee-section' },
+  'story-index': { target: 'story-index-section' },
+  'subject-grid': { target: 'subject-grid-section' },
+  'template-gallery': { target: 'template-gallery-section' }
+}
+
+/** A page-JSON entry after its retired id, props and media are translated. */
+export type SitePageResolvedEntry = {
+  /** The section that renders the entry. */
+  id: string
+  /** The props bound onto that section. */
+  props: SitePageSectionProps
+  /** Scenes the translation moved into a slot of the section, by slot name; the entry's own scenes win. */
+  scenes?: Record<string, { component: string; props?: Record<string, unknown> }>
+}
+
+export function resolveSectionEntry(
+  id: string,
+  props: SitePageSectionProps = {}
+): SitePageResolvedEntry {
+  const alias = Object.prototype.hasOwnProperty.call(sitePageSectionAliases, id)
+    ? sitePageSectionAliases[id]
+    : undefined
+  if (!alias) return routeEntry(id, translateLegacyProps(id, props))
+  const translated = translateLegacyProps(alias.target, props)
+  return routeEntry(alias.target, alias.props ? alias.props(translated) : translated)
+}
+
+function isSitePageSectionId(id: string): id is SitePageSectionId {
+  return Object.prototype.hasOwnProperty.call(sitePageSections, id)
+}
+
+const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
+
+const sectionCache = new Map<string, Component>()
+
+const warned = new Set<string>()
+
+const Nothing: Component = { name: 'SitePageSectionUnavailable', render: () => null }
+
+export function warnOnce(key: string, message: string) {
+  if (!dev || warned.has(key)) return
+  warned.add(key)
+  console.warn(`[azion-ui] <SitePage>: ${message}`)
+}
+
+export function resolveSection(id: string): Component | null {
+  if (!isSitePageSectionId(id)) {
+    warnOnce(`section:${id}`, `no section is registered as "${id}".`)
+    return null
+  }
+  const cached = sectionCache.get(id)
+  if (cached) return cached
+  const component = markRaw(
+    defineAsyncComponent({
+      loader: sitePageSections[id] as SitePageSectionLoader,
+      timeout: 10000,
+      errorComponent: Nothing,
+      onError: (error, _retry, fail) => {
+        if (dev) console.warn(`[azion-ui] <SitePage>: section "${id}" could not load.`, error)
+        fail()
+      }
+    })
+  )
+  sectionCache.set(id, component)
+  return component
+}

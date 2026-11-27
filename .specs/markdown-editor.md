@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 2
 template: 2
-checksum: 0f74011d6544b5109f716f8e0eeda0d9441abbfd208be7deda11d8a4d18f869b
+checksum: f39f8767659b36b23ff450f91b3c9fa2c225c0b8fab7d1f534491b520e0a5a6a
 created: 2026-11-23
 last_updated: 2026-11-25
 ---
@@ -62,9 +62,9 @@ Changes this build makes to code it reuses, each with no public API change and i
 <script setup>
   import { ref } from 'vue'
 
-  import Button from '@aziontech/webkit/button'
-  import Field from '@aziontech/webkit/field'
-  import MarkdownEditor from '@aziontech/webkit/markdown-editor'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import MarkdownEditor from '@aziontech/ui/markdown-editor'
 
   const reply = ref('')
   const people = [
@@ -199,7 +199,7 @@ The panel top gap replaces `Tabs.Content`'s `--layout-group-gap` through its `cn
   - Tabs: the `Tabs` keyboard map (arrows between Write and Preview, automatic activation).
 - ARIA: the toolbar carries `aria-label` "Formatting" and `aria-controls` the field; each button has its accessible name ("Bold") and `aria-keyshortcuts` (`Meta+B Control+B`) for the three with shortcuts. The field keeps its native textbox role (ARIA in HTML allows no `combobox` role on `textarea`) and takes the combobox attributes the role allows: `aria-autocomplete="list"`, `aria-controls` (the listbox, while open) and `aria-activedescendant` (the highlighted option). The menu is `role="listbox"` with `aria-label` "People"; options are `role="option"` with `aria-selected`. The match count is announced in a polite live region ("3 people").
 - Accessible name: from the wrapping `Field` label, or `aria-label` / `aria-labelledby` passed to the editor (forwarded to the field); with neither, the built-in "Message".
-- Contrast: only documented token pairs (`rules/webkit-tokens.md` § Contrast); the muted empty-preview text is `--text-muted` on `--bg-surface`; the disabled preview is `--text-disabled` on `--bg-disabled`, the pair `Textarea` uses (disabled text is outside the WCAG 1.4.3 minimum).
+- Contrast: only documented token pairs (`rules/azion-ui-tokens.md` § Contrast); the muted empty-preview text is `--text-muted` on `--bg-surface`; the disabled preview is `--text-disabled` on `--bg-disabled`, the pair `Textarea` uses (disabled text is outside the WCAG 1.4.3 minimum).
 - Motion: none of its own (see Motion).
 - Touch targets: toolbar buttons are `IconButton` size `small` with its 44 × 44 px hit area on a coarse pointer (TT01); menu options take `min-h-11` on a coarse pointer.
 
@@ -265,7 +265,7 @@ Canonical layout — state examples change only the prop they demonstrate.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/primitives/animations/animate.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

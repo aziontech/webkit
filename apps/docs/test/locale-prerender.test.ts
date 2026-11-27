@@ -34,7 +34,7 @@ test('every docs page is prerendered in each language, frames and the 404 page o
 
 test('a saved language is honoured before the first paint, by its own prerendered page', () => {
   const html = source('index.html')
-  assert.match(html, /webkit-docs:locale/)
+  assert.match(html, /azion-ui-docs:locale/)
   assert.match(html, /location\.replace\(/)
   assert.match(source('src/main.ts'), /splitLocalePath\(/)
 })

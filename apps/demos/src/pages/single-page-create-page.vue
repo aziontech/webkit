@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { toast } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/ui/toast'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
 

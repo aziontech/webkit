@@ -47,7 +47,7 @@ jobs:
           TAG: ${{ steps.release.outputs.tag_name }}
         run: |
           failed=0
-          for workflow in publish-webkit.yml publish-theme.yml publish-icons.yml publish-webkit-mcp.yml; do
+          for workflow in publish-ui.yml publish-theme.yml publish-icons.yml publish-ui-mcp.yml; do
             if ! gh workflow run "$workflow" --ref main -f tag="$TAG"; then
               echo "::error::failed to dispatch $workflow for tag $TAG"
               failed=1
@@ -77,10 +77,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          WEBKIT_TAG: ${{ steps.release.outputs['packages/webkit--release_created'] == 'true' && steps.release.outputs['packages/webkit--tag_name'] || '' }}
+          AZION_UI_TAG: ${{ steps.release.outputs['packages/ui--release_created'] == 'true' && steps.release.outputs['packages/ui--tag_name'] || '' }}
           THEME_TAG: ${{ steps.release.outputs['packages/theme--release_created'] == 'true' && steps.release.outputs['packages/theme--tag_name'] || '' }}
           ICONS_TAG: ${{ steps.release.outputs['packages/icons--release_created'] == 'true' && steps.release.outputs['packages/icons--tag_name'] || '' }}
-          WEBKIT_MCP_TAG: ${{ steps.release.outputs['packages/webkit-mcp--release_created'] == 'true' && steps.release.outputs['packages/webkit-mcp--tag_name'] || '' }}
+          AZION_UI_MCP_TAG: ${{ steps.release.outputs['packages/ui-mcp--release_created'] == 'true' && steps.release.outputs['packages/ui-mcp--tag_name'] || '' }}
         run: |
           pnpm run generate:sbom
           attach() {
@@ -89,7 +89,7 @@ jobs:
             cp "sbom/$file" "$RUNNER_TEMP/$file"
             gh release upload "$tag" "$RUNNER_TEMP/$file" --clobber
           }
-          attach "$WEBKIT_TAG" aziontech-webkit.cdx.json
+          attach "$AZION_UI_TAG" aziontech-ui.cdx.json
           attach "$THEME_TAG" aziontech-theme.cdx.json
           attach "$ICONS_TAG" aziontech-icons.cdx.json
-          attach "$WEBKIT_MCP_TAG" aziontech-webkit-mcp.cdx.json
+          attach "$AZION_UI_MCP_TAG" aziontech-ui-mcp.cdx.json

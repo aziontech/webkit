@@ -1,0 +1,85 @@
+{
+ "name": "doc-call-to-action",
+ "binding": "DocCallToAction",
+ "import": "@aziontech/ui/doc-call-to-action",
+ "treeShakeableImport": "@aziontech/ui/doc-call-to-action",
+ "category": "docs",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The closing offer of a documentation page, parked at the foot of the \"On this page\" rail after the outline. It is a docs card built like every other card on the page: a `RegistrationFrame` with corner marks, a flat `--bg-surface` face, the wordmark at its small size, a headline, a subtitle and full-width stacked actions. Set on the rail scale (14 px headline, 12 px copy) so it never out-shouts the page outline. Every string is content passed by the page. Its actions are `{ label, href }` objects, the same shape as the marketing bands' `primaryAction` / `secondaryAction`.",
+ "setup": null,
+ "useWhen": [
+  "Use DocCallToAction only in the docs 'On this page' rail; marketing bands use CallToAction.",
+  "Once per documentation page, last in the right rail."
+ ],
+ "avoidWhen": [
+  "In the prose column — use `CallToAction` on marketing pages or a `DocCard` link in docs.",
+  "More than once per page."
+ ],
+ "related": [
+  "`DocTableOfContents` — the rail it closes.",
+  "`RegistrationFrame` — the frame.",
+  "`CallToAction` — the marketing closing band."
+ ],
+ "bestPractices": [
+  "One primary action; a secondary only when it is a real alternative (talk to sales).",
+  "A one-line headline and a one-line subtitle."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The offer's headline; names the complementary landmark."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback copy when the default slot is empty."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ModuleHeaderAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The primary action, `{ label, href }`; unset or an empty label renders none."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "ModuleHeaderAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The outlined secondary action, `{ label, href }`; unset renders none."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The offer's copy, set as the headline's subtitle."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/doc-call-to-action/default.vue"
+  },
+  {
+   "name": "Two actions",
+   "file": "examples/doc-call-to-action/two-actions.vue"
+  },
+  {
+   "name": "Markdown",
+   "file": "examples/doc-call-to-action/markdown.vue"
+  }
+ ],
+ "docs": "components/doc-call-to-action.md"
+}

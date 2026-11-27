@@ -18,17 +18,17 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "package-name": "@aziontech/webkit-monorepo",
-      "component": "webkit",
+      "package-name": "@aziontech/design-monorepo",
+      "component": "ui",
       "include-component-in-tag": false,
       "include-v-in-tag": true,
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
-        { "type": "json", "path": "packages/webkit/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/ui/package.json", "jsonpath": "$.version" },
         { "type": "json", "path": "packages/theme/package.json", "jsonpath": "$.version" },
         { "type": "json", "path": "packages/icons/package.json", "jsonpath": "$.version" },
-        { "type": "json", "path": "packages/webkit-mcp/package.json", "jsonpath": "$.version" },
-        { "type": "json", "path": "packages/webkit/catalog.json", "jsonpath": "$.webkitVersion" }
+        { "type": "json", "path": "packages/ui-mcp/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/ui/catalog.json", "jsonpath": "$.azionUiVersion" }
       ]
     }
   }

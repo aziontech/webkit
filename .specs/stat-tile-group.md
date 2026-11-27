@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 0806a0f87615298aae6936ad242c96fc4efb1a9df9d9cba24b31a671eff2cab2
+checksum: 29e127fbdd88f4db7fd566515ae565319e2138e4dfaeff2e77ad670c14aebc80
 created: 2026-11-12
 last_updated: 2026-11-22
 ---
@@ -47,8 +47,8 @@ One card split into cells, one `StatTile` per cell: the KPI strip at the top of 
 
 ```vue
 <script setup>
-  import StatTile from '@aziontech/webkit/stat-tile'
-  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
+  import StatTile from '@aziontech/ui/stat-tile'
+  import StatTileGroup from '@aziontech/ui/stat-tile-group'
 </script>
 
 <template>
@@ -81,7 +81,7 @@ One card split into cells, one `StatTile` per cell: the KPI strip at the top of 
 </template>
 ```
 
-**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a `<StatTileGroup>` tag with `<StatTile />` tags inside (`DocMarkdown`, braced attribute values are JSON), and from the site's page JSON as the `StatTileGroup` scene whose `children` are `StatTile` scenes:
+**Three ways in** (decision RV-C2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as a `<StatTileGroup>` tag with `<StatTile />` tags inside (`DocMarkdown`, braced attribute values are JSON), and from the site's page JSON as the `StatTileGroup` scene whose `children` are `StatTile` scenes:
 
 ```mdx
 <StatTileGroup aria-label="Usage">
@@ -188,7 +188,7 @@ _No events — the group is layout; each tile is content._
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -7,7 +7,7 @@ spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-24
-checksum: 9173895ff664da0fcf13489ae3f9293650bb6aed3beef08585249c2e29b77b1f
+checksum: 33ab77abb122ceb7c7cbadb632ef87adcc5512e478568227708c34c4b6875dfb
 ---
 
 # CompetitorComparisonSection — Component Spec
@@ -34,7 +34,7 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 ## Best practices
 
 - Give every row a `definition`; the hint note is where a reader learns what the capability means.
-- Pass the competitor's entry from `@aziontech/webkit/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.
+- Pass the competitor's entry from `@aziontech/ui/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.
 - With only a `name`, the band looks the name up in the competitor registry once the page is interactive (the registry loads on demand, outside the band's bundle) and shows the name as text until then, or for a platform the registry does not hold.
 - For a platform outside the registry, ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme), or one file with its `artwork`.
 - Set `anchor` when a page links to the table (`#compare`).
@@ -44,7 +44,7 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
 ```vue
 <script setup>
-  import CompetitorComparisonSection from '@aziontech/webkit/competitor-comparison-section'
+  import CompetitorComparisonSection from '@aziontech/ui/competitor-comparison-section'
 </script>
 
 <template>
@@ -190,7 +190,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

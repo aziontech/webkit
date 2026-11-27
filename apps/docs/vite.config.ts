@@ -93,7 +93,7 @@ export default defineConfig({
     include: ['vue', 'vue-router']
   },
   ssr: {
-    noExternal: ['@aziontech/webkit', '@aziontech/icons', '@aziontech/theme']
+    noExternal: ['@aziontech/ui', '@aziontech/icons', '@aziontech/theme']
   },
   build: {
     assetsDir: '_app',

@@ -2,7 +2,7 @@
 // prop/event vocabulary, defaults drift, testid, animations vs the spec/catalog).
 // Consumed by TWO enforcement surfaces so they can never drift:
 //   - contributing/hooks/validate-spec-compliance.mjs  → write-time gate (AI pipeline)
-//   - packages/webkit/scripts/check-authoring.mjs → DS CI ratchet (repo-wide), so an
+//   - packages/ui/scripts/check-authoring.mjs → DS CI ratchet (repo-wide), so an
 //     editor push that never ran the hook cannot merge off-spec code either.
 // DS-internal only (depends on .specs/), so it lives in lib — not in the package.
 
@@ -30,7 +30,7 @@ import {
 /** Valid animate-* names from the generated catalog, or null if it can't be read. */
 function loadCatalogAnimations(ROOT) {
   try {
-    const raw = readFileSync(resolve(ROOT, 'packages/webkit/catalog.json'), 'utf-8')
+    const raw = readFileSync(resolve(ROOT, 'packages/ui/catalog.json'), 'utf-8')
     const anims = JSON.parse(raw)?.tokens?.animations
     return Array.isArray(anims) ? new Set(anims) : null
   } catch {
@@ -257,8 +257,8 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
     const catalogAnims = loadCatalogAnimations(ROOT)
     if (!catalogAnims) {
       violations.push(
-        'Cannot validate animate-* classes: packages/webkit/catalog.json is missing or unreadable. ' +
-          'Run `pnpm --filter @aziontech/webkit build:catalog`.'
+        'Cannot validate animate-* classes: packages/ui/catalog.json is missing or unreadable. ' +
+          'Run `pnpm --filter @aziontech/ui build:catalog`.'
       )
     } else {
       for (const nameOnly of usedAnims) {

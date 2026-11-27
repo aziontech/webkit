@@ -1,6 +1,6 @@
-# Page sections — `@aziontech/webkit/<name>`
+# Page sections — `@aziontech/ui/<name>`
 
-A **page section** is a complete marketing block (a hero, a FAQ band, a pricing grid, the site footer) that the marketing site places on a page from JSON. Every section is a webkit component under `packages/webkit/src/components/section/<name>/`, published on its own at `@aziontech/webkit/<name>`. This document is the convention; the rules it leans on are [`imports.md`](../rules/imports.md) § Marketing — elements and page sections and [`component-structure.md`](../rules/component-structure.md).
+A **page section** is a complete marketing block (a hero, a FAQ band, a pricing grid, the site footer) that the marketing site places on a page from JSON. Every section is an Azion UI component under `packages/ui/src/components/section/<name>/`, published on its own at `@aziontech/ui/<name>`. This document is the convention; the rules it leans on are [`imports.md`](../rules/imports.md) § Marketing — elements and page sections and [`component-structure.md`](../rules/component-structure.md).
 
 ## The contract with the site
 
@@ -24,9 +24,9 @@ Two names are the **same string**, on purpose:
 | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `_id` in the site JSON                                                                                     | `customer-use-cases-section`                             |
 | component name, folder, spec (`.specs/customer-use-cases-section.md`), testid `customer-use-cases-section` | `customer-use-cases-section`                             |
-| public path `@aziontech/webkit/customer-use-cases-section`, import binding                                 | `customer-use-cases-section` → `CustomerUseCasesSection` |
+| public path `@aziontech/ui/customer-use-cases-section`, import binding                                     | `customer-use-cases-section` → `CustomerUseCasesSection` |
 
-A whole page renders through `SitePage` (`@aziontech/webkit/site-page`), the package's page renderer: it takes the page JSON `{ hero, sections }`, resolves each `_id` to the section of the same name (loaded on demand), binds `props` onto it, lays `sections` in the site column with a hatched `Spacer` before each band and one after the last (a page that ends on a closing band — `closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true` — closes on that band's own frame instead, stacked closing bands share one frame, and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap), and warns in development about an `_id` it does not know. The registry it resolves against is `src/components/marketing/site-page/site-page-sections.ts`: every folder in `src/components/section/` except `site-header-section` and `site-footer-section` (the frame, owned by `shell/shell-site`). A new section is added there in the same change, or the `site-page` test fails.
+A whole page renders through `SitePage` (`@aziontech/ui/site-page`), the package's page renderer: it takes the page JSON `{ hero, sections }`, resolves each `_id` to the section of the same name (loaded on demand), binds `props` onto it, lays `sections` in the site column with a hatched `Spacer` before each band and one after the last (a page that ends on a closing band — `closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true` — closes on that band's own frame instead, stacked closing bands share one frame, and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap), and warns in development about an `_id` it does not know. The registry it resolves against is `src/components/marketing/site-page/site-page-sections.ts`: every folder in `src/components/section/` except `site-header-section` and `site-footer-section` (the frame, owned by `shell/shell-site`). A new section is added there in the same change, or the `site-page` test fails.
 
 **Retired `_id`s keep rendering.** The site's page JSON lives outside this repo, so when a section is merged into another or renamed, its old `_id` gets an entry in `sitePageSectionAliases` (same file): the `target` section and a `props` transform from the old shape to the new one (`{ _id: 'hero-copy-on-top-art', props }` renders `hero-section` with `variant: 'copy-on-top-art'`). Add the alias and a `site-page` test row in the same change as the merge. It is the one alias the package keeps; the old export, its types and its props are removed, not re-exported.
 
@@ -40,7 +40,7 @@ Customer proof, for example: `Quote` for one testimonial; `ClientQuotesSection` 
 
 ```vue
 <script setup>
-  import SitePage from '@aziontech/webkit/site-page'
+  import SitePage from '@aziontech/ui/site-page'
   import page from './pages/sql-database.json'
 </script>
 
@@ -53,7 +53,7 @@ A page section stays importable on its own, for a page that composes one band by
 
 ```vue
 <script setup>
-  import CustomerUseCasesSection from '@aziontech/webkit/customer-use-cases-section'
+  import CustomerUseCasesSection from '@aziontech/ui/customer-use-cases-section'
 </script>
 
 <template>
@@ -69,11 +69,11 @@ Next to `props`, an entry may carry:
 
 ## Content channels
 
-A content component (a diagram, a table, a callout, a card, stats, a quote, logos, code, a chart) is used in three places, and each has its own way in: `app` (the Vue import), `docs` (a tag `DocMarkdown` renders) and `site` (an entry `SitePage` renders). It is usable through all three unless the registry says why not (decision RV-F2-1; consumer rule [`webkit-content-channels`](../../rules/webkit-content-channels.md)).
+A content component (a diagram, a table, a callout, a card, stats, a quote, logos, code, a chart) is used in three places, and each has its own way in: `app` (the Vue import), `docs` (a tag `DocMarkdown` renders) and `site` (an entry `SitePage` renders). It is usable through all three unless the registry says why not (decision RV-F2-1; consumer rule [`azion-ui-content-channels`](../../rules/azion-ui-content-channels.md)).
 
 - **Site:** a component that is not a band is a **scene**: one entry in `src/assets/scene-registry.ts`, placed by name in a band's slot (`{ _id: 'console-showcase-section', props: { variant: 'diagram' }, scenes: { scene: { component: 'FlowDiagram', props: { nodes, edges } } } }`). A scene may list `children`, scenes drawn in its default slot, so a `Chart` names its marks and a `StatTileGroup` its tiles (decision RV-C2-1). Do not add a `<name>-section` that only wraps one component: only page sections take an `_id`, and the band already gives the frame, title and spacing.
 - **Docs:** a tag in `DocMarkdown`'s block tags and component map, loaded with `defineAsyncComponent` so the docs bundle grows only when a page uses it. Braced attribute values are JSON (`nodes={[{ "id": "you" }]}`), so the Markdown carries the same data as the props and the page JSON. A tag takes data attributes; hand-composed parts stay Vue, except the parts that are data too (`<ChartLine />` inside `<Chart>`, `<StatTile />` inside `<StatTileGroup>`).
-- **Registry and guard:** `packages/webkit/scripts/lib/content-channels.mjs` lists every content component with each channel wired, `pending` or out of scope with a reason; `build-catalog` stamps the wired ones as `channels`. `test/standards/content-channels.test.mjs` fails when a component in `chart/`, `code/`, `docs/` or `marketing/` is missing from it, when a declared tag or entry is not wired, or when a pending one got wired without moving it. The open gaps are in `packages/webkit/docs/reviews/content-channels.md`.
+- **Registry and guard:** `packages/ui/scripts/lib/content-channels.mjs` lists every content component with each channel wired, `pending` or out of scope with a reason; `build-catalog` stamps the wired ones as `channels`. `test/standards/content-channels.test.mjs` fails when a component in `chart/`, `code/`, `docs/` or `marketing/` is missing from it, when a declared tag or entry is not wired, or when a pending one got wired without moving it. The open gaps are in `packages/ui/docs/reviews/content-channels.md`.
 - **Examples:** a component with all three shows them on its docs page: the Vue examples, a `markdown.vue` (`DocMarkdown` with the source) and a `page-entry.vue` that renders a `page-entry.json` through `SitePage` (`examples.json` names it in `json`, and the docs page prints the JSON under the example).
 
 ## Pages and their sections
@@ -96,9 +96,9 @@ The `//` eyebrow prefix marks every marketing section header (decision EB-1, 202
 ## What a section component is
 
 - **Props only.** The props are exactly the keys of `props` in the section's `examples/<name>/site-*.json` — nothing more, nothing less — so `v-bind="section.props"` is the whole API. No slots, and no events except a form's `submit` (below). Interaction the block needs (tabs, filters, load-more, copy-to-clipboard) is local state inside the component.
-- **Forms are the one exception: they emit `submit`, the site sends.** A section that collects data (a lead form, a newsletter sign-up) never posts, fetches or fakes a send. It renders the fields, validates them locally on submit only (the `webkit-form` pattern: a required field's label carries its Required tag from the first render, an empty required field takes the amber `required` state and a malformed value the red `invalid` state only after a failed submit, never both at once, and editing a field clears its message), and on a valid submit emits `submit: [event: SubmitEvent, values: Record<string, string>]` (event first — see [`event-payloads.md`](../rules/event-payloads.md)); the site posts to its endpoint. On a page rendered by `SitePage`, the renderer re-emits it as `submit: [event, { section, values }]`, `section` being the whole entry with its `submission`. The outcome comes back as consumer-owned state props the block renders (see [`component-states.md`](../rules/component-states.md)): `loading` while the site sends (submit suppressed), `submitted` to show the success message, `error` to show the failure message; the messages themselves are props from the JSON. Transport details (`endpoint`, `hiddenFields`, `pageName`) are not component props: they sit in a `submission` key next to `props` in the section entry (`{ _id, props, submission }`), so `v-bind="section.props"` stays the whole API.
+- **Forms are the one exception: they emit `submit`, the site sends.** A section that collects data (a lead form, a newsletter sign-up) never posts, fetches or fakes a send. It renders the fields, validates them locally on submit only (the `azion-ui-form` pattern: a required field's label carries its Required tag from the first render, an empty required field takes the amber `required` state and a malformed value the red `invalid` state only after a failed submit, never both at once, and editing a field clears its message), and on a valid submit emits `submit: [event: SubmitEvent, values: Record<string, string>]` (event first — see [`event-payloads.md`](../rules/event-payloads.md)); the site posts to its endpoint. On a page rendered by `SitePage`, the renderer re-emits it as `submit: [event, { section, values }]`, `section` being the whole entry with its `submission`. The outcome comes back as consumer-owned state props the block renders (see [`component-states.md`](../rules/component-states.md)): `loading` while the site sends (submit suppressed), `submitted` to show the success message, `error` to show the failure message; the messages themselves are props from the JSON. Transport details (`endpoint`, `hiddenFields`, `pageName`) are not component props: they sit in a `submission` key next to `props` in the section entry (`{ _id, props, submission }`), so `v-bind="section.props"` stays the whole API.
 - **One landmark per band.** The root is a `<section>` named by the band's title (`aria-label`) only when no composed component already renders a named landmark for it; when `media-split`, `quote-tabs` or `stats` owns the named region, the root is a plain `div`, so axe never sees two landmarks with one name.
-- **Monolithic.** A section composes existing webkit components (`Module`, `RegistrationFrame`, `CardGrid`, `FeatureItem`, `Hero`, …) inside its own root; it has no sub-components of its own. The page owns the column (`Container` / `Spacer`), so a section's root is the band at `Module` level.
+- **Monolithic.** A section composes existing Azion UI components (`Module`, `RegistrationFrame`, `CardGrid`, `FeatureItem`, `Hero`, …) inside its own root; it has no sub-components of its own. The page owns the column (`Container` / `Spacer`), so a section's root is the band at `Module` level.
 - **Bulk data is typed.** Every nested shape is a named, exported type beside the component (`CustomerUseCasesSectionItem`), one JSDoc line per field; a call to action is the shared `ModuleHeaderAction` from `module-header`, and a client mark the shared `LogoMark` from `logo`. Arrays default to `() => []`; an optional affordance object (`primaryAction`, `search`) defaults to `undefined` and is rendered under `v-if`; a configuration object the block cannot render without (`form`, `competitor`, `menus`) is `Required: true`.
 - **`variant` changes layout, never the content shape.** Two variants share one component (+ `variant`) only when they take the same props (at most two optional keys of difference). A different data model or different behaviour is a different section, even when the site JSON reused the `_id`.
 - **Vocabulary.** `title` / `eyebrow` / `description` for copy; `primaryAction` / `secondaryAction` (`{ label, href, trailing?, target? }`) for the band's one or two calls to action — never `action`, `actions[]`, `cta`, `link`, `moreLink` at the root; inside a repeated item (a feature, a step, a cell) the single affordance is `action` and a clipboard affordance is `copy: { label, text }`; `anchor` for the in-page `id` a `#hash` link targets (set on the band's root `<section>` with `scroll-mt-(--spacing-2xl)`); `ariaLabel` / `xAriaLabel` for every accessible name the markup needs. Banned at the root: `status`, `heading`, `header`, `variant`, `is*`/`has*` (see [`prop-vocabulary.md`](../rules/prop-vocabulary.md)).
@@ -106,13 +106,13 @@ The `//` eyebrow prefix marks every marketing section header (decision EB-1, 202
 ## Layout and exports
 
 ```
-packages/webkit/src/components/section/
+packages/ui/src/components/section/
   customer-use-cases-section/
     customer-use-cases-section.vue
     customer-use-cases-section.test.ts
 ```
 
-One export per block in `packages/webkit/package.json`, and one `.size-limit.json` budget:
+One export per block in `packages/ui/package.json`, and one `.size-limit.json` budget:
 
 ```jsonc
 "./customer-use-cases-section": "./src/components/section/customer-use-cases-section/customer-use-cases-section.vue"
@@ -121,13 +121,13 @@ One export per block in `packages/webkit/package.json`, and one `.size-limit.jso
 ## Examples
 
 - **The site JSON is the single source.** Each section's page entry lives in
-  `packages/webkit/examples/<name>/site-<example>.json` (`{ _id, props }`), and
+  `packages/ui/examples/<name>/site-<example>.json` (`{ _id, props }`), and
   `site-<example>.vue` renders the same props inside `Container` / `Spacer` as a
   copyable SFC (the big arrays as `<script setup>` consts). `examples.json` lists both, and the
   example's `README.md` prints the JSON under "Use it on the site".
-- The copyable example imports every logo, badge and illustration from `@aziontech/webkit/assets/<file>`
-  and passes the neutral placeholders (`@aziontech/webkit/assets/placeholder-image.svg`,
-  `placeholder-clip.webm`) for editorial media WebKit does not ship; the `webkit/no-root-relative-asset`
+- The copyable example imports every logo, badge and illustration from `@aziontech/ui/assets/<file>`
+  and passes the neutral placeholders (`@aziontech/ui/assets/placeholder-image.svg`,
+  `placeholder-clip.webm`) for editorial media Azion UI does not ship; the `azion-ui/no-root-relative-asset`
   lint blocks `/marketing-components/…` and `/media/…` URLs. The site JSON (`site-*.json`) keeps the
   site's own URLs because it is the marketing site's data; `src/assets/site-assets.json` maps them.
 - The docs page (`/components/<name>`), the bare frame (`/frame/example/<name>/<file>`) and the styled
@@ -136,7 +136,7 @@ One export per block in `packages/webkit/package.json`, and one `.size-limit.jso
 ## Authoring a section through the pipeline
 
 1. Read the section's page entry (the sample's page JSON, or `examples/<name>/site-*.json` when it exists): `props` → the Props table; nested shapes → exported types; the sample's markup → the component template; its interaction → local state.
-2. Write `.specs/<name>.md` from `.specs/_template.md`: `category: sections`, `structure: monolithic`, `status: draft`, no `checksum`, no `figma:`; drop `## Sub-components`; Events and Slots tables are `_none_`; `## Usage` imports `@aziontech/webkit/<name>`; the Constraints block verbatim. Then run `spec-validator`.
+2. Write `.specs/<name>.md` from `.specs/_template.md`: `category: sections`, `structure: monolithic`, `status: draft`, no `checksum`, no `figma:`; drop `## Sub-components`; Events and Slots tables are `_none_`; `## Usage` imports `@aziontech/ui/<name>`; the Constraints block verbatim. Then run `spec-validator`.
    - The spec parser reads the first `interface …Props {` block line by line: never inline an object type in `Props`, never name a helper type `*Props`.
    - `Motion & Animations: _none_` is only valid when the file carries no `transition-*` / `animate-*` at all; otherwise list each class, and each must exist in the catalog's animations.
 3. `/component-create <name>`: the export key is the flat `./<name>`; the template is transcribed from the sample with relative imports; there is no `figma:` block, so the Code Connect step is a documented skip.

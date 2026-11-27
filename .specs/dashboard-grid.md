@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: a8f35dc185037703eb7cf0cde88f7f45c9f87be8659e73ba4a4aaf428f29f346
+checksum: 68d7dda252d01d221932781bc882ce0c0dfd20bb763407a1c8ba2b51edc6471f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -55,8 +55,8 @@ item, on top of the existing `ChartCard` handles.
 
 ```vue
 <script setup>
-  import DashboardGrid from '@aziontech/webkit/dashboard-grid'
-  import ChartCard from '@aziontech/webkit/chart-card'
+  import DashboardGrid from '@aziontech/ui/dashboard-grid'
+  import ChartCard from '@aziontech/ui/chart-card'
   import { ref } from 'vue'
 
   const editing = ref(true)
@@ -96,8 +96,8 @@ Tree-shaking alternative — the standalone root and the item from their own ent
 
 ```vue
 <script setup>
-  import DashboardGrid from '@aziontech/webkit/dashboard-grid-root'
-  import DashboardGridItem from '@aziontech/webkit/dashboard-grid-item'
+  import DashboardGrid from '@aziontech/ui/dashboard-grid-root'
+  import DashboardGridItem from '@aziontech/ui/dashboard-grid-item'
 </script>
 ```
 
@@ -117,7 +117,7 @@ drags and resizes go to the board. `ChartCard` keeps working on its own outside 
 Resulting layout:
 
 ```
-packages/webkit/src/components/layout/dashboard-grid/
+packages/ui/src/components/layout/dashboard-grid/
 ├── board.vue
 ├── board.test.ts
 ├── index.ts
@@ -256,7 +256,7 @@ ping or a save of one row. They are outcomes of a drag or a key, so they carry n
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

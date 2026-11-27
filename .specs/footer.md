@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: f9133fc5dbe0a2ae48f77afdcb493de888f5ebb87d4aa402660714cf771ef892
+checksum: 56245ffecde98a2e1d2a84e8a92e061b1a2c05c996dd66f64577c148cfe88241
 created: 2026-08-10
 last_updated: 2026-11-21
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-21
 
 ## Purpose
 
-Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`. A canvas-colored shell of two bands divided by a hairline rule. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`).
+Page footer for marketing, docs and console surfaces: the bottom-of-page counterpart to `AppHeader`. A canvas-colored shell of two bands divided by a hairline rule. Matches the Azion UI Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`).
 
 **Two bands.** Top to bottom: the link columns, then the bottom bar. The bottom bar is one row, as azion.com draws it: the brand at the start, the social icons after it, and the status indicator with the language select at the end. There is no separate brand band: the brand sits at the start of the bar at every width, at the 18px height `AppHeaderBrand` gives the header's mark.
 
@@ -64,11 +64,11 @@ Content (links, labels, languages, status, brand) always comes from the consumer
 
 ```vue
 <script setup>
-  import Brand from '@aziontech/webkit/brand'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Select from '@aziontech/webkit/select'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Brand from '@aziontech/ui/brand'
+  import Footer from '@aziontech/ui/footer'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Select from '@aziontech/ui/select'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
   import { ref } from 'vue'
 
   const language = ref('en')
@@ -124,9 +124,9 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 ```vue
 <script setup>
-  import Footer from '@aziontech/webkit/footer-root'
-  import FooterColumn from '@aziontech/webkit/footer-column'
-  import FooterLink from '@aziontech/webkit/footer-link'
+  import Footer from '@aziontech/ui/footer-root'
+  import FooterColumn from '@aziontech/ui/footer-column'
+  import FooterLink from '@aziontech/ui/footer-link'
 </script>
 ```
 
@@ -251,7 +251,7 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

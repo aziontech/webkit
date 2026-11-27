@@ -172,8 +172,8 @@ for (const variant of ['light', 'dark']) {
   })
 }
 
-test('every exception is recorded with its reason in rules/webkit-tokens.md', () => {
-  const doc = readFileSync(new URL('../../../rules/webkit-tokens.md', import.meta.url), 'utf8')
+test('every exception is recorded with its reason in rules/azion-ui-tokens.md', () => {
+  const doc = readFileSync(new URL('../../../rules/azion-ui-tokens.md', import.meta.url), 'utf8')
   const section = doc.slice(doc.indexOf('## Contrast: APCA and WCAG 2'))
   assert.ok(section.length > 0 && doc.includes('## Contrast: APCA and WCAG 2'))
   for (const e of EXCEPTIONS) {

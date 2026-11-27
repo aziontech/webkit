@@ -17,7 +17,7 @@ The wrong/correct code pairs these fixtures are drawn from are documented in [`c
 
 **CI only** — the `lint-canaries` job in [`.github/workflows/governance.yml`](../.github/workflows/governance.yml), side by side with the Security scans (audit) job. It feeds the Governance Gate, so a weakened lint blocks the pipeline. It is deliberately **not** part of `pnpm gates`, husky, or lint-staged.
 
-The job triggers when anything that can change lint behavior moves: the four config files, `packages/webkit/eslint.config.js`, this directory, root `package.json`, `pnpm-lock.yaml`, or the workflow itself.
+The job triggers when anything that can change lint behavior moves: the four config files, `packages/ui/eslint.config.js`, this directory, root `package.json`, `pnpm-lock.yaml`, or the workflow itself.
 
 Run locally when touching lint configs:
 
@@ -36,7 +36,7 @@ lint-canaries/
     typescript/           # §4 — @typescript-eslint/*, unused-imports/no-unused-vars
     import-hygiene/       # §5 — simple-import-sort/*, import/*, unused-imports/no-unused-imports
     clean-code/           # §6 — no-console, no-debugger, prefer-const
-    webkit/               # webkit/* rules from the package ESLint plugin (no-physical-direction, its gradient case)
+    Azion UI/               # azion-ui/* rules from the package ESLint plugin (no-physical-direction, its gradient case)
   stylelint/              # §7 — one .css per rule
   prettier/               # §8 — files that must stay "unformatted"
   commitlint/             # §10 — one wrong commit message per .txt
@@ -46,8 +46,8 @@ lint-canaries/
 
 ## Why these files never break the normal pipeline
 
-- The repo lint scripts and CI lint job are scoped to `packages/webkit/src` (ESLint) and `packages/webkit/**` globs (Stylelint, Prettier, lint-staged). This directory lives at the repo root, outside all of them.
-- `packages/webkit/tsconfig.json` only includes `src/**`, so `vue-tsc` / `type-coverage` never see these files.
+- The repo lint scripts and CI lint job are scoped to `packages/ui/src` (ESLint) and `packages/ui/**` globs (Stylelint, Prettier, lint-staged). This directory lives at the repo root, outside all of them.
+- `packages/ui/tsconfig.json` only includes `src/**`, so `vue-tsc` / `type-coverage` never see these files.
 - The root [`.prettierignore`](../.prettierignore) excludes `lint-canaries/`, so **repo-wide `prettier --write` sweeps can never "fix" the fixtures** (a sweep once reformatted the two Prettier fixtures and collapsed `${ label }` in the `template-curly-spacing` one, silently killing 3 canaries). The runner is the one place that must still see them, so it calls prettier with `--ignore-path=/dev/null`.
 - Only the canary runner ever lints them — expecting failure.
 

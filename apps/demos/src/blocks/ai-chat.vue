@@ -1,23 +1,20 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
-  import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/webkit/chat-message'
-  import ChatMessage from '@aziontech/webkit/chat-message-root'
-  import Conversation from '@aziontech/webkit/conversation'
-  import type { FeedbackReasonDialogPayload } from '@aziontech/webkit/feedback-reason-dialog'
-  import {
-    type McpAppFrameMessage,
-    type McpAppFrameResource
-  } from '@aziontech/webkit/mcp-app-frame'
+  import Alert from '@aziontech/ui/alert'
+  import type { ChatMessageFeedbackValue, ChatMessageStatus } from '@aziontech/ui/chat-message'
+  import ChatMessage from '@aziontech/ui/chat-message-root'
+  import Conversation from '@aziontech/ui/conversation'
+  import type { FeedbackReasonDialogPayload } from '@aziontech/ui/feedback-reason-dialog'
+  import { type McpAppFrameMessage, type McpAppFrameResource } from '@aziontech/ui/mcp-app-frame'
   import type {
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
-  } from '@aziontech/webkit/prompt-input'
-  import PromptQueue from '@aziontech/webkit/prompt-queue'
-  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
-  import { useAiChatTools } from '@aziontech/webkit/use-ai-chat-tools'
-  import { useAiChatVersions } from '@aziontech/webkit/use-ai-chat-versions'
-  import { useLocale } from '@aziontech/webkit/use-locale'
+  } from '@aziontech/ui/prompt-input'
+  import PromptQueue from '@aziontech/ui/prompt-queue'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/ui/suggestion-group'
+  import { useAiChatTools } from '@aziontech/ui/use-ai-chat-tools'
+  import { useAiChatVersions } from '@aziontech/ui/use-ai-chat-versions'
+  import { useLocale } from '@aziontech/ui/use-locale'
   import {
     type AiChatConnection,
     type AiChatInterrupt,
@@ -33,7 +30,7 @@
     hasAnswer,
     interruptErrorText,
     queueItemOf
-  } from '@aziontech/webkit/utils/ai-chat'
+  } from '@aziontech/ui/utils/ai-chat'
   import { computed, ref, useSlots } from 'vue'
 
   import { failureText, turnTime } from './ai-chat.ai-chat-failure'

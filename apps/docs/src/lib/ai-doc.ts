@@ -1,1 +1,1 @@
-export const AI_DOC = 'packages/webkit/docs/AI.md'
+export const AI_DOC = 'packages/ui/docs/AI.md'

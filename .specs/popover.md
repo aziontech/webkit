@@ -7,7 +7,7 @@ spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 01b17bef0831bfec756ca65bb0fc77ddae0b5cd38c6426ac03eaac2f5f2b4ea1
+checksum: 6987b93ab4b6d7cb3228ca551883dd844007c0f620868e72c433231fd16afc52
 created: 2026-06-30
 last_updated: 2026-11-18
 ---
@@ -42,7 +42,7 @@ Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and 
 ## Best practices
 
 - Place `Popover.Trigger` first and `Popover.Content` after it. The trigger wires `aria-expanded`, `aria-controls` and the click toggle onto your element, so don't bind them yourself.
-- Let `Popover.Trigger` show the pointer: its wrapper sets `cursor-pointer` (`cursor-not-allowed` when disabled), so a `Tag`, `Avatar` or icon slotted in reads as clickable. Don't put `cursor-pointer` on the slotted WebKit component — `webkit/no-style-override` blocks it.
+- Let `Popover.Trigger` show the pointer: its wrapper sets `cursor-pointer` (`cursor-not-allowed` when disabled), so a `Tag`, `Avatar` or icon slotted in reads as clickable. Don't put `cursor-pointer` on the slotted Azion UI component — `azion-ui/no-style-override` blocks it.
 - Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
 - Set `size` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
 - Use `side="auto"` for triggers that can sit near a viewport edge.
@@ -54,8 +54,8 @@ Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and 
 
 ```vue
 <script setup>
-  import Popover from '@aziontech/webkit/popover'
-  import Button from '@aziontech/webkit/button'
+  import Popover from '@aziontech/ui/popover'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
@@ -82,14 +82,14 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 
 ```vue
 <script setup>
-  import Popover from '@aziontech/webkit/popover-root'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import PopoverHeader from '@aziontech/webkit/popover-header'
-  import PopoverTitle from '@aziontech/webkit/popover-title'
-  import PopoverDescription from '@aziontech/webkit/popover-description'
-  import PopoverClose from '@aziontech/webkit/popover-close'
-  import PopoverFooter from '@aziontech/webkit/popover-footer'
+  import Popover from '@aziontech/ui/popover-root'
+  import PopoverTrigger from '@aziontech/ui/popover-trigger'
+  import PopoverContent from '@aziontech/ui/popover-content'
+  import PopoverHeader from '@aziontech/ui/popover-header'
+  import PopoverTitle from '@aziontech/ui/popover-title'
+  import PopoverDescription from '@aziontech/ui/popover-description'
+  import PopoverClose from '@aziontech/ui/popover-close'
+  import PopoverFooter from '@aziontech/ui/popover-footer'
 </script>
 ```
 
@@ -97,7 +97,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 
 The root `Popover` owns open/closed state, anchoring/placement (exposing the computed `panelStyle`), outside-click + `Esc` dismissal, focus entry on open, Tab hand-off and focus return. Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `side` and `align`, `size`, `panelStyle`, and the `panelEl` that `Popover.Content` assigns), so every sub-component is context-aware and the consumer wires nothing. **`Popover.Content` renders the single teleported, animated floating panel with its content inline** (the Select / Tooltip pattern — one `<Teleport>` + `<Transition>`, so the scale animation carries the whole panel on enter/leave); the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin` (via `panelStyle`), and `data-state` / `data-side` / `data-align`, and assigns itself to the root's `panelEl` so the root's placement/focus logic operates on it. Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
 
-- `popover-trigger/popover-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) with the pointer cursor (`not-allowed` when disabled) that carries `data-testid`, `data-state` and `data-disabled` and toggles the panel on the bubbling `click`. It gives `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which is the one tab stop, the anchor the popover positions against and the focus-return target. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled), opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
+- `popover-trigger/popover-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) with the pointer cursor (`not-allowed` when disabled) that carries `data-testid`, `data-state` and `data-disabled` and toggles the panel on the bubbling `click`. It gives `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which is the one tab stop, the anchor the popover positions against and the focus-return target. When the first node in the slot is an Azion UI `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled), opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The trigger forwards aria + click; the consumer must not bind those itself.
@@ -128,7 +128,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 <!-- Resulting layout (composition, canonical):
 
-  packages/webkit/src/components/overlay/popover/
+  packages/ui/src/components/overlay/popover/
   ├── popover.vue
   ├── index.ts                    (compound: Object.assign attaches every sub-component; vue-tsc emits index.d.ts)
   ├── injection-key.ts            (shared by every sub-component)
@@ -178,7 +178,7 @@ export default Object.assign(Popover, {
 | `defaultOpen` | `boolean`                                        | `false`     | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                                                                                                                                                                                                                   |
 | `dismissible` | `boolean`                                        | `true`      | false    | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it.                                                                                                                                                                              |
 
-Types (exported from `@aziontech/webkit/popover`): `PopoverSide` is `'top' | 'bottom' | 'start' | 'end'`; `PopoverAlign` is `'start' | 'center' | 'end'`. `start` and `end` follow the text direction: under `dir="rtl"`, `side="start"` opens on the right and `align="start"` lines the panel up with the trigger's right edge. On `start`/`end` sides, `align` runs top to bottom.
+Types (exported from `@aziontech/ui/popover`): `PopoverSide` is `'top' | 'bottom' | 'start' | 'end'`; `PopoverAlign` is `'start' | 'center' | 'end'`. `start` and `end` follow the text direction: under `dir="rtl"`, `side="start"` opens on the right and `align="start"` lines the panel up with the trigger's right edge. On `start`/`end` sides, `align` runs top to bottom.
 
 ## v-model
 
@@ -275,7 +275,7 @@ Canonical layout — composite stories render every variant of one axis side-by-
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

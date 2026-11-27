@@ -1,4 +1,4 @@
-import type { TableColumn } from '@aziontech/webkit/data-table'
+import type { TableColumn } from '@aziontech/ui/data-table'
 
 import type { EditResourceProject } from './edit-resource.vue'
 import type { PolicyModuleField, PolicySettingsRecord } from './edit-resource-policy-groups.vue'

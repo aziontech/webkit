@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 26a22ddd898433a6be2e7452fa19698ca8ac8445575cdfd5e906206ab3ebb1a3
+checksum: c0a516348dcf5f254484ec7ff6a2abbb9b70d0d732c22c18ff72b02a46056f49
 created: 2026-11-11
 last_updated: 2026-11-25
 ---
@@ -47,7 +47,7 @@ Key and value tags of one resource, after Cloudscape's tag editor, built on `Att
 
 ```vue
 <script setup>
-  import TagEditor from '@aziontech/webkit/tag-editor'
+  import TagEditor from '@aziontech/ui/tag-editor'
   import { ref } from 'vue'
 
   const tags = ref([
@@ -194,7 +194,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

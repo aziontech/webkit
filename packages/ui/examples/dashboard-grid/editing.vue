@@ -1,0 +1,106 @@
+<script setup>
+  import Button from '@aziontech/ui/button'
+  import Chart from '@aziontech/ui/chart'
+  import ChartCard from '@aziontech/ui/chart-card'
+  import DashboardGrid from '@aziontech/ui/dashboard-grid'
+  import Tag from '@aziontech/ui/tag'
+  import { computed, ref } from 'vue'
+
+  const labels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00']
+
+  const cards = {
+    requests: {
+      title: 'Requests',
+      series: [{ id: 'requests', name: 'Requests', values: [1820, 1640, 2210, 2480, 2390, 2050] }]
+    },
+    errors: {
+      title: 'Errors',
+      series: [{ id: 'errors', name: 'Errors', values: [42, 38, 61, 57, 49, 44] }]
+    },
+    latency: {
+      title: 'Response time',
+      series: [{ id: 'p95', name: 'p95', values: [166, 172, 205, 208, 182, 175] }]
+    }
+  }
+
+  const defaultLayout = [
+    { id: 'requests', span: 12 },
+    { id: 'errors', span: 6 },
+    { id: 'latency', span: 6 }
+  ]
+
+  const editing = ref(true)
+  const layout = ref(defaultLayout.map((item) => ({ ...item })))
+  const customized = computed(() => JSON.stringify(layout.value) !== JSON.stringify(defaultLayout))
+
+  const reset = () => {
+    layout.value = defaultLayout.map((item) => ({ ...item }))
+  }
+</script>
+
+<template>
+  <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
+    <div class="flex flex-wrap items-center justify-end gap-(--spacing-xs)">
+      <Button
+        v-if="customized"
+        label="Reset layout"
+        variant="ghost"
+        size="medium"
+        icon="az az-replay"
+        @click="reset"
+      />
+      <Button
+        :label="editing ? 'Done' : 'Edit layout'"
+        :variant="editing ? 'primary' : 'outline'"
+        size="medium"
+        :icon="editing ? 'az az-check' : 'az az-layout-grid'"
+        :aria-pressed="editing"
+        @click="editing = !editing"
+      />
+    </div>
+    <DashboardGrid
+      v-model:layout="layout"
+      :editing="editing"
+      :min-span="4"
+      :min-height="240"
+      :max-height="560"
+    >
+      <DashboardGrid.Item
+        v-for="item in layout"
+        :key="item.id"
+        :item-id="item.id"
+        :label="cards[item.id].title"
+      >
+        <ChartCard>
+          <ChartCard.Header>
+            <ChartCard.DragHandle :aria-label="'Move ' + cards[item.id].title" />
+            <ChartCard.Title>{{ cards[item.id].title }}</ChartCard.Title>
+            <ChartCard.Action v-if="editing">
+              <span class="inline-flex @max-3xl/dashboard-grid:hidden">
+                <Tag
+                  :label="item.span + '/12'"
+                  severity="neutral"
+                  size="small"
+                  icon="az az-move-horizontal"
+                />
+              </span>
+            </ChartCard.Action>
+          </ChartCard.Header>
+          <ChartCard.Content>
+            <Chart
+              :series="cards[item.id].series"
+              :labels="labels"
+            >
+              <Chart.Grid />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
+              <Chart.Line />
+              <Chart.Tooltip />
+            </Chart>
+          </ChartCard.Content>
+          <ChartCard.ResizeHandle :aria-label="'Resize ' + cards[item.id].title" />
+        </ChartCard>
+      </DashboardGrid.Item>
+    </DashboardGrid>
+  </div>
+</template>

@@ -1,0 +1,76 @@
+{
+  "id": "view/view-ticket-inbox",
+  "name": "ViewTicketInbox",
+  "title": "Blocks/View/ViewTicketInbox",
+  "surface": "app",
+  "stability": "preview",
+  "summary": "The support agent's ticket inbox: a `PageHeader` with Create Ticket over one controls band (a `Select` of saved views with their counts, such as My open tickets (4), Unassigned (3) and Overdue (2, needs action); a `PropertyFilter` over status, priority, assignee, group, channel and tag, with free text over subject, requester and number; Refresh and `CollectionPreferences`) and a `DataTable` of the view's tickets on `useCollection`, most urgent SLA first: a selection checkbox, Subject as a `TableCellLink` with an unread mark, the requester `Avatar`, name and number under it, Status as `TableCellStatus`, `PriorityTag`, the assignee `Avatar` with presence, the next SLA as a `Countdown` (paused while Pending or On hold) and Updated as `TableCellTime`; Group and Channel are hidden columns. Selecting tickets opens a bulk bar in the controls band: the count, Select all N tickets, Clear selection, Assign and Change status as menus (`DropdownMenuRoot`), Merge (two or more; a `ConfirmDialog` asks which ticket to keep) and Close (confirmed with the count), each label counting the selection. A row click or Enter opens the ticket. A view with no tickets says You're all caught up and offers all open tickets, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "ticket inbox",
+    "support inbox",
+    "helpdesk",
+    "help desk views",
+    "ticket list",
+    "ticket queue",
+    "agent inbox",
+    "support queue",
+    "saved views",
+    "unassigned tickets",
+    "overdue tickets",
+    "sla countdown",
+    "bulk assign tickets",
+    "caixa de entrada de tickets",
+    "caixa de suporte",
+    "fila de chamados",
+    "lista de tickets",
+    "lista de chamados",
+    "visões salvas",
+    "chamados sem responsável",
+    "chamados atrasados",
+    "atribuir chamados em massa"
+  ],
+  "skills": ["azion-ui-lists", "azion-ui-tables", "azion-ui-states", "azion-ui-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "view-ticket-inbox.vue"
+  },
+  "files": [
+    "sample.ts",
+    "lib/ticket-fields.ts",
+    "parts/inbox-controls.vue",
+    "parts/ticket-bulk-actions.vue",
+    "parts/ticket-subject-cell.vue",
+    "parts/ticket-assignee-cell.vue"
+  ],
+  "variants": [
+    {
+      "name": "Empty",
+      "summary": "My open tickets holds no ticket: the heading and controls stay, and a flush EmptyState says You're all caught up, with Show all open tickets.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: the filter and preferences are disabled, Refresh spins and the table shows its skeleton rows.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The tickets could not load: the disabled controls stay and a danger Alert with Retry takes the table's place.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "Filtered",
+      "summary": "A Channel = Phone filter on My open tickets hides every ticket: the table shows No matching tickets with Clear filters.",
+      "file": "variants/filtered.vue"
+    },
+    {
+      "name": "Selected",
+      "summary": "Three tickets selected: the bulk bar in the controls band counts them and offers Assign (3), Change status (3), Merge (3) and Close (3).",
+      "file": "variants/selected.vue"
+    }
+  ]
+}

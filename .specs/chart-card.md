@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: 2a532450f5f32da9034d48dde7be0b615b077e5f9357faac8a313927e1971de6
+checksum: cf9b904a80030f71869fe0e51926b6f808e6b43ffb07eb786b2de9e9390c1dce
 spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-24
@@ -48,7 +48,7 @@ The box a dashboard chart lives in: a header with the title, the description and
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import ChartCard from '@aziontech/webkit/chart-card'
+  import ChartCard from '@aziontech/ui/chart-card'
 
   const span = ref(6)
   const height = ref(552)
@@ -82,9 +82,9 @@ Tree-shaking alternative:
 
 ```vue
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card-root'
-  import ChartCardHeader from '@aziontech/webkit/chart-card-header'
-  import ChartCardContent from '@aziontech/webkit/chart-card-content'
+  import ChartCard from '@aziontech/ui/chart-card-root'
+  import ChartCardHeader from '@aziontech/ui/chart-card-header'
+  import ChartCardContent from '@aziontech/ui/chart-card-content'
 </script>
 ```
 
@@ -105,7 +105,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text description.
-- `chart-card-controls/chart-card-controls.vue` — the trailing zone of the header for tags and the options menu. Attached to the root as `ChartCard.Action` (shadcn's CardAction); imported alone from `@aziontech/webkit/chart-card-controls`.
+- `chart-card-controls/chart-card-controls.vue` — the trailing zone of the header for tags and the options menu. Attached to the root as `ChartCard.Action` (shadcn's CardAction); imported alone from `@aziontech/ui/chart-card-controls`.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the consumer's tags, buttons and dropdown.
@@ -128,7 +128,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/chart/chart-card/
+  packages/ui/src/components/chart/chart-card/
   ├── chart-card.vue
   ├── index.ts
   ├── injection-key.ts
@@ -246,7 +246,7 @@ Justification: ChartCard has no `variant` / `size` axis; its axes are the conten
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

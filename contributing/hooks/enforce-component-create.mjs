@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // PreToolUse hook: blocks the FIRST Write that creates a new component file under
-// packages/webkit/src/components/<category>/<name>/<file>.vue when the agent
+// packages/ui/src/components/<category>/<name>/<file>.vue when the agent
 // has not yet read or invoked the `component-create` skill in this session.
 
 import { existsSync, readFileSync, statSync } from 'node:fs'
@@ -33,13 +33,19 @@ function pipelineReferencedInTranscript(transcriptPath) {
     // The hook fails open by design; any of the markers is enough.
     return (
       // 1. New pipeline
-      /(?:contributing|\.claude)\/commands\/(component-create|spec-create|component-verify)\.md/i.test(content) ||
-      /(?:contributing|\.claude)\/skills\/(component-scaffold|spec-create|spec-validate|figma-extract|token-map|reuse-audit|structure-decide|code-connect-write|component-validate|echo-report)\/SKILL\.md/i.test(content) ||
-      /(?:contributing|\.claude)\/agents\/(component-scaffolder|spec-creator|spec-validator|figma-extractor|token-mapper|reuse-auditor|structure-decider|code-connect-writer|echo-reporter)\.md/i.test(content) ||
+      /(?:contributing|\.claude)\/commands\/(component-create|spec-create|component-verify)\.md/i.test(
+        content
+      ) ||
+      /(?:contributing|\.claude)\/skills\/(component-scaffold|spec-create|spec-validate|figma-extract|token-map|reuse-audit|structure-decide|code-connect-write|component-validate|echo-report)\/SKILL\.md/i.test(
+        content
+      ) ||
+      /(?:contributing|\.claude)\/agents\/(component-scaffolder|spec-creator|spec-validator|figma-extractor|token-mapper|reuse-auditor|structure-decider|code-connect-writer|echo-reporter)\.md/i.test(
+        content
+      ) ||
       // 2. Spec was loaded
       /\.specs\/[a-z][a-z0-9-]*\.md/i.test(content) ||
       // 3. Cultural anchors
-      /packages\/webkit\/AGENTS\.md/i.test(content) ||
+      /packages\/ui\/AGENTS\.md/i.test(content) ||
       /(?:^|\/)AGENTS\.md\b/i.test(content) ||
       // 4. Backward-compat
       /skills\/component-create\.md/i.test(content) ||
@@ -76,9 +82,7 @@ async function main() {
   if (!filePath) process.exit(0)
 
   const relPath = relative(ROOT, resolve(filePath))
-  const match = relPath.match(
-    /^packages\/webkit\/src\/components\/([^/]+)\/([^/]+)\/[^/]+\.vue$/
-  )
+  const match = relPath.match(/^packages\/ui\/src\/components\/([^/]+)\/([^/]+)\/[^/]+\.vue$/)
   if (!match) process.exit(0)
 
   const [, category] = match
@@ -93,7 +97,7 @@ async function main() {
   const msg = [
     `Component-create gate: blocked Write to ${relPath}`,
     '',
-    `This file is a new webkit-layer component. Before creating it, the agent`,
+    `This file is a new azion-ui-layer component. Before creating it, the agent`,
     `MUST run the spec-driven pipeline:`,
     '',
     `  1. /spec-create <name>          — drafts .specs/<name>.md`,
@@ -106,9 +110,9 @@ async function main() {
     `  contributing/rules/*.md                     (immutable rules)`,
     `  .specs/<name>.md                       (per-component contract)`,
     '',
-    `See also: contributing/AGENTS.md § 11.2, packages/webkit/AGENTS.md,`,
+    `See also: contributing/AGENTS.md § 11.2, packages/ui/AGENTS.md,`,
     `         contributing/docs/TOKENS.md (authoritative tokens),`,
-    `         contributing/docs/COMPONENT_REQUIREMENTS.md § "Webkit Layer Pattern (in-depth)".`
+    `         contributing/docs/COMPONENT_REQUIREMENTS.md § "Azion UI Layer Pattern (in-depth)".`
   ].join('\n')
 
   process.stderr.write(msg + '\n')

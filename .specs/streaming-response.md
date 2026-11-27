@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 7
 template: 2
-checksum: 85e16798afebd8623661bb59dcafdbe9809c8de5f1a44816e598f3f2bb4fb006
+checksum: 5b1b7c370e7ffd32163d1079f5313db27e99e27ae8e783a13e8141a9401dec98
 created: 2026-11-11
 last_updated: 2026-11-23
 ---
@@ -66,8 +66,8 @@ against `sources`: `[1]` one chip with the site's mark and name, and a run of ma
 
 ```vue
 <script setup>
-  import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import Sources from '@aziontech/webkit/sources'
+  import StreamingResponse from '@aziontech/ui/streaming-response'
+  import Sources from '@aziontech/ui/sources'
 
   const sources = [{ title: 'Real-Time Purge', href: 'https://www.azion.com/en/documentation/' }]
 </script>
@@ -175,7 +175,7 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
 
 ## Examples
 
-_Examples in `packages/webkit/examples/streaming-response/`: Default (rich Markdown with a nested list, a code card and a quote), Streaming (simulated tokens), With citations, Unsafe input._
+_Examples in `packages/ui/examples/streaming-response/`: Default (rich Markdown with a nested list, a code card and a quote), Streaming (simulated tokens), With citations, Unsafe input._
 
 ## Constraints — DO NOT
 
@@ -184,7 +184,7 @@ _Examples in `packages/webkit/examples/streaming-response/`: Default (rich Markd
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

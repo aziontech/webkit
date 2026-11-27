@@ -1,5 +1,5 @@
-import { toast } from '@aziontech/webkit/toast'
-import { copyText } from '@aziontech/webkit/utils/clipboard'
+import { toast } from '@aziontech/ui/toast'
+import { copyText } from '@aziontech/ui/utils/clipboard'
 
 import { messages } from './i18n'
 import type { Token } from './types'

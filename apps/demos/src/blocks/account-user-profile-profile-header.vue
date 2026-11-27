@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
+  import Avatar from '@aziontech/ui/avatar'
+  import Skeleton from '@aziontech/ui/skeleton'
+  import Tag from '@aziontech/ui/tag'
   import { computed } from 'vue'
 
   import type { UserProfileData } from './account-user-profile.user-profile-model'

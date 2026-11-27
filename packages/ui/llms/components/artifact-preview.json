@@ -1,0 +1,126 @@
+{
+ "name": "artifact-preview",
+ "binding": "ArtifactPreview",
+ "import": "@aziontech/ui/artifact-preview",
+ "treeShakeableImport": "@aziontech/ui/artifact-preview",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact). The header names it (title, description, metadata such as size or format, a file-type icon) and carries its actions: Copy (when `copyValue` is set), Download (when `downloadHref` is set) and Open (when `openable`, emitting `open` so the owner shows the full artifact in a side panel — Cloudscape's canvas preview). The body holds a short inline preview (Cloudscape's inline preview): the first lines of code, the first rows of a table.",
+ "setup": null,
+ "useWhen": [
+  "The assistant produced an artifact the reader may copy, download or open: a rules file, a CSV export, a command, a generated function."
+ ],
+ "avoidWhen": [
+  "Short code inside the prose of a response → fenced code in `StreamingResponse` (rendered as `CodeBlock`).",
+  "A resource that already exists in the product → link to its page; this card is for generated content.",
+  "Uploads the reader attached → `file-dropzone` items or chips in `PromptInput`'s attachments."
+ ],
+ "related": [
+  "`code-block` — the usual inline preview body.",
+  "`drawer` — where an `open` artifact is shown in full.",
+  "`chat-message` — artifacts stack under the response, not inside its bubble."
+ ],
+ "bestPractices": [
+  "Stack artifacts below the message text, one card each; do not nest them in the bubble.",
+  "Keep artifact actions in the card and message actions in `ChatMessage.Actions`.",
+  "Express sizes in KB, MB or GB in `meta`.",
+  "Long or editable content opens (canvas); the inline body stays a preview."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "File name or title of what was generated (`cache-rules.json`)."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One line on what it is or does."
+  },
+  {
+   "name": "meta",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Facts that help recognize it: size, rows, language (`2.4 KB · JSON`)."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "'az az-file'",
+   "required": "false",
+   "doc": "Icon class for the file type."
+  },
+  {
+   "name": "copyValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text the Copy control puts on the clipboard. Empty hides Copy."
+  },
+  {
+   "name": "downloadHref",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "URL of the file for the Download control. Empty hides Download."
+  },
+  {
+   "name": "openable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview)."
+  }
+ ],
+ "events": [
+  {
+   "name": "open",
+   "payload": "(event: MouseEvent)",
+   "notes": ""
+  },
+  {
+   "name": "copy",
+   "payload": "(event: MouseEvent, value: string)",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The inline preview; scrolls inside a 20 rem body."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Extra icon actions, placed before Copy and Download."
+  }
+ ],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [
+  {
+   "kind": "icons",
+   "page": "foundations/icons.md"
+  }
+ ],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/artifact-preview/default.vue"
+  },
+  {
+   "name": "Table",
+   "file": "examples/artifact-preview/table.vue"
+  }
+ ],
+ "docs": "components/artifact-preview.md"
+}

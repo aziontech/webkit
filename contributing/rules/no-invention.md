@@ -8,7 +8,7 @@ You are a transcriber, not an author. The spec at `.specs/<name>.md` is the cont
 2. **Do not add events** that are not in the spec's Events table.
 3. **Do not add slots** that are not in the spec's Slots table.
 4. **Do not add sub-components** that are not in the spec's Sub-components section.
-5. **Do not invent imports.** Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve. Every npm package must be installed.
+5. **Do not invent imports.** Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve. Every npm package must be installed.
 6. **Do not create composables, utilities, or sibling components** unless the task explicitly tells you to.
 7. **Do not edit files outside the paths your task names.**
 8. **Do not bring artifacts from outside this codebase as-is.** Migrating from another design system, Figma, Base UI/Reka UI/Radix/shadcn examples, a previous repo, or any inherited `CONTRACT.md`/`README.md` requires **rewriting** to our conventions. See [`migration.md`](./migration.md).
@@ -34,6 +34,6 @@ Then exit with no writes. The orchestrator will surface the message to the user.
 
 ## Why this rule exists
 
-Previous runs scaffolded "helpful" extras: a `tone` prop nobody requested, a `useToast` composable nobody asked for, a `@aziontech/webkit/utils/slot` import that does not exist. Every such extra later became a removal task, a code review back-and-forth, or a broken build when a hook caught the phantom path.
+Previous runs scaffolded "helpful" extras: a `tone` prop nobody requested, a `useToast` composable nobody asked for, a `@aziontech/ui/utils/slot` import that does not exist. Every such extra later became a removal task, a code review back-and-forth, or a broken build when a hook caught the phantom path.
 
 Treat the spec as a sealed contract. If something is missing from the spec, fix the spec — not the code you are about to write.

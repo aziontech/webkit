@@ -1,0 +1,33 @@
+{
+  "id": "top-bar/top-bar-auth",
+  "name": "TopBarAuth",
+  "title": "Blocks/TopBar/TopBarAuth",
+  "surface": "app",
+  "summary": "The console bar for the signed-out and onboarding screens: sign in, sign up, password recovery and the first-run steps. A `AppHeader` in its default `content` placement with the brand at the start and one outlined Documentation button at the end. There is no navigation, no search and no account control, because there is no session to act on yet. Built from `AppHeader`, `Button` and `Brand`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "auth header",
+    "signed-out header",
+    "login page header",
+    "onboarding header",
+    "public console header",
+    "header without navigation",
+    "logged-out top bar",
+    "cabeçalho de login",
+    "cabeçalho deslogado",
+    "barra do topo sem navegação",
+    "top bar",
+    "auth bar",
+    "signed-out top bar",
+    "barra de autenticação"
+  ],
+  "skills": ["azion-ui-navigation", "azion-ui-layout"],
+  "primary": {
+    "name": "Default",
+    "file": "top-bar-auth.vue"
+  },
+  "variants": []
+}

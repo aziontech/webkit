@@ -4,7 +4,7 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 4
-checksum: f3de633f88a2434e52a06a1b07f4900bac8cd6664eee3ad8ef50d71c548da298
+checksum: c3789f35cbd229d7b5c7c4776c522f3997bc1119b8057d054e6e5c06500e8c77
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-18
@@ -56,8 +56,8 @@ The responsive cell grid of the page language, in three registers: spaced cards 
 
 ```vue
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
-  import FeatureItem from '@aziontech/webkit/feature-item'
+  import CardGrid from '@aziontech/ui/card-grid'
+  import FeatureItem from '@aziontech/ui/feature-item'
 </script>
 
 <template>
@@ -93,8 +93,8 @@ Tree-shaking alternative — the standalone root and cell from their own entries
 
 ```vue
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid-root'
-  import CardGridCell from '@aziontech/webkit/card-grid-cell'
+  import CardGrid from '@aziontech/ui/card-grid-root'
+  import CardGridCell from '@aziontech/ui/card-grid-cell'
 </script>
 ```
 
@@ -190,7 +190,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

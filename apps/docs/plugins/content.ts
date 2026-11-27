@@ -20,7 +20,7 @@ import {
   SPECS,
   THEME,
   walk,
-  WEBKIT
+  AZION_UI
 } from './paths.ts'
 
 const LANGS = ['vue', 'ts', 'js', 'json', 'bash', 'shell', 'css', 'html', 'md', 'yaml', 'diff']
@@ -56,7 +56,7 @@ const PAGE_OF_FILE = new Map([
     (page) => [page.markdown, `/foundations/${page.slug}`] as [string, string]
   ),
   ...PATTERNS.map((page) => [page.markdown, `/patterns/${page.slug}`] as [string, string]),
-  ['packages/webkit/docs/AI.md', '/ai']
+  ['packages/ui/docs/AI.md', '/ai']
 ])
 
 function repositoryHref(href: string): string {
@@ -437,8 +437,8 @@ type ExampleMeta = { name: string; summary?: string; file: string; json?: string
 type ExamplesFile = { component: string; title?: string; examples: ExampleMeta[] }
 
 function readExampleDirs(): { dir: string; data: ExamplesFile }[] {
-  return walk(join(WEBKIT, 'examples'), (name) => name === 'examples.json').map((file) => ({
-    dir: relative(join(WEBKIT, 'examples'), dirname(file)),
+  return walk(join(AZION_UI, 'examples'), (name) => name === 'examples.json').map((file) => ({
+    dir: relative(join(AZION_UI, 'examples'), dirname(file)),
     data: JSON.parse(readFileSync(file, 'utf8')) as ExamplesFile
   }))
 }
@@ -608,7 +608,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
       purpose: splitLead(
         stripReviewerNotes(entry.purpose ?? (parent?.purpose as string | undefined) ?? '')
       ).lead,
-      import: entry.import ?? `@aziontech/webkit/${name}`,
+      import: entry.import ?? `@aziontech/ui/${name}`,
       exampleDir: examples?.dir ?? null,
       exampleCount: examples?.data.examples.length ?? 0,
       firstExample: examples?.data.examples[0]?.file ?? null,
@@ -633,7 +633,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     uses: (
       ((catalog.blocks as Record<string, { imports?: string[] }>)?.[block.id]?.imports ??
         []) as string[]
-    ).map((path) => path.replace('@aziontech/webkit/', '')),
+    ).map((path) => path.replace('@aziontech/ui/', '')),
     layout: block.preview?.layout ?? 'padded',
     shell: block.preview?.frame === 'primary' ? block.primary.file : null,
     llms: llmsFile(llms, 'blocks', block.id)
@@ -644,7 +644,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     llmsTxt: existsSync(join(LLMS, 'llms.txt')),
     foundationLlms: foundationLlms(llms, foundationSlugs),
     patternLlms: Object.fromEntries(PATTERNS.map((page) => [page.slug, `/${page.markdown}`])),
-    version: (catalog.webkitVersion as string) ?? ''
+    version: (catalog.azionUiVersion as string) ?? ''
   }
 }
 
@@ -692,7 +692,7 @@ function specSections(name: string): Record<string, string> {
 export async function buildComponent(name: string, catalog: Catalog = readCatalog()) {
   const md = await markdown(join(SPECS, `${name.replace(/\//g, '-')}.md`))
   const inline = (text: unknown) => (typeof text === 'string' ? md.renderInline(text) : '')
-  const entry = (catalog.imports[name] ?? { import: `@aziontech/webkit/${name}` }) as CatalogEntry
+  const entry = (catalog.imports[name] ?? { import: `@aziontech/ui/${name}` }) as CatalogEntry
   const rows = (list: unknown) =>
     Array.isArray(list)
       ? list.map((row: Record<string, string>) =>
@@ -711,7 +711,7 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
   const practices = (entry.bestPractices as string[]) ?? []
   const found = readExampleDirs().find(({ data }) => data.component === name)
   const examplesDir = found
-    ? { file: join(WEBKIT, 'examples', found.dir, 'examples.json'), data: found.data }
+    ? { file: join(AZION_UI, 'examples', found.dir, 'examples.json'), data: found.data }
     : undefined
   return {
     name,
@@ -738,7 +738,9 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
       file: example.file,
       ...(example.json ? { json: example.json } : {})
     })),
-    exampleDir: examplesDir ? relative(join(WEBKIT, 'examples'), dirname(examplesDir.file)) : null,
+    exampleDir: examplesDir
+      ? relative(join(AZION_UI, 'examples'), dirname(examplesDir.file))
+      : null,
     spec: Object.fromEntries(
       Object.entries(sections).map(([heading, body]) => [heading, md.render(body)])
     )
@@ -785,7 +787,7 @@ type TokenGroup = {
 }
 
 function tokenUsage(): { match: (name: string) => boolean; usage: TokenUsage }[] {
-  const file = join(REPO, 'rules/webkit-tokens.md')
+  const file = join(REPO, 'rules/azion-ui-tokens.md')
   if (!existsSync(file)) return []
   const source = readFileSync(file, 'utf8')
   const start = source.indexOf('## Which color token does which job')
@@ -1022,7 +1024,7 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
 }
 
 function assetItems<T>(name: string): T[] {
-  const file = join(WEBKIT, 'catalog/assets', `${name}.json`)
+  const file = join(AZION_UI, 'catalog/assets', `${name}.json`)
   if (!existsSync(file)) return []
   return (JSON.parse(readFileSync(file, 'utf8')) as { items: T[] }).items
 }

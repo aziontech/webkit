@@ -3,7 +3,7 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: 65e5b13d3defbbeadf3c7e6fecb4c6877a69ae75c5303514f127eda0e88bef67
+checksum: 4dd1a92d1d04d7825a3b8b4727df06513e14ccddd1f6e75d8ff709906f74d643
 spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-23
@@ -58,8 +58,8 @@ the links or carry one section or five.
 
 ```vue
 <script setup>
-  import HelpPanel from '@aziontech/webkit/help-panel'
-  import Link from '@aziontech/webkit/link'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import Link from '@aziontech/ui/link'
 </script>
 
 <template>
@@ -94,10 +94,10 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 ```vue
 <script setup>
-  import HelpPanel from '@aziontech/webkit/help-panel-root'
-  import HelpPanelHeader from '@aziontech/webkit/help-panel-header'
-  import HelpPanelGroup from '@aziontech/webkit/help-panel-group'
-  import HelpPanelFooter from '@aziontech/webkit/help-panel-footer'
+  import HelpPanel from '@aziontech/ui/help-panel-root'
+  import HelpPanelHeader from '@aziontech/ui/help-panel-header'
+  import HelpPanelGroup from '@aziontech/ui/help-panel-group'
+  import HelpPanelFooter from '@aziontech/ui/help-panel-footer'
 </script>
 ```
 
@@ -121,11 +121,11 @@ tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tut
   - Props: `title?: string` (default `undefined` — the heading over the links; absent uses the locale catalog, `Learn more` in English, and an empty string renders no heading).
   - Slot: `default` — `Link` items, one per destination.
   - `data-testid` fallback: `help-panel-footer`.
-    Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
+    Resulting layout (no per-component `package.json`; the root `packages/ui/package.json#exports`
     resolves every path, and `.d.ts` is generated at publish time):
 
 ```
-packages/webkit/src/components/content/help-panel/
+packages/ui/src/components/content/help-panel/
 ├── help-panel.vue                         (root; aside landmark, loading state)
 ├── help-panel.test.ts
 ├── index.ts                               (compound: attaches the three parts to the root)
@@ -137,7 +137,7 @@ packages/webkit/src/components/content/help-panel/
     └── help-panel-footer.vue
 ```
 
-Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the
+Exports to add to `packages/ui/package.json#exports` (flat public names; category lives in the
 folder only):
 
 ```jsonc
@@ -148,7 +148,7 @@ folder only):
 "./help-panel-footer": "./src/components/content/help-panel/help-panel-footer/help-panel-footer.vue"
 ```
 
-Composed DS components (all present in `packages/webkit/package.json#exports`, imported by relative path
+Composed DS components (all present in `packages/ui/package.json#exports`, imported by relative path
 inside the package): `skeleton` (root, `loading`), `divider` (`Links`).
 `link` is composed by the consumer through slots, never imported by the panel.
 
@@ -235,7 +235,7 @@ name.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

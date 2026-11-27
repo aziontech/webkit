@@ -1,0 +1,102 @@
+{
+ "name": "field",
+ "binding": "Field",
+ "import": "@aziontech/ui/field",
+ "treeShakeableImport": "@aziontech/ui/field-root",
+ "category": "input",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/ui/field-label",
+  "@aziontech/ui/field-description",
+  "@aziontech/ui/field-error",
+  "@aziontech/ui/field-group",
+  "@aziontech/ui/field-set",
+  "@aziontech/ui/field-legend",
+  "@aziontech/ui/field-content",
+  "@aziontech/ui/field-title",
+  "@aziontech/ui/field-separator"
+ ],
+ "purpose": "One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`, `RadioGroup`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. One anatomy serves every control, so there is no per-control field wrapper.",
+ "setup": null,
+ "useWhen": [
+  "Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Field.Description and Field.Error also work alone, under a control that is not inside a Field; for an optional explanation beside a label (a click-open note) use Hint; information needed to fill the field goes in Field.Description.",
+  "Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.",
+  "A checkbox, radio or switch with its label beside it (`orientation=\"horizontal\"`).",
+  "A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup variant=\"card\"`, never a radio inside a `Field.Label`.",
+  "A group of related controls under one caption (`Field.Set` + `Field.Legend`), or a form section (`Field.Group`)."
+ ],
+ "avoidWhen": [
+  "A control with no visible label inside a toolbar or a table cell → render the control alone with an `aria-label`.",
+  "A group of mutually exclusive cards with icons → use `radio-group` with `type=\"card\"`.",
+  "A static key/value read-out → use `key-value-list`."
+ ],
+ "related": [
+  "`input-group` — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.",
+  "`phone-input`, `password-requirements` — a phone number control and the live password rules row, each placed inside a `Field`."
+ ],
+ "bestPractices": [
+  "Put the state on the `Field`, not on the control: `<Field invalid>` sets `aria-invalid` on the control and the invalid tone on `Field.Description`.",
+  "Set `required` on the `Field` from the first render, never only after a submit: it shows the Required marker on `Field.Label` and sets `required` on the control, and nothing turns a warning colour. A required field submitted empty is `invalid`, with a `Field.Error` that says what to enter; it turns red only then.",
+  "Let the Field own the ids. Pass an explicit `id` on the control and `for` on `Field.Label` only when another part of the page needs the id (focusing the first invalid field, an error summary link).",
+  "Render `Field.Description` for guidance and `Field.Error` for a validation message; both are announced through `aria-describedby`. `Field.Error` has `role=\"alert\"`, so render it only when there is an error.",
+  "Choice cards: `<Field.Label><Field orientation=\"horizontal\">control + Field.Content</Field></Field.Label>`. Never nest a choice card inside another `Field`; group cards with `Field.Set`.",
+  "Use `orientation=\"responsive\"` for settings rows that stack in a narrow container and sit side by side in a wide one; it follows the nearest container (a `Field.Group`, a Card, a dialog or drawer body)."
+ ],
+ "props": [
+  {
+   "name": "orientation",
+   "type": "'vertical' | 'horizontal' | 'responsive'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Layout axis: label above the control, beside it, or beside it once the enclosing container (a FieldGroup, Card, drawer or dialog body) is wide enough."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field invalid: the control sets aria-invalid and FieldDescription switches to the invalid tone."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the wrapped control and dims the field."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the Required marker on FieldLabel and sets required on the wrapped control."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "`Field.Label`, the control, `Field.Description`, `Field.Error` (or `Field.Content` beside the control in a horizontal field)."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/field/default.vue"
+  },
+  {
+   "name": "DescriptionAndError",
+   "file": "examples/field/description-and-error.vue"
+  },
+  {
+   "name": "Horizontal",
+   "file": "examples/field/horizontal.vue"
+  }
+ ],
+ "docs": "components/field.md"
+}

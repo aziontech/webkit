@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: ac8cb611b0c8ba25fc8e514f0e68791f7d4f90c1d778f041598666f95530b9ee
+checksum: 08c01478fcb5a736a467f925e424e75bd59300d4c2690983e3df5e2be906993f
 created: 2026-11-16
 last_updated: 2026-11-25
 ---
@@ -50,8 +50,8 @@ A catalog tile laid out from props: a logo mark, the item name, its vendor, a sh
 
 ```vue
 <script setup>
-  import Button from '@aziontech/webkit/button'
-  import IntegrationCard from '@aziontech/webkit/integration-card'
+  import Button from '@aziontech/ui/button'
+  import IntegrationCard from '@aziontech/ui/integration-card'
 </script>
 
 <template>
@@ -74,7 +74,7 @@ A catalog tile laid out from props: a logo mark, the item name, its vendor, a sh
 </template>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). From a docs page it is the `<IntegrationCard />` tag `DocMarkdown` mounts (braced attribute values are JSON). From the site's page JSON it is the `IntegrationCard` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); the `logo`, `actions` and default slots and the `select` event stay Vue.
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). From a docs page it is the `<IntegrationCard />` tag `DocMarkdown` mounts (braced attribute values are JSON). From the site's page JSON it is the `IntegrationCard` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); the `logo`, `actions` and default slots and the `select` event stay Vue.
 
 ## Props
 
@@ -188,7 +188,7 @@ A catalog tile laid out from props: a logo mark, the item name, its vendor, a sh
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

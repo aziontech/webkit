@@ -6,7 +6,7 @@ status: implemented
 spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 0a5e546c57461b9f72c19fedfb1ae172a89677ac2bb1ea593d8ab8b36c37b111
+checksum: 1b65ba74e501446dc7e04c4d228fe62648e5b5f60f756cfecd5f54f71c7ae421
 ---
 
 # ClientStoryColumnsSection — Component Spec
@@ -33,16 +33,16 @@ Three featured success stories side by side: each column is a client's mark on a
 
 - Three cells for `reveal="always"` (the grid is three columns from the medium breakpoint); three or four for `reveal="hover"`, which shares the row between them.
 - With `reveal="hover"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).
-- Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
+- Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/ui/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
 - Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. Left out, the ink is chosen by measured contrast: a hex `base` on which white text would fall under 4.5:1 (WCAG AA) takes dark ink. A cell with neither paints a black face.
 
 ## Usage
 
 ```vue
 <script setup>
-  import dafitiLogo from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
-  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import ClientStoryColumnsSection from '@aziontech/webkit/client-story-columns-section'
+  import dafitiLogo from '@aziontech/ui/assets/dafiti-extended-reversed.svg'
+  import magaluLogo from '@aziontech/ui/assets/magalu-extended-color.svg'
+  import ClientStoryColumnsSection from '@aziontech/ui/client-story-columns-section'
 </script>
 
 <template>
@@ -149,7 +149,7 @@ Three featured success stories side by side: each column is a client's mark on a
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

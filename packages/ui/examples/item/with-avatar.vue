@@ -1,0 +1,29 @@
+<script setup>
+  import Avatar from '@aziontech/ui/avatar'
+  import Button from '@aziontech/ui/button'
+  import Item from '@aziontech/ui/item'
+</script>
+
+<template>
+  <Item variant="outline">
+    <Item.Media>
+      <Avatar
+        alt="Sam Lee"
+        label="SL"
+        size="medium"
+      />
+    </Item.Media>
+    <Item.Content>
+      <Item.Title>Sam Lee</Item.Title>
+      <Item.Description>Product designer</Item.Description>
+    </Item.Content>
+    <Item.Actions>
+      <Button
+        label="Invite"
+        variant="outline"
+        size="small"
+        icon="az az-plus"
+      />
+    </Item.Actions>
+  </Item>
+</template>

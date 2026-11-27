@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 10
 template: 2
-checksum: 2222578eb0813395394fa698da5eb25520d8146809eb805ab19ff0517f8a55c6
+checksum: 884deb159948fc9438f296b57270b506e8f5a19a488ac846aa4a9cdcd2f495aa
 created: 2026-11-14
 last_updated: 2026-11-17
 ---
@@ -63,7 +63,7 @@ combines them with operators and and/or): this menu offers only the values a fie
 
 ```vue
 <script setup>
-  import FilterMenu from '@aziontech/webkit/filter-menu'
+  import FilterMenu from '@aziontech/ui/filter-menu'
   import { ref } from 'vue'
 
   const fields = [
@@ -105,8 +105,8 @@ Tree-shaking alternative — the standalone root and the chips from their own en
 
 ```vue
 <script setup>
-  import FilterMenu from '@aziontech/webkit/filter-menu-root'
-  import FilterMenuChipGroup from '@aziontech/webkit/filter-menu-chip-group'
+  import FilterMenu from '@aziontech/ui/filter-menu-root'
+  import FilterMenuChipGroup from '@aziontech/ui/filter-menu-chip-group'
 </script>
 ```
 
@@ -136,7 +136,7 @@ field. That is the one applied-filters row of a table.
 Resulting layout:
 
 ```
-packages/webkit/src/components/data/filter-menu/
+packages/ui/src/components/data/filter-menu/
 ├── filter-menu.vue
 ├── filter-menu.test.ts
 ├── index.ts
@@ -312,7 +312,7 @@ The table pairing (`TableFilter type="menu"` with `FilterMenu.ChipGroup` in the 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

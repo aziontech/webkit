@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 66ef8704911b630872876cf3f476111356dcf377f25f58acfba506fc8a60fef3
+checksum: 7a4382919cdcb9dce3416706063ab38a780411c2c4def00e3f20007ca8edff54
 created: 2026-11-11
 last_updated: 2026-11-25
 ---
@@ -56,7 +56,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 
 ```vue
 <script setup>
-  import AttributeEditor from '@aziontech/webkit/attribute-editor'
+  import AttributeEditor from '@aziontech/ui/attribute-editor'
   import { computed, ref } from 'vue'
 
   const definition = [
@@ -102,9 +102,9 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 | `reorderable`       | `boolean`                        | `false`     | false    | Shows a grip and Move up / Move down on every row (and every group in grouped mode) when there is more than one; rows move by dragging the grip, with the buttons, with Arrow Up / Arrow Down on the grip or Alt+Arrow Up / Alt+Arrow Down anywhere in the row. The new order goes out through v-model. |
 | `ariaLabel`         | `string`                         | `''`        | false    | Accessible name of the list of rows.                                                                                                                                                                                                                                                                    |
 
-The component is generic over the row: `TItem extends object`, inferred from `items`, `groups`, `newItem` or `itemRemovable` (default `AttributeEditorItem`), so every slot receives `item` typed as the consumer's own interface and a `cell-<key>` slot whose key is a field of the row receives `value` typed as that field; `update` accepts whatever the slotted control emits (`unknown`), so `@update:model-value="update"` works with any WebKit control. `definition` keys stay `string`, so a column list written as a plain array type-checks.
+The component is generic over the row: `TItem extends object`, inferred from `items`, `groups`, `newItem` or `itemRemovable` (default `AttributeEditorItem`), so every slot receives `item` typed as the consumer's own interface and a `cell-<key>` slot whose key is a field of the row receives `value` typed as that field; `update` accepts whatever the slotted control emits (`unknown`), so `@update:model-value="update"` works with any Azion UI control. `definition` keys stay `string`, so a column list written as a plain array type-checks.
 
-Types (exported from `@aziontech/webkit/attribute-editor`): `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn = { key: string; label: string; placeholder?: string; required?: boolean }`; `AttributeEditorRowErrors = Record<string, string | undefined>`; `AttributeEditorErrors = (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]`; `AttributeEditorSize = 'small' | 'medium' | 'large'`; `AttributeEditorCellScope<TItem, TValue> = { item: TItem; index: number; groupIndex: number | undefined; value: TValue; update: (value: unknown) => void; invalid: boolean }`; `AttributeEditorCellSlots<TItem>` (one `cell-<key>` slot per field of `TItem`, plus `cell-<string>` with `unknown` for any other key); `AttributeEditorRowScope<TItem>` (its `update(key, value)` takes a field name of `TItem`; its `move(event, offset)` moves the row by `offset` positions inside its group when `reorderable` is on); `AttributeEditorRowActionsScope<TItem>`.
+Types (exported from `@aziontech/ui/attribute-editor`): `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn = { key: string; label: string; placeholder?: string; required?: boolean }`; `AttributeEditorRowErrors = Record<string, string | undefined>`; `AttributeEditorErrors = (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]`; `AttributeEditorSize = 'small' | 'medium' | 'large'`; `AttributeEditorCellScope<TItem, TValue> = { item: TItem; index: number; groupIndex: number | undefined; value: TValue; update: (value: unknown) => void; invalid: boolean }`; `AttributeEditorCellSlots<TItem>` (one `cell-<key>` slot per field of `TItem`, plus `cell-<string>` with `unknown` for any other key); `AttributeEditorRowScope<TItem>` (its `update(key, value)` takes a field name of `TItem`; its `move(event, offset)` moves the row by `offset` positions inside its group when `reorderable` is on); `AttributeEditorRowActionsScope<TItem>`.
 
 ## v-model
 
@@ -235,7 +235,7 @@ Rows appear and leave without animation; the controls keep their own transitions
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

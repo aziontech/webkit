@@ -4,7 +4,7 @@ category: input
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: af46b1739070eba9d2cf40297443800650341fc853bdac870306baf2776654dd
+checksum: 4a393fc2da1e7a29677e1799513b77d59dd03de76a17ab9a82befd23fd7dd51e
 created: 2026-11-10
 last_updated: 2026-11-25
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-25
 
 ## Purpose
 
-Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate. `@aziontech/webkit/password-requirements-root` points straight at the component, for an app that only renders the checklist; the rules and types stay on `@aziontech/webkit/password-requirements`.
+Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate. `@aziontech/ui/password-requirements-root` points straight at the component, for an app that only renders the checklist; the rules and types stay on `@aziontech/ui/password-requirements`.
 
 ## When to use
 
@@ -40,11 +40,11 @@ Live checklist of password rules shown under a `PasswordInput`: a caption follow
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Field from '@aziontech/webkit/field'
-  import PasswordInput from '@aziontech/webkit/password-input'
+  import Field from '@aziontech/ui/field'
+  import PasswordInput from '@aziontech/ui/password-input'
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
-  } from '@aziontech/webkit/password-requirements'
+  } from '@aziontech/ui/password-requirements'
 
   const password = ref('')
   const valid = () => DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(password.value))
@@ -123,7 +123,7 @@ Live checklist of password rules shown under a `PasswordInput`: a caption follow
 
 ## Examples
 
-The examples in `packages/webkit/examples/password-requirements/` render on the docs site (`/components/<name>`):
+The examples in `packages/ui/examples/password-requirements/` render on the docs site (`/components/<name>`):
 
 - Default — inside a `Field` under a `PasswordInput`.
 
@@ -134,7 +134,7 @@ The examples in `packages/webkit/examples/password-requirements/` render on the 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

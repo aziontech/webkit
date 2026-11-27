@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import DocTableOfContents from '@aziontech/webkit/doc-table-of-contents'
+  import Accordion from '@aziontech/ui/accordion'
+  import DocTableOfContents from '@aziontech/ui/doc-table-of-contents'
   import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import { messages } from '../lib/i18n'

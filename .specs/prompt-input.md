@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 11
 template: 2
-checksum: 8600501975b73daa0f0588a0545163ccc183cbc6a5dcff4ccd54143ad4a9001c
+checksum: d3e70325cc8cde74e167debcd8a1ab6086f82cf44dd9dfac5ec25364b0f2d8ea
 created: 2026-11-11
 last_updated: 2026-11-25
 ---
@@ -83,8 +83,8 @@ two rows (text on its own row) until the prompt is cleared.
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Button from '@aziontech/webkit/button'
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import Button from '@aziontech/ui/button'
+  import PromptInput from '@aziontech/ui/prompt-input'
 
   const prompt = ref('')
   const files = ref([])
@@ -166,12 +166,12 @@ Tree-shaking alternative — the root and each part as standalone imports:
 
 ```vue
 <script setup>
-  import PromptInput from '@aziontech/webkit/prompt-input-root'
-  import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
-  import PromptInputDictateButton from '@aziontech/webkit/prompt-input-dictate-button'
-  import PromptInputModelPicker from '@aziontech/webkit/prompt-input-model-picker'
-  import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'
-  import PromptInputTools from '@aziontech/webkit/prompt-input-tools'
+  import PromptInput from '@aziontech/ui/prompt-input-root'
+  import PromptInputAttachButton from '@aziontech/ui/prompt-input-attach-button'
+  import PromptInputDictateButton from '@aziontech/ui/prompt-input-dictate-button'
+  import PromptInputModelPicker from '@aziontech/ui/prompt-input-model-picker'
+  import PromptInputContextPicker from '@aziontech/ui/prompt-input-context-picker'
+  import PromptInputTools from '@aziontech/ui/prompt-input-tools'
 </script>
 ```
 
@@ -185,7 +185,7 @@ the composer context (`injection-key.ts`): `disabled`, `voiceActive`, `accept`, 
 `fileCount`, the text (read and write), `appendFiles`, `reject`, `setRejection`, `setDragging`,
 `registerAttach(handlers)`, `setChips(count)`, `focus()`. `usePromptInputContext()` throws outside a `PromptInput`.
 Every part disables with the composer. The compound attaches the three pickers as async
-components, so `@aziontech/webkit/prompt-input` does not carry `DropdownMenu` until a picker
+components, so `@aziontech/ui/prompt-input` does not carry `DropdownMenu` until a picker
 renders; their standalone paths are static.
 
 - `prompt-input-attach-button/prompt-input-attach-button.vue` — the attach control: a ghost
@@ -285,7 +285,7 @@ attach, dictate), `file-token-group` (files, loaded on first file), `button`, `d
 `chip`.
 
 ```
-packages/webkit/src/components/ai/prompt-input/
+packages/ui/src/components/ai/prompt-input/
 ├── prompt-input.vue
 ├── prompt-input.test.ts
 ├── index.ts
@@ -583,7 +583,7 @@ performance passed.
 
 ## Examples
 
-_Examples in `packages/webkit/examples/prompt-input/`: Default (the full composer), Streaming (Stop), Character limit, With attachments and actions, Disabled, Shortcut menus (`/` commands and `@` references), Queue (`queueable` with a `PromptQueue` above the composer)._
+_Examples in `packages/ui/examples/prompt-input/`: Default (the full composer), Streaming (Stop), Character limit, With attachments and actions, Disabled, Shortcut menus (`/` commands and `@` references), Queue (`queueable` with a `PromptQueue` above the composer)._
 
 Default also stars two models and fills the model picker's `footer` with a speed `ToggleGroup`, an
 Ultracode toggle `Button` and `PromptInput.AccessPicker`.
@@ -600,7 +600,7 @@ Stop show together and a prompt sent while busy lands in the queue.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

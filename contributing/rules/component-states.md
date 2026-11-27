@@ -53,7 +53,7 @@ Not every component has every state — a `Button` has `disabled` + `loading`; a
 ## Enforcement
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** checks the props/events behind each state against the spec; the state-matrix section becomes a required part of the spec (see [`.specs/_template.md`](../../.specs/_template.md)).
-- **[`validate-tokens.mjs`](../hooks/validate-tokens.mjs)** + `webkit/no-style-override` keep state styling on `data-*` + tokens.
+- **[`validate-tokens.mjs`](../hooks/validate-tokens.mjs)** + `azion-ui/no-style-override` keep state styling on `data-*` + tokens.
 - Examples: each mutually-exclusive state is shown in an example (`examples/<name>/`, Loading / Disabled / Empty / Invalid), so the docs page and the visual suite show it.
 
 ## Why this rule exists

@@ -1,0 +1,110 @@
+{
+ "name": "file-token-group",
+ "binding": "FileTokenGroup",
+ "import": "@aziontech/ui/file-token-group",
+ "treeShakeableImport": "@aziontech/ui/file-token-group",
+ "category": "input",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use FileTokenGroup for the files picked in a form field, before and during upload; a transfer that runs in the background while the person keeps working is an UploadProgress. The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress bar while it uploads and its own error or warning line when it cannot be sent. It pairs with `file-dropzone` (which receives the files) and with a Browse files button: the product keeps the list, the group renders it and reports which token was removed. Taken from Cloudscape's file token group; the Console Kit and the design sample list files by hand.",
+ "setup": null,
+ "useWhen": [
+  "Under a `FileDropzone` or a Browse files button in a form, to show what will be uploaded and let the person drop a file before submitting.",
+  "In an upload dialog, to show each file's progress and the files that were refused (too large, wrong type) with the reason.",
+  "Read-only, in a review step, to list the attachments that will be sent."
+ ],
+ "avoidWhen": [
+  "A running transfer that should follow the person around the console → use `upload-progress`.",
+  "Files already stored in a bucket or a repository → use `table` (the file browser block).",
+  "Free-text tags or labels → use `tag-editor` or `chip`."
+ ],
+ "related": [
+  "`file-dropzone` — receives dropped files; the group lists them.",
+  "`upload-progress` — the floating card for transfers that keep running after the dialog closes. Split: FileTokenGroup lists the files picked in a form, before and while they are sent, and dies with the form; UploadProgress tracks transfers that outlive the dialog, with Cancel and Retry. Both draw a file row with a progress bar; when a transfer must survive navigation, hand it to UploadProgress instead of keeping the token.",
+  "`chip` — a removable label without file details."
+ ],
+ "bestPractices": [
+  "Keep the refused files in the list with their error, so the person sees why and can remove them; do not drop them silently.",
+  "Write each error as the reason and the limit (`Larger than 300 MB`), not as a code.",
+  "Use `limit` when more than five files are common, so the form below stays in view.",
+  "Remove the file from your list on `remove`; the group moves focus to the next token for you."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "FileTokenGroupItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The files, in order; each with its optional upload state, error and warning."
+  },
+  {
+   "name": "orientation",
+   "type": "'vertical' | 'horizontal'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. Same name as `field`'s axis."
+  },
+  {
+   "name": "limit",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Shows this many tokens and a Show more toggle for the rest. 0 shows them all."
+  },
+  {
+   "name": "showFileSize",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the size beside the name, formatted for the locale."
+  },
+  {
+   "name": "showFileLastModified",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the last-modified date, formatted for the locale."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Hides the remove buttons; the list is for reading only."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list. Empty uses the locale catalog (`Files`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "remove",
+   "payload": "(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })",
+   "notes": "The remove button of the token at `index` was pressed. The parent removes it from `items`. Same name as Chip and AttributeEditor."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/file-token-group/default.vue"
+  },
+  {
+   "name": "Uploading",
+   "file": "examples/file-token-group/uploading.vue"
+  },
+  {
+   "name": "Horizontal",
+   "file": "examples/file-token-group/horizontal.vue"
+  }
+ ],
+ "docs": "components/file-token-group.md"
+}

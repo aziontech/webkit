@@ -33,7 +33,7 @@ export const en = {
   demoLanguage: 'Demo language',
   demoDirection: 'Demo direction',
   demoLocaleNote:
-    'The sign-in block under ConfigProvider: its copy and every WebKit string follow the language.',
+    'The sign-in block under ConfigProvider: its copy and every Azion UI string follow the language.',
   demoDirectionNote:
     'The sign-in block under ConfigProvider: every side, gap and arrow mirrors with the direction.',
   keyTableTitle: 'Keys by platform',
@@ -55,17 +55,17 @@ export const en = {
   keyDelete: 'Delete the focused row, after asking',
   rightToLeft: 'Right-to-left',
   leftToRight: 'Left-to-right',
-  github: 'WebKit on GitHub',
+  github: 'Azion UI on GitHub',
   newTab: '(opens in a new tab)',
   footer: 'Footer',
-  footerWebkit: 'WebKit',
+  footerAzionUi: 'Brand',
   guides: 'Guides',
   footerAzion: 'Azion',
   footerGithub: 'GitHub',
   footerNpm: 'npm',
   footerAzionDocs: 'Azion docs',
   footerConsole: 'Azion Console',
-  home: 'WebKit home',
+  home: 'Brand home',
   examples: 'Examples',
   preview: 'Preview',
   code: 'Code',
@@ -230,7 +230,7 @@ export const en = {
   iconsEmpty: 'No icons match that search',
   iconsEmptyLead: 'Try another name or keyword.',
   iconsCopy: 'Copy the class',
-  assetsLead: 'The brand lockups, product illustrations and icons WebKit ships.',
+  assetsLead: 'The brand lockups, product illustrations and icons Azion UI ships.',
   brand: 'Brand',
   brandLead:
     'The Azion lockups of Brand. Keep the mark clear and unmodified, and pick the lockup that fits the space.',
@@ -253,55 +253,55 @@ export const en = {
   openIcons: 'Open the icon gallery',
   homeTitle: 'The Azion design system, built for AI.',
   homeNote:
-    'The prompt installs WebKit and runs init, so your coding agent gets the MCP server, the guidance and the lint.',
+    'The prompt installs Azion UI and runs init, so your coding agent gets the MCP server, the guidance and the lint.',
   homeLead:
-    'Components, blocks, patterns and foundations for the Azion Console, docs and site. Your AI agent reads the same catalog you browse here, and AI agents build WebKit itself.',
+    'Components, blocks, patterns and foundations for the Azion Console, docs and site. Your AI agent reads the same catalog you browse here, and AI agents build Azion UI itself.',
   startWithAgents: 'Start with agents',
   agentPrompt:
-    "Build my UI with the Azion design system. Install @aziontech/webkit, @aziontech/theme and @aziontech/icons, run npx @aziontech/webkit init, import the theme once, and compose the app from WebKit's Vue components and design tokens instead of hand-rolled UI, following each component's documented props and compound API.",
+    "Build my UI with the Azion design system. Install @aziontech/ui, @aziontech/theme and @aziontech/icons, run npx @aziontech/ui init, import the theme once, and compose the app from Azion UI's Vue components and design tokens instead of hand-rolled UI, following each component's documented props and compound API.",
   pathsTitle: 'Start by role',
   pathsLead:
-    'Hand the work to your coding agent, or pick your path: build an app with WebKit, or make WebKit better.',
+    'Hand the work to your coding agent, or pick your path: build an app with Azion UI, or make Azion UI better.',
   pathBuildTitle: 'Start building',
   pathBuildBody:
-    'Install the packages, run npx @aziontech/webkit init and compose your screens from blocks and components. Your AI agent gets the MCP server, the guidance and the lint in the same step.',
+    'Install the packages, run npx @aziontech/ui init and compose your screens from blocks and components. Your AI agent gets the MCP server, the guidance and the lint in the same step.',
   pathBuildLink: 'Get started',
   pathContributeTitle: 'Start contributing',
   pathContributeBody:
-    'WebKit is built by AI agents. You open a GitHub issue; agents research it, write the spec, have a second agent review it, build, run every gate and the UI review, and open the pull request. No design file, no hand-built component.',
-  pathContributeLink: 'How WebKit is built',
-  forAi: 'WebKit for AI',
+    'Azion UI is built by AI agents. You open a GitHub issue; agents research it, write the spec, have a second agent review it, build, run every gate and the UI review, and open the pull request. No design file, no hand-built component.',
+  pathContributeLink: 'How Azion UI is built',
+  forAi: 'Azion UI for AI',
   aiNav: 'AI',
   aiPageSummary:
-    'The MCP server, the setup command, the guidance agents load, the checks they pass, and how agents build WebKit itself.',
-  aiTitle: 'Your AI agent reads the same WebKit you do',
+    'The MCP server, the setup command, the guidance agents load, the checks they pass, and how agents build Azion UI itself.',
+  aiTitle: 'Your AI agent reads the same Azion UI you do',
   aiLead:
     'This site is half of it. The other half is for AI agents: a server they query, guidance they load and checks that hold their code to the standard.',
   aiMcpTitle: 'MCP server',
   aiMcpBody:
-    '@aziontech/webkit-mcp answers search_blocks, get_component, list_tokens and validate_usage from the catalog of the version you installed.',
+    '@aziontech/ui-mcp answers search_blocks, get_component, list_tokens and validate_usage from the catalog of the version you installed.',
   aiInitTitle: 'One setup command',
   aiInitBody:
-    'npx @aziontech/webkit init wires the MCP server, the lint, the theme and the agent instructions in AGENTS.md.',
+    'npx @aziontech/ui init wires the MCP server, the lint, the theme and the agent instructions in AGENTS.md.',
   aiGuidanceTitle: 'Skills, rules and patterns',
   aiGuidanceBody:
     'The guidance on this site ships as Markdown in the package, so an agent reads the pattern for the job before it writes a line.',
   aiChecksTitle: 'Checks that hold the line',
   aiChecksBody:
-    'The lint presets, webkit doctor and webkit check fail the build on a wrong import, a raw colour or a missing label.',
+    'The lint presets, azion-ui doctor and azion-ui check fail the build on a wrong import, a raw colour or a missing label.',
   aiAgentTitle: 'Set up your agent in one prompt',
   aiAgentBody:
-    'Paste it into Claude Code, Cursor, Codex or ChatGPT. It installs WebKit and runs init, so the agent knows the components from the first screen.',
+    'Paste it into Claude Code, Cursor, Codex or ChatGPT. It installs Azion UI and runs init, so the agent knows the components from the first screen.',
   aiAgentAside: 'Want the details first?',
-  aiAgentAction: 'Read WebKit for AI',
-  exploreTitle: 'Explore WebKit',
+  aiAgentAction: 'Read Azion UI for AI',
+  exploreTitle: 'Explore Azion UI',
   exploreLead: 'Everything the system holds, for people and for agents.',
   exploreFoundations: 'Tokens, color, type, languages, right-to-left, accessibility and keyboard.',
   exploreComponents: 'Every component by category, rendered live from its first example.',
   explorePatterns: 'How to build forms, tables, errors, states and navigation.',
   exploreBlocks: 'Whole screens built from the components, in a resizable frame.',
   exploreAssets: 'The brand lockups, product illustrations and icons.',
-  exploreAi: 'The MCP server, the setup command and how agents build WebKit.',
+  exploreAi: 'The MCP server, the setup command and how agents build Azion UI.',
   whyTitle: 'One kit powers every Azion interface',
   whyLead:
     '{components} components, {examples} live examples and {blocks} blocks: the same pieces behind the Azion Console, shaped by the teams who use them every day.',
@@ -318,7 +318,7 @@ export const en = {
   categoryLead: '{count} components',
   componentsLead: '{count} components, each with its examples, API and guidelines.',
   blocksLead:
-    '{count} screens and fragments, each with its states, code and guidelines. Copy one with npx @aziontech/webkit add <id>.',
+    '{count} screens and fragments, each with its states, code and guidelines. Copy one with npx @aziontech/ui add <id>.',
   copyPageTip: 'Copy this page as Markdown, ready to paste into an assistant.',
   copyBlockTip: 'Copy this block as Markdown, ready to paste into an assistant.'
 }

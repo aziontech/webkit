@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 46ec8230945d1180b9810311c06df61668c3750e578f1cbde45adf1095aea099
+checksum: 9e5abae77fad026446886ab3d05426d5f19e3d6d1e490314b14112cde8cfd509
 created: 2026-08-22
 last_updated: 2026-11-24
 ---
@@ -44,7 +44,7 @@ The bordered surface every screenshot, diagram and clip in a documentation page 
 
 ```vue
 <script setup>
-  import DocFrame from '@aziontech/webkit/doc-frame'
+  import DocFrame from '@aziontech/ui/doc-frame'
 </script>
 
 <template>
@@ -151,7 +151,7 @@ The FLIP transform itself is an inline style because it is a measurement (the re
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

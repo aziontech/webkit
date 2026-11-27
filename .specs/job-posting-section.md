@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 0c1589192ff6deea597264f863255336a5e2278e620afe9416a5dd0b0ea09f00
+checksum: 26a283ca31ba9bf6ad0db50a31bcaf079f0e6cf71c1b33942ecb3da654da599a
 created: 2026-11-14
 last_updated: 2026-11-18
 ---
@@ -46,7 +46,7 @@ The body of a careers posting page, under the posting's title band: the descript
 <script setup>
   import { ref } from 'vue'
 
-  import JobPostingSection from '@aziontech/webkit/job-posting-section'
+  import JobPostingSection from '@aziontech/ui/job-posting-section'
 
   const loading = ref(false)
   const submitted = ref(false)
@@ -220,7 +220,7 @@ No built-in strings: every visible string and accessible name comes from the pro
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

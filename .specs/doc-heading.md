@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 685d3362aea387bf164367bceddf41e882b28ae590fbd8a7fd3872eb96030f36
+checksum: 3762f090484d71c82b6f8a2ba1c663913f82662930a23f4b14e106a7b1a292c2
 created: 2026-11-11
 last_updated: 2026-11-22
 ---
@@ -42,7 +42,7 @@ A documentation section heading that is also the link to itself. The whole text 
 
 ```vue
 <script setup>
-  import DocHeading from '@aziontech/webkit/doc-heading'
+  import DocHeading from '@aziontech/ui/doc-heading'
 </script>
 
 <template>
@@ -132,7 +132,7 @@ The glyph fades in with `transition-opacity duration-150`; `motion-reduce:transi
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

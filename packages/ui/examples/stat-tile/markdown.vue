@@ -1,0 +1,25 @@
+<script setup>
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
+
+  const source = [
+    '## Blocked threats',
+    '',
+    'Threat requests the firewall blocked in the last 24 hours.',
+    '',
+    '<StatTile',
+    '  label="Blocked threats"',
+    '  value={48210}',
+    '  delta={12.4}',
+    '  delta-label="vs previous 24 hours"',
+    '  inverse',
+    '  trend={[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]}',
+    '/>'
+  ].join('\n')
+</script>
+
+<template>
+  <DocProse>
+    <DocMarkdown :source="source" />
+  </DocProse>
+</template>

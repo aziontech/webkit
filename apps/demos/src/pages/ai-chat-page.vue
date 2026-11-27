@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { AiChatMessage } from '@aziontech/webkit/utils/ai-chat'
+  import type { AiChatMessage } from '@aziontech/ui/utils/ai-chat'
   import { useChat } from '@tanstack/ai-vue'
   import { computed, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'

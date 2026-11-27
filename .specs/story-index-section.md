@@ -7,7 +7,7 @@ spec_version: 7
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 3a07caeaeb524c58de3ba51cd6d7dffa7e6aa08f877aecedc2ef7e2c85bc9328
+checksum: 7182e6aa9393cce5a44fecb5a1cd195ee7ca7f2cbb6cd31a6f6ee27fbc140d71
 ---
 
 # StoryIndexSection — Component Spec
@@ -35,13 +35,13 @@ Every success story of a company as one filterable library. A left-aligned title
 
 - Derive each facet's `options` from the values the items carry, so every option matches at least one story.
 - Give every item a `facets` entry per facet `id`; an item without one never matches a selection on that facet.
-- Pass `client.logo` as any image URL or imported asset (`import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'`); the card fits a mark of any intrinsic size, so do not pre-scale or crop it.
+- Pass `client.logo` as any image URL or imported asset (`import gpaExtendedReversed from '@aziontech/ui/assets/gpa-extended-reversed.svg'`); the card fits a mark of any intrinsic size, so do not pre-scale or crop it.
 
 ## Usage
 
 ```vue
 <script setup>
-  import StoryIndexSection from '@aziontech/webkit/story-index-section'
+  import StoryIndexSection from '@aziontech/ui/story-index-section'
 </script>
 
 <template>
@@ -198,7 +198,7 @@ Every success story of a company as one filterable library. A left-aligned title
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

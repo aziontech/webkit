@@ -3,7 +3,7 @@ name: audit-fix
 description: Fix `pnpm audit --audit-level=high` failures by bumping the offending dependency to its patched version, with a semver-aware guardrail (patch = auto, minor = validate carefully, major = ALERT and ask). Identifies the owning monorepo project and emits a status report.
 status: active
 last_updated: 2026-06-28
-scope: webkit
+scope: ui
 enforced_by: [release-types, git-workflow]
 ---
 
@@ -31,26 +31,28 @@ Scope discipline: `--audit-level=high` ignores `low` / `moderate`. Those stay re
 
 Compare the **current resolved version** against the **minimum patched version** that clears the advisory, per the SemVer spec (https://semver.org/lang/pt-BR/). Classify the bump and act accordingly:
 
-| Bump class | Example | Action |
-|---|---|---|
-| **patch** (`x.y.Z`) | `1.2.3 → 1.2.9` | ✅ **Apply automatically.** Patches are backward-compatible bug fixes. |
-| **minor** (`x.Y.z`) | `10.30.3 → 10.34.4` | ⚠️ **Apply, then validate carefully** — frozen-lockfile install + re-audit; for runtime/build deps also run the affected `governance` checks (lint / type-check / docsbook build). |
-| **major** (`X.y.z`) | `10.x → 11.x` | 🚨 **ALERT and ASK first** (`AskUserQuestion`). Majors carry breaking changes — **never auto-apply.** Present the advisory, the current → target jump, and the blast radius (which project; runtime vs tooling). |
+| Bump class          | Example             | Action                                                                                                                                                                                                           |
+| ------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **patch** (`x.y.Z`) | `1.2.3 → 1.2.9`     | ✅ **Apply automatically.** Patches are backward-compatible bug fixes.                                                                                                                                           |
+| **minor** (`x.Y.z`) | `10.30.3 → 10.34.4` | ⚠️ **Apply, then validate carefully** — frozen-lockfile install + re-audit; for runtime/build deps also run the affected `governance` checks (lint / type-check / docsbook build).                               |
+| **major** (`X.y.z`) | `10.x → 11.x`       | 🚨 **ALERT and ASK first** (`AskUserQuestion`). Majors carry breaking changes — **never auto-apply.** Present the advisory, the current → target jump, and the blast radius (which project; runtime vs tooling). |
 
 **Pre-1.0 caveat (SemVer §4):** for a `0.y.z` package, a **minor** bump (`0.Y.z`) MAY break — treat it with the **major** rule (ALERT + ask). Only `0.y.Z` patch stays patch.
 
-If the *only* version that clears a high advisory is a major (or a `0.x` minor) and the user declines, **STOP and report** — do not apply a weaker bump that leaves the high unresolved.
+If the _only_ version that clears a high advisory is a major (or a `0.x` minor) and the user declines, **STOP and report** — do not apply a weaker bump that leaves the high unresolved.
 
 ## Workflow
 
 1. **Capture structured advisories** from the repo root:
+
    ```bash
    pnpm audit --audit-level=high --json > audit.json   # machine-readable
    pnpm audit --audit-level=high                        # human view + exit code
    ```
+
    Already exit 0 → nothing to do; report "no high/critical advisories" and stop.
 
-2. **Per advisory, resolve four facts:** the **package**, the **current resolved version** (`pnpm why <pkg>` or the lockfile), the **patched range** (advisory *Patched versions*), and the **owning path** (advisory *Paths*). Map the first path segment to a workspace project:
+2. **Per advisory, resolve four facts:** the **package**, the **current resolved version** (`pnpm why <pkg>` or the lockfile), the **patched range** (advisory _Patched versions_), and the **owning path** (advisory _Paths_). Map the first path segment to a workspace project:
    - `.` → root [`package.json`](../../../package.json)
    - `packages/<name>` → `packages/<name>/package.json`
    - `apps/<name>` → `apps/<name>/package.json`
@@ -60,21 +62,25 @@ If the *only* version that clears a high advisory is a major (or a `0.x` minor) 
 4. **Classify with the semver policy** above. For **major** (or `0.x` minor): ALERT + ASK before continuing.
 
 5. **Apply to the OWNING manifest, by dependency kind:**
-   - **Direct dependency** (the package is in some project's `dependencies`/`devDependencies`): raise its range floor in *that* project's `package.json` (e.g. `^10.34.4`). If the package is `pnpm` itself, also bump the root **`packageManager`** field to the same exact version.
-   - **Transitive dependency** (appears only deep in *Paths*, in no manifest): pin it via **`pnpm.overrides`** in the **root** `package.json` (and mirror it in [`pnpm-workspace.yaml`](../../../pnpm-workspace.yaml) `overrides` if that file also declares overrides — keep the two consistent). Use the lowest safe constraint, e.g. `">=1.2.9"`.
+   - **Direct dependency** (the package is in some project's `dependencies`/`devDependencies`): raise its range floor in _that_ project's `package.json` (e.g. `^10.34.4`). If the package is `pnpm` itself, also bump the root **`packageManager`** field to the same exact version.
+   - **Transitive dependency** (appears only deep in _Paths_, in no manifest): pin it via **`pnpm.overrides`** in the **root** `package.json` (and mirror it in [`pnpm-workspace.yaml`](../../../pnpm-workspace.yaml) `overrides` if that file also declares overrides — keep the two consistent). Use the lowest safe constraint, e.g. `">=1.2.9"`.
 
 6. **Refresh the lockfile minimally** — prefer a targeted update so the diff stays reviewable:
+
    ```bash
    COREPACK_ENABLE_DOWNLOAD_PROMPT=0 pnpm update <pkg> --lockfile-only
    ```
+
    A bare `pnpm install` can re-resolve every `^`/`~` range to its newest in-range version, producing a large, noisy lockfile diff. Avoid it for a security fix unless that broad refresh is the explicit intent.
 
 7. **Verify (CI parity).**
+
    ```bash
    pnpm install --frozen-lockfile                       # CI's first step — must pass
-   cd packages/webkit && pnpm audit --audit-level=high  # CI runs the audit HERE; exit must be 0
+   cd packages/ui && pnpm audit --audit-level=high  # CI runs the audit HERE; exit must be 0
    ```
-   For a **minor**+ bump of a runtime/build dependency, also run the affected `governance` checks (`pnpm run lint:webkit`, `pnpm run typecheck:webkit`, `pnpm build:docs`).
+
+   For a **minor**+ bump of a runtime/build dependency, also run the affected `governance` checks (`pnpm run lint:ui`, `pnpm run typecheck:ui`, `pnpm build:docs`).
    If a high advisory remains, return to step 3 with a higher target — and **re-apply the semver policy**, because a higher target may cross into major (→ ASK).
 
 8. **Repeat** until `pnpm audit --audit-level=high` exits **0**.
@@ -83,7 +89,7 @@ If the *only* version that clears a high advisory is a major (or a `0.x` minor) 
 
 - `pnpm` runs through **corepack**. If `pnpm` is not on PATH, run `corepack enable` — the husky `pre-commit` (`pnpm lint-staged`) and `commit-msg` (`pnpm exec commitlint`) hooks call `pnpm`, so it must resolve. **Never** `--no-verify` past them.
 - When bumping the `packageManager` field, prefix install commands with `COREPACK_ENABLE_DOWNLOAD_PROMPT=0` so corepack fetches the new pnpm non-interactively.
-- The audit gate runs in `working-directory: packages/webkit`, but `pnpm audit` covers the **whole workspace** lockfile — a root-only dependency surfaces as the path `.>pnpm` and is still fixed at the root.
+- The audit gate runs in `working-directory: packages/ui`, but `pnpm audit` covers the **whole workspace** lockfile — a root-only dependency surfaces as the path `.>pnpm` and is still fixed at the root.
 
 ## Outputs — status report
 
@@ -97,7 +103,7 @@ Emit this Markdown report (the semver class is always visible):
 | Advisory | Package | Owns (workspace) | Current → Target | Bump | Mechanism | Result |
 |---|---|---|---|---|---|---|
 | GHSA-… | pnpm | root (`.`) | 10.30.3 → 10.34.4 | minor ⚠️ | `dependencies` + `packageManager` | ✅ cleared |
-| GHSA-… | foo  | packages/webkit | 1.2.0 → 1.2.9   | patch ✅ | `pnpm.overrides`              | ✅ cleared |
+| GHSA-… | foo  | packages/ui | 1.2.0 → 1.2.9   | patch ✅ | `pnpm.overrides`              | ✅ cleared |
 
 **Validation:** `pnpm install --frozen-lockfile` ✅ · re-audit ✅ exit 0 · (minor/major) governance ✅
 **Remaining (below the gate, informational):** e.g. 2 low, 2 moderate — not addressed; they do not fail `--audit-level=high`.
@@ -122,7 +128,7 @@ Emit this Markdown report (the semver class is always visible):
 
 ## Definition of Done
 
-- [ ] `pnpm audit --audit-level=high` exits **0** (run from `packages/webkit`, matching CI).
+- [ ] `pnpm audit --audit-level=high` exits **0** (run from `packages/ui`, matching CI).
 - [ ] `pnpm install --frozen-lockfile` succeeds against the updated lockfile.
 - [ ] Every applied bump is patch, or minor-with-validation; any major was explicitly approved.
 - [ ] The lockfile diff is limited to the offending package(s).

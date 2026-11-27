@@ -1,5 +1,5 @@
 name: New block
-description: Request a new WebKit block (a screen agents copy). An agent builds it through /block-new from this issue.
+description: Request a new Azion UI block (a screen agents copy). An agent builds it through /block-new from this issue.
 title: 'block: <group>/<group>-<what>'
 labels: ['new-block', 'ai-flow']
 body:
@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         This issue is the input of `/block-new <issue number>`
-        (`contributing/commands/block-new.md`). A block is a screen built only from WebKit
+        (`contributing/commands/block-new.md`). A block is a screen built only from Azion UI
         components: `block.json`, the primary `.vue` and its states in `variants/`. Describe the
         job the screen does; the agent picks the components.
   - type: dropdown

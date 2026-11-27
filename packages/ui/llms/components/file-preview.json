@@ -1,0 +1,137 @@
+{
+ "name": "file-preview",
+ "binding": "FilePreview",
+ "import": "@aziontech/ui/file-preview",
+ "treeShakeableImport": "@aziontech/ui/file-preview",
+ "category": "content",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The preview of one stored file in a storage or object browser, or of a document in an AI conversation (a PDF the reader attaches or a model returns): a header with the file's glyph, name, type and size, a Download action, and a body that shows the file the way it can be read. An image renders as the image, a PDF in the browser's own PDF viewer, text as wrapped monospace text, JSON pretty-printed, and any other type a no-preview state that points at Download. Audio and video files are recognized (their glyph and type) and show the file card with Download; this component plays nothing. Long text is cut at `maxLength` characters with a note that says so. The file comes as a URL (`src`), as text (`content`) or as base64 bytes (`base64`, the shape a chat message carries); it renders what the app hands it and fetches nothing.",
+ "setup": null,
+ "useWhen": [
+  "The detail pane or drawer of a file browser when a row is opened (`view/view-file-browser`, an Object Storage bucket, a KV value).",
+  "Showing an uploaded object before it is published or replaced.",
+  "A document part or an attachment in an AI conversation: a PDF, a text file or an image, from a URL or from base64 bytes.",
+  "Any screen that shows one file and needs a type-aware fallback for files it cannot draw."
+ ],
+ "avoidWhen": [
+  "Editing a file — use `CodeEditor`.",
+  "Highlighted source code with tabs and copy — use `CodeBlock`.",
+  "A list of files with upload progress — use `FileTokenGroup` or `UploadProgress`.",
+  "A log stream — use `LogViewer`.",
+  "Playing audio or video — this component shows those files as a card with Download, not a player."
+ ],
+ "related": [
+  "`CodeBlock` — syntax-highlighted code; heavier, for a code sample rather than a stored object.",
+  "`EmptyState` — the no-preview and error states inside this component.",
+  "`Skeleton` — the loading placeholder inside this component.",
+  "`DataTable` — the file list a preview opens from."
+ ],
+ "bestPractices": [
+  "Pass `mimeType` from the object's `Content-Type`; leave it empty and the file name's extension decides.",
+  "Fetch only the first part of a large text file (a ranged request) and pass `bytes` with the full size, so the header shows the real size while the body shows the first part.",
+  "Handle `download` with the app's own signed or authorized URL; the component never builds one.",
+  "Pass an object URL (`URL.createObjectURL`) or a short-lived signed URL as `src`; revoke an object URL when the preview closes.",
+  "`src` goes through `safeHref` (file schemes allowed): `javascript:`, `file:`, a protocol-relative `//host` URL and any other scheme draw nothing, as every other URL-taking component does. An image or PDF URL loads with no click, so an app that shows URLs a model or a tool returned should allow only its own origins before it passes them, or show a click-to-load placeholder. A `Content-Security-Policy` with `object-src 'none'` blocks the PDF viewer; allow `object-src 'self' blob:` where PDFs are previewed.",
+  "When the app holds the bytes rather than a URL (a chat message part with base64 data), pass them as `base64` with `mimeType`; the component makes its own object URL for an image or PDF and revokes it when the source changes or the preview unmounts. Text and JSON are decoded into the body.",
+  "A PDF is drawn by the browser's own viewer; where there is none (most phones, a viewer turned off), the body shows the no-preview state and Download stays."
+ ],
+ "props": [
+  {
+   "name": "fileName",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Name of the file, shown in the header and used as the image's alternative text."
+  },
+  {
+   "name": "mimeType",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Media type of the file (`image/png`, `application/json`). Empty reads the type from the file extension."
+  },
+  {
+   "name": "bytes",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Size of the whole file in bytes, shown beside the type. Unset hides the size."
+  },
+  {
+   "name": "src",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "URL of an image or PDF file to draw: https, http, blob, data or a relative path; any other scheme draws nothing. Set, it wins over `base64`."
+  },
+  {
+   "name": "base64",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Base64 bytes of the file, for an app that holds the file rather than a URL. Text and JSON are decoded into the body when `content` is empty; an image or PDF with no `src` is drawn from them."
+  },
+  {
+   "name": "content",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text of a text or JSON file. JSON that parses is pretty-printed; JSON that does not shows as text. Set, it wins over `base64`."
+  },
+  {
+   "name": "maxLength",
+   "type": "number",
+   "default": "20000",
+   "required": "false",
+   "doc": "Characters of text shown before the rest is cut, with a note that says how much is shown."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a placeholder in the body while the app fetches the file; the header stays."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Why the preview could not load. Set, the body shows the error state with this text."
+  }
+ ],
+ "events": [
+  {
+   "name": "download",
+   "payload": "MouseEvent",
+   "notes": "The Download button was pressed; the app starts the download."
+  }
+ ],
+ "slots": [
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "More actions in the header, before Download (copy link, delete)."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/file-preview/default.vue"
+  },
+  {
+   "name": "Image",
+   "file": "examples/file-preview/image.vue"
+  },
+  {
+   "name": "PDF",
+   "file": "examples/file-preview/pdf.vue"
+  }
+ ],
+ "docs": "components/file-preview.md"
+}

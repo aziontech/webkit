@@ -7,14 +7,14 @@ spec_version: 1
 template: 2
 created: 2026-11-20
 last_updated: 2026-11-20
-checksum: 18fb6037e1347bf3764986239fd2faced7c4672c59faa55aed57a187b61d1ace
+checksum: d8c6f0728de129dcf01efe57ac13fc63bfc7335fe2678c523e668020ced389a4
 ---
 
 # ShortcutsDialog — Component Spec
 
 ## Purpose
 
-The list of every keyboard shortcut the current screen offers, opened with `?` (Shift+/) as the console keyboard standard asks. It reads the shortcuts screens register with `useShortcuts` (`@aziontech/webkit/use-shortcuts`), so the list is generated, never written by hand: a shortcut that a screen stops offering leaves the list with it. Built from `Dialog`, the `Panel` parts and `Kbd`.
+The list of every keyboard shortcut the current screen offers, opened with `?` (Shift+/) as the console keyboard standard asks. It reads the shortcuts screens register with `useShortcuts` (`@aziontech/ui/use-shortcuts`), so the list is generated, never written by hand: a shortcut that a screen stops offering leaves the list with it. Built from `Dialog`, the `Panel` parts and `Kbd`.
 
 ## When to use
 
@@ -47,8 +47,8 @@ The list of every keyboard shortcut the current screen offers, opened with `?` (
 
 ```vue
 <script setup>
-  import ShortcutsDialog from '@aziontech/webkit/shortcuts-dialog'
-  import { useShortcuts } from '@aziontech/webkit/use-shortcuts'
+  import ShortcutsDialog from '@aziontech/ui/shortcuts-dialog'
+  import { useShortcuts } from '@aziontech/ui/use-shortcuts'
   import { ref } from 'vue'
 
   const searchEl = ref(null)
@@ -165,7 +165,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 0917c40a7e1daa89ebbb5485030aa1745880fc4d5bb501a77fea3cc53ad1d880
+checksum: 21522e01118cdcefae5c030ab4d05d56f61caba8510c5c2dddc24230cb09fbcd
 created: 2026-11-11
 last_updated: 2026-11-18
 ---
@@ -26,7 +26,7 @@ It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its 
 each tutorial with its own internal task list (6.0 moved the former `HelpPanel.TutorialPanelTutorial` and
 `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP
 app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is
-Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.
+Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on Azion UI parts.
 
 Design call (2026-11-18): the hotspot is a part of this component, not a component of its own. It
 renders nothing without the provider's running tutorial and reads only this component's context, so
@@ -75,9 +75,9 @@ to the compound.
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Button from '@aziontech/webkit/button'
-  import TutorialPanel from '@aziontech/webkit/tutorial-panel'
-  import TutorialPanelHotspot from '@aziontech/webkit/tutorial-panel-hotspot'
+  import Button from '@aziontech/ui/button'
+  import TutorialPanel from '@aziontech/ui/tutorial-panel'
+  import TutorialPanelHotspot from '@aziontech/ui/tutorial-panel-hotspot'
 
   const tutorials = [
     {
@@ -134,8 +134,8 @@ Tree-shaking alternative — the standalone panel and provider from their own en
 
 ```vue
 <script setup>
-  import TutorialPanel from '@aziontech/webkit/tutorial-panel-root'
-  import TutorialPanelProvider from '@aziontech/webkit/tutorial-panel-provider'
+  import TutorialPanel from '@aziontech/ui/tutorial-panel-root'
+  import TutorialPanelProvider from '@aziontech/ui/tutorial-panel-provider'
 </script>
 ```
 
@@ -173,7 +173,7 @@ not hold it reports its step as dismissed, so its popover is closed and its mark
 Exported types: `TutorialPanelTutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialPanelTaskData` (`title`, `steps`), `TutorialPanelStep` (`title`, `content`, `hotspotId`), `TutorialPanelHotspotSide`.
 
 ```
-packages/webkit/src/components/content/tutorial-panel/
+packages/ui/src/components/content/tutorial-panel/
 ├── tutorial-panel.vue                    (root; the panel views)
 ├── tutorial-panel.test.ts
 ├── index.ts                              (compound: attaches Provider)
@@ -341,7 +341,7 @@ _None._
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

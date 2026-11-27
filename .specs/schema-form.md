@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: efe31487ded265aa0bda341ba234f2fea3125992fbde660c7157e5e2615f4b74
+checksum: f786a923cd4f5441eb2fef77c42746ba3cdc507f06f5c140596e19f2de963f43
 created: 2026-11-11
 last_updated: 2026-11-24
 ---
@@ -58,7 +58,7 @@ A form rendered from a JSON schema: each property of an object schema becomes a 
 
 ```vue
 <script setup>
-  import SchemaForm from '@aziontech/webkit/schema-form'
+  import SchemaForm from '@aziontech/ui/schema-form'
   import { ref } from 'vue'
 
   const schema = {
@@ -212,7 +212,7 @@ The form has no motion of its own; the composed controls bring theirs (the `Sele
 - A repeat and a map are `<fieldset>`s named by the property title; each repeat item is a `role="group"` named "Item 2" (or the item schema's `title` and number), its Remove button is named "Remove item 2", and Add and Remove are announced by `AttributeEditor`'s live region, which also moves focus to the new row.
 - A collapsed section is an `Accordion` trigger with `aria-expanded`; a closed section's fields are still validated, and `validate()` opens it before moving focus.
 - A field that appears or disappears through `when` is not announced; keep the controlling field just before it so the change happens where the user is.
-- A `field:<path>` slot control must name itself (the scope gives `invalid`, `required`, `disabled`); WebKit inputs read the Field context and need nothing.
+- A `field:<path>` slot control must name itself (the scope gives `invalid`, `required`, `disabled`); Azion UI inputs read the Field context and need nothing.
 - Visible focus, contrast and touch targets come from the composed controls.
 
 ## Internationalization
@@ -305,7 +305,7 @@ Justification: SchemaForm has no `variant` or `size` axis. WithValidation shows 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

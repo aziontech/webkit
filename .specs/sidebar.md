@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: a087179121caa2161313e230e62158385b779e5fd724eb51b0f808b2b681976e
+checksum: 0c80ceea605a4f5350436468ea7d4f6ad4620e0309aa072b6ba9432d46728fd2
 created: 2026-05-22
 last_updated: 2026-11-21
 ---
@@ -81,13 +81,13 @@ Two details are what make the pair correct, and neither costs more than one attr
 
 ```vue
 <script setup>
-  import Avatar from '@aziontech/webkit/avatar'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Menu from '@aziontech/webkit/sidebar-menu'
-  import Sidebar from '@aziontech/webkit/sidebar'
-  import SidebarFooter from '@aziontech/webkit/sidebar-footer'
-  import SidebarHeader from '@aziontech/webkit/sidebar-header'
+  import Avatar from '@aziontech/ui/avatar'
+  import DropdownMenu from '@aziontech/ui/dropdown-menu'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Menu from '@aziontech/ui/sidebar-menu'
+  import Sidebar from '@aziontech/ui/sidebar'
+  import SidebarFooter from '@aziontech/ui/sidebar-footer'
+  import SidebarHeader from '@aziontech/ui/sidebar-header'
   import { ref } from 'vue'
 
   const accountMenuOpen = ref(false)
@@ -290,9 +290,9 @@ this the only trace of a fully collapsed rail would be a 1 px line down the page
 
 ```vue
 <script setup>
-  import Menu from '@aziontech/webkit/sidebar-menu'
-  import Sidebar from '@aziontech/webkit/sidebar'
-  import SidebarFooter from '@aziontech/webkit/sidebar-footer'
+  import Menu from '@aziontech/ui/sidebar-menu'
+  import Sidebar from '@aziontech/ui/sidebar'
+  import SidebarFooter from '@aziontech/ui/sidebar-footer'
   import { ref } from 'vue'
 
   // Persisted by the app — the rail remounts per route, the user's choice must not.
@@ -339,8 +339,8 @@ the freed space on the same frames.
 
 ## Sub-components
 
-The compound `@aziontech/webkit/sidebar` (its `index.ts`) attaches every part for dot-notation —
-`Sidebar.Header`, `Sidebar.Footer` — and `@aziontech/webkit/sidebar-root` is the
+The compound `@aziontech/ui/sidebar` (its `index.ts`) attaches every part for dot-notation —
+`Sidebar.Header`, `Sidebar.Footer` — and `@aziontech/ui/sidebar-root` is the
 standalone, tree-shakeable root with nothing attached. The flat sub-component paths below keep
 working.
 
@@ -662,7 +662,7 @@ Every story composes `SidebarMenu` for its rows and groups.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

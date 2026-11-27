@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: a53b26842330b149fc2f40624ed798dfa015705355891e3f7cf2173152a6a118
+checksum: 49bde25052cc6d9a59ff6273328730c7ee6c9679de0320b956d13acf8ac5f79a
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -50,7 +50,7 @@ Composition mode — one import of the root; every part is reached via dot-notat
 
 ```vue
 <script setup>
-  import Pagination from '@aziontech/webkit/pagination'
+  import Pagination from '@aziontech/ui/pagination'
 </script>
 
 <template>
@@ -83,14 +83,14 @@ Composition mode — one import of the root; every part is reached via dot-notat
 </template>
 ```
 
-Each sub-component is also a standalone import (`import PaginationButton from '@aziontech/webkit/pagination-button'`, …) — the tree-shaking path.
+Each sub-component is also a standalone import (`import PaginationButton from '@aziontech/ui/pagination-button'`, …) — the tree-shaking path.
 
 Data-driven mode — pass `total` and bind state; the Pagination renders the controls and emits the page/page-size changes:
 
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Pagination from '@aziontech/webkit/pagination'
+  import Pagination from '@aziontech/ui/pagination'
 
   const page = ref(1)
   const pageSize = ref(10)
@@ -114,7 +114,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
      below describe ONLY the root Pagination element).
      Compound API: index.ts (Object.assign; vue-tsc emits the adjacent index.d.ts at publish time) attaches the sub-components
      to the root as `Pagination.Button` (PaginationButton) / `Pagination.Description` / `Pagination.PageSize`
-     (PascalCase root required). No per-component package.json — the root packages/webkit/package.json#exports
+     (PascalCase root required). No per-component package.json — the root packages/ui/package.json#exports
      map points each public path directly at its source file. See `contributing/rules/compound-api.md`. -->
 
 - `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-control)`). Props `type?: 'previous' | 'next' | 'number' | 'more'`, `active?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `az az-chevron-left`; `next` renders `az az-chevron-right`; `more` renders `az az-ellipsis`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the TOKENS.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `active` uses `var(--bg-selected)` + border; `disabled` keeps the type's own surface and mutes the foreground to `var(--text-disabled)`.
@@ -123,7 +123,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/data/pagination/
+  packages/ui/src/components/data/pagination/
   ├── pagination.vue
   ├── index.ts              (compound: Object.assign attaches sub-components; vue-tsc emits index.d.ts at publish)
   ├── injection-key.ts
@@ -240,7 +240,7 @@ _None of its own._ The two-way values above are the root's only emits.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

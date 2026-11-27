@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 93561348f7a6e0db74faa63f73c76e8fcbb7405cd4eda283eb6454561af6daf4
+checksum: ad84ffe3256dc869319549be61e56512483e9759c4a366ca9ce49585a2883c60
 created: 2026-08-22
 last_updated: 2026-11-25
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-25
 
 ## Purpose
 
-The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the border, the icon and the radius come from the design system rather than from this layer. Every variant sits on the calm `--bg-surface` of the reading column: the severity reads from the border and the glyph colour, never from a full status fill. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
+The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the Azion UI `Alert` surface, so the border, the icon and the radius come from the design system rather than from this layer. Every variant sits on the calm `--bg-surface` of the reading column: the severity reads from the border and the glyph colour, never from a full status fill. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
 ## When to use
 
@@ -29,7 +29,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ## Related
 
-- `Alert` — the webkit surface this renders on; reach for it directly outside documentation prose.
+- `Alert` — the Azion UI surface this renders on; reach for it directly outside documentation prose.
 - `DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder.
 
 ## Best practices
@@ -42,7 +42,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ```vue
 <script setup>
-  import DocCallout from '@aziontech/webkit/doc-callout'
+  import DocCallout from '@aziontech/ui/doc-callout'
 </script>
 
 <template>
@@ -135,7 +135,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -1,6 +1,6 @@
 // Canonical prop vocabulary (machine-readable side of contributing/rules/prop-vocabulary.md).
 // Consumed by validate-spec-compliance.mjs (write-time block), check-authoring.mjs (CI
-// ratchet), the naming engine (packages/webkit/scripts/lib/naming-rules.mjs, which reports
+// ratchet), the naming engine (packages/ui/scripts/lib/naming-rules.mjs, which reports
 // every entry) and build-catalog.mjs (stamps `vocabulary` into catalog.json for the MCP).
 //
 // Two stages. `aliases`, `VALUES`, the `enforced` VALUE_PATTERNS, PATTERNS, SLOTS and
@@ -8,7 +8,7 @@
 // STAGED_VALUES, the other VALUE_PATTERNS, GROUP_LABEL and DATA_ATTRIBUTES belong to the
 // 6.0 naming standard (decisions N1-N18) still being applied: the naming check reports
 // them now and blocks them once the lead flips NAMING_STAGED_BLOCKS in
-// packages/webkit/scripts/lib/naming-rules.mjs. Pass { stage: 'all' } to see both.
+// packages/ui/scripts/lib/naming-rules.mjs. Pass { stage: 'all' } to see both.
 
 const CONCEPTS = [
   {

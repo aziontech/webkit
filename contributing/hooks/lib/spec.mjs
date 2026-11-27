@@ -333,7 +333,7 @@ export function constraintsBlockHasCanonicalBullets(body) {
  */
 export function resolveSpecForComponentPath(filePath, repoRoot) {
   const rel = filePath.startsWith(repoRoot) ? filePath.slice(repoRoot.length + 1) : filePath
-  const m = rel.match(/^packages\/webkit\/src\/components\/(.+)\.vue$/)
+  const m = rel.match(/^packages\/ui\/src\/components\/(.+)\.vue$/)
   if (!m) return null
   const segs = m[1].split('/')
   if (segs[0] === 'wip') return null

@@ -13,7 +13,7 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 const DOCS_DIST = resolve(HERE, '../dist')
 const DEMOS_DIST = resolve(HERE, '../../demos/dist')
 const ACCEPTED = JSON.parse(
-  readFileSync(resolve(HERE, '../../../packages/webkit/src/test/a11y-accepted.json'), 'utf8')
+  readFileSync(resolve(HERE, '../../../packages/ui/src/test/a11y-accepted.json'), 'utf8')
 ).exceptions
 
 const LIGHTHOUSE = 'lighthouse@12.8.2'
@@ -42,7 +42,7 @@ const PAGES = [
 ]
 
 function certificate() {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-lighthouse-'))
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-lighthouse-'))
   const key = join(dir, 'key.pem')
   const cert = join(dir, 'cert.pem')
   const made = spawnSync(

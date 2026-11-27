@@ -1,0 +1,23 @@
+<script setup>
+  import HoverCard from '@aziontech/ui/hover-card'
+  import Link from '@aziontech/ui/link'
+</script>
+
+<template>
+  <p class="text-body-sm text-(--text-default)">
+    Deployed by
+    <HoverCard disabled>
+      <HoverCard.Trigger>
+        <Link
+          href="https://example.com/people/jane-doe"
+          label="Jane Doe"
+          size="small"
+        />
+      </HoverCard.Trigger>
+      <HoverCard.Content>
+        <p class="text-body-sm text-(--text-default)">Owner of production.</p>
+      </HoverCard.Content>
+    </HoverCard>
+    two hours ago.
+  </p>
+</template>

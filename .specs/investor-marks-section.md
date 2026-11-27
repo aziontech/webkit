@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: acdf58b68bce580730b55c24092df46f246213a64d111a1d8ca0424785c0a26c
+checksum: df3eeae4111ac8c084ca0f83f9ea3b0e14bb0ae15d8b6e0a46b32f8ab7344486
 template: 2
 ---
 
@@ -37,7 +37,7 @@ The investors band: a centered section title over a two-column bento grid where 
 
 ```vue
 <script setup>
-  import InvestorMarksSection from '@aziontech/webkit/investor-marks-section'
+  import InvestorMarksSection from '@aziontech/ui/investor-marks-section'
 </script>
 
 <template>
@@ -163,7 +163,7 @@ The investors band: a centered section title over a two-column bento grid where 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -1,0 +1,117 @@
+{
+ "name": "third-party-logo",
+ "binding": "ThirdPartyLogo",
+ "import": "@aziontech/ui/third-party-logo",
+ "treeShakeableImport": "@aziontech/ui/third-party-logo",
+ "category": "content",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/ui/assets/client-registry`, `@aziontech/ui/assets/competitor-registry` and the `@aziontech/ui/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `ThirdPartyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.",
+ "setup": null,
+ "useWhen": [
+  "Use ThirdPartyLogo for any other company's mark (client, competitor, agent, certification).",
+  "A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.",
+  "The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.",
+  "A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester)."
+ ],
+ "avoidWhen": [
+  "The Azion logo → use `Brand`.",
+  "A card network beside a payment method → use `PaymentBrand`.",
+  "A person or an account → use `Avatar`.",
+  "A product icon or a UI glyph → use an icon from `@aziontech/icons`.",
+  "A grid of client marks → use `LogoWall`; it renders each mark and can render `ThirdPartyLogo` in its `mark` slot."
+ ],
+ "related": [
+  "`brand` — the Azion lockup; `ThirdPartyLogo` is everyone else's.",
+  "`payment-brand` — card-network plates, drawn in tokens.",
+  "`logo-wall` — the grid that lays marks out; `ThirdPartyLogo` draws one mark.",
+  "`avatar` — a person's or an organization's picture with initials."
+ ],
+ "bestPractices": [
+  "Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.",
+  "Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.",
+  "In a list of many clients, use `variant=\"monochrome\"`: per-brand colour reads as noise next to twenty others.",
+  "On a coloured fill (white, `--primary`), use `variant=\"knockout\"`: a fill does not follow the theme, so the ink must not either.",
+  "On a surface that is dark in both themes, or among drawn diagram parts, use `variant=\"current\"` so the mark takes the surface's own ink.",
+  "When the text beside the mark already names the company, set `decorative`."
+ ],
+ "props": [
+  {
+   "name": "name",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set."
+  },
+  {
+   "name": "src",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "URL of the mark; on its own it serves both themes, and with `srcLight` it is the dark-theme file. Empty draws the wordmark."
+  },
+  {
+   "name": "srcLight",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "URL of the light-theme file; with `src` both files render and the theme reveals one."
+  },
+  {
+   "name": "artwork",
+   "type": "'color' | 'light' | 'dark'",
+   "default": "'color'",
+   "required": "false",
+   "doc": "The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`."
+  },
+  {
+   "name": "variant",
+   "type": "'color' | 'monochrome' | 'current' | 'knockout'",
+   "default": "'color'",
+   "required": "false",
+   "doc": "Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name when it should differ from `name`."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio."
+  },
+  {
+   "name": "decorative",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Hides the mark from assistive technology when the text beside it already names the company."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/third-party-logo/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/third-party-logo/sizes.vue"
+  },
+  {
+   "name": "Variants",
+   "file": "examples/third-party-logo/variants.vue"
+  }
+ ],
+ "docs": "components/third-party-logo.md"
+}

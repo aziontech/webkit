@@ -70,7 +70,7 @@ const renamed = manifest.icons.flatMap((e) =>
 lines.push(
   '## Old names',
   '',
-  'Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi pi-<name>`. They are gone in 6.0: `npx @aziontech/webkit migrate` rewrites every one. Where only the prefix changed, `ai` became `az` and `ai-cor` became `az-color`. These icons also changed their name:',
+  'Until 6.0 the classes were `ai ai-<name>`, `ai-cor ai-<name>` and PrimeIcons `pi pi-<name>`. They are gone in 6.0: `npx @aziontech/ui migrate` rewrites every one. Where only the prefix changed, `ai` became `az` and `ai-cor` became `az-color`. These icons also changed their name:',
   '',
   '| Old class | New class | Why |',
   '| --- | --- | --- |'

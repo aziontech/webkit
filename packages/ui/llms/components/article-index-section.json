@@ -1,0 +1,194 @@
+{
+ "name": "article-index-section",
+ "binding": "ArticleIndexSection",
+ "import": "@aziontech/ui/article-index-section",
+ "treeShakeableImport": "@aziontech/ui/article-index-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Every article or resource of a blog or a resource hub as one ruled list, with the controls to narrow it on one row. `filters` picks the filter bar: `category-search` draws a category picker and a search field (the blog), `facets` draws one dropdown per facet — content type, category, industry — that wraps when it runs out of room (a resource hub). Each entry is a row — its cover on the left, and on the right its overline, headline, a deck and, when it has them, its writers with the byline; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The filters combine; a facet dropdown with more than seven options gains an option search; a load-more button reveals the next page, and when nothing matches an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'article-index-section', props }` entry and binds `props` straight onto it — and it composes `module`, `registration-frame`, `toggle-group`, `select`, `input`, `avatar`, `empty-state` and `button`; the selected category, the search term, the facet selections, each dropdown's option search and the page count are local state. A row without a cover draws its client's mark in one flat ink that follows the theme.",
+ "setup": null,
+ "useWhen": [
+  "Use ArticleIndexSection for the full filterable list of articles or resources; choose the filter bar with `filters`: `category-search` for the blog (category picker and search field), `facets` for a resource hub (one dropdown per facet)."
+ ],
+ "avoidWhen": [
+  "For a card grid of customer stories with search and facets → use `story-index-section`.",
+  "For a filterable list of non-article rows (jobs) → use `listing-index-section`.",
+  "For a closing row of related articles → use `article-cards-section`."
+ ],
+ "related": [
+  "`article-highlight-section` — the band that opens the blog above this list.",
+  "`story-index-section` — the card-grid library with search and facets.",
+  "`listing-index-section` — the filterable list of job rows."
+ ],
+ "bestPractices": [
+  "With `filters=\"category-search\"`, list the articles newest first and file every article under at least one of `categories`; keep the category list short enough to scroll on one row.",
+  "With `filters=\"facets\"`, give every item a `facets` entry per facet `id` it can be filtered by (an item without one never matches a selection on that facet), and keep each facet's `options` to values some item carries.",
+  "Set `emptyTitle` (and `emptyActionLabel`) so a reader who filters everything away gets a way back; without it the list just disappears.",
+  "Set `leading` to the number of entries a highlight band above already shows, so they are not listed twice until the reader filters.",
+  "Leave `rowVariant` unset to get the layout that fits the filter bar: `byline` for `category-search`, `center` for `facets`."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline beside the controls, rendered as the band's `h2`; it also names the band."
+  },
+  {
+   "name": "filters",
+   "type": "ArticleIndexSectionFilters",
+   "default": "'category-search'",
+   "required": "false",
+   "doc": "Filter bar: `category-search` draws the category picker and the search field, `facets` draws one dropdown per facet."
+  },
+  {
+   "name": "items",
+   "type": "ArticleIndexSectionItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The entries, in order; each is `{ id, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, target? }`."
+  },
+  {
+   "name": "categories",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Segments of the category picker after the show-all segment (`category-search`); the picker is omitted when empty."
+  },
+  {
+   "name": "allLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the first category segment, which shows every category (`category-search`)."
+  },
+  {
+   "name": "categoryAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the category picker (`category-search`)."
+  },
+  {
+   "name": "searchPlaceholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder of the search field (`category-search`); the field is omitted when this and `searchAriaLabel` are both empty."
+  },
+  {
+   "name": "searchAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the search field (`category-search`)."
+  },
+  {
+   "name": "facets",
+   "type": "ArticleIndexSectionFacet[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The facet dropdowns, in order (`facets`); each is `{ id, label, allLabel, options }`."
+  },
+  {
+   "name": "rowLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Read cue revealed at the end of a row under hover or focus."
+  },
+  {
+   "name": "moreLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the load-more button under the list; without it every match is listed and no button renders."
+  },
+  {
+   "name": "pageSize",
+   "type": "number",
+   "default": "12",
+   "required": "false",
+   "doc": "Rows listed per page when `moreLabel` is set; the load-more button reveals the next page."
+  },
+  {
+   "name": "leading",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Leading entries left out until a filter applies, because a band above already shows them."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the state when nothing matches; the state renders only with it."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Sentence under the empty-state headline."
+  },
+  {
+   "name": "emptyActionLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the empty-state button that clears every filter; no button renders without it."
+  },
+  {
+   "name": "rowVariant",
+   "type": "ArticleIndexSectionRowVariant",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`."
+  },
+  {
+   "name": "categoryParam",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Name of a URL query parameter that preselects a category on load and scrolls the band into view (`category-search`); off when empty."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/article-index-section/default.vue"
+  },
+  {
+   "name": "Facets",
+   "file": "examples/article-index-section/facets.vue"
+  },
+  {
+   "name": "Empty",
+   "file": "examples/article-index-section/empty.vue"
+  }
+ ],
+ "docs": "components/article-index-section.md"
+}

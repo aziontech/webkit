@@ -4,7 +4,7 @@ category: input
 structure: monolithic
 status: implemented
 spec_version: 13
-checksum: cecb63285c64bd55004ff4607c3a573d65d0e6e2ab4477a9b5c8dc5bb67c270c
+checksum: 87da02a2ff0e82ee95b6f65339ad6247344a53cbdc3daa2c1230972e61d7f0bf
 created: 2026-05-22
 last_updated: 2026-11-25
 ---
@@ -15,7 +15,7 @@ last_updated: 2026-11-25
 
 Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer.
 
-Aligned with Figma frame `562:6774` (Webkit / Input).
+Aligned with Figma frame `562:6774` (Azion UI / Input).
 
 ## When to use
 
@@ -47,7 +47,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 
 ```vue
 <script setup>
-  import Input from '@aziontech/webkit/input'
+  import Input from '@aziontech/ui/input'
   import { ref } from 'vue'
 
   const domain = ref('')
@@ -192,7 +192,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

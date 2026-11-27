@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import Tabs from '@aziontech/webkit/tabs'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
 
   defineProps<{
     /** The tabs, in order. */

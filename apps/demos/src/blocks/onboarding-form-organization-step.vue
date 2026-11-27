@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Field from '@aziontech/webkit/field'
-  import FieldDescription from '@aziontech/webkit/field-description'
-  import Input from '@aziontech/webkit/input'
-  import RadioGroup from '@aziontech/webkit/radio-group-root'
+  import Avatar from '@aziontech/ui/avatar'
+  import Field from '@aziontech/ui/field'
+  import FieldDescription from '@aziontech/ui/field-description'
+  import Input from '@aziontech/ui/input'
+  import RadioGroup from '@aziontech/ui/radio-group-root'
 
   import { accents } from './onboarding-form.onboarding-form-data'
 

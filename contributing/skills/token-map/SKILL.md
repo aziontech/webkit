@@ -3,7 +3,7 @@ name: token-map
 description: Map a Figma token JSON blob to TOKENS.md classes / `var(--*)` semantic tokens. Pure transformation; never edits the spec or component files.
 status: active
 last_updated: 2026-05-22
-scope: webkit
+scope: ui
 enforced_by: [styling, migration]
 ---
 
@@ -41,15 +41,18 @@ Transform the structured JSON from `figma-extract` into a deterministic mapping 
 
    | Figma variable | Resolved to | Source |
    |---|---|---|
-  | color/surface | `var(--bg-surface)` | TOKENS.md |
-  | text/heading-md | `.text-heading-md` | TOKENS.md |
-
-   ### Theme gaps
-
-   | Figma variable | Temporary primitive | Follow-up |
-   |---|---|---|
-   | color/overlay-shadow | `shadow-lg` | `TODO: tokenize` |
    ```
+
+| color/surface | `var(--bg-surface)` | TOKENS.md |
+| text/heading-md | `.text-heading-md` | TOKENS.md |
+
+### Theme gaps
+
+| Figma variable       | Temporary primitive | Follow-up        |
+| -------------------- | ------------------- | ---------------- |
+| color/overlay-shadow | `shadow-lg`         | `TODO: tokenize` |
+
+```
 
 ## Outputs
 
@@ -75,3 +78,4 @@ Transform the structured JSON from `figma-extract` into a deterministic mapping 
 - [ ] Every "Resolved to" cell is either a `.text-*` class or a `var(--*)` literal.
 - [ ] No HEX / RGB / Tailwind / external color utility in the output.
 - [ ] No zero carrying a length unit in the output — a zero resolves to `0` (`0rem` only inside a math function).
+```

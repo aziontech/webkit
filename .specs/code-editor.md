@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 11
 template: 2
-checksum: 32cb6f1c2cca2d8fbbfd41c0bbbcf66bd359496933845f34acfa10ab0657be50
+checksum: 4bb8ab2a7b8b05fd3260cced67185341d862ee80dfdc5d7367d27cd7ff98c4b2
 created: 2026-11-11
 last_updated: 2026-11-19
 ---
@@ -34,7 +34,7 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 - Free prose or a description → use `textarea`.
 - A stream of log lines → use `log-viewer`.
 - A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both).
-- In a docs Markdown page or the site's page JSON. CodeEditor is app-only (decision RV-C2-1, rule `webkit-content-channels`): the person edits code in it, so it has no `DocMarkdown` tag and no page JSON entry. A docs page shows code as a code fence (`DocCodeGroup`); the site uses `CodeBlock`.
+- In a docs Markdown page or the site's page JSON. CodeEditor is app-only (decision RV-C2-1, rule `azion-ui-content-channels`): the person edits code in it, so it has no `DocMarkdown` tag and no page JSON entry. A docs page shows code as a code fence (`DocCodeGroup`); the site uses `CodeBlock`.
 
 ## Related
 
@@ -47,7 +47,7 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 ## Best practices
 
 - Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.
-- Pass `loader` from the app so Monaco is code-split and never part of the WebKit bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.
+- Pass `loader` from the app so Monaco is code-split and never part of the Azion UI bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.
 - Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.
 - Function calls are coloured for you (JavaScript and TypeScript, with `--code-syntax-function`); do not register your own Monarch grammar for that.
 - Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.
@@ -61,8 +61,8 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 
 ```vue
 <script setup>
-  import CodeEditor from '@aziontech/webkit/code-editor'
-  import Field from '@aziontech/webkit/field'
+  import CodeEditor from '@aziontech/ui/code-editor'
+  import Field from '@aziontech/ui/field'
   import { ref } from 'vue'
 
   const loadMonaco = async () => {
@@ -129,7 +129,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 | `schema`          | `Record<string, unknown>`         | `undefined`   | false    | JSON Schema the value is checked against when `language` is `json` and Monaco is loaded.                      |
 | `ariaLabel`       | `string`                          | `''`          | false    | Accessible name when no `Field` label names it. Empty uses the locale catalog.                                |
 
-Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; endColumn?: number; severity: 'danger' | 'warning' | 'info'; message: string }`. `CodeEditorMonaco` is a structural subset of the `monaco-editor` module (`editor.create`, `editor.createDiffEditor`, `editor.createModel`, `editor.defineTheme`, `editor.setTheme`, `editor.setModelMarkers`, `MarkerSeverity`, and the optional `editor.getModelMarkers`, `editor.onDidChangeMarkers`, `json.jsonDefaults`, `languages.getLanguages` / `languages.setMonarchTokensProvider`), so `import('monaco-editor')` satisfies it without WebKit depending on Monaco's types.
+Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; endColumn?: number; severity: 'danger' | 'warning' | 'info'; message: string }`. `CodeEditorMonaco` is a structural subset of the `monaco-editor` module (`editor.create`, `editor.createDiffEditor`, `editor.createModel`, `editor.defineTheme`, `editor.setTheme`, `editor.setModelMarkers`, `MarkerSeverity`, and the optional `editor.getModelMarkers`, `editor.onDidChangeMarkers`, `json.jsonDefaults`, `languages.getLanguages` / `languages.setMonarchTokensProvider`), so `import('monaco-editor')` satisfies it without Azion UI depending on Monaco's types.
 
 ## v-model
 
@@ -251,14 +251,14 @@ One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trac
 ## Decisions and open questions
 
 - **Example order.** Default, Monaco, WithToolbar come first because the catalog, the MCP and `llms/` carry only the first three examples of a component, and the worker wiring must reach them.
-- **No Monaco dependency.** `monaco-editor` is the app's dependency, passed as `loader`; WebKit ships only the structural types and the token theme. Decided (M2.10): no `@aziontech/webkit/code-editor-monaco` entry. Worker wiring depends on the bundler (Vite `?worker`, webpack 5 `new URL(..., import.meta.url)`), so an entry would tie consumers to one; the copyable example `code-editor#Monaco` is the loader. `monaco-editor` is an optional peer (`>=0.50`) and a dev dependency for that example and its browser test.
+- **No Monaco dependency.** `monaco-editor` is the app's dependency, passed as `loader`; Azion UI ships only the structural types and the token theme. Decided (M2.10): no `@aziontech/ui/code-editor-monaco` entry. Worker wiring depends on the bundler (Vite `?worker`, webpack 5 `new URL(..., import.meta.url)`), so an entry would tie consumers to one; the copyable example `code-editor#Monaco` is the loader. `monaco-editor` is an optional peer (`>=0.50`) and a dev dependency for that example and its browser test.
 - **Worker wiring (monaco-editor 0.56+).** Since 0.56 the package `exports` map sends `monaco-editor/*` to `esm/vs/*.js`, so the long-documented `monaco-editor/esm/vs/editor/editor.worker?worker` resolves to `esm/vs/esm/vs/...` and the build fails ("failed to resolve import"). The working paths are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (the `language/...` paths still exist and re-export these). Verified 2026-11-12 in a fresh Vite 8.3 app with `monaco-editor` 0.57.0: `vite build` + `vite preview` and four cold `vite` dev starts, JSON and TypeScript workers producing their diagnostics. Before 0.56 there is no exports map: use `monaco-editor/esm/vs/editor/editor.worker?worker` and `monaco-editor/esm/vs/language/json/json.worker?worker`.
-- **Function calls are coloured by WebKit.** Monaco's Monarch JavaScript and TypeScript grammars tag a called name as a plain `identifier`, so a theme rule for `function` never matched and calls stayed default ink. When Monaco loads, CodeEditor takes each built-in grammar from `languages.getLanguages()` (its `loader`), prepends four rules to `tokenizer.common` (a member call after `.`, a bare call unless the word is a keyword, `true`/`false`/`null`/`undefined` as constants, CONSTANT_CASE as identifiers, as the design sample does) and registers it with `setMonarchTokensProvider`, once per Monaco instance. A module without `languages` (or a grammar without `tokenizer.common`) is left alone. It replaces the stock tokenizer for those two languages, so an app that registers its own Monarch grammar for them should do it after the editor's `ready`.
+- **Function calls are coloured by Azion UI.** Monaco's Monarch JavaScript and TypeScript grammars tag a called name as a plain `identifier`, so a theme rule for `function` never matched and calls stayed default ink. When Monaco loads, CodeEditor takes each built-in grammar from `languages.getLanguages()` (its `loader`), prepends four rules to `tokenizer.common` (a member call after `.`, a bare call unless the word is a keyword, `true`/`false`/`null`/`undefined` as constants, CONSTANT_CASE as identifiers, as the design sample does) and registers it with `setMonarchTokensProvider`, once per Monaco instance. A module without `languages` (or a grammar without `tokenizer.common`) is left alone. It replaces the stock tokenizer for those two languages, so an app that registers its own Monarch grammar for them should do it after the editor's `ready`.
 - **Padded line numbers are opt-in.** The design sample pads (`String(line).padStart(2, '0')`) only its full-page function and arguments editors and keeps plain numbers on the small JSON field of a drawer, so `padLineNumbers` defaults to `false`; both the plain gutter and Monaco's `lineNumbers` formatter follow it. Lines past 99 show three digits.
 - **Code line height (M2.10 row 77).** Monaco draws code at the console's 16 px line, not at the `.text-body-code-sm` line height (12 px × 1.625 ≈ 20 px). The value is the theme token `--code-editor-line-height` (`1rem`), read from the host element when the editor is created; `px` and `rem` are converted to pixels, and an absent or unparseable value falls back to 16. The font size stays `--text-body-code-sm-font-size` (12 px), which the console reference also uses (7 px per character, 16 px lines). The plain editor keeps `.text-body-code-sm`.
-- **Theme is global in Monaco.** Every editor shares the `webkit` theme, so it is defined and set only when its content changes (`applyThemeOnce`, per Monaco instance): several editors on a page no longer each re-define it on every `class`/`data-theme` change of the document, and a `setTheme` that touched those classes could not make two editors ping-pong (`code-editor.test.ts`).
+- **Theme is global in Monaco.** Every editor shares the `ui` theme, so it is defined and set only when its content changes (`applyThemeOnce`, per Monaco instance): several editors on a page no longer each re-define it on every `class`/`data-theme` change of the document, and a `setTheme` that touched those classes could not make two editors ping-pong (`code-editor.test.ts`).
 - **JSON Schema (`schema`).** The design sample checks the arguments schema editor against a JSON Schema. When Monaco is loaded and `language` is `json`, CodeEditor registers `schema` with Monaco's JSON defaults (`json.jsonDefaults` since monaco-editor 0.55, `languages.json.jsonDefaults` before) under its own schema URI with `fileMatch` set to the model's URI, keeping every other entry, so several editors on a page each keep their own schema. It turns on `validate`, reports schema problems as warnings (as the sample does) and never fetches remote schemas. The model gets a URI even without `path` when a schema is set. The entry is removed when the schema is cleared, the language changes or the editor unmounts. The plain editor does not validate.
-- **`markers-change` payload.** It emits WebKit's `CodeEditorMarker` shape (1-based `line`, `column`, `endLine`, `endColumn`, `severity`, `message`), not Monaco's `IMarker`, so the payload is typed without Monaco's types and matches `markers`. Monaco's `Hint` maps to `info`. Markers WebKit set from the `markers` prop (owner `webkit`) are left out, so the app never receives its own diagnostics back. It is a value event, not an activation, so it carries no DOM event.
+- **`markers-change` payload.** It emits Azion UI's `CodeEditorMarker` shape (1-based `line`, `column`, `endLine`, `endColumn`, `severity`, `message`), not Monaco's `IMarker`, so the payload is typed without Monaco's types and matches `markers`. Monaco's `Hint` maps to `info`. Markers Azion UI set from the `markers` prop (owner `ui`) are left out, so the app never receives its own diagnostics back. It is a value event, not an activation, so it carries no DOM event.
 - **`bordered` (sample `flush`).** The vocabulary name for an outline is `bordered` (default `true`, like `log-viewer` and `code-block`). Off, the root drops its border, radius and ring offset and the ring is drawn inset (`ring-inset`), so the focus stays visible when a pane's `overflow: hidden` would clip an outer ring. The toolbar and problems bands keep their dividers.
 - **Diff names.** Both sides of the diff are named after the editor (`<name>, Original` and `<name>, Modified`), since Monaco leaves them empty.
 - **Plain editor is the default.** Not a skeleton: it is fully usable, so the SSR markup is an editor and slow networks never block typing.
@@ -272,7 +272,7 @@ One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trac
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

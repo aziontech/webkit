@@ -1,0 +1,71 @@
+<script setup>
+  import MediaSplitStackSection from '@aziontech/ui/media-split-stack-section'
+
+  const bands = [
+    {
+      illustration: 'quick-start-with-templates',
+      eyebrow: 'Web applications',
+      title: 'Modern applications',
+      description: 'Build static sites, run serverless applications, or modernize legacy systems.',
+      action: {
+        label: 'Learn more',
+        href: '/en/solutions/web-apps/'
+      }
+    },
+    {
+      illustration: 'improve-application-performance-and-reliability',
+      eyebrow: 'Performance',
+      href: '/en/solutions/performance/overview/',
+      title: 'Optimized workloads',
+      description:
+        'Speed up applications, deliver content through the CDN, and process images on demand.',
+      action: {
+        label: 'Learn more',
+        href: '/en/solutions/performance/'
+      }
+    },
+    {
+      scene: { component: 'ConsoleMockup', props: { name: 'ai-inference-model' } },
+      illustration: 'ai-applications',
+      eyebrow: 'AI inference',
+      title: 'AI applications',
+      description:
+        'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
+      action: {
+        label: 'Learn more',
+        href: '/en/solutions/ai/'
+      }
+    },
+    {
+      illustration: 'automate-threat-mitigation',
+      eyebrow: 'Security',
+      title: 'Protected applications and APIs',
+      description:
+        'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',
+      action: {
+        label: 'Learn more',
+        href: '/en/solutions/security/'
+      }
+    },
+    {
+      illustration: 'content-and-media-delivery',
+      eyebrow: 'Media',
+      title: 'Media and streaming content',
+      description:
+        'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',
+      action: {
+        label: 'Learn more',
+        href: '/en/solutions/streaming/'
+      }
+    }
+  ]
+</script>
+
+<template>
+  <MediaSplitStackSection
+    eyebrow="Solutions"
+    title="One platform for every workload you run"
+    description="Pick the outcome you need; the same distributed platform serves it."
+    :bands="bands"
+  />
+</template>

@@ -117,7 +117,7 @@ async function worker() {
     )
     await context.addInitScript(() => {
       try {
-        for (const key of ['webkit-docs:', 'webkit-demos:']) {
+        for (const key of ['azion-ui-docs:', 'azion-ui-demos:']) {
           localStorage.setItem(`${key}theme`, 'light')
           localStorage.setItem(`${key}dir`, 'ltr')
           localStorage.setItem(`${key}locale`, 'en')
@@ -127,9 +127,11 @@ async function worker() {
     const page = await context.newPage()
     await page.clock.setFixedTime(new Date('2026-11-10T12:00:00Z'))
     try {
-      await page.goto(`${job.url}?theme=light&dir=ltr`, { waitUntil: 'networkidle', timeout: 30_000 })
-      if (job.example)
-        await page.locator('[data-example][data-ready]').waitFor({ timeout: 15_000 })
+      await page.goto(`${job.url}?theme=light&dir=ltr`, {
+        waitUntil: 'networkidle',
+        timeout: 30_000
+      })
+      if (job.example) await page.locator('[data-example][data-ready]').waitFor({ timeout: 15_000 })
       await page.evaluate(async () => {
         await document.fonts.ready
         await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)))

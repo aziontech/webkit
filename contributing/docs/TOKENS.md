@@ -1,6 +1,6 @@
-# Design guidelines for `@aziontech/webkit`
+# Design guidelines for `@aziontech/ui`
 
-How to style components under `packages/webkit/src/components/` using tokens from `@aziontech/theme`. The theme compiles tokens into CSS custom properties and utility classes; components consume those outputs — they do not redefine typography or raw visual values.
+How to style components under `packages/ui/src/components/` using tokens from `@aziontech/theme`. The theme compiles tokens into CSS custom properties and utility classes; components consume those outputs — they do not redefine typography or raw visual values.
 
 ## Prerequisites
 
@@ -13,13 +13,13 @@ How to style components under `packages/webkit/src/components/` using tokens fro
 
 ### Tailwind v4 (CSS-first)
 
-`@aziontech/webkit` targets **Tailwind v4 only**. `packages/theme/scripts/build-tokens.mjs` emits a single output — `packages/theme/dist/globals.{css,scss}` — and consumers import it directly:
+`@aziontech/ui` targets **Tailwind v4 only**. `packages/theme/scripts/build-tokens.mjs` emits a single output — `packages/theme/dist/globals.{css,scss}` — and consumers import it directly:
 
 ```css
 @import '@aziontech/theme/globals.css';
 ```
 
-That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. The theme scans no component package. Utility detection for webkit components comes from the consumer's `src/webkit.sources.css` (one `@source` per WebKit file the app imports, written by `@aziontech/webkit/vite-plugin` or `npx @aziontech/webkit css`), or from `@aziontech/webkit/styles/all` in an app that renders every component; that is what makes arbitrary utilities like `bg-(--primary)` or `p-(--spacing-md)` compile for the components the app uses, and only those.
+That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. The theme scans no component package. Utility detection for Azion UI components comes from the consumer's `src/azion-ui.sources.css` (one `@source` per Azion UI file the app imports, written by `@aziontech/ui/vite-plugin` or `npx @aziontech/ui css`), or from `@aziontech/ui/styles/all` in an app that renders every component; that is what makes arbitrary utilities like `bg-(--primary)` or `p-(--spacing-md)` compile for the components the app uses, and only those.
 
 Integration points:
 
@@ -56,7 +56,7 @@ const sizeClasses = {
 }
 ```
 
-Reference: `packages/webkit/src/components/action/button/button.vue`.
+Reference: `packages/ui/src/components/action/button/button.vue`.
 
 ### Available text styles
 
@@ -98,7 +98,7 @@ Heading tracking is in `em`, so it shrinks with the font: `text-heading-3xl` is 
 
 ### Do not declare typography primitives in components
 
-Inside `packages/webkit/src/components/`, **never** set:
+Inside `packages/ui/src/components/`, **never** set:
 
 - `font-family` / `font-proto-mono` / `font-rubik`
 - `line-height` / `leading-*` (except `leading-none` on icons aligned to `text-[length:inherit]`)
@@ -120,7 +120,7 @@ Font family, line height, letter spacing, and responsive font size live in `typo
 
 ### Inline links vs navigation `Link`
 
-For links **inside** body or heading copy, use `Link` with `inline` (`@aziontech/webkit/link`). It renders the `text-link` typography class, so it inherits the size of the parent `text-body-*` / `text-heading-*` class and wraps with the sentence:
+For links **inside** body or heading copy, use `Link` with `inline` (`@aziontech/ui/link`). It renders the `text-link` typography class, so it inherits the size of the parent `text-body-*` / `text-heading-*` class and wraps with the sentence:
 
 ```vue
 <p class="text-body-md">
@@ -133,7 +133,7 @@ For links **inside** body or heading copy, use `Link` with `inline` (`@aziontech
 </p>
 ```
 
-Do not hand-write a plain `<a class="text-link">`: `Link` owns the anchor element (`webkit/no-unowned-element`), and a `Link` without `inline` inside a sentence is flagged by `webkit/no-link-in-sentence`.
+Do not hand-write a plain `<a class="text-link">`: `Link` owns the anchor element (`azion-ui/no-unowned-element`), and a `Link` without `inline` inside a sentence is flagged by `azion-ui/no-link-in-sentence`.
 
 `text-link` draws a quiet underline at rest (40 % of the link colour) and a full 2px underline on hover. Never remove it from a link inside a sentence: the link blue is only about 3:1 against default text and close to 1:1 against muted text, so colour alone does not mark the link (WCAG 1.4.1).
 
@@ -151,11 +151,11 @@ Use **only** the spacing tokens declared in:
 
 Each key (for example `spacing-md`) becomes a CSS variable: `--spacing-md` (mobile-first; values can change at `sm`, `xl`, etc.).
 
-Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/spacing.js` (`--spacing-1`, `--spacing-4`, …) in `packages/webkit/src/components/`.
+Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/spacing.js` (`--spacing-1`, `--spacing-4`, …) in `packages/ui/src/components/`.
 
 ### How to apply
 
-Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `packages/webkit/src/components/`:
+Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `packages/ui/src/components/`:
 
 ```html
 p-(--spacing-md) px-(--spacing-sm) py-(--spacing-xs) gap-(--spacing-sm) gap-x-(--spacing-md)
@@ -181,7 +181,7 @@ If none of these fit the design, add a new entry in `spacing.js` and rebuild the
 ### Do not
 
 - Use primitive `--spacing-1` … `--spacing-96` from `spacing.js`.
-- Use arbitrary pixel/rem values or Tailwind’s default scale (`p-4`, `gap-3`, `m-6`) in webkit components.
+- Use arbitrary pixel/rem values or Tailwind’s default scale (`p-4`, `gap-3`, `m-6`) in Azion UI components.
 - Use legacy `spacing-elements-*` names; map to `spacing-*` keys from `spacing.js`.
 
 Example from Button — horizontal padding and inner gap:
@@ -270,7 +270,7 @@ Source: `packages/theme/src/tokens/primitives/shape/shape.js`.
 
 When a pseudo-element mirrors the parent radius, use `rounded-[inherit]` on the child (see Button `before:rounded-[inherit]`).
 
-Do not use `rounded-md`, `rounded-lg`, or numeric radius in webkit components.
+Do not use `rounded-md`, `rounded-lg`, or numeric radius in Azion UI components.
 
 ---
 
@@ -288,7 +288,7 @@ Apply on the element that should cast elevation (panel shell, floating surface, 
 
 ### Scale
 
-| Token          | Typical use in webkit                                  |
+| Token          | Typical use in Azion UI                                |
 | -------------- | ------------------------------------------------------ |
 | `--shadow-2xs` | Hairline lift (rare; prefer border tokens when unsure) |
 | `--shadow-xs`  | Subtle chips, compact controls                         |
@@ -298,15 +298,15 @@ Apply on the element that should cast elevation (panel shell, floating surface, 
 | `--shadow-xl`  | High emphasis overlays (use sparingly)                 |
 | `--shadow-2xl` | Maximum elevation (marketing hero cards, not forms)    |
 
-Reference: `packages/webkit/src/components/overlay/panel/panel.vue` (`shadow-(--shadow-md)`).
+Reference: `packages/ui/src/components/overlay/panel/panel.vue` (`shadow-(--shadow-md)`).
 
 ### Related effect primitives
 
-`drop-shadow.js` and `inset-shadow.js` emit `--drop-shadow-*` and `--inset-shadow-*`. Use those only when the design calls for filter-based or inset depth; default elevation for webkit components is `--shadow-*` from `shadow.js`.
+`drop-shadow.js` and `inset-shadow.js` emit `--drop-shadow-*` and `--inset-shadow-*`. Use those only when the design calls for filter-based or inset depth; default elevation for Azion UI components is `--shadow-*` from `shadow.js`.
 
 ### Do not
 
-- Use legacy theme vars such as `--card-shadow` in `packages/webkit/src/components/` — they are legacy SCSS aliases, not the primitive scale.
+- Use legacy theme vars such as `--card-shadow` in `packages/ui/src/components/` — they are legacy SCSS aliases, not the primitive scale.
 - Hardcode `box-shadow` values or Tailwind default shadows (`shadow-md`, `shadow-lg` without `var(--shadow-*)`).
 - Use `rgb(...)` / `rgba(...)` / hex in component class strings for elevation.
 
@@ -327,21 +327,21 @@ text-(--text-default) text-(--text-muted) ring-(--ring-color)
 
 Every fill colour pairs with a `-foreground` text colour of the same role (`--primary` / `--primary-foreground`). The one exception is the inverted surface: `--bg-contrast` takes `--text-contrast`.
 
-| Role          | Examples                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Brand actions | `--primary`, `--primary-foreground`, `--secondary`, `--secondary-foreground`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| Accent        | `--accent`, `--accent-foreground` — the blue for a live state or a connection, never an action: `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles, a dragged `Table` row, `FlowDiagram` edges and ports. There is no accent `Button`. `--accent-mask` and `--accent-selected` are defined but unused. Blue 600 with white text in light, blue 200 with black text in dark, so the Tag label and the marks pass APCA on both grounds.                                                                                                                     |
-| Brand marks   | `--brand-blue`, `--brand-blue-foreground` — the azion.com blue (`#0072F5`), the same in both themes, for brand marks only: the `Eyebrow` cursor. The `Eyebrow` label uses the logo orange, `--primary`, as text.                                                                                                                                                                                                                                                                                                                                                          |
-| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask`                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| Text          | `--text-default`, `--text-muted`, `--text-disabled`, `--text-danger` (error text on the page: the `FieldError` message; red.600 in light, red.200 in dark, 4.5:1 and APCA Lc 60 on every surface; never `--danger-foreground`, which is text on the `--danger` fill). The logo orange is never a text colour: brand text is `--text-default` with a `--primary` bar, underline or fill (owner 2026-11-22). `--text-primary` and `--text-brand` were removed in 6.0                                                                                                        |
-| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`, `--border-input` (the resting and disabled outline of a value-entry control: text fields, select and multi-select triggers, number, password and OTP boxes, date fields, checkbox, radio, switch track; same value as `--border-default` in light mode; brighter in dark mode so field outlines stay visible while dividers stay quiet)                                                                                                                                                     |
-| Feedback      | `--success`, `--success-border`, `--success-foreground`, `--warning`, `--warning-border`, `--warning-foreground`, `--danger`, `--danger-border` (solid red.400, 3:1 or more on every surface: the invalid field outline), `--danger-foreground`, `--info`, `--info-border`, `--info-foreground`; the soft tint of an `Alert` box: `--success-mask`, `--warning-mask`, `--danger-mask` (an info `Alert` is neutral); marks on the page (status dot, outcome disc): `--success-mark`, `--warning-mark`, `--danger-mark`, `--info-mark`                                      |
-| Code syntax   | `--code-syntax-identifier`, `--code-syntax-line-number`, `--code-syntax-keyword`, `--code-syntax-string`, `--code-syntax-function`, `--code-syntax-type`, `--code-syntax-punctuation`, `--code-syntax-comment`                                                                                                                                                                                                                                                                                                                                                            |
-| Code editor   | `--code-editor-line-height` (16 px line step of code in `CodeEditor`; Monaco reads it when the editor is created)                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| Charts        | `--chart-series-1` … `--chart-series-8` and `--chart-series-other` (categories), `--chart-sequential-1` … `--chart-sequential-7` (magnitude), `--chart-diverging-negative`, `-negative-2`, `-negative-3`, `-neutral`, `-positive-3`, `-positive-2`, `-positive` (a seven-step scale around a midpoint; three steps use the end and neutral tokens only), `--chart-status-*` (a series that means a state), and the chrome `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*`. Rules in `rules/webkit-tokens.md` § "Chart palettes" |
+| Role          | Examples                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Brand actions | `--primary`, `--primary-foreground`, `--secondary`, `--secondary-foreground`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Accent        | `--accent`, `--accent-foreground` — the blue for a live state or a connection, never an action: `Switch` on, `Slider` fill, `Tag variant="accent"`, resize handles, a dragged `Table` row, `FlowDiagram` edges and ports. There is no accent `Button`. `--accent-mask` and `--accent-selected` are defined but unused. Blue 600 with white text in light, blue 200 with black text in dark, so the Tag label and the marks pass APCA on both grounds.                                                                                                                       |
+| Brand marks   | `--brand-blue`, `--brand-blue-foreground` — the azion.com blue (`#0072F5`), the same in both themes, for brand marks only: the `Eyebrow` cursor. The `Eyebrow` label uses the logo orange, `--primary`, as text.                                                                                                                                                                                                                                                                                                                                                            |
+| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask`                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Text          | `--text-default`, `--text-muted`, `--text-disabled`, `--text-danger` (error text on the page: the `FieldError` message; red.600 in light, red.200 in dark, 4.5:1 and APCA Lc 60 on every surface; never `--danger-foreground`, which is text on the `--danger` fill). The logo orange is never a text colour: brand text is `--text-default` with a `--primary` bar, underline or fill (owner 2026-11-22). `--text-primary` and `--text-brand` were removed in 6.0                                                                                                          |
+| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`, `--border-input` (the resting and disabled outline of a value-entry control: text fields, select and multi-select triggers, number, password and OTP boxes, date fields, checkbox, radio, switch track; same value as `--border-default` in light mode; brighter in dark mode so field outlines stay visible while dividers stay quiet)                                                                                                                                                       |
+| Feedback      | `--success`, `--success-border`, `--success-foreground`, `--warning`, `--warning-border`, `--warning-foreground`, `--danger`, `--danger-border` (solid red.400, 3:1 or more on every surface: the invalid field outline), `--danger-foreground`, `--info`, `--info-border`, `--info-foreground`; the soft tint of an `Alert` box: `--success-mask`, `--warning-mask`, `--danger-mask` (an info `Alert` is neutral); marks on the page (status dot, outcome disc): `--success-mark`, `--warning-mark`, `--danger-mark`, `--info-mark`                                        |
+| Code syntax   | `--code-syntax-identifier`, `--code-syntax-line-number`, `--code-syntax-keyword`, `--code-syntax-string`, `--code-syntax-function`, `--code-syntax-type`, `--code-syntax-punctuation`, `--code-syntax-comment`                                                                                                                                                                                                                                                                                                                                                              |
+| Code editor   | `--code-editor-line-height` (16 px line step of code in `CodeEditor`; Monaco reads it when the editor is created)                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Charts        | `--chart-series-1` … `--chart-series-8` and `--chart-series-other` (categories), `--chart-sequential-1` … `--chart-sequential-7` (magnitude), `--chart-diverging-negative`, `-negative-2`, `-negative-3`, `-neutral`, `-positive-3`, `-positive-2`, `-positive` (a seven-step scale around a midpoint; three steps use the end and neutral tokens only), `--chart-status-*` (a series that means a state), and the chrome `--chart-grid`, `--chart-axis`, `--chart-label`, `--chart-crosshair`, `--chart-tooltip-*`. Rules in `rules/azion-ui-tokens.md` § "Chart palettes" |
 
-Which token does which job, and which components use each one, is in [`rules/webkit-tokens.md`](../../rules/webkit-tokens.md) § "Which color token does which job". Update that table when a component starts or stops using a color token. A mock-up, example or proposal draws only variants the component's `variant` / `severity` union lists.
+Which token does which job, and which components use each one, is in [`rules/azion-ui-tokens.md`](../../rules/azion-ui-tokens.md) § "Which color token does which job". Update that table when a component starts or stops using a color token. A mock-up, example or proposal draws only variants the component's `variant` / `severity` union lists.
 
 Text on `--bg-surface-overlay` is `--text-default`. In dark the overlay fill is `#4D4D4D`, and `--text-muted` (`#B2B2B2`) on it is 3.99:1, under the 4.5:1 that WCAG 1.4.3 asks for (found by the a11y harness, M2.9 WP a11y).
 
@@ -383,8 +383,8 @@ Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Moti
 ### Do not
 
 - Hardcode hex/rgb/hsl in component class strings.
-- Use Tailwind palette names (`bg-gray-500`, `text-violet-600`) in `packages/webkit/src/components/`.
-- Use external/legacy color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
+- Use Tailwind palette names (`bg-gray-500`, `text-violet-600`) in `packages/ui/src/components/`.
+- Use external/legacy color utilities (`text-color`, `surface-*`) in new Azion UI components — map to `var(--*)` tokens instead.
 - Build a loading placeholder from an opaque surface token (`--bg-surface-overlay`, `--bg-surface-raised`) — it only reads on the one surface it was picked against. Use `--bg-placeholder` / `--bg-placeholder-highlight`.
 
 Reference: `button.vue` variants (`bg-(--secondary)`, `text-(--secondary-foreground)`, etc.).
@@ -402,7 +402,7 @@ Reference: `button.vue` variants (`bg-(--secondary)`, `text-(--secondary-foregro
 7. **Color** — `bg-(--…)`, `text-(--…)`, `border-(--…)`.
 8. **Interactive states** — `::before` / `::after` ghost layers for `--bg-hover` / `--bg-active`; `focus-visible:ring-2 focus-visible:ring-offset-1`; `duration-fast-02` + `ease-productive-*` (see § Interactive states).
 9. **Motion** — `duration` / `curve` from `animate.js` only; `data-state` overlays use a `presets/transitions.ts` module (see § Motion — reference: Drawer).
-10. **Examples** — Add or update examples under `packages/webkit/examples/<name>/` for new states and sizes.
+10. **Examples** — Add or update examples under `packages/ui/examples/<name>/` for new states and sizes.
 
 ---
 
@@ -485,7 +485,7 @@ Named keyframe bundles in the same file (`popup-scale-in`, `popup-scale-out`, �
 
 Canonical pattern for **`data-state`** / open-close motion. Read values **only** from `animate.js`; never hardcode `110ms`, `400ms`, or raw `cubic-bezier(...)` in components.
 
-**Reference:** `packages/webkit/src/components/overlay/drawer/presets/transitions.ts`
+**Reference:** `packages/ui/src/components/overlay/drawer/presets/transitions.ts`
 
 1. **Import primitives** — `import { curve, duration } from '…/animate.js'`.
 2. **Declare a preset map** — per target (`panel`, `overlay`, …) and phase (`open`, `close`), pick `duration[…]` + `curve[…]`.
@@ -561,7 +561,7 @@ after:ease-productive-entrance active:after:opacity-100 motion-reduce:before:tra
 motion-reduce:after:transition-none
 ```
 
-Reference: `packages/webkit/src/components/action/button/button.vue`.
+Reference: `packages/ui/src/components/action/button/button.vue`.
 
 ### Reduced motion
 
@@ -620,4 +620,4 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 - Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)
 - Agent rules (discipline layer): [`../rules/`](../rules/)
 - Per-component specs: [`../../.specs/`](../../.specs/)
-- Drawer motion preset: [`../../packages/webkit/src/components/overlay/drawer/presets/transitions.ts`](../../packages/webkit/src/components/overlay/drawer/presets/transitions.ts)
+- Drawer motion preset: [`../../packages/ui/src/components/overlay/drawer/presets/transitions.ts`](../../packages/ui/src/components/overlay/drawer/presets/transitions.ts)

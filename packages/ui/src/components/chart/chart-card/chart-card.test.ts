@@ -1,0 +1,318 @@
+import { fireEvent, render } from '@testing-library/vue'
+import { describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
+
+import { expectNoA11yViolations } from '../../../test/axe'
+import Chart, { ChartLine } from '../chart/index'
+import ChartCard, {
+  ChartCardContent,
+  ChartCardControls,
+  ChartCardDescription,
+  ChartCardDragHandle,
+  ChartCardFooter,
+  ChartCardHeader,
+  ChartCardResizeHandle,
+  ChartCardTitle
+} from './index'
+
+const card = (props: Record<string, unknown> = {}, content: () => unknown = () => 'Plot') =>
+  h(ChartCard, props, {
+    default: () => [
+      h(ChartCardHeader, null, {
+        default: () => [
+          h(ChartCardDragHandle),
+          h(ChartCardTitle, null, { default: () => 'Threats vs requests' }),
+          h(ChartCardControls, null, { default: () => 'Sum' })
+        ]
+      }),
+      h(ChartCardDescription, null, { default: () => 'Requests WAF analyzed.' }),
+      h(ChartCardContent, null, { default: content }),
+      h(ChartCardFooter, null, { default: () => 'Last 24 hours' }),
+      h(ChartCardResizeHandle)
+    ]
+  })
+
+describe('ChartCard', () => {
+  it('attaches its parts to the root for dot notation', () => {
+    expect(ChartCard).toBeTruthy()
+    expect(ChartCard?.Header).toBe(ChartCardHeader)
+    expect(ChartCard?.Title).toBe(ChartCardTitle)
+    expect(ChartCard?.Description).toBe(ChartCardDescription)
+    expect(ChartCard?.Action).toBe(ChartCardControls)
+    expect(ChartCard?.DragHandle).toBe(ChartCardDragHandle)
+    expect(ChartCard?.Content).toBe(ChartCardContent)
+    expect(ChartCard?.Footer).toBe(ChartCardFooter)
+    expect(ChartCard?.ResizeHandle).toBe(ChartCardResizeHandle)
+  })
+
+  it('renders the fallback data-testid and lets a consumer override it', () => {
+    const fallback = render(card())
+    expect(fallback.getByTestId('chart-card').getAttribute('role')).toBe('group')
+    fallback.unmount()
+    expect(render(card({ 'data-testid': 'threats-card' })).getByTestId('threats-card')).toBeTruthy()
+  })
+
+  it('is named by its title and described by its description', async () => {
+    const view = render(card())
+    await nextTick()
+    const root = view.getByTestId('chart-card')
+    expect(document.getElementById(root.getAttribute('aria-labelledby') ?? '')?.textContent).toBe(
+      'Threats vs requests'
+    )
+    expect(document.getElementById(root.getAttribute('aria-describedby') ?? '')?.textContent).toBe(
+      'Requests WAF analyzed.'
+    )
+  })
+
+  it('names the chart inside it after its title and description', () => {
+    const view = render(
+      card({}, () =>
+        h(
+          Chart,
+          { series: [{ id: 'a', name: 'A', values: [1, 2] }], labels: ['a', 'b'] },
+          {
+            default: () => [h(ChartLine)]
+          }
+        )
+      )
+    )
+    const plot = view.getByTestId('chart__plot')
+    expect(document.getElementById(plot.getAttribute('aria-labelledby') ?? '')?.textContent).toBe(
+      'Threats vs requests'
+    )
+    expect(plot.getAttribute('aria-describedby')).toContain(
+      view.getByTestId('chart-card-description').id
+    )
+  })
+
+  it('applies span and height through custom properties', () => {
+    const view = render(card({ span: 12, height: 552 }))
+    const root = view.getByTestId('chart-card')
+    expect(root.style.getPropertyValue('--chart-card-span')).toBe('12')
+    expect(root.style.getPropertyValue('--chart-card-height')).toBe('552px')
+  })
+
+  it('renders the handles only when enabled', async () => {
+    const plain = render(card())
+    expect(plain.queryByTestId('chart-card-drag-handle')).toBeNull()
+    expect(plain.queryByTestId('chart-card-resize-handle')).toBeNull()
+    plain.unmount()
+
+    const both = render(card({ draggable: true, resizable: true }))
+    await nextTick()
+    const handle = both.getByTestId('chart-card-drag-handle')
+    expect(handle).toHaveAccessibleName('Move Threats vs requests')
+    expect(handle).toHaveAccessibleDescription('Use the arrow keys to move the card.')
+    expect(both.getByTestId('chart-card-resize-handle').getAttribute('role')).toBe('separator')
+  })
+
+  it('widens both handle hit areas to 44px on a coarse pointer', async () => {
+    const view = render(card({ draggable: true, resizable: true }))
+    await nextTick()
+    expect(view.getByTestId('chart-card-drag-handle').classList).toContain(
+      'pointer-coarse:before:-inset-2.5'
+    )
+    expect(view.getByTestId('chart-card-resize-handle').classList).toContain(
+      'pointer-coarse:before:-inset-2.5'
+    )
+  })
+
+  it('emits move with the event first and the direction second from the drag handle', async () => {
+    const moves: unknown[][] = []
+    const view = render(card({ draggable: true, onMove: (...args: unknown[]) => moves.push(args) }))
+    const handle = view.getByTestId('chart-card-drag-handle')
+    await fireEvent.keyDown(handle, { key: 'ArrowRight' })
+    await fireEvent.keyDown(handle, { key: 'ArrowUp' })
+    await fireEvent.keyDown(handle, { key: 'Enter' })
+    expect(moves.map((args) => args[1])).toEqual(['right', 'up'])
+    expect(moves[0]?.[0]).toBeInstanceOf(KeyboardEvent)
+  })
+
+  it('announces the new position after a keyboard move', async () => {
+    const order = ref(['a', 'b', 'c'])
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            'div',
+            order.value.map((id) =>
+              h(
+                ChartCard,
+                {
+                  key: id,
+                  draggable: true,
+                  'data-testid': `card-${id}`,
+                  onMove: () => {
+                    order.value = [...order.value.filter((item) => item !== id), id]
+                  }
+                },
+                {
+                  default: () => [
+                    h(ChartCardHeader, null, { default: () => h(ChartCardDragHandle) })
+                  ]
+                }
+              )
+            )
+          )
+      })
+    )
+    const handle = view.getByTestId('card-a').querySelector<HTMLElement>('button')!
+    await fireEvent.keyDown(handle, { key: 'ArrowRight' })
+    await vi.waitFor(() =>
+      expect(document.querySelector('[data-azion-announcer]')?.textContent).toBe(
+        'Moved to position 3 of 3'
+      )
+    )
+  })
+
+  it('arms native drag only while the handle is pressed', async () => {
+    const view = render(card({ draggable: true }))
+    const root = view.getByTestId('chart-card')
+    const handle = view.getByTestId('chart-card-drag-handle')
+    expect(root.getAttribute('draggable')).toBeNull()
+    await fireEvent.pointerDown(handle)
+    expect(root.getAttribute('draggable')).toBe('true')
+    await fireEvent.dragStart(root)
+    expect(root.hasAttribute('data-dragging')).toBe(true)
+    expect(view.emitted('drag-start')).toHaveLength(1)
+    await fireEvent.dragEnd(root)
+    expect(root.hasAttribute('data-dragging')).toBe(false)
+    expect(root.getAttribute('draggable')).toBeNull()
+    expect(view.emitted('drag-end')).toHaveLength(1)
+  })
+
+  it('resizes from the keyboard within its bounds', async () => {
+    const span = ref(6)
+    const height = ref<number | undefined>(400)
+    const ends: unknown[][] = []
+    const view = render({
+      render: () =>
+        card({
+          resizable: true,
+          span: span.value,
+          height: height.value,
+          maxSpan: 8,
+          'onUpdate:span': (next: number) => {
+            span.value = next
+          },
+          'onUpdate:height': (next: number | undefined) => {
+            height.value = next
+          },
+          onResizeEnd: (...args: unknown[]) => ends.push(args)
+        })
+    })
+    const handle = view.getByTestId('chart-card-resize-handle')
+    await fireEvent.keyDown(handle, { key: 'ArrowRight' })
+    expect(span.value).toBe(7)
+    await fireEvent.keyDown(handle, { key: 'End' })
+    expect(span.value).toBe(8)
+    await fireEvent.keyDown(handle, { key: 'ArrowRight' })
+    expect(span.value).toBe(8)
+    await fireEvent.keyDown(handle, { key: 'ArrowDown' })
+    expect(height.value).toBe(424)
+    await fireEvent.keyDown(handle, { key: 'Home' })
+    expect(span.value).toBe(3)
+    expect(handle.getAttribute('aria-valuenow')).toBe('3')
+    expect(handle.getAttribute('aria-valuetext')).toBe('3 of 8 columns, 424 pixels tall')
+    expect(ends.length).toBeGreaterThan(0)
+  })
+
+  it('resizes the height by pointer drag and restores it on Escape', async () => {
+    const height = ref<number | undefined>(400)
+    const view = render({
+      render: () =>
+        h(
+          'div',
+          { style: 'display: grid; grid-template-columns: repeat(12, 1fr); width: 1200px' },
+          [
+            card({
+              resizable: true,
+              height: height.value,
+              'onUpdate:height': (next: number | undefined) => {
+                height.value = next
+              }
+            })
+          ]
+        )
+    })
+    const handle = view.getByTestId('chart-card-resize-handle')
+    const rendered = view.getByTestId('chart-card').offsetHeight
+    await fireEvent.pointerDown(handle, { pointerId: 1, button: 0, clientX: 100, clientY: 100 })
+    await fireEvent.pointerMove(handle, { pointerId: 1, clientX: 100, clientY: 160 })
+    expect(height.value).toBe(Math.max(240, rendered + 60))
+    await fireEvent.keyDown(handle, { key: 'Escape' })
+    expect(height.value).toBe(400)
+  })
+
+  it('pads content unless padded is false', () => {
+    const view = render(
+      h(ChartCard, null, {
+        default: () => [h(ChartCardContent, { padded: false }, { default: () => 'x' })]
+      })
+    )
+    expect(view.getByTestId('chart-card-content').hasAttribute('data-flush')).toBe(true)
+  })
+
+  it('throws when a part renders outside a card', () => {
+    expect(() => render(ChartCardTitle)).toThrow(
+      'ChartCard.* sub-components must be used inside <ChartCard>.'
+    )
+  })
+
+  it('has no a11y violations with and without handles', async () => {
+    for (const props of [{}, { draggable: true, resizable: true, height: 552 }]) {
+      const view = render(card(props))
+      await expectNoA11yViolations(view.container)
+      view.unmount()
+    }
+  })
+
+  describe('on devices', () => {
+    it('is a named container whose header wraps and keeps the controls at the end', () => {
+      const view = render(card())
+
+      expect(view.getByTestId('chart-card').className).toContain('@container/chart-card')
+      expect(view.getByTestId('chart-card-header').className).toContain('flex-wrap')
+      const controls = view.getByTestId('chart-card-controls').className
+      expect(controls).toContain('ms-auto')
+      expect(controls).not.toContain('@max-xs/chart-card:w-full')
+      expect(controls).not.toContain('@max-xs/chart-card:ms-0')
+    })
+  })
+
+  describe('parts: Action, padded, title and group role', () => {
+    it('attaches Action and no longer the removed Controls', () => {
+      expect(ChartCard.Action).toBe(ChartCardControls)
+      expect((ChartCard as unknown as Record<string, unknown>)['Controls']).toBeUndefined()
+    })
+
+    it('drops the content padding with padded false and ignores the removed flush', () => {
+      const padded = render(ChartCard, {
+        slots: { default: () => h(ChartCardContent, { padded: false }, () => 'plot') }
+      })
+      expect(padded.getByTestId('chart-card-content').hasAttribute('data-flush')).toBe(true)
+      padded.unmount()
+      const flush = render(ChartCard, {
+        slots: { default: () => h(ChartCardContent, { flush: true }, () => 'plot') }
+      })
+      expect(flush.getByTestId('chart-card-content').hasAttribute('data-flush')).toBe(false)
+      flush.unmount()
+      const normal = render(ChartCard, {
+        slots: { default: () => h(ChartCardContent, null, () => 'plot') }
+      })
+      expect(normal.getByTestId('chart-card-content').hasAttribute('data-flush')).toBe(false)
+    })
+
+    it('names a group, not a region landmark, and renders the title as no heading', async () => {
+      const view = render(ChartCard, {
+        slots: {
+          default: () => h(ChartCardHeader, null, () => h(ChartCardTitle, null, () => 'Requests'))
+        }
+      })
+      await nextTick()
+      expect(view.getByRole('group', { name: 'Requests' })).toBeTruthy()
+      expect(view.queryByRole('region')).toBeNull()
+      expect(view.queryByRole('heading')).toBeNull()
+    })
+  })
+})

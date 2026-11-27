@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: e9c89d4a256ce2233339f18e0f41bae18610404f490058774b10941c7feeebfd
+checksum: ae9d71a3d18b2fed5bd9a1184a937c27e6e1cffeac357bfa84526e89b61186f8
 spec_version: 14
 template: 2
 created: 2026-10-20
@@ -63,7 +63,7 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
 
 ```vue
 <script setup>
-  import Chart from '@aziontech/webkit/chart'
+  import Chart from '@aziontech/ui/chart'
 
   const labels = ['14:00', '14:05', '14:10', '14:15', '14:20', '14:25']
   const series = [
@@ -103,13 +103,13 @@ Tree-shaking alternative — the standalone root plus only the parts a chart use
 
 ```vue
 <script setup>
-  import Chart from '@aziontech/webkit/chart-root'
-  import ChartLine from '@aziontech/webkit/chart-line'
-  import ChartAxis from '@aziontech/webkit/chart-axis'
+  import Chart from '@aziontech/ui/chart-root'
+  import ChartLine from '@aziontech/ui/chart-line'
+  import ChartAxis from '@aziontech/ui/chart-axis'
 </script>
 ```
 
-**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page and from the site's page JSON. The marks are tags inside the `<Chart>` tag (`<ChartGrid />`, `<ChartAxis />`, `<ChartArea />`, `<ChartBar />`, `<ChartLine />`, `<ChartScatter />`, `<ChartReference />`, `<ChartCrosshair />`, `<ChartTooltip />`, `<ChartLegend />`), and the scene's `children` in page JSON; `Chart.Brush` stays Vue, because the range it selects is app state.
+**Three ways in** (decision RV-C2-1, rule `azion-ui-content-channels`). The same data renders from a docs page and from the site's page JSON. The marks are tags inside the `<Chart>` tag (`<ChartGrid />`, `<ChartAxis />`, `<ChartArea />`, `<ChartBar />`, `<ChartLine />`, `<ChartScatter />`, `<ChartReference />`, `<ChartCrosshair />`, `<ChartTooltip />`, `<ChartLegend />`), and the scene's `children` in page JSON; `Chart.Brush` stays Vue, because the range it selects is app state.
 
 ```mdx
 <Chart aria-label="Requests" labels={["14:00", "14:05"]} series={[{ "id": "requests", "name": "Requests", "values": [1460, 1610] }]}>
@@ -180,7 +180,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/chart/
+  packages/ui/src/components/chart/
   ├── lib/                        (pure TS: scale, ticks, path, stack, format, series, types)
   └── chart/
       ├── chart.vue
@@ -392,7 +392,7 @@ Justification: a chart has no `type` / `size` axis; its axes are the mark form a
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

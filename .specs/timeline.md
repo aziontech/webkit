@@ -6,7 +6,7 @@ status: implemented
 stability: preview
 spec_version: 1
 template: 2
-checksum: 7eaab390d1d36d6b4b3ac2af5eab2121f5041f9fc2970975c8065defe1b1f96e
+checksum: 34687a20c90a2da7d6062d06643aaad6d7b4763e820a6f2df558638054fabff3
 created: 2026-11-23
 last_updated: 2026-11-25
 ---
@@ -60,7 +60,7 @@ It is read-only and has no current position: unlike `Stepper` it does not move a
 
 ```vue
 <script setup>
-import Timeline from '@aziontech/webkit/timeline'
+import Timeline from '@aziontech/ui/timeline'
 </script>
 
 <template>
@@ -89,9 +89,9 @@ Tree-shaking alternative — the standalone root and each part from its own entr
 
 ```vue
 <script setup>
-import Timeline from '@aziontech/webkit/timeline-root'
-import TimelineGroup from '@aziontech/webkit/timeline-group'
-import TimelineItem from '@aziontech/webkit/timeline-item'
+import Timeline from '@aziontech/ui/timeline-root'
+import TimelineGroup from '@aziontech/ui/timeline-group'
+import TimelineItem from '@aziontech/ui/timeline-item'
 </script>
 ```
 
@@ -132,7 +132,7 @@ Markup: the root is an `<ol>`. An Item is an `<li>`. A Group is an `<li>` holdin
 Resulting layout:
 
 ```
-packages/webkit/src/components/content/timeline/
+packages/ui/src/components/content/timeline/
 ├── timeline.vue
 ├── timeline.test.ts
 ├── index.ts
@@ -145,7 +145,7 @@ packages/webkit/src/components/content/timeline/
     └── timeline-group.vue
 ```
 
-Exports (flat; run `pnpm --filter @aziontech/webkit build:exports` after adding them):
+Exports (flat; run `pnpm --filter @aziontech/ui build:exports` after adding them):
 
 ```jsonc
 "./timeline": "./src/components/content/timeline/index.ts",
@@ -154,7 +154,7 @@ Exports (flat; run `pnpm --filter @aziontech/webkit build:exports` after adding 
 "./timeline-group": "./src/components/content/timeline/timeline-group/timeline-group.vue"
 ```
 
-The same change rewrites the `timeline` entry of `packages/webkit/src/cli/migrations/v6.json` (`legacy.manual`) to "PrimeVue Timeline; use Timeline with Timeline.Item and Timeline.Group (different API)", so `webkit migrate` points v3 apps at the new export.
+The same change rewrites the `timeline` entry of `packages/ui/src/cli/migrations/v6.json` (`legacy.manual`) to "PrimeVue Timeline; use Timeline with Timeline.Item and Timeline.Group (different API)", so `azion-ui migrate` points v3 apps at the new export.
 
 `./timeline` and `./timeline-root` export `TimelineProps`, `TimelineSize`, `TimelineTimeFormat`; `./timeline-item` exports `TimelineItemProps` and `TimelineItemSeverity` (derived from `Severity`); `./timeline-group` exports `TimelineGroupProps`; `./timeline` also exports `useTimelineContext` and `TimelineContext`.
 
@@ -280,7 +280,7 @@ The marker box is 1.5rem square at `medium` and 1.25rem at `small`, the height o
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/primitives/animations/animate.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

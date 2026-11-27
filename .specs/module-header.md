@@ -4,7 +4,7 @@ category: layout
 structure: monolithic
 status: implemented
 spec_version: 9
-checksum: d128602bb1e8e650a81bdd1157d4e8e55b08d375a773fc45990625898ccf7be4
+checksum: 03a0601301ad127e24305dcf0a4897dd4ea050894c289700e25b369598da49d1
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
@@ -56,8 +56,8 @@ The framed header row that opens a page section: an optional overline, the secti
 
 ```vue
 <script setup>
-  import ModuleHeader from '@aziontech/webkit/module-header'
-  import Button from '@aziontech/webkit/button'
+  import ModuleHeader from '@aziontech/ui/module-header'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
@@ -158,7 +158,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

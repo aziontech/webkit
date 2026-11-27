@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import DocCard from '@aziontech/webkit/doc-card'
-  import DocCardGroup from '@aziontech/webkit/doc-card-group'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import Tag from '@aziontech/webkit/tag'
+  import DocCard from '@aziontech/ui/doc-card'
+  import DocCardGroup from '@aziontech/ui/doc-card-group'
+  import DocPageHeader from '@aziontech/ui/doc-page-header'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import Tag from '@aziontech/ui/tag'
   import { computed, ref } from 'vue'
 
   import { BLOCK_THUMBNAIL } from '../lib/block-thumbnails'

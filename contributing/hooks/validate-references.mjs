@@ -45,15 +45,15 @@ function readBaselineImports(filePath) {
   }
 }
 
-function resolveAziontechWebkit(specifier) {
+function resolveAziontechAzionUi(specifier) {
   try {
-    const pkg = JSON.parse(readFileSync(join(ROOT, 'packages/webkit/package.json'), 'utf-8'))
-    const subpath = specifier.replace(/^@aziontech\/webkit/, '.')
+    const pkg = JSON.parse(readFileSync(join(ROOT, 'packages/ui/package.json'), 'utf-8'))
+    const subpath = specifier.replace(/^@aziontech\/ui/, '.')
     const entry = pkg.exports?.[subpath]
     const target = typeof entry === 'string' ? entry : entry?.default
     if (!target) return false
     const rel = target.replace(/^\.\//, '')
-    return existsSync(join(ROOT, 'packages/webkit', rel))
+    return existsSync(join(ROOT, 'packages/ui', rel))
   } catch {
     return false
   }
@@ -103,7 +103,7 @@ function resolveNodeModule(specifier) {
   const pkgName = specifier.startsWith('@') ? `${parts[0]}/${parts[1]}` : parts[0]
   const dirs = [
     'node_modules',
-    'packages/webkit/node_modules',
+    'packages/ui/node_modules',
     'packages/theme/node_modules',
     'packages/icons/node_modules',
     'apps/docs/node_modules',
@@ -145,9 +145,9 @@ async function main() {
     let ok = false
     let reason = ''
 
-    if (spec === '@aziontech/webkit' || spec.startsWith('@aziontech/webkit/')) {
-      ok = resolveAziontechWebkit(spec)
-      reason = 'no matching entry in packages/webkit/package.json#exports'
+    if (spec === '@aziontech/ui' || spec.startsWith('@aziontech/ui/')) {
+      ok = resolveAziontechAzionUi(spec)
+      reason = 'no matching entry in packages/ui/package.json#exports'
     } else if (spec.startsWith('@aziontech/')) {
       ok = resolveAziontechWorkspace(spec)
       reason = 'no such workspace under packages/'
@@ -177,7 +177,7 @@ async function main() {
   lines.push('')
   lines.push('Do not invent paths. Either:')
   lines.push(
-    '  1) Import an existing export — for @aziontech/webkit see packages/webkit/package.json#exports.'
+    '  1) Import an existing export — for @aziontech/ui see packages/ui/package.json#exports.'
   )
   lines.push(
     '  2) Install the missing package via `pnpm --filter <workspace> add <pkg>` before importing it.'

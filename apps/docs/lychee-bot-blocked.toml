@@ -1,6 +1,6 @@
 # The hosts lychee.toml leaves out: each blocks automated clients, so a 403 or 429 from it
 # says nothing about the page. A 404, a 5xx or a failed connection still fails the check.
-# Run: pnpm --filter @aziontech/webkit-docs run check:external-links after pnpm build:docs.
+# Run: pnpm --filter @aziontech/ui-docs run check:external-links after pnpm build:docs.
 
 scheme = ["https"]
 max_concurrency = 2

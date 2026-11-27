@@ -1,0 +1,61 @@
+{
+ "name": "copy-command-section",
+ "binding": "CopyCommandSection",
+ "import": "@aziontech/ui/copy-command-section",
+ "treeShakeableImport": "@aziontech/ui/copy-command-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A command or agent prompt with a copy button, under hero or section copy (\"npm create azion\", \"Ask your agent to …\"). Both are a read-only block that wraps, so the reader sees every word they copy; with `shell` a decorative `$` prompt leads the command, which breaks anywhere (a command has no spaces to break at), and without it the agent prompt wraps between words. From the design sample's site `CopyCommandSection`.",
+ "setup": null,
+ "useWhen": [
+  "Use CopyCommandSection for a one-line command or agent prompt with a copy button on a marketing page.",
+  "The one command that starts a product, beside or instead of a call to action.",
+  "A prompt to paste into an AI agent (`shell` off)."
+ ],
+ "avoidWhen": [
+  "For several lines or output — use `CodeBlock` or `CliTerminalSection`.",
+  "For an editable field — use `Input`."
+ ],
+ "related": [
+  "`CopyButton` — the part.",
+  "`CliTerminalSection` — a full terminal session."
+ ],
+ "bestPractices": [
+  "One line that works when pasted as is.",
+  "Place it in a hero or module-header actions slot."
+ ],
+ "props": [
+  {
+   "name": "value",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Text on the line, copied as written."
+  },
+  {
+   "name": "shell",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draws the shell prompt before the text; turn off for a prompt meant for an agent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/copy-command-section/default.vue"
+  },
+  {
+   "name": "Prompt",
+   "file": "examples/copy-command-section/prompt.vue"
+  }
+ ],
+ "docs": "components/copy-command-section.md"
+}

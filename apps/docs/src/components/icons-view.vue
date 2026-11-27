@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import '@aziontech/icons/azionicons-color'
 
-  import EmptyState from '@aziontech/webkit/empty-state'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item-root'
-  import Slider from '@aziontech/webkit/slider'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import Input from '@aziontech/ui/input'
+  import Item from '@aziontech/ui/item-root'
+  import Slider from '@aziontech/ui/slider'
   import assets from 'virtual:docs-assets'
   import { computed, ref } from 'vue'
 

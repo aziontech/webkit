@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import type { ConversationHistoryItem } from '@aziontech/webkit/conversation-history'
-  import ConversationHistory from '@aziontech/webkit/conversation-history'
-  import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
+  import type { ConversationHistoryItem } from '@aziontech/ui/conversation-history'
+  import ConversationHistory from '@aziontech/ui/conversation-history'
+  import { useConsoleLayout } from '@aziontech/ui/use-console-layout'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 

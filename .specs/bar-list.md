@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: af6af532102d175e0c26790c39f5b9eb15aeeea3af949dea8cef365cc654d2ef
+checksum: f9178d9554b1d9326787170abc1fbfd8c0a3599b4a74246c99b016c359152c7b
 ---
 
 # BarList — Component Spec
@@ -46,7 +46,7 @@ A ranked list of named values: each row is a tinted bar whose length is the valu
 
 ```vue
 <script setup>
-  import BarList from '@aziontech/webkit/bar-list'
+  import BarList from '@aziontech/ui/bar-list'
 </script>
 
 <template>
@@ -63,7 +63,7 @@ A ranked list of named values: each row is a tinted bar whose length is the valu
 </template>
 ```
 
-**Three ways in** (decision RV-C2-1, rule `webkit-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `BarList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+**Three ways in** (decision RV-C2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `BarList` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
 
 ```mdx
 <BarList aria-label="Top paths" items={[{ "name": "/home", "value": 843 }]} />
@@ -171,7 +171,7 @@ The rows are data (`items`). The state surface matches `chart`, `donut-chart`, `
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

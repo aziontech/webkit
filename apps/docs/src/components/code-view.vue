@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import CopyButton from '@aziontech/webkit/copy-button'
+  import CopyButton from '@aziontech/ui/copy-button'
 
   import type { Highlighted } from '../lib/types'
   import RawHtml from './raw-html.vue'

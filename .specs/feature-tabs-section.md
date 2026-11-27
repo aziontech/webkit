@@ -6,14 +6,14 @@ status: implemented
 spec_version: 8
 created: 2026-11-05
 last_updated: 2026-11-18
-checksum: 358af35d35511c4db4ec4d75eca49a0027037c20e49941d4bc9074385e8481be
+checksum: 0e93ededdd1d340f8dace84353429c30f4ec5f814ae35a9c89c11ce9a7dd4c08
 ---
 
 # FeatureTabsSection — Component Spec
 
 ## Purpose
 
-The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
+The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the Azion UI scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
 ## When to use
 
@@ -42,7 +42,7 @@ The feature walkthrough band of a product page: a horizontal section title, with
 
 ```vue
 <script setup>
-  import FeatureTabsSection from '@aziontech/webkit/feature-tabs-section'
+  import FeatureTabsSection from '@aziontech/ui/feature-tabs-section'
 </script>
 
 <template>
@@ -77,7 +77,7 @@ The feature walkthrough band of a product page: a horizontal section title, with
 | `title`            | `string`                  | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                                                                                                                                                                                                                                                                                             |
 | `description`      | `string`                  | `''`        | false    | Supporting sentence under the headline.                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `tabs`             | `FeatureTabsSectionTab[]` | `[]`        | false    | The features, in order, at most three; each is `{ title, description, value?, code?, illustration?, illustrationLabel? }` where `value` is the stable key handed to the band scene as its `tab`, `code` is the `{ label, value, code, language?, fileName?, fileIcon? }` file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code and the band no scene, and `illustrationLabel` its accessible name. |
-| `scene`            | `FeatureTabsSectionScene` | `undefined` | false    | Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations.                                                                                                                                                                                                                     |
+| `scene`            | `FeatureTabsSectionScene` | `undefined` | false    | Live scene drawn as the media of every tab without code, `{ component, props? }` naming an Azion UI scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations.                                                                                                                                                                                                                     |
 | `autoplay`         | `boolean`                 | `true`      | false    | Opens the next tab on a timer, with the composed tabs' visible pause control.                                                                                                                                                                                                                                                                                                                                                                  |
 | `autoplayInterval` | `number`                  | `5200`      | false    | Milliseconds each tab holds before the next one opens.                                                                                                                                                                                                                                                                                                                                                                                         |
 | `copyAriaLabel`    | `string`                  | `''`        | false    | Accessible name of the copy button on each tab's code file; empty keeps the code block's own.                                                                                                                                                                                                                                                                                                                                                  |
@@ -142,7 +142,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

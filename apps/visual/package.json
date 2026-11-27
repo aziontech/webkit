@@ -1,8 +1,8 @@
 {
-  "name": "@aziontech/webkit-visual",
+  "name": "@aziontech/ui-visual",
   "version": "0.1.0",
   "private": true,
-  "description": "Styled visual regression for WebKit: Playwright screenshots of the docs site's examples and blocks and of the demos, with the real theme CSS",
+  "description": "Styled visual regression for Azion UI: Playwright screenshots of the docs site's examples and blocks and of the demos, with the real theme CSS",
   "license": "MIT",
   "type": "module",
   "scripts": {

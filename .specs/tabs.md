@@ -7,7 +7,7 @@ spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 4257acd0f8593f7bd67a07d5ad8d5bace7db15a29775e0300bdee6d9bfe21e72
+checksum: 7788ffdb794903b059904cc3ef64959ea44f9f26c9eead609108dbd986a379f0
 created: 2026-05-22
 last_updated: 2026-11-22
 ---
@@ -48,7 +48,7 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Trigger`s (6.0 removed the item's `selected` prop).
-- Add no spacing between the list and the panels: every `Tabs.Content` starts one group step below the strip (`pt-(--layout-group-gap)`, 16 px), the rule every tab strip in WebKit follows (a Markdown `<Tabs>` rendered by `DocMarkdown` is a `Tabs` too). A consumer `class` can still override it (`pt-0` for a panel that butts against a framed strip). It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
+- Add no spacing between the list and the panels: every `Tabs.Content` starts one group step below the strip (`pt-(--layout-group-gap)`, 16 px), the rule every tab strip in Azion UI follows (a Markdown `<Tabs>` rendered by `DocMarkdown` is a `Tabs` too). A consumer `class` can still override it (`pt-0` for a panel that butts against a framed strip). It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
 - Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Usage
@@ -56,7 +56,7 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import Tabs from '@aziontech/webkit/tabs'
+  import Tabs from '@aziontech/ui/tabs'
 
   const active = ref('overview')
 </script>
@@ -87,10 +87,10 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 
 ## Sub-components
 
-- `tabs-trigger.vue` — Public sub-component `tabs-trigger` (`@aziontech/webkit/tabs-trigger`), attached as `Tabs.Trigger`. `label` defaults to `''` (an item with neither `label` nor default slot renders an empty label). It has no selection of its own: the root's value selects it. The disabled state is read reactively: toggling `disabled` after mount updates the arrow-key path. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-foreground)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
-- `tabs-list.vue` — Public sub-component `tabs-list` (`@aziontech/webkit/tabs-list`), attached as `Tabs.List`. Prop `align: 'start' | 'center'` (default `'start'`): `center` centres the tabs in the row (`data-align="center"`, `justify-center-safe`, so a row that overflows still scrolls from its first tab), for a page whose content below is centred, such as a catalog of cards.
-- `tabs-content.vue` — Public sub-component `tabs-content` (`@aziontech/webkit/tabs-content`), attached as `Tabs.Content`. Prop `value: TabsValue` (required). It renders the `role="tabpanel"` for that tab, attributes forwarded to it; its testid derives from the root's (`<testId>__panel`); it starts one group step (`--layout-group-gap`) below the strip.
-- The root file is `tabs.vue`; `@aziontech/webkit/tabs-root` resolves to it with no part attached (the tree-shaking path).
+- `tabs-trigger.vue` — Public sub-component `tabs-trigger` (`@aziontech/ui/tabs-trigger`), attached as `Tabs.Trigger`. `label` defaults to `''` (an item with neither `label` nor default slot renders an empty label). It has no selection of its own: the root's value selects it. The disabled state is read reactively: toggling `disabled` after mount updates the arrow-key path. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-foreground)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
+- `tabs-list.vue` — Public sub-component `tabs-list` (`@aziontech/ui/tabs-list`), attached as `Tabs.List`. Prop `align: 'start' | 'center'` (default `'start'`): `center` centres the tabs in the row (`data-align="center"`, `justify-center-safe`, so a row that overflows still scrolls from its first tab), for a page whose content below is centred, such as a catalog of cards.
+- `tabs-content.vue` — Public sub-component `tabs-content` (`@aziontech/ui/tabs-content`), attached as `Tabs.Content`. Prop `value: TabsValue` (required). It renders the `role="tabpanel"` for that tab, attributes forwarded to it; its testid derives from the root's (`<testId>__panel`); it starts one group step (`--layout-group-gap`) below the strip.
+- The root file is `tabs.vue`; `@aziontech/ui/tabs-root` resolves to it with no part attached (the tree-shaking path).
 - Every part spreads the consumer's attributes (`id`, `aria-*`, `dir`, `data-*`, listeners) on its own root element (`inheritAttrs: false` + `v-bind="$attrs"`), with `class` merged through `cn`.
 
 ## Props
@@ -100,7 +100,7 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 | `defaultValue`   | `TabsValue \| null`       | `null`        | false    | Initial active tab when uncontrolled.                                                                                                                                                  |
 | `activationMode` | `'automatic' \| 'manual'` | `'automatic'` | false    | `automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render). |
 
-Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `TabsActivationMode = 'automatic' | 'manual'`, the value of a tab and of its panel; `TabsListAlign = 'start' | 'center'`. The compound is typed from `index.ts` (`Tabs`, `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`), so a wrong prop on a part is a type error.
+Types (exported from `@aziontech/ui/tabs`): `TabsValue = string | number`, `TabsActivationMode = 'automatic' | 'manual'`, the value of a tab and of its panel; `TabsListAlign = 'start' | 'center'`. The compound is typed from `index.ts` (`Tabs`, `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`), so a wrong prop on a part is a type error.
 
 ## v-model
 
@@ -186,7 +186,7 @@ Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

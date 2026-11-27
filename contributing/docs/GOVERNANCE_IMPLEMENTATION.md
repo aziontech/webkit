@@ -1,6 +1,6 @@
 # Governance Pipeline Implementation
 
-**Package:** @aziontech/webkit
+**Package:** @aziontech/ui
 **Framework:** Vue 3 + TypeScript
 **CI/CD:** GitHub Actions
 **Implemented:** 2026-04-13 · **Last refreshed:** 2026-07-28 (release-please model, current job set)
@@ -9,9 +9,9 @@
 
 ## Overview
 
-This document details the implementation of the governance pipeline for the `@aziontech/webkit` Vue 3 component library. The pipeline enforces code quality, security, accessibility, and type safety standards on every commit and CI/CD run.
+This document details the implementation of the governance pipeline for the `@aziontech/ui` Vue 3 component library. The pipeline enforces code quality, security, accessibility, and type safety standards on every commit and CI/CD run.
 
-The construction standards themselves (props, styling, testing, …) are catalogued in [`STYLEGUIDE.md`](../../packages/webkit/docs/STYLEGUIDE.md) and digested in [`GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md); the full process map is [`PROCESS.md`](./PROCESS.md). This document covers the **tooling**: what runs, where it runs, and why each piece exists.
+The construction standards themselves (props, styling, testing, …) are catalogued in [`STYLEGUIDE.md`](../../packages/ui/docs/STYLEGUIDE.md) and digested in [`GUIDELINES.md`](../../packages/ui/docs/GUIDELINES.md); the full process map is [`PROCESS.md`](./PROCESS.md). This document covers the **tooling**: what runs, where it runs, and why each piece exists.
 
 ---
 
@@ -31,7 +31,7 @@ The construction standards themselves (props, styling, testing, …) are catalog
 
 ## 1. ESLint Configuration
 
-**File:** root [`eslint.config.js`](../../eslint.config.js) — the repo-wide flat config. `packages/webkit/eslint.config.js` is a one-line re-export of it, so running ESLint from the package resolves the exact same rule set.
+**File:** root [`eslint.config.js`](../../eslint.config.js) — the repo-wide flat config. `packages/ui/eslint.config.js` is a one-line re-export of it, so running ESLint from the package resolves the exact same rule set.
 
 ### What Was Implemented
 
@@ -96,23 +96,23 @@ Stylelint configuration with SCSS support and Vue integration.
 
 ## 3. TypeScript Configuration
 
-**Files:** root [`tsconfig.base.json`](../../tsconfig.base.json) (shared strictness) + [`packages/webkit/tsconfig.json`](../../packages/webkit/tsconfig.json) (extends the base, adds declaration emit).
+**Files:** root [`tsconfig.base.json`](../../tsconfig.base.json) (shared strictness) + [`packages/ui/tsconfig.json`](../../packages/ui/tsconfig.json) (extends the base, adds declaration emit).
 
 ### What Was Implemented
 
-Strict TypeScript shared across the monorepo, with the webkit package layering declaration-emit options on top.
+Strict TypeScript shared across the monorepo, with the Azion UI package layering declaration-emit options on top.
 
 ### Reasoning
 
-| Option                                                       | Where  | Reason                                                                                                                                                                                            |
-| ------------------------------------------------------------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`strict: true`**                                           | base   | Enables all strict type checking options.                                                                                                                                                         |
-| **`noImplicitReturns: true`**                                | base   | Ensures all code paths return a value. Prevents functions that implicitly return `undefined` when a return type is expected. Catches missing return statements in branches.                       |
-| **`noImplicitOverride: true`**                               | base   | Requires explicit `override` keyword when overriding inherited members. Prevents accidental overrides when base class methods change. Makes inheritance hierarchies clearer.                      |
-| **`noUnusedLocals: true`**                                   | base   | Reports unused local variables. Indicates incomplete refactoring or dead code. Keeps codebase clean.                                                                                              |
-| **`noUnusedParameters: true`**                               | base   | Reports unused function parameters. If a parameter is unused, it should be prefixed with `_` (e.g., `_event`) to indicate intentional. Prevents confusion about required vs. optional parameters. |
-| **`noPropertyAccessFromIndexSignature: true`**               | webkit | Disallows accessing index signature properties with dot notation (`obj.property`). Requires bracket notation (`obj['property']`). Makes it explicit that the property is dynamically accessed.    |
-| **`declaration` + `declarationMap` + `emitDeclarationOnly`** | webkit | The same tsconfig drives publish-time `.d.ts` emit (see [§8 — Build Job](#build-job-details)). CI validation runs `vue-tsc --noEmit`, so declarations are never built in dev or CI.               |
+| Option                                                       | Where | Reason                                                                                                                                                                                            |
+| ------------------------------------------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`strict: true`**                                           | base  | Enables all strict type checking options.                                                                                                                                                         |
+| **`noImplicitReturns: true`**                                | base  | Ensures all code paths return a value. Prevents functions that implicitly return `undefined` when a return type is expected. Catches missing return statements in branches.                       |
+| **`noImplicitOverride: true`**                               | base  | Requires explicit `override` keyword when overriding inherited members. Prevents accidental overrides when base class methods change. Makes inheritance hierarchies clearer.                      |
+| **`noUnusedLocals: true`**                                   | base  | Reports unused local variables. Indicates incomplete refactoring or dead code. Keeps codebase clean.                                                                                              |
+| **`noUnusedParameters: true`**                               | base  | Reports unused function parameters. If a parameter is unused, it should be prefixed with `_` (e.g., `_event`) to indicate intentional. Prevents confusion about required vs. optional parameters. |
+| **`noPropertyAccessFromIndexSignature: true`**               | ui    | Disallows accessing index signature properties with dot notation (`obj.property`). Requires bracket notation (`obj['property']`). Makes it explicit that the property is dynamically accessed.    |
+| **`declaration` + `declarationMap` + `emitDeclarationOnly`** | ui    | The same tsconfig drives publish-time `.d.ts` emit (see [§8 — Build Job](#build-job-details)). CI validation runs `vue-tsc --noEmit`, so declarations are never built in dev or CI.               |
 
 Test files (`*.test.ts`, `src/test/`) and Code Connect files (`*.figma.ts`) are excluded from the program — they are development artifacts, not part of the published type surface.
 
@@ -120,7 +120,7 @@ Test files (`*.test.ts`, `src/test/`) and Code Connect files (`*.figma.ts`) are 
 
 ## 4. Type Coverage
 
-**File:** [`packages/webkit/type-coverage.json`](../../packages/webkit/type-coverage.json)
+**File:** [`packages/ui/type-coverage.json`](../../packages/ui/type-coverage.json)
 
 ### What Was Implemented
 
@@ -147,7 +147,7 @@ Type coverage configuration enforcing a 95% type safety threshold (the `type-cov
 
 ## 5. Prettier Ignore
 
-**Files:** [`packages/webkit/.prettierignore`](../../packages/webkit/.prettierignore) + the root [`.prettierignore`](../../.prettierignore)
+**Files:** [`packages/ui/.prettierignore`](../../packages/ui/.prettierignore) + the root [`.prettierignore`](../../.prettierignore)
 
 ### What Was Implemented
 
@@ -174,7 +174,7 @@ Markdown is formatted, but the code inside its fences is not: `.prettierrc.json`
 
 ## 6. Package Scripts
 
-**Files:** `/package.json` and `/packages/webkit/package.json`
+**Files:** `/package.json` and `/packages/ui/package.json`
 
 ### What Was Implemented
 
@@ -182,7 +182,7 @@ Comprehensive npm scripts for local development and CI/CD.
 
 ### Reasoning
 
-#### Webkit Package Scripts — quality checks
+#### Azion UI Package Scripts — quality checks
 
 | Script                                                    | Reason                                                                                                                   |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
@@ -195,7 +195,7 @@ Comprehensive npm scripts for local development and CI/CD.
 | **`check:type-coverage`**                                 | Reports type coverage percentage. Enforces 95% threshold. Gives measurable type safety metric.                           |
 | **`test`** (+ `test:watch` / `test:coverage` / `test:ui`) | Vitest **browser mode** (Playwright Chromium) — the functional per-component suites required by the testing standard.    |
 
-#### Webkit Package Scripts — governance gates
+#### Azion UI Package Scripts — governance gates
 
 | Script                     | Reason                                                                                                                                 |
 | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
@@ -205,17 +205,17 @@ Comprehensive npm scripts for local development and CI/CD.
 | **`check:tests`**          | Fails if any root component lacks its co-located `<name>.test.ts` (test-existence gate; never grandfathered).                          |
 | **`test:toolkit`**         | Unit tests for the adoption toolkit itself (ESLint rules, MCP, CLI, stylelint config).                                                 |
 | **`check:authoring`**      | Construction-standard ratchet — no **new** authoring violations against the baseline (`update:authoring` re-baselines).                |
-| **`check:authoring-docs`** | Authoring-docs ratchet — no new out-of-standard `contributing/` docs (`update:authoring-docs` re-baselines).                                 |
+| **`check:authoring-docs`** | Authoring-docs ratchet — no new out-of-standard `contributing/` docs (`update:authoring-docs` re-baselines).                           |
 | **`test:consume`**         | Scaffolds and builds a bare consumer app against the local package — proves `init` + a consumer build still work.                      |
 
 #### Root Package Scripts
 
-| Script              | Reason                                                                                                                                                                                                             |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`prepare`**       | Runs `husky` to initialize Git hooks after `pnpm install`. Ensures hooks are set up on every machine.                                                                                                              |
-| **`<verb>:webkit`** | Delegation scripts (`lint:webkit`, `typecheck:webkit`, `check:webkit:format`, `test:webkit`, …) via `pnpm --filter @aziontech/webkit`, so any check runs from the repo root — these are the entry points CI calls. |
-| **`gates`**         | Unified command running all static checks: `lint:webkit` + `lint:webkit:style` + `check:webkit:format` + `typecheck:webkit` + `check:webkit:type-coverage` + `audit`. Single command to reproduce CI locally.            |
-| **`audit`**         | Runs plain **`pnpm audit`** — any severity fails (deliberately stricter than `--audit-level=high`). Accepted-risk overrides live in `pnpm-workspace.yaml`, not in a lowered threshold.                             |
+| Script                | Reason                                                                                                                                                                                         |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`prepare`**         | Runs `husky` to initialize Git hooks after `pnpm install`. Ensures hooks are set up on every machine.                                                                                          |
+| **`<verb>:Azion UI`** | Delegation scripts (`lint:ui`, `typecheck:ui`, `check:ui:format`, `test:ui`, …) via `pnpm --filter @aziontech/ui`, so any check runs from the repo root — these are the entry points CI calls. |
+| **`gates`**           | Unified command running all static checks: `lint:ui` + `lint:ui:style` + `check:ui:format` + `typecheck:ui` + `check:ui:type-coverage` + `audit`. Single command to reproduce CI locally.      |
+| **`audit`**           | Runs plain **`pnpm audit`** — any severity fails (deliberately stricter than `--audit-level=high`). Accepted-risk overrides live in `pnpm-workspace.yaml`, not in a lowered threshold.         |
 
 ### Design Decisions
 
@@ -224,7 +224,7 @@ Comprehensive npm scripts for local development and CI/CD.
    - `gates` command provides one-stop validation for CI parity
 
 2. **Root vs. package scripts**:
-   - Root scripts use `pnpm --filter @aziontech/webkit` to delegate
+   - Root scripts use `pnpm --filter @aziontech/ui` to delegate
    - Allows running governance from any directory in monorepo
 
 ---
@@ -271,20 +271,20 @@ Comprehensive CI/CD pipeline with path-filtered gating, parallel execution, and 
 
 #### Job Structure
 
-| Job               | Purpose                                                                                              | Runs                                  |
-| ----------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| **changes**       | `dorny/paths-filter` gate — computes `webkit` / `toolkit` / `tests` / `visual` / `canary` outputs    | always, first                         |
-| **security**      | Dependency audit, secret detection, unused deps                                                      | `webkit` changes, parallel            |
-| **lint-canaries** | Every deliberately-broken fixture in `lint-canaries/` must **still fail** its lint rule              | `canary` changes (lint configs moved) |
-| **lint**          | ESLint (zero warnings), Stylelint, Prettier check                                                    | `webkit` changes, parallel            |
-| **types**         | `vue-tsc --noEmit` + type coverage ≥ 95%                                                             | `webkit` changes, parallel            |
-| **build**         | Publish-safety (`check:pack`) + bundle budget (`check:size`)                                         | after lint + types                    |
-| **site**          | Docs site + demos build, uploaded for the visual shards                                              | after lint + types                    |
+| Job               | Purpose                                                                                               | Runs                                  |
+| ----------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| **changes**       | `dorny/paths-filter` gate — computes `ui` / `toolkit` / `tests` / `visual` / `canary` outputs         | always, first                         |
+| **security**      | Dependency audit, secret detection, unused deps                                                       | `ui` changes, parallel                |
+| **lint-canaries** | Every deliberately-broken fixture in `lint-canaries/` must **still fail** its lint rule               | `canary` changes (lint configs moved) |
+| **lint**          | ESLint (zero warnings), Stylelint, Prettier check                                                     | `ui` changes, parallel                |
+| **types**         | `vue-tsc --noEmit` + type coverage ≥ 95%                                                              | `ui` changes, parallel                |
+| **build**         | Publish-safety (`check:pack`) + bundle budget (`check:size`)                                          | after lint + types                    |
+| **site**          | Docs site + demos build, uploaded for the visual shards                                               | after lint + types                    |
 | **toolkit**       | Catalog drift, toolkit unit tests, authoring **ratchet**, test-existence gate, authoring-docs ratchet | `toolkit` changes, parallel           |
-| **smoke**         | Consumer smoke test — `init` + build a bare consumer app                                             | `visual`-scope changes                |
-| **tests**         | **Vitest browser mode** (Playwright Chromium), 4 shards                                              | after lint + types                    |
-| **visual**        | Styled Playwright screenshots (`apps/visual`) in the Playwright image, 4 shards, report on failure   | after all build/test jobs             |
-| **gates**         | Summary gate ensuring all jobs passed (or cleanly skipped)                                           | `always()`, last                      |
+| **smoke**         | Consumer smoke test — `init` + build a bare consumer app                                              | `visual`-scope changes                |
+| **tests**         | **Vitest browser mode** (Playwright Chromium), 4 shards                                               | after lint + types                    |
+| **visual**        | Styled Playwright screenshots (`apps/visual`) in the Playwright image, 4 shards, report on failure    | after all build/test jobs             |
+| **gates**         | Summary gate ensuring all jobs passed (or cleanly skipped)                                            | `always()`, last                      |
 
 #### Security Job Details
 
@@ -315,11 +315,11 @@ The `lint-canaries/` fixtures each violate exactly one lint rule on purpose. The
 
 #### Build Job Details
 
-| Step                              | Reason                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Depends on lint + types**       | Only builds if linting and type checking pass. Prevents wasting CI time on broken code.                                                                                                                                                                                                                                                                                                                                               |
-| **Publish safety (`check:pack`)** | `npm pack --dry-run` must list **no** `*.test.ts` / `src/test/**` files — tests never ship to npm. `.d.ts` declarations are **not** built in this job: they are generated at publish time by the release workflow ([`publish-webkit.yml`](../../.github/workflows/publish-webkit.yml) runs `vue-tsc --declaration --emitDeclarationOnly` immediately before `npm publish`, triggered by release-please's `release: published` event). |
-| **Bundle budget (`check:size`)**  | Every budgeted export entry is compiled (Vite + plugin-vue, vue externalized) and its gzipped size compared against `.size-limit.json`. Budgets only ratchet down.                                                                                                                                                                                                                                                                    |
+| Step                              | Reason                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Depends on lint + types**       | Only builds if linting and type checking pass. Prevents wasting CI time on broken code.                                                                                                                                                                                                                                                                                                                                       |
+| **Publish safety (`check:pack`)** | `npm pack --dry-run` must list **no** `*.test.ts` / `src/test/**` files — tests never ship to npm. `.d.ts` declarations are **not** built in this job: they are generated at publish time by the release workflow ([`publish-ui.yml`](../../.github/workflows/publish-ui.yml) runs `vue-tsc --declaration --emitDeclarationOnly` immediately before `npm publish`, triggered by release-please's `release: published` event). |
+| **Bundle budget (`check:size`)**  | Every budgeted export entry is compiled (Vite + plugin-vue, vue externalized) and its gzipped size compared against `.size-limit.json`. Budgets only ratchet down.                                                                                                                                                                                                                                                            |
 
 #### Tests Job Details (Vitest browser mode)
 
@@ -342,7 +342,7 @@ The `lint-canaries/` fixtures each violate exactly one lint rule on purpose. The
 | Step                    | Reason                                                                                                 |
 | ----------------------- | ------------------------------------------------------------------------------------------------------ |
 | **Build the docs site** | `build:docs` prerenders every route (components, examples, blocks, frames); a broken example fails it. |
-| **Build the demos**     | `build:demos` proves the blocks copied with `webkit add` still build together.                         |
+| **Build the demos**     | `build:demos` proves the blocks copied with `azion-ui add` still build together.                       |
 | **Upload for visual**   | The four visual shards download the built sites instead of rebuilding them.                            |
 
 #### Governance Gate Job
@@ -441,25 +441,25 @@ The initial ESLint run identified issues that needed manual fixing — missing p
 pnpm run gates
 
 # Individual checks
-pnpm run lint:webkit
-pnpm run typecheck:webkit
-pnpm run check:webkit:format
+pnpm run lint:ui
+pnpm run typecheck:ui
+pnpm run check:ui:format
 pnpm run check:audit
 
 # Functional tests (Vitest browser mode)
 pnpm run test:browser-webkit
 
 # Auto-fix issues
-pnpm run lint:webkit:fix
-pnpm run format:webkit
+pnpm run lint:ui:fix
+pnpm run format:ui
 ```
 
 ### Pre-commit Hook Test
 
 ```bash
 # Make a change
-echo "console.log('test')" >> packages/webkit/src/test.js
-git add packages/webkit/src/test.js
+echo "console.log('test')" >> packages/ui/src/test.js
+git add packages/ui/src/test.js
 git commit -m "test: pre-commit hook"
 
 # pre-commit runs ESLint + Prettier on the staged file (fails on no-console);
@@ -468,7 +468,7 @@ git commit -m "test: pre-commit hook"
 
 ### CI/CD Validation
 
-1. Create a PR touching `packages/webkit/`
+1. Create a PR touching `packages/ui/`
 2. Navigate to Actions tab in GitHub
 3. Verify the jobs run:
    - changes (first — path-filter gate)
@@ -522,7 +522,7 @@ pnpm run prepare  # Re-initialize hooks
 #### Type Coverage Too Low
 
 ```bash
-pnpm run check:webkit:type-coverage  # See detailed report
+pnpm run check:ui:type-coverage  # See detailed report
 ```
 
 #### CI Job Failing Locally
@@ -553,5 +553,5 @@ The pipeline is **strict by default** but **configurable**—adjust rules as nee
 
 **Implemented by:** Claude Code
 **Implemented:** 2026-04-13 · **Last refreshed:** 2026-07-28
-**Package:** @aziontech/webkit
+**Package:** @aziontech/ui
 **Framework:** Vue 3 + TypeScript + Composition API

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 9c4e88318283f430211009d457a6dab5d96131c5afdb17194098d0cd3b96c78f
+checksum: e761d51411a1d07bea98ec9a476faeb4586d63ef48f5f27ff88e2993ccae1b17
 created: 2026-11-14
 last_updated: 2026-11-18
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-18
 
 ## Purpose
 
-A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/webkit/assets/client-registry`, `@aziontech/webkit/assets/competitor-registry` and the `@aziontech/webkit/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `ThirdPartyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
+A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes. The asset registries already hold the files (`@aziontech/ui/assets/client-registry`, `@aziontech/ui/assets/competitor-registry` and the `@aziontech/ui/assets/<file>.svg` exports); every surface that drew one repeated the same theme rule by hand (two `img` tags revealed per `[data-theme]`, a `brightness-0` silhouette, a CSS mask in `currentColor`) and none had every route. `ThirdPartyLogo` holds the rule once: a light/dark pair of files, or one file inverted on the theme where it would vanish, or one ink (the theme's black or white, the surrounding `currentColor`, or black pinned for a coloured fill), and the company's name as a typographic wordmark when there is no file yet. It replaces the design sample's `AgentMark` and `ClientMark`. It is a renderer: it takes the file URLs from a registry entry and imports no registry itself, so a page pays only for the marks it shows.
 
 ## When to use
 
@@ -51,8 +51,8 @@ A third-party mark (a client, a competitor, an analyst firm, a standard or certi
 
 ```vue
 <script setup>
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-  import ThirdPartyLogo from '@aziontech/webkit/third-party-logo'
+  import { CLIENTS } from '@aziontech/ui/assets/client-registry'
+  import ThirdPartyLogo from '@aziontech/ui/third-party-logo'
 
   const client = CLIENTS[0]
 </script>
@@ -69,7 +69,7 @@ A third-party mark (a client, a competitor, an analyst firm, a standard or certi
 </template>
 ```
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). The same data renders from a docs page as the `<ThirdPartyLogo>` tag `DocMarkdown` mounts (braced attribute values are JSON); `src` is the URL of the logo file. The site places logos through `logo-wall-section`.
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as the `<ThirdPartyLogo>` tag `DocMarkdown` mounts (braced attribute values are JSON); `src` is the URL of the logo file. The site places logos through `logo-wall-section`.
 
 ## Props
 
@@ -169,7 +169,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

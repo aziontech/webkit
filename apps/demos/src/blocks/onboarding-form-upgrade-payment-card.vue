@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import Select from '@aziontech/webkit/select'
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PaymentBrand from '@aziontech/ui/payment-brand'
+  import Select from '@aziontech/ui/select'
 
   import { blankCard } from './onboarding-form.onboarding-form-data'
   import { countryOptions } from './onboarding-form.sample'

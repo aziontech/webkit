@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 7e64447e84f7a1616a66a5590fb24ac3acb70c075ec6e47efb93e31e354eba7c
+checksum: ffb7bcadbc0dc0a9a713dfe60c30199b5414d440e6b8673edbf2f1b2c589dbe5
 created: 2026-11-12
 last_updated: 2026-11-24
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-24
 
 ## Purpose
 
-The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `Container max-width="site"` with a hatched `Spacer` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently.
+The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/ui/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `Container max-width="site"` with a hatched `Spacer` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently.
 
 It reverses the earlier rule in `contributing/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it.
 
@@ -29,14 +29,14 @@ It reverses the earlier rule in `contributing/docs/SECTIONS.md` ("the package sh
 ## When to use
 
 - Use SitePage inside SiteLayout to render a page from its JSON.
-- Rendering a marketing page stored as data (a CMS entry, a JSON file, the site's page modules) on WebKit sections.
+- Rendering a marketing page stored as data (a CMS entry, a JSON file, the site's page modules) on Azion UI sections.
 - A campaign landing built from existing sections with no page-specific code.
 
 ## When NOT to use
 
 - A page that composes marketing primitives by hand (`Hero`, `MediaSplit`, `CardGrid`) — write the SFC with `Container` / `Spacer` instead.
 - A console screen or a docs page — use `shell/shell-console` or `shell/shell-docs`.
-- One section on its own — import that section (`@aziontech/webkit/<name>`) and bind its props.
+- One section on its own — import that section (`@aziontech/ui/<name>`) and bind its props.
 
 ## Related
 
@@ -47,7 +47,7 @@ It reverses the earlier rule in `contributing/docs/SECTIONS.md` ("the package sh
 
 ## Best practices
 
-- Write `_id` as the section's public subpath (`customer-use-cases-section` for `@aziontech/webkit/customer-use-cases-section`); the `props` object is exactly what the section's own `site-*.json` example carries.
+- Write `_id` as the section's public subpath (`customer-use-cases-section` for `@aziontech/ui/customer-use-cases-section`); the `props` object is exactly what the section's own `site-*.json` example carries.
 - Put openings (`hero-section`, `hero-form-section`, `article-body-section`, `pricing-plans-section`) in `hero` and every band after them in `sections`.
 - Keep scenes as names (`{ component: 'BrandGlobeScene' }`), never as code, so the page stays plain JSON.
 - Use `gap` only to change the default break: `none` for a band that follows its neighbour with no break, `small` for two bands that belong together.
@@ -61,7 +61,7 @@ It reverses the earlier rule in `contributing/docs/SECTIONS.md` ("the package sh
 
 ```vue
 <script setup>
-  import SitePage from '@aziontech/webkit/site-page'
+  import SitePage from '@aziontech/ui/site-page'
 
   const page = {
     hero: [
@@ -185,7 +185,7 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

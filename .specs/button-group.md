@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 0c8f60d710e1ff7fabc35afa1480acf1969caed36a9a0ab178c9a8a120e228ca
+checksum: 05fa404d230763adf00f2be118964096f0040ead4f0b378b27b4cd928a9cecd9
 created: 2026-11-11
 last_updated: 2026-11-25
 ---
@@ -44,7 +44,7 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
 ## Best practices
 
 - Give the toolbar an `aria-label` that names the surface ("Editor actions"), and every item a `label` that says what it does ("Copy code", not "Copy"). Write the kebab attribute (`aria-label`, `:aria-label` when the name changes, `aria-labelledby` when a visible heading already names the surface), never the camelCase `ariaLabel` attribute.
-- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/require-accessible-name` keeps the name required instead: it flags a `ButtonGroup` with neither `aria-label` nor `aria-labelledby`.
+- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `azion-ui/require-accessible-name` keeps the name required instead: it flags a `ButtonGroup` with neither `aria-label` nor `aria-labelledby`.
 - Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.
 - Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.
 - Set `loading` on an action while its request runs instead of disabling the whole group.
@@ -55,7 +55,7 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
 
 ```vue
 <script setup>
-  import ButtonGroup from '@aziontech/webkit/button-group'
+  import ButtonGroup from '@aziontech/ui/button-group'
   import { computed, ref } from 'vue'
 
   const wrap = ref(false)
@@ -147,7 +147,7 @@ _none_ — tooltips, menus and the loading spinner bring their own motion with `
 
 ## Accessibility (WCAG 2.1 AA)
 
-- `role="toolbar"` with `aria-orientation="horizontal"` and a mandatory accessible name: `aria-label` (static or bound) or `aria-labelledby`. `webkit/require-accessible-name` flags a ButtonGroup with neither, and an empty name renders no `aria-label` attribute.
+- `role="toolbar"` with `aria-orientation="horizontal"` and a mandatory accessible name: `aria-label` (static or bound) or `aria-labelledby`. `azion-ui/require-accessible-name` flags a ButtonGroup with neither, and an empty name renders no `aria-label` attribute.
 - Keyboard map: one tab stop (the last focused item, else the first enabled); `ArrowRight` / `ArrowLeft` move and wrap (swapped under `dir="rtl"` through `logicalArrowKey`); `Home` / `End` jump to the ends; `Enter` / `Space` activate; on a menu item `Enter`, `Space` or `ArrowDown` open the menu, `Escape` closes it and returns focus to its button.
 - Each icon button's accessible name is its `label`; the tooltip shows the same text on hover and focus.
 - Toggles expose `aria-pressed`; the pressed fill is backed by an outline in forced colors.
@@ -201,7 +201,7 @@ Justification: `variant` and `size` are shown through Default's controls; the ov
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 3b72177796a648248e77ef81cd3eced326afa0a1c9bbe4b514ac5a3b6271c5b5
+checksum: f0470d9bb9a9dca1c6ea2b027d311bd6af8bd02552031dd3cfa81de1d21dba20
 created: 2026-05-28
 last_updated: 2026-11-25
 ---
@@ -75,7 +75,7 @@ The other regions render conditionally from tab data. Tab header appears when `t
 - Set `:copyable="false"` on decorative blocks, and `:bordered="false"` when the block sits inside a surface that already frames it.
 - Keep `animate-lines` for marketing layouts; leave it off in docs and console screens.
 - Do: keep a command block to what the reader runs — the copy control copies exactly that. Put what it prints in a second block with `type="output"` (or in prose).
-- Don't: write expected output into the command, as a `# HTTP/2 200` comment or as unprompted lines after a `$ ` prompt — the reader pastes it into the terminal. The `webkit/no-output-in-command` lint warns on it.
+- Don't: write expected output into the command, as a `# HTTP/2 200` comment or as unprompted lines after a `$ ` prompt — the reader pastes it into the terminal. The `azion-ui/no-output-in-command` lint warns on it.
 - Do: turn `show-label` on in docs (`DocCodeGroup` does by default) so every block is titled with its language; set `title` only when the language name is not the right title.
 
 ## Usage
@@ -84,7 +84,7 @@ One snippet takes its source straight from **`code`** and **`language`**:
 
 ```vue
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import CodeBlock from '@aziontech/ui/code-block'
 
   const code = `export default {
   async fetch(request) {
@@ -106,7 +106,7 @@ For several languages or files, pass one entry per snippet in **`tabs`** (each w
 
 ```vue
 <script setup>
-  import CodeBlock from '@aziontech/webkit/code-block'
+  import CodeBlock from '@aziontech/ui/code-block'
 
   const tabs = [
     {
@@ -136,7 +136,7 @@ For several languages or files, pass one entry per snippet in **`tabs`** (each w
 
 Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should update reactively.
 
-**Three ways in** (decision RV-K2-1, rule `webkit-content-channels`). Markdown writes a code fence, which renders `DocCodeGroup`. From the site's page JSON it is the `CodeBlock` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); the props are data (`code`, `language`, `title`, `tabs`), and the `tab-icon` slot and the events stay Vue.
+**Three ways in** (decision RV-K2-1, rule `azion-ui-content-channels`). Markdown writes a code fence, which renders `DocCodeGroup`. From the site's page JSON it is the `CodeBlock` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` and `texture: "none"`, so no texture sits behind it); the props are data (`code`, `language`, `title`, `tabs`), and the `tab-icon` slot and the events stay Vue.
 
 ## Props
 
@@ -221,7 +221,7 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 
 When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block). With a tab strip or a filename bar the copy control (`variant="ghost"` `size="small"`) sits at the end of that header row, the filename bar first.
 
-Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
+Code content scrolls inside `@aziontech/ui/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
 
 **The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. In a block with no header, the copy control (a `CopyButton`, `variant="outline"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
@@ -352,7 +352,7 @@ One code size across the code components (CodeBlock, CodeEditor, LogViewer, Trac
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
 - Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
