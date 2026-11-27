@@ -1,15 +1,20 @@
 <script setup lang="ts">
+  import Button from '@aziontech/ui/button'
   import type {
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
   } from '@aziontech/ui/prompt-input'
+  import PromptInputAccessPicker from '@aziontech/ui/prompt-input-access-picker'
   import PromptInputAttachButton from '@aziontech/ui/prompt-input-attach-button'
   import PromptInputContextPicker from '@aziontech/ui/prompt-input-context-picker'
   import PromptInputDictateButton from '@aziontech/ui/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/ui/prompt-input-model-picker'
   import PromptInput from '@aziontech/ui/prompt-input-root'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
+
+  import { sampleAccessModes, sampleProviders, sampleSpeeds } from '../sample'
 
   defineProps<{
     state: PromptInputStatus
@@ -39,6 +44,11 @@
   const modeKey = defineModel<string>('modeKey', { required: true })
   const contextKey = defineModel<string>('contextKey', { required: true })
   const toolKeys = defineModel<string[]>('toolKeys', { required: true })
+
+  const accessKey = ref('full')
+  const speedKey = ref('standard')
+  const ultracode = ref(false)
+  const favoriteKeys = ref<string[]>(['gemini-4-neon', 'claude-opus-4-5'])
 
   const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
   const voiceActive = ref(false)
@@ -85,10 +95,33 @@
         v-if="models.length"
         v-model="modelKey"
         v-model:mode="modeKey"
+        v-model:favorite-keys="favoriteKeys"
+        :providers="sampleProviders"
         :models="models"
         :modes="modes"
-        mode-label="Effort"
-      />
+        mode-label="Thinking Level"
+      >
+        <template #footer>
+          <ToggleGroup
+            v-model="speedKey"
+            :options="sampleSpeeds"
+            size="small"
+            aria-label="Response speed"
+          />
+          <Button
+            label="Ultracode"
+            icon="az az-sparkles"
+            :variant="ultracode ? 'secondary' : 'ghost'"
+            size="small"
+            :aria-pressed="ultracode"
+            @click="ultracode = !ultracode"
+          />
+          <PromptInputAccessPicker
+            v-model="accessKey"
+            :options="sampleAccessModes"
+          />
+        </template>
+      </PromptInputModelPicker>
       <PromptInputDictateButton />
     </template>
     <template

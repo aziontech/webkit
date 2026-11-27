@@ -50,9 +50,9 @@ The same prompt and response anatomy as the full page: loading, thinking, stream
 
 After the last complete response, aligned with its text.
 
-### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
+### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`
 
-The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint until the first message is sent, then no disclaimer. The "+" menu (`attachable`, `toolOptions`, `v-model:toolKeys`; pass the keys as `sendMessage(content, { body: { tools: toolKeys } })`), attachments (`accept`, `maxFiles`, `maxFileSize`), the multimodal `send` content and Dictate work as in `ai/ai-chat`. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint until the first message is sent, then no disclaimer. The "+" menu (`attachable`, `toolOptions`, `v-model:toolKeys`; pass the keys as `sendMessage(content, { body: { tools: toolKeys } })`), attachments (`accept`, `maxFiles`, `maxFileSize`), the multimodal `send` content, Dictate and the model picker (Favorites, and a footer with the speed `ToggleGroup`, Ultracode and the access mode `PromptInputAccessPicker`) work as in `ai/ai-chat`. The composer is disabled while the conversation is restored.
 
 ### J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 

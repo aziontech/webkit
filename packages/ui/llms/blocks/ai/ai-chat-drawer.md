@@ -6,7 +6,7 @@
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/ui`
 - MCP: `get_block("ai/ai-chat-drawer")`
 - Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
-- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
+- Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [Conversation](../../components/conversation.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [KeyValueList](../../components/key-value-list.md), [McpAppFrame](../../components/mcp-app-frame.md), [PageHeader](../../components/page-header.md), `PanelHeader`, `PromptInputAccessPicker`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `azion-ui-ai-surfaces`, `azion-ui-states`, `azion-ui-microcopy`
 
 ## Asked as
@@ -63,9 +63,9 @@ The same prompt and response anatomy as the full page: loading, thinking, stream
 
 After the last complete response, aligned with its text.
 
-### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputDictateButton`
+### I. Composer — `PromptInput`, `PromptInputAttachButton`, `PromptInputModelPicker`, `PromptInputDictateButton`
 
-The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint until the first message is sent, then no disclaimer. The "+" menu (`attachable`, `toolOptions`, `v-model:toolKeys`; pass the keys as `sendMessage(content, { body: { tools: toolKeys } })`), attachments (`accept`, `maxFiles`, `maxFileSize`), the multimodal `send` content and Dictate work as in `ai/ai-chat`. The composer is disabled while the conversation is restored.
+The `#composer` of `Conversation`: one floating pill at the foot of the drawer, no divider, four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint until the first message is sent, then no disclaimer. The "+" menu (`attachable`, `toolOptions`, `v-model:toolKeys`; pass the keys as `sendMessage(content, { body: { tools: toolKeys } })`), attachments (`accept`, `maxFiles`, `maxFileSize`), the multimodal `send` content, Dictate and the model picker (Favorites, and a footer with the speed `ToggleGroup`, Ultracode and the access mode `PromptInputAccessPicker`) work as in `ai/ai-chat`. The composer is disabled while the conversation is restored.
 
 ### J. Tool calls — `ToolCall`, `ToolApproval`, `CodeBlock`
 
@@ -900,10 +900,72 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
 ]
 
+export const sampleProviders: PromptInputMenuOption[] = [
+  { value: 'azion', label: 'Azion AI', icon: 'az az-azion' },
+  { value: 'google', label: 'Google', icon: 'az az-gemini' },
+  { value: 'anthropic', label: 'Anthropic', icon: 'az az-claude' },
+  { value: 'openai', label: 'OpenAI', icon: 'az az-openai' },
+  { value: 'meta', label: 'Meta', icon: 'az az-meta' }
+]
+
 export const sampleModels: PromptInputMenuOption[] = [
-  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
-  { value: 'fast', label: 'Fast', description: 'Answers right away' },
-  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+  {
+    value: 'gemini-4-neon',
+    label: 'Gemini 4 Neon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘1'
+  },
+  {
+    value: 'gemini-4-carbon',
+    label: 'Gemini 4 Carbon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘2'
+  },
+  {
+    value: 'gemini-3-8-flash',
+    label: 'Gemini 3.8 Flash',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘3'
+  },
+  {
+    value: 'claude-opus-4-5',
+    label: 'Claude Opus 4.5',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘4'
+  },
+  {
+    value: 'claude-sonnet-4',
+    label: 'Claude Sonnet 4',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘5'
+  },
+  { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', icon: 'az az-openai', shortcut: '⌘6' },
+  {
+    value: 'gpt-5-mini',
+    label: 'GPT-5 Mini',
+    provider: 'openai',
+    icon: 'az az-openai',
+    shortcut: '⌘7'
+  },
+  {
+    value: 'llama-4-maverick',
+    label: 'Llama 4 Maverick',
+    provider: 'meta',
+    icon: 'az az-meta',
+    shortcut: '⌘8'
+  },
+  {
+    value: 'auto',
+    label: 'Azion Auto',
+    provider: 'azion',
+    icon: 'az az-azion',
+    description: 'AI Gateway router'
+  }
 ]
 
 export const sampleModes: PromptInputMenuOption[] = [
@@ -921,6 +983,38 @@ export const sampleTools: PromptInputMenuOption[] = [
   { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
   { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
   { value: 'create-image', label: 'Create image', icon: 'az az-image' }
+]
+
+export const sampleAccessModes: PromptInputMenuOption[] = [
+  {
+    value: 'supervised',
+    label: 'Supervised',
+    icon: 'az az-lock',
+    description: 'Ask before commands and file changes.'
+  },
+  {
+    value: 'edits',
+    label: 'Auto-accept edits',
+    icon: 'az az-pencil',
+    description: 'Auto-approve edits, ask before other actions.'
+  },
+  {
+    value: 'auto',
+    label: 'Auto',
+    icon: 'az az-shield',
+    description: 'Approve routine actions, ask before the rest.'
+  },
+  {
+    value: 'full',
+    label: 'Full access',
+    icon: 'az az-lock-open',
+    description: 'Allow commands and edits without prompts.'
+  }
+]
+
+export const sampleSpeeds: PromptInputMenuOption[] = [
+  { value: 'standard', label: 'Standard' },
+  { value: 'fast', label: 'Fast', icon: 'az az-bolt' }
 ]
 ````
 
@@ -1489,17 +1583,22 @@ export const sampleTools: PromptInputMenuOption[] = [
 
 ```ts
 <script setup lang="ts">
+  import Button from '@aziontech/ui/button'
   import type {
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
   } from '@aziontech/ui/prompt-input'
+  import PromptInputAccessPicker from '@aziontech/ui/prompt-input-access-picker'
   import PromptInputAttachButton from '@aziontech/ui/prompt-input-attach-button'
   import PromptInputContextPicker from '@aziontech/ui/prompt-input-context-picker'
   import PromptInputDictateButton from '@aziontech/ui/prompt-input-dictate-button'
   import PromptInputModelPicker from '@aziontech/ui/prompt-input-model-picker'
   import PromptInput from '@aziontech/ui/prompt-input-root'
+  import ToggleGroup from '@aziontech/ui/toggle-group'
   import { ref } from 'vue'
+
+  import { sampleAccessModes, sampleProviders, sampleSpeeds } from '../sample'
 
   defineProps<{
     state: PromptInputStatus
@@ -1529,6 +1628,11 @@ export const sampleTools: PromptInputMenuOption[] = [
   const modeKey = defineModel<string>('modeKey', { required: true })
   const contextKey = defineModel<string>('contextKey', { required: true })
   const toolKeys = defineModel<string[]>('toolKeys', { required: true })
+
+  const accessKey = ref('full')
+  const speedKey = ref('standard')
+  const ultracode = ref(false)
+  const favoriteKeys = ref<string[]>(['gemini-4-neon', 'claude-opus-4-5'])
 
   const inputEl = ref<InstanceType<typeof PromptInput> | null>(null)
   const voiceActive = ref(false)
@@ -1575,10 +1679,33 @@ export const sampleTools: PromptInputMenuOption[] = [
         v-if="models.length"
         v-model="modelKey"
         v-model:mode="modeKey"
+        v-model:favorite-keys="favoriteKeys"
+        :providers="sampleProviders"
         :models="models"
         :modes="modes"
-        mode-label="Effort"
-      />
+        mode-label="Thinking Level"
+      >
+        <template #footer>
+          <ToggleGroup
+            v-model="speedKey"
+            :options="sampleSpeeds"
+            size="small"
+            aria-label="Response speed"
+          />
+          <Button
+            label="Ultracode"
+            icon="az az-sparkles"
+            :variant="ultracode ? 'secondary' : 'ghost'"
+            size="small"
+            :aria-pressed="ultracode"
+            @click="ultracode = !ultracode"
+          />
+          <PromptInputAccessPicker
+            v-model="accessKey"
+            :options="sampleAccessModes"
+          />
+        </template>
+      </PromptInputModelPicker>
       <PromptInputDictateButton />
     </template>
     <template

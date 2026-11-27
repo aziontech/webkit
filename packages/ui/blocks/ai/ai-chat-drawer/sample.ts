@@ -160,10 +160,72 @@ export const sampleSuggestions: SuggestionGroupItem[] = [
   { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'az az-globe' }
 ]
 
+export const sampleProviders: PromptInputMenuOption[] = [
+  { value: 'azion', label: 'Azion AI', icon: 'az az-azion' },
+  { value: 'google', label: 'Google', icon: 'az az-gemini' },
+  { value: 'anthropic', label: 'Anthropic', icon: 'az az-claude' },
+  { value: 'openai', label: 'OpenAI', icon: 'az az-openai' },
+  { value: 'meta', label: 'Meta', icon: 'az az-meta' }
+]
+
 export const sampleModels: PromptInputMenuOption[] = [
-  { value: 'auto', label: 'Auto', description: 'Decides how long to think' },
-  { value: 'fast', label: 'Fast', description: 'Answers right away' },
-  { value: 'thinking', label: 'Thinking', description: 'Thinks longer for harder questions' }
+  {
+    value: 'gemini-4-neon',
+    label: 'Gemini 4 Neon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘1'
+  },
+  {
+    value: 'gemini-4-carbon',
+    label: 'Gemini 4 Carbon',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘2'
+  },
+  {
+    value: 'gemini-3-8-flash',
+    label: 'Gemini 3.8 Flash',
+    provider: 'google',
+    icon: 'az az-gemini',
+    shortcut: '⌘3'
+  },
+  {
+    value: 'claude-opus-4-5',
+    label: 'Claude Opus 4.5',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘4'
+  },
+  {
+    value: 'claude-sonnet-4',
+    label: 'Claude Sonnet 4',
+    provider: 'anthropic',
+    icon: 'az az-claude',
+    shortcut: '⌘5'
+  },
+  { value: 'gpt-5-2', label: 'GPT-5.2', provider: 'openai', icon: 'az az-openai', shortcut: '⌘6' },
+  {
+    value: 'gpt-5-mini',
+    label: 'GPT-5 Mini',
+    provider: 'openai',
+    icon: 'az az-openai',
+    shortcut: '⌘7'
+  },
+  {
+    value: 'llama-4-maverick',
+    label: 'Llama 4 Maverick',
+    provider: 'meta',
+    icon: 'az az-meta',
+    shortcut: '⌘8'
+  },
+  {
+    value: 'auto',
+    label: 'Azion Auto',
+    provider: 'azion',
+    icon: 'az az-azion',
+    description: 'AI Gateway router'
+  }
 ]
 
 export const sampleModes: PromptInputMenuOption[] = [
@@ -181,4 +243,36 @@ export const sampleTools: PromptInputMenuOption[] = [
   { value: 'web-search', label: 'Web search', icon: 'az az-globe' },
   { value: 'deep-research', label: 'Deep research', icon: 'az az-lightbulb' },
   { value: 'create-image', label: 'Create image', icon: 'az az-image' }
+]
+
+export const sampleAccessModes: PromptInputMenuOption[] = [
+  {
+    value: 'supervised',
+    label: 'Supervised',
+    icon: 'az az-lock',
+    description: 'Ask before commands and file changes.'
+  },
+  {
+    value: 'edits',
+    label: 'Auto-accept edits',
+    icon: 'az az-pencil',
+    description: 'Auto-approve edits, ask before other actions.'
+  },
+  {
+    value: 'auto',
+    label: 'Auto',
+    icon: 'az az-shield',
+    description: 'Approve routine actions, ask before the rest.'
+  },
+  {
+    value: 'full',
+    label: 'Full access',
+    icon: 'az az-lock-open',
+    description: 'Allow commands and edits without prompts.'
+  }
+]
+
+export const sampleSpeeds: PromptInputMenuOption[] = [
+  { value: 'standard', label: 'Standard' },
+  { value: 'fast', label: 'Fast', icon: 'az az-bolt' }
 ]
