@@ -188,6 +188,9 @@ times on the docs home, `/components/button` (mobile profile) and the demos `/re
 (desktop profile). The median must have LCP at most 2.5 s, CLS at most 0.1 and TBT at most
 200 ms, and the accessibility score must be 100; a failing node counts only when no entry of
 `packages/ui/src/test/a11y-accepted.json` covers its rule, theme and selector.
+The mobile profile's CPU slowdown is calibrated to the machine: 4x on a machine whose Lighthouse
+`benchmarkIndex` is 4200 (the CI runner the budget was set on), scaled by the measured index on
+any other, so a slower runner emulates the same phone instead of a slower one.
 `LIGHTHOUSE_OUT=<dir>` keeps the reports.
 
 `pnpm --filter @aziontech/ui-docs run check:external-links` runs `lychee` over the built

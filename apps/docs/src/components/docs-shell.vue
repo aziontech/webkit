@@ -20,6 +20,7 @@
     computed,
     defineAsyncComponent,
     hydrateOnIdle,
+    type HydrationStrategy,
     nextTick,
     onMounted,
     ref,
@@ -40,13 +41,27 @@
   const loadSidebar = () => import('./docs-sidebar.vue')
   const loadHeaderNav = () => import('./header-nav.vue')
 
+  const WIDE = '(min-width: 64rem)'
+
+  const hydrateWhenShown: HydrationStrategy = (hydrate, forEach) => {
+    const query = globalThis.matchMedia?.(WIDE)
+    if (!query || query.matches) return hydrateOnIdle()(hydrate, forEach)
+    const onChange = (event: MediaQueryListEvent) => {
+      if (!event.matches) return
+      query.removeEventListener('change', onChange)
+      hydrate()
+    }
+    query.addEventListener('change', onChange)
+    return () => query.removeEventListener('change', onChange)
+  }
+
   const DocsSidebar = defineAsyncComponent({
     loader: loadSidebar,
-    hydrate: hydrateOnIdle()
+    hydrate: hydrateWhenShown
   })
   const HeaderNav = defineAsyncComponent({
     loader: loadHeaderNav,
-    hydrate: hydrateOnIdle()
+    hydrate: hydrateWhenShown
   })
 
   const route = useRoute()

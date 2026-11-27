@@ -21,6 +21,8 @@ const RUNS = Number(process.env.LIGHTHOUSE_RUNS ?? 3)
 const OUT = process.env.LIGHTHOUSE_OUT ? resolve(process.env.LIGHTHOUSE_OUT) : null
 
 const BUDGET = { accessibility: 100, lcp: 2500, cls: 0.1, tbt: 200 }
+const REFERENCE_BENCHMARK = 4200
+const MOBILE_SLOWDOWN = 4
 
 const PAGES = [
   { name: 'docs-home', site: 'docs', path: '/', preset: 'mobile' },
@@ -70,7 +72,7 @@ function certificate() {
   return tls
 }
 
-async function lighthouse(url, preset) {
+async function lighthouse(url, preset, slowdown = MOBILE_SLOWDOWN) {
   const { stdout } = await promisify(execFile)(
     'npx',
     [
@@ -82,7 +84,9 @@ async function lighthouse(url, preset) {
       '--output-path=stdout',
       '--only-categories=accessibility,performance',
       '--chrome-flags=--headless=new --no-sandbox --ignore-certificate-errors',
-      ...(preset === 'desktop' ? ['--preset=desktop'] : [])
+      ...(preset === 'desktop'
+        ? ['--preset=desktop']
+        : [`--throttling.cpuSlowdownMultiplier=${slowdown}`])
     ],
     {
       encoding: 'utf8',
@@ -147,13 +151,25 @@ const servers = {
 const browser = await chromium.launch({ args: ['--ignore-certificate-errors'] })
 if (OUT) mkdirSync(OUT, { recursive: true })
 
+async function calibratedSlowdown(url) {
+  const report = await lighthouse(url, 'mobile')
+  const benchmark = report.environment.benchmarkIndex
+  const slowdown = Math.min(8, Math.max(1, (MOBILE_SLOWDOWN * benchmark) / REFERENCE_BENCHMARK))
+  return { benchmark: Math.round(benchmark), slowdown: Number(slowdown.toFixed(2)) }
+}
+
+const calibration = await calibratedSlowdown(`https://localhost:${servers.docs.address().port}/`)
+console.log(
+  `CPU benchmark ${calibration.benchmark} (reference ${REFERENCE_BENCHMARK}): mobile CPU slowdown ${calibration.slowdown}x`
+)
+
 const failures = []
 for (const target of PAGES) {
   const url = `https://localhost:${servers[target.site].address().port}${target.path}`
   const runs = []
   const audits = new Set()
   for (let run = 1; run <= RUNS; run++) {
-    const report = await lighthouse(url, target.preset)
+    const report = await lighthouse(url, target.preset, calibration.slowdown)
     if (OUT) writeFileSync(join(OUT, `${target.name}-${run}.json`), JSON.stringify(report))
     const failing = []
     for (const audit of failingA11yAudits(report)) {
