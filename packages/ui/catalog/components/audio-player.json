@@ -1,0 +1,29 @@
+{
+ "purpose": "A compact player for one audio clip: play and pause, a seek bar between the current time and the duration, mute and volume, and, when asked for, a playback speed control, a download link and a transcript. It plays what the app hands it (a URL, an object URL or a `data:` URL built from base64 audio) on the browser's own audio element; it fetches and decodes nothing. It owns the generating, buffering and error states, so an AI reply that speaks, or a stored recording, looks the same everywhere.",
+ "useWhen": [
+  "An AI reply that carries audio: speech generated from text, generated music or sound, an audio part of a chat message.",
+  "A voice note or recording a person attached to a message or a ticket.",
+  "Previewing one stored audio file in a detail pane or drawer."
+ ],
+ "avoidWhen": [
+  "Video, or audio that needs a picture → use `DocFrame` (a captured clip) or `Embed` (a hosted player).",
+  "Recording audio or a live voice conversation → use `PromptInput` and its dictate button.",
+  "A file of any type with a type-aware fallback → use `FilePreview`.",
+  "Background or decorative sound that the reader did not ask for → do not autoplay audio; leave it out."
+ ],
+ "related": [
+  "`FilePreview` — the preview of a stored file of any type; an audio file can open in an `AudioPlayer` instead.",
+  "`ChatMessage` — the message an audio reply sits in.",
+  "`Slider` — the seek and volume controls inside this component.",
+  "`IconButton` — the play, mute and download controls inside this component."
+ ],
+ "bestPractices": [
+  "Build `src` once from the source the app has: a URL as it is, base64 audio as `data:<mimeType>;base64,<value>`, a `Blob` as an object URL (revoke it when the player unmounts).",
+  "Pass `duration` when the generator reports it, so the time shows before the browser has read the file.",
+  "Set `loading` while the audio is being generated, so the player holds its place in the reply instead of appearing when it is done.",
+  "Pass the text the audio speaks as `transcript`; a reader who cannot hear it reads it instead (WCAG 1.2.1).",
+  "Give each player a `title` when a message holds more than one, so each control group has its own name.",
+  "Never start playback on mount; the reader presses Play.",
+  "In a narrow column only Mute is left for the volume; the device volume covers the rest on a phone."
+ ]
+}

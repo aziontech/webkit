@@ -1,0 +1,42 @@
+<script setup>
+  import ConsoleApplicationScene from '@aziontech/ui/assets/console-application-scene'
+  import MediaTabs from '@aziontech/ui/media-tabs'
+
+  const tabs = [
+    {
+      value: 'build',
+      title: 'Build',
+      description: 'Connect a repository, pick the framework preset, and deploy a branch.'
+    },
+    {
+      value: 'device-groups',
+      title: 'Device Groups',
+      description: 'Group requests by user-agent, so a rule can treat a phone differently.'
+    },
+    {
+      value: 'rules-engine',
+      title: 'Rules Engine',
+      description: 'Order what happens on request and on response, rule by rule.'
+    }
+  ]
+</script>
+
+<template>
+  <div class="[--media-tabs-media-min:20rem]">
+    <MediaTabs
+      :items="tabs"
+      tabs-side="end"
+      size="large"
+      :autoplay-interval="4600"
+    >
+      <template #media="{ index, active }">
+        <ConsoleApplicationScene
+          :tab="tabs[index].value"
+          :active="active"
+          :width="760"
+          class="size-full"
+        />
+      </template>
+    </MediaTabs>
+  </div>
+</template>

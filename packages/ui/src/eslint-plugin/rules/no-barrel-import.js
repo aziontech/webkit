@@ -1,0 +1,92 @@
+import { isAzionUiBare, loadCatalog } from '../lib/catalog.js'
+import { ctxCwd } from '../lib/rule-utils.js'
+
+function kebab(name) {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+    .toLowerCase()
+}
+
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description:
+        'Disallow barrel imports from the bare @aziontech/ui entry (defeats tree-shaking).'
+    },
+    hasSuggestions: true,
+    schema: [],
+    messages: {
+      barrel:
+        'Barrel import from @aziontech/ui defeats tree-shaking. Import each component from its own subpath (e.g. {{example}}).',
+      namespace:
+        'Namespace import of @aziontech/ui pulls in every component. Import only the subpaths you use.',
+      split: 'Split into per-subpath default imports'
+    }
+  },
+  create(context) {
+    const catalog = loadCatalog(ctxCwd(context))
+    const prefix = catalog.prefix
+
+    return {
+      ImportDeclaration(node) {
+        if (!isAzionUiBare(node.source.value)) return
+        if (node.importKind === 'type') return
+
+        const named = node.specifiers.filter(
+          (s) => s.type === 'ImportSpecifier' && s.importKind !== 'type'
+        )
+        const namespace = node.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier')
+
+        if (namespace) {
+          context.report({ node, messageId: 'namespace' })
+          return
+        }
+        if (!named.length) return
+
+        const subs = named.map((s) => kebab(s.imported.name))
+        const allResolve = catalog.available && subs.every((sub) => catalog.has(sub))
+
+        const first = named[0]
+        const example = `import ${first.local.name} from '${prefix}${kebab(first.imported.name)}'`
+        context.report({
+          node,
+          messageId: 'barrel',
+          data: { example },
+          suggest: allResolve
+            ? [
+                {
+                  messageId: 'split',
+                  fix: (fixer) => {
+                    const lines = named.map(
+                      (s, i) => `import ${s.local.name} from '${prefix}${subs[i]}'`
+                    )
+                    return fixer.replaceText(node, lines.join('\n'))
+                  }
+                }
+              ]
+            : []
+        })
+      },
+      ExportAllDeclaration(node) {
+        if (node.source && isAzionUiBare(node.source.value)) {
+          context.report({ node, messageId: 'namespace' })
+        }
+      },
+      ExportNamedDeclaration(node) {
+        if (!node.source || !isAzionUiBare(node.source.value)) return
+        const named = node.specifiers.filter((s) => s.type === 'ExportSpecifier')
+        if (!named.length) return
+        const first = named[0]
+        const example = `export { default as ${first.exported.name} } from '${prefix}${kebab(first.local.name)}'`
+        context.report({ node, messageId: 'barrel', data: { example } })
+      },
+      ImportExpression(node) {
+        if (node.source?.type === 'Literal' && isAzionUiBare(node.source.value)) {
+          context.report({ node, messageId: 'namespace' })
+        }
+      }
+    }
+  }
+}

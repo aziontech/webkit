@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Three cells with gutters between them — the `gap` register.",
+   "file": "examples/card-grid/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "The same layout drawn three ways. In `divider` the seams are the grid’s own 1px gaps, so every cell must fill its own background; in `frame` each cell is a real frame box that draws its own rules and corner marks.",
+   "file": "examples/card-grid/variants.vue"
+  },
+  {
+   "name": "Columns",
+   "summary": "Two column counts in one view — a count only reads against another.",
+   "file": "examples/card-grid/columns.vue"
+  }
+ ]
+}

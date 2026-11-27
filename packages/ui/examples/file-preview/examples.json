@@ -1,0 +1,41 @@
+{
+  "component": "file-preview",
+  "title": "Components/Content/FilePreview",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A JSON object pretty-printed, with its type, size and the Download action.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Image",
+      "summary": "An image file drawn from `src`, its name as the alternative text.",
+      "file": "image.vue"
+    },
+    {
+      "name": "PDF",
+      "summary": "A PDF invoice handed over as base64 bytes, the shape a chat document part carries, drawn in the browser's own PDF viewer; where the browser has none, the no-preview state points at Download.",
+      "file": "pdf.vue"
+    },
+    {
+      "name": "Text",
+      "summary": "A long log file cut at `max-length`, with the note that says how much is shown.",
+      "file": "text.vue"
+    },
+    {
+      "name": "Unknown",
+      "summary": "A binary archive: the no-preview state points at Download; a copy-link action sits in the `actions` slot.",
+      "file": "unknown.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The body placeholder while the app fetches the file; the header and Download stay.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The preview could not load: the app's message in the body, Download still available.",
+      "file": "error.vue"
+    }
+  ]
+}

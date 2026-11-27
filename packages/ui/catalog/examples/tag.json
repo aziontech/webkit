@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default primary tag at medium size.",
+   "file": "examples/tag/default.vue"
+  },
+  {
+   "name": "Severities",
+   "summary": "The five status colours, picked by meaning: `neutral` for a plain or inactive value, `info` for a second category, `success`, `warning` and `danger` for outcomes.",
+   "file": "examples/tag/severities.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "The three emphasis looks for a category: `primary` (the logo orange) for the one value a list singles out, `accent` for an entity type, `contrast` for the strongest neutral label.",
+   "file": "examples/tag/variants.vue"
+  }
+ ]
+}

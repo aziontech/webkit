@@ -1,0 +1,11 @@
+{
+ "variants": [
+  {
+   "name": "Loading",
+   "summary": "While the account reloads, the page holds the block's own footprint in `Skeleton`s: the empty-state band, the three method rows and the two promo cards, in a busy status region.",
+   "file": "blocks/state/state-first-use/variants/loading.vue"
+  }
+ ],
+ "sfcFile": "blocks/state/state-first-use/state-first-use.vue",
+ "guidelinesFile": "blocks/state/state-first-use/guidelines.md"
+}

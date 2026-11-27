@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A reply field: write Markdown, format it from the toolbar or with Ctrl/⌘+B, I and K, check it on the Preview tab, and type @ to mention a teammate from `mentions`.",
+   "file": "examples/markdown-editor/default.vue"
+  },
+  {
+   "name": "Disabled",
+   "summary": "`disabled` turns off the field, the toolbar, the tabs and the mention menu.",
+   "file": "examples/markdown-editor/disabled.vue"
+  },
+  {
+   "name": "Readonly",
+   "summary": "`readonly` opens on the Preview tab and hides the toolbar, so a reader sees the rendered note; Write still shows the source. This note uses every format.",
+   "file": "examples/markdown-editor/readonly.vue"
+  }
+ ]
+}

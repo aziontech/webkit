@@ -1,19 +1,34 @@
+const PRODUCTIVE_ENTRANCE = 'cubic-bezier(0.39, 0.57, 0.56, 1)'
+const PRODUCTIVE_EXIT = 'cubic-bezier(0.55, 0.09, 0.68, 0.53)'
+const EXPRESSIVE_ENTRANCE = 'cubic-bezier(0.17, 0.84, 0.44, 1)'
+const EXPRESSIVE_EXIT = 'cubic-bezier(0.95, 0.05, 0.8, 0.04)'
+const FAST_01 = '70ms'
+const FAST_02 = '110ms'
+const MODERATE_01 = '150ms'
+const MODERATE_02 = '240ms'
+const SLOW_01 = '400ms'
+const SLOW_02 = '700ms'
+const SLOW_03 = '1100ms'
+const SLOW_04 = '2100ms'
+const SETTLE_SPIN = '4200ms'
+const SETTLE_WAVE = '4800ms'
+
 export const curve = {
-  'productive-entrance': 'cubic-bezier(0.39, 0.57, 0.56, 1)',
-  'productive-exit': 'cubic-bezier(0.55, 0.09, 0.68, 0.53)',
-  'expressive-entrance': 'cubic-bezier(0.17, 0.84, 0.44, 1)',
-  'expressive-exit': 'cubic-bezier(0.95, 0.05, 0.8, 0.04)'
+  'productive-entrance': PRODUCTIVE_ENTRANCE,
+  'productive-exit': PRODUCTIVE_EXIT,
+  'expressive-entrance': EXPRESSIVE_ENTRANCE,
+  'expressive-exit': EXPRESSIVE_EXIT
 }
 
 export const duration = {
-  'fast-01': '70ms',
-  'fast-02': '110ms',
-  'moderate-01': '150ms',
-  'moderate-02': '240ms',
-  'slow-01': '400ms',
-  'slow-02': '700ms',
-  'slow-03': '1100ms',
-  'slow-04': '2100ms'
+  'fast-01': FAST_01,
+  'fast-02': FAST_02,
+  'moderate-01': MODERATE_01,
+  'moderate-02': MODERATE_02,
+  'slow-01': SLOW_01,
+  'slow-02': SLOW_02,
+  'slow-03': SLOW_03,
+  'slow-04': SLOW_04
 }
 
 export const animate = {
@@ -23,23 +38,30 @@ export const animate = {
   bounce: 'bounce 1s infinite',
   shimmer: 'shimmer 1.6s linear infinite',
   blink: 'blink 1s step-end infinite',
+  'spin-settle': `spin ${SETTLE_SPIN} cubic-bezier(0.4, 0, 0.2, 1)`,
+  'ping-settle': 'ping 1s cubic-bezier(0, 0, 0.2, 1) 3',
+  'pulse-settle': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 2',
+  'status-pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+  'blink-settle': 'blink 1s step-end 4',
   'fade-in': 'fadeIn 220ms ease-in-out',
   'fade-out': 'fadeOut 220ms ease-in-out',
   'slide-down': 'slideDown 220ms ease-in-out',
-  'highlight-fade': `highlight ${duration['slow-03']} ease-in forwards`,
-  'page-enter': `pageEnter ${duration['moderate-02']} ${curve['productive-entrance']}`,
-  'content-enter': `contentEnter ${duration['moderate-02']} ${curve['productive-entrance']} var(--content-enter-delay, 0s) backwards`,
-  'popup-scale-in': `popupScaleIn ${duration['moderate-01']} ${curve['productive-entrance']}`,
-  'popup-scale-out': `popupScaleOut ${duration['fast-02']} ${curve['productive-exit']}`,
-  'slide-in-left': `slideInLeft ${duration['moderate-02']} ${curve['productive-entrance']}`,
-  'slide-out-left': `slideOutLeft ${duration['moderate-01']} ${curve['productive-exit']}`,
-  'slide-in-right': `slideInRight ${duration['moderate-02']} ${curve['productive-entrance']}`,
-  'slide-out-right': `slideOutRight ${duration['moderate-01']} ${curve['productive-exit']}`,
-  'progress-indeterminate': `progressIndeterminate ${duration['slow-04']} ${curve['productive-entrance']} infinite`,
-  'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`,
-  'flow-dash': `flowDash ${duration['slow-02']} linear infinite`,
-  'texture-wave-a': 'textureWaveA 13s linear infinite',
-  'texture-wave-b': 'textureWaveB 19s linear infinite',
+  'highlight-fade': `highlight ${SLOW_03} ease-in forwards`,
+  'page-enter': `pageEnter ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
+  'content-enter': `contentEnter ${MODERATE_02} ${PRODUCTIVE_ENTRANCE} var(--content-enter-delay, 0s) backwards`,
+  'popup-scale-in': `popupScaleIn ${MODERATE_01} ${PRODUCTIVE_ENTRANCE}`,
+  'popup-scale-out': `popupScaleOut ${FAST_02} ${PRODUCTIVE_EXIT}`,
+  'slide-in-start': `slideInStart ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
+  'slide-out-start': `slideOutStart ${MODERATE_01} ${PRODUCTIVE_EXIT}`,
+  'slide-in-end': `slideInEnd ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
+  'slide-out-end': `slideOutEnd ${MODERATE_01} ${PRODUCTIVE_EXIT}`,
+  'progress-indeterminate': `progressIndeterminate ${SLOW_04} ${PRODUCTIVE_ENTRANCE} infinite`,
+  'progress-indeterminate-short': `progressIndeterminateShort ${SLOW_04} ${EXPRESSIVE_ENTRANCE} ${SLOW_03} infinite`,
+  'autoplay-progress': `autoplayProgress ${SLOW_04} linear forwards`,
+  'flow-dash': `flowDash ${SLOW_02} linear infinite`,
+  'flow-dash-settle': `flowDash ${SLOW_02} linear 6`,
+  'texture-wave-a': `textureWaveA ${SETTLE_WAVE} ${PRODUCTIVE_ENTRANCE} forwards`,
+  'texture-wave-b': `textureWaveB ${SETTLE_WAVE} ${PRODUCTIVE_ENTRANCE} forwards`,
   'brand-marquee': 'brandMarquee 59s linear infinite'
 }
 
@@ -53,7 +75,18 @@ export const useWhen = {
   pulse: 'Skeleton/placeholder opacity pulse while content loads.',
   bounce: 'Playful attention bounce (scroll-down hints); use sparingly.',
   shimmer: 'Skeleton shimmer sweep while content loads.',
-  blink: 'Text caret / terminal cursor blink.',
+  blink:
+    'Text caret / terminal cursor blink while text is being typed or streamed (stops when the typing does).',
+  'spin-settle':
+    'One eased revolution, then still (4.2s): a decorative rotating glow that must stop by itself within 5 seconds (WCAG 2.2.2). Ends on its start frame.',
+  'ping-settle':
+    'Three attention rings radiating from a small element, then still (3s): draws the eye once without looping (WCAG 2.2.2). Remount the element to replay it.',
+  'pulse-settle':
+    'Two opacity pulses, then still at full strength (4s): a decorative pulse that must stop by itself within 5 seconds (WCAG 2.2.2). Keep any stagger delay under 1s so the last pulse still ends within 5 seconds.',
+  'blink-settle':
+    'Four caret blinks, then a solid caret (4s): a decorative cursor that must stop by itself within 5 seconds (WCAG 2.2.2).',
+  'status-pulse':
+    'A small status mark (a live dot, a streaming sparkle) pulsing for as long as the status it shows lasts: the signal is the motion, so it stops when the status ends. Never for loading placeholders (pulse, on Skeleton) or decoration (pulse-settle).',
   'fade-in': 'Content or backdrop appearing in place (no directional origin).',
   'fade-out': 'Content or backdrop leaving in place (pair of fade-in).',
   'slide-down': 'Vertical disclosure expanding (accordion panel, expandable row).',
@@ -61,20 +94,25 @@ export const useWhen = {
   'popup-scale-in':
     'Anchored overlays opening (dropdown, popover, tooltip, menu); set --popup-origin.',
   'popup-scale-out': 'Anchored overlays closing (pair of popup-scale-in).',
-  'slide-in-left':
-    'Left-anchored panel entering (sidebar, navigation drawer). Wrap the v-if region in a Vue Transition with enter-active-class.',
-  'slide-out-left':
-    'Left-anchored panel leaving (pair of slide-in-left; use as leave-active-class).',
-  'slide-in-right': 'Right-anchored panel entering (settings/detail drawer).',
-  'slide-out-right': 'Right-anchored panel leaving (pair of slide-in-right).',
+  'slide-in-start':
+    'Start-anchored panel entering (sidebar, navigation drawer); flips with the reading direction. Wrap the v-if region in a Vue Transition with enter-active-class.',
+  'slide-out-start':
+    'Start-anchored panel leaving (pair of slide-in-start; use as leave-active-class).',
+  'slide-in-end':
+    'End-anchored panel entering (settings/detail drawer); flips with the reading direction.',
+  'slide-out-end': 'End-anchored panel leaving (pair of slide-in-end).',
   'progress-indeterminate': 'Indeterminate linear progress bar (primary sweep).',
   'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).',
+  'autoplay-progress':
+    'The hairline that fills while a rotating band (tabs, quotes, highlights) waits to advance. Set animation-duration ON THE ELEMENT to the rotation interval, key the element on the slide so it restarts, pause it with animation-play-state while the rotation holds, and anchor its transform origin at the inline start.',
   'flow-dash':
     'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.',
+  'flow-dash-settle':
+    'Marching dashes along a decorative SVG connector, six cycles then still (4.2s, WCAG 2.2.2); same stroke-dasharray contract as flow-dash. Keep the infinite flow-dash for a stroke that shows a live status.',
   'texture-wave-a':
-    'One of the two crossing bands of a pixelate texture, travelling left. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers mid-cycle.',
+    'One of the two crossing bands of a pixelate texture, drifting left and easing to a stop (4.8s, WCAG 2.2.2), holding where it lands. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers.',
   'texture-wave-b':
-    'The counter-travelling band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction).',
+    'The counter-drifting band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction).',
   'brand-marquee':
     'A strip of logos looping forever (client trust strips, framework strips). Apply to a track holding its row exactly twice, the duplicate aria-hidden, and set animation-duration ON THE ELEMENT from the mark count so every strip on a site moves at one speed rather than one duration — a var in this shorthand would resolve at :root and never see it. Pause it on hover and focus-within so a linked mark can be reached.'
 }

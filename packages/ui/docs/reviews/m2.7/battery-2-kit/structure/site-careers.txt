@@ -1,0 +1,36 @@
+[block-hero-centered-band kind=centered]
+  [marketing-hero kind=screen size=large align=center width=site aria-label="Let's build together"]
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Careers
+      h1 "Let's build together"
+      p "Azion is driven by innovation, reliability, and the ability to make transparent, forward-looking decisions and execute them with agility. Our success depends on the success of our customers."
+      button "See roles" → #latest-roles
+[marketing-section-container width=site]
+  [block-photo-marquee aria-label='Work at Azion']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=horizontal size=medium]
+        h2 "Work at Azion"
+        p "At Azion, culture is how we live and work every day. The Azion Way of Life is built on the belief that high performance goes hand in hand with autonomy, authenticity, and enjoyment. We trust people to manage their own routines with balance and accountability, focusing on outcomes. We collaborate across countries and cultures to build solutions for the world. And we value originality, bold ideas, a…"
+  · section-gap (hatched spacer band)
+  [block-media-split-band-globe]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Four values shape every role at Azion']
+        text: // ⏎ Our values
+        h2 "Four values shape every role at Azion"
+        p "Quality, Drive, Accountability, and Innovation. They guide how we work every day: we set high standards and measure what we deliver, take on hard problems with persistence, own our commitments and mistakes, and use AI and new technology to solve problems in new ways. Together, they help us earn and keep the trust of our customers."
+  · section-gap (hatched spacer band)
+  [block-process-scroll]
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Hiring process"
+        p "Every role goes through the same five stages, from the first request to the offer."
+    list (5): Role request A hiring manager requests a new role. · Scope and posting We define the role’s scope, write the job description, and post the opening on selected channels. · Recruiting and interviews We source and screen candidates, then schedule interviews and, when the role needs one, a technical assessment. · Calibration Interviewers meet to compare feedback and choose the candidate. · Offer letter We prepare the offer and send it to the chosen candidate.
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-primary kind=primary]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=primary aria-label='Build, secure, and scale applications everywhere.']
+        [marketing-section-title kind=centered size=large]
+          h2 "Build, secure, and scale applications everywhere."
+          p "Get faster launches, lower latency, and less infrastructure overhead from day one."
+          button "Start free" → https://console.azion.com/signup?tck=generic_cta
+          button "Talk to a specialist" → https://www.azion.com/en/contact/

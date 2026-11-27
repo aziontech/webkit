@@ -1,0 +1,82 @@
+{
+ "name": "doc-previous-next",
+ "binding": "DocPreviousNext",
+ "import": "@aziontech/ui/doc-previous-next",
+ "treeShakeableImport": "@aziontech/ui/doc-previous-next",
+ "category": "docs",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The previous / next pair that closes a documentation page. Each side is a link carrying an eyebrow and the destination's title; a side with no neighbour leaves its half of the row empty, so the remaining link stays anchored to its own edge rather than drifting to the centre.",
+ "setup": null,
+ "useWhen": [
+  "Use DocPreviousNext only at the foot of a documentation page to link the previous and next documents.",
+  "At the foot of a page that sits in a reading order — a guide, a tutorial, a numbered series.",
+  "Whenever \"what do I read next\" has a single obvious answer in each direction."
+ ],
+ "avoidWhen": [
+  "To page through a data set — that is `Pagination`, which walks pages of rows and owns a page number. This links two neighbouring documents and knows nothing about a total.",
+  "On a page with no reading order (a reference index, a landing page): a next link that points somewhere arbitrary is worse than none."
+ ],
+ "related": [
+  "`Pagination` — the data counterpart; numbered pages over a collection, not two named documents.",
+  "`DocTableOfContents` — navigation _within_ the page, where this is navigation _between_ pages."
+ ],
+ "bestPractices": [
+  "Pass the destination's real title, not \"Next page\". The title is what tells the reader whether they want to go.",
+  "Leave a side `null` at the ends of a series rather than looping around.",
+  "Handle `navigate` when the app routes client-side; the anchor's `href` is what makes the link real for everyone else."
+ ],
+ "props": [
+  {
+   "name": "previous",
+   "type": "DocPreviousNextLink | null",
+   "default": "null",
+   "required": "false",
+   "doc": "The page before this one."
+  },
+  {
+   "name": "next",
+   "type": "DocPreviousNextLink | null",
+   "default": "null",
+   "required": "false",
+   "doc": "The page after this one."
+  },
+  {
+   "name": "previousLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow over the previous link. Empty uses the locale catalog (`Previous`)."
+  },
+  {
+   "name": "nextLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow over the next link. Empty uses the locale catalog (`Next`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "navigate",
+   "payload": "(event: MouseEvent, page: DocPreviousNextLink)",
+   "notes": "Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/doc-previous-next/default.vue"
+  },
+  {
+   "name": "Ends",
+   "file": "examples/doc-previous-next/ends.vue"
+  }
+ ],
+ "docs": "components/doc-previous-next.md"
+}

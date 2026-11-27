@@ -1,0 +1,66 @@
+# Rule: deprecation — mark, keep one major cycle, then remove
+
+Removing or renaming a public part (a component, a prop, an event, a slot) is a **breaking change**. This rule fixes the lifecycle between "we want this gone" and "it is gone", so a consumer always has a migration window and a machine-readable warning — never a silent removal.
+
+## The rule
+
+> A public part slated for removal is first **marked `@deprecated`** (with the replacement named in the tag), ships **at least one major version** in the deprecated state, and is only then **removed in a subsequent major**. Marking is a `patch`/`minor`; removal is a `major` (`BREAKING CHANGE:`). See [`release-types.md`](./release-types.md) for the bump mapping.
+
+```ts
+interface Props {
+  /**
+   * @deprecated since 4.2 — use `variant` instead. Removed in 5.0.
+   */
+  kind?: string
+  /** Visual variant. */
+  variant?: ButtonVariant
+}
+```
+
+For a whole component:
+
+```vue
+<script setup lang="ts">
+  /** @deprecated since 4.2 — use `EmptyState` instead. Removed in 5.0. */
+  defineOptions({ name: 'EmptyResultsBlock' })
+</script>
+```
+
+## 6.0 is the clean break
+
+Azion UI 6.0 is the one **clean-break major**: every name marked `@deprecated` before it, and every rename made for it, is removed outright in 6.0 — no alias, no "Removed in 7.0". Apps migrate once, with [`MIGRATION_V6.md`](../../packages/ui/MIGRATION_V6.md) and `npx @aziontech/ui migrate v6` (maps in `packages/ui/src/cli/migrations/v6*.json`). **From 6.0 on**, the lifecycle above applies to every public part: mark → at least one major → remove. The only names 6.0 still resolves are **data aliases** read from external content (a site page's old section `_id`, an old `Illustration` scene name, a Markdown `<CardGroup cols>`), kept so stored page data keeps rendering; they carry no `@deprecated` tag and no removal version.
+
+## Preview parts — the cycle starts at GA
+
+A new component or block ships as **preview** (`stability: preview` in its spec frontmatter or `block.json`) until the owner marks it **GA** by hand (`stability: ga`, or no field). Everything that existed on 2026-11-23 is GA. The lifecycle above applies **from GA on**:
+
+- A **preview** part's API (props, events, slots, models, parts, exports) may change in a **minor** release, with no `@deprecated` step and no codemod. Name the change in the commit body (`Preview API change: <Name> renames <old> to <new>.`), so it reaches the changelog. Mark nothing `!` or `BREAKING CHANGE:` for it; `check-api-diff.mjs` and `check-migrations.mjs` exempt it.
+- **Promoting** preview → GA is its own PR, `feat(ui): promote <Name> to GA`, approved by the owner. From that commit the API is frozen.
+- **Demoting** GA → preview is not allowed once the part is in a published release: `check-api-diff.mjs` fails it, because it would unfreeze a stable API without a deprecation cycle. A part that was never released (not an export of `origin/main`) may still be set to preview (LC-05).
+
+## Tag details
+
+- The `@deprecated` tag **names the replacement** and the **removal version** — a deprecation with no exit is just a warning that never ends.
+- The deprecated part **keeps working** for its cycle; do not change its behaviour, only annotate it.
+- **`catalog.json`** carries the deprecation (surfaced by the MCP) so AI-written consumer code is steered off the deprecated part before removal.
+- Removal is a **`major`** commit, marked `BREAKING CHANGE:`, updating the spec, the examples, and the exports map in the same change (see [`migration.md`](./migration.md) and [`event-payloads.md`](./event-payloads.md) for the same "reshape = breaking" discipline).
+
+## Hard prohibitions
+
+- Do not remove or rename a public part without a deprecation cycle first (except while a component is still on the legacy whitelist and unreleased, and except the 6.0 clean break, which removed old names outright).
+- Do not add a compatibility alias for a code-level name (prop, event, slot, type, export) in 6.x; only data aliases for stored external content are kept.
+- Do not write `@deprecated` without naming the replacement and the removal version.
+- Do not change a deprecated part's behaviour during its cycle — annotate, don't mutate.
+- Do not ship a removal as anything other than a `major` (`BREAKING CHANGE:`).
+- Do not mark a preview part's API change as breaking, and do not set a GA part back to `stability: preview`.
+
+## Enforcement
+
+- **`azion-ui/no-deprecated-component`** (ESLint, `error` in `recommended`) flags a consumer importing a component marked deprecated in the catalog.
+- **release-please** maps the bump; a `BREAKING CHANGE:` footer / `!` produces the `major` (see [`release-types.md`](./release-types.md)).
+- **`catalog.json`** records `deprecated` per part; `build-catalog.mjs` stamps it and the MCP surfaces it. It records `stability: preview` the same way, and the docs site shows a Preview tag.
+- **`check-api-diff.mjs`** (`api-diff` gate) exempts a preview part from the breaking marker and the migration, and fails a GA → preview change; **`check-migrations.mjs`** exempts a preview part or block from the codemod requirement. Pinned in `check-api-diff.test.mjs` and `check-migrations.test.mjs`.
+
+## Why this rule exists
+
+Breaking changes were happening (the branch renamed `variant`→`kind`, `closeable`→`closable`, removed `empty-results-block`), each correctly marked breaking — but there was no written lifecycle, so whether a part got a deprecation window or was removed outright depended on the PR. A fixed cycle (mark → one major → remove) plus a machine-readable `@deprecated` in the catalog gives every consumer the same, predictable migration path, and lets `no-deprecated-component` warn them inside the window. 6.0 resets the slate once: it removes every old name in one major, with one migration guide and one codemod, so the cycle starts from a catalog that carries no deprecated names.

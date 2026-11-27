@@ -1,0 +1,31 @@
+{
+ "variants": [
+  {
+   "name": "Loading",
+   "summary": "While the period loads, the chart, the rankings and the trackers render their own Skeleton and the incidents hold Skeleton rows, so the page does not reflow when data arrives.",
+   "file": "blocks/dashboard/dashboard-health-score/variants/loading.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "A period with no samples. The score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.",
+   "file": "blocks/dashboard/dashboard-health-score/variants/empty.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
+   "file": "blocks/dashboard/dashboard-health-score/variants/error.vue"
+  },
+  {
+   "name": "RealUser",
+   "summary": "Real-user monitoring: a Period Select in the header drives four vitals StatTiles (page load time, largest contentful paint, first input delay, sessions) that read a median value beside its unit with no delta and a Hint on the label, over a two-column grid of trend StatTiles with the latest value, a sparkline of the period and the period name in the aside.",
+   "file": "blocks/dashboard/dashboard-health-score/variants/real-user.vue"
+  }
+ ],
+ "sfcFile": "blocks/dashboard/dashboard-health-score/dashboard-health-score.vue",
+ "guidelinesFile": "blocks/dashboard/dashboard-health-score/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "parts/hourly-score-card.vue",
+  "parts/open-incidents-card.vue"
+ ]
+}

@@ -1,0 +1,1019 @@
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+import { ESLint } from 'eslint'
+
+import {
+  planInit,
+  FRAGMENT_LEGACY_MARKER,
+  MCP_SERVER_NAME,
+  _internals
+} from '../../src/cli/plan.js'
+import { applyPlan } from '../../src/cli/apply.js'
+import { FRAGMENT_START } from '../../src/cli/bundle.js'
+import {
+  LEGACY_MCP_SERVER_ARGS,
+  LEGACY_MCP_SERVER_NAME,
+  MCP_PACKAGE
+} from '../../src/cli/init/mcp.js'
+
+const PINNED_MCP = `@aziontech/ui-mcp@^${JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')).version.split('.')[0]}`
+
+const MAIN_TS =
+  "import { createApp } from 'vue'\nimport App from './App.vue'\ncreateApp(App).mount('#app')\n"
+
+const hasGit = !spawnSync('git', ['--version']).error
+
+function makeProject({ git = false } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-cli-'))
+  writeFileSync(
+    join(dir, 'package.json'),
+    JSON.stringify({ name: 'demo', version: '1.0.0' }, null, 2)
+  )
+  mkdirSync(join(dir, 'src'))
+  if (git) spawnSync('git', ['init', '-q'], { cwd: dir })
+  return dir
+}
+
+function findAddDeps(plan) {
+  return plan.filter((a) => a.type === 'add-dep').map((a) => a.dep)
+}
+
+test(
+  'planInit records the runtime and dev dependencies',
+  { skip: !hasGit && 'git is not installed' },
+  () => {
+    const dir = makeProject({ git: true })
+    try {
+      const plan = planInit(dir, {})
+      const deps = findAddDeps(plan)
+      for (const d of ['@aziontech/ui', '@aziontech/theme', '@aziontech/icons']) {
+        assert.ok(deps.includes(d), `missing runtime dep ${d}`)
+      }
+      // The eslint plugin + stylelint config ship inside @aziontech/ui now, so they
+      // are NOT separate deps; only the tooling peers are added.
+      for (const d of ['eslint', 'stylelint', 'vue-eslint-parser', 'husky']) {
+        assert.ok(deps.includes(d), `missing dev dep ${d}`)
+      }
+      assert.ok(
+        !deps.includes('@aziontech/eslint-plugin-azion-ui'),
+        'must not add a separate eslint-plugin package'
+      )
+      assert.ok(
+        !deps.includes('@aziontech/stylelint-config-azion-ui'),
+        'must not add a separate stylelint-config package'
+      )
+      // Dev flag is set correctly.
+      const dev = plan.find((a) => a.type === 'add-dep' && a.dep === 'eslint')
+      assert.equal(dev.dev, true)
+      const runtime = plan.find((a) => a.type === 'add-dep' && a.dep === '@aziontech/ui')
+      assert.equal(runtime.dev, false)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+)
+
+test("planInit writes a .prettierrc.json in the copied blocks' style when the app has none", () => {
+  const dir = makeProject()
+  try {
+    const write = planInit(dir, {}).find((a) => a.type === 'write' && a.path === '.prettierrc.json')
+    assert.ok(write, 'expected .prettierrc.json write action')
+    assert.equal(write.skipIfExists, true)
+    const repo = JSON.parse(
+      readFileSync(fileURLToPath(new URL('../../../../.prettierrc.json', import.meta.url)), 'utf8')
+    )
+    delete repo.$schema
+    delete repo.overrides
+    assert.deepEqual(JSON.parse(write.content), repo)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("planInit keeps an existing Prettier config and prints the blocks' options instead", () => {
+  for (const setup of [
+    (dir) => writeFileSync(join(dir, '.prettierrc'), '{ "semi": true }\n'),
+    (dir) => writeFileSync(join(dir, 'prettier.config.mjs'), 'export default {}\n'),
+    (dir) =>
+      writeFileSync(
+        join(dir, 'package.json'),
+        JSON.stringify({ name: 'demo', version: '1.0.0', prettier: { semi: true } })
+      )
+  ]) {
+    const dir = makeProject()
+    try {
+      setup(dir)
+      const plan = planInit(dir, {})
+      assert.equal(
+        plan.find((a) => a.type === 'write' && a.path === '.prettierrc.json'),
+        undefined
+      )
+      const advice = plan.find((a) => a.type === 'advise' && /Prettier config/.test(a.message))
+      assert.ok(advice, 'expected the Prettier advice')
+      assert.match(advice.message, /"singleAttributePerLine": true/)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+})
+
+test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const deps = findAddDeps(plan)
+    const eslint = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.mjs')
+    assert.ok(eslint, 'expected eslint.config.mjs write action')
+    assert.match(eslint.content, /@aziontech\/ui\/eslint-plugin/)
+    assert.match(eslint.content, /configs\.strict/)
+    assert.match(eslint.content, /vue-eslint-parser/)
+    // Static a11y floor is wired (the lint half of the accessibility skill).
+    assert.match(eslint.content, /eslint-plugin-vuejs-accessibility/)
+    assert.match(eslint.content, /vuejs-accessibility\/click-events-have-key-events/)
+    assert.ok(deps.includes('eslint-plugin-vuejs-accessibility'), 'missing a11y lint dep')
+
+    const stylelint = plan.find((a) => a.type === 'write' && a.path === '.stylelintrc.json')
+    assert.ok(stylelint, 'expected .stylelintrc.json write action')
+    assert.match(stylelint.content, /@aziontech\/ui\/stylelint-config/)
+    // stylelint config wires the .vue / .scss custom syntaxes
+    assert.match(stylelint.content, /postcss-html/)
+    assert.match(stylelint.content, /postcss-scss/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const deps = findAddDeps(plan)
+    // Style pipeline deps present and pinned to a range (NOT "latest").
+    for (const d of ['tailwindcss', '@tailwindcss/postcss']) {
+      assert.ok(deps.includes(d), `missing style dep ${d}`)
+      const action = plan.find((a) => a.type === 'add-dep' && a.dep === d)
+      assert.notEqual(action.version, 'latest', `${d} must be pinned, not "latest"`)
+      assert.equal(action.dev, true)
+    }
+    // Tailwind v4 specifically (matches the theme's v4 stylesheet).
+    const tw = plan.find((a) => a.type === 'add-dep' && a.dep === 'tailwindcss')
+    assert.match(tw.version, /^\^4\./, 'tailwind must be v4 to match the theme stylesheet')
+    // v4 is CSS-first: no autoprefixer, no tailwind.config.
+    assert.ok(!deps.includes('autoprefixer'), 'autoprefixer is not needed under Tailwind v4')
+    const twCfg = plan.find(
+      (a) => a.type === 'write' && a.path && a.path.startsWith('tailwind.config')
+    )
+    assert.equal(
+      twCfg,
+      undefined,
+      'Tailwind v4 is CSS-first — no tailwind.config should be written'
+    )
+
+    const pcCfg = plan.find((a) => a.type === 'write' && a.path === 'postcss.config.mjs')
+    assert.ok(pcCfg, 'expected postcss.config.mjs write action')
+    assert.match(pcCfg.content, /@tailwindcss\/postcss/)
+
+    const cssEntry = plan.find((a) => a.type === 'write' && a.path === 'src/azion-ui.css')
+    assert.ok(cssEntry, 'expected src/azion-ui.css write action')
+    assert.match(cssEntry.content, /@import '@aziontech\/theme'/)
+    // The font faces are their own entry, so an app that hosts its fonts can drop the line.
+    assert.match(cssEntry.content, /@import '@aziontech\/theme\/fonts\.css'/)
+    // Critically, it must register Azion UI's source so component classes compile — via the
+    // package-name import (the @source ships inside ui), never a ../node_modules path.
+    assert.match(cssEntry.content, /@import '@aziontech\/ui\/styles'/)
+    // Font smoothing ships in the consumer's own file, inside `@layer base`, so it stays
+    // overridable by their unlayered rules and is visible where they can edit it.
+    assert.match(cssEntry.content, /@layer base \{[\s\S]*-webkit-font-smoothing: antialiased;/)
+    assert.match(cssEntry.content, /-moz-osx-font-smoothing: grayscale;/)
+    assert.doesNotMatch(
+      cssEntry.content,
+      /node_modules/,
+      'the CSS entry must not hardcode a node_modules path'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+const V5_AZION_UI_CSS =
+  "/* @aziontech/ui design-system styles. Import this once from your app entry. */\n@import '@aziontech/theme';\n\n/* The Azion fonts (Rubik, Roboto Mono, \u2026) from fonts.azion.com. Delete this line if your app\n   hosts its own font files. */\n@import '@aziontech/theme/fonts.css';\n\n/* ui is consumed as source \u2014 this registers it with Tailwind so its component classes compile. */\n@import '@aziontech/ui/styles';\n\n/* Text rendering. The type ladder is drawn at these settings, so they are the design\n   system's default \u2014 and they live here, in your file, so you can change them. */\n@layer base {\n  html {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n  }\n}\n"
+
+test('init replaces the untouched 5.x src/azion-ui.css with the 6.0 template', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/azion-ui.css'), V5_AZION_UI_CSS)
+    const plan = planInit(dir, {})
+    const action = plan.find((a) => a.type === 'write' && a.path === 'src/azion-ui.css')
+    assert.equal(action.skipIfExists, undefined)
+    applyPlan(dir, [action])
+    const css = readFileSync(join(dir, 'src/azion-ui.css'), 'utf8')
+    assert.match(css, /@import '\.\/azion-ui\.sources\.css';/)
+    assert.match(css, /@source not '\.\.\/\.agents';/)
+    assert.equal(planInit(dir, {}).find((a) => a.path === 'src/azion-ui.css').skipIfExists, true)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('init patches an edited src/azion-ui.css with only the 6.0 lines it lacks', () => {
+  const dir = makeProject()
+  try {
+    const edited = `${V5_AZION_UI_CSS}\n.brand { color: var(--primary); }\n`
+    writeFileSync(join(dir, 'src/azion-ui.css'), edited)
+    const plan = planInit(dir, {})
+    const action = plan.find((a) => a.type === 'write' && a.path === 'src/azion-ui.css')
+    const [result] = applyPlan(dir, [action])
+    assert.match(result.detail, /edited by hand/)
+    const css = readFileSync(join(dir, 'src/azion-ui.css'), 'utf8')
+    assert.match(css, /\.brand \{ color: var\(--primary\); \}/)
+    assert.match(
+      css,
+      /@import '@aziontech\/ui\/styles';\n@import '\.\/azion-ui\.sources\.css';\n@source not '\.\.\/\.agents';\n@source not '\.\.\/AGENTS\.md';\n@source not '\.\.\/\.claude';\n@source not '\.\.\/CLAUDE\.md';/
+    )
+    assert.equal(planInit(dir, {}).find((a) => a.path === 'src/azion-ui.css').skipIfExists, true)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('an existing postcss config is advised, not overwritten', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'postcss.config.js'), 'export default {}\n')
+    const plan = planInit(dir, {})
+    const write = plan.find((a) => a.type === 'write' && a.path.startsWith('postcss.config'))
+    assert.equal(write, undefined, 'must not plan to write over an existing postcss config')
+    const advise = plan.find(
+      (a) => a.type === 'advise' && /PostCSS config already exists/.test(a.message)
+    )
+    assert.ok(advise, 'expected a postcss merge-snippet advice')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit advises the device default and how to pin light or dark', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const advise = plan.find(
+      (a) =>
+        a.type === 'advise' &&
+        /follows the device/.test(a.message) &&
+        /data-theme="light"/.test(a.message) &&
+        /data-theme="dark"/.test(a.message)
+    )
+    assert.ok(advise, 'expected a theme-selection advice naming the device default and both pins')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit patches the app entry with the style imports by default', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS, { flag: 'w' })
+    const plan = planInit(dir, {})
+    const patch = plan.find((a) => a.type === 'patch-entry')
+    assert.ok(patch, 'expected a patch-entry action for src/main.ts')
+    assert.equal(patch.path, 'src/main.ts')
+    assert.deepEqual(patch.imports, ["import './azion-ui.css'", "import '@aziontech/icons'"])
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('wireEntry: false falls back to entry advice, never edits the file', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS, { flag: 'w' })
+    const plan = planInit(dir, { wireEntry: false })
+    assert.equal(
+      plan.find((a) => a.type === 'patch-entry'),
+      undefined,
+      'must not plan an entry patch with wireEntry: false'
+    )
+    const advise = plan.find(
+      (a) => a.type === 'advise' && /import '\.\/azion-ui\.css'/.test(a.message)
+    )
+    assert.ok(advise, 'expected the entry-imports advice')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('icons: false drops @aziontech/icons from deps and entry imports', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS, { flag: 'w' })
+    const plan = planInit(dir, { icons: false })
+    assert.ok(!findAddDeps(plan).includes('@aziontech/icons'), 'icons dep must be omitted')
+    const patch = plan.find((a) => a.type === 'patch-entry')
+    assert.deepEqual(patch.imports, ["import './azion-ui.css'"])
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit never wires feature-scoped setup (toast is just-in-time, not init)', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS)
+    const plan = planInit(dir, {})
+    const patch = plan.find((a) => a.type === 'patch-entry')
+    assert.equal(patch.use, undefined, 'patch-entry must not carry plugin wiring')
+    assert.ok(
+      !patch.imports.some((l) => l.includes('ToastPlugin')),
+      'init must not import ToastPlugin — toast setup is just-in-time (catalog `setup` + doctor)'
+    )
+    assert.ok(
+      !plan.some((a) => a.type === 'advise' && /ToastPlugin|Toaster/.test(a.message)),
+      'init must not advise toast setup'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan wires the entry imports once and is idempotent', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'src/main.ts'), MAIN_TS, { flag: 'w' })
+    applyPlan(dir, planInit(dir, {}))
+
+    const wired = readFileSync(join(dir, 'src/main.ts'), 'utf8')
+    assert.ok(wired.startsWith("import './azion-ui.css'\nimport '@aziontech/icons'\n"))
+    assert.ok(wired.includes(MAIN_TS), 'original entry content must be preserved')
+
+    // Second run — no duplication.
+    applyPlan(dir, planInit(dir, {}))
+    const again = readFileSync(join(dir, 'src/main.ts'), 'utf8')
+    assert.equal(again, wired, 'entry file changed on the second run')
+
+    // A partially wired entry (double quotes, moved line) is completed, not duplicated.
+    writeFileSync(join(dir, 'src/main.ts'), `import "./azion-ui.css"\n${MAIN_TS}`)
+    applyPlan(dir, planInit(dir, {}))
+    const completed = readFileSync(join(dir, 'src/main.ts'), 'utf8')
+    assert.equal(completed.split('azion-ui.css').length - 1, 1, 'azion-ui.css import duplicated')
+    assert.equal(
+      completed.split('@aziontech/icons').length - 1,
+      1,
+      'icons import missing/duplicated'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('--recommended selects the recommended eslint preset', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, { recommended: true })
+    const eslint = plan.find((a) => a.type === 'write' && a.path === 'eslint.config.mjs')
+    assert.match(eslint.content, /configs\.recommended/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('an existing eslint config is advised, not overwritten', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'eslint.config.js'), 'export default []\n')
+    const plan = planInit(dir, {})
+    const write = plan.find((a) => a.type === 'write' && a.path.startsWith('eslint.config'))
+    assert.equal(write, undefined, 'must not plan to write over an existing eslint config')
+    const advise = plan.find(
+      (a) => a.type === 'advise' && /ESLint config already exists/.test(a.message)
+    )
+    assert.ok(advise, 'expected an advise action with a merge snippet')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('an existing stylelint config is advised, not overwritten', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(join(dir, 'stylelint.config.js'), 'export default {}\n')
+    const plan = planInit(dir, {})
+    const write = plan.find((a) => a.type === 'write' && a.path === '.stylelintrc.json')
+    assert.equal(write, undefined, 'must not plan to write over an existing stylelint config')
+    const advise = plan.find(
+      (a) => a.type === 'advise' && /Stylelint config already exists/.test(a.message)
+    )
+    assert.ok(advise, 'expected a stylelint merge-snippet advice')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test(
+  'planInit adds the husky "prepare" script and a shim-free pre-commit hook',
+  { skip: !hasGit && 'git is not installed' },
+  () => {
+    const dir = makeProject({ git: true })
+    try {
+      const plan = planInit(dir, {})
+      const prepare = plan.find((a) => a.type === 'merge-json' && a.path === 'package.json')
+      assert.ok(prepare, 'expected a package.json merge for the prepare script')
+      assert.equal(prepare.merge.scripts.prepare, 'husky')
+
+      const hook = plan.find((a) => a.type === 'append' && a.path === '.husky/pre-commit')
+      assert.ok(hook, 'expected the husky pre-commit hook')
+      assert.doesNotMatch(
+        hook.content,
+        /husky\.sh/,
+        'must not use the removed husky v8 bootstrap shim'
+      )
+      assert.match(hook.content, /npx eslint/)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+)
+
+test('planInit merges the Azion UI MCP server into .mcp.json', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const mcp = plan.find((a) => a.type === 'merge-json' && a.path === '.mcp.json')
+    assert.ok(mcp, 'expected .mcp.json merge action')
+    assert.ok(mcp.merge.mcpServers[MCP_SERVER_NAME], 'expected ui server in the merge')
+    assert.equal(mcp.merge.mcpServers[MCP_SERVER_NAME].command, 'npx')
+    assert.deepEqual(mcp.merge.mcpServers[MCP_SERVER_NAME].args, ['-y', PINNED_MCP])
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit points a v5 Azion UI MCP entry at @aziontech/ui-mcp and keeps other servers', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, '.mcp.json'),
+      JSON.stringify({
+        mcpServers: {
+          other: { command: 'node', args: ['x.js'] },
+          [LEGACY_MCP_SERVER_NAME]: { command: 'npx', args: LEGACY_MCP_SERVER_ARGS }
+        }
+      })
+    )
+    applyPlan(dir, planInit(dir, {}))
+    const mcp = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
+    assert.deepEqual(mcp.mcpServers[MCP_SERVER_NAME], {
+      command: 'npx',
+      args: ['-y', PINNED_MCP]
+    })
+    assert.equal(mcp.mcpServers[LEGACY_MCP_SERVER_NAME], undefined)
+    assert.deepEqual(mcp.mcpServers.other, { command: 'node', args: ['x.js'] })
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit pins an unpinned azion-ui-mcp entry to the major of the installed Azion UI', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, '.mcp.json'),
+      JSON.stringify({
+        mcpServers: { [MCP_SERVER_NAME]: { command: 'npx', args: ['-y', '@aziontech/ui-mcp'] } }
+      })
+    )
+    applyPlan(dir, planInit(dir, {}))
+    const mcp = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
+    assert.deepEqual(mcp.mcpServers[MCP_SERVER_NAME].args, ['-y', PINNED_MCP])
+    assert.equal(MCP_PACKAGE, PINNED_MCP)
+    assert.match(PINNED_MCP, /^@aziontech\/ui-mcp@\^\d+$/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit copies the .claude/rules/azion-ui-*.md bundle', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const copies = plan.filter((a) => a.type === 'copy-stamped').map((a) => a.to)
+    for (const rel of [
+      '.agents/rules/azion-ui-imports.md',
+      '.agents/rules/azion-ui-tokens.md',
+      '.agents/rules/azion-ui-performance.md',
+      '.agents/rules/azion-ui-prefer-over-custom.md',
+      '.agents/rules/azion-ui-style-override.md',
+      '.agents/rules/azion-ui-comments.md',
+      '.agents/rules/azion-ui-construction-standards.md',
+      '.agents/rules/azion-ui-prop-vocabulary.md',
+      '.agents/rules/azion-ui-styling.md',
+      '.agents/rules/azion-ui-direction.md',
+      '.agents/rules/azion-ui-strings.md',
+      '.agents/rules/azion-ui-example-data.md',
+      '.agents/rules/azion-ui-component-structure.md',
+      '.agents/rules/azion-ui-props.md',
+      '.agents/rules/azion-ui-v-model.md',
+      '.agents/rules/azion-ui-emits.md',
+      '.agents/rules/azion-ui-slots.md',
+      '.agents/rules/azion-ui-composables.md',
+      '.agents/rules/azion-ui-root-element.md',
+      '.agents/rules/azion-ui-component-states.md',
+      '.agents/rules/azion-ui-accessibility.md',
+      '.agents/rules/azion-ui-motion.md',
+      '.agents/rules/azion-ui-testid.md',
+      '.agents/rules/azion-ui-deprecation.md',
+      '.agents/rules/azion-ui-api-data.md',
+      '.agents/skills/azion-ui-usage/SKILL.md',
+      // UI-craft pack (18 skills: the redundancy/false-positive pass + azion-ui-tables +
+      // azion-ui-lists (the index page around the table and its filter system) +
+      // azion-ui-create-surface (page vs drawer, and the anatomy both share) +
+      // azion-ui-errors (where a failure goes) + azion-ui-layout (the container system every
+      // page is built on) + azion-ui-microcopy (Azion product copy rules, unlike the
+      // generic content-microcopy dropped below)).
+      '.agents/skills/azion-ui-ux-heuristics/SKILL.md',
+      '.agents/skills/azion-ui-states/SKILL.md',
+      '.agents/skills/azion-ui-form/SKILL.md',
+      '.agents/skills/azion-ui-create-surface/SKILL.md',
+      '.agents/skills/azion-ui-errors/SKILL.md',
+      '.agents/skills/azion-ui-microcopy/SKILL.md',
+      '.agents/skills/azion-ui-tables/SKILL.md',
+      '.agents/skills/azion-ui-lists/SKILL.md',
+      '.agents/skills/azion-ui-navigation/SKILL.md',
+      '.agents/skills/azion-ui-layout/SKILL.md',
+      '.agents/skills/azion-ui-quick-cleanup/SKILL.md',
+      '.agents/skills/azion-ui-theming-dark-mode/SKILL.md',
+      '.agents/skills/azion-ui-data-viz/SKILL.md',
+      '.agents/skills/azion-ui-motion-polish/SKILL.md',
+      '.agents/skills/azion-ui-final-polish/SKILL.md',
+      '.agents/skills/azion-ui-verify/SKILL.md',
+      '.agents/skills/azion-ui-adoption/SKILL.md',
+      '.agents/skills/azion-ui-azion-api/SKILL.md',
+      '.agents/skills/azion-ui-query-explorer/SKILL.md',
+      '.agents/skills/azion-ui-in-product-help/SKILL.md',
+      '.agents/skills/azion-ui-api-data/SKILL.md',
+      '.agents/skills/azion-ui-site-pages/SKILL.md',
+      '.agents/skills/azion-ui-product-screens/SKILL.md',
+      '.agents/agents/azion-ui-advisor.md',
+      '.agents/agents/azion-ui-adopter.md',
+      '.agents/agents/azion-ui-reviewer.md',
+      '.agents/agents/azion-ui-verifier.md',
+      '.agents/agents/azion-ui-adoption-auditor.md'
+    ]) {
+      assert.ok(copies.includes(rel), `missing bundle copy ${rel}`)
+    }
+    // Dropped (false positives) and merged skills must NOT ship — locks the redundancy pass.
+    for (const gone of [
+      '.agents/skills/azion-ui-performance-ux/SKILL.md',
+      '.agents/skills/azion-ui-content-microcopy/SKILL.md',
+      '.agents/skills/azion-ui-i18n-readiness/SKILL.md',
+      '.agents/skills/azion-ui-responsive-layout/SKILL.md',
+      '.agents/skills/azion-ui-usability/SKILL.md',
+      '.agents/skills/azion-ui-delight/SKILL.md',
+      '.agents/skills/azion-ui-accessibility-implementation/SKILL.md'
+    ]) {
+      assert.ok(!copies.includes(gone), `dropped/merged skill must not ship: ${gone}`)
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit fences the AGENTS.md fragment instead of appending it once', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const fenceAction = plan.find((a) => a.type === 'fence' && a.path === 'AGENTS.md')
+    assert.ok(fenceAction, 'expected a AGENTS.md fence action')
+    assert.equal(fenceAction.start, FRAGMENT_START)
+    assert.ok(fenceAction.content.length > 0, 'fence content must be the fragment body')
+    // The fragment body itself is not marker-wrapped by the plan — spliceFragment owns the
+    // wrapping — so the legacy marker string should not appear inside the plain content.
+    assert.ok(
+      !fenceAction.content.includes(FRAGMENT_LEGACY_MARKER),
+      'fence content must be the raw fragment body, not pre-wrapped with a marker'
+    )
+    // No append action for AGENTS.md anymore.
+    assert.equal(
+      plan.find((a) => a.type === 'append' && a.path === 'AGENTS.md'),
+      undefined,
+      'AGENTS.md must no longer be planned as an append-once action'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test(
+  'applyPlan writes the expected files and is idempotent on a second run',
+  { skip: !hasGit && 'git is not installed' },
+  () => {
+    const dir = makeProject({ git: true })
+    try {
+      // First run.
+      applyPlan(dir, planInit(dir, {}))
+
+      // Files landed on disk.
+      assert.ok(existsSync(join(dir, 'eslint.config.mjs')))
+      assert.ok(existsSync(join(dir, '.stylelintrc.json')))
+      assert.ok(existsSync(join(dir, '.mcp.json')))
+      assert.ok(existsSync(join(dir, '.husky/pre-commit')))
+      assert.ok(existsSync(join(dir, '.agents/rules/azion-ui-imports.md')))
+      assert.ok(existsSync(join(dir, 'AGENTS.md')))
+      assert.ok(!existsSync(join(dir, 'CLAUDE.md')), 'no Claude Code files without --claude')
+      assert.ok(!existsSync(join(dir, '.claude')), 'no Claude Code files without --claude')
+
+      // package.json got the deps.
+      const pkg1 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
+      assert.ok(pkg1.dependencies['@aziontech/ui'])
+      assert.ok(pkg1.devDependencies['eslint'])
+
+      // .mcp.json has exactly one ui server.
+      const mcp1 = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
+      assert.equal(Object.keys(mcp1.mcpServers).length, 1)
+      assert.ok(mcp1.mcpServers[MCP_SERVER_NAME])
+
+      const claude1 = readFileSync(join(dir, 'AGENTS.md'), 'utf8')
+      const fenceCount1 = claude1.split(FRAGMENT_START).length - 1
+      assert.equal(fenceCount1, 1)
+
+      // Second run — must not clobber or duplicate.
+      applyPlan(dir, planInit(dir, {}))
+
+      // .mcp.json still has exactly one ui server.
+      const mcp2 = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
+      assert.equal(Object.keys(mcp2.mcpServers).length, 1)
+      assert.deepEqual(mcp2, mcp1, '.mcp.json changed on the second run')
+
+      // AGENTS.md fenced block present exactly once (no duplication), content unchanged.
+      const claude2 = readFileSync(join(dir, 'AGENTS.md'), 'utf8')
+      const fenceCount2 = claude2.split(FRAGMENT_START).length - 1
+      assert.equal(fenceCount2, 1, 'AGENTS fragment duplicated on the second run')
+      assert.equal(claude2, claude1, 'AGENTS.md changed on the second run')
+
+      // Dependency versions unchanged (no re-pin).
+      const pkg2 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
+      assert.deepEqual(pkg2, pkg1, 'package.json changed on the second run')
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+)
+
+test('applyPlan migrates a pre-existing legacy CLAUDE.md marker into a fenced block', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, 'CLAUDE.md'),
+      `# My project\n\n${FRAGMENT_LEGACY_MARKER}\nOld fragment body.\n\n## Notes\nUser content.\n`
+    )
+
+    const results = applyPlan(dir, planInit(dir, {}))
+    const fenceResult = results.find(
+      (r) => r.action.type === 'fence' && r.action.path === 'CLAUDE.md'
+    )
+    assert.equal(
+      fenceResult.result,
+      'merged',
+      'a pre-existing file must report merged, not written'
+    )
+
+    const claude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
+    assert.equal(claude.split(FRAGMENT_START).length - 1, 1, 'expected exactly one fenced block')
+    assert.ok(
+      !claude.includes(FRAGMENT_LEGACY_MARKER),
+      'legacy marker must be gone after migration'
+    )
+    assert.ok(claude.startsWith('# My project'), 'user heading must be preserved')
+    assert.ok(
+      claude.includes('## Notes\nUser content.'),
+      'user content after the fragment must be preserved'
+    )
+    assert.ok(
+      !claude.includes('Old fragment body.'),
+      'the legacy body must be replaced with the current one'
+    )
+
+    // Idempotent: applying again either reports skipped, or plans no fence action at all
+    // (the fragment already classifies as `current`, so `planSync` omits the action) —
+    // either way the file must not be rewritten.
+    const results2 = applyPlan(dir, planInit(dir, {}))
+    const fenceResult2 = results2.find(
+      (r) => r.action.type === 'fence' && r.action.path === 'CLAUDE.md'
+    )
+    assert.equal(
+      fenceResult2?.result ?? 'skipped',
+      'skipped',
+      'a second run must not rewrite an already-fenced file'
+    )
+    assert.equal(readFileSync(join(dir, 'CLAUDE.md'), 'utf8'), claude, 'CLAUDE.md changed on rerun')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan repairs a CLAUDE.md with the legacy fragment duplicated at two positions', () => {
+  const dir = makeProject()
+  try {
+    // Mirrors the real docs-repo case: the legacy marker + fragment appended twice.
+    const legacyFragment = `${FRAGMENT_LEGACY_MARKER}\n## @aziontech/ui design system\nOld body.\n`
+    writeFileSync(
+      join(dir, 'CLAUDE.md'),
+      `# Proj\n\n${legacyFragment}\n${legacyFragment}\n## Other\nkeep me\n`
+    )
+
+    applyPlan(dir, planInit(dir, {}))
+
+    const claude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
+    assert.equal(claude.split(FRAGMENT_LEGACY_MARKER).length - 1, 0, 'no legacy marker must remain')
+    assert.equal(claude.split(FRAGMENT_START).length - 1, 1, 'exactly one fenced block must remain')
+    assert.ok(claude.includes('## Other\nkeep me'), 'trailing user content must survive the repair')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan writes AGENTS.md fresh (fence result "written") when the file is absent', () => {
+  const dir = makeProject()
+  try {
+    assert.ok(!existsSync(join(dir, 'AGENTS.md')))
+    const results = applyPlan(dir, planInit(dir, {}))
+    const fenceResult = results.find(
+      (r) => r.action.type === 'fence' && r.action.path === 'AGENTS.md'
+    )
+    assert.equal(fenceResult.result, 'written')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('init --claude adds the Claude Code adapter: pointers in .claude/ and CLAUDE.md importing AGENTS.md', () => {
+  const dir = makeProject()
+  try {
+    applyPlan(dir, planInit(dir, { claude: true }))
+    assert.match(readFileSync(join(dir, 'CLAUDE.md'), 'utf8'), /@AGENTS\.md/)
+    const pointer = readFileSync(join(dir, '.claude/skills/azion-ui-usage/SKILL.md'), 'utf8')
+    assert.match(pointer, /Read `\.agents\/skills\/azion-ui-usage\/SKILL\.md` and follow it/)
+    assert.ok(!existsSync(join(dir, '.claude/rules')), 'rules stay in .agents/ only')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan refuses to overwrite a malformed package.json (no data loss)', () => {
+  const dir = makeProject()
+  try {
+    const pkgPath = join(dir, 'package.json')
+    const malformed = '{ "name": "x", oops not valid json'
+    writeFileSync(pkgPath, malformed)
+
+    const results = applyPlan(dir, planInit(dir, {}))
+
+    // The unparseable file is left exactly as it was — never clobbered with `{}`.
+    assert.equal(readFileSync(pkgPath, 'utf8'), malformed)
+    // And the affected actions reported an error instead of silently succeeding.
+    assert.ok(
+      results.some((r) => r.result === 'error' && /not valid JSON/.test(r.detail)),
+      'expected an error result for the malformed package.json'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan keeps a dependency at a compatible or newer version and never downgrades it', () => {
+  const dir = makeProject()
+  try {
+    const pkgPath = join(dir, 'package.json')
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
+    pkg.dependencies = { tailwindcss: '^4.9.0', vue: '^3.5.0' }
+    pkg.devDependencies = {
+      eslint: '^10.0.0',
+      stylelint: '^17.0.0',
+      'postcss-html': 'workspace:*'
+    }
+    writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
+
+    const plan = planInit(dir, {})
+    const tailwind = plan.find((a) => a.type === 'add-dep' && a.dep === 'tailwindcss')
+    assert.equal(tailwind.keep, '^4.9.0')
+    assert.equal(tailwind.dev, false, 'kept in the field it already lives in')
+    const results = applyPlan(dir, plan)
+
+    const after = JSON.parse(readFileSync(pkgPath, 'utf8'))
+    assert.equal(after.devDependencies.eslint, '^10.0.0', 'a newer major is never downgraded')
+    assert.equal(after.devDependencies.stylelint, '^17.0.0', 'a compatible range is kept')
+    assert.equal(after.devDependencies['postcss-html'], 'workspace:*')
+    assert.equal(after.dependencies.tailwindcss, '^4.9.0')
+    assert.equal(after.devDependencies.tailwindcss, undefined, 'no duplicate entry')
+    const kept = results.find((r) => r.action.dep === 'eslint')
+    assert.equal(kept.result, 'skipped')
+    assert.match(kept.detail, /eslint@\^10\.0\.0 kept \(Azion UI needs \^9/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan raises a dependency older than Azion UI needs and says so', () => {
+  const dir = makeProject()
+  try {
+    const pkgPath = join(dir, 'package.json')
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
+    pkg.dependencies = { '@aziontech/ui': '^1.2.3' }
+    pkg.devDependencies = { tailwindcss: '^3.4.0' }
+    writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
+
+    const results = applyPlan(dir, planInit(dir, {}))
+
+    const after = JSON.parse(readFileSync(pkgPath, 'utf8'))
+    const wanted = _internals.DEP_VERSION('@aziontech/ui')
+    assert.equal(after.dependencies['@aziontech/ui'], wanted)
+    assert.equal(after.devDependencies.tailwindcss, '^4.1.0')
+    const raised = results.find((r) => r.action.dep === 'tailwindcss')
+    assert.match(
+      raised.detail,
+      /tailwindcss@\^4\.1\.0 \(was \^3\.4\.0, older than Azion UI needs\)/
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit skips the git hooks outside a git repository and says how to add them', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    assert.ok(!findAddDeps(plan).includes('husky'), 'husky is not added')
+    assert.ok(!plan.some((a) => a.type === 'merge-json' && a.path === 'package.json'))
+    assert.ok(!plan.some((a) => a.path === '.husky/pre-commit'))
+    const notes = plan.filter((a) => a.type === 'advise' && /git init/.test(a.message))
+    assert.equal(notes.length, 1)
+    assert.match(notes[0].message, /npx @aziontech\/ui init/)
+
+    applyPlan(dir, plan)
+    const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
+    assert.equal(pkg.scripts?.prepare, undefined)
+    assert.equal(pkg.devDependencies.husky, undefined)
+    assert.ok(!existsSync(join(dir, '.husky')))
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan merges into an existing .mcp.json without dropping other servers', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, '.mcp.json'),
+      JSON.stringify({ mcpServers: { other: { command: 'node', args: ['x.js'] } } }, null, 2)
+    )
+
+    applyPlan(dir, planInit(dir, {}))
+
+    const mcp = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
+    assert.ok(mcp.mcpServers.other, 'existing server was dropped')
+    assert.ok(mcp.mcpServers[MCP_SERVER_NAME], 'ui server not added')
+    assert.equal(Object.keys(mcp.mcpServers).length, 2)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+const CARET_RANGE = /^\^\d+\.\d+\.\d+( \|\| \^\d+\.\d+\.\d+)*$/
+
+const caretSatisfies = (range, version) =>
+  range.split(' || ').some((alternative) => {
+    const m = /^\^(\d+)\.(\d+)\.(\d+)$/.exec(alternative)
+    const v = version.split('.').map(Number)
+    if (!m) return false
+    const r = m.slice(1).map(Number)
+    if (v[0] !== r[0]) return false
+    return v[1] > r[1] || (v[1] === r[1] && v[2] >= r[2])
+  })
+
+test('planInit pins every dependency it adds to caret ranges, never "latest"', () => {
+  const dir = makeProject()
+  try {
+    for (const a of planInit(dir, {}).filter((x) => x.type === 'add-dep')) {
+      assert.match(a.version ?? '', CARET_RANGE, `${a.dep} is pinned as ${a.version}`)
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('the ranges init writes for Azion UI, theme and icons are satisfied by the workspace packages', () => {
+  const read = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url), 'utf8'))
+  const own = read('../../package.json')
+  const theme = read('../../../theme/package.json')
+  const icons = read('../../../icons/package.json')
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const v = (dep) => plan.find((a) => a.type === 'add-dep' && a.dep === dep).version
+    assert.equal(v('@aziontech/ui'), `^${own.version}`)
+    assert.equal(v('@aziontech/theme'), own.peerDependencies['@aziontech/theme'])
+    assert.ok(
+      caretSatisfies(own.peerDependencies['@aziontech/theme'], theme.version),
+      'theme peer range must accept the workspace theme'
+    )
+    assert.equal(v('@aziontech/icons'), own.peerDependencies['@aziontech/icons'])
+    assert.ok(
+      caretSatisfies(v('@aziontech/icons'), icons.version),
+      'icons range must accept the workspace icons'
+    )
+    assert.equal(
+      own.dependencies['@aziontech/theme'],
+      undefined,
+      'theme is a peer, never a nested dependency'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit leaves PostCSS out when the app runs Tailwind through @tailwindcss/vite', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, 'package.json'),
+      JSON.stringify({
+        name: 'demo',
+        version: '1.0.0',
+        devDependencies: { '@tailwindcss/vite': '^4.1.0' }
+      })
+    )
+    const plan = planInit(dir, {})
+    assert.ok(!findAddDeps(plan).includes('@tailwindcss/postcss'))
+    assert.ok(!plan.some((a) => a.type === 'write' && a.path === 'postcss.config.mjs'))
+    assert.ok(plan.some((a) => a.type === 'advise' && /@tailwindcss\/vite/.test(a.message)))
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+async function lintWithInitConfig(code) {
+  process.env.AZION_UI_CATALOG_PATH ||= fileURLToPath(
+    new URL('../../catalog.json', import.meta.url)
+  )
+  const dir = mkdtempSync(join(tmpdir(), 'azion-ui-init-lint-'))
+  try {
+    let source = _internals.eslintFlatConfig('strict')
+    for (const spec of [
+      '@aziontech/ui/eslint-plugin',
+      'eslint-plugin-vuejs-accessibility',
+      'vue-eslint-parser',
+      '@typescript-eslint/parser'
+    ]) {
+      source = source.replace(`'${spec}'`, JSON.stringify(import.meta.resolve(spec)))
+    }
+    writeFileSync(join(dir, 'eslint.config.mjs'), source)
+    writeFileSync(join(dir, 'Field.vue'), code)
+    const eslint = new ESLint({ cwd: dir, overrideConfigFile: join(dir, 'eslint.config.mjs') })
+    const [result] = await eslint.lintFiles(['Field.vue'])
+    return result.messages.filter((m) => m.ruleId === 'vuejs-accessibility/label-has-for')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+}
+
+test('the init ESLint config accepts a label that points at its control with for, or wraps it', async () => {
+  const script =
+    "<script setup>\nimport Input from '@aziontech/ui/input'\nimport FieldLabel from '@aziontech/ui/field-label'\n</script>\n"
+  assert.deepEqual(
+    await lintWithInitConfig(
+      `${script}<template><FieldLabel for="name">Name</FieldLabel><Input id="name" /></template>\n`
+    ),
+    [],
+    'a standalone FieldLabel with for next to its Input must pass'
+  )
+  assert.deepEqual(
+    await lintWithInitConfig(
+      '<template><label for="email">Email</label><input id="email" /></template>\n'
+    ),
+    [],
+    'a native label with for must pass'
+  )
+  assert.deepEqual(
+    await lintWithInitConfig('<template><label>Email <input /></label></template>\n'),
+    [],
+    'a label wrapping its control must pass'
+  )
+  assert.deepEqual(
+    await lintWithInitConfig(
+      "<script setup>\nimport Checkbox from '@aziontech/ui/checkbox'\n</script>\n<template><label>Accept <Checkbox /></label></template>\n"
+    ),
+    [],
+    'a label wrapping an Azion UI control must pass'
+  )
+  assert.equal(
+    (await lintWithInitConfig(`${script}<template><label>Name</label><Input /></template>\n`))
+      .length,
+    1,
+    'a label that neither wraps nor points at a control must fail'
+  )
+})

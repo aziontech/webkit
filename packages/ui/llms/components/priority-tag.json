@@ -1,0 +1,84 @@
+{
+ "name": "priority-tag",
+ "binding": "PriorityTag",
+ "import": "@aziontech/ui/priority-tag",
+ "treeShakeableImport": "@aziontech/ui/priority-tag",
+ "category": "content",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use PriorityTag only for the priority of a ticket, task or request on the urgent → low scale, or for \"no priority\"; the severity of a finding or alert is a SeverityTag, and the state of a ticket is a StatusIndicator or a Tag. PriorityTag labels a work item with how soon it should be handled: urgent, high, medium, low or none. The level reads from a three-bar signal glyph (the filled bars count the level), from a distinct alert mark for urgent, from three flat dots for none, and from the label, so no level depends on colour alone. Its accessible name always says the axis (\"Priority: High\"), which is why it is its own component and not a SeverityTag (decision SUP-05).",
+ "setup": null,
+ "useWhen": [
+  "Show how urgent a support ticket, task, issue or request is, in a ticket list row, a table cell, a board card or a ticket detail header.",
+  "Rank work on the fixed urgent, high, medium, low scale used by help desks and issue trackers, with \"no priority\" for items nobody has triaged yet."
+ ],
+ "avoidWhen": [
+  "The value is how severe a finding, alert, incident or vulnerability is → use `severity-tag`.",
+  "The value is the state of the ticket (open, pending, solved) → use `status-indicator` or `tag`.",
+  "The user picks or changes the priority (a priority field or filter) → use `select` or `chip`; show the chosen value with this tag elsewhere.",
+  "The value is a count on an icon or avatar → use `badge`."
+ ],
+ "related": [
+  "`severity-tag` — the same frame and bar glyph for the critical → info findings scale; its accessible name is the level alone.",
+  "`tag` — a toned status or category label with no order between values.",
+  "`status-indicator` — the live state of a resource or ticket.",
+  "`chip` — an interactive or removable token, for priority filters."
+ ],
+ "bestPractices": [
+  "Keep the default label (the level name from the locale catalog, translated under `ConfigProvider`); override `label` only when the product glossary names a level differently (`Normal` for medium).",
+  "Show `none` for an untriaged item instead of leaving the cell empty, so the column reads the same on every row.",
+  "Use one PriorityTag per row, in its own column, so the glyphs line up and the scale reads down the column.",
+  "Do not add a toned `tag` beside it for the same level; the glyph and the label already carry it."
+ ],
+ "props": [
+  {
+   "name": "priority",
+   "type": "'urgent' | 'high' | 'medium' | 'low' | 'none'",
+   "default": "'none'",
+   "required": "false",
+   "doc": "Priority level (exported as `PriorityTagPriority`); sets the glyph (alert mark, filled bars or dots) and the default label."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text of the tag. Empty uses the locale catalog (`Urgent`, `High`, `Medium`, `Low`, `No priority`)."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; `medium` is 24px tall, `small` is 20px."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Replaces the visible label text; the hidden `Priority:` prefix remains."
+  }
+ ],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/priority-tag/default.vue"
+  },
+  {
+   "name": "Priorities",
+   "file": "examples/priority-tag/priorities.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/priority-tag/sizes.vue"
+  }
+ ],
+ "docs": "components/priority-tag.md"
+}

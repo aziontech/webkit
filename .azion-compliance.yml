@@ -1,0 +1,5 @@
+exceptions:
+  - check: semver
+    action: waive
+    until: 2027-05-31
+    reason: 'the per-package tags made before the switch to one shared version (@aziontech/ui@5.13.0 and older) stay as they are, because releases and changelogs link to them; every new tag is vX.Y.Z'

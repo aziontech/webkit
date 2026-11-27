@@ -1,0 +1,28 @@
+import type { ComputedRef, InjectionKey } from 'vue'
+
+export type FieldOrientation = 'vertical' | 'horizontal' | 'responsive'
+
+export type FieldPartType = 'description' | 'error' | 'title'
+
+export interface FieldContext {
+  /** Id the wrapped control renders and FieldLabel targets with `for`. */
+  controlId: string
+  /** Space-separated ids of the mounted FieldDescription and FieldError parts. */
+  describedBy: ComputedRef<string | undefined>
+  /** Ids of the mounted FieldTitle parts; a choice-card control is labelled by them. */
+  labelledBy: ComputedRef<string | undefined>
+  /** Whether the field is invalid; the control sets aria-invalid. */
+  invalid: ComputedRef<boolean>
+  /** Whether the field is disabled; the control disables itself. */
+  disabled: ComputedRef<boolean>
+  /** Whether the field is required; FieldLabel shows the marker and the control sets required. */
+  required: ComputedRef<boolean>
+  /** Id of the hidden Required text FieldLabel renders; a control whose role cannot take aria-required adds it to its description. */
+  requiredId?: string
+  /** Whether a FieldError is mounted; FieldDescription then keeps its neutral tone. */
+  hasError: ComputedRef<boolean>
+  /** Registers a description, error or title id; returns the function that unregisters it. */
+  register: (kind: FieldPartType, id: string) => () => void
+}
+
+export const FieldInjectionKey: InjectionKey<FieldContext | null> = Symbol('Field')

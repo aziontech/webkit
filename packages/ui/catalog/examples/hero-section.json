@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as a product page opens with it: the large `title-band` with the overline, headline, sentence and both actions centered. A band with no title renders nothing, and one with no marks has no client strip.",
+   "file": "examples/hero-section/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "Every layout stacked: `center` over the dot field with the client strip, the large `title-band`, `copy-beside-art` with the illustration beside the copy, then `copy-on-top-art` with its copy centered over a scene in the window under it.",
+   "file": "examples/hero-section/variants.vue"
+  },
+  {
+   "name": "Bands",
+   "summary": "The design sample's other openings: `center-band` (large, site-wide, centered), `compact-band` (short, copy at the start) with `title-length=\"long\"` widening the headline, and a `plain` centered screen with a scene in the `bottom` slot.",
+   "file": "examples/hero-section/bands.vue"
+  }
+ ]
+}

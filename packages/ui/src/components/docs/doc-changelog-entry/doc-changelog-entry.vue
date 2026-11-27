@@ -1,0 +1,192 @@
+<script setup lang="ts">
+  import { computed, ref, useAttrs } from 'vue'
+
+  import {
+    useHeadingNavigation,
+    useHeadingOutline
+  } from '../../../composables/use-heading-navigation/index'
+  import Tag from '../../content/tag/tag.vue'
+  import { slugify } from './slugify'
+
+  /**
+   * One changelog entry: a sticky identity column on the left, the notes on the
+   * right. There is deliberately no rss prop — this layer renders pages and
+   * generates nothing, so the prop would be inert, worse than an absence.
+   */
+  defineOptions({ name: 'DocChangelogEntry', inheritAttrs: false })
+
+  export interface DocChangelogEntryProps {
+    /** The entry's name — a date, a release name. Also its anchor. */
+    label?: string
+    /** The release's heading, shown above the notes. The label becomes the date beside it. */
+    title?: string
+    /** Secondary line under the label; usually the version. */
+    description?: string
+    /** Short labels categorising the entry: a product, an area, a kind of change. */
+    tags?: string[]
+    /** Anchor override; wins over the slug derived from the label. Set it when two entries share a label. */
+    anchor?: string
+  }
+
+  const props = withDefaults(defineProps<DocChangelogEntryProps>(), {
+    label: '',
+    title: '',
+    description: '',
+    tags: () => [],
+    anchor: ''
+  })
+
+  defineSlots<{
+    /** The release notes: prose, lists, code, or any documentation component. */
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const nav = useHeadingNavigation()
+
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-changelog-entry')
+
+  const anchorId = computed(
+    () => props.anchor || slugify(props.title ? `${props.label} ${props.title}` : props.label)
+  )
+
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+
+  useHeadingOutline(rootEl, () =>
+    anchorId.value ? { id: anchorId.value, text: props.title || props.label, depth: 2 } : null
+  )
+
+  const ANCHOR_ICON_CLASS =
+    'az az-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out ' +
+    'group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none'
+
+  const BODY_CLASS =
+    'relative min-w-0 flex-1 md:border-s md:border-(--border-default) md:ps-(--spacing-lg) md:data-titled:ps-(--spacing-xl) ' +
+    'md:[[data-doc-changelog-entry]+[data-doc-changelog-entry]_&]:-mt-6 md:[[data-doc-changelog-entry]+[data-doc-changelog-entry]_&]:pt-6 ' +
+    'data-titled:[[data-doc-changelog-entry]:has(+[data-doc-changelog-entry])_&]:pb-(--spacing-xl) ' +
+    '[&>*:first-child]:pt-0!'
+
+  const NODE_CLASS =
+    'absolute top-[0.5lh] start-[calc(var(--spacing-xl)*-1)] hidden size-3 -translate-x-1/2 ' +
+    'rtl:translate-x-1/2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-strong) bg-(--bg-canvas) text-heading-md ' +
+    'md:block'
+</script>
+
+<template>
+  <section
+    ref="rootEl"
+    v-bind="$attrs"
+    :id="anchorId"
+    data-doc-block
+    data-doc-changelog-entry
+    :data-titled="title ? '' : null"
+    :data-testid="testId"
+    :aria-labelledby="`${anchorId}-label`"
+    class="flex w-full scroll-mt-(--spacing-lg) flex-col gap-(--spacing-sm) md:flex-row md:gap-(--spacing-lg)"
+  >
+    <div
+      data-doc-chrome
+      class="flex shrink-0 flex-col items-start gap-(--spacing-2xs) md:sticky md:top-(--spacing-lg) md:w-40 md:self-start"
+    >
+      <div
+        v-if="title"
+        class="flex min-h-[1lh] items-center text-heading-md"
+      >
+        <span class="whitespace-nowrap text-heading-2xs text-(--text-default)">{{ label }}</span>
+      </div>
+      <h2
+        v-else
+        :id="`${anchorId}-label`"
+        class="text-heading-xs text-(--text-default)"
+      >
+        <a
+          :href="`#${anchorId}`"
+          data-doc-anchor
+          class="group/anchor rounded-(--shape-flat) text-inherit no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+          @click="nav($event, { id: anchorId })"
+        >
+          <span
+            class="underline-offset-4 decoration-(--border-strong) group-hover/anchor:underline"
+            >{{ label }}</span
+          >
+          <span class="ms-(--spacing-xs) inline-flex h-lh items-center align-top">
+            <i
+              :class="ANCHOR_ICON_CLASS"
+              aria-hidden="true"
+            />
+          </span>
+        </a>
+      </h2>
+      <span
+        v-if="description"
+        class="text-label-code-sm text-(--text-muted)"
+        >{{ description }}</span
+      >
+      <div
+        v-if="tags.length && !title"
+        class="flex flex-wrap gap-(--spacing-2xs) pt-(--spacing-2xs)"
+      >
+        <Tag
+          v-for="tag in tags"
+          :key="tag"
+          :label="tag"
+          severity="neutral"
+          size="small"
+        />
+      </div>
+    </div>
+    <div
+      :data-titled="title ? '' : null"
+      :class="BODY_CLASS"
+    >
+      <div
+        v-if="title"
+        data-doc-chrome
+        class="relative flex flex-col items-start gap-(--spacing-md) pb-(--spacing-lg)"
+      >
+        <span
+          aria-hidden="true"
+          :data-testid="`${testId}__node`"
+          :class="NODE_CLASS"
+        />
+        <h2
+          :id="`${anchorId}-label`"
+          class="text-heading-xl text-(--text-default) sm:text-heading-md"
+        >
+          <a
+            :href="`#${anchorId}`"
+            data-doc-anchor
+            class="group/anchor rounded-(--shape-flat) text-inherit no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+            @click="nav($event, { id: anchorId })"
+          >
+            <span
+              class="underline-offset-4 decoration-(--border-strong) group-hover/anchor:underline"
+              >{{ title }}</span
+            >
+            <span class="ms-(--spacing-xs) inline-flex h-lh items-center align-top">
+              <i
+                :class="ANCHOR_ICON_CLASS"
+                aria-hidden="true"
+              />
+            </span>
+          </a>
+        </h2>
+        <div
+          v-if="tags.length"
+          class="flex flex-wrap gap-(--spacing-xs)"
+        >
+          <Tag
+            v-for="tag in tags"
+            :key="tag"
+            :label="tag"
+            severity="neutral"
+            size="medium"
+          />
+        </div>
+      </div>
+      <div class="[&>*:first-child]:pt-0!">
+        <slot />
+      </div>
+    </div>
+  </section>
+</template>

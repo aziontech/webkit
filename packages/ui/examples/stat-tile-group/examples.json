@@ -1,0 +1,32 @@
+{
+  "component": "stat-tile-group",
+  "title": "Components/Chart/StatTileGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "An overview's usage strip: four StatTiles in one card, split by dividers, each delta aligned to the end of its cell. One cell per row in a narrow box, two from the group's medium size, all four in a row on a wide one.",
+      "file": "default.vue"
+    },
+    {
+      "name": "BesideCard",
+      "summary": "A dashboard row: the usage strip beside a taller card. The row stretches the group to the card's height and the cells share it, so no empty band sits under the tiles.",
+      "file": "beside-card.vue"
+    },
+    {
+      "name": "MissingData",
+      "summary": "A row where some cells have no history. A cell with no trend draws the same gray placeholder curve as soon as a sibling draws a sparkline, so every label and figure stays on one line: Not enough data when the value is there, No data when it is missing, Couldn't load when the request failed.",
+      "file": "missing-data.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same data written in a docs page: `DocMarkdown` turns a `<StatTileGroup>` tag with `<StatTile label value unit delta />` tags inside into a real `StatTileGroup` of `StatTile`s. The attribute values are JSON, so a docs author copies them from the props or a page entry.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same data in the marketing site's page JSON: `StatTileGroup` is a scene and its tiles are the scene's `children` (each a `StatTile` scene with its own `props`). A band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"`) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
+    }
+  ]
+}

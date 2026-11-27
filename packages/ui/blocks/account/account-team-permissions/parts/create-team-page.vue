@@ -1,0 +1,170 @@
+<script setup lang="ts">
+  import Button from '@aziontech/ui/button'
+  import Card from '@aziontech/ui/card'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Kbd from '@aziontech/ui/kbd'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SaveBar from '@aziontech/ui/save-bar'
+  import SettingsGroup from '@aziontech/ui/settings-group'
+  import Textarea from '@aziontech/ui/textarea'
+  import { toast } from '@aziontech/ui/toast'
+  import { toAriaKeyshortcuts, useShortcuts } from '@aziontech/ui/use-shortcuts'
+  import { onMounted, reactive, ref } from 'vue'
+
+  import { useTeamLeaveGuard } from '../composables/use-team-leave-guard'
+  import { validateTeam } from '../lib/team-form'
+  import TeamFormHeader from './team-form-header.vue'
+  import TeamLeaveDialog from './team-leave-dialog.vue'
+  import TeamPermissionsField from './team-permissions-field.vue'
+  import TeamStatusGroup from './team-status-group.vue'
+
+  const form = reactive({ name: '', description: '', active: true })
+  const selected = ref<string[]>(['applications.view', 'domains.view', 'metrics.view'])
+  const errors = reactive({ name: '', permissions: '' })
+  const submitting = ref(false)
+  const pageEl = ref<HTMLElement | null>(null)
+  const guard = useTeamLeaveGuard(
+    pageEl,
+    () => ({ form, selected: selected.value }),
+    () => !submitting.value
+  )
+
+  const submit = () => {
+    if (submitting.value) return
+    if (!validateTeam(form.name, selected.value, errors)) return
+    submitting.value = true
+    setTimeout(() => {
+      submitting.value = false
+      guard.commit()
+      toast.success(`Team "${form.name.trim()}" created with ${selected.value.length} permissions.`)
+    }, 700)
+  }
+
+  const formEl = ref<HTMLFormElement | null>(null)
+  const nameEl = ref<InstanceType<typeof Input> | null>(null)
+
+  onMounted(() => nameEl.value?.focus())
+
+  useShortcuts({
+    keys: 'meta+enter',
+    label: 'Create team',
+    group: 'Page',
+    element: formEl,
+    when: () => !submitting.value,
+    handler: () => formEl.value?.requestSubmit()
+  })
+</script>
+
+<template>
+  <div
+    ref="pageEl"
+    class="flex h-dvh flex-col bg-(--bg-canvas)"
+  >
+    <TeamFormHeader page="Create Team" />
+
+    <main
+      class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col overflow-auto"
+    >
+      <form
+        ref="formEl"
+        class="flex min-h-0 flex-1 flex-col"
+        aria-labelledby="create-team-title"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <div class="flex-1">
+          <div
+            class="layout-column-form layout-boundary-inline flex flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
+          >
+            <PageHeader
+              title="Create Team"
+              description="A team is a named set of permissions. People added to it get exactly what it grants."
+              size="small"
+              title-id="create-team-title"
+            />
+
+            <fieldset
+              class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
+              :disabled="submitting"
+            >
+              <legend class="sr-only">Create Team</legend>
+
+              <SettingsGroup
+                label="General"
+                hint="The name is the only required field."
+              >
+                <Card>
+                  <template #default>
+                    <div class="flex flex-col gap-(--spacing-lg)">
+                      <Field
+                        required
+                        :invalid="!!errors.name"
+                      >
+                        <Field.Label for="team-name">Name</Field.Label>
+                        <Input
+                          ref="nameEl"
+                          id="team-name"
+                          v-model="form.name"
+                          placeholder="Developers"
+                          autocomplete="off"
+                          @update:model-value="errors.name = ''"
+                        />
+                        <Field.Description>{{
+                          errors.name || 'Usually the role or the area the team is responsible for.'
+                        }}</Field.Description>
+                      </Field>
+                      <Field>
+                        <Field.Label for="team-description">Description</Field.Label>
+                        <Textarea
+                          id="team-description"
+                          v-model="form.description"
+                          :rows="3"
+                        />
+                      </Field>
+                    </div>
+                  </template>
+                </Card>
+              </SettingsGroup>
+
+              <TeamPermissionsField
+                v-model="selected"
+                v-model:error="errors.permissions"
+              />
+
+              <TeamStatusGroup v-model="form.active" />
+            </fieldset>
+          </div>
+
+          <SaveBar variant="centered">
+            <template #actions>
+              <Button
+                type="button"
+                label="Cancel"
+                variant="outline"
+                size="medium"
+                href="/account/teams"
+              />
+              <Button
+                variant="primary"
+                size="medium"
+                type="submit"
+                :loading="submitting"
+                :aria-keyshortcuts="toAriaKeyshortcuts('meta+enter')"
+              >
+                Create
+                <Kbd
+                  meta
+                  key-name="enter"
+                  size="small"
+                  aria-hidden="true"
+                />
+              </Button>
+            </template>
+          </SaveBar>
+        </div>
+      </form>
+    </main>
+    <TeamLeaveDialog :guard="guard" />
+  </div>
+</template>

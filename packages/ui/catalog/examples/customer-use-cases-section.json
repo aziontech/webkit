@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as the SQL Database page places it: the product name as overline, the headline and lead in the title cell with a link out to the documentation, and four icon-led use cases filling the rest of the three-column frame. A band with no items renders nothing at all.",
+   "file": "examples/customer-use-cases-section/default.vue"
+  }
+ ]
+}

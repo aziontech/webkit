@@ -1,0 +1,33 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "eyebrow": "Cache",
+    "title": "Serve more from the edge",
+    "description": "The share of requests served from cache in the last hour."
+  },
+  "scenes": {
+    "scene": {
+      "component": "GaugeChart",
+      "props": {
+        "ariaLabel": "Cache hit ratio",
+        "value": 74,
+        "label": "Cache hit ratio, %",
+        "thresholds": [
+          {
+            "value": 0,
+            "severity": "danger"
+          },
+          {
+            "value": 50,
+            "severity": "warning"
+          },
+          {
+            "value": 70,
+            "severity": "success"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+<script setup>
+  import Alert from '@aziontech/ui/alert'
+</script>
+
+<template>
+  <div class="flex w-full flex-col gap-(--spacing-md)">
+    <Alert
+      severity="info"
+      size="small"
+      label="A small note."
+    />
+    <Alert
+      severity="info"
+      size="medium"
+      label="A medium note."
+    />
+  </div>
+</template>

@@ -5,5 +5,3 @@ export const perspective = {
   midrange: '800px',
   distant: '1200px'
 }
-
-export default { perspective }

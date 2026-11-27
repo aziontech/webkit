@@ -3,131 +3,174 @@ name: tooltip
 category: overlay
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 803042cf5b98067d7634cb4e269d2f0c2cc0d929c5b322e28c3b00a65b821b2a
+checksum: 8e280357fec5ca4435177b32aa7731ba02d1641dc99aec65344712c27104dbc2
 created: 2026-06-02
-last_updated: 2026-08-19
+last_updated: 2026-11-23
 ---
 
 # Tooltip — Component Spec
 
 ## Purpose
 
-Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `overlay/popover` instead.
+Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `popover` instead.
+
+## When to use
+
+- Use Tooltip for a one-line plain-text name or hint on a control, shown on hover or focus; it cannot hold links. For rich or interactive content opened by a click use Popover; for a read-only rich preview on hover use HoverCard.
+- Naming an icon-only control on hover and focus.
+- Revealing the full text of a truncated label, or expanding an abbreviation.
+- One short, plain-text hint that the user can do without.
+
+## When NOT to use
+
+- The content has links, buttons or more than one line of structure → use `popover`.
+- An explanation, an info glyph, or anything over a few words (about 80 characters) → use `hint`.
+- A read-only rich preview (a definition, a glossed term in documentation prose) → use `hover-card`.
+- Guidance or errors the user needs to complete a field → use `field-error`.
+
+## Related
+
+- `popover` — click-opened, interactive, with a header, body and footer.
+- `hint` — the info glyph that opens a short note on click; use it for explanations, never a tooltip.
+- `hover-card` — read-only rich preview on hover or focus; DocMarkdown's `<Tooltip>` tag renders one.
+- `icon-button` — the most common trigger; it still needs its own `ariaLabel`.
+
+## Best practices
+
+- Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.
+- Keep `content` to a few words (about 80 characters at most): a name, a shortcut or an abbreviation, as plain text. Never an explanation.
+- The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.
+- Use `disabled` to suppress the tooltip. An empty `content` also blocks opening, but it reads as a bug.
+- Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.
+- Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
 ## Usage
 
 ```vue
 <script setup>
-import Tooltip from '@aziontech/webkit/overlay/tooltip'
-import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/ui/tooltip'
+  import IconButton from '@aziontech/ui/icon-button'
 </script>
 
 <template>
-  <Tooltip text="Delete" placement="top">
-    <IconButton icon="pi pi-trash" aria-label="Delete" />
+  <Tooltip
+    content="Delete"
+    side="top"
+  >
+    <IconButton
+      icon="az az-trash"
+      aria-label="Delete"
+    />
   </Tooltip>
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `text` | `string` | `''` | true | Plain text shown inside the tooltip. |
-| `placement` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'` | false | Anchor side relative to the trigger. |
-| `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
-| `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open`. |
-| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
+| Prop          | Type                                              | Default    | Required | JSDoc                                                                                                                            |
+| ------------- | ------------------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `content`     | `string`                                          | —          | true     | Plain text shown inside the tooltip.                                                                                             |
+| `side`        | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'top'`    | false    | Side of the trigger the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. |
+| `align`       | `'start' \| 'center' \| 'end'`                    | `'center'` | false    | Alignment along the trigger edge.                                                                                                |
+| `sideOffset`  | `number`                                          | `8`        | false    | Pixel gap between the trigger and the tooltip.                                                                                   |
+| `delay`       | `number`                                          | `200`      | false    | Hover-open delay in milliseconds.                                                                                                |
+| `disabled`    | `boolean`                                         | `false`    | false    | Disables tooltip activation.                                                                                                     |
+| `defaultOpen` | `boolean`                                         | `false`    | false    | Initial open state when uncontrolled.                                                                                            |
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                               |
+| -------------- | --------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (hover, focus, `Esc`). While unbound the tooltip is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:open` | `boolean` | v-model:open. Fires on open and close. |
-| `show` | `void` | Emitted right after the open transition starts. |
-| `hide` | `void` | Emitted right after the close transition starts. |
+_No events of its own: `v-model:open` emits `update:open` (6.0 removed the `show` / `hide` echoes)._
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The trigger element. Tooltip anchors to its bounding box. |
+| Slot      | Scope | Notes                                                     |
+| --------- | ----- | --------------------------------------------------------- |
+| `default` | —     | The trigger element. Tooltip anchors to its bounding box. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
 - `data-state` values: `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop
-- `data-placement`: `top` | `right` | `bottom` | `left`
+- `data-side`: `top` | `bottom` | `start` | `end` — the side the panel landed on after flipping, on the trigger wrapper and the panel
+- `data-align`: `start` | `center` | `end` — the alignment the panel landed on
+- `start` and `end` follow the text direction: under `dir="rtl"`, `side="start"` opens on the right and `align="start"` lines the panel up with the trigger's right edge
 - `data-anchored` on the panel once its opening position has landed — the flag that lets a re-anchor animate while the entrance stays the open animation
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| open | `animate-popup-scale-in` | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
-| close | `animate-popup-scale-out` | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
-| re-anchor while open (the text changed size) | `transition-[translate] duration-fast-02 ease-productive-entrance`, gated on `data-anchored` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                                      | Animation / Transition                                                                       | Token                                           | Reduced-motion fallback                |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------------------------------------- |
+| open                                         | `animate-popup-scale-in`                                                                     | semantic (150ms · cubic-bezier)                 | `motion-reduce:animate-none` (instant) |
+| close                                        | `animate-popup-scale-out`                                                                    | semantic (110ms · cubic-bezier)                 | `motion-reduce:animate-none` (instant) |
+| re-anchor while open (the text changed size) | `transition-[translate] duration-fast-02 ease-productive-entrance`, gated on `data-anchored` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`        |
 
-`--popup-origin` is set per instance based on `placement` (e.g. `top` → `bottom center`).
+`--popup-origin` is set per instance from the resolved side and alignment (e.g. `top` → `bottom center`).
 
 The panel is positioned with the standalone **`translate`** property, never `top`/`left` — that is what lets a re-anchor be a compositor transition, and it keeps the position independent of the `transform: scale()` the open and close animations use. A tooltip whose text changes while it is up (the copy control swapping `Copy` for `Copied` under the pointer) therefore glides back onto its trigger's centre instead of jumping: measured 21px of width lost, 10.4px off-centre, snapped in one frame before this. The entrance is deliberately excluded — `data-anchored` is only set one frame after the opening placement, so the panel scales in where it belongs rather than travelling in from the off-screen seed.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (label) | `.text-body-sm` |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| border | `var(--border-muted)` |
-| padding | `var(--spacing-xs)` |
-| max-width | `var(--container-3xs)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region             | Token (TOKENS.md)      |
+| ------------------ | ---------------------- |
+| typography (label) | `.text-body-sm`        |
+| surface            | `var(--bg-surface)`    |
+| text               | `var(--text-default)`  |
+| border             | `var(--border-muted)`  |
+| padding            | `var(--spacing-xs)`    |
+| max-width          | `var(--container-3xs)` |
+| shape              | `var(--shape-control)` |
+| ring               | `var(--ring-color)`    |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `bg-contrast` | `bg-(--bg-surface)` | `TODO: tokenizar` (add `--bg-contrast` to DESIGN.md when contrast surface diverges) |
-| `text-contrast` | `text-(--text-default)` | `TODO: tokenizar` (add `--text-contrast` to DESIGN.md when contrast text diverges) |
+| Figma variable  | Temporary primitive     | Follow-up                                                                           |
+| --------------- | ----------------------- | ----------------------------------------------------------------------------------- |
+| `bg-contrast`   | `bg-(--bg-surface)`     | `TODO: tokenizar` (add `--bg-contrast` to TOKENS.md when contrast surface diverges) |
+| `text-contrast` | `text-(--text-default)` | `TODO: tokenizar` (add `--text-contrast` to TOKENS.md when contrast text diverges)  |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger wrapper.
-- Keyboard map: `Tab` focuses the trigger → tooltip opens; `Escape` closes; tooltip never traps focus.
-- ARIA: `role="tooltip"` on the panel; the trigger references the panel via `aria-describedby`. `aria-hidden="true"` when `data-state="closed"`.
+- Hoverable (WCAG 1.4.13): the panel takes the pointer. Leaving the trigger closes the tooltip after a 100 ms grace, and entering the panel within the grace keeps it open (so text can be read under magnification); leaving the panel closes it after the same grace. Tests: `tooltip.test.ts` › hoverable content.
+- Touch: a long-press (500 ms `pointerdown` with `pointerType` `touch`) opens the tooltip; it hides 1.5 s after the finger lifts. A mouse press never opens it.
+- Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. `Escape` is taken only while the tooltip is open: closing removes the trigger's `aria-describedby` at once, and a page that reads open overlays (`useEscapeToCancel`) counts a tooltip only while a control still points to it, so the next `Escape` reaches the page even while the leave animation runs. A tooltip closed by `Escape` stays closed while the pointer rests on the trigger (a browser fires `mouseenter` when the panel disappears under a still pointer); it opens on hover again only after the pointer leaves the trigger and comes back, and on the next focus as usual. Tests: `tooltip.test.ts` › keyboard map (spec).
+- Nested overlays: while open, the tooltip joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (it never takes focus, so it does not pause a dialog's focus trap). Inside a `Dialog`, `Drawer` or `Popover`, the first `Escape` closes only the tooltip; the next one reaches the host. Tests: `tooltip.test.ts` › inside an open Dialog, Escape closes only the tooltip.
+- ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into an Azion UI `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
 - `motion-reduce:animate-none` on the panel; reduced-motion users get instant show/hide.
 - Touch target ≥40×40 px on the trigger (the consumer's responsibility — flag in docs).
+- Teleported content: the teleported `role="tooltip"` panel binds `dir` and `lang` from the nearest `ConfigProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
-## Stories (Storybook)
+## Examples
 
 - Default — tooltip rendered **closed**; viewer hovers/focuses the trigger to see it open.
-- Placements — composite story with all four placements (top/right/bottom/left) side-by-side; each instance defaults to **closed**.
+- Sides — composite story with all four sides (top/end/bottom/start) side-by-side; each instance defaults to **closed**.
 - Disabled — trigger present, tooltip activation no-op.
 
 ## Constraints — DO NOT
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

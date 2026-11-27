@@ -1,0 +1,61 @@
+{
+  "component": "input-group",
+  "title": "Components/Input/InputGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Root with only a raw `<input>` as its single child.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three sizes stacked (`small`=28px, `medium`=32px, `large`=40px). Match the same `size` on child input controls to keep the inner content vertically centered.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "WithAddonStart",
+      "summary": "`<InputGroupAddon>` before the middle input — static-text island on the left.",
+      "file": "with-addon-start.vue"
+    },
+    {
+      "name": "WithAddonEnd",
+      "summary": "`<InputGroupAddon>` after the middle input — static-text island on the right.",
+      "file": "with-addon-end.vue"
+    },
+    {
+      "name": "WithAddons",
+      "summary": "Addons on both sides flanking the input — `https://…​.com` composition.",
+      "file": "with-addons.vue"
+    },
+    {
+      "name": "WithButton",
+      "summary": "`<Button>` as a direct child on the right. The Button keeps its own API (`label`, `variant`, `size`, `@click`) — the group only joins the border/seam.",
+      "file": "with-button.vue"
+    },
+    {
+      "name": "WithSelect",
+      "summary": "`<Select>` as a direct child on the left. The Select composition (`Trigger` + `Content` + `Option`) is unchanged — the group only joins the border/seam.",
+      "file": "with-select.vue"
+    },
+    {
+      "name": "WithAll",
+      "summary": "Addon + input + Button in a single row. Seams are drawn between adjacent children; only the outer edges are rounded.",
+      "file": "with-all.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state inside a Field: the group shows the danger border and a Field.Error says what to fix.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "A required InputGroup inside a Field: the label carries the Required marker, the group root gets data-required and its input gets required and aria-required; the border stays neutral.",
+      "file": "required.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state — muted fill, not-allowed cursor, focus-within ring suppressed. Note: the consumer must also set `disabled` on their middle `<input>` and on each child control; InputGroup does not propagate it.",
+      "file": "disabled.vue"
+    }
+  ]
+}

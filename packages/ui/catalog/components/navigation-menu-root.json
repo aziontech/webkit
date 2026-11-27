@@ -1,0 +1,33 @@
+{
+ "purpose": "The top bar of a site: a row of links and triggers whose items open large panels of grouped links (product and solution menus). The items share one hover-intent timing, one keyboard model and one animated popup that resizes and slides between panels, inside a `navigation` landmark.",
+ "useWhen": [
+  "Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteHeaderSection, and app navigation uses SidebarMenu.",
+  "A horizontal top bar whose items open large panels of grouped links (product and solution mega-menus).",
+  "A mix of panel triggers and plain links in one bar that shares hover-intent timing, keyboard navigation and a single animated popup.",
+  "Panel entries need a title plus a muted description line, a leading icon, or a featured \"see all\" link."
+ ],
+ "avoidWhen": [
+  "It is the persistent vertical navigation of an app → use `sidebar` with `sidebar-menu`.",
+  "It is a list of actions or options opened from a button → use `dropdown-menu`.",
+  "It shows where the current page sits in a hierarchy → use `breadcrumb`.",
+  "It is the marketing site's whole navigation bar → use `site-header-section`, which already composes this menu."
+ ],
+ "related": [
+  "`site-header-section` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.",
+  "`app-header` — the bar layout this menu usually sits in.",
+  "`dropdown-menu` — a single-trigger option menu, not a site-wide navigation bar.",
+  "`sidebar-menu` — vertical, hierarchical navigation rows for a sidebar."
+ ],
+ "bestPractices": [
+  "Give every panel item a stable `value` on `NavigationMenu.Item`; `v-model` and `default-value` refer to it, and an omitted value is auto-generated and cannot be controlled.",
+  "A top-level item with no panel is a `NavigationMenu.Trigger` with an `href`; inside panels use `NavigationMenu.Item` with `layout=\"entry\"`, an `href`, an optional `description` and `close-on-click`.",
+  "Render one `NavigationMenu.Viewport` per root, after the list (the shadcn shape). It holds the whole overlay: it teleports, positions the popup on the active trigger, sizes it and hosts every panel. Each `Content` is moved into it, so a menu without a `Viewport` renders no panel.",
+  "The `Viewport` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same tree the client hydrates.",
+  "Pin a wide panel to the page column with the viewport's `collision-padding`, not with override classes on the popup.",
+  "Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark.",
+  "Test ids: root fallback `navigation-menu` (its own name); every part uses its own name (`navigation-menu-list`, `navigation-menu-item`, `navigation-menu-trigger` with its chevron `navigation-menu__icon`, `navigation-menu-content`, `navigation-menu-viewport` and the viewport's inner `__portal`, `__positioner`, `__popup`, `__arrow`, `__backdrop`), and a consumer `data-testid` wins on every part; one set on the `Viewport` lands on its popup.",
+  "Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.",
+  "The compound has the shadcn parts only: `List`, `Item`, `Trigger`, `Content`, `Link`, `Viewport`. 6.0 folded the Base UI overlay chain (`Portal`, `Positioner`, `Popup`, `Arrow`, `Backdrop`) into `Viewport` props, and the `Icon` part into the trigger, which renders its own chevron.",
+  "`NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`); 6.0 removed its `native-button` prop."
+ ]
+}

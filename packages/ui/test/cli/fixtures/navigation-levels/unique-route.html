@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Access rules</title>
+  </head>
+  <body>
+    <aside aria-label="Console navigation">
+      <a href="/" aria-label="Home">Acme</a>
+      <nav>
+        <ul>
+          <li><a href="/">Overview</a></li>
+          <li><a href="/policies" aria-current="page">Policies</a></li>
+        </ul>
+        <ul aria-hidden="true" inert>
+          <li><a href="/settings/users">Users management</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main>
+      <nav aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/policies">Policies</a></li>
+          <li><span aria-current="page">acme-default</span></li>
+        </ol>
+      </nav>
+      <div role="tablist" aria-label="Policy sections">
+        <button type="button" role="tab" aria-selected="false">Web security</button>
+        <button type="button" role="tab" aria-selected="true">Private access</button>
+      </div>
+      <div role="navigation" aria-label="Private access">
+        <a href="/policies/acme/private-access/app-segments">App segments</a>
+        <a href="/policies/acme/private-access/access-rules" aria-current="page">Access rules</a>
+        <a href="#rules-table">Skip to the rules</a>
+      </div>
+      <nav aria-label="Pagination">
+        <a href="/policies/acme/private-access/access-rules?page=2">2</a>
+      </nav>
+      <h1 id="rules-table">Access rules</h1>
+    </main>
+  </body>
+</html>

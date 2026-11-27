@@ -3,30 +3,91 @@ name: avatar
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 9
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 13f4fed9da5a838e97b034a2878dc931a235f7c30add98f6a3c0ba45b390b993
+checksum: d24ba8da7272b7605de2930b1e490c5633c4983bbb6bddf19d820112a847adb9
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-11-25
 ---
+
 # Avatar — Component Spec
 
 ## Purpose
 
-Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/avatar/`.
+Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name. It comes in a circle or a square at three sizes, so the same person reads the same way in a header, a list row or a comment thread. An optional presence dot on its bottom inline-end edge says whether the person is online, away, busy or offline.
+
+## When to use
+
+- Identify a person next to their name: comment threads, member lists, "Last modified" cells, quotes.
+- The user entry in a header or account menu.
+- Show whether a teammate or support agent is reachable now (`presence`): an assignee picker, a ticket's agent list, a conversation header.
+- The mark of an organization or account that has no logo: `pattern="marble"` draws a soft generated mark seeded by its name, the same for the same name everywhere (account switcher, create organization, onboarding).
+
+## When NOT to use
+
+- The Azion logo → use `brand`.
+- A count or short status → use `badge`.
+- A loading placeholder → use `skeleton`.
+- The outcome of a job or a deploy → use `status-indicator`; `presence` is only whether a person is reachable.
+
+## Related
+
+- `badge` — overlay on an avatar to show a count.
+- `quote` — composes an avatar for the speaker.
+- `brand` — the product mark, not a person.
+
+## Best practices
+
+- Pass initials or the full name in `label`: a name of several words shows the first letter of its first and last word (`"Jane Doe"` shows `JD`), and one word keeps its first two characters (`"JD"` stays `JD`).
+- Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
+- Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `az az-user`).
+- For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
+- Set `presence` only when the value is live (`online`, `away`, `busy`, `offline`); leave it empty when the app does not know, rather than showing `offline`. The presence joins the accessible name ("Jane Doe, away"), so keep `alt` to the name alone.
+- `size` maps to 24 / 32 / 48 px with `medium` as the default; `variant` is `circle` (default) or `square`.
+
+## Usage
+
+```vue
+<script setup>
+  import Avatar from '@aziontech/ui/avatar'
+</script>
+
+<template>
+  <Avatar label="JD" />
+  <Avatar
+    src="https://example.com/jane.jpg"
+    alt="Jane Doe"
+    size="large"
+  />
+  <Avatar
+    icon="az az-users"
+    variant="square"
+    size="small"
+  />
+  <Avatar
+    label="Jane Doe"
+    alt="Jane Doe"
+    presence="away"
+  />
+</template>
+```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `src` | `string` | `undefined` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
-| `alt` | `string` | `undefined` | false | Accessible description for the image. Use when `src` is set. |
-| `label` | `string` | `undefined` | false | Initials shown when no image (normalized to two uppercase characters). |
-| `icon` | `string` | `undefined` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
-| `kind` | `AvatarKind` | `undefined` | false | Visual shape of the avatar container. |
-| `size` | `AvatarSize` | `undefined` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
+| Prop       | Type                   | Default                                                     | Required | JSDoc                                                                                                                                   |
+| ---------- | ---------------------- | ----------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `src`      | `string`               | `''`                                                        | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                                                          |
+| `alt`      | `string`               | `''`                                                        | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.                                |
+| `label`    | `string`               | `''`                                                        | false    | Initials shown when no image: the first letters of the first and last word, or the first two characters of one word, uppercased.        |
+| `icon`     | `string`               | `'az az-user'`                                              | false    | Icon class for the fallback when no image or label (Azion icon class).                                                                  |
+| `variant`  | `AvatarVariant`        | `'circle'`                                                  | false    | Visual shape of the avatar container.                                                                                                   |
+| `size`     | `AvatarSize`           | `'medium'`                                                  | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                                              |
+| `pattern`  | `AvatarPattern`        | `undefined`                                                 | false    | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`).                        |
+| `colors`   | `string[]`             | `['var(--primary)', 'var(--warning)', 'var(--brand-blue)']` | false    | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`.                                          |
+| `presence` | `AvatarPresence \| ''` | `''`                                                        | false    | Whether the person is reachable now, drawn as a dot on the bottom inline-end edge and added to the accessible name; empty draws no dot. |
 
 ## Events
 
@@ -39,6 +100,12 @@ Displays content or metadata in the UI. Migrated from the existing implementatio
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Content: `image` (`src`), `pattern` (`pattern` set, no `src`), `label` (initials), `icon`. `data-pattern` mirrors `pattern` on the root while the pattern renders.
+- Root attributes: `data-variant` and `data-size` mirror the props; `data-content` names the content that renders (`image`, `pattern`, `label`, `icon`). Variants are styled from these attributes.
+- Image error: when `src` fails to load, the avatar falls back to the next content in the precedence (`pattern`, `label`, `icon`) instead of a broken image; a new `src` tries the image again. An image that already failed before hydration is detected on mount.
+- Presence: `presence` is `online`, `away`, `busy` or `offline` (`AvatarPresence`); `''` (default) renders nothing. When set, the root carries `data-presence` and a dot (`data-slot="presence"`, test id `${testId}__presence`) sits inside the avatar's box, in its bottom inline-end corner, overlapping only the picture, at 10 / 12 / 16 px for `small` / `medium` / `large` (its 2 px ring included), the same for `circle` and `square`. On `small` the dot is pushed a quarter of its size past the corner (`translate-1/4`, mirrored under `rtl`), so on a 24 px avatar it no longer covers the second initial; only its ring leaves the box. The content is clipped to the avatar shape by an inner box, so the dot is never clipped by the avatar itself, and a parent that clips its content never cuts it off. Each value has its own shape, so colour is not the only signal: `online` a filled dot, `away` a crescent, `busy` a dot with a horizontal bar, `offline` a hollow ring. A 2 px ring in `--avatar-presence-ring` (default `var(--bg-surface)`) separates the dot from the picture and from the background; an app on another background sets that variable on the avatar or an ancestor.
+- Attributes: every consumer attribute (`id`, `title`, `aria-*`, `style`, listeners) lands on the root.
+- Marble: three layers seeded by a 32-bit string hash of `label` (falling back to `alt`): a filled square, then two blurred shapes translated, rotated and scaled by the seed, the last blended with `overlay`. Each layer takes the color at `(seed + layer) % colors.length`. The same seed and colors always draw the same mark, on the server and in the browser.
 
 ## Motion & Animations
 
@@ -46,33 +113,79 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region                     | Token (TOKENS.md)                                         |
+| -------------------------- | --------------------------------------------------------- |
+| typography                 | .text-body-sm                                             |
+| surface                    | `var(--bg-surface)`                                       |
+| text                       | `var(--text-default)`                                     |
+| spacing                    | `var(--spacing-3)`                                        |
+| shape                      | `var(--shape-control)`                                    |
+| ring                       | `var(--ring-color)`                                       |
+| pattern colors (default)   | `var(--primary)` · `var(--warning)` · `var(--brand-blue)` |
+| presence `online`          | `var(--success-mark)`                                     |
+| presence `away`            | `var(--warning-mark)`                                     |
+| presence `busy`            | `var(--danger-mark)`                                      |
+| presence `offline`         | `var(--text-muted)`                                       |
+| presence ring and cut-outs | `var(--avatar-presence-ring, var(--bg-surface))`          |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Visible focus: none; the avatar is not focusable. A parent control (account menu trigger) owns focus.
+- Keyboard map: none.
+- ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization; an `aria-label` the consumer passes, such as the purpose of a menu trigger the avatar sits in, replaces the derived name), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
+- Contrast ≥4.5:1 for the initials on `var(--bg-surface-raised)`; the generated pattern is decorative and carries no text.
+- Presence: the dot is presentational (`aria-hidden`); the presence joins the accessible name of the root (`aria-label`) or of the image (`alt`) through `avatar.withPresence`, for example "Jane Doe, away"; it wraps whichever name applies (`alt`, the label, the initials or the fallback, so "User avatar, away"). The dot colours are the documented `-mark` colours (`--text-muted` for `offline`, the neutral mark), solid marks at APCA Lc 30 and WCAG 3:1 on the surface, and each value differs in shape as well as colour (WCAG 1.4.1). A change of `presence` is not announced (no live region): the avatar is a label, and a live roster announces through the app.
 
-## Stories (Storybook)
+## Internationalization
+
+| Key                      | English source     | Override prop |
+| ------------------------ | ------------------ | ------------- |
+| `avatar.imageAlt`        | Avatar             | `alt`         |
+| `avatar.fallbackLabel`   | User avatar        | `alt`         |
+| `avatar.presenceOnline`  | online             | —             |
+| `avatar.presenceAway`    | away               | —             |
+| `avatar.presenceBusy`    | busy               | —             |
+| `avatar.presenceOffline` | offline            | —             |
+| `avatar.withPresence`    | {name}, {presence} | —             |
+
+- Formatting: none. With `pattern`, the accessible name is `alt`, then the full `label`, then `avatar.fallbackLabel`.
+
+## Right-to-left
+
+- Layout: the avatar is a square box with centred content; the presence dot sits on the inline-end corner (`end-0`), so it moves to the bottom left under `dir="rtl"`. The `away` crescent mirrors with it.
+- Icons: the fallback icon and the generated pattern are not mirrored (the pattern is a mark, not a direction).
+- Keyboard: none; the avatar is not interactive.
+- User data: the initials and the name in the accessible name come from the consumer; no wrapper is needed for a two-character label.
+
+## Responsive
+
+- Container queries: none: fixed size (24 / 32 / 48 px from `size`).
+- Narrow (≤ 640 px or a narrow container): nothing changes; the avatar does not shrink (`shrink-0`).
+- Presence: the dot stays inside the 24 / 32 / 48 px box, so it changes neither the avatar's size nor its footprint.
+- Touch: not interactive; a parent control owns the target size.
+- Reflow: fixed size, no horizontal scroll.
+
+## Performance
+
+- Bundle budget: 12.8 KB gzip for the initial chunk of `./avatar` (it carries the locale lookup) in `.size-limit.json`; the presence dot, its cut-out and its five strings added about 0.5 KB to every entry that renders an avatar (recorded in `packages/ui/docs/reviews/size-budgets-v6.md`).
+- Runtime budget: none: static; the pattern is a three-layer inline SVG computed once per `label` and `colors` change.
+- Heavy parts: the marble drawing loads in its own async chunk the first time an avatar sets `pattern`, so an avatar without a pattern pays nothing for it. Server rendering resolves the chunk before it writes the HTML, so hydration finds the same SVG; on a client-only render the avatar's surface shows until the chunk arrives.
+
+## Examples
 
 - Default
+- Types — every `variant` side by side.
+- Sizes — every `size` side by side.
+- Fallbacks — the content precedence: photo, initials, icon.
+- VariantGrid — shapes and sizes across the content modes.
+- Pattern — generated marble marks for organizations with no logo, one per name and palette; justified because `pattern` replaces the initials with a different content mode.
+- Presence — each `presence` value on a photo, initials and a square avatar, at every size; justified because `presence` adds a mark and changes the accessible name.
 
 ## Constraints — DO NOT
 
@@ -81,16 +194,15 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

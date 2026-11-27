@@ -1,0 +1,39 @@
+{
+ "variants": [
+  {
+   "name": "Empty",
+   "summary": "My open tickets holds no ticket: the heading and controls stay, and a flush EmptyState says You're all caught up, with Show all open tickets.",
+   "file": "blocks/view/view-ticket-inbox/variants/empty.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The first load: the filter and preferences are disabled, Refresh spins and the table shows its skeleton rows.",
+   "file": "blocks/view/view-ticket-inbox/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The tickets could not load: the disabled controls stay and a danger Alert with Retry takes the table's place.",
+   "file": "blocks/view/view-ticket-inbox/variants/error.vue"
+  },
+  {
+   "name": "Filtered",
+   "summary": "A Channel = Phone filter on My open tickets hides every ticket: the table shows No matching tickets with Clear filters.",
+   "file": "blocks/view/view-ticket-inbox/variants/filtered.vue"
+  },
+  {
+   "name": "Selected",
+   "summary": "Three tickets selected: the bulk bar in the controls band counts them and offers Assign (3), Change status (3), Merge (3) and Close (3).",
+   "file": "blocks/view/view-ticket-inbox/variants/selected.vue"
+  }
+ ],
+ "sfcFile": "blocks/view/view-ticket-inbox/view-ticket-inbox.vue",
+ "guidelinesFile": "blocks/view/view-ticket-inbox/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "lib/ticket-fields.ts",
+  "parts/inbox-controls.vue",
+  "parts/ticket-bulk-actions.vue",
+  "parts/ticket-subject-cell.vue",
+  "parts/ticket-assignee-cell.vue"
+ ]
+}

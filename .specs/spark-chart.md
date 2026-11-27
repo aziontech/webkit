@@ -1,0 +1,151 @@
+---
+name: spark-chart
+category: chart
+structure: monolithic
+status: implemented
+spec_version: 3
+created: 2026-11-10
+last_updated: 2026-11-18
+checksum: 8c91fe85e63512b6be67b95a9193f7c87c580c1dad381d4977569af3d8686cef
+---
+
+# SparkChart — Component Spec
+
+## Purpose
+
+A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height. It shows the shape of a recent history next to a number — in a stat tile, a table row or a marquee card — where a full `chart` would be too much.
+
+## When to use
+
+- The shape of a metric's recent history beside its current value: requests in the last hour, latency over the day.
+- Rows of comparable items, each with its own trend: one SparkChart per row of a list or table.
+- The trend inside a `stat-tile`, which draws its `trend` through this component.
+
+## When NOT to use
+
+- The reader needs exact values, a time axis or several series → use `chart`.
+- A ranking across categories → use `bar-list`.
+- Up/down status over discrete periods → use `tracker`.
+
+## Related
+
+- `stat-tile` — the KPI tile that renders its sparkline with SparkChart.
+- `chart` — the full history with axes, tooltip and legend.
+- `tracker` — a strip of status blocks rather than a measured shape.
+
+## Best practices
+
+- Pair it with the number it describes; a spark alone has no scale and says nothing exact.
+- Use the same buckets as the chart behind it, about twelve to thirty points.
+- Leave `fromZero` off for prices and latencies, where the shape matters more than the magnitude; turn it on for counts that are meaningful from zero.
+- Give it an `ariaLabel` only when it stands without a nearby number; otherwise keep it decorative.
+
+## Usage
+
+```vue
+<script setup>
+  import SparkChart from '@aziontech/ui/spark-chart'
+</script>
+
+<template>
+  <SparkChart :values="[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]" />
+</template>
+```
+
+**Three ways in** (decision RV-C2-1, rule `azion-ui-content-channels`). The same data renders from a docs page as a tag (`DocMarkdown`, braced attribute values are JSON) and from the site's page JSON as the `SparkChart` scene a band draws by name (a `console-showcase-section` with `variant: "diagram"` in its `scene` slot):
+
+```mdx
+<SparkChart aria-label="Requests per minute" values={[310, 290, 340]} />
+```
+
+```json
+{ "component": "SparkChart", "props": { "values": [310, 290, 340] } }
+```
+
+The function props (`formatValue`) and the events stay Vue. `DocMarkdown` and the scene registry load the component as an async chunk, so neither grows unless a page uses it.
+
+## Props
+
+| Prop        | Type                             | Default    | Required | JSDoc                                                                                  |
+| ----------- | -------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------- |
+| `values`    | `(number \| null)[]`             | `[]`       | false    | The series, oldest first; null leaves a gap.                                           |
+| `type`      | `'area' \| 'line' \| 'bar'`      | `'area'`   | false    | Mark drawn for the series.                                                             |
+| `color`     | `ChartColor`                     | `1`        | false    | Hue of the mark: a categorical slot (1–8), `other`, or a status.                       |
+| `size`      | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Height: 32, 48 or 64 pixels. Width follows the container.                              |
+| `fromZero`  | `boolean`                        | `false`    | false    | Starts the value range at zero instead of the lowest value; bars always start at zero. |
+| `ariaLabel` | `string`                         | `''`       | false    | Accessible name; when set the chart is an image, when empty it is decorative.          |
+
+## Events
+
+_No events — a spark is a glyph; wrap it in a link or button to make it interactive._
+
+## Slots
+
+_No slots._
+
+## States
+
+- Visual states: `default`, `empty` (no finite value — renders nothing at its reserved height)
+- `data-type`: `area` | `line` | `bar`
+- `data-size`: `small` | `medium` | `large`
+- Lines and area edges are linear segments with round joins and caps; 2px stroke; the area fill fades from the hue to transparent. Bars have a 1px rounded data end and a 1px gap between them.
+
+- Its root carries `data-plain-ground`: it is content that must sit on a plain ground, so a `Texture` beside it hides itself, and the texture-backdrop check blocks placing it on a textured band (a texture is a backdrop for text only, RV-T2-1).
+
+## Motion & Animations
+
+| Trigger              | Animation / Transition                                                                                         | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
+| -------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| line / area entrance | `transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance`, `pathLength="1"` on `data-entered` | `slow-02` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| area fill entrance   | `transition-opacity duration-slow-01 ease-productive-entrance` on `data-entered`                               | `slow-01` · `productive-entrance`                      | `motion-reduce:transition-none` |
+| bar entrance         | `transition-[scale] duration-slow-01 ease-productive-entrance` from the baseline on `data-entered`             | `slow-01` · `productive-entrance`                      | `motion-reduce:transition-none` |
+
+## Tokens
+
+| Region | Token (TOKENS.md)                                                                                                                                                                                                         |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| mark   | the `color` role (`var(--chart-series-1)` … `var(--chart-series-8)`, `var(--chart-series-other)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-danger)`, `var(--chart-status-info)`) |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- With `ariaLabel` the SVG is `role="img"` named by it; without, it is `aria-hidden` and the number beside it carries the information.
+- Not focusable; no keyboard map.
+- The mark clears 3:1 against the chart surfaces in both themes (the `--chart-*` role guarantees it).
+
+## Examples
+
+- Default — an area spark.
+- Types — composite: `area`, `line`, `bar` side by side.
+- Sizes — composite: `small`, `medium`, `large`.
+- Cards — a list of marquee rows (name, SparkChart, value, delta); justified because a spark is only legible beside its number, and this is the reference composition.
+- Markdown — the same data as a `<SparkChart>` tag rendered by `DocMarkdown`. Justified: the docs channel (RV-C2-1).
+- Page JSON — the same data as a `SparkChart` scene in a `console-showcase-section` entry rendered by `SitePage`, with the JSON shown. Justified: the site channel (RV-C2-1).
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

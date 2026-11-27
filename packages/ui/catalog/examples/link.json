@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default large link to an off-site page; the `_blank` target adds the external-link icon.",
+   "file": "examples/link/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "file": "examples/link/sizes.vue"
+  },
+  {
+   "name": "Inline",
+   "summary": "Links inside a sentence: they take the paragraph's size, wrap with it and keep the underline at rest; the `_blank` one adds the external-link mark.",
+   "file": "examples/link/inline.vue"
+  }
+ ]
+}

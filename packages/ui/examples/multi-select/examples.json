@@ -1,0 +1,66 @@
+{
+  "component": "multi-select",
+  "title": "Components/Input/MultiSelect",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Multi-select over a flat option list; one option is pre-selected through v-model.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three trigger sizes (small, medium, large) matching Input.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "Options organised into labelled sections via MultiSelectGroup.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "WithSearchAndFooter",
+      "summary": "The search and footer slots on MultiSelectContent: a filterable list with a footer action that appends a new option.",
+      "file": "with-search-and-footer.vue"
+    },
+    {
+      "name": "WithOptionExtras",
+      "summary": "Per-option extras on MultiSelectItem: a leading icon, a custom left slot, and a trailing tag.",
+      "file": "with-option-extras.vue"
+    },
+    {
+      "name": "LongList",
+      "summary": "A long option list; the panel scrolls internally once it exceeds its max height.",
+      "file": "long-list.vue"
+    },
+    {
+      "name": "Filled",
+      "summary": "Pre-populated selection showing the filled trigger label and the checked indicators.",
+      "file": "filled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state inside a Field: the danger border and a Field.Error, which clear once a region is picked.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled trigger; the dropdown cannot open.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Chips",
+      "summary": "variant=\"chips\" shows each selected value as a removable chip; chipLimit caps them with a +N more chip.",
+      "file": "chips.vue"
+    },
+    {
+      "name": "Searchable",
+      "summary": "searchable types in the trigger to filter the options, Backspace removes the last chip, and allowCustom offers an Add row that emits create.",
+      "file": "searchable.vue"
+    },
+    {
+      "name": "ListStates",
+      "summary": "Pick a state, then open the list: loading, error and empty. The error says how to retry; reopening loads again.",
+      "file": "list-states.vue"
+    }
+  ]
+}

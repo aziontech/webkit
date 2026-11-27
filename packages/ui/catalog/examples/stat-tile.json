@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Blocked threats rose 12.4 percent. A rise in threats is bad, so the tile sets inverse and the delta reads as a regression.",
+   "file": "examples/stat-tile/default.vue"
+  },
+  {
+   "name": "Deltas",
+   "summary": "A good rise, a bad rise with inverse, a flat change, and no delta at all.",
+   "file": "examples/stat-tile/deltas.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "variant=\"mono\" (default) draws the big-number mono figure of a usage strip; variant=\"sans\" draws the large heading figure of a traffic summary. The unit is always smaller, muted and sans.",
+   "file": "examples/stat-tile/variants.vue"
+  }
+ ]
+}

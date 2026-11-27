@@ -1,12 +1,12 @@
 ---
 name: doc-item
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 85a13f274408b916d3795d1dd81177279da697ec5c794397b756e49932e75459
+spec_version: 2
+checksum: 14c9ca4d566814051a06f99fc0808e19a66068a2c9d883fca2cbe4020007c89a
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-22
 ---
 
 # DocItem — Component Spec
@@ -29,43 +29,43 @@ One row of the documentation's related-content list: a leading glyph in a framed
 ## Related
 
 - `DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.
-- `Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.
-- `FrameBox` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
+- `Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the Azion UI anatomy this row composes.
+- `RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
 
 ## Best practices
 
 - Keep the title to a noun phrase and let the sentence carry the verb; inline code in the sentence renders as the chip.
 - Give every row of one list the same shape — all with glyphs or none, all linked or none — so the column reads as one object.
-- Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role="list"` parent is what makes each row's `role="listitem"` valid.
+- Compose rows inside a `RegistrationFrame` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role="list"` parent is what makes each row's `role="listitem"` valid.
 
 ## Usage
 
 ```vue
 <script setup>
-  import DocItem from '@aziontech/webkit/doc-item'
-  import FrameBox from '@aziontech/webkit/frame-box'
-  import ItemList from '@aziontech/webkit/item-list'
+  import DocItem from '@aziontech/ui/doc-item'
+  import RegistrationFrame from '@aziontech/ui/registration-frame'
+  import ItemList from '@aziontech/ui/item-list'
 </script>
 
 <template>
-  <FrameBox class="w-full bg-(--bg-surface)">
+  <RegistrationFrame class="w-full bg-(--bg-surface)">
     <ItemList>
       <DocItem
-        title="Edge Functions"
-        icon="pi pi-code"
-        href="/docs/edge-functions"
+        title="Functions"
+        icon="az az-code"
+        href="/docs/functions"
       >
         Build serverless applications on Azion's global network.
       </DocItem>
       <DocItem
-        title="Edge SQL"
-        icon="pi pi-database"
+        title="SQL Database"
+        icon="az az-database"
         href="/docs/edge-sql"
       >
         Store relational data across the network.
       </DocItem>
     </ItemList>
-  </FrameBox>
+  </RegistrationFrame>
 </template>
 ```
 
@@ -74,7 +74,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
 | Prop     | Type                  | Default   | Required | JSDoc                                                 |
 | -------- | --------------------- | --------- | -------- | ----------------------------------------------------- |
 | `title`  | `string`              | `''`      | false    | The row's name — what the reader is choosing.         |
-| `icon`   | `string`              | `''`      | false    | PrimeIcons class for the leading glyph.               |
+| `icon`   | `string`              | `''`      | false    | Azion icon class for the leading glyph.               |
 | `href`   | `string`              | `''`      | false    | Destination; when set the whole row becomes the link. |
 | `target` | `'_self' \| '_blank'` | `'_self'` | false    | Where the link opens.                                 |
 | `label`  | `string`              | `''`      | false    | Fallback copy when the default slot is empty.         |
@@ -95,28 +95,30 @@ One row of the documentation's related-content list: a leading glyph in a framed
 - The anchor appears on data, not on a mode prop: the title wraps in an anchor when `href` is set, and the trailing glyph region renders only then
 - An external destination (absolute URL, `mailto:`, or explicit `target="_blank"`) swaps the chevron for the diagonal arrow and, for `target="_blank"`, adds `rel="noreferrer"`
 - `data-doc-chrome` is the `DocProse` contract (prose rules stop at the row's edge)
+- Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap; code inside `pre` never takes the chip (`src/test/inline-code.test.ts`)
 
 ## Motion & Animations
 
-| Trigger                     | Animation / Transition                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
-| --------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
-| hover on a linked row       | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| hover on the trailing glyph | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | semantic                                          | `motion-reduce:transition-none` |
+| Trigger                     | Animation / Transition                                                 | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
+| --------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover on a linked row       | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                               | `motion-reduce:transition-none` |
+| hover on the trailing glyph | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | semantic                                               | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region                           | Token (DESIGN.md)          |
+| Region                           | Token (TOKENS.md)          |
 | -------------------------------- | -------------------------- |
 | typography (inline code)         | `.text-label-code-sm`      |
 | text (glyph, title, inline code) | `var(--text-default)`      |
 | text (trailing glyph)            | `var(--text-muted)`        |
 | tile surface                     | `var(--bg-surface-raised)` |
 | tile border                      | `var(--border-muted)`      |
-| tile shape                       | `var(--shape-elements)`    |
+| tile shape                       | `var(--shape-control)`     |
 | row hover + inline-code surface  | `var(--bg-hover)`          |
-| inline-code border               | `var(--border-default)`    |
-| inline-code shape                | `var(--shape-flat)`        |
-| spacing (title to copy)          | `var(--spacing-xxs)`       |
+| inline-code inset ring           | `var(--border-default)`    |
+| inline-code shape                | `var(--shape-control)`     |
+| inline-code inline padding       | `var(--spacing-2xs)`       |
+| spacing (title to copy)          | `var(--spacing-2xs)`       |
 | ring                             | `var(--ring-color)`        |
 
 ## Theme gaps
@@ -133,10 +135,18 @@ One row of the documentation's related-content list: a leading glyph in a framed
 - A row that leaves the documentation carries `rel="noreferrer"` on `target="_blank"` and swaps the chevron for a diagonal arrow, so the destination change is visible and not colour-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the full row is the hit area, comfortably over 40×40 px.
+- A link that opens a new tab (`target="_blank"`) carries a visually hidden ` (opens in a new tab)` (`common.newTab`) inside its accessible name, the same words `DocMarkdown` adds to external prose links.
 
-## Stories (Storybook)
+## Right-to-left
 
-- Default — the documented pattern: a `FrameBox` holding an `ItemList` of linked rows. Justified in writing here: a lone row is not the unit the page composes — `role="listitem"` requires a `role="list"` parent to be valid (axe `aria-required-parent`), so even the default render is the composed list rather than a single-row arg canvas.
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the chevron mirrors; the external-link arrow does not, but its hover nudge moves toward the end edge (`rtl:` flips the `translate-x`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
+
+- Default — the documented pattern: a `RegistrationFrame` holding an `ItemList` of linked rows. Justified in writing here: a lone row is not the unit the page composes — `role="listitem"` requires a `role="list"` parent to be valid (axe `aria-required-parent`), so even the default render is the composed list rather than a single-row arg canvas.
 - Variants — composite story covering the axes that change the anatomy: an external destination (diagonal arrow + `rel="noreferrer"`), a row without a glyph, and inert rows with no `href` at all — where the anchor and the trailing glyph region disappear. Justified in writing here because the rendered structure itself changes with `href` and the destination, which no single-arg story can show.
 
 ## Constraints — DO NOT
@@ -146,19 +156,17 @@ One row of the documentation's related-content list: a leading glyph in a framed
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

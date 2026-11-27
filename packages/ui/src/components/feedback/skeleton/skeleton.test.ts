@@ -1,0 +1,125 @@
+import { render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+
+import Default from '../../../../examples/skeleton/default.vue'
+import OnSurfaces from '../../../../examples/skeleton/on-surfaces.vue'
+import Static from '../../../../examples/skeleton/static.vue'
+import Types from '../../../../examples/skeleton/variants.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import Skeleton from './skeleton.vue'
+
+describe('Skeleton', () => {
+  it('renders with the default data-testid and presentational a11y semantics', () => {
+    const { getByTestId } = render(Skeleton)
+    const el = getByTestId('skeleton')
+
+    expect(el.getAttribute('role')).toBe('presentation')
+    expect(el.getAttribute('aria-hidden')).toBe('true')
+  })
+
+  it('honors a consumer-provided data-testid over the fallback', () => {
+    const { getByTestId } = render(Skeleton, {
+      attrs: { 'data-testid': 'my-placeholder' }
+    })
+
+    expect(getByTestId('my-placeholder')).toBeTruthy()
+  })
+
+  it('defaults to the rectangle geometry', () => {
+    const { getByTestId } = render(Skeleton)
+
+    expect(getByTestId('skeleton').getAttribute('data-variant')).toBe('rectangle')
+  })
+
+  it('reflects variant="circle" on data-variant', () => {
+    const { getByTestId } = render(Skeleton, { props: { variant: 'circle' } })
+
+    expect(getByTestId('skeleton').getAttribute('data-variant')).toBe('circle')
+  })
+
+  it('exposes data-animated when animated is true (the default)', () => {
+    const { getByTestId } = render(Skeleton)
+
+    expect(getByTestId('skeleton').hasAttribute('data-animated')).toBe(true)
+    expect(getByTestId('skeleton').getAttribute('data-animated')).toBe('true')
+  })
+
+  it('omits data-animated when animated is false', () => {
+    const { getByTestId } = render(Skeleton, { props: { animated: false } })
+
+    expect(getByTestId('skeleton').hasAttribute('data-animated')).toBe(false)
+  })
+
+  it('applies width and height as inline styles', () => {
+    const { getByTestId } = render(Skeleton, {
+      props: { width: '240px', height: '100px' }
+    })
+    const el = getByTestId('skeleton') as HTMLElement
+
+    expect(el.style.width).toBe('240px')
+    expect(el.style.height).toBe('100px')
+  })
+
+  it('defaults width to 100% and height to 1rem', () => {
+    const { getByTestId } = render(Skeleton)
+    const el = getByTestId('skeleton') as HTMLElement
+
+    expect(el.style.width).toBe('100%')
+    expect(el.style.height).toBe('1rem')
+  })
+
+  it.each(['rectangle', 'circle'] as const)('renders the %s geometry', (variant) => {
+    const { getByTestId } = render(Skeleton, { props: { variant: variant } })
+
+    expect(getByTestId('skeleton').getAttribute('data-variant')).toBe(variant)
+  })
+
+  it('has no a11y violations for the default rectangle', async () => {
+    const { container } = render(Skeleton, {
+      props: { width: '240px', height: '100px' }
+    })
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations for the circle geometry', async () => {
+    const { container } = render(Skeleton, {
+      props: { variant: 'circle', width: '100px', height: '100px' }
+    })
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('renders the composed Default story', () => {
+    const { getByTestId } = render(Default)
+    const el = getByTestId('skeleton')
+
+    expect(el.getAttribute('data-variant')).toBe('rectangle')
+    expect(el.hasAttribute('data-animated')).toBe(true)
+  })
+
+  it('renders the composed Types story with both geometries', () => {
+    const { getAllByTestId } = render(Types)
+    const variants = getAllByTestId('skeleton').map((el) => el.getAttribute('data-variant'))
+
+    expect(variants).toContain('rectangle')
+    expect(variants).toContain('circle')
+  })
+
+  it('renders the composed Static story without the animated attribute', () => {
+    const { getByTestId } = render(Static)
+
+    expect(getByTestId('skeleton').hasAttribute('data-animated')).toBe(false)
+  })
+
+  // The fill is a translucent role, so one value per theme reads correctly on every
+  // layer. Whether it *reads* is the visual layer's job (this story is snapshotted in
+  // both themes); here we only prove the fixture renders on all four surfaces and
+  // stays a11y-clean, so a broken story fails a test rather than a screenshot diff.
+  it('renders the composed OnSurfaces story on every surface layer', async () => {
+    const { getAllByTestId, container } = render(OnSurfaces)
+
+    expect(getAllByTestId('skeleton')).toHaveLength(8)
+    await expectNoA11yViolations(container)
+  })
+})

@@ -1,0 +1,363 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Infrastructure without the waste']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ Pricing
+      h1 "Infrastructure without the waste"
+      p "Azion was built differently from the ground up — distributed by design, extremely fast, and ready for the strictest compliance. No idle clusters, no capacity provisioned just in case. Scale from zero to mission-critical instantly and pay only for what you use."
+[marketing-section-container width=site]
+  [block-pricing-plans]
+    [marketing-section-module kind=left]
+      button "Monthly"
+      button "Annual"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [content-card-pricing kind=transparent]
+          h3 "Hobby"
+          text "Free"
+          p "All features available"
+          list (5): Global infrastructure · Serverless functions · Storage and databases · Image optimization · DDoS protection & firewall
+          button "Start free" → https://console.azion.com/signup?plan=hobby
+        [content-card-pricing kind=transparent]
+          h3 "Pro"
+          text: Popular ⏎ /mo
+          p "Billed monthly, cancel anytime"
+          p "Scale beyond included usage"
+          list (5): Additional workloads · Higher application limits · More storage capacity · Broader security coverage · Configurable spend limits
+          button "Start with Pro" → https://console.azion.com/signup?plan=pro&billing-cycle=monthly
+        [content-card-pricing kind=transparent]
+          h3 "Enterprise"
+          text "Custom"
+          p "Tailored to your usage and payment terms"
+          p "Choose your pricing model"
+          list (5): On-demand pricing · Lower costs with commitments · Reserved Capacity available · Savings Plan available · Advanced support available
+          button "Contact us" → /en/contact/
+  · section-gap (hatched spacer band)
+  [block-feature-tiles-illustrated kind=illustrated]
+    [marketing-section-module kind=left]
+      [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+        [marketing-card-grid-cell]
+          [marketing-media-tile kind=plain media=true described=true]
+            figcaption "No idle. No waste Why pay for infrastructure doing nothing? Azion is built around actual consumption: you pay for what your workloads use, not for idle capacity."
+        [marketing-card-grid-cell]
+          [marketing-media-tile kind=plain media=true described=true]
+            figcaption "Stay in control Scale without losing control of your bill. Track consumption, set spending limits, and keep costs predictable as your applications grow."
+        [marketing-card-grid-cell]
+          [marketing-media-tile kind=plain media=true described=true]
+            figcaption "White-glove when it matters Self-service when you want it. Experts when you need them. Azion specialists and partners help you build, migrate, optimize, and scale with confidence."
+  · section-gap (hatched spacer band)
+  [block-compare-plans]
+    [marketing-section-module kind=left]
+      text "Feature and included-usage comparison across the plans."
+      th "Features Pro"
+      th "Hobby Start free"
+      th "Pro Start with Pro"
+      th "Enterprise Contact us"
+      th "// Managed Infrastructure Azion Platform Powering modern workloads on global infrastructure."
+      th "Global Infrastructure"
+      th "100+ data centers"
+      td "Included"
+      th "Automatic routing with load balancing and failover"
+      td "Included"
+      th "Management"
+      th "Workspaces (Multi-Org)"
+      td "1 Workspace"
+      td "Custom"
+      th "Users"
+      td "Unlimited"
+      th "Access Security"
+      th "Role-Based Access Control (RBAC)"
+      td "Team level"
+      td "Team and workspace levels"
+      th "Multi-Factor Authentication (MFA)"
+      td "Included"
+      th "OAuth Sign-in (Google, GitHub)"
+      td "Included"
+      th "SAML Single Sign-On (SSO)"
+      td "Included"
+      th "Workloads"
+      td "10 included"
+      td "20 included"
+      td "Custom"
+      th "Data Transfer"
+      td "1 TB / month included"
+      td "2 TB / month included"
+      td "Custom"
+      th "Requests"
+      td "10M / month included"
+      td "20M / month included"
+      td "Custom"
+      th "TLS Encryption"
+      td "Included"
+      th "Mutual TLS (mTLS)"
+      td "Included"
+      th "Certificate Manager"
+      th "Let's Encrypt Certificate"
+      td "Included"
+      th "Bring Your Own Certificate"
+      td "Included"
+      th "Dev Tools"
+      th "CLI, API, GraphQL API, Terraform"
+      td "Included"
+      th "Azion MCP servers"
+      td "Included"
+      th "// Build Azion Applications Build, run, and scale applications globally."
+      th "Applications"
+      th "Rules Engine"
+      td "Included"
+      th "Rules per Application"
+      td "10 included"
+      td "20 included"
+      td "Custom"
+      th "Redirects"
+      td "Included"
+      th "Reverse Proxy Using Connectors"
+      td "Included"
+      th "Functions"
+      th "Compute Time"
+      td "8 hours / month included"
+      td "10 hours / month included"
+      td "Custom"
+      th "Requests"
+      td "3M / month included"
+      td "10M / month included"
+      td "Custom"
+      th "Cache"
+      th "Purges"
+      td "1,000 / month included"
+      td "2,000 / month included"
+      td "Custom"
+      th "Tiered Cache"
+      td "Included"
+      th "Application Accelerator"
+      th "Data Transfer"
+      td "1 TB / month included"
+      td "2 TB / month included"
+      td "Custom"
+      th "Custom Cache Keys"
+      td "Included"
+      th "Path Rewrites"
+      td "Included"
+      th "Image Processor"
+      th "Images"
+      td "5,000 / month included"
+      td "10,000 / month included"
+      td "Custom"
+      th "AI Inference"
+      th "Preview access"
+      td "Upon request (subject to approval)"
+      td "Custom"
+      th "// Store Storage & Databases Reliable performance at scale."
+      th "Object Storage"
+      th "Storage"
+      td "10 GB / month included"
+      td "20 GB / month included"
+      td "Custom"
+      th "Class A Operations"
+      td "10,000 / month included"
+      td "20,000 / month included"
+      td "Custom"
+      th "Class B Operations"
+      td "100,000 / month included"
+      td "200,000 / month included"
+      td "Custom"
+      th "Class C Operations"
+      td "Included"
+      th "SQL Database"
+      th "Preview access"
+      td "Included"
+      td "Custom"
+      th "Storage"
+      td "1 GB / month included"
+      td "Custom"
+      th "Rows Read"
+      td "150M / month included"
+      td "Custom"
+      th "Rows Written"
+      td "20,000 / day included"
+      td "Custom"
+      th "KV Store"
+      th "Preview access"
+      td "Upon request (subject to approval)"
+      td "Custom"
+      th "// Secure Azion Connectors Trusted connections for any infrastructure."
+      th "Single Origin"
+      td "Included"
+      th "Load Balancer"
+      th "Data Transfer"
+      td "50 GB / month included"
+      td "Custom"
+      th "Origin Shield"
+      th "Shielded Connectors"
+      td "1 included"
+      td "Custom"
+      th "// Secure Azion Firewall Always-on defense for your applications."
+      th "Firewall"
+      th "Requests"
+      td "10M / month included"
+      td "20M / month included"
+      td "Custom"
+      th "Rules Engine"
+      td "Included"
+      th "Rules per Firewall"
+      td "10 included"
+      td "20 included"
+      td "Custom"
+      th "Regex Support"
+      td "Included"
+      th "DDoS Protection"
+      td "Included"
+      th "Network Shield"
+      td "Included"
+      td "Included with Firewall"
+      th "Web Application Firewall"
+      th "Azion Managed Rules"
+      td "Included"
+      th "WAF Attack Score"
+      td "Included"
+      th "Requests"
+      td "100,000 / month included"
+      td "200,000 / month included"
+      td "Custom"
+      th "Custom Rule Sets"
+      td "1 included"
+      td "2 included"
+      td "Custom"
+      th "Exceptions per Rule Set"
+      td "10 included"
+      td "20 included"
+      td "Custom"
+      th "Bot Manager"
+      th "Lite"
+      td "Included"
+      td "Custom"
+      th "// Secure Azion Edge DNS Securing the foundation of every connection."
+      th "Edge DNS"
+      th "Zones"
+      td "10 included"
+      td "Custom"
+      th "Queries"
+      td "1M / month included"
+      td "Custom"
+      th "// Observe Real-Time Observability See everything. Turn data into insights."
+      th "Real-Time Metrics"
+      td "Included"
+      th "Real-Time Events"
+      th "Storage"
+      td "1 GB / month included"
+      td "2 GB / month included"
+      td "Custom"
+      th "Data Scan"
+      td "1 GB / month included"
+      td "2 GB / month included"
+      td "Custom"
+      th "Data Stream"
+      th "Requests"
+      td "1M / month included"
+      td "2M / month included"
+      td "Custom"
+      th "Data Transfer"
+      td "10 GB / month included"
+      td "20 GB / month included"
+      td "Custom"
+      th "Edge Pulse"
+      td "Included"
+      th "// Azion Platform Compliance Compliance that protects your business."
+      th "PCI DSS 4.0.1 Level 1 Service Provider"
+      td "Not included"
+      td "Included"
+      th "SOC 2 Type 2 / SOC 3"
+      td "Not included"
+      td "Included"
+      th "FIPS 140-2 Level 3"
+      td "Not included"
+      td "Included with Secure Key Store (paid add-on)"
+      th "// Enterprise Contracts Contract Discounts Commit to usage or spend and pay less than on-demand rates."
+      th "Reserved Capacity"
+      td "Not included"
+      td "Available"
+      th "Savings Plan"
+      td "Not included"
+      td "Available"
+      td "See on-demand pricing"
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Serverless AI-Native Primitives for Autonomous Workloads']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Serverless AI-Native Primitives for Autonomous Workloads"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "How do I know what is included in each plan?"
+          [content-accordion-item]
+            h3 "How do Preview features work?"
+          [content-accordion-item]
+            h3 "What is the difference between monthly and annual billing?"
+          [content-accordion-item]
+            h3 "What happens if I exceed my included usage or resource limits?"
+          [content-accordion-item]
+            h3 "When should I choose the Pro plan?"
+          [content-accordion-item]
+            h3 "When should I choose the Enterprise plan?"
+          [content-accordion-item]
+            h3 "How does on-demand pricing work?"
+          [content-accordion-item]
+            h3 "Where can I see detailed pricing for usage and overages?"
+          [content-accordion-item]
+            h3 "What commitment options are available?"
+          [content-accordion-item]
+            h3 "How are support and professional services offered across plans?"
+          [content-accordion-item]
+            h3 "Are the Azion MCP servers included in my plan?"
+          [content-accordion-item]
+            h3 "Can I cancel or change my plan at any time?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-primary kind=primary]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=primary aria-label='Build, secure, and scale applications everywhere.']
+        [marketing-section-title kind=centered size=large]
+          h2 "Build, secure, and scale applications everywhere."
+          p "Get faster launches, lower latency, and less infrastructure overhead from day one."
+          button "Start free" → https://console.azion.com/signup?tck=generic_cta
+          button "Talk to a specialist" → https://www.azion.com/en/contact/

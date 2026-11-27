@@ -1,0 +1,29 @@
+{
+ "variants": [
+  {
+   "name": "Preview",
+   "summary": "The preview drawer open on Next.js Starter: details, the README and the Deploy entry into the deploy template flow.",
+   "file": "blocks/view/view-template-browser/variants/preview.vue"
+  },
+  {
+   "name": "NoMatch",
+   "summary": "A search that matches no template: the filter keeps the token and a medium EmptyState offers Clear filters.",
+   "file": "blocks/view/view-template-browser/variants/no-match.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The catalog is loading: the filter is disabled and two sections of skeleton tiles hold the layout.",
+   "file": "blocks/view/view-template-browser/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The catalog failed to load: a danger Alert with Retry, and an EmptyState that points to Import from Git.",
+   "file": "blocks/view/view-template-browser/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/view/view-template-browser/view-template-browser.vue",
+ "guidelinesFile": "blocks/view/view-template-browser/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
+}

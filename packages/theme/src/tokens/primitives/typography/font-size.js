@@ -26,5 +26,3 @@ export const fontSize = {
   '9xl': '8rem',
   '9xl--line-height': '1'
 }
-
-export default { fontSize }

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The console chrome around a list page: navigation as data with a drill level and a Preview badge, the breadcrumb, Create and Agent in the actions slot (icon-only while compact), recent resources in the ⌘K palette and the account menu, whose choice (pointer or keyboard) arrives through `@account-select`. The page body is only the slot content.",
+   "file": "examples/console-layout/default.vue"
+  },
+  {
+   "name": "PageOpensSearch",
+   "summary": "A page inside the layout opens the shared ⌘K palette from its own button with `useConsoleLayout().openSearch()`; it never mounts a second palette.",
+   "file": "examples/console-layout/page-opens-search.vue"
+  },
+  {
+   "name": "NavigationOpen",
+   "summary": "`v-model:navigation-open` binds the rail: a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot folds and restores it, and the app can persist the value. Press ⌘K (Ctrl K off Apple) and choose Collapse sidebar to fold the rail.",
+   "file": "examples/console-layout/navigation-open.vue"
+  }
+ ]
+}

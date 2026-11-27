@@ -1,0 +1,193 @@
+# Page Tabs
+
+> The second-level navigation strip of a resource detail page: a full-bleed bar ruled at the bottom, its `Tabs` at the page boundary inset, with room for the actions the whole resource owns on the right (a staged-changes `Tag`, Deploy). It is `Tabs` plus the strip and the actions region, so every detail page stops re-creating the same bar.
+
+- Import: `import PageTabs from '@aziontech/ui/page-tabs'`
+- Category: navigation · Surface: app · Structure: monolithic
+- API as JSON: [page-tabs.json](page-tabs.json)
+
+## When to use
+
+- Use PageTabs for the second-level navigation strip of a resource detail page; to switch peer views inside a page or panel use Tabs.
+- The top of every resource detail page, under the global header.
+- An account page split into tabs, such as Billing.
+
+## Do
+
+- Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content`: the page renders the active section itself from the `v-model` value.
+- Keep the labels to one word where possible.
+- Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`.
+- Set `column` to the column the page body uses (`form` over a settings form, `data` over a list) so the tabs start where the content starts.
+
+## Don’t
+
+- Tabs inside a card, a drawer or a panel → use `tabs`.
+- Steps of a flow → use `stepper` or `wizard`.
+- Navigation between pages of the app → use `sidebar` or `navigation-menu`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [tabs](tabs.md) — the tablist it renders; pass one `Tabs.Trigger` per section in the default slot.
+- [page-header](page-header.md) — the page heading under the strip.
+- [tag](tag.md) and `button` — the usual content of the `actions` slot.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `column` | `'full' \| 'data' \| 'form' \| 'focused'` | `'full'` | false | The page column the tab row lines up with: the full width, or the data, form or focused column below it. |
+| `align` | `'start' \| 'center'` | `'start'` | false | Where the tab triggers sit in the row: at the start edge, or centred. Passed to `Tabs.List`. |
+| `modelValue` | `TabsValue \| null` | `null` | false | Two-way value (`v-model`). |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | One Tabs.Trigger per section of the resource. |
+| `actions` | — | The actions the whole resource owns, on the right of the strip: a staged-changes Tag, Deploy. |
+
+## v-model
+
+- **`v-model`** (`modelValue`) — `string | number | null`, default `null`. The active tab; it updates when a tab is picked.
+
+## States
+
+- Visual states: `default`; the tab states are owned by `tabs`
+- `data-column` mirrors the `column` prop on the root. The strip and its rule stay full bleed; with `data`, `form` or `focused` the tab row inside is capped at the same measure as the page column it sits over (`layout-column`, `layout-column-form`, `layout-column-focused`) and centred, so the first tab lines up with the content below. `full` leaves the row at the page boundary inset.
+
+## Accessibility
+
+- Visible focus: owned by `Tabs.Trigger` and the actions.
+- Keyboard map: the tablist follows `tabs` (arrows move between tabs, `Home`/`End` jump); `Tab` leaves the tablist for the actions.
+- ARIA: `role="tablist"` and `role="tab"` come from `tabs`.
+- Contrast ≥4.5:1, owned by `tabs`.
+
+## Right-to-left
+
+- Layout: logical utilities only (`-ms-`, `margin-inline` from the column utilities); the tabs start at the inline start and the actions sit at the inline end.
+- Icons: none of its own.
+- Keyboard: owned by `tabs` (the arrow keys follow the reading direction).
+- User data: none.
+
+## Internationalization
+
+No built-in strings: the tab labels and the actions come from the consumer's slots.
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: the root is `@container/page-tabs`; the column utilities cap the tab row at the page column's measure and fall back to the full width below it.
+- Narrow (the strip below 36rem, `@max-xl/page-tabs`): the row wraps, the tablist takes the full width and scrolls inline inside its own region (owned by `tabs`), and the actions move to their own line at the inline end, after the tabs in reading and focus order.
+- Touch: tab targets are owned by `tabs`; no hover-only affordance.
+- Reflow: no page-level horizontal scroll at 320 px and 200 % zoom; only the tablist scrolls.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import { ref } from 'vue'
+
+  const activeTab = ref('overview')
+  const tabs = [
+    { value: 'overview', label: 'Overview' },
+    { value: 'build', label: 'Build' },
+    { value: 'deployments', label: 'Deployments' },
+    { value: 'variables', label: 'Variables' },
+    { value: 'rules', label: 'Rules' },
+    { value: 'logs', label: 'Logs' },
+    { value: 'metrics', label: 'Metrics' },
+    { value: 'settings', label: 'Settings' }
+  ]
+</script>
+
+<template>
+  <PageTabs v-model="activeTab">
+    <Tabs.Trigger
+      v-for="tab in tabs"
+      :key="tab.value"
+      :value="tab.value"
+      :label="tab.label"
+    />
+  </PageTabs>
+</template>
+```
+
+### WithActions
+
+```vue
+<script setup>
+  import Button from '@aziontech/ui/button'
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import Tag from '@aziontech/ui/tag'
+  import { ref } from 'vue'
+
+  const activeTab = ref('overview')
+  const tabs = [
+    { value: 'overview', label: 'Overview' },
+    { value: 'deployments', label: 'Deployments' },
+    { value: 'settings', label: 'Settings' }
+  ]
+</script>
+
+<template>
+  <PageTabs v-model="activeTab">
+    <Tabs.Trigger
+      v-for="tab in tabs"
+      :key="tab.value"
+      :value="tab.value"
+      :label="tab.label"
+    />
+    <template #actions>
+      <Tag
+        severity="warning"
+        size="small"
+        label="2 changes"
+      />
+      <Button
+        label="Deploy"
+        variant="outline"
+        size="medium"
+        icon="az az-cloud-upload"
+      />
+    </template>
+  </PageTabs>
+</template>
+```
+
+### FormColumn
+
+```vue
+<script setup>
+  import PageTabs from '@aziontech/ui/page-tabs'
+  import Tabs from '@aziontech/ui/tabs'
+  import { ref } from 'vue'
+
+  const activeTab = ref('general')
+  const tabs = [
+    { value: 'general', label: 'General' },
+    { value: 'members', label: 'Members' },
+    { value: 'billing', label: 'Billing' }
+  ]
+</script>
+
+<template>
+  <PageTabs
+    v-model="activeTab"
+    column="form"
+  >
+    <Tabs.Trigger
+      v-for="tab in tabs"
+      :key="tab.value"
+      :value="tab.value"
+      :label="tab.label"
+    />
+  </PageTabs>
+</template>
+```

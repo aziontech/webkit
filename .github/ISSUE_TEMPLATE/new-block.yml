@@ -1,0 +1,92 @@
+name: New block
+description: Request a new Azion UI block (a screen agents copy). An agent builds it through /block-new from this issue.
+title: 'block: <group>/<group>-<what>'
+labels: ['new-block', 'ai-flow']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue is the input of `/block-new <issue number>`
+        (`contributing/commands/block-new.md`). A block is a screen built only from Azion UI
+        components: `block.json`, the primary `.vue` and its states in `variants/`. Describe the
+        job the screen does; the agent picks the components.
+  - type: dropdown
+    id: category
+    attributes:
+      label: Group
+      description: The job the screen serves (the block groups of `contributing/rules/naming.md` § 3).
+      options:
+        - account
+        - ai
+        - auth
+        - create
+        - dashboard
+        - detail
+        - edit
+        - settings
+        - state
+        - view
+        - shell
+        - top-bar
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Proposed name
+      description: kebab-case English, starting with the group word once (`<group>-<what>`, e.g. `detail-domain`, `create-api-token`); the block id is `<group>/<name>`.
+    validations:
+      required: true
+  - type: textarea
+    id: intent
+    attributes:
+      label: Intent
+      description: What the user comes to this screen to do, and what they leave with. Add the words people would search for, in English and pt-BR; they seed `block.json#intents`.
+    validations:
+      required: true
+  - type: textarea
+    id: benchmarks
+    attributes:
+      label: Benchmark links
+      description: Cloudscape patterns or demos (`https://cloudscape.design/patterns/<x>/index.html.md`), shadcn blocks (`https://ui.shadcn.com/blocks`), or console screenshots.
+    validations:
+      required: true
+  - type: textarea
+    id: usage
+    attributes:
+      label: Where it is used
+      description: The console routes, sites or docs pages that will copy it.
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      description: Where the screen lives; it becomes `block.json#surface`.
+      options:
+        - app
+        - site
+        - docs
+    validations:
+      required: true
+  - type: textarea
+    id: states
+    attributes:
+      label: States
+      description: The variants the screen needs besides the default (empty, loading, error, no permission, success, ...).
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Observable behaviour the PR must show. One per line.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Figma link, existing blocks it overlaps with, components it must use.
+    validations:
+      required: false

@@ -1,0 +1,100 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  import type { Severity } from '../../../utils/severity'
+  import { labelDirection } from '../../../utils/text-direction'
+
+  export type { Severity } from '../../../utils/severity'
+
+  /** Brand look of the tag, used when no severity is set. */
+  export type TagVariant = 'primary' | 'accent' | 'contrast'
+
+  /** Status colour of the tag: the shared severity scale. */
+  export type TagSeverity = Severity
+
+  export type TagSize = 'small' | 'medium'
+
+  defineOptions({
+    name: 'Tag',
+    inheritAttrs: false
+  })
+
+  export interface TagProps {
+    /** Fallback text when the default slot is empty. */
+    label?: string
+    /** Emphasis look of the tag surface and label, used when `severity` is not set. */
+    variant?: TagVariant
+    /** Status colour of the tag surface and label; wins over `variant` when set. */
+    severity?: TagSeverity
+    /** Size token; `medium` is 24px tall, `small` is 20px. */
+    size?: TagSize
+    /** Azion icon class for the leading icon. */
+    icon?: string
+  }
+
+  const props = withDefaults(defineProps<TagProps>(), {
+    label: '',
+    variant: 'primary',
+    severity: undefined,
+    size: 'medium',
+    icon: ''
+  })
+
+  defineSlots<{
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tag')
+
+  const SEVERITIES: readonly TagSeverity[] = ['neutral', 'info', 'success', 'warning', 'danger']
+  const VARIANTS: readonly TagVariant[] = ['primary', 'accent', 'contrast']
+
+  const resolvedSeverity = computed(() =>
+    props.severity && SEVERITIES.includes(props.severity) ? props.severity : null
+  )
+
+  const resolvedVariant = computed((): TagVariant | null =>
+    resolvedSeverity.value ? null : VARIANTS.includes(props.variant) ? props.variant : 'primary'
+  )
+
+  const ROOT_CLASS =
+    'group/tag inline-flex items-center justify-center overflow-hidden border border-transparent leading-none text-tag-md ' +
+    'data-[size=small]:text-tag-sm data-[size=medium]:gap-(--spacing-xs) data-[size=small]:gap-(--spacing-2xs) data-[size=medium]:h-6 data-[size=medium]:px-(--spacing-xs) ' +
+    'data-[size=small]:h-5 data-[size=small]:px-(--spacing-2xs) ' +
+    'rounded-(--shape-control) ' +
+    'data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground) ' +
+    'data-[severity=neutral]:bg-(--bg-selected) ' +
+    'data-[severity=neutral]:text-(--text-default) ' +
+    'data-[variant=accent]:bg-(--accent) data-[variant=accent]:text-(--accent-foreground) data-[variant=contrast]:bg-(--bg-contrast) data-[variant=contrast]:text-(--text-contrast) ' +
+    'data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-foreground) data-[severity=info]:bg-(--info) data-[severity=info]:text-(--info-foreground) ' +
+    'data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-foreground)'
+</script>
+
+<template>
+  <span
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-severity="resolvedSeverity"
+    :data-variant="resolvedVariant"
+    :data-size="size"
+    :class="[ROOT_CLASS, attrs.class]"
+  >
+    <i
+      v-if="icon"
+      :class="icon"
+      class="flex size-3.5 shrink-0 items-center group-data-[size=small]/tag:size-3"
+      aria-hidden="true"
+      :data-testid="`${testId}__icon`"
+    />
+    <slot v-if="$slots['default']" />
+    <span
+      v-else-if="label"
+      :data-testid="`${testId}__label`"
+      :dir="labelDirection(label)"
+    >
+      {{ label }}
+    </span>
+  </span>
+</template>

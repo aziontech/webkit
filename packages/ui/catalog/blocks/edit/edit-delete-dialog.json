@@ -1,0 +1,19 @@
+{
+ "variants": [
+  {
+   "name": "SettingsRow",
+   "summary": "The danger-zone delete of a settings page: an outlined `Item` row under the page's `PageHeader` names what the delete removes and holds the danger trigger, and the medium `ConfirmDialog` it opens stacks a warning `Alert` (with the Help Center link) over the `confirmation-phrase` field asking for the exact resource name, with Delete disabled until the typed name matches and loading while it runs. The field clears every time the dialog opens. Built from `PageHeader`, `Item`, `ConfirmDialog`, `Alert` and `Button`. The page is a page body for ConsoleLayout.",
+   "file": "blocks/edit/edit-delete-dialog/variants/settings-row.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "A delete the server refuses (the resource is still in use): the dialog stays open (in a live flow the typed name stays in the field), the warning gives way to a danger `Alert` saying what blocks the delete and how to fix it, and Delete can run again.",
+   "file": "blocks/edit/edit-delete-dialog/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/edit/edit-delete-dialog/edit-delete-dialog.vue",
+ "guidelinesFile": "blocks/edit/edit-delete-dialog/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
+}

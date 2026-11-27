@@ -1,0 +1,53 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Find, test, and deploy software that runs anywhere.']
+    [marketing-hero-title width=xl centered=true]
+      h1 "Find, test, and deploy software that runs anywhere."
+      button "Start Free" → https://console.azion.com/signup
+      button "Become a Partner" → https://www.azion.com/en/partners
+    [marketing-ticker kind=plain size=small width=site content=marks]
+      text "Proven on mission-critical workloads"
+      list (11): Global Fashion Group · HeroSpark · Itaú · NZN · Netshoes · Caixa · Agibank · Prime Video · América Móvil · GPA · Fourbank
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-use-case-links]
+    [marketing-section-module kind=left]
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic described=true]
+          h3 "More Value"
+          p "Find and launch a product on the Firewall or the Applications, and it will be available in your Azion account for immediate use."
+        [marketing-topic described=true linked=true]
+        link "Licensing Flexibility You can use your existing licenses in a BYOL (Bring Your Own License) model, or purchase new licenses directly from Azion." → https://console.azion.com/signup/
+        [marketing-topic described=true]
+          h3 "Vendor Streamlining"
+          p "Simplified software acquisition, with a single vendor and a single invoice."
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-section-title kind=left size=medium]
+      text: // ⏎ Marketplace
+      h2 "What is the Azion Marketplace?"
+      p "The Azion Marketplace is a digital catalog that makes it easy to find, test, and deploy edge-enabled software that runs anywhere. The Marketplace brings together a wide range of solutions that you can use to enhance, compose, or customize your applications."
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Agile"
+          p "Run code and deploy in minutes. From prototype to enterprise scale with NoOps, just code."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Diverse use cases"
+          p "Fraud detection, authentication and authorization, bot mitigation, and facial recognition, using technologies such as visual computing and artificial intelligence executed at the edge."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Cost-effective"
+          p "Pricing is based on the edge resources and/or private edge locations in use."
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  [marketing-section-gap-end]

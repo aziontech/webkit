@@ -1,0 +1,51 @@
+{
+  "component": "tree",
+  "title": "Components/Data/Tree",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A bucket-like file tree three levels deep, with glyphs and size descriptions. Two folders are seeded in `v-model:open-keys`; the chevron and ArrowRight / ArrowLeft fold the rest.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "`size` sets the row density: `small` is 24px rows for dense file explorers, `medium` (the default) 32px, `large` 40px for touch or roomy panels. Height, padding, label type and indentation step together.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Selectable",
+      "summary": "With `selectable`, activating a node writes its id to `v-model:selected-key`, marks the row selected and sets `aria-selected`. The bound id is shown under the tree.",
+      "file": "selectable.vue"
+    },
+    {
+      "name": "CustomItem",
+      "summary": "The `item` slot replaces the label region of every row, here adding a status `Tag`; the `actions` slot adds an end-aligned `IconButton` per row that opens a `DropdownMenu` of row actions (Download, Copy path, Delete); the last one picked is shown under the tree. The chevron, indentation and row states stay owned by the tree.",
+      "file": "custom-item.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While `loading`, the tree renders Skeleton rows in its place and sets `aria-busy` on the root.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "With an empty `items` array the tree shows the default `EmptyState`, titled by `emptyTitle` with `emptyDescription`. Pass the `empty` slot to replace it.",
+      "file": "empty.vue"
+    },
+    {
+      "name": "LazyChildren",
+      "summary": "A node marked `lazy` is a parent before its children exist. The app listens to `update:openKeys`, sets `loading` on the node while it fetches the listing, then patches `children` in; while loading, the expanded node shows a loading row (Skeleton plus a polite status) and its group is `aria-busy`.",
+      "file": "lazy-children.vue"
+    },
+    {
+      "name": "Rename",
+      "summary": "With `editable`, F2 on the focused node (or the exposed `startRename`, here wired to a per-row `IconButton` in the `actions` slot) turns the label into a field. Enter or blur submits and emits `rename` with `{ item, label }`; Escape cancels. A double-click on a row emits `item-double-click` to open it.",
+      "file": "rename.vue"
+    },
+    {
+      "name": "MultiSelect",
+      "summary": "`selectable=\"multiple\"` writes ids to `v-model:selected-keys` and sets `aria-multiselectable`. Click selects one node, Ctrl or Cmd+click toggles, Shift+click selects the visible range, Space toggles the focused node, Shift+Arrow extends and Ctrl+A selects every visible node.",
+      "file": "multi-select.vue"
+    }
+  ]
+}

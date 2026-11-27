@@ -1,0 +1,124 @@
+{
+  "groups": ["screens", "forms", "data", "feedback", "navigation", "content", "ai", "azion"],
+  "patterns": [
+    {
+      "slug": "product-screens",
+      "title": "Building a console screen",
+      "summary": "Where to start a console screen: the block, the pattern and the rule for each problem.",
+      "group": "screens",
+      "skill": "azion-ui-product-screens"
+    },
+    {
+      "slug": "site-pages",
+      "title": "Building a site page",
+      "summary": "How a marketing page is built from page sections, in order, from the content up.",
+      "group": "screens",
+      "skill": "azion-ui-site-pages"
+    },
+    {
+      "slug": "form",
+      "title": "Forms",
+      "summary": "Which control each value takes, labels, grouping, the two layouts and how a form submits.",
+      "group": "forms",
+      "skill": "azion-ui-form"
+    },
+    {
+      "slug": "create-surface",
+      "title": "Create flows",
+      "summary": "Page, drawer or dialog: the surface follows what is created, with one shared anatomy.",
+      "group": "forms",
+      "skill": "azion-ui-create-surface"
+    },
+    {
+      "slug": "tables",
+      "title": "Tables",
+      "summary": "One data-driven table: columns, toolbar, internal scroll and the shared cell recipes.",
+      "group": "data",
+      "skill": "azion-ui-tables"
+    },
+    {
+      "slug": "lists",
+      "title": "List pages",
+      "summary": "One list page: the controls row, the collection model, filters in the URL, selection.",
+      "group": "data",
+      "skill": "azion-ui-lists"
+    },
+    {
+      "slug": "data-viz",
+      "title": "Charts and figures",
+      "summary": "Pick the chart for the question, take every colour from the chart role, render its states.",
+      "group": "data",
+      "skill": "azion-ui-data-viz"
+    },
+    {
+      "slug": "api-data",
+      "title": "Showing API data",
+      "summary": "References by name, pickers that keep their values, fresh lookups and typed records.",
+      "group": "data",
+      "skill": "azion-ui-api-data"
+    },
+    {
+      "slug": "ui-states",
+      "title": "Loading, empty and error states",
+      "summary": "Every data-backed view owns its states, and an action locks its scope while it runs.",
+      "group": "feedback",
+      "skill": "azion-ui-states"
+    },
+    {
+      "slug": "errors",
+      "title": "Errors",
+      "summary": "Where an error goes, what it carries there and what it says: field, section or toast.",
+      "group": "feedback",
+      "skill": "azion-ui-errors"
+    },
+    {
+      "slug": "in-product-help",
+      "title": "In-product help",
+      "summary": "A description first, a Hint note on click, an Info trigger for the page; a Tooltip only names.",
+      "group": "feedback",
+      "skill": "azion-ui-in-product-help"
+    },
+    {
+      "slug": "navigation",
+      "title": "Navigation",
+      "summary": "The two shells, navigation levels, tabs, drawers, breadcrumbs and router wiring.",
+      "group": "navigation",
+      "skill": "azion-ui-navigation"
+    },
+    {
+      "slug": "layout",
+      "title": "Page layout",
+      "summary": "Three decisions per page: the boundary, the measure and the rhythm, each a named token.",
+      "group": "navigation",
+      "skill": "azion-ui-layout"
+    },
+    {
+      "slug": "microcopy",
+      "title": "Interface text",
+      "summary": "Punctuation and case, which surface owns which words, and one word per concept.",
+      "group": "content",
+      "skill": "azion-ui-microcopy"
+    },
+    {
+      "slug": "ai-surfaces",
+      "title": "AI chat and actions",
+      "summary": "The conversation, a streamed answer and the step where a person authorizes an action.",
+      "group": "ai",
+      "skill": "azion-ui-ai-surfaces"
+    },
+    {
+      "slug": "azion-api",
+      "title": "Calling the Azion API",
+      "summary": "CORS, a dev proxy and an edge proxy, and where the personal token lives.",
+      "group": "azion",
+      "skill": "azion-ui-azion-api"
+    },
+    {
+      "slug": "query-explorer",
+      "title": "Query explorer",
+      "summary": "A Metrics and Events GraphQL explorer built from Azion UI components.",
+      "group": "azion",
+      "skill": "azion-ui-query-explorer"
+    }
+  ]
+}

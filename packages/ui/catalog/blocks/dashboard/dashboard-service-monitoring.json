@@ -1,0 +1,24 @@
+{
+ "variants": [
+  {
+   "name": "Loading",
+   "summary": "The first load: every tile, both charts and the rail hold Skeletons, and the window switches stay usable.",
+   "file": "blocks/dashboard/dashboard-service-monitoring/variants/loading.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "No traffic yet: the tiles show a dash, both charts explain that metrics appear once a service serves requests, and the rail reads No open alerts.",
+   "file": "blocks/dashboard/dashboard-service-monitoring/variants/empty.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The request for the window failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
+   "file": "blocks/dashboard/dashboard-service-monitoring/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/dashboard/dashboard-service-monitoring/dashboard-service-monitoring.vue",
+ "guidelinesFile": "blocks/dashboard/dashboard-service-monitoring/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
+}

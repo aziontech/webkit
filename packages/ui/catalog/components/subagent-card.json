@@ -1,0 +1,25 @@
+{
+ "purpose": "One helper agent the main agent handed part of the work to, shown inside the conversation (TanStack AI `subagent` parts, AG-UI sub-agent runs; benchmarks: Vercel AI Elements Task, Cloudscape generative AI progressive steps). A card names the helper agent, says in plain words what it is doing, shows its status (`Waiting`, `Running`, `Completed`, `Failed`, `Stopped`) and how long it has been working, offers `Stop` while it runs, and opens to the helper's own messages. The component renders no messages itself: the owner puts the child run's messages (a `StreamingResponse`, a `ToolCall`, a nested `SubagentCard`) in the default slot. It is its own component, not new props on `tool-call`: a helper run carries its own message stream (the default slot), a stop action, an elapsed clock, a summary line and a `canceled` status, which would add three props, an event, a slot and a status value that a single tool call never uses.",
+ "useWhen": [
+  "A response delegates a step to a helper agent (a researcher, a reviewer, a planner) whose run has its own status and its own messages.",
+  "The reader may need to stop the helper without stopping the conversation."
+ ],
+ "avoidWhen": [
+  "One tool or command the agent called → `tool-call`.",
+  "Asking the reader to allow an action → `tool-approval`.",
+  "The model's own reasoning → `reasoning`.",
+  "A long job outside a chat → `progress` or `status-indicator` on the resource."
+ ],
+ "related": [
+  "`tool-call` — the same row for a single tool call; a helper's tool calls go in this card's slot.",
+  "`status-indicator` — the status the row shows.",
+  "`streaming-response` — the helper's text in the slot.",
+  "`reasoning` — same elapsed time and skip pattern for thinking."
+ ],
+ "bestPractices": [
+  "Name the helper as it is defined (`researcher`) and say what it is doing in the reader's words (`Comparing cache plans`).",
+  "Keep the card collapsed while the main answer is the point; open it when the helper fails so the reader sees why.",
+  "Offer `Stop` only when the host can stop the helper (`stoppable`), and set the status to `canceled` once it stops.",
+  "Put the error message in `description` when the helper fails."
+ ]
+}

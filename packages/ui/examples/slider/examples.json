@@ -1,0 +1,31 @@
+{
+  "component": "slider",
+  "title": "Components/Input/Slider",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "0–100 in steps of 1 in a `Field`: the label names it and the value sits at the end of the label row.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Ticks",
+      "summary": "A tick mark under every step. Ticks render only when the range has at most 21 positions.",
+      "file": "ticks.vue"
+    },
+    {
+      "name": "ReferenceValues",
+      "summary": "Labelled landmarks under the track. `unit` is appended to each label and to the announced value.",
+      "file": "reference-values.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled: skipped by Tab, ignores pointer and keys, disabled tokens.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid: danger fill and thumb, `aria-invalid`, and a `Field.Error`.",
+      "file": "invalid.vue"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+
+  /**
+   * The grid a DocCard set sits in. Each cell paints a 1px ring just outside its
+   * box, so neighbours' rings share the grid's 1px gap and read as one hairline
+   * (never doubling), and an incomplete last row leaves no rule-coloured holes.
+   */
+  defineOptions({ name: 'DocCardGroup', inheritAttrs: false })
+
+  /** Column count at the large breakpoint. */
+  export type DocCardGroupColumns = 1 | 2 | 3 | 4
+  /** Column count on a phone. */
+  export type DocCardGroupMobileColumns = 1 | 2
+
+  export interface DocCardGroupProps {
+    /** Column count at the large breakpoint. */
+    columns?: DocCardGroupColumns
+    /** Column count on a phone. Two only pays when the cells are a mark plus a word. */
+    mobileColumns?: DocCardGroupMobileColumns
+  }
+
+  withDefaults(defineProps<DocCardGroupProps>(), {
+    columns: 2,
+    mobileColumns: 1
+  })
+
+  defineSlots<{
+    /** The `DocCard` children. */
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'doc-card-group')
+
+  const GRID_CLASS =
+    'grid w-full gap-px [&>*]:ring-1 [&>*]:ring-(--border-default) ' +
+    'data-[mobile-columns=1]:grid-cols-1 data-[mobile-columns=2]:grid-cols-2 ' +
+    'data-[columns=2]:sm:grid-cols-2 data-[columns=3]:sm:grid-cols-2 data-[columns=3]:lg:grid-cols-3 data-[columns=4]:sm:grid-cols-2 data-[columns=4]:lg:grid-cols-4'
+</script>
+
+<template>
+  <RegistrationFrame
+    v-bind="$attrs"
+    :data-testid="testId"
+    data-doc-block
+    :data-columns="columns"
+    class="w-full"
+  >
+    <div
+      :class="GRID_CLASS"
+      :data-columns="columns"
+      :data-mobile-columns="mobileColumns"
+    >
+      <slot />
+    </div>
+  </RegistrationFrame>
+</template>

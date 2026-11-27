@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Determinate bar at 60%.",
+   "file": "examples/progress/default.vue"
+  },
+  {
+   "name": "Shapes",
+   "summary": "Both corner-radius variants stacked: `rounded` and `flat`.",
+   "file": "examples/progress/shapes.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All height tokens stacked: `small`, `medium`, `large`.",
+   "file": "examples/progress/sizes.vue"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A short thread in a fixed-height log with the composer floating over its bottom (`composer` slot): the reader's questions at the inline end, the assistant's responses at the start, follow-up questions after the last one, and the thread scrolling under the composer.",
+   "file": "examples/conversation/default.vue"
+  },
+  {
+   "name": "StartAlignment",
+   "summary": "The same thread in a narrow panel with every message at the inline start, as a drawer or side panel shows it.",
+   "file": "examples/conversation/start-alignment.vue"
+  },
+  {
+   "name": "LongThread",
+   "summary": "Twelve turns that overflow the log: it opens at the newest message, stops following when the reader scrolls up, and the round Scroll to the latest message button above the floating composer brings them back.",
+   "file": "examples/conversation/long-thread.vue"
+  }
+ ]
+}

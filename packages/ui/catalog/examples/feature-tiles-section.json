@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as the home page places it: the `artwork` layout with the overline, headline and lead over two picture tiles in the four-column frame. A band with no tiles renders nothing at all, and one with no title drops its header.",
+   "file": "examples/feature-tiles-section/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "Both layouts stacked: the `artwork` band with its header and picture tiles in the four-column frame with marks on every corner, then the `illustrated` band with no header, an `anchor`, and three illustration tiles in the three-column frame with marks on the bottom rule.",
+   "file": "examples/feature-tiles-section/variants.vue"
+  }
+ ]
+}

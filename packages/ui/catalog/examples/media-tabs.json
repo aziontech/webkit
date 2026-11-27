@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Three peer claims and one media frame. The band opens on the first tab and advances on its own every five seconds, drawing a hairline along the active row as the interval runs down. Point at a row and the selection follows the pointer while the timer holds; click one and the timer stops for good, because a reader who has chosen should not be moved off their choice. Each row is a real button, so `Tab` reaches every claim and `Enter` selects it.",
+   "file": "examples/media-tabs/default.vue"
+  },
+  {
+   "name": "Positions",
+   "summary": "Every `tabsSide` value, one band under the other, with the same five use cases on each. Start and end stack the tabs beside the media and hold the first three; top and bottom lay all five in one row, each carrying its own title, description and progress hairline, with the one medium running the full width on the other side. The seam between the tabs and the media is one hairline wherever the tabs sit. Below the large breakpoint every side stacks and the active tab carries its media inside its row.",
+   "file": "examples/media-tabs/positions.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Every `size` value beside the media, one band under the other with the same three claims on each, so the only thing that changes is the height of a row. That height is the component's own — three, four and a half, and six times the padding step inside the row — and the media column matches the stack beside it to the pixel. It is a floor rather than a ceiling: at `small` this copy is taller than three padding steps, so the rows keep their text and the media grows with them instead of the text being squeezed. In a row of tabs (`top` or `bottom`) `small` sets the title and description two steps down, which is what keeps five claims from filling the band.",
+   "file": "examples/media-tabs/sizes.vue"
+  }
+ ]
+}

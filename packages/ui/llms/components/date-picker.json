@@ -1,0 +1,201 @@
+{
+ "name": "date-picker",
+ "binding": "DatePicker",
+ "import": "@aziontech/ui/date-picker",
+ "treeShakeableImport": "@aziontech/ui/date-picker-root",
+ "category": "input",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/ui/date-picker-clear"
+ ],
+ "purpose": "DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and a Cancel / Apply pair. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false); Cancel closes, drops the draft and refocuses the trigger, as in `date-range-picker`. Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty), and the panel shows and edits it in that zone too: the grid, the date and time fields and the `min` / `max` bounds are wall-clock time there, and `v-model` stays the instant. Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn \"Date Picker\".",
+ "setup": null,
+ "useWhen": [
+  "Use DatePicker to pick one date (optionally with a time) in a form field. For any start–end range use DateRangePicker; to display a moment in time use Timestamp.",
+  "A due date, a start date, an expiry date, a birthday.",
+  "A date and a time of day together (`show-time`): a scheduled maintenance window start, a release time."
+ ],
+ "avoidWhen": [
+  "A start and an end, whole days or with times, relative or absolute → use `date-range-picker`.",
+  "Displaying a date the person does not edit → use `timestamp`.",
+  "A duration or count (retention days, TTL) rather than a date → use `number-input`."
+ ],
+ "related": [
+  "`date-range-picker` — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time=\"false\"`. It is built on this component's grid, fields and time zone selector.",
+  "`timestamp` — shows a moment in time in the app's time zone.",
+  "`field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
+  "`select` — the Month and Year selects in the calendar caption (`variant=\"ghost\"`, `size=\"small\"`).",
+  "`combobox` — the time field: a typed time or a pick from the 30-minute list, which opens under the field so the panel stays as thin as the grid.",
+  "`input` — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side."
+ ],
+ "bestPractices": [
+  "`modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
+  "Bind a `Date` or `null`.",
+  "Bound the selectable days with `min` and `max` instead of validating after commit. Unlike `date-range-picker` (five years back to the end of today by default), DatePicker is unbounded by default: a single date is often in the future (a token expiry, an alert schedule), so a page sets `min` to today there, and sets `max` only when the date must be in the past.",
+  "Send `toISOString()` (or the ISO date `2026-11-15`) to the server, never the printed label."
+ ],
+ "props": [
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; affects the trigger, day-cell hit-area, and typography."
+  },
+  {
+   "name": "min",
+   "type": "Date | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Earliest selectable date; earlier days render disabled."
+  },
+  {
+   "name": "max",
+   "type": "Date | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Latest selectable date; later days render disabled."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the trigger, grid, and all controls, applying disabled tokens."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date`)."
+  },
+  {
+   "name": "showFields",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the date field (and the time field with `showTime`) in the panel. Set false when the grid is the whole interaction and typing a date is not offered."
+  },
+  {
+   "name": "showTime",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a time field beside the date field, so the value carries a time of day."
+  },
+  {
+   "name": "orientation",
+   "type": "'vertical' | 'horizontal'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Places the fields and Apply column below the calendar (vertical) or beside it (horizontal)."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the trigger; the current value is appended (`Due date: Nov 15, 2026`). Empty leaves the name to the Field label or the trigger text."
+  },
+  {
+   "name": "clearable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a clear control on the trigger that empties the committed selection."
+  },
+  {
+   "name": "showApply",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Stages edits in a draft and shows Cancel and Apply; when false, every edit commits immediately and neither button renders."
+  },
+  {
+   "name": "split",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders the trigger as a split control with a separate chevron affordance."
+  },
+  {
+   "name": "modelValue",
+   "type": "DatePickerValue",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  },
+  {
+   "name": "timeZone",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:timeZone`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "month-change",
+   "payload": "DatePickerMonth",
+   "notes": "Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed)."
+  },
+  {
+   "name": "apply",
+   "payload": "(event: Event, value: Date | null)",
+   "notes": "Emitted when the draft selection is committed via Apply; `event` is the activating click or key event, `value` the committed date."
+  }
+ ],
+ "slots": [
+  {
+   "name": "trigger",
+   "scope": "{ open, value, displayValue }",
+   "notes": "Replaces the default trigger button; scope exposes the open state, raw value, and formatted label."
+  },
+  {
+   "name": "footer",
+   "scope": "—",
+   "notes": "Custom footer/action-bar content (e.g. `<DatePicker.Clear>`) alongside Apply."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/date-picker/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/date-picker/sizes.vue"
+  },
+  {
+   "name": "Horizontal",
+   "file": "examples/date-picker/horizontal.vue"
+  }
+ ],
+ "docs": "components/date-picker.md"
+}

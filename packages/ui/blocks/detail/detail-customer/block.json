@@ -1,0 +1,77 @@
+{
+  "id": "detail/detail-customer",
+  "name": "DetailCustomer",
+  "title": "Blocks/Detail/DetailCustomer",
+  "surface": "app",
+  "stability": "preview",
+  "summary": "The profile of one customer a support agent opens from a ticket or a search, as a page body for ConsoleLayout. A `PageHeader` names the customer with a square `Avatar`, their organization as the description, and the actions Edit, More actions (an `IconButton` with a `Tooltip` opening a `DropdownMenu`: Merge customer, Export data, Delete customer) and New ticket. Below it a details column (a `Card` with a `KeyValueList`: email and phone with a `CopyButton`, local time, language, the organization `Link`, the tags as `Tag`s and customer since, then a Satisfaction `Card` with a read-only `Rating` and the survey count) sits beside `Tabs`, and stacks above them in a narrow container. Tickets is a `DataTable` of the customer's tickets (subject `Link`, `TableCellStatus`, `PriorityTag`, the next-reply `Countdown`, `TableCellTime`) with an `EmptyState` for a customer with none; Activity is a `Timeline` grouped by day; Notes is a `MessageThread` of internal notes over a `Field` with a `Textarea` and Add note. Loading draws `Skeleton`s, the table's skeleton rows and the timeline and thread placeholders; a failed load shows a danger `Alert` with Retry. The sample renders under a `ConfigProvider` with a fixed clock.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "customer profile",
+    "customer details",
+    "contact profile",
+    "requester profile",
+    "customer tickets",
+    "customer activity",
+    "customer notes",
+    "support customer",
+    "end user profile",
+    "perfil do cliente",
+    "detalhes do cliente",
+    "perfil do contato",
+    "perfil do solicitante",
+    "tickets do cliente",
+    "atividade do cliente",
+    "notas do cliente"
+  ],
+  "skills": [
+    "azion-ui-layout",
+    "azion-ui-states",
+    "azion-ui-tables",
+    "azion-ui-form",
+    "azion-ui-lists",
+    "azion-ui-microcopy"
+  ],
+  "primary": {
+    "name": "Tickets",
+    "file": "detail-customer.vue"
+  },
+  "files": [
+    "sample.ts",
+    "parts/customer-clock.vue",
+    "parts/customer-details-panel.vue",
+    "parts/customer-tickets-tab.vue",
+    "parts/customer-activity-tab.vue",
+    "parts/customer-notes-tab.vue"
+  ],
+  "variants": [
+    {
+      "name": "Activity",
+      "summary": "The Activity tab: a `Timeline` with one group per day, newest first, each event with its marker, actor and time (ticket opened, replied, merged, rated, solved).",
+      "file": "variants/activity.vue"
+    },
+    {
+      "name": "Notes",
+      "summary": "The Notes tab: the internal notes agents left on the customer as a `MessageThread` of notes, oldest first, then the Add a note field and the Add note button.",
+      "file": "variants/notes.vue"
+    },
+    {
+      "name": "NoTickets",
+      "summary": "A customer created today: no phone and no tags, No ratings yet, the Tickets tab showing the No tickets yet empty state with New ticket, and one activity event.",
+      "file": "variants/no-tickets.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the customer loads: the Customer title with skeletons for the avatar and organization, the actions disabled, skeleton values in the details, and skeleton rows in the tickets table.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The customer failed to load: the Customer title with no actions and a danger `Alert` with Retry in place of the details and tabs.",
+      "file": "variants/error.vue"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "component": "recognition-marquee-section",
+  "title": "Components/Marketing/Sections/RecognitionMarqueeSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the analyst-recognitions page places it: the eyebrow and headline above a framed strip of seven signed recognitions, each marked by its firm logo. A band with no items renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The seven recognitions Home runs, at twelve seconds per card. Each firm logo has a reversed file for dark and a colour file for light; G2 uses one colour file on both.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

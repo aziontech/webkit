@@ -1,0 +1,583 @@
+import { fireEvent, render } from '@testing-library/vue'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { page, userEvent } from 'vitest/browser'
+import { nextTick } from 'vue'
+
+import { expectNoA11yViolations } from '../../../test/axe'
+import MediaTabs, { type MediaTabsItem } from './media-tabs.vue'
+
+const TESTID = 'media-tabs'
+
+const PIXEL = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+
+const ITEMS: MediaTabsItem[] = [
+  {
+    title: 'Run AI models close to users',
+    description: 'Execute models across hundreds of locations with median latency under 30 ms.',
+    src: PIXEL,
+    alt: 'Inference running at the locations closest to each user'
+  },
+  {
+    title: 'Keep every inference accounted for',
+    description: 'Meter tokens, latency and cost per model as the traffic happens.',
+    src: PIXEL,
+    alt: 'Token and latency counters updating as requests arrive'
+  },
+  {
+    title: 'Ship a model the way you ship code',
+    description: 'One command puts a new revision in every location at once.',
+    src: PIXEL,
+    alt: 'A model revision rolling out across the platform'
+  }
+]
+
+const INTERVAL = 5000
+
+function rowsOf(container: HTMLElement): globalThis.HTMLLIElement[] {
+  const list = container.querySelector('ul')
+  return list ? ([...list.children] as globalThis.HTMLLIElement[]) : []
+}
+
+function activeTitles(container: HTMLElement): string[] {
+  return rowsOf(container)
+    .filter((row) => row.getAttribute('data-active') !== null)
+    .map((row) => row.querySelector('button')?.textContent?.trim() ?? '')
+}
+
+afterEach(() => {
+  vi.useRealTimers()
+})
+
+describe('MediaTabs', () => {
+  beforeEach(async () => {
+    await page.viewport(1280, 800)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(true))
+  })
+
+  it('does not autoplay while the media stacks under the rows (below lg)', async () => {
+    await page.viewport(390, 844)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(false))
+    const { getByTestId, queryByRole } = render(MediaTabs, { props: { items: ITEMS } })
+    await nextTick()
+    expect(getByTestId(TESTID).getAttribute('data-autoplay')).toBeNull()
+    expect(queryByRole('button', { name: 'Pause rotation' })).toBeNull()
+  })
+
+  it('renders the band under the default testid', () => {
+    const { getByTestId } = render(MediaTabs, { props: { items: ITEMS } })
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+  })
+
+  it('lets a consumer data-testid win over the fallback', () => {
+    const { getByTestId, queryByTestId } = render(MediaTabs, {
+      props: { items: ITEMS },
+      attrs: { 'data-testid': 'platform-claims' }
+    })
+
+    expect(getByTestId('platform-claims')).toBeInTheDocument()
+    expect(queryByTestId(TESTID)).toBeNull()
+  })
+
+  it('renders one row tab per item, carrying its title', () => {
+    const { getAllByRole } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+    const buttons = getAllByRole('tab').filter((button) => button.closest('ul'))
+
+    expect(buttons).toHaveLength(ITEMS.length)
+    expect(buttons.map((button) => button.textContent?.trim())).toEqual(
+      ITEMS.map((item) => item.title)
+    )
+  })
+
+  it('renders every description as text', () => {
+    const { getByText } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+
+    for (const item of ITEMS) {
+      expect(getByText(item.description)).toBeInTheDocument()
+    }
+  })
+
+  it('opens on the first tab', () => {
+    const { container, getAllByRole } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
+    expect(getAllByRole('tab')[0].getAttribute('aria-selected')).toBe('true')
+    expect(getAllByRole('tab')[1].getAttribute('aria-selected')).toBe('false')
+  })
+
+  it('ties each tab to the medium it shows, as a tablist of tabs over labelled tabpanels', () => {
+    const { getByRole, getAllByRole, container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+    const tabs = getAllByRole('tab')
+
+    expect(getByRole('tablist').getAttribute('aria-orientation')).toBe('vertical')
+    expect(tabs.map((tab) => tab.getAttribute('tabindex'))).toEqual(['0', '-1', '-1'])
+    tabs.forEach((tab) => {
+      const panel = container.querySelector(`#${CSS.escape(tab.getAttribute('aria-controls')!)}`)
+      expect(panel?.getAttribute('role')).toBe('tabpanel')
+      expect(panel?.getAttribute('aria-labelledby')).toBe(tab.id)
+    })
+    expect(getByRole('tabpanel')).toHaveAccessibleName(ITEMS[0].title)
+  })
+
+  it('moves between tabs with the arrow keys, Home and End', async () => {
+    const { getAllByRole } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false, selectOn: 'click' }
+    })
+    const tabs = () => getAllByRole('tab')
+
+    tabs()[0].focus()
+    await userEvent.keyboard('{ArrowDown}')
+    await vi.waitFor(() => expect(document.activeElement).toBe(tabs()[1]))
+    expect(tabs()[1].getAttribute('aria-selected')).toBe('true')
+    await userEvent.keyboard('{End}')
+    await vi.waitFor(() => expect(document.activeElement).toBe(tabs()[2]))
+    await userEvent.keyboard('{ArrowDown}')
+    await vi.waitFor(() => expect(document.activeElement).toBe(tabs()[0]))
+  })
+
+  it('makes each stacked row a disclosure of its inline medium below lg', async () => {
+    await page.viewport(390, 844)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(false))
+    const { getAllByRole, queryByRole, container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+    await nextTick()
+    const rows = getAllByRole('button')
+
+    expect(queryByRole('tablist')).toBeNull()
+    expect(rows.map((row) => row.getAttribute('aria-expanded'))).toEqual(['true', 'false', 'false'])
+    const media = container.querySelector(`#${CSS.escape(rows[0].getAttribute('aria-controls')!)}`)
+    expect(media?.querySelector('img')).not.toBeNull()
+    await expectNoA11yViolations(container)
+  })
+
+  it('keeps one copy of the media once mounted: the inline medium below lg, the side panels from lg', async () => {
+    const narrow = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+    await nextTick()
+    expect(narrow.container.querySelectorAll('[role="tabpanel"]')).toHaveLength(ITEMS.length)
+    expect(narrow.container.querySelector('[id*="-row-media-"]')).toBeNull()
+    narrow.unmount()
+
+    await page.viewport(390, 844)
+    await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(false))
+    const { container } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+    await nextTick()
+
+    expect(container.querySelectorAll('[role="tabpanel"]')).toHaveLength(0)
+    expect(container.querySelectorAll('img')).toHaveLength(1)
+  })
+
+  it('carries the size and selectOn tokens as data attributes', () => {
+    const { getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false, size: 'large', selectOn: 'click' }
+    })
+    const root = getByTestId(TESTID)
+
+    expect(root.getAttribute('data-size')).toBe('large')
+    expect(root.getAttribute('data-select-on')).toBe('click')
+  })
+
+  it('defaults the size to medium', () => {
+    const { getByTestId } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+
+    expect(getByTestId(TESTID).getAttribute('data-size')).toBe('medium')
+  })
+
+  it('moves the active tab to the one a reader clicks', async () => {
+    const { container, getAllByRole } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+
+    await fireEvent.click(getAllByRole('tab')[2])
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[2].title])
+    expect(getAllByRole('tab')[2].getAttribute('aria-selected')).toBe('true')
+    expect(getAllByRole('tab')[0].getAttribute('aria-selected')).toBe('false')
+  })
+
+  it('emits update:modelValue with the index and no removed tab-change', async () => {
+    const { getAllByRole, emitted } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+
+    await fireEvent.click(getAllByRole('tab')[1])
+
+    const calls = emitted()['update:modelValue'] as unknown[][]
+    expect(calls).toHaveLength(1)
+    expect(calls[0][0]).toBe(1)
+    expect(emitted()['tab-change']).toBeUndefined()
+  })
+
+  it('does not emit update:modelValue when the clicked tab is already the active one', async () => {
+    const { getAllByRole, emitted } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+
+    await fireEvent.click(getAllByRole('tab')[0])
+
+    expect(emitted()['update:modelValue']).toBeUndefined()
+  })
+
+  it('moves the selection on hover when selectOn is hover', async () => {
+    const { container, emitted } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false, selectOn: 'hover' }
+    })
+
+    await fireEvent.pointerEnter(rowsOf(container as HTMLElement)[2])
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[2].title])
+    expect(emitted()['update:modelValue']).toHaveLength(1)
+  })
+
+  it('leaves the selection alone on hover when selectOn is click', async () => {
+    const { container, emitted } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false, selectOn: 'click' }
+    })
+
+    await fireEvent.pointerEnter(rowsOf(container as HTMLElement)[2])
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
+    expect(emitted()['update:modelValue']).toBeUndefined()
+  })
+
+  it('still selects on click when selectOn is click', async () => {
+    const { container, getAllByRole } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false, selectOn: 'click' }
+    })
+
+    await fireEvent.click(getAllByRole('tab')[1])
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[1].title])
+  })
+
+  it('offers a pause control while autoplay runs that stops and resumes the rotation', async () => {
+    vi.useFakeTimers()
+    const { container, getByRole, getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+
+    const control = getByRole('button', { name: 'Pause rotation' })
+    await fireEvent.click(control)
+    expect(getByRole('button', { name: 'Resume rotation' })).toBe(control)
+    expect(getByTestId(TESTID)).toHaveAttribute('data-paused')
+
+    vi.advanceTimersByTime(INTERVAL * 2)
+    await nextTick()
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
+
+    await fireEvent.click(control)
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[1].title])
+  })
+
+  it('renders no pause control when autoplay is off', () => {
+    const { queryByRole } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+    expect(queryByRole('button', { name: 'Pause rotation' })).toBeNull()
+  })
+
+  it('writes the shown tab back through v-model on a click and on an autoplay tick', async () => {
+    vi.useFakeTimers()
+    const { emitted, getAllByRole } = render(MediaTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+    expect(emitted()['update:modelValue']).toEqual([[1]])
+
+    await fireEvent.click(getAllByRole('tab')[2])
+    expect(emitted()['update:modelValue']).toEqual([[1], [2]])
+  })
+
+  it('opens on the tab a bound modelValue names', () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, modelValue: 2, autoplay: false }
+    })
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[2].title])
+  })
+
+  it('marks a running band with data-autoplay', () => {
+    const { getByTestId } = render(MediaTabs, { props: { items: ITEMS } })
+
+    expect(getByTestId(TESTID).getAttribute('data-autoplay')).not.toBeNull()
+  })
+
+  it('advances to the next tab once the interval elapses', async () => {
+    vi.useFakeTimers()
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
+
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[1].title])
+  })
+
+  it('wraps from the last tab back to the first', async () => {
+    vi.useFakeTimers()
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+
+    vi.advanceTimersByTime(INTERVAL * ITEMS.length)
+    await nextTick()
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
+  })
+
+  it('never moves on its own when autoplay is off', async () => {
+    vi.useFakeTimers()
+    const { container, getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false, autoplayInterval: INTERVAL }
+    })
+
+    expect(getByTestId(TESTID).getAttribute('data-autoplay')).toBeNull()
+
+    vi.advanceTimersByTime(INTERVAL * 3)
+    await nextTick()
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
+  })
+
+  it('keeps autoplay running after a click and restarts the count from the clicked tab', async () => {
+    vi.useFakeTimers()
+    const { container, getAllByRole, getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+
+    await fireEvent.click(getAllByRole('tab')[1])
+
+    expect(getByTestId(TESTID).getAttribute('data-autoplay')).not.toBeNull()
+
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[2].title])
+  })
+
+  it('keeps the progress moving after a click while the pointer stays on the band', async () => {
+    vi.useFakeTimers()
+    const { container, getAllByRole, getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+    const root = getByTestId(TESTID)
+    const hairline = () => container.querySelector('[data-progress]') as HTMLElement
+
+    await fireEvent.pointerEnter(root)
+    await fireEvent.click(getAllByRole('tab')[1])
+    expect(root.getAttribute('data-autoplay')).not.toBeNull()
+
+    vi.advanceTimersByTime(INTERVAL / 2)
+    await nextTick()
+
+    expect(hairline()?.style.animationPlayState).toBe('')
+    expect(hairline().style.animationDuration).toBe(`${INTERVAL}ms`)
+  })
+
+  it('pauses autoplay while the pointer rests on the band, and resumes on leave', async () => {
+    vi.useFakeTimers()
+    const { getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+    const root = getByTestId(TESTID)
+
+    await fireEvent.pointerEnter(root)
+    expect(root.getAttribute('data-autoplay')).toBeNull()
+
+    await fireEvent.pointerLeave(root)
+    expect(root.getAttribute('data-autoplay')).not.toBeNull()
+  })
+
+  it('draws the autoplay hairline over the active row only', () => {
+    const { container } = render(MediaTabs, { props: { items: ITEMS } })
+    const hairlines = container.querySelectorAll('[data-progress]')
+
+    expect(hairlines).toHaveLength(1)
+  })
+
+  it('draws no hairline when showProgress is off', () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, showProgress: false }
+    })
+
+    expect(container.querySelector('[data-progress]')).toBeNull()
+  })
+
+  it('renders nothing when there are no items', () => {
+    const { container, getByTestId } = render(MediaTabs, { props: { items: [] } })
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+    expect(container.querySelector('button')).toBeNull()
+    expect(container.querySelector('img')).toBeNull()
+    expect(container.querySelector('ul')).toBeNull()
+  })
+
+  it('names every medium after its tab and hides the inactive ones', () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+    const images = [...container.querySelectorAll('img')]
+    const hidden = [...container.querySelectorAll('[aria-hidden="true"] img')]
+
+    expect(images.length).toBeGreaterThan(0)
+    for (const image of images) {
+      expect(ITEMS.map((item) => item.alt)).toContain(image.getAttribute('alt'))
+    }
+    expect(hidden).toHaveLength(ITEMS.length - 1)
+  })
+
+  it('takes the inactive media out of the tab order with inert', async () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false },
+      slots: { media: `<button type="button">Play {{ params.index }}</button>` }
+    })
+    const inertButtons = () =>
+      [...container.querySelectorAll('[inert] button')].map((button) => button.textContent)
+    const plays = [...container.querySelectorAll('button')].filter((button) =>
+      button.textContent?.startsWith('Play')
+    )
+
+    expect(plays.length).toBeGreaterThan(0)
+    expect(inertButtons()).not.toContain('Play 0')
+    expect(inertButtons()).toContain('Play 1')
+    for (const host of container.querySelectorAll('[inert]')) {
+      expect(host.getAttribute('aria-hidden')).toBe('true')
+    }
+
+    await fireEvent.click(rowsOf(container as HTMLElement)[1]!.querySelector('button')!)
+    await nextTick()
+    expect(inertButtons()).toContain('Play 0')
+    expect(inertButtons()).not.toContain('Play 1')
+  })
+
+  it('hands the media slot its item, index and active flag', () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false },
+      slots: {
+        media: `<p data-testid="scene" :data-active="params.active">{{ params.index }}:{{ params.item.title }}</p>`
+      }
+    })
+    const scenes = [...container.querySelectorAll('[data-testid="scene"]')]
+
+    expect(scenes.length).toBeGreaterThan(0)
+    expect(scenes.map((scene) => scene.textContent)).toContain(`0:${ITEMS[0].title}`)
+    expect(scenes.map((scene) => scene.textContent)).toContain(`2:${ITEMS[2].title}`)
+  })
+
+  it('has no a11y violations with a full band', async () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false }
+    })
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations while autoplay is running', async () => {
+    const { container } = render(MediaTabs, { props: { items: ITEMS } })
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('renders no more than three tabs', () => {
+    const items = [...ITEMS, { ...ITEMS[0], title: 'A fourth claim' }]
+    const { container } = render(MediaTabs, { props: { items, autoplay: false } })
+    expect(rowsOf(container as HTMLElement)).toHaveLength(3)
+    expect(container.textContent).not.toContain('A fourth claim')
+  })
+
+  it('defaults the tabs to the start of the media', () => {
+    const { getByTestId } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-tabs-side', 'start')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-orientation', 'vertical')
+  })
+
+  it.each([
+    ['start', 'vertical'],
+    ['end', 'vertical'],
+    ['top', 'horizontal'],
+    ['bottom', 'horizontal']
+  ] as const)('maps tabsSide %s to the root and the %s axis', (tabsSide, orientation) => {
+    const { getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, tabsSide, autoplay: false }
+    })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-tabs-side', tabsSide)
+    expect(getByTestId(TESTID)).toHaveAttribute('data-orientation', orientation)
+  })
+
+  it.each([
+    ['start', 3],
+    ['end', 3],
+    ['top', 5],
+    ['bottom', 5]
+  ] as const)('renders at most %s-side limit of %s tabs', (tabsSide, limit) => {
+    const items = Array.from({ length: 6 }, (_, index) => ({
+      ...ITEMS[0],
+      title: `Use case ${index + 1}`
+    }))
+    const { container } = render(MediaTabs, { props: { items, tabsSide, autoplay: false } })
+
+    expect(rowsOf(container as HTMLElement)).toHaveLength(limit)
+    expect(container.textContent).not.toContain(`Use case ${limit + 1}`)
+  })
+
+  it.each(['top', 'bottom'] as const)(
+    'selects a tab on click and emits its index when the tabs are on the %s',
+    async (tabsSide) => {
+      const items = Array.from({ length: 5 }, (_, index) => ({
+        ...ITEMS[0],
+        title: `Use case ${index + 1}`
+      }))
+      const { container, emitted } = render(MediaTabs, {
+        props: { items, tabsSide, autoplay: false }
+      })
+
+      await fireEvent.click(
+        rowsOf(container as HTMLElement)[4].querySelector('button') as HTMLElement
+      )
+
+      expect(activeTitles(container as HTMLElement)).toEqual(['Use case 5'])
+      expect(emitted()['update:modelValue']).toHaveLength(1)
+      expect(emitted<unknown[]>()['update:modelValue'][0][0]).toBe(4)
+    }
+  )
+
+  it.each(['start', 'end', 'top', 'bottom'] as const)(
+    'has no a11y violations with the tabs on the %s',
+    async (tabsSide) => {
+      const { container } = render(MediaTabs, {
+        props: { items: ITEMS, tabsSide, autoplay: false }
+      })
+
+      await expectNoA11yViolations(container)
+    }
+  )
+
+  it('grounds the media column on the texture it is given', () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, autoplay: false, texture: 'grid', textureSize: 'small' }
+    })
+    const ground = container.querySelector('[data-testid="texture"]')
+    expect(ground?.getAttribute('data-variant')).toBe('grid')
+    expect(ground?.getAttribute('data-size')).toBe('small')
+  })
+
+  it('leaves the media column bare by default', () => {
+    const { container } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+    const ground = container.querySelector('[data-testid="texture"]')
+    expect(ground?.getAttribute('data-variant')).toBe('none')
+  })
+})

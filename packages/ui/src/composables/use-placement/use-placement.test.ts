@@ -1,0 +1,510 @@
+import { render } from '@testing-library/vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, nextTick, ref, Teleport } from 'vue'
+
+import {
+  computePlacement,
+  type ComputePlacementInput,
+  getClippingBoundary,
+  type Rect,
+  usePlacement
+} from './index'
+
+const rect = (left: number, top: number, width: number, height: number): Rect => ({
+  left,
+  top,
+  width,
+  height,
+  right: left + width,
+  bottom: top + height
+})
+
+const VIEWPORT = rect(0, 0, 1000, 600)
+
+const base = (overrides: Partial<ComputePlacementInput>): ComputePlacementInput => ({
+  triggerRect: rect(100, 100, 200, 40),
+  panelSize: { width: 240, height: 200 },
+  boundary: VIEWPORT,
+  side: 'bottom',
+  align: 'start',
+  flip: true,
+  sideOffset: 4,
+  collisionPadding: 8,
+  ...overrides
+})
+
+describe('computePlacement (pure geometry)', () => {
+  it('keeps the preferred side when it fits and reports no cap', () => {
+    const r = computePlacement(base({}))
+    expect([r.side, r.align]).toEqual(['bottom', 'start'])
+    expect(r.top).toBe(144)
+    expect(r.left).toBe(100)
+    expect(r.maxHeight).toBeNull()
+    expect(r.maxWidth).toBeNull()
+  })
+
+  it('flips to the opposite side (alignment preserved) when only that side fits', () => {
+    // Trigger 100px from the bottom edge: a 200px panel fits above, not below.
+    const r = computePlacement(base({ triggerRect: rect(100, 460, 200, 40) }))
+    expect([r.side, r.align]).toEqual(['top', 'start'])
+    expect(r.top).toBe(460 - 200 - 4)
+    expect(r.maxHeight).toBeNull()
+  })
+
+  it('shrinks on the roomier side when neither side fits, never overlapping the trigger', () => {
+    // 300 above, 260 below: a 400px panel fits nowhere, so it takes the roomier side.
+    const trigger = rect(100, 300, 200, 40)
+    const r = computePlacement(
+      base({ triggerRect: trigger, panelSize: { width: 240, height: 400 } })
+    )
+    expect([r.side, r.align]).toEqual(['top', 'start'])
+    expect(r.maxHeight).toBe(300 - 4 - 8)
+    expect(r.height).toBe(r.maxHeight)
+    expect(r.top).toBe(8)
+    expect(r.top + r.height).toBeLessThanOrEqual(trigger.top - 4)
+  })
+
+  it('caps to the free space below when below is the roomier side', () => {
+    const trigger = rect(100, 60, 200, 40) // 60 above, 500 below
+    const r = computePlacement(
+      base({ triggerRect: trigger, panelSize: { width: 240, height: 900 } })
+    )
+    expect([r.side, r.align]).toEqual(['bottom', 'start'])
+    expect(r.top).toBe(104)
+    expect(r.maxHeight).toBe(600 - 104 - 8)
+    expect(r.top + r.height).toBe(600 - 8)
+  })
+
+  it('side=auto picks the first candidate that fits, in preference order', () => {
+    const r = computePlacement(
+      base({
+        side: 'auto',
+        autoSides: ['bottom', 'top'],
+        triggerRect: rect(100, 460, 200, 40)
+      })
+    )
+    expect([r.side, r.align]).toEqual(['top', 'start'])
+  })
+
+  it('a sub-menu on a phone opens below its row when neither side has room, inside the screen', () => {
+    const r = computePlacement(
+      base({
+        boundary: rect(0, 0, 390, 844),
+        triggerRect: rect(9, 137, 254, 40),
+        panelSize: { width: 254, height: 160 },
+        side: 'auto',
+        autoSides: ['end', 'start', 'bottom', 'top']
+      })
+    )
+    expect(r.side).toBe('bottom')
+    expect(r.left).toBeGreaterThanOrEqual(8)
+    expect(r.left + r.width).toBeLessThanOrEqual(382)
+    expect(r.width).toBe(254)
+  })
+
+  it('shifts the panel back inside a boundary narrower than the viewport', () => {
+    const boundary = rect(0, 0, 300, 600)
+    const r = computePlacement(base({ boundary, triggerRect: rect(200, 100, 80, 40) }))
+    expect(r.left + r.width).toBeLessThanOrEqual(300 - 8)
+    expect(r.left).toBeGreaterThanOrEqual(8)
+  })
+
+  it('bounds the main axis by the boundary, not the viewport', () => {
+    const boundary = rect(0, 0, 1000, 300)
+    const r = computePlacement(base({ boundary, triggerRect: rect(100, 200, 200, 40) }))
+    // 200 above, 60 below inside the boundary: flips up and caps to the space above.
+    expect([r.side, r.align]).toEqual(['top', 'start'])
+    expect(r.maxHeight).toBe(200 - 4 - 8)
+    expect(r.top).toBe(8)
+  })
+
+  it('matchTriggerWidth keeps the panel exactly under the trigger, even at the edge', () => {
+    const trigger = rect(0, 100, 1000, 40)
+    const r = computePlacement(
+      base({
+        triggerRect: trigger,
+        panelSize: { width: 1000, height: 100 },
+        matchTriggerWidth: true
+      })
+    )
+    expect(r.left).toBe(0)
+    expect(r.width).toBe(1000)
+    expect(r.maxWidth).toBeNull()
+  })
+
+  it('applies a per-axis collision padding to that axis only', () => {
+    // A sheet pinned to a page column: 300px of horizontal inset, 8px vertically.
+    const r = computePlacement(
+      base({
+        triggerRect: rect(320, 20, 120, 40),
+        panelSize: { width: 400, height: 200 },
+        collisionPadding: { x: 300, y: 8 }
+      })
+    )
+    // Horizontal: shifted back to the column's leading edge.
+    expect(r.left).toBe(300)
+    // Vertical: still anchored to the trigger, not pushed down by the horizontal inset.
+    expect(r.top).toBe(64)
+    expect(r.maxHeight).toBeNull()
+  })
+
+  it('caps the panel across the axis its own padding leaves, not the other one', () => {
+    const r = computePlacement(
+      base({
+        triggerRect: rect(320, 20, 120, 40),
+        panelSize: { width: 900, height: 200 },
+        collisionPadding: { x: 300, y: 8 }
+      })
+    )
+    expect(r.width).toBe(VIEWPORT.width - 2 * 300)
+    expect(r.maxWidth).toBe(VIEWPORT.width - 2 * 300)
+    expect(r.height).toBe(200)
+    expect(r.maxHeight).toBeNull()
+  })
+
+  it('a scalar collision padding still insets both axes', () => {
+    const r = computePlacement(base({ triggerRect: rect(0, 20, 120, 40), collisionPadding: 24 }))
+    expect(r.left).toBe(24)
+    expect(r.top).toBe(64)
+  })
+})
+
+describe('computePlacement (text direction)', () => {
+  const trigger = rect(400, 100, 200, 40)
+
+  it('aligns start to the left edge in ltr and to the right edge in rtl', () => {
+    const ltr = computePlacement(base({ triggerRect: trigger }))
+    const rtl = computePlacement(base({ triggerRect: trigger, dir: 'rtl' }))
+    expect(ltr.left).toBe(trigger.left)
+    expect(rtl.left + rtl.width).toBe(trigger.right)
+    expect([rtl.side, rtl.align]).toEqual(['bottom', 'start'])
+    expect(rtl.origin).toBe('top right')
+  })
+
+  it('places side=start on the left in ltr and on the right in rtl', () => {
+    const ltr = computePlacement(base({ triggerRect: trigger, side: 'start', align: 'center' }))
+    const rtl = computePlacement(
+      base({ triggerRect: trigger, side: 'start', align: 'center', dir: 'rtl' })
+    )
+    expect(ltr.physicalSide).toBe('left')
+    expect(rtl.physicalSide).toBe('right')
+    expect(rtl.side).toBe('start')
+    expect(rtl.left).toBe(trigger.right + 4)
+  })
+
+  it('flips side=end to start in the logical vocabulary when only the other side fits', () => {
+    const nearLeft = rect(200, 100, 200, 40)
+    const r = computePlacement(base({ triggerRect: nearLeft, side: 'end', dir: 'rtl' }))
+    expect(r.physicalSide).toBe('right')
+    expect(r.side).toBe('start')
+  })
+})
+
+describe('getClippingBoundary', () => {
+  afterEach(() => {
+    document.body.querySelectorAll('[data-fixture]').forEach((el) => el.remove())
+  })
+
+  const mount = (html: string) => {
+    const host = document.createElement('div')
+    host.setAttribute('data-fixture', '')
+    host.innerHTML = html
+    document.body.appendChild(host)
+    return host.querySelector('button') as HTMLElement
+  }
+  const viewport = () => ({ width: window.innerWidth, height: window.innerHeight })
+
+  it('is the scrolling ancestor intersected with the viewport, per overflowing axis', () => {
+    const trigger = mount(`
+      <div style="position:fixed;top:100px;left:50px;width:300px;height:200px;overflow:auto">
+        <div style="height:1000px"><button type="button">t</button></div>
+      </div>`)
+    const scroller = trigger.parentElement!.parentElement as HTMLElement
+    const b = getClippingBoundary(trigger, viewport())
+    const s = scroller.getBoundingClientRect()
+    expect(b.top).toBeCloseTo(s.top, 0)
+    expect(b.bottom).toBeCloseTo(s.top + scroller.clientHeight, 0)
+    // Only the vertical axis overflows, so horizontally the viewport still bounds.
+    expect(b.left).toBe(0)
+    expect(b.right).toBe(window.innerWidth)
+  })
+
+  it('ignores overflow:hidden ancestors', () => {
+    const trigger = mount(`
+      <div style="position:fixed;top:100px;left:50px;width:300px;height:40px;overflow:hidden">
+        <div style="height:1000px"><button type="button">t</button></div>
+      </div>`)
+    const b = getClippingBoundary(trigger, viewport())
+    expect(b).toEqual({ ...rect(0, 0, window.innerWidth, window.innerHeight) })
+  })
+
+  it('ignores an overflow:auto ancestor whose content does not overflow', () => {
+    const trigger = mount(`
+      <div style="position:fixed;top:100px;left:50px;width:300px;height:400px;overflow:auto">
+        <div style="height:100px"><button type="button">t</button></div>
+      </div>`)
+    const b = getClippingBoundary(trigger, viewport())
+    expect(b.height).toBe(window.innerHeight)
+    expect(b.width).toBe(window.innerWidth)
+  })
+})
+
+describe('usePlacement (composable, real layout)', () => {
+  afterEach(() => {
+    document.body.querySelectorAll('[data-testid="up-panel"]').forEach((el) => el.remove())
+  })
+
+  const Host = defineComponent({
+    props: {
+      rows: { type: Number, default: 100 },
+      triggerStyle: {
+        type: String,
+        default: 'position:fixed;top:8px;left:8px;width:180px;height:32px'
+      }
+    },
+    setup(props) {
+      const triggerRef = ref<HTMLElement | null>(null)
+      const panelRef = ref<HTMLElement | null>(null)
+      const isOpen = ref(true)
+      const placement = usePlacement({
+        triggerRef,
+        panelRef,
+        isOpen,
+        side: 'bottom',
+        align: 'start',
+        matchTriggerWidth: true
+      })
+      return () => [
+        h('button', { ref: triggerRef, type: 'button', style: props.triggerStyle }, 'trigger'),
+        h(Teleport, { to: 'body' }, [
+          h(
+            'div',
+            {
+              ref: panelRef,
+              'data-testid': 'up-panel',
+              style: { ...placement.panelStyle.value, overflowY: 'auto' }
+            },
+            Array.from({ length: props.rows }, (_, i) =>
+              h('div', { key: i, style: 'height:24px' }, `row ${i}`)
+            )
+          )
+        ])
+      ]
+    }
+  })
+
+  const panel = () => document.body.querySelector<HTMLElement>('[data-testid="up-panel"]')!
+
+  it('caps a panel taller than the space below and keeps it inside the viewport', async () => {
+    const { getByText } = render(Host)
+    await nextTick()
+    await nextTick()
+    const trigger = getByText('trigger')
+    const p = panel()
+    const pr = p.getBoundingClientRect()
+    const tr = trigger.getBoundingClientRect()
+
+    expect(p.style.maxHeight).not.toBe('')
+    expect(pr.top).toBeGreaterThanOrEqual(tr.bottom)
+    expect(pr.bottom).toBeLessThanOrEqual(window.innerHeight - 8 + 1)
+    expect(Math.abs(pr.width - tr.width)).toBeLessThanOrEqual(1)
+    expect(p.scrollHeight).toBeGreaterThan(p.clientHeight)
+  })
+
+  it('reaches the same cap on a repeated update (no drift from measuring the shrunk box)', async () => {
+    render(Host)
+    await nextTick()
+    await nextTick()
+    const first = panel().style.maxHeight
+    // Drive a third pass the way a resize would.
+    window.dispatchEvent(new Event('resize'))
+    await nextTick()
+    expect(panel().style.maxHeight).toBe(first)
+    expect(first).not.toBe('')
+  })
+
+  it('flips above the trigger when only the top fits', async () => {
+    render(Host, {
+      props: { rows: 6, triggerStyle: 'position:fixed;bottom:8px;left:8px;width:180px;height:32px' }
+    })
+    await nextTick()
+    await nextTick()
+    const tr = document.querySelector('button')!.getBoundingClientRect()
+    const pr = panel().getBoundingClientRect()
+    expect(pr.bottom).toBeLessThanOrEqual(tr.top)
+    expect(panel().style.maxHeight).toBe('')
+  })
+  it('re-anchors on scroll when a controlled open refuses the dismiss', async () => {
+    const Pinned = defineComponent({
+      setup() {
+        const triggerRef = ref<HTMLElement | null>(null)
+        const panelRef = ref<HTMLElement | null>(null)
+        const isOpen = ref(true)
+        const dismissed = ref(0)
+        const placement = usePlacement({
+          triggerRef,
+          panelRef,
+          isOpen,
+          side: 'bottom',
+          align: 'start',
+          onDismiss: () => {
+            dismissed.value += 1
+          }
+        })
+        return () =>
+          h('div', { style: 'height:3000px' }, [
+            h(
+              'button',
+              { ref: triggerRef, type: 'button', style: 'margin-top:40px;width:120px;height:32px' },
+              'trigger'
+            ),
+            h('output', { 'data-testid': 'up-dismissed' }, String(dismissed.value)),
+            h(Teleport, { to: 'body' }, [
+              h(
+                'div',
+                {
+                  ref: panelRef,
+                  'data-testid': 'up-panel',
+                  style: { ...placement.panelStyle.value, height: '80px', width: '120px' }
+                },
+                'panel'
+              )
+            ])
+          ])
+      }
+    })
+    const { getByText, getByTestId } = render(Pinned)
+    await nextTick()
+    await nextTick()
+    window.scrollTo(0, 24)
+    document.dispatchEvent(new Event('scroll'))
+    await nextTick()
+    await nextTick()
+    const tr = getByText('trigger').getBoundingClientRect()
+    const pr = panel().getBoundingClientRect()
+    expect(getByTestId('up-dismissed').textContent).toBe('1')
+    expect(Math.abs(pr.top - tr.bottom)).toBeLessThanOrEqual(1 + 4)
+    window.scrollTo(0, 0)
+  })
+
+  const ScrollHost = defineComponent({
+    setup() {
+      const triggerRef = ref<HTMLElement | null>(null)
+      const panelRef = ref<HTMLElement | null>(null)
+      const isOpen = ref(true)
+      const dismissed = ref(0)
+      const placement = usePlacement({
+        triggerRef,
+        panelRef,
+        isOpen,
+        side: 'bottom',
+        align: 'start',
+        onDismiss: () => {
+          dismissed.value += 1
+        }
+      })
+      return () =>
+        h('div', [
+          h('div', { 'data-testid': 'up-ancestor', style: 'height:120px;overflow:auto' }, [
+            h('div', { style: 'height:600px' }, [
+              h(
+                'button',
+                { ref: triggerRef, type: 'button', style: 'width:120px;height:32px' },
+                'trigger'
+              )
+            ])
+          ]),
+          h('div', { 'data-testid': 'up-unrelated', style: 'height:120px;overflow:auto' }, [
+            h('div', { style: 'height:600px' }, 'list')
+          ]),
+          h('output', { 'data-testid': 'up-dismissed' }, String(dismissed.value)),
+          h(Teleport, { to: 'body' }, [
+            h(
+              'div',
+              {
+                ref: panelRef,
+                'data-testid': 'up-panel',
+                style: { ...placement.panelStyle.value, height: '80px', width: '120px' }
+              },
+              'panel'
+            )
+          ])
+        ])
+    }
+  })
+
+  const scrollBy = async (el: HTMLElement, top: number) => {
+    el.scrollTop = top
+    el.dispatchEvent(new Event('scroll'))
+    await nextTick()
+  }
+
+  it('ignores the scroll of a scroller that does not hold the trigger', async () => {
+    const { getByTestId } = render(ScrollHost)
+    await nextTick()
+    await nextTick()
+    await scrollBy(getByTestId('up-unrelated'), 200)
+    expect(getByTestId('up-unrelated').scrollTop).toBeGreaterThan(0)
+    expect(getByTestId('up-dismissed').textContent).toBe('0')
+  })
+
+  it('ignores a scroll event on an ancestor that leaves the trigger in place', async () => {
+    const { getByTestId } = render(ScrollHost)
+    await nextTick()
+    await nextTick()
+    await scrollBy(getByTestId('up-ancestor'), 0)
+    document.dispatchEvent(new Event('scroll'))
+    await nextTick()
+    expect(getByTestId('up-dismissed').textContent).toBe('0')
+  })
+
+  it('dismisses when an ancestor scroll moves the trigger', async () => {
+    const { getByTestId } = render(ScrollHost)
+    await nextTick()
+    await nextTick()
+    await scrollBy(getByTestId('up-ancestor'), 40)
+    expect(getByTestId('up-dismissed').textContent).toBe('1')
+  })
+})
+
+describe('usePlacement listeners', () => {
+  it('adds the window resize and document scroll listeners only while open', async () => {
+    const addDoc = vi.spyOn(document, 'addEventListener')
+    const removeDoc = vi.spyOn(document, 'removeEventListener')
+    const addWin = vi.spyOn(window, 'addEventListener')
+    const isOpen = ref(false)
+    const Closed = defineComponent({
+      setup() {
+        const triggerRef = ref<HTMLElement | null>(null)
+        const panelRef = ref<HTMLElement | null>(null)
+        usePlacement({ triggerRef, panelRef, isOpen, side: 'bottom', align: 'start' })
+        return () => [
+          h('button', { ref: triggerRef, type: 'button' }, 'trigger'),
+          isOpen.value ? h('div', { ref: panelRef }, 'panel') : null
+        ]
+      }
+    })
+    const scrolls = (spy: typeof addDoc) =>
+      spy.mock.calls.filter(([type]) => type === 'scroll').length
+    const resizes = () => addWin.mock.calls.filter(([type]) => type === 'resize').length
+    try {
+      const { unmount } = render(Closed)
+      await nextTick()
+      expect(scrolls(addDoc)).toBe(0)
+      expect(resizes()).toBe(0)
+      isOpen.value = true
+      await nextTick()
+      expect(scrolls(addDoc)).toBe(1)
+      expect(resizes()).toBe(1)
+      const scrollOptions = addDoc.mock.calls.find(([type]) => type === 'scroll')?.[2]
+      expect(scrollOptions).toEqual({ capture: true, passive: true })
+      isOpen.value = false
+      await nextTick()
+      expect(scrolls(removeDoc)).toBe(1)
+      unmount()
+      expect(scrolls(addDoc)).toBe(1)
+    } finally {
+      vi.restoreAllMocks()
+    }
+  })
+})

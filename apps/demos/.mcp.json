@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "azion-ui": {
+      "command": "npx",
+      "args": ["-y", "@aziontech/ui-mcp@^6"]
+    }
+  }
+}

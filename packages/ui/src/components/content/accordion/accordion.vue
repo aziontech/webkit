@@ -1,0 +1,158 @@
+<script setup lang="ts">
+  import { computed, onBeforeUnmount, provide, useAttrs, useId } from 'vue'
+
+  import {
+    type AccordionIconPosition,
+    AccordionInjectionKey,
+    type AccordionItemRegistration,
+    type AccordionSize,
+    type AccordionType,
+    type AccordionValue
+  } from './injection-key'
+
+  export type { AccordionValue } from './injection-key'
+
+  defineOptions({
+    name: 'Accordion',
+    inheritAttrs: false
+  })
+
+  export interface AccordionProps {
+    /** Whether one or multiple items can be open at the same time. */
+    type?: AccordionType
+    /** Initial open item(s) when uncontrolled. */
+    defaultValue?: AccordionValue
+    /** In single mode, lets the open item collapse so that no item is open. */
+    collapsible?: boolean
+    /** Size token; affects header height, padding, and typography. Provided to every item via context. */
+    size?: AccordionSize
+    /** Side of the header the chevron sits on. Provided to every item via context. */
+    iconPosition?: AccordionIconPosition
+  }
+
+  const props = withDefaults(defineProps<AccordionProps>(), {
+    type: 'single',
+    defaultValue: null,
+    collapsible: true,
+    size: 'medium',
+    iconPosition: 'trailing'
+  })
+
+  const model = defineModel<AccordionValue | undefined>({ default: undefined })
+
+  defineSlots<{
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const baseId = useId()
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'accordion')
+
+  const openValue = computed<AccordionValue>(() =>
+    model.value === undefined ? props.defaultValue : model.value
+  )
+
+  const setOpen = (next: AccordionValue) => {
+    model.value = next
+  }
+
+  const isOpen = (value: string): boolean => {
+    const current = openValue.value
+    if (Array.isArray(current)) return current.includes(value)
+    return current === value
+  }
+
+  const toggle = (value: string) => {
+    if (props.type === 'multiple') {
+      const current = Array.isArray(openValue.value) ? [...openValue.value] : []
+      const index = current.indexOf(value)
+      if (index === -1) current.push(value)
+      else current.splice(index, 1)
+      setOpen(current)
+      return
+    }
+
+    if (openValue.value === value) {
+      if (props.collapsible) setOpen(null)
+      return
+    }
+    setOpen(value)
+  }
+
+  const items = new Map<string, AccordionItemRegistration>()
+
+  const register = (registration: AccordionItemRegistration) => {
+    items.set(registration.value, registration)
+  }
+
+  const unregister = (value: string) => {
+    items.delete(value)
+  }
+
+  const domOrder = (a: AccordionItemRegistration, b: AccordionItemRegistration) => {
+    const first = a.el.value
+    const second = b.el.value
+    if (!first || !second) return 0
+    return first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+  }
+
+  const getEnabled = () => [...items.values()].filter((item) => !item.disabled).sort(domOrder)
+
+  const focusTrigger = (item: AccordionItemRegistration | undefined) => {
+    const trigger = item?.el.value?.querySelector<globalThis.HTMLButtonElement>('button')
+    trigger?.focus()
+  }
+
+  const focusSibling = (value: string, direction: 1 | -1) => {
+    const enabled = getEnabled()
+    if (!enabled.length) return
+    const currentIndex = enabled.findIndex((item) => item.value === value)
+    const startIndex = currentIndex === -1 ? 0 : currentIndex
+    const nextIndex = (startIndex + direction + enabled.length) % enabled.length
+    focusTrigger(enabled[nextIndex])
+  }
+
+  const focusEdge = (edge: 'first' | 'last') => {
+    const enabled = getEnabled()
+    if (!enabled.length) return
+    focusTrigger(edge === 'first' ? enabled[0] : enabled[enabled.length - 1])
+  }
+
+  const triggerId = (value: string) => `${baseId}-trigger-${value}`
+  const contentId = (value: string) => `${baseId}-content-${value}`
+
+  provide(AccordionInjectionKey, {
+    value: computed(() => openValue.value),
+    toggle,
+    isOpen,
+    type: computed(() => props.type),
+    collapsible: computed(() => props.collapsible),
+    size: computed(() => props.size),
+    iconPosition: computed(() => props.iconPosition),
+    register,
+    unregister,
+    focusSibling,
+    focusEdge,
+    triggerId,
+    contentId
+  })
+
+  onBeforeUnmount(() => {
+    items.clear()
+  })
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    :data-testid="testId"
+    data-orientation="vertical"
+    :data-type="type"
+    :data-size="size"
+    :data-icon-position="iconPosition"
+    class="flex w-full flex-col"
+  >
+    <slot />
+  </div>
+</template>

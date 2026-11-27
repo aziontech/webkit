@@ -1,0 +1,70 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "texture": "none",
+    "eyebrow": "Support",
+    "title": "Questions, answered",
+    "description": "What teams ask before they move a first workload."
+  },
+  "scenes": {
+    "scene": {
+      "component": "Accordion",
+      "props": {
+        "type": "single",
+        "collapsible": true,
+        "defaultValue": "overview"
+      },
+      "children": [
+        {
+          "component": "AccordionItem",
+          "props": {
+            "value": "overview"
+          },
+          "children": [
+            {
+              "component": "AccordionTrigger",
+              "children": ["What is Azion?"]
+            },
+            {
+              "component": "AccordionContent",
+              "children": ["Azion runs your code at the edge, close to users."]
+            }
+          ]
+        },
+        {
+          "component": "AccordionItem",
+          "props": {
+            "value": "pricing"
+          },
+          "children": [
+            {
+              "component": "AccordionTrigger",
+              "children": ["How does pricing work?"]
+            },
+            {
+              "component": "AccordionContent",
+              "children": ["Pay only for what you use, with no upfront cost."]
+            }
+          ]
+        },
+        {
+          "component": "AccordionItem",
+          "props": {
+            "value": "support"
+          },
+          "children": [
+            {
+              "component": "AccordionTrigger",
+              "children": ["Enterprise support"]
+            },
+            {
+              "component": "AccordionContent",
+              "children": ["Available on Business and Enterprise plans."]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+<script setup lang="ts">
+  import { computed, onBeforeUnmount, onMounted, useAttrs } from 'vue'
+
+  import { usePopoverContext } from '../composables/use-popover-context'
+
+  defineOptions({
+    name: 'PopoverDescription',
+    inheritAttrs: false
+  })
+
+  defineSlots<{
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const ctx = usePopoverContext()
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'popover-description'
+  )
+
+  onMounted(() => {
+    ctx.registerDescription()
+  })
+
+  onBeforeUnmount(() => {
+    ctx.unregisterDescription()
+  })
+</script>
+
+<template>
+  <p
+    v-bind="attrs"
+    :id="ctx.descriptionId"
+    :data-testid="testId"
+    class="text-body-xs text-(--text-muted)"
+  >
+    <slot />
+  </p>
+</template>

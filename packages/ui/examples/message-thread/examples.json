@@ -1,0 +1,36 @@
+{
+  "component": "message-thread",
+  "title": "Components/Content/MessageThread",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A support ticket: the customer's email with its recipients, an attachment and the quoted invoice behind the ellipsis toggle, a status event line, and the agent's reply with a Reply button and a More menu holding Forward.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "One item of each `type`: a public reply, an internal note on its warning band labelled Internal note, and a system event line.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Channels",
+      "summary": "One reply per `channel`: email, chat, phone, web form and API, each written beside its glyph.",
+      "file": "channels.vue"
+    },
+    {
+      "name": "Earlier messages",
+      "summary": "A ten-message thread whose middle six sit in a closed `MessageThread.Group`; Show 6 earlier messages reveals them and moves focus to the first.",
+      "file": "with-earlier-messages.vue"
+    },
+    {
+      "name": "Quoted text",
+      "summary": "An email reply whose quoted history starts closed, bound with `v-model:quoted-open`; the ellipsis toggle shows and hides it.",
+      "file": "with-quoted-text.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "`loading` shows three placeholder messages and marks the list busy while the ticket loads.",
+      "file": "loading.vue"
+    }
+  ]
+}

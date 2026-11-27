@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Ancestor segment rendered as a link with muted label text.",
+   "file": "examples/breadcrumb-item/default.vue"
+  },
+  {
+   "name": "Active",
+   "summary": "Active segment (the current page): rendered as a span with `aria-current=\"page\"` and default (non-muted) text.",
+   "file": "examples/breadcrumb-item/active.vue"
+  },
+  {
+   "name": "WithIcon",
+   "summary": "Segment with a leading icon before the label.",
+   "file": "examples/breadcrumb-item/with-icon.vue"
+  }
+ ]
+}

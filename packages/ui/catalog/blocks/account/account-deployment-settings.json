@@ -1,0 +1,30 @@
+{
+ "variants": [
+  {
+   "name": "UnsavedChanges",
+   "summary": "The binding policy default changed from Strict to Flexible: the SaveBar says You have unsaved changes. with Discard and Save; Save confirms with a toast and Discard puts the saved value back.",
+   "file": "blocks/account/account-deployment-settings/variants/unsaved-changes.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "An account with no service yet: All services shows a small EmptyState and the Deployment Settings table holds only Default.",
+   "file": "blocks/account/account-deployment-settings/variants/empty.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The first load: Skeletons in place of the default Selects and the services, and the table's loading rows.",
+   "file": "blocks/account/account-deployment-settings/variants/loading.vue"
+  }
+ ],
+ "sfcFile": "blocks/account/account-deployment-settings/account-deployment-settings.vue",
+ "guidelinesFile": "blocks/account/account-deployment-settings/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "deployment-policies.ts",
+  "parts/deployment-defaults-group.vue",
+  "parts/deployment-save-bar.vue",
+  "parts/deployment-services-group.vue",
+  "parts/deployment-setting-drawer.vue",
+  "parts/deployment-settings-table.vue"
+ ]
+}

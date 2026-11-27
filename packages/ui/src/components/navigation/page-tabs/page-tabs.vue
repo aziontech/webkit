@@ -1,0 +1,77 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  import type { TabsValue } from '../tabs/injection-key'
+  import TabsRoot from '../tabs/tabs.vue'
+  import TabsList, { type TabsListAlign } from '../tabs/tabs-list.vue'
+
+  defineOptions({
+    name: 'PageTabs',
+    inheritAttrs: false
+  })
+
+  /** The page column the tab row lines up with. */
+  export type PageTabsColumn = 'full' | 'data' | 'form' | 'focused'
+
+  export interface PageTabsProps {
+    /** The page column the tab row lines up with: the full width, or the data, form or focused column below it. */
+    column?: PageTabsColumn
+    /** Where the tab triggers sit in the row: at the start edge, or centred. Passed to Tabs.List. */
+    align?: TabsListAlign
+  }
+
+  withDefaults(defineProps<PageTabsProps>(), {
+    column: 'full',
+    align: 'start'
+  })
+
+  const value = defineModel<TabsValue | null>({ default: null })
+
+  defineSlots<{
+    /** One Tabs.Trigger per section of the resource. */
+    default(): unknown
+    /** The actions the whole resource owns, on the right of the strip: a staged-changes Tag, Deploy. */
+    actions(): unknown
+  }>()
+
+  const attrs = useAttrs()
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'page-tabs')
+
+  const ROW_CLASS =
+    'layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm) @max-xl/page-tabs:flex-wrap ' +
+    'group-data-[column=data]/page-tabs:layout-column group-data-[column=focused]/page-tabs:layout-column-focused group-data-[column=form]/page-tabs:layout-column-form'
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-column="column"
+    class="group/page-tabs @container/page-tabs border-b border-(--border-default)"
+  >
+    <div
+      :data-testid="`${testId}__row`"
+      :class="ROW_CLASS"
+    >
+      <div class="flex -ms-(--spacing-xs) min-w-0 flex-1 @max-xl/page-tabs:basis-full">
+        <TabsRoot
+          v-model="value"
+          :data-testid="`${testId}__tabs`"
+          class="w-full"
+        >
+          <TabsList :align="align">
+            <slot />
+          </TabsList>
+        </TabsRoot>
+      </div>
+      <div
+        v-if="$slots['actions']"
+        :data-testid="`${testId}__actions`"
+        class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs) @max-xl/page-tabs:ms-auto"
+      >
+        <slot name="actions" />
+      </div>
+    </div>
+  </div>
+</template>

@@ -3,42 +3,77 @@ name: skeleton
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: 8b386405cb685ad4eafbf981fa27631dff0f7b1ae55f2bcca6ab05b90df18d89
+checksum: 32a79fd32cc8d77c4e1a7f752392cf4a92eb3dcc76bcd61fdb423182ca875516
 created: 2026-06-23
-last_updated: 2026-07-28
+last_updated: 2026-11-22
 ---
 
 # Skeleton — Component Spec
 
 ## Purpose
 
-A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle` (for avatars / icons).
+Use Skeleton when a region with a known shape (text, table rows, cards, avatars) is still loading — the default answer to 'show a loading state'. For an inline busy mark use Spinner, for work with a measurable amount use Progress, and for a generative AI answer use ResponseLoading.
+
+A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).
+
+## When to use
+
+- Content is loading and its final layout is known: text lines, cards, media blocks.
+- Avatar and icon placeholders, with `variant="circle"`.
+
+## When NOT to use
+
+- The duration is unknown and no layout is reserved → use `progress` with `indeterminate`, or `spinner`.
+- Rows in a data-driven `table` → use the `table` `loading` prop, which renders aligned skeleton rows.
+- Loading finished with no data → use `empty-state`.
+- A settled state such as Active or Failed → use `status-indicator`.
+
+## Related
+
+- `progress` — measured or indeterminate progress of a task, not a placeholder.
+- `spinner` — compact busy glyph for buttons and inline status.
+- `empty-state` — what replaces the skeleton when the request returns nothing.
+- `table` — its `loading` prop renders skeleton rows for you.
+
+## Best practices
+
+- Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.
+- For `variant="circle"`, set `width` and `height` to the same value.
+- The skeleton is `aria-hidden`. Mark the container you own with `aria-busy="true"` while it loads.
+- Keep `animated` on (the default). The shimmer already turns off under reduced motion; use `:animated="false"` only for static captures.
 
 ## Usage
 
 ```vue
 <script setup>
-import Skeleton from '@aziontech/webkit/skeleton'
+  import Skeleton from '@aziontech/ui/skeleton'
 </script>
 
 <template>
-  <Skeleton width="240px" height="100px" />
-  <Skeleton kind="circle" width="100px" height="100px" />
+  <Skeleton
+    width="240px"
+    height="100px"
+  />
+  <Skeleton
+    variant="circle"
+    width="100px"
+    height="100px"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'shape' \| 'circle'` | `'shape'` | false | Geometry: a rounded rectangular block (`shape`) or a circle. |
-| `width` | `string` | `'100%'` | false | CSS width (any length). |
-| `height` | `string` | `'1rem'` | false | CSS height (any length); for a circle, set equal to `width`. |
-| `animated` | `boolean` | `true` | false | Shimmer while loading; suppressed under reduced motion. |
+| Prop       | Type                      | Default       | Required | JSDoc                                                            |
+| ---------- | ------------------------- | ------------- | -------- | ---------------------------------------------------------------- |
+| `variant`  | `'rectangle' \| 'circle'` | `'rectangle'` | false    | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
+| `width`    | `string`                  | `'100%'`      | false    | CSS width (any length); a rectangle never grows past its container. |
+| `height`   | `string`                  | `'1rem'`      | false    | CSS height (any length); for a circle, set equal to `width`.     |
+| `animated` | `boolean`                 | `true`        | false    | Shimmer while loading; suppressed under reduced motion.          |
 
 ## Events
 
@@ -51,28 +86,28 @@ import Skeleton from '@aziontech/webkit/skeleton'
 ## States
 
 - Visual states: `default` (a single decorative placeholder; no hover/focus/active — it is not interactive)
-- `data-kind` mirrors the `kind` prop (`shape` | `circle`)
+- `data-variant` mirrors `variant` (`rectangle` | `circle`)
 - `data-animated` is present when `animated` is true (drives the shimmer)
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                    | Animation / Transition                                  | Token (see `contributing/docs/TOKENS.md` § Animations)                                                                      | Reduced-motion fallback                                                        |
+| -------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | while loading (`animated`) | `animate-shimmer` (linear gradient sweep over the fill) | `--animate-shimmer` (`primitives/animations/animate.js`) + `@keyframes shimmer` (`primitives/animations/keyframes.js`) | gated behind `motion-safe:` (no sweep) + `motion-reduce:animate-none` (static) |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| fill | `var(--bg-placeholder)` |
-| shimmer sweep | `var(--bg-placeholder-highlight)` |
-| shape radius (`shape`) | `var(--shape-elements)` |
+| Region                     | Token (TOKENS.md)                 |
+| -------------------------- | --------------------------------- |
+| fill                       | `var(--bg-placeholder)`           |
+| shimmer sweep              | `var(--bg-placeholder-highlight)` |
+| shape radius (`rectangle`) | `var(--shape-control)`            |
 
 `--bg-placeholder` and `--bg-placeholder-highlight` are **translucent** (alpha) by design: the fill composites over whatever surface the placeholder sits on (`--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`), so a single value per mode keeps the contrast correct everywhere. The sweep is a white alpha in both modes — it lightens the fill rather than replacing it, so the animated and static states share the same base tone.
 
 ## Theme gaps
 
-| _none_ | — | Both prior gaps are closed: `--bg-placeholder` / `--bg-placeholder-highlight` are documented in `.claude/docs/DESIGN.md` § Colors → Loading placeholders, and `--animate-shimmer` in § Animations. |
+| _none_ | — | Both prior gaps are closed: `--bg-placeholder` / `--bg-placeholder-highlight` are documented in `contributing/docs/TOKENS.md` § Colors → Loading placeholders, and `--animate-shimmer` in § Animations. |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -80,12 +115,12 @@ import Skeleton from '@aziontech/webkit/skeleton'
 - Not focusable, not interactive: no keyboard map, no focus ring.
 - The shimmer is gated behind `motion-safe:` and `motion-reduce:animate-none` suppresses it for users who prefer reduced motion (static flat fill).
 
-## Stories (Storybook)
+## Examples
 
 This component has no `size` axis, so the canonical Sizes story does not apply.
 
 - Default
-- Types — composite story rendering both `kind` values (`shape`, `circle`) side-by-side.
+- Types — composite story rendering both `variant` values (`rectangle`, `circle`) side-by-side.
 - Static — `animated: false`; demonstrates the non-shimmering placeholder. Justified because `animated` is a distinct state of the component and the shimmer cannot be seen in a static screenshot.
 
 ## Constraints — DO NOT
@@ -95,17 +130,15 @@ This component has no `size` axis, so the canonical Sizes story does not apply.
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

@@ -1,0 +1,41 @@
+import json, os, sys
+from PIL import Image, ImageDraw
+
+Image.MAX_IMAGE_PIXELS = None
+REF = '/data/eval-m27b/ref/shots'
+AI = '/data/eval-m27b/ai-shots'
+OUT = '/data/eval-m27b/compare/pairs'
+os.makedirs(OUT, exist_ok=True)
+GAP = 24
+
+
+def pair(id_, prof):
+    r = f'{REF}/{id_}--{prof}.png'
+    a = f'{AI}/{id_}--{prof}.png'
+    if not os.path.exists(r):
+        return None
+    ri = Image.open(r).convert('RGB')
+    ai = Image.open(a).convert('RGB') if os.path.exists(a) else Image.new('RGB', ri.size, (200, 0, 0))
+    w = ri.width + GAP + ai.width
+    h = max(ri.height, ai.height)
+    can = Image.new('RGB', (w, h), (255, 0, 255))
+    can.paste(ri, (0, 0))
+    can.paste(ai, (ri.width + GAP, 0))
+    chunk = 1100 if prof == 'desktop' else 1000
+    scale = 0.5 if prof == 'desktop' else 1.0
+    files = []
+    for k, y in enumerate(range(0, h, chunk)):
+        t = can.crop((0, y, w, min(h, y + chunk)))
+        if scale != 1:
+            t = t.resize((int(t.width * scale), int(t.height * scale)))
+        f = f'{OUT}/{id_}--{prof}-{k:02d}.jpg'
+        t.save(f, quality=72)
+        files.append(f)
+    return {'ref_h': ri.height, 'ai_h': ai.height if os.path.exists(a) else None, 'tiles': len(files)}
+
+
+ids = sys.argv[1:]
+res = {}
+for i in ids:
+    res[i] = {p: pair(i, p) for p in ('desktop', 'iphone')}
+    print(i, json.dumps(res[i]))

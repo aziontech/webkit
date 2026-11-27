@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Primary split button at large size with a three-action menu.",
+   "file": "examples/split-button/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "All variants side by side.",
+   "file": "examples/split-button/variants.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "file": "examples/split-button/sizes.vue"
+  }
+ ]
+}

@@ -1,0 +1,104 @@
+{
+ "name": "conversation",
+ "binding": "Conversation",
+ "import": "@aziontech/ui/conversation",
+ "treeShakeableImport": "@aziontech/ui/conversation",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. With `moreMessages`, a Load earlier messages button opens the thread and the log also emits `load-more` as the reader scrolls near the top; prepended messages never move what the reader sees. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces). The thread is a centred reading column 752 px wide (`--container-2xl`, closest to ChatGPT's 48 rem) inside a 16 px gutter, with one even gap between messages: 36 px from `sm`, 28 px on a phone. The `composer` slot floats the composer over the bottom of the column: the thread scrolls under it behind a fade and is padded by its height; the Scroll to latest button floats just above it.",
+ "setup": null,
+ "useWhen": [
+  "Any surface where a person and the generative AI assistant exchange messages: the assistant page, the assistant drawer, an in-flow helper.",
+  "A transcript that grows while the reader watches it (streaming responses, tool calls appearing)."
+ ],
+ "avoidWhen": [
+  "A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.",
+  "A log of system events with timestamps and filtering → use `log-viewer`.",
+  "A list of past conversations → a `table` or `item` list; this is one thread.",
+  "A lost or resuming connection (`Reconnecting…`) → the app's state, not the log's: an `Alert` or `StatusIndicator` above the prompt input."
+ ],
+ "related": [
+  "`chat-message` — the item the log holds; announces itself through this component.",
+  "`prompt-input` — the composer, floated over the bottom of the log through the `composer` slot (outside the log; only the log scrolls).",
+  "`suggestion-group` — follow-up questions after the last response, or support prompts in the empty state.",
+  "`empty-state` — what the panel shows before the first message; render it in the default slot (the thread column is at least the log's height, so `my-auto` centres it) so the composer in `composer` never remounts when the first message is sent.",
+  "`log-viewer` — machine logs, not conversations."
+ ],
+ "bestPractices": [
+  "Put the prompt input in the `composer` slot; only the log scrolls, and the thread scrolls under the composer.",
+  "Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.",
+  "Use `layout=\"start\"` in drawers and side panels, `split` on a full page.",
+  "Keep one conversation per surface; a second thread is a second page or a history list.",
+  "Prepend older messages in the same update that sets `loadingMore` back to `false`."
+ ],
+ "props": [
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the message log. Empty uses the locale catalog (`Conversation`)."
+  },
+  {
+   "name": "layout",
+   "type": "'split' | 'start'",
+   "default": "'split'",
+   "required": "false",
+   "doc": "`split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer)."
+  },
+  {
+   "name": "moreMessages",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Older messages exist above the first one. A Load earlier messages button opens the thread and the log emits `load-more` as the reader scrolls near the top."
+  },
+  {
+   "name": "loadingMore",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The older messages are loading; the button at the top of the thread shows its spinner and holds further `load-more` requests."
+  }
+ ],
+ "events": [
+  {
+   "name": "load-more",
+   "payload": "(event: Event)",
+   "notes": "The button's click, or the top row came within 200 px of the viewport (`new Event('load-more')`). Not repeated while `loadingMore`, nor until older messages were prepended (the first message changed); after a failed load only the button asks again."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card), or the empty state before the first message."
+  },
+  {
+   "name": "composer",
+   "scope": "—",
+   "notes": "The composer floating over the bottom of the thread, in the reading column: `PromptInput`, with any status, alert or queue above it. Rendered outside the log, after it in the reading order."
+  }
+ ],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/conversation/default.vue"
+  },
+  {
+   "name": "StartAlignment",
+   "file": "examples/conversation/start-alignment.vue"
+  },
+  {
+   "name": "LongThread",
+   "file": "examples/conversation/long-thread.vue"
+  }
+ ],
+ "docs": "components/conversation.md"
+}

@@ -1,0 +1,53 @@
+<script setup>
+  import Select from '@aziontech/ui/select'
+  import Tag from '@aziontech/ui/tag'
+  import { ref } from 'vue'
+
+  const value = ref('')
+  const options = [
+    { value: 'heart', label: 'With icon', icon: 'az az-heart' },
+    { value: 'left', label: 'With left slot', leftIcon: 'az az-star' },
+    { value: 'tag', label: 'With tag', tag: 'Label' }
+  ]
+</script>
+
+<template>
+  <div class="w-[280px]">
+    <Select
+      aria-label="Option"
+      v-model="value"
+      placeholder="Select an option"
+    >
+      <Select.Trigger />
+      <Select.Content>
+        <Select.Item
+          v-for="o in options"
+          :key="o.value"
+          :value="o.value"
+          :icon="o.icon"
+        >
+          <template
+            v-if="o.leftIcon"
+            #leading
+          >
+            <i
+              :class="o.leftIcon"
+              aria-hidden="true"
+            />
+          </template>
+          {{ o.label }}
+          <template
+            v-if="o.tag"
+            #tag
+          >
+            <Tag
+              :label="o.tag"
+              severity="info"
+              size="small"
+            />
+          </template>
+        </Select.Item>
+      </Select.Content>
+    </Select>
+  </div>
+</template>

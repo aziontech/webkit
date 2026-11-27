@@ -1,0 +1,31 @@
+{
+  "component": "rating",
+  "title": "Components/Input/Rating",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "An empty, `clearable` rating bound with `v-model`: one tab stop, the arrow keys move the score, the clear button resets it to 0.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "`size` small, medium and large: 16, 20 and 24 px stars in 24, 28 and 32 px targets, 44 px on a touch screen.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Readonly",
+      "summary": "`readonly` shows averages to the nearest half star, announced as one image (\"Rated 4.5 out of 5\"); the review count stays in text beside it.",
+      "file": "readonly.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` keeps the score visible and takes every star and the clear button out of the tab order.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "SendOnSelect",
+      "summary": "A support satisfaction (CSAT) question: the star the customer picks is the answer, sent on `@select` with no Send button, then a thank-you replaces the stars and takes focus.",
+      "file": "send-on-select.vue"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+ "variants": [
+  {
+   "name": "Records",
+   "summary": "The Records tab with the zone’s one A record, the ID column hidden by default.",
+   "file": "blocks/detail/detail-dns-zone/variants/records.vue"
+  },
+  {
+   "name": "ImportZoneFile",
+   "summary": "The Records tab with Import zone file open: a large `Drawer` that takes one BIND zone file from a `FileDropzone` (or Browse files) or pasted into a `Textarea`, parses it once typing pauses ($ORIGIN, $TTL with units, inherited names, quoted TXT) and previews every line in a `DataTable` paginated at 10 with its line number, name, type, value and a Ready, Skipped or Error `Tag`, the reason under the value. A polite status line counts ready, skipped and errors; errors raise a danger `Alert` saying the ready records still import. The SOA, the apex NS and unsupported types are skipped with their reason; a bad address or a missing value is an error. Import N records adds the ready ones to the table and reports through a toast that counts what was left out.",
+   "file": "blocks/detail/detail-dns-zone/variants/import-zone-file.vue"
+  }
+ ],
+ "sfcFile": "blocks/detail/detail-dns-zone/detail-dns-zone.vue",
+ "guidelinesFile": "blocks/detail/detail-dns-zone/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "dns-zone-policy.ts",
+  "parts/dns-zone-records-tab.vue",
+  "parts/dns-zone-settings-tab.vue"
+ ]
+}

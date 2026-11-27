@@ -1,0 +1,19 @@
+{
+ "variants": [
+  {
+   "name": "Success",
+   "summary": "Every gate done: the Tag turns into a success Ready for production, the rows are gone and the header loses its bottom border, so the card closes down to its title and the expand button.",
+   "file": "blocks/detail/detail-production-checklist/variants/success.vue"
+  },
+  {
+   "name": "DrawerDetail",
+   "summary": "The drawer open, as the expand button or a row opens it: a right-side drawer with the same progress Tag, the checklist description, every step with its description, and either its action or, once done, a Tag with what it now serves, over a Done footer.",
+   "file": "blocks/detail/detail-production-checklist/variants/drawer-detail.vue"
+  }
+ ],
+ "sfcFile": "blocks/detail/detail-production-checklist/detail-production-checklist.vue",
+ "guidelinesFile": "blocks/detail/detail-production-checklist/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
+}

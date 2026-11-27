@@ -1,0 +1,67 @@
+{
+ "name": "doc-accordion-group",
+ "binding": "DocAccordionGroup",
+ "import": "@aziontech/ui/doc-accordion-group",
+ "treeShakeableImport": "@aziontech/ui/doc-accordion-group",
+ "category": "docs",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The FAQ and \"expand for detail\" block of a documentation page. It reads the `title` of each `DocAccordion` child to build the triggers and renders the child body in the panel, so an author writes only titles and prose. It always ships as a card (surface, outer rule, radius) so a run of rows reads as one closed group in an open prose column. Built on `Accordion` at `size=\"large\"`.",
+ "setup": null,
+ "useWhen": [
+  "Use DocAccordionGroup only inside documentation pages (Markdown AccordionGroup); product UI uses Accordion.",
+  "A list of questions with answers at the end of a guide.",
+  "Optional detail that would interrupt the main path of a page (edge cases, troubleshooting)."
+ ],
+ "avoidWhen": [
+  "For steps the reader must follow in order — use `DocSteps`.",
+  "For alternative paths through the same instruction — use `Tabs`.",
+  "Inside an application screen — use `Accordion` directly."
+ ],
+ "related": [
+  "`DocAccordion` — the entry it reads.",
+  "`Accordion` — the design-system surface it renders on.",
+  "`Faq` — the marketing FAQ band."
+ ],
+ "bestPractices": [
+  "Write each title as the full question the reader would ask.",
+  "Keep answers short; link out for anything longer than a few paragraphs.",
+  "Open at most one entry by default."
+ ],
+ "props": [
+  {
+   "name": "type",
+   "type": "'single' | 'multiple'",
+   "default": "'single'",
+   "required": "false",
+   "doc": "Whether one or several entries can be open at once."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The `DocAccordion` children, in order. Each child's `title` and `defaultOpen` are read; its body is rendered inside the panel."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/doc-accordion-group/default.vue"
+  },
+  {
+   "name": "Multiple",
+   "file": "examples/doc-accordion-group/multiple.vue"
+  },
+  {
+   "name": "Markdown",
+   "file": "examples/doc-accordion-group/markdown.vue"
+  }
+ ],
+ "docs": "components/doc-accordion-group.md"
+}

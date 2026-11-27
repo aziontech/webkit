@@ -1,0 +1,4 @@
+dist
+.vite-ssg-temp
+*.png
+.build

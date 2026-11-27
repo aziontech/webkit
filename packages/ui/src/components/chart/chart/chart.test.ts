@@ -1,0 +1,762 @@
+import { fireEvent, render } from '@testing-library/vue'
+import { describe, expect, it, vi } from 'vitest'
+import { h, nextTick, ref } from 'vue'
+
+import { expectNoA11yViolations } from '../../../test/axe'
+import type { ChartSeries } from '../lib'
+import { dateSpan, formatLabel } from '../lib/format'
+import { linearLayout } from '../lib/scale'
+import Chart, {
+  ChartArea,
+  ChartAxis,
+  ChartBar,
+  ChartCrosshair,
+  ChartGrid,
+  ChartLegend,
+  ChartLine,
+  ChartTooltip
+} from './index'
+
+const labels = ['14:00', '14:05', '14:10', '14:15']
+const threats: ChartSeries[] = [
+  { id: 'allowed', name: 'WAF requests allowed', values: [1200, 1350, 1280, 1500] },
+  { id: 'blocked', name: 'WAF requests blocked', values: [320, 410, null, 520] },
+  { id: 'threat', name: 'WAF requests threat', values: [80, 95, 70, 120] }
+]
+
+const parts = () => [
+  h(ChartGrid),
+  h(ChartAxis, { type: 'y' }),
+  h(ChartAxis, { type: 'x' }),
+  h(ChartArea, { ids: ['allowed'] }),
+  h(ChartBar, { ids: ['threat'] }),
+  h(ChartLine, { ids: ['blocked'] }),
+  h(ChartCrosshair),
+  h(ChartTooltip),
+  h(ChartLegend, { total: true })
+]
+
+const mount = (props: Record<string, unknown> = {}, children = parts) =>
+  render({
+    render: () =>
+      h('div', { style: 'width: 640px' }, [
+        h(
+          Chart,
+          { series: threats, labels, ariaLabel: 'Threats vs requests', ...props },
+          { default: children }
+        )
+      ])
+  })
+
+const plotOf = (view: ReturnType<typeof render>) => view.getByTestId('chart__plot')
+
+const measured = (view: ReturnType<typeof render>) =>
+  vi.waitFor(() => {
+    const layer = view.container.querySelector('figure svg')
+    expect(Number(layer?.getAttribute('width'))).toBeGreaterThan(0)
+  })
+
+describe('Chart', () => {
+  it('attaches its parts to the root for dot notation', () => {
+    expect(Chart).toBeTruthy()
+    expect(Chart?.Grid).toBe(ChartGrid)
+    expect(Chart?.Axis).toBe(ChartAxis)
+    expect(Chart?.Line).toBe(ChartLine)
+    expect(Chart?.Area).toBe(ChartArea)
+    expect(Chart?.Bar).toBe(ChartBar)
+    expect(Chart?.Crosshair).toBe(ChartCrosshair)
+    expect(Chart?.Tooltip).toBe(ChartTooltip)
+    expect(Chart?.Legend).toBe(ChartLegend)
+  })
+
+  it('renders the fallback data-testid and lets a consumer override it', () => {
+    const fallback = mount()
+    expect(fallback.getByTestId('chart').tagName).toBe('FIGURE')
+    fallback.unmount()
+    expect(mount({ 'data-testid': 'threats' }).getByTestId('threats')).toBeTruthy()
+  })
+
+  it('draws one path per series in its mark and paints each with its slot token', async () => {
+    const view = mount()
+    await measured(view)
+    const line = view.getByTestId('chart-line').querySelector('[data-series="blocked"] path')
+    const area = view.getByTestId('chart-area').querySelectorAll('[data-series="allowed"] path')
+    const bars = view.getByTestId('chart-bar').querySelectorAll('[data-series="threat"] path')
+    expect(line?.getAttribute('stroke')).toBe('var(--chart-series-2)')
+    expect(area).toHaveLength(2)
+    expect(area[0]?.getAttribute('fill')).toBe('var(--chart-series-1)')
+    expect(bars).toHaveLength(4)
+    expect(bars[0]?.getAttribute('fill')).toBe('var(--chart-series-3)')
+  })
+
+  it('folds every series past the eighth into Other', async () => {
+    const many: ChartSeries[] = Array.from({ length: 10 }, (_, index) => ({
+      id: `host-${index}`,
+      name: `Host ${index + 1}`,
+      values: [index + 1, index + 2, index + 3, index + 4]
+    }))
+    const view = mount({ series: many }, () => [h(ChartLine), h(ChartLegend)])
+    await nextTick()
+    const strokes = [...view.getByTestId('chart-line').querySelectorAll('path')].map((path) =>
+      path.getAttribute('stroke')
+    )
+    expect(strokes).toEqual([
+      'var(--chart-series-1)',
+      'var(--chart-series-2)',
+      'var(--chart-series-3)',
+      'var(--chart-series-4)',
+      'var(--chart-series-5)',
+      'var(--chart-series-6)',
+      'var(--chart-series-7)',
+      'var(--chart-series-8)',
+      'var(--chart-series-other)'
+    ])
+    const items = view.getAllByTestId('chart-legend__item')
+    expect(items).toHaveLength(9)
+    expect(items[8]?.textContent).toContain('Other')
+  })
+
+  it('honours a status color for a series whose color means a state', async () => {
+    const view = mount(
+      { series: [{ id: 'blocked', name: 'Blocked', values: [1, 2, 3, 4], color: 'danger' }] },
+      () => [h(ChartLine)]
+    )
+    await nextTick()
+    expect(view.getByTestId('chart-line').querySelector('path')?.getAttribute('stroke')).toBe(
+      'var(--chart-status-danger)'
+    )
+  })
+
+  it('honours a severity color for a series that counts one severity level', async () => {
+    const view = mount(
+      {
+        series: [
+          { id: 'critical', name: 'Critical', values: [1, 2, 3, 4], color: 'severity-critical' }
+        ]
+      },
+      () => [h(ChartLine)]
+    )
+    await nextTick()
+    expect(view.getByTestId('chart-line').querySelector('path')?.getAttribute('stroke')).toBe(
+      'var(--severity-critical)'
+    )
+  })
+
+  it('renders no legend for a single series', () => {
+    const view = mount({ series: [threats[0]] }, () => [h(ChartLine), h(ChartLegend)])
+    expect(view.queryByTestId('chart-legend')).toBeNull()
+  })
+
+  it('toggles a series from the legend and keeps the others painted the same', async () => {
+    const view = mount()
+    await nextTick()
+    const [allowed] = view.getAllByTestId('chart-legend__item')
+    expect(allowed?.getAttribute('aria-pressed')).toBe('true')
+    await fireEvent.click(allowed as Element)
+    expect(allowed?.getAttribute('aria-pressed')).toBe('false')
+    expect(view.getByTestId('chart-area').querySelector('[data-series="allowed"]')).toBeNull()
+    expect(view.getByTestId('chart-line').querySelector('path')?.getAttribute('stroke')).toBe(
+      'var(--chart-series-2)'
+    )
+    const toggles = view.emitted('legend-toggle') as unknown[][] | undefined
+    expect(toggles).toBeUndefined()
+  })
+
+  it('dims the other legend keys with their marks while one entry is emphasized', async () => {
+    const view = mount()
+    await nextTick()
+    const items = view.getAllByTestId('chart-legend__item')
+    const keys = () => items.map((item) => item.querySelector('[data-dimmed]') !== null)
+    expect(keys()).toEqual([false, false, false])
+    await fireEvent.pointerEnter(items[0] as Element)
+    expect(keys()).toEqual([false, true, true])
+    expect(view.getByTestId('chart-line').querySelector('[data-dimmed]')).not.toBeNull()
+    await fireEvent.pointerLeave(items[0] as Element)
+    expect(keys()).toEqual([false, false, false])
+  })
+
+  it('emits legend-toggle with the event first and the consumer series second', async () => {
+    const hidden = ref<string[]>([])
+    const toggles: unknown[][] = []
+    const view = render({
+      render: () =>
+        h(
+          Chart,
+          {
+            series: threats,
+            labels,
+            ariaLabel: 'Threats',
+            hiddenSeries: hidden.value,
+            'onUpdate:hiddenSeries': (next: string[]) => {
+              hidden.value = next
+            },
+            onLegendToggle: (...args: unknown[]) => toggles.push(args)
+          },
+          { default: () => [h(ChartLine), h(ChartLegend)] }
+        )
+    })
+    const items = view.getAllByTestId('chart-legend__item')
+    await fireEvent.click(items[1] as Element)
+    expect(hidden.value).toEqual(['blocked'])
+    expect(toggles).toHaveLength(1)
+    expect(toggles[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(toggles[0]?.[1]).toBe(threats[1])
+  })
+
+  it('walks the points from the keyboard and announces each one', async () => {
+    const indexes: Array<number | null> = []
+    const clicks: unknown[][] = []
+    const view = mount({
+      'onUpdate:activeIndex': (index: number | null) => indexes.push(index),
+      onPointClick: (...args: unknown[]) => clicks.push(args)
+    })
+    const plot = plotOf(view)
+    plot.focus()
+    await fireEvent.keyDown(plot, { key: 'ArrowRight' })
+    await fireEvent.keyDown(plot, { key: 'ArrowRight' })
+    await fireEvent.keyDown(plot, { key: 'End' })
+    await fireEvent.keyDown(plot, { key: 'Home' })
+    expect(indexes).toEqual([0, 1, 3, 0])
+    expect(view.getByTestId('chart__live').textContent).toContain('14:00')
+    expect(view.getByTestId('chart__live').textContent).toContain('WAF requests allowed 1.2K')
+    await fireEvent.keyDown(plot, { key: 'Enter' })
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0]?.[0]).toBeInstanceOf(KeyboardEvent)
+    expect(clicks[0]?.[1]).toEqual({
+      index: 0,
+      label: '14:00',
+      values: { allowed: 1200, blocked: 320, threat: 80 }
+    })
+    await fireEvent.keyDown(plot, { key: 'Escape' })
+    expect(indexes.at(-1)).toBeNull()
+  })
+
+  it('emits point-click with the mouse event first and the active point second on click', async () => {
+    const clicks: unknown[][] = []
+    const view = mount({
+      activeIndex: 2,
+      onPointClick: (...args: unknown[]) => clicks.push(args)
+    })
+    await fireEvent.click(plotOf(view))
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(clicks[0]?.[1]).toEqual({
+      index: 2,
+      label: '14:10',
+      values: { allowed: 1280, blocked: null, threat: 70 }
+    })
+  })
+
+  it('emits point-click for the point the keyboard walked to', async () => {
+    const clicks: unknown[][] = []
+    const view = mount({ onPointClick: (...args: unknown[]) => clicks.push(args) })
+    const plot = plotOf(view)
+    plot.focus()
+    await fireEvent.keyDown(plot, { key: 'ArrowRight' })
+    await fireEvent.keyDown(plot, { key: 'ArrowRight' })
+    await fireEvent.keyDown(plot, { key: ' ' })
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0]?.[0]).toBeInstanceOf(KeyboardEvent)
+    expect(clicks[0]?.[1]).toEqual({
+      index: 1,
+      label: '14:05',
+      values: { allowed: 1350, blocked: 410, threat: 95 }
+    })
+  })
+
+  it('emits no point-click on a click with no active point', async () => {
+    const clicks: unknown[][] = []
+    const view = mount({ onPointClick: (...args: unknown[]) => clicks.push(args) })
+    await fireEvent.click(plotOf(view))
+    expect(clicks).toHaveLength(0)
+  })
+
+  it('snaps the active index to the nearest category under the pointer', async () => {
+    const indexes: Array<number | null> = []
+    const view = mount({ 'onUpdate:activeIndex': (index: number | null) => indexes.push(index) })
+    await nextTick()
+    const plot = plotOf(view)
+    const rect = plot.getBoundingClientRect()
+    await fireEvent.pointerMove(plot, { clientX: rect.right - 2, clientY: rect.top + 1 })
+    expect(indexes.at(-1)).toBe(3)
+    await fireEvent.pointerLeave(plot)
+    expect(indexes.at(-1)).toBeNull()
+  })
+
+  it('a tap on touch shows the point and keeps it after the finger lifts', async () => {
+    const indexes: Array<number | null> = []
+    const view = mount({ 'onUpdate:activeIndex': (index: number | null) => indexes.push(index) })
+    await nextTick()
+    const plot = plotOf(view)
+    const rect = plot.getBoundingClientRect()
+    const at = { clientX: rect.right - 2, clientY: rect.top + 1, pointerType: 'touch' }
+    plot.dispatchEvent(new PointerEvent('pointerdown', { ...at, bubbles: true }))
+    plot.dispatchEvent(new PointerEvent('pointerup', { ...at, bubbles: true }))
+    plot.dispatchEvent(new PointerEvent('pointerleave', { ...at, bubbles: false }))
+    await nextTick()
+    expect(indexes.at(-1)).toBe(3)
+    expect(view.getByTestId('chart').hasAttribute('data-active')).toBe(true)
+    document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))
+    await nextTick()
+    expect(indexes.at(-1)).toBeNull()
+  })
+
+  it('emits point-click for the tapped point on touch', async () => {
+    const clicks: unknown[][] = []
+    const view = mount({ onPointClick: (...args: unknown[]) => clicks.push(args) })
+    await nextTick()
+    const plot = plotOf(view)
+    const rect = plot.getBoundingClientRect()
+    plot.dispatchEvent(
+      new PointerEvent('click', {
+        clientX: rect.right - 2,
+        clientY: rect.top + 1,
+        pointerType: 'touch',
+        bubbles: true
+      })
+    )
+    expect(clicks).toHaveLength(1)
+    expect((clicks[0]?.[1] as { index: number }).index).toBe(3)
+  })
+
+  it('shows the tooltip inside the figure with every visible series, name before value', async () => {
+    const view = mount({ activeIndex: 1 })
+    await nextTick()
+    const tooltip = view.getByTestId('chart-tooltip')
+    expect(view.getByTestId('chart').contains(tooltip)).toBe(true)
+    const text = tooltip.textContent ?? ''
+    expect(text).toContain('14:05')
+    expect(text).toContain('1.4K')
+    expect(text).toContain('WAF requests blocked')
+    expect(text.indexOf('WAF requests allowed')).toBeLessThan(text.indexOf('1.4K'))
+  })
+
+  it('sums the visible series in a Total row and renders the footer hint', async () => {
+    const view = mount({ activeIndex: 0 }, () => [
+      h(ChartBar, { stacked: true }),
+      h(ChartTooltip, { total: true }, { footer: () => 'Click to filter to this bucket.' })
+    ])
+    await nextTick()
+    expect(view.getByTestId('chart-tooltip__total').textContent).toContain('1.6K')
+    expect(view.getByTestId('chart-tooltip__footer').textContent).toContain(
+      'Click to filter to this bucket.'
+    )
+  })
+
+  it('leaves hidden series out of the total and skips empty values', async () => {
+    const view = mount({ activeIndex: 2, hiddenSeries: ['allowed'] }, () => [
+      h(ChartLine),
+      h(ChartTooltip, { total: true })
+    ])
+    await nextTick()
+    expect(view.getByTestId('chart-tooltip__total').textContent).toContain('70')
+  })
+
+  it('renders no Total row or footer by default', async () => {
+    const view = mount({ activeIndex: 1 })
+    await nextTick()
+    expect(view.queryByTestId('chart-tooltip__total')).toBeNull()
+    expect(view.queryByTestId('chart-tooltip__footer')).toBeNull()
+  })
+
+  it('renders exactly one state at a time', () => {
+    const loading = mount({ loading: true })
+    expect(loading.getByTestId('chart__loading')).toBeTruthy()
+    expect(loading.queryByTestId('chart__plot')).toBeNull()
+    expect(loading.getByTestId('chart').getAttribute('aria-busy')).toBe('true')
+    loading.unmount()
+
+    const failed = mount({ error: 'The chart could not load.' })
+    expect(failed.getByTestId('chart__error').textContent).toContain('The chart could not load.')
+    expect(failed.queryByTestId('chart__plot')).toBeNull()
+    failed.unmount()
+
+    const empty = mount({ series: [{ id: 'a', name: 'A', values: [null, null] }] })
+    expect(empty.getByTestId('chart__empty').textContent).toContain('No data available')
+    expect(empty.getByTestId('chart').hasAttribute('data-empty')).toBe(true)
+  })
+
+  it('thins axis labels to the width it has, so neighbours never overlap', async () => {
+    const hours = Array.from({ length: 24 }, (_, hour) => `${String(hour).padStart(2, '0')}:00`)
+    const traffic: ChartSeries[] = [
+      { id: 'requests', name: 'Requests', values: hours.map((_, index) => 1000 + index * 40) }
+    ]
+    const at = (width: number, props: Record<string, unknown>, axis: 'x' | 'y') =>
+      render({
+        render: () =>
+          h('div', { style: `width: ${width}px` }, [
+            h(
+              Chart,
+              { series: traffic, labels: hours, ariaLabel: 'Requests', ...props },
+              { default: () => [h(ChartAxis, { type: 'x', ticks: 24 }), h(ChartBar)] }
+            )
+          ])
+      }).container.querySelector(
+        `[data-testid="chart-axis"][data-type="${axis}"]`
+      ) as globalThis.Element
+
+    const gapsClear = (axis: globalThis.Element) => {
+      const texts = [...axis.querySelectorAll('text')]
+      return texts.every((text, index) => {
+        if (index === 0) return true
+        const previous = texts[index - 1]
+        const gap = Number(text.getAttribute('x')) - Number(previous.getAttribute('x'))
+        return gap >= (previous.textContent?.trim().length ?? 0) * 7
+      })
+    }
+
+    const wide = at(1600, {}, 'x')
+    await vi.waitFor(() => expect(wide.querySelectorAll('text')).toHaveLength(24))
+
+    const narrow = at(320, {}, 'x')
+    await vi.waitFor(() => {
+      expect(narrow.querySelectorAll('text').length).toBeGreaterThan(1)
+      expect(narrow.querySelectorAll('text').length).toBeLessThan(24)
+    })
+    expect(gapsClear(narrow)).toBe(true)
+
+    const ranking = at(
+      240,
+      { orientation: 'horizontal', formatValue: (value: number) => `${value} requests` },
+      'x'
+    )
+    await vi.waitFor(() => {
+      expect(ranking.querySelectorAll('text').length).toBeGreaterThan(1)
+      expect(gapsClear(ranking)).toBe(true)
+    })
+  })
+
+  it.each(['ltr', 'rtl'])(
+    'keeps the edge-anchored first and last month labels clear of their neighbours (%s)',
+    async (dir) => {
+      const months = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
+      const labels = months.map((month, index) => `${month} ${index < 3 ? 2025 : 2026}`)
+      const series: ChartSeries[] = [
+        { id: 'spend', name: 'Spend', values: labels.map((_, index) => 100 + index * 9) }
+      ]
+      const view = render({
+        render: () =>
+          h('div', { dir, style: 'width: 280px' }, [
+            h(
+              Chart,
+              { series, labels, ariaLabel: 'Spend' },
+              { default: () => [h(ChartAxis, { type: 'x' }), h(ChartLine)] }
+            )
+          ])
+      })
+      const axis = () =>
+        view.container.querySelector('[data-testid="chart-axis"][data-type="x"]') as Element
+      await vi.waitFor(() => expect(axis().querySelectorAll('text').length).toBeGreaterThan(1))
+      const boxes = [...axis().querySelectorAll('text')]
+        .map((text) => text.getBoundingClientRect())
+        .sort((a, b) => a.left - b.left)
+      for (let index = 1; index < boxes.length; index += 1)
+        expect(boxes[index]!.left).toBeGreaterThanOrEqual(boxes[index - 1]!.right)
+    }
+  )
+
+  it('explains an empty range and offers the consumer actions', async () => {
+    const view = render(Chart, {
+      props: {
+        series: [{ id: 'a', name: 'A', values: [null, null] }],
+        labels,
+        ariaLabel: 'Threats vs requests',
+        emptyTitle: 'No requests match these filters',
+        emptyDescription: 'Choose another host or widen the time range.'
+      },
+      slots: { 'empty-actions': () => h('button', { type: 'button' }, 'Clear filters') }
+    })
+    expect(view.getByTestId('chart__empty__title').textContent).toContain(
+      'No requests match these filters'
+    )
+    expect(view.getByTestId('chart__empty__description').textContent).toContain(
+      'Choose another host or widen the time range.'
+    )
+    expect(view.getByTestId('chart__empty__icon')).toBeTruthy()
+    expect(view.getByTestId('chart__empty__actions').querySelector('button')?.textContent).toBe(
+      'Clear filters'
+    )
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('renders no actions region when the consumer passes none', () => {
+    const view = mount({ series: [{ id: 'a', name: 'A', values: [null, null] }] })
+    expect(view.queryByTestId('chart__empty__description')).toBeNull()
+    expect(view.queryByTestId('chart__empty__actions')).toBeNull()
+  })
+
+  it('holds the previous render while refetching', () => {
+    const view = mount({ refetching: true })
+    expect(view.getByTestId('chart').hasAttribute('data-refetching')).toBe(true)
+    expect(view.getByTestId('chart__plot')).toBeTruthy()
+  })
+
+  it('keeps a table twin of every value and shows it in table view', () => {
+    const chart = mount()
+    const twin = chart.getByTestId('chart__twin')
+    expect(twin.querySelectorAll('tbody tr')).toHaveLength(labels.length)
+    expect(twin.querySelectorAll('thead th')).toHaveLength(threats.length + 1)
+    chart.unmount()
+
+    const table = mount({ tableView: true })
+    expect(table.getByTestId('chart__table').querySelectorAll('tbody tr')).toHaveLength(4)
+    expect(table.queryByTestId('chart__plot')).toBeNull()
+  })
+
+  it('samples the hidden twin to 1,000 rows above 1,000 categories and keeps both ends', () => {
+    const many = Array.from({ length: 5000 }, (_, index) => `t${index}`)
+    const values = many.map((_, index) => index)
+    const chart = mount({ labels: many, series: [{ id: 'a', name: 'A', values }] }, () => [
+      h(ChartLine)
+    ])
+    const rows = chart.getByTestId('chart__twin').querySelectorAll('tbody tr')
+    expect(rows).toHaveLength(1000)
+    expect(rows[0]?.querySelector('th')?.textContent).toBe('t0')
+    expect(rows[999]?.querySelector('th')?.textContent).toBe('t4999')
+  })
+
+  it('lays bars down the side when horizontal', async () => {
+    const view = mount({ orientation: 'horizontal' }, () => [
+      h(ChartAxis, { type: 'y' }),
+      h(ChartBar, { ids: ['allowed'], showLabels: true })
+    ])
+    await measured(view)
+    expect(view.getByTestId('chart').getAttribute('data-orientation')).toBe('horizontal')
+    const bar = view.getByTestId('chart-bar')
+    expect(bar.querySelectorAll('path')).toHaveLength(4)
+    expect(bar.querySelectorAll('text')).toHaveLength(4)
+  })
+
+  it('draws a histogram as solid touching columns that end at the tallest bucket', async () => {
+    const volume: ChartSeries[] = [
+      { id: 'error', name: 'Error', values: [3, 5] },
+      { id: 'info', name: 'Info', values: [2, 2] }
+    ]
+    const at = (type: 'default' | 'histogram') =>
+      render({
+        render: () =>
+          h('div', { style: 'width: 640px' }, [
+            h(
+              Chart,
+              { series: volume, labels: ['08:00', '08:05'], ariaLabel: 'Event volume' },
+              {
+                default: () => [
+                  h(ChartAxis, { type: 'y' }),
+                  h(ChartBar, { type: type, stacked: true })
+                ]
+              }
+            )
+          ])
+      })
+    const segments = async (view: ReturnType<typeof render>) => {
+      await measured(view)
+      const bar = view.getByTestId('chart-bar')
+      const paths = [...bar.querySelectorAll('path')] as globalThis.SVGPathElement[]
+      expect(paths).toHaveLength(4)
+      return { bar, boxes: paths.map((path) => path.getBBox()) }
+    }
+    const ticks = (view: ReturnType<typeof render>) =>
+      [
+        ...view.container
+          .querySelector('[data-testid="chart-axis"][data-type="y"]')!
+          .querySelectorAll('text')
+      ].map((text) => text.textContent?.trim())
+
+    const solid = at('histogram')
+    const histogram = await segments(solid)
+    expect(histogram.bar.getAttribute('data-type')).toBe('histogram')
+    const [lowerFirst, upperFirst] = [histogram.boxes[0], histogram.boxes[1]]
+    expect(Math.abs(lowerFirst!.y - (upperFirst!.y + upperFirst!.height))).toBeLessThan(0.5)
+    expect(ticks(solid)).not.toContain('8')
+    solid.unmount()
+
+    const gapped = at('default')
+    const bars = await segments(gapped)
+    const [lower, upper] = [bars.boxes[0], bars.boxes[1]]
+    expect(lower!.y - (upper!.y + upper!.height)).toBeGreaterThan(1)
+    expect(ticks(gapped)).toContain('8')
+  })
+
+  it('throws when a part renders outside a chart', () => {
+    expect(() => render(ChartLine)).toThrow('Chart.* sub-components must be used inside <Chart>.')
+  })
+
+  it('has no a11y violations in the chart, loading and table views', async () => {
+    for (const props of [{}, { loading: true }, { tableView: true }, { error: 'Failed' }]) {
+      const view = mount(props)
+      await nextTick()
+      await expectNoA11yViolations(view.container)
+      view.unmount()
+    }
+  })
+
+  describe('table twin on devices', () => {
+    it('clips the twin inside a visually hidden box so it adds no horizontal overflow', () => {
+      const view = mount()
+      const twin = view.getByTestId('chart__twin')
+
+      expect(twin.parentElement?.className).toBe('sr-only')
+    })
+  })
+
+  describe('ChartLegend total', () => {
+    it('shows the totals with total, and not with the removed totals', () => {
+      const next = mount({}, () => [h(ChartLine), h(ChartLegend, { total: true })])
+      const withTotal = next.getAllByTestId('chart-legend__item')[0]!.textContent
+      next.unmount()
+      const legacy = mount({}, () => [h(ChartLine), h(ChartLegend, { totals: true })])
+      expect(legacy.getAllByTestId('chart-legend__item')[0]!.textContent).not.toBe(withTotal)
+      legacy.unmount()
+      const none = mount({}, () => [h(ChartLine), h(ChartLegend)])
+      expect(none.getAllByTestId('chart-legend__item')[0]!.textContent).not.toBe(withTotal)
+    })
+  })
+
+  describe('linearLayout hit-testing', () => {
+    const nearest = (positions: number[], offset: number) => {
+      let best = 0
+      positions.forEach((position, index) => {
+        if (Math.abs(position - offset) < Math.abs(positions[best] - offset)) best = index
+      })
+      return best
+    }
+
+    it('finds the nearest point of an ascending axis, in a fraction of a linear scan', () => {
+      const values = Array.from({ length: 200_000 }, (_, i) => i)
+      const layout = linearLayout(values, 0, 1000)
+      const positions = values.map((_, i) => layout.position(i))
+      for (const offset of [-5, 0, 0.002, 333.3333, 500, 999.999, 1005]) {
+        expect(layout.indexAt(offset)).toBe(nearest(positions, offset))
+      }
+      const t0 = performance.now()
+      for (let i = 0; i < 2000; i++) layout.indexAt((i * 7) % 1000)
+      expect(performance.now() - t0).toBeLessThan(50)
+    })
+
+    it('keeps the first of equal positions and scans an axis that is not sorted', () => {
+      const tied = linearLayout([1, 2, 2, 2, 3], 0, 100)
+      expect(tied.indexAt(50)).toBe(1)
+      const unsorted = linearLayout([5, 1, 9, 3], 0, 100)
+      const positions = [5, 1, 9, 3].map((_, i) => unsorted.position(i))
+      for (const offset of [0, 20, 60, 100]) {
+        expect(unsorted.indexAt(offset)).toBe(nearest(positions, offset))
+      }
+    })
+  })
+
+  describe('default Date label format', () => {
+    const HOUR = 3_600_000
+    const start = Date.UTC(2026, 10, 9)
+    const hourly = (hours: number) =>
+      Array.from({ length: hours }, (_, index) => new Date(start + index * HOUR))
+    const format = (label: Date, labels: Date[], locale = 'en-US') =>
+      formatLabel(label, locale, 'UTC', dateSpan(labels))
+
+    it('prints the time within one day and the day at midnight', () => {
+      const day = hourly(24)
+      expect(format(day[0], day)).toBe('Nov 9')
+      expect(format(day[14], day)).toBe('14:00')
+    })
+
+    it('names the day on every label of a sub-day series that spans several days', () => {
+      const week = hourly(24 * 7)
+      expect(format(week[0], week)).toBe('Nov 9')
+      expect(format(week[28], week)).toBe('Nov 10, 04:00')
+      expect(format(week[48], week)).toBe('Nov 11')
+    })
+
+    it('prints the day for daily buckets and the month for monthly buckets', () => {
+      const daily = Array.from({ length: 14 }, (_, index) => new Date(start + index * 24 * HOUR))
+      expect(format(daily[3], daily)).toBe('Nov 12')
+      const monthly = Array.from({ length: 6 }, (_, index) => new Date(Date.UTC(2026, index, 1)))
+      expect(format(monthly[2], monthly)).toBe('Mar')
+    })
+
+    it('adds the year when the labels cross a calendar year', () => {
+      const monthly = Array.from(
+        { length: 4 },
+        (_, index) => new Date(Date.UTC(2026, 10 + index, 1))
+      )
+      expect(format(monthly[0], monthly)).toBe('Nov 2026')
+      expect(format(monthly[3], monthly)).toBe('Feb 2027')
+    })
+
+    it('follows the locale', () => {
+      const week = hourly(24 * 7)
+      expect(format(week[48], week, 'pt-BR')).toBe('11 de nov.')
+    })
+
+    it('draws day-naming ticks for a week of hourly labels', async () => {
+      const week = hourly(24 * 7)
+      const view = render({
+        render: () =>
+          h('div', { style: 'width: 640px' }, [
+            h(
+              Chart,
+              {
+                series: [{ id: 'requests', name: 'Requests', values: week.map((_, i) => i % 50) }],
+                labels: week,
+                timeZone: 'UTC',
+                ariaLabel: 'Requests'
+              },
+              { default: () => [h(ChartAxis, { type: 'x' }), h(ChartLine)] }
+            )
+          ])
+      })
+      await measured(view)
+      await vi.waitFor(() => {
+        const texts = [...view.getByTestId('chart-axis').querySelectorAll('text')].map(
+          (node) => node.textContent?.trim() ?? ''
+        )
+        expect(texts.length).toBeGreaterThan(1)
+        for (const text of texts) expect(text).toMatch(/^Nov \d+/)
+      })
+    })
+  })
+
+  describe('Chart examples with several series name them in a legend', () => {
+    it.each([
+      ['chart/tooltip-total', () => import('../../../../examples/chart/tooltip-total.vue'), [4]],
+      ['chart/brush', () => import('../../../../examples/chart/brush.vue'), [3]],
+      [
+        'chart-card/draggable',
+        () => import('../../../../examples/chart-card/draggable.vue'),
+        [3, 5]
+      ]
+    ])('%s', async (_name, load, counts) => {
+      const view = render((await load()).default)
+      await nextTick()
+      const legends = view.getAllByTestId('chart-legend')
+      expect(
+        legends.map(
+          (legend) => legend.querySelectorAll('[data-testid="chart-legend__item"]').length
+        )
+      ).toEqual(counts)
+    })
+  })
+
+  it('shows the failed-load cause with a Try again action in its error example', async () => {
+    const { default: Example } = await import('../../../../examples/chart/error-state.vue')
+    const view = render(Example)
+    const alert = view.getByRole('alert')
+    expect(alert.textContent).toContain('Could not load this report')
+    expect(view.getByRole('button', { name: 'Try again' })).toBeTruthy()
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('paints the labelled band of the threshold example over its series line', async () => {
+    const { default: Example } = await import('../../../../examples/chart/threshold.vue')
+    const view = render(Example)
+    const band = await vi.waitFor(() => {
+      const found = view
+        .getAllByTestId('chart-reference')
+        .find((el) => el.dataset['type'] === 'band')
+      expect(found).toBeTruthy()
+      return found as Element
+    })
+    const line = view.getByTestId('chart-line')
+    expect(line.compareDocumentPosition(band) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    )
+  })
+})

@@ -1,0 +1,58 @@
+{
+ "name": "doc-accordion",
+ "binding": "DocAccordion",
+ "import": "@aziontech/ui/doc-accordion",
+ "treeShakeableImport": "@aziontech/ui/doc-accordion",
+ "category": "docs",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One collapsible entry inside a `DocAccordionGroup`. It carries its title and its body only; the group owns the open-state model, the trigger and the panel. Rendered on its own it is a `display: contents` wrapper around its body.",
+ "setup": null,
+ "useWhen": [
+  "As a direct child of `DocAccordionGroup`."
+ ],
+ "avoidWhen": [
+  "Outside a `DocAccordionGroup` — it renders no trigger of its own."
+ ],
+ "related": [
+  "`DocAccordionGroup` — the group that reads it."
+ ],
+ "bestPractices": [
+  "Keep the title a question; keep the body prose."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The question the trigger shows; `DocAccordionGroup` reads it to build the row."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Opens this entry on first render."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The answer shown when the entry is open."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/doc-accordion/default.vue"
+  }
+ ],
+ "docs": "components/doc-accordion.md"
+}

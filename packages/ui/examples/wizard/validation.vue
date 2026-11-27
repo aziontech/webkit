@@ -1,0 +1,117 @@
+<script setup>
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import Select from '@aziontech/ui/select'
+  import Wizard from '@aziontech/ui/wizard'
+  import { nextTick, ref } from 'vue'
+
+  const step = ref(0)
+  const name = ref('')
+  const region = ref('')
+  const environment = ref('production')
+  const nameMissing = ref(false)
+  const nameEl = ref(null)
+
+  const regions = [
+    { value: 'north-america', label: 'North America' },
+    { value: 'south-america', label: 'South America' },
+    { value: 'europe', label: 'Europe' }
+  ]
+  const environments = [
+    { value: 'production', label: 'Production' },
+    { value: 'staging', label: 'Staging' },
+    { value: 'development', label: 'Development' }
+  ]
+  const labelOf = (options, value) =>
+    options.find((option) => option.value === value)?.label ?? 'Not set'
+
+  const onNext = async (event, current) => {
+    nameMissing.value = current === 0 && !name.value.trim()
+    if (!nameMissing.value) return
+    event.preventDefault()
+    await nextTick()
+    nameEl.value?.focus()
+  }
+</script>
+
+<template>
+  <Wizard
+    v-model="step"
+    aria-label="Create resource"
+    submit-label="Create"
+    @next="onNext"
+  >
+    <Wizard.Step
+      title="Name and region"
+      description="Name the resource and choose where it runs."
+      :invalid="nameMissing && !name.trim()"
+    >
+      <div class="flex flex-col gap-(--spacing-md)">
+        <Field
+          required
+          :invalid="nameMissing && !name.trim()"
+        >
+          <Field.Label> Name </Field.Label>
+          <Input
+            ref="nameEl"
+            v-model="name"
+          />
+          <Field.Error v-if="nameMissing && !name.trim()"> Enter a name to continue. </Field.Error>
+        </Field>
+        <Field>
+          <Field.Label> Region </Field.Label>
+          <Select
+            v-model="region"
+            placeholder="Choose a region"
+          >
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Item
+                v-for="option in regions"
+                :key="String(option.value)"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                {{ option.label }}
+              </Select.Item>
+            </Select.Content>
+          </Select>
+        </Field>
+      </div>
+    </Wizard.Step>
+    <Wizard.Step
+      title="Configuration"
+      description="Choose the environment it serves."
+    >
+      <Field>
+        <Field.Label> Environment </Field.Label>
+        <Select v-model="environment">
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Item
+              v-for="option in environments"
+              :key="String(option.value)"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              {{ option.label }}
+            </Select.Item>
+          </Select.Content>
+        </Select>
+      </Field>
+    </Wizard.Step>
+    <Wizard.Step
+      title="Review"
+      description="Check every answer before creating."
+    >
+      <dl class="grid grid-cols-2 gap-(--spacing-xs) text-body-sm">
+        <dt class="text-(--text-muted)">Name</dt>
+        <dd class="text-(--text-default)">{{ name }}</dd>
+        <dt class="text-(--text-muted)">Region</dt>
+        <dd class="text-(--text-default)">{{ labelOf(regions, region) }}</dd>
+        <dt class="text-(--text-muted)">Environment</dt>
+        <dd class="text-(--text-default)">{{ labelOf(environments, environment) }}</dd>
+      </dl>
+    </Wizard.Step>
+  </Wizard>
+</template>

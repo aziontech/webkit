@@ -1,0 +1,16 @@
+{
+  "component": "video-player",
+  "title": "Components/Content/VideoPlayer",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A ready video with a poster, an English caption track and every control: play, seek, mute, volume, captions and full screen.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Statuses",
+      "summary": "The states a generated video goes through before it plays: waiting to generate, generating with a percentage, and failed with the app's message and Try again.",
+      "file": "statuses.vue"
+    }
+  ]
+}

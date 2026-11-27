@@ -1,0 +1,85 @@
+{
+  "id": "shell/shell-console",
+  "name": "ShellConsole",
+  "title": "Blocks/Shell/ShellConsole",
+  "surface": "app",
+  "summary": "The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with an `href` the layout follows with the app's router, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`HighlightButton`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` whose theme choice is a group of radio items and Upgrade to Pro an item, over a `StatusIndicator`). The body is a stand-in list page (`PageHeader` and a `Card`) for view/view-table, which owns the controls row and the table; a page opens the same palette with useConsoleLayout().openSearch(). The shell mounts the app's one `Toaster`, and the other states render it and fill its slots (the body, `actions`, `sidebar-header`, `header-leading`, `notifications`, `tools`, with `v-model:tools-open`) instead of copying it.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "platform shell",
+    "console shell",
+    "app shell",
+    "sidebar layout",
+    "navigation rail",
+    "dashboard layout",
+    "admin layout",
+    "app layout with sidebar",
+    "estrutura do console",
+    "layout com menu lateral",
+    "menu lateral",
+    "console",
+    "console layout",
+    "layout do console",
+    "notifications panel",
+    "notifications drawer",
+    "notification center",
+    "central de notificações",
+    "painel de notificações",
+    "switch account",
+    "account switcher",
+    "organization switcher",
+    "change organization",
+    "trocar conta",
+    "trocar organização",
+    "selecionar conta",
+    "console layout component",
+    "ConsoleLayout",
+    "app layout with router view",
+    "layout do console com RouterView",
+    "account list failed to load",
+    "switch account error",
+    "erro ao carregar contas",
+    "page help",
+    "help panel",
+    "info link",
+    "contextual help",
+    "ajuda da página",
+    "painel de ajuda"
+  ],
+  "skills": ["azion-ui-navigation", "azion-ui-layout"],
+  "primary": {
+    "name": "ListPage",
+    "file": "shell-console.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": [
+    {
+      "name": "DetailPage",
+      "summary": "A resource detail page rendered through `ConsoleLayout`: the page body sets its own trail with `ConsoleLayout.Breadcrumb` (Applications, the application) ending on its environment as a control crumb, a `Select` with `variant=\"ghost\"` and `size=\"small\"` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; while compact the header hides the crumbs but keeps the environment `Select` in place of the brand, and below `md` the body repeats the rest of the trail in its own row (back to Applications, the application name); the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it.",
+      "file": "variants/detail-page.vue"
+    },
+    {
+      "name": "Notifications",
+      "summary": "The ListPage rendered through `ConsoleLayout` with a bell in its `actions` slot: the bell carries an unread `Badge` and toggles the layout's tools region (`v-model:tools-open`, titled Notifications, a drawer on a narrow screen), whose `tools` slot lists deploys, invitations and alerts with Mark all as read and Clear all and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` in the `notifications` slot above the page, and an empty list reads You are all caught up through `EmptyState`.",
+      "file": "variants/notifications.vue"
+    },
+    {
+      "name": "PageHelp",
+      "summary": "The ListPage rendered through `ConsoleLayout` with page help: `ConsoleLayout.ToolsTrigger` first in the `PageHeader`'s `meta` slot puts the `Info` link right after the title, and it opens and closes the layout's tools region (`v-model:tools-open`, titled Help, a drawer on a narrow screen), whose `tools` slot holds the page's `HelpPanel` topic (what an application is, when to create one, a Learn more link). The link carries `aria-expanded` and `aria-controls`; the region's close button closes it too.",
+      "file": "variants/page-help.vue"
+    },
+    {
+      "name": "AccountSwitch",
+      "summary": "The ListPage rendered through `ConsoleLayout` with the account switcher in its `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar`, the account name, a sort glyph; tooltip on the right; Ctrl+O or ⌘O), and in its `header-start` slot while compact (avatar and chevron only): a large `Dialog` with search over the organization, group and workspace `Table` tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.",
+      "file": "variants/account-switch.vue"
+    },
+    {
+      "name": "AccountSwitchError",
+      "summary": "The AccountSwitch dialog when the account list fails to load: a danger `Alert`, The account list could not be loaded., with Retry replaces the account `Table` under the search; Retry loads the tree.",
+      "file": "variants/account-switch-error.vue"
+    }
+  ]
+}

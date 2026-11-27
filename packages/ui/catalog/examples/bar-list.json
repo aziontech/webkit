@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Five paths ranked by requests. Each bar runs against the largest value, so /home fills the row.",
+   "file": "examples/bar-list/default.vue"
+  },
+  {
+   "name": "Interactive",
+   "summary": "Left: items carry an href, so each row is a link to that path filtered in analytics. Right: clickable renders rows as buttons that emit item-click with the event and the item.",
+   "file": "examples/bar-list/interactive.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "Skeleton rows of falling length hold the place of the list.",
+   "file": "examples/bar-list/loading.vue"
+  }
+ ]
+}

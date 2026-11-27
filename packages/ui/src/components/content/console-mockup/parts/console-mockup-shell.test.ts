@@ -1,0 +1,346 @@
+import { render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+import { commands } from 'vitest/browser'
+import { defineComponent, nextTick, ref } from 'vue'
+
+import Default from '../../../../../examples/console-mockup/default.vue'
+import { expectNoA11yViolations } from '../../../../test/axe'
+import { useHydrationHost } from '../../../../test/hydration-shared'
+import ConsoleMockupShell from './console-mockup-shell.vue'
+import ConsoleMockupShellItem from './console-mockup-shell-item.vue'
+
+const TESTID = 'console-mockup-shell'
+const PART_TESTID = 'console-mockup-shell-item'
+
+const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+const host = (props: Record<string, unknown> = {}, overlay = false) =>
+  defineComponent({
+    components: { ConsoleMockupShell, ConsoleMockupShellItem },
+    setup: () => ({ props, overlay }),
+    template: `
+      <div style="width: 860px; height: 480px">
+        <ConsoleMockupShell v-bind="props" style="display: block; height: 100%">
+          <ConsoleMockupShellItem :order="0"><p>First part</p></ConsoleMockupShellItem>
+          <ConsoleMockupShellItem :order="1"><p>Second part</p></ConsoleMockupShellItem>
+          <template v-if="overlay" #overlay><p>Drawer layer</p></template>
+        </ConsoleMockupShell>
+      </div>
+    `
+  })
+
+const fadeLayers = (root: Element) => root.querySelectorAll(':scope > [data-fade]')
+
+const drawnChrome = (root: Element) =>
+  Array.from(root.querySelectorAll('[inert][aria-hidden="true"]'))
+
+const parts = (container: Element) =>
+  Array.from(container.querySelectorAll(`[data-testid="${PART_TESTID}"]`))
+
+describe('ConsoleMockupShell', () => {
+  describe('composition', () => {
+    it('renders the root and its parts under the default testids', () => {
+      const { getByTestId, container } = render(host())
+
+      expect(getByTestId(TESTID).tagName).toBe('FIGURE')
+      expect(parts(container)).toHaveLength(2)
+    })
+
+    it('lets a consumer data-testid win over the fallback', () => {
+      const { getByTestId, queryByTestId } = render(host({ 'data-testid': 'workloads-mock' }))
+
+      expect(getByTestId('workloads-mock')).toBeInTheDocument()
+      expect(queryByTestId(TESTID)).toBeNull()
+    })
+
+    it('mirrors variant and fade on the root', () => {
+      const { getByTestId } = render(host({ variant: 'bare', fade: 'y' }))
+      const root = getByTestId(TESTID)
+
+      expect(root.getAttribute('data-variant')).toBe('bare')
+      expect(root.getAttribute('data-fade')).toBe('y')
+    })
+
+    it('renders a fade layer only when fade is set', () => {
+      const faded = render(host({ fade: 'bottom' }))
+      const layers = fadeLayers(faded.getByTestId(TESTID))
+      expect(layers).toHaveLength(1)
+      expect(layers[0]?.getAttribute('data-fade')).toBe('bottom')
+      faded.unmount()
+
+      const plain = render(host())
+      expect(fadeLayers(plain.getByTestId(TESTID))).toHaveLength(0)
+    })
+
+    it('is an inert picture hidden from assistive technology by default', () => {
+      const { getByTestId } = render(host())
+      const root = getByTestId(TESTID)
+
+      expect(root.hasAttribute('inert')).toBe(true)
+      expect(root.getAttribute('aria-hidden')).toBe('true')
+      expect(root.hasAttribute('data-interactive')).toBe(false)
+    })
+
+    it('exposes its controls when interactive', () => {
+      const { getByTestId } = render(host({ interactive: true }))
+      const root = getByTestId(TESTID)
+
+      expect(root.hasAttribute('inert')).toBe(false)
+      expect(root.hasAttribute('aria-hidden')).toBe(false)
+      expect(root.hasAttribute('data-interactive')).toBe(true)
+    })
+
+    it('draws the slim console bar with the title when there is no rail', () => {
+      const { getByTestId } = render(host({ title: 'Workloads' }))
+      const root = getByTestId(TESTID)
+
+      const bars = drawnChrome(root)
+
+      expect(bars).toHaveLength(1)
+      expect(bars[0]?.textContent).toContain('Workloads')
+      expect(root.querySelector('[data-active]')).toBeNull()
+    })
+
+    it('splits the title into breadcrumbs and marks the active rail entry when a rail is set', () => {
+      const { getByTestId } = render(host({ title: 'Workloads › my-workload', rail: 'workloads' }))
+      const root = getByTestId(TESTID)
+      const crumbs = Array.from(root.querySelectorAll('ol li'))
+
+      expect(crumbs.map((crumb) => crumb.textContent?.trim())).toEqual(['Workloads', 'my-workload'])
+      expect(crumbs[1]?.hasAttribute('data-active')).toBe(true)
+      expect(crumbs[0]?.hasAttribute('data-active')).toBe(false)
+
+      const active = Array.from(root.querySelectorAll('[data-active]')).filter(
+        (el) => !el.closest('ol')
+      )
+      expect(active).toHaveLength(1)
+      expect(active[0]?.textContent).toContain('Workloads')
+    })
+
+    it('draws the previous console bar for the legacy shell', () => {
+      const { getByTestId } = render(host({ shell: 'legacy' }))
+      const root = getByTestId(TESTID)
+
+      const bars = drawnChrome(root)
+
+      expect(bars).toHaveLength(1)
+      expect(bars[0]?.textContent).toContain('Feedback')
+      expect(root.querySelector('ol')).toBeNull()
+    })
+
+    it('draws no bar when chrome is off', () => {
+      const { getByTestId } = render(host({ chrome: false, title: 'Workloads' }))
+
+      expect(drawnChrome(getByTestId(TESTID))).toHaveLength(0)
+    })
+
+    it('rescales the frame when its design width changes', async () => {
+      const width = ref(860)
+      const mobileWidth = ref(390)
+      const Host = defineComponent({
+        components: { ConsoleMockupShell, ConsoleMockupShellItem },
+        setup: () => ({ width, mobileWidth }),
+        template: `
+        <div style="width: 860px; height: 480px">
+          <ConsoleMockupShell :width="width" :mobile-width="mobileWidth" style="display: block; height: 100%">
+            <ConsoleMockupShellItem><p>Only part</p></ConsoleMockupShellItem>
+          </ConsoleMockupShell>
+        </div>
+      `
+      })
+      const { getByTestId } = render(Host)
+      const frame = getByTestId(TESTID).firstElementChild as globalThis.HTMLElement
+      const designWidth = () =>
+        globalThis.matchMedia('(min-width: 768px)').matches ? width.value : mobileWidth.value
+
+      await expect.poll(() => frame.style.width).toBe(`${designWidth()}px`)
+      const before = frame.style.transform
+      await new Promise((resolve) =>
+        globalThis.requestAnimationFrame(() => globalThis.requestAnimationFrame(resolve))
+      )
+
+      width.value = 430
+      mobileWidth.value = 215
+      await expect.poll(() => frame.style.width).toBe(`${designWidth()}px`)
+      expect(frame.style.transform).not.toBe(before)
+    })
+
+    it('scales a mockup inside a transformed host by its layout width, not its on-screen box', async () => {
+      const Host = defineComponent({
+        components: { ConsoleMockupShell, ConsoleMockupShellItem },
+        template: `
+        <div>
+          <div data-host="plain" style="width: 430px; height: 240px">
+            <ConsoleMockupShell :width="860" :mobile-width="860" style="display: block; height: 100%">
+              <ConsoleMockupShellItem><p>Plain</p></ConsoleMockupShellItem>
+            </ConsoleMockupShell>
+          </div>
+          <div data-host="scaled" style="width: 430px; height: 240px; transform: scale(0.5); transform-origin: top left">
+            <ConsoleMockupShell :width="860" :mobile-width="860" style="display: block; height: 100%">
+              <ConsoleMockupShellItem><p>Scaled</p></ConsoleMockupShellItem>
+            </ConsoleMockupShell>
+          </div>
+        </div>
+      `
+      })
+      const { container } = render(Host)
+      const frameIn = (host: string) =>
+        container.querySelector(`[data-host="${host}"] [data-testid="${TESTID}"]`)
+          ?.firstElementChild as globalThis.HTMLElement
+
+      await expect.poll(() => frameIn('plain').style.transform).toMatch(/^scale\(/)
+      await expect
+        .poll(() => frameIn('scaled').style.transform)
+        .toBe(frameIn('plain').style.transform)
+    })
+
+    it('renders the overlay slot over the frame', () => {
+      const { getByText } = render(host({}, true))
+
+      expect(getByText('Drawer layer')).toBeInTheDocument()
+    })
+
+    it('lands every part once the mockup is on screen and active', async () => {
+      const { container } = render(host())
+
+      await expect
+        .poll(() => parts(container).every((part) => part.hasAttribute('data-entered')))
+        .toBe(true)
+    })
+
+    it('draws every part in place from the start when not animated', () => {
+      const { container } = render(host({ animated: false }))
+
+      expect(parts(container).every((part) => part.hasAttribute('data-entered'))).toBe(true)
+    })
+
+    it.skipIf(reducedMotion())(
+      'holds the entrance while inactive and replays it when activated',
+      async () => {
+        const active = ref(false)
+        const Host = defineComponent({
+          components: { ConsoleMockupShell, ConsoleMockupShellItem },
+          setup: () => ({ active }),
+          template: `
+        <div style="width: 860px; height: 480px">
+          <ConsoleMockupShell :active="active" style="display: block; height: 100%">
+            <ConsoleMockupShellItem :order="0"><p>Only part</p></ConsoleMockupShellItem>
+          </ConsoleMockupShell>
+        </div>
+      `
+        })
+        const { container } = render(Host)
+        await new Promise((resolve) => globalThis.setTimeout(resolve, 100))
+
+        expect(parts(container)[0]?.hasAttribute('data-entered')).toBe(false)
+
+        active.value = true
+        await expect.poll(() => parts(container)[0]?.hasAttribute('data-entered')).toBe(true)
+
+        active.value = false
+        await nextTick()
+        expect(parts(container)[0]?.hasAttribute('data-entered')).toBe(false)
+      }
+    )
+
+    it('throws when a part is rendered outside a ConsoleMockupShell', () => {
+      expect(() => render(ConsoleMockupShellItem)).toThrow(
+        'useConsoleMockupShellContext must be used within ConsoleMockupShell.'
+      )
+    })
+
+    it.each(['console', 'legacy'] as const)(
+      'keeps the drawn %s chrome out of the accessibility tree when interactive',
+      async (shell) => {
+        const Page = defineComponent({
+          components: { ConsoleMockupShell, ConsoleMockupShellItem },
+          setup: () => ({ shell }),
+          template: `
+          <div>
+            <header><p>Page banner</p></header>
+            <div style="width: 860px; height: 480px">
+              <ConsoleMockupShell
+                interactive
+                :shell="shell"
+                title="Workloads › my-workload"
+                :rail="shell === 'console' ? 'workloads' : ''"
+                style="display: block; height: 100%"
+              >
+                <ConsoleMockupShellItem><button type="button">Slot action</button></ConsoleMockupShellItem>
+              </ConsoleMockupShell>
+            </div>
+          </div>
+        `
+        })
+        const { container, getByRole, queryAllByRole, getByTestId } = render(Page)
+
+        expect(queryAllByRole('banner')).toHaveLength(1)
+        expect(queryAllByRole('navigation')).toHaveLength(0)
+        expect(queryAllByRole('complementary')).toHaveLength(0)
+        expect(queryAllByRole('button').map((button) => button.textContent?.trim())).toEqual([
+          'Slot action'
+        ])
+
+        const slotAction = getByRole('button', { name: 'Slot action' })
+        const drawnButtons = Array.from(getByTestId(TESTID).querySelectorAll('button')).filter(
+          (button) => button !== slotAction
+        )
+
+        expect(drawnButtons.length).toBeGreaterThan(0)
+        for (const button of drawnButtons) {
+          button.focus()
+          expect(document.activeElement).not.toBe(button)
+        }
+        slotAction.focus()
+        expect(document.activeElement).toBe(slotAction)
+
+        await expectNoA11yViolations(container)
+      }
+    )
+
+    it('has no axe violations as a picture or when interactive', async () => {
+      const picture = render(host({ title: 'Workloads › my-workload', rail: 'workloads' }))
+      await expectNoA11yViolations(picture.container)
+      picture.unmount()
+
+      const interactive = render(host({ interactive: true, shell: 'legacy' }))
+      await expectNoA11yViolations(interactive.container)
+    })
+  })
+
+  describe('right-to-left', () => {
+    it('scales the frame from its start corner in both directions', () => {
+      const { container } = render(host())
+      const frame = container.querySelector('.origin-top-left')
+      expect(frame?.className).toContain('start-0')
+      expect(frame?.className).toContain('rtl:origin-top-right')
+    })
+  })
+
+  describe('under reduced motion', () => {
+    const { hydrate } = useHydrationHost()
+
+    it('hydrates the server-rendered HTML without a mismatch', async () => {
+      await commands.emulateMedia({ reducedMotion: 'reduce' })
+      try {
+        const rendered = await commands.renderOnServer('examples/console-mockup/default.vue')
+        expect(rendered.error).toBeNull()
+        const mismatches = await hydrate(Default, rendered.html, rendered.teleports)
+        expect(mismatches, mismatches.join('\n')).toEqual([])
+      } finally {
+        await commands.emulateMedia({ reducedMotion: null })
+      }
+    })
+
+    it('draws every part in place once mounted', async () => {
+      await commands.emulateMedia({ reducedMotion: 'reduce' })
+      try {
+        const { container } = render(host({ active: false }))
+        await nextTick()
+        expect(parts(container).every((part) => part.hasAttribute('data-entered'))).toBe(true)
+      } finally {
+        await commands.emulateMedia({ reducedMotion: null })
+      }
+    })
+  })
+})

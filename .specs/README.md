@@ -1,6 +1,6 @@
 # `.specs/` — Component specs
 
-This directory holds one Markdown spec per webkit-layer component. **A spec is a contract.** It is reviewed and approved **before any code is written**, and once approved it is the single source of truth that every sub-agent in `/component-create` must obey 1-to-1.
+This directory holds one Markdown spec per azion-ui-layer component. **A spec is a contract.** It is reviewed and approved **before any code is written**, and once approved it is the single source of truth that every sub-agent in `/component-create` must obey 1-to-1.
 
 ## Why specs exist
 
@@ -15,7 +15,7 @@ Specs collapse that latitude. The agent stops being an author and becomes a tran
 | `_template.md` | Canonical template — copy this to start a new spec. Defines the mandatory frontmatter + 9 body sections. |
 | `_schema.json` | JSON Schema (Draft 2020-12) for the frontmatter. Validated by Ajv inside `spec-validator` and `enforce-spec-exists.mjs`. |
 | `__fixtures__/` | Intentionally invalid specs used by the hook test suite. Their presence must make `spec-validator` fail. |
-| `<name>.md` | One per component (e.g. `button.md`, `dialog.md`). Created by `/spec-create` or bulk-migrated via `node scripts/migrate-webkit-specs.mjs`. |
+| `<name>.md` | One per component (e.g. `button.md`, `dialog.md`). Created by `/spec-create` or bulk-migrated via `node scripts/migrate-azion-ui-specs.mjs`. |
 
 ## Lifecycle
 
@@ -42,7 +42,7 @@ Don't write one by hand for the first time. Run:
 /spec-create <name> --figma <url>
 ```
 
-The `spec-author` sub-agent will ask focused questions (kind options, sizes, events, slots, a11y, stories), cross-reference DESIGN.md and any Figma URL you provide, and write `.specs/<name>.md` with `status: draft`.
+The `spec-creator` sub-agent will ask focused questions (kind options, sizes, events, slots, a11y, stories), cross-reference TOKENS.md and any Figma URL you provide, and write `.specs/<name>.md` with `status: draft`.
 
 Review the draft. Edit anything that's wrong. Then mark `status: approved` and re-run `/component-create` (which will call `spec-validator` and refuse to proceed if the body and the schema disagree).
 
@@ -58,7 +58,7 @@ Review the draft. Edit anything that's wrong. Then mark `status: approved` and r
 ## Legacy components
 
 Components created **before** the spec-driven workflow live in
-`.claude/hooks/_lib/legacy-components.json`. The two new hooks consult that
+`contributing/hooks/lib/legacy-components.json`. The two new hooks consult that
 whitelist and bypass spec checks for them. **Backfilling specs for legacy
 components is intentionally a separate task** — do not mix it with new-component
 PRs.
@@ -67,5 +67,5 @@ PRs.
 
 - **Do not** delete `_template.md` or `_schema.json`.
 - **Do not** edit a spec whose `status` is `locked`. Bump `spec_version` and create a new draft instead.
-- **Do not** edit DESIGN.md or COMPONENT_REQUIREMENTS.md to "match a spec" — the spec is wrong, fix the spec.
+- **Do not** edit TOKENS.md or COMPONENT_REQUIREMENTS.md to "match a spec" — the spec is wrong, fix the spec.
 - **Do not** commit a spec with `status: draft` to `main`. Drafts are local working state.

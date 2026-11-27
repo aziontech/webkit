@@ -1,0 +1,148 @@
+{
+ "name": "template-gallery-section",
+ "binding": "TemplateGallerySection",
+ "import": "@aziontech/ui/template-gallery-section",
+ "treeShakeableImport": "@aziontech/ui/template-gallery-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a two-column wall, scrolling once the band splits, of deployable template cards, closed by a marquee of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery-section', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `module`, `media-split`, `scroll-area`, `card-grid`, `button`, `registration-frame` and `marquee` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).",
+ "setup": null,
+ "useWhen": [
+  "Use TemplateGallerySection on marketing pages to show deployable templates; set `closing` when it is the last band.",
+  "On a solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming) to show the templates a reader can deploy right away.",
+  "Whenever a band pairs one pitch with a long, browsable list of deployable starters."
+ ],
+ "avoidWhen": [
+  "For a grid of features with artwork → use `feature-tiles-section`.",
+  "For a marquee of marks alone → compose `marquee` directly.",
+  "For a handful of icon-led use cases → use `customer-use-cases-section`.",
+  "For a closing ask with links or a command and no templates → use `closing-call-to-action-section`; for an email sign-up close → use `newsletter-section`."
+ ],
+ "related": [
+  "`media-split` — the framed copy-and-media split the band is built on; it owns the band's named region.",
+  "`marquee` — the row of framework and cloud marks that closes the band."
+ ],
+ "bestPractices": [
+  "Keep the wall to an even number of templates so the two columns end level.",
+  "Turn on `invertInDark` only for a mark whose artwork ships in dark ink, so it stays legible on the dark theme.",
+  "Set `templatesAriaLabel` so the scrolling wall is announced by name.",
+  "Set `closing` only on the last band of the page, right above `site-footer-section`: it draws the hatched closing frame itself, so nothing follows it inside the page column (no trailing `Spacer`, no closing `RegistrationFrame`).",
+  "Turn `hatch` off only on a closing band that another closing band follows directly; the last one keeps the frame."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the headline."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Paragraph under the headline."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ModuleHeaderAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "ModuleHeaderAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent."
+  },
+  {
+   "name": "templates",
+   "type": "TemplateGallerySectionTemplate[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped."
+  },
+  {
+   "name": "deployLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. The button is named `<label>, <template title>`, so each card's action is told apart."
+  },
+  {
+   "name": "templatesAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the scrolling wall of templates."
+  },
+  {
+   "name": "marqueeLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the row of marks."
+  },
+  {
+   "name": "marqueeMarks",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Registry names of the frameworks and clouds in the row of marks, in order; the marquee is omitted when empty."
+  },
+  {
+   "name": "closing",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Makes the band the page's closing band: the hatched closing frame follows it, as the closing call to action draws it."
+  },
+  {
+   "name": "hatch",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draws the hatched closing frame under a `closing` band; turn it off when another closing band stacks directly below and draws the shared frame. Ignored without `closing`."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [
+  {
+   "kind": "brandMarks",
+   "page": "foundations/brand-marks.md"
+  }
+ ],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/template-gallery-section/default.vue"
+  },
+  {
+   "name": "Closing",
+   "file": "examples/template-gallery-section/closing.vue"
+  }
+ ],
+ "docs": "components/template-gallery-section.md"
+}

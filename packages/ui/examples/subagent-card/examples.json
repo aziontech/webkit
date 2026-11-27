@@ -1,0 +1,16 @@
+{
+  "component": "subagent-card",
+  "title": "Components/AI/SubagentCard",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Every status of a helper agent in the order a run goes through them: waiting on the reader, running, completed, failed and stopped, each with its status in text, how long it worked and a summary line.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithMessages",
+      "summary": "A running helper opened to its task and its own messages, with Stop and a nested helper inside it, and a failed helper whose error is the summary line.",
+      "file": "with-messages.vue"
+    }
+  ]
+}

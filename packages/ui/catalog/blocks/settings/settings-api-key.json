@@ -1,0 +1,39 @@
+{
+ "variants": [
+  {
+   "name": "Empty",
+   "summary": "No key saved: only Save key shows.",
+   "file": "blocks/settings/settings-api-key/variants/empty.vue"
+  },
+  {
+   "name": "Saving",
+   "summary": "The save is in flight: the controls lock and Replace key spins, keeping focus.",
+   "file": "blocks/settings/settings-api-key/variants/saving.vue"
+  },
+  {
+   "name": "Testing",
+   "summary": "Test connection runs: the status reads Testing, Remove key and the Provider lock.",
+   "file": "blocks/settings/settings-api-key/variants/testing.vue"
+  },
+  {
+   "name": "Success",
+   "summary": "The test passed: the status reads Connected.",
+   "file": "blocks/settings/settings-api-key/variants/success.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The test failed: the status reads Connection failed and an Alert gives the reason with Test again.",
+   "file": "blocks/settings/settings-api-key/variants/error.vue"
+  },
+  {
+   "name": "SaveError",
+   "summary": "The save failed: an Alert gives the reason with no action; Replace key retries.",
+   "file": "blocks/settings/settings-api-key/variants/save-error.vue"
+  }
+ ],
+ "sfcFile": "blocks/settings/settings-api-key/settings-api-key.vue",
+ "guidelinesFile": "blocks/settings/settings-api-key/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
+}

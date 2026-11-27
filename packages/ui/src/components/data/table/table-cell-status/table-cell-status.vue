@@ -1,0 +1,51 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  import Tag, { type TagSeverity } from '../../../content/tag/tag.vue'
+
+  defineOptions({
+    name: 'TableCellStatus',
+    inheritAttrs: false
+  })
+
+  export interface TableCellStatusProps {
+    /** The status text. Empty renders a muted dash. */
+    label?: string
+    /** Semantic colour of the status; keep it from one shared helper per status set. */
+    severity?: TagSeverity
+    /** Azion icon class for a leading glyph. */
+    icon?: string
+  }
+
+  withDefaults(defineProps<TableCellStatusProps>(), {
+    label: '',
+    severity: 'neutral',
+    icon: undefined
+  })
+
+  const attrs = useAttrs()
+  const testId = computed<string>(
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-cell-status'
+  )
+</script>
+
+<template>
+  <Tag
+    v-if="label"
+    v-bind="$attrs"
+    :data-testid="testId"
+    :severity="severity"
+    :icon="icon"
+    size="medium"
+    class="max-w-full min-w-0"
+  >
+    <span class="min-w-0 truncate">{{ label }}</span>
+  </Tag>
+  <span
+    v-else
+    v-bind="$attrs"
+    :data-testid="testId"
+    class="text-body-sm text-(--text-muted)"
+    >—</span
+  >
+</template>

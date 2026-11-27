@@ -1,6 +1,6 @@
 ---
 name: hex-token
-category: actions
+category: action
 structure: monolithic
 status: draft
 spec_version: 1
@@ -12,25 +12,25 @@ last_updated: 2026-05-22
 
 ## Purpose
 
-Fixture: the Tokens table references a HEX literal instead of a DESIGN.md token. spec-validator must reject.
+Fixture: the Tokens table references a HEX literal instead of a TOKENS.md token. spec-validator must reject.
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'primary'` | `'primary'` | no | Visual variant. |
+| Prop   | Type        | Default     | Required | JSDoc           |
+| ------ | ----------- | ----------- | -------- | --------------- |
+| `kind` | `'primary'` | `'primary'` | no       | Visual variant. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event   | Payload      | Notes           |
+| ------- | ------------ | --------------- |
 | `click` | `MouseEvent` | Fires on click. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Body. |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | Body. |
 
 ## States
 
@@ -38,21 +38,21 @@ Fixture: the Tokens table references a HEX literal instead of a DESIGN.md token.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region     | Token (TOKENS.md) |
+| ---------- | ----------------- |
 | typography | `.text-button-lg` |
-| surface | `#0066ff` |
+| surface    | `#0066ff`         |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| -------------- | ------------------- | --------- |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus ring.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - LightDark
@@ -64,7 +64,7 @@ Fixture: the Tokens table references a HEX literal instead of a DESIGN.md token.
 - Do not add events beyond the Events table above.
 - Do not invent imports.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names, raw typography classes, `any`, `@ts-ignore`, or `class` in defineProps.
-- Do not edit DESIGN.md or COMPONENT_REQUIREMENTS.md.
+- Do not edit TOKENS.md or COMPONENT_REQUIREMENTS.md.
 - Do not change `structure` after `status: approved`.
 - Do not create files outside the paths declared by your task.
 - If anything is ambiguous, emit `BLOCKED:` and write nothing.

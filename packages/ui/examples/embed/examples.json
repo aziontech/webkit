@@ -1,0 +1,27 @@
+{
+  "component": "embed",
+  "title": "Components/Content/Embed",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One frame at the default `video` ratio. The source is the reserved `example.com` page standing in for a real demo. Only an `http` or `https` URL is framed: a `javascript:`, `data:` or relative `src` renders the title as plain text instead, and the frame is always sandboxed (scripts, forms, popups and presentation only, no top-level navigation). Change `ratio` and the frame changes shape without the page shifting, because the ratio is reserved before the document loads. `title` has no default on purpose — an `iframe` without one is announced as an unnamed frame, and a screen-reader user meets that name before any content.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Ratios",
+      "summary": "Every `ratio` value, one frame under the other, around the same placeholder document. Each frame keeps its shape at any width — only the height follows. Pick the ratio the source already has: a `video` frame around a square form leaves bands of empty surface above and below it, and no ratio will crop a document that disagrees, it will just scroll inside the frame. Each frame states its own `title`, because every embedded document needs its own name.",
+      "file": "ratios.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<Embed>` tag into a real `Embed`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same content in the marketing site's page JSON: `Embed` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"` and `texture: \"none\"`, so nothing is painted behind it) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
+    }
+  ]
+}

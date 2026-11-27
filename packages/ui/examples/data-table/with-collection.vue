@@ -1,0 +1,51 @@
+<script setup>
+  import DataTable from '@aziontech/ui/data-table'
+  import DataTablePagination from '@aziontech/ui/data-table-pagination'
+  import Input from '@aziontech/ui/input'
+  import { useCollection } from '@aziontech/ui/use-collection'
+
+  const all = Array.from({ length: 87 }, (_, i) => ({
+    id: String(i + 1),
+    name: `domain-${String(i + 1).padStart(2, '0')}.example.com`,
+    status: i % 4 ? 'Active' : 'Inactive'
+  }))
+
+  const fetchDomains = async ({ filteringText, sort, page, pageSize, signal }) => {
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    if (signal.aborted) return { items: [], total: 0 }
+    const needle = filteringText.toLowerCase()
+    const matching = all.filter((row) => row.name.includes(needle))
+    const sorted = sort[0]?.desc ? [...matching].reverse() : matching
+    return { items: sorted.slice((page - 1) * pageSize, page * pageSize), total: matching.length }
+  }
+
+  const columns = [
+    { accessorKey: 'name', header: 'Domain', sortable: true },
+    { accessorKey: 'status', header: 'Status' }
+  ]
+
+  const { paginationProps, filterProps, tableProps } = useCollection({
+    fetch: fetchDomains,
+    columns,
+    pagination: { pageSize: 10 },
+    selection: {}
+  })
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-sm)">
+    <Input
+      v-bind="filterProps"
+      placeholder="Search domains"
+      aria-label="Search domains"
+    />
+    <DataTable v-bind="tableProps">
+      <template #footer>
+        <DataTablePagination
+          v-bind="paginationProps"
+          manual
+        />
+      </template>
+    </DataTable>
+  </div>
+</template>

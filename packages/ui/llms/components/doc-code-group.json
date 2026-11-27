@@ -1,0 +1,84 @@
+{
+ "name": "doc-code-group",
+ "binding": "DocCodeGroup",
+ "import": "@aziontech/ui/doc-code-group",
+ "treeShakeableImport": "@aziontech/ui/doc-code-group",
+ "category": "docs",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One or more code samples of the same thing in different languages or package managers, rendered on `CodeBlock` so the docs inherit its header, copy control and syntax surface. One sample renders a block titled by a label header (the sample label, else the language's readable name: Shell, JavaScript, JSON); several render the joined tab strip. A sample's `output` — what its command prints — renders as a separate muted \"Output\" block under it, with no copy control, so the command block holds only what the reader runs.",
+ "setup": null,
+ "useWhen": [
+  "The same install command for npm, pnpm and yarn.",
+  "The same request in cURL, JavaScript and Python."
+ ],
+ "avoidWhen": [
+  "For unrelated snippets — use one `CodeBlock` each.",
+  "For prose that differs per platform — use `Tabs`."
+ ],
+ "related": [
+  "`CodeBlock` — the surface it renders on.",
+  "`Tabs` — alternatives that are prose, not code."
+ ],
+ "bestPractices": [
+  "Label each sample with what differs (the language or the tool), not with \"Example\". With one sample, leave `label` empty: the header names the language.",
+  "Keep the same order across a page.",
+  "Do: set `language` on every sample, so the header reads \"Shell\" or \"JavaScript\" and the code is highlighted.",
+  "Do: keep `code` to what the reader runs or pastes; the copy control copies exactly that. A leading `$ ` prompt is drawn but never copied.",
+  "Do: put what the command prints in the sample's `output` (`{ language: 'bash', code: 'curl -I https://<your-azion-domain>', output: 'HTTP/2 200' }`), or say it in prose.",
+  "Do: show a standalone printout (a deploy log) with `type=\"output\"`.",
+  "Don't: write output into `code` — never `curl -I https://example.com\\n# HTTP/2 200`, never `$ azion version\\nAzion CLI 4.23.0`. The lint `azion-ui/no-output-in-command` warns on it.",
+  "Don't: turn the label header off on a docs page."
+ ],
+ "props": [
+  {
+   "name": "samples",
+   "type": "DocCodeGroupSample[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing."
+  },
+  {
+   "name": "showLineNumbers",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the line-number gutter."
+  },
+  {
+   "name": "showLabel",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the label header (the sample label or the language name) on a single sample."
+  },
+  {
+   "name": "type",
+   "type": "'code' | 'output'",
+   "default": "'code'",
+   "required": "false",
+   "doc": "What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an \"Output\" label, without a copy control."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/doc-code-group/default.vue"
+  },
+  {
+   "name": "Group",
+   "file": "examples/doc-code-group/group.vue"
+  },
+  {
+   "name": "WithOutput",
+   "file": "examples/doc-code-group/with-output.vue"
+  }
+ ],
+ "docs": "components/doc-code-group.md"
+}

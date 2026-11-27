@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default primary button at large size.",
+   "file": "examples/button/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "All variants side by side. `link` is an inline text action with no box, for a cell or a summary line that opens a drawer or a flow; `size` does not apply to it.",
+   "file": "examples/button/variants.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "file": "examples/button/sizes.vue"
+  }
+ ]
+}

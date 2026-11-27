@@ -1,0 +1,106 @@
+import { render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+
+import Default from '../../../../examples/spacer/default.vue'
+import Hatch from '../../../../examples/spacer/hatch.vue'
+import Sizes from '../../../../examples/spacer/sizes.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import Spacer from './spacer.vue'
+
+const TESTID = 'spacer'
+const FRAME_TESTID = 'registration-frame'
+
+describe('Spacer', () => {
+  it('renders the gap frame under its own testid, not the registration-frame fallback', () => {
+    const { getByTestId, queryByTestId } = render(Spacer)
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+    expect(queryByTestId(FRAME_TESTID)).toBeNull()
+  })
+
+  it('renders as a flush frame that keeps only its two dividing rules', () => {
+    const { getByTestId } = render(Spacer)
+    const root = getByTestId(TESTID)
+
+    expect(root).toHaveAttribute('data-flush', 'top')
+    expect(root).toHaveAttribute('data-borders', 'bottom')
+    expect(root.getAttribute('data-marks')?.split(' ').sort()).toEqual([
+      'bottom-left',
+      'bottom-right',
+      'top-left',
+      'top-right'
+    ])
+    expect(root.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(4)
+  })
+
+  it('draws no hatch texture by default', () => {
+    const { getByTestId } = render(Spacer)
+    const root = getByTestId(TESTID)
+
+    expect(root).not.toHaveAttribute('data-hatch')
+    expect(root.querySelectorAll('div[aria-hidden="true"]')).toHaveLength(0)
+  })
+
+  it('draws one hatch layer when hatch is set', () => {
+    const { getByTestId } = render(Spacer, { props: { hatch: true } })
+    const root = getByTestId(TESTID)
+
+    expect(root).toHaveAttribute('data-hatch', 'true')
+    expect(root.querySelectorAll('div[aria-hidden="true"]')).toHaveLength(1)
+  })
+
+  it('defaults to the medium size', () => {
+    const { getByTestId } = render(Spacer)
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-size', 'medium')
+  })
+
+  it.each(['small', 'medium', 'large'] as const)('reflects size="%s" on data-size', (size) => {
+    const { getByTestId } = render(Spacer, { props: { size } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-size', size)
+  })
+
+  it('holds no content of its own', () => {
+    const { getByTestId } = render(Spacer)
+
+    expect(getByTestId(TESTID)).toHaveTextContent('')
+  })
+
+  it('forwards a consumer data-testid onto the root', () => {
+    const { getByTestId } = render(Spacer, { attrs: { 'data-testid': 'my-gap' } })
+
+    expect(getByTestId('my-gap')).toHaveAttribute('data-borders', 'bottom')
+  })
+
+  it('has no a11y violations', async () => {
+    const { container } = render(Spacer)
+    await expectNoA11yViolations(container)
+  })
+
+  describe('stories', () => {
+    it('renders the Default story with the gap between two stub sections', () => {
+      const { getByTestId, getByText } = render(Default)
+
+      expect(getByText('Section above')).toBeInTheDocument()
+      expect(getByTestId(TESTID)).toHaveAttribute('data-flush', 'top')
+      expect(getByText('Section below')).toBeInTheDocument()
+    })
+
+    it('renders the Hatch story with the texture drawn in the gap', () => {
+      const { getByTestId } = render(Hatch)
+
+      expect(getByTestId(TESTID)).toHaveAttribute('data-hatch', 'true')
+    })
+
+    it('renders the Sizes story with one gap per size step', () => {
+      const { getAllByTestId } = render(Sizes)
+
+      expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-size'))).toEqual([
+        'small',
+        'medium',
+        'large'
+      ])
+    })
+  })
+})

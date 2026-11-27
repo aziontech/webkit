@@ -1,0 +1,33 @@
+{
+  "id": "shell/shell-site",
+  "name": "ShellSite",
+  "title": "Blocks/Shell/ShellSite",
+  "surface": "site",
+  "summary": "The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeaderSection data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooterSection data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `Container max-width=\"site\"` separated by hatched `Spacer`s, ending on a closing frame that draws no rule of its own, so the SiteFooterSection's full-width top rule, with its corner marks, closes the page frame. The hero and the sections resolve to the site measure, which is the only reason the side rules running down the page are continuous; the footer spans the page like the bar. Built from `SiteLayout`, `Hero`, `Button`, `Container`, `Spacer`, `Module`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeaderSection.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "site shell",
+    "marketing site layout",
+    "landing page layout",
+    "website layout",
+    "marketing page frame",
+    "layout do site",
+    "estrutura do site",
+    "página de marketing",
+    "website shell",
+    "marketing site shell",
+    "site layout component",
+    "SiteLayout",
+    "layout do site com SiteHeaderSection"
+  ],
+  "skills": ["azion-ui-layout"],
+  "primary": {
+    "name": "Default",
+    "file": "shell-site.vue"
+  },
+  "files": ["sample.ts"],
+  "variants": []
+}

@@ -1,0 +1,150 @@
+{
+ "name": "stat-tile",
+ "binding": "StatTile",
+ "import": "@aziontech/ui/stat-tile",
+ "treeShakeableImport": "@aziontech/ui/stat-tile",
+ "category": "chart",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use StatTile to show one headline metric (figure, delta, sparkline) in product UI; the strip of related metrics is a StatTileGroup, one value against a range with thresholds is a GaugeChart, and a money amount on its own is a CurrencyAmount. A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `variant` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).",
+ "setup": null,
+ "useWhen": [
+  "The headline numbers of a dashboard: total requests, blocked threats, cache hit ratio, error rate.",
+  "A single value whose change matters more than its history; the sparkline adds the shape of that history."
+ ],
+ "avoidWhen": [
+  "The history itself is the point → use `chart`.",
+  "A share of a whole → use `donut-chart`.",
+  "Marketing figures on a site band → use `stats`."
+ ],
+ "related": [
+  "`chart` — the full history behind a tile.",
+  "`chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.",
+  "`stats` — the marketing figure band, with no delta and no live data.",
+  "`spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.",
+  "`tag` — the delta renders as a `Tag`; the empty band's \"No data\" is a `Tag` too.",
+  "`stat-tile-group` — one card split into cells, one per tile: the KPI strip of an overview."
+ ],
+ "bestPractices": [
+  "Name the comparison period in `deltaLabel` (\"vs previous 24 hours\"); a bare percentage is ambiguous.",
+  "Set `inverse` on every metric where a rise is bad, so a growing threat count reads as a regression.",
+  "Keep the label in sentence case with no trailing colon.",
+  "Put the unit in `unit` (\"GB\", \"ms\", \"%\"), not inside `formatValue`, so it reads muted beside the figure.",
+  "Leave `trend` out for a strip of figures with no history; the tile then has no chart band. In a row where some tiles have a trend, the others draw the gray placeholder band by themselves; do not fake a trend for them.",
+  "Give the sparkline the same buckets as the chart below it, about twelve points.",
+  "For a KPI strip that reads as one band (an overview's usage row), put the tiles in a `StatTileGroup`; do not hand-build the card, the grid or the dividers. Separate tiles are for figures that stand alone.",
+  "Use `variant=\"mono\"` (default) for usage figures with a delta, `variant=\"sans\"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one variant per row.",
+  "Pass the delta as the raw percentage (`12.4`); the tile prints at most two decimals and drops trailing zeros (`+12.4%`, `+3%`)."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Metric name, in sentence case. Fallback for the default slot."
+  },
+  {
+   "name": "value",
+   "type": "number | null",
+   "default": "null",
+   "required": "false",
+   "doc": "The current value. It counts up from the previous value on change; null renders a dash."
+  },
+  {
+   "name": "formatValue",
+   "type": "(value: number) => string",
+   "default": "formatCompact",
+   "required": "false",
+   "doc": "Formats the figure."
+  },
+  {
+   "name": "variant",
+   "type": "StatTileVariant",
+   "default": "'mono'",
+   "required": "false",
+   "doc": "Figure face: `mono` is the big-number mono figure, `sans` the large heading figure."
+  },
+  {
+   "name": "unit",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Unit read after the figure, smaller and in a muted sans tone. Empty hides it."
+  },
+  {
+   "name": "delta",
+   "type": "number | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta."
+  },
+  {
+   "name": "deltaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The comparison period, read after the delta."
+  },
+  {
+   "name": "inverse",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "A rise is bad for this metric; flips the delta between success and danger."
+  },
+  {
+   "name": "trend",
+   "type": "(number | null)[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Sparkline values, oldest first. Under two points draws a gray placeholder curve; empty leaves the figure alone unless a sibling in its group draws a band."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders Skeleton lines in place of the figure, delta and sparkline."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Why the value failed to load. When set, the tile shows a dash and a neutral band that says it could not load, never No data."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Replaces the label text."
+  },
+  {
+   "name": "aside",
+   "scope": "—",
+   "notes": "Trailing content beside the label, such as an info icon or a menu."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/stat-tile/default.vue"
+  },
+  {
+   "name": "Deltas",
+   "file": "examples/stat-tile/deltas.vue"
+  },
+  {
+   "name": "Variants",
+   "file": "examples/stat-tile/variants.vue"
+  }
+ ],
+ "docs": "components/stat-tile.md"
+}

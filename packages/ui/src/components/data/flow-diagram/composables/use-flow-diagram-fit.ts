@@ -1,0 +1,97 @@
+import { useMutationObserver, useResizeObserver } from '@vueuse/core'
+import {
+  computed,
+  type ComputedRef,
+  type MaybeRefOrGetter,
+  onMounted,
+  onScopeDispose,
+  type Ref,
+  ref,
+  toValue,
+  watch
+} from 'vue'
+
+export type FlowDiagramDirection = 'row' | 'column'
+
+export interface UseFlowDiagramFitReturn {
+  /** The direction the steps are laid out in. */
+  direction: ComputedRef<FlowDiagramDirection>
+  /** Content is scrolled past the inline start. */
+  overflowStart: ComputedRef<boolean>
+  /** Content continues past the inline end. */
+  overflowEnd: ComputedRef<boolean>
+  /** Content is taller than the scroll area, so it scrolls in the block direction. */
+  overflowBlock: ComputedRef<boolean>
+  /** Re-reads the overflow edges; bind it to the scroll event. */
+  measureEdges: () => void
+}
+
+const overflows = (el: HTMLElement): boolean => el.scrollWidth > el.clientWidth + 1
+
+export const useFlowDiagramFit = (
+  scrollEl: Ref<HTMLElement | null>,
+  listEl: Ref<HTMLElement | null>,
+  orientation: MaybeRefOrGetter<'horizontal' | 'vertical' | 'responsive'>
+): UseFlowDiagramFitReturn => {
+  const fixed = (): FlowDiagramDirection | null =>
+    (({ horizontal: 'row', vertical: 'column', responsive: null }) as const)[toValue(orientation)]
+
+  const direction = ref<FlowDiagramDirection>(fixed() ?? 'column')
+  const overflowStart = ref<boolean>(false)
+  const overflowEnd = ref<boolean>(false)
+  const overflowBlock = ref<boolean>(false)
+
+  const measureEdges = (): void => {
+    const el = scrollEl.value
+    if (!el) return
+    const offset = Math.abs(el.scrollLeft)
+    overflowStart.value = offset > 1
+    overflowEnd.value = el.scrollWidth - el.clientWidth - offset > 1
+    overflowBlock.value = el.scrollHeight - el.clientHeight > 1
+  }
+
+  let probed = ''
+
+  const fit = (): void => {
+    const el = scrollEl.value
+    const list = listEl.value
+    if (!el || !list) return
+    const size = () => [el.clientWidth, list.offsetWidth, list.offsetHeight].join()
+    const next = fixed()
+    if (next) direction.value = next
+    else if (size() !== probed) {
+      list.setAttribute('data-direction', 'row')
+      direction.value = overflows(el) ? 'column' : 'row'
+      list.setAttribute('data-direction', direction.value)
+      probed = size()
+    }
+    measureEdges()
+  }
+
+  let frame = 0
+  const schedule = (): void => {
+    globalThis.cancelAnimationFrame(frame)
+    frame = globalThis.requestAnimationFrame(fit)
+  }
+
+  const probe = (): void => {
+    probed = ''
+    globalThis.cancelAnimationFrame(frame)
+    fit()
+  }
+
+  onMounted(fit)
+  onScopeDispose(() => globalThis.cancelAnimationFrame(frame))
+  watch(() => toValue(orientation), probe, { flush: 'post' })
+  useResizeObserver(() => scrollEl.value, schedule)
+  useResizeObserver(() => listEl.value, schedule)
+  useMutationObserver(listEl, probe, { childList: true, subtree: true })
+
+  return {
+    direction: computed(() => direction.value),
+    overflowStart: computed(() => overflowStart.value),
+    overflowEnd: computed(() => overflowEnd.value),
+    overflowBlock: computed(() => overflowBlock.value),
+    measureEdges
+  }
+}

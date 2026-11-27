@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Headings, paragraphs, links, inline code, both list kinds, a blockquote and a section rule: the plain semantic HTML a Markdown source renders to through `DocMarkdown`, none of it carrying a class. `DocProse` styles it the way it styles a documentation page.",
+   "file": "examples/doc-prose/default.vue"
+  },
+  {
+   "name": "ChromeBoundary",
+   "summary": "`DocProse` styles descendants, so without a guard it would restyle the internals of every documentation component sitting in the prose — a callout body, a code block’s lines, an accordion trigger’s heading. Every prose rule carries `:not([data-doc-chrome],[data-doc-chrome]_*)`, so a subtree marked `data-doc-chrome` is left alone while the prose around it is not.",
+   "file": "examples/doc-prose/chrome-boundary.vue"
+  }
+ ]
+}

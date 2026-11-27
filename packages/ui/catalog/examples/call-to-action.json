@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The panel a page closes with: one headline, one supporting sentence, and the two controls the reader is meant to choose between. The primary action leads and the secondary one is `outlined`, so the panel has a single obvious target. From `md` up the controls sit beside the copy; below it they stack and stretch full width.",
+   "file": "examples/call-to-action/default.vue"
+  },
+  {
+   "name": "WithEyebrow",
+   "summary": "The same panel with an `eyebrow` above the headline. The overline names the panel when it sits mid-page and the headline alone would not say what it belongs to. It adds a line to the copy stack, so the panel grows taller while the actions stay on the headline row from `md` up.",
+   "file": "examples/call-to-action/with-eyebrow.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "The three registers. `panel` keeps the copy and both controls on one surface and reads as a row from `md` up. `split` divides the band at 7fr/3fr: the raised lead cell carries the two-tone headline and the primary action, the aside carries the supporting line and the secondary one, and each cell pushes its control to the band floor so the two share a baseline whatever the copy does. `lead` is that lead cell with no aside — the supporting line moves under the headline and every control sits in one row on the floor, which is the register for a close whose actions are peers.",
+   "file": "examples/call-to-action/variants.vue"
+  }
+ ]
+}

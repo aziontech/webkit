@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default rectangular placeholder with a shimmer.",
+   "file": "examples/skeleton/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "Both geometries side by side: a `rectangle` and a `circle`.",
+   "file": "examples/skeleton/variants.vue"
+  },
+  {
+   "name": "OnSurfaces",
+   "summary": "The same placeholder on all four surface layers. The fill is `var(--bg-placeholder)`, a translucent role rather than an opaque surface, so it composites over whatever sits behind it and holds its contrast on every layer — in both themes. Built from a surface token instead, a placeholder is only legible on the one surface it was picked against.",
+   "file": "examples/skeleton/on-surfaces.vue"
+  }
+ ]
+}

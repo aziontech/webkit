@@ -1,0 +1,129 @@
+<script setup lang="ts">
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
+
+  import { useTranslate } from '../../../../composables/use-translate'
+  import * as en from '../../../../locales/en'
+  import { useWizardContext } from '../composables/use-wizard-context'
+
+  defineOptions({
+    name: 'WizardStep',
+    inheritAttrs: false
+  })
+
+  export interface WizardStepProps {
+    /** What this step decides, in the reader's words; shown in the rail and as the step heading. */
+    title?: string
+    /** One line under the heading saying what the step is for; omitted when empty. */
+    description?: string
+    /** Marks the step as skippable: shows Optional beside the title in the rail and in the header. */
+    optional?: boolean
+    /** The step holds an error: the rail shows it in the error state and the step root carries data-invalid. */
+    invalid?: boolean
+  }
+
+  const props = withDefaults(defineProps<WizardStepProps>(), {
+    title: '',
+    description: '',
+    optional: false,
+    invalid: false
+  })
+
+  defineSlots<{
+    /** The step's content (fields, review summary). */
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ wizard: en.wizard })
+  const context = useWizardContext()
+
+  const id = Symbol('WizardStep')
+  const { index, active } = context.register(id, {
+    title: () => props.title,
+    optional: () => props.optional,
+    invalid: () => props.invalid
+  })
+
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+  const headingEl = ref<globalThis.HTMLElement | null>(null)
+  const headingId = useId()
+  const counterId = useId()
+  let settled = false
+
+  const testId = computed<string>(
+    () => (attrs['data-testid'] as string | undefined) ?? 'wizard-step'
+  )
+
+  watch(
+    active,
+    (now) => {
+      if (now && settled) headingEl.value?.focus()
+    },
+    { flush: 'post' }
+  )
+
+  onMounted(() => {
+    context.attach(id, rootEl.value)
+    void nextTick(() => {
+      settled = true
+    })
+  })
+
+  onBeforeUnmount(() => context.unregister(id))
+</script>
+
+<template>
+  <div
+    ref="rootEl"
+    v-bind="$attrs"
+    role="group"
+    :aria-labelledby="active ? headingId : undefined"
+    :hidden="!active"
+    :data-testid="testId"
+    :data-active="active || null"
+    :data-optional="optional || null"
+    :data-invalid="invalid || null"
+  >
+    <template v-if="active">
+      <div class="flex flex-col gap-(--spacing-2xs)">
+        <p
+          :id="counterId"
+          class="text-body-sm text-(--text-muted) @max-2xl/wizard:hidden"
+        >
+          {{ t('wizard.stepOf', { step: index + 1, total: context.total.value }) }}
+        </p>
+        <div class="flex items-baseline gap-(--spacing-xs)">
+          <h2
+            :id="headingId"
+            ref="headingEl"
+            tabindex="-1"
+            :aria-describedby="counterId"
+            class="text-heading-sm text-(--text-default) outline-none"
+          >
+            {{ title }}
+          </h2>
+          <span
+            v-if="optional"
+            class="text-body-sm text-(--text-muted)"
+            >{{ t('wizard.optional') }}</span
+          >
+        </div>
+        <p
+          v-if="description"
+          class="text-body-sm text-(--text-muted)"
+        >
+          {{ description }}
+        </p>
+      </div>
+      <Transition
+        appear
+        enter-from-class="opacity-0"
+        enter-active-class="transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+      >
+        <div class="pt-(--spacing-lg)">
+          <slot />
+        </div>
+      </Transition>
+    </template>
+  </div>
+</template>

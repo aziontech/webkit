@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as the Functions page places it: the overline, headline and lead centered over two calls to action, then three illustrated cells in a three-column bento grid — a copy button that puts a prompt on the clipboard for the agent path, and outlined link buttons for the Console and terminal paths. A band with no items renders nothing at all.",
+   "file": "examples/feature-widgets-section/default.vue"
+  },
+  {
+   "name": "Live scenes",
+   "summary": "Each cell draws a `ConsoleMockup` console fragment as its `scene`, which plays its beat while the pointer is over the cell. The last cell carries a link and a copy button together; the copy button reads Copied for two seconds after a copy.",
+   "file": "examples/feature-widgets-section/live-scenes.vue"
+  }
+ ]
+}

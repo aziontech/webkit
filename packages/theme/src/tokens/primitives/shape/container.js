@@ -13,5 +13,3 @@ export const container = {
   '6xl': '1388px',
   '7xl': '1620px'
 }
-
-export default { container }

@@ -1,12 +1,12 @@
 ---
 name: doc-prompt
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: dffe6e94e4778720987e52a9d078566f766e666a52b541b9d9dac0e1fee297dd
+spec_version: 5
+checksum: e607bda48d929d16eab30e0e8af895695c2198605fd3a504e081ea4f167450a6
 created: 2026-08-22
-last_updated: 2026-08-28
+last_updated: 2026-11-25
 ---
 
 # DocPrompt — Component Spec
@@ -17,6 +17,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 ## When to use
 
+- Use DocPrompt to show a prompt the reader pastes into an agent, with its copy control.
 - A documentation step, onboarding screen, or empty state whose next action is "paste this into your agent".
 - A short list of example prompts a reader can try, under a heading that has already said what they are.
 - Anywhere a literal string must be copied verbatim and the reader is the one who decides where it goes.
@@ -26,6 +27,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 - The payload is source code, a shell command, or configuration → use a code viewer, which owns languages, gutters, and highlighting; a prompt has none of them.
 - The payload is a short inline token (a key, a flag, a variable name) → use `kbd` or inline code in prose.
 - The block needs to run the prompt itself, or route it to a named vendor → out of scope; this component only puts the text on the clipboard.
+- The "Copy prompt" action of a docs home hero or agent card, where the prompt is copied and not shown → use `CopyPromptButton` (inside `DocHero` or `DocAgentCard`).
 
 ## Related
 
@@ -37,14 +39,14 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 - Write the prompt once, in the default slot. It is both the visible text and the copied string, so the two cannot drift.
 - Give `title` only when the surrounding page has not already said what the block is. Three one-line prompts under a "Prompts to try" heading want the bare shape.
-- Use `kind="line"` for a single instruction and `kind="block"` for a priming paragraph. A one-sentence prompt broken across three lines reads as three instructions.
+- Use `variant="line"` for a single instruction and `variant="block"` for a priming paragraph. A one-sentence prompt broken across three lines reads as three instructions.
 - Keep the prompt in the imperative and free of placeholders the reader must fill silently — if a value must be substituted, name it in the prose above.
 
 ## Usage
 
 ```vue
 <script setup>
-  import DocPrompt from '@aziontech/webkit/doc-prompt'
+  import DocPrompt from '@aziontech/ui/doc-prompt'
 </script>
 
 <template>
@@ -56,12 +58,12 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 ## Props
 
-| Prop    | Type                | Default            | Required | JSDoc                                                                          |
-| ------- | ------------------- | ------------------ | -------- | ------------------------------------------------------------------------------ |
-| `kind`  | `'block' \| 'line'` | `'block'`          | false    | Wrapping paragraph capped at four lines, or one line that scrolls sideways.    |
-| `title` | `string`            | `''`               | false    | What the block is, in a word or two. Renders as a titled row above the prompt. |
-| `icon`  | `string`            | `'pi pi-sparkles'` | false    | PrimeIcons class for the glyph beside the title.                               |
-| `label` | `string`            | `''`               | false    | Fallback prompt text when the default slot is empty.                           |
+| Prop      | Type                | Default            | Required | JSDoc                                                                          |
+| --------- | ------------------- | ------------------ | -------- | ------------------------------------------------------------------------------ |
+| `variant` | `'block' \| 'line'` | `'block'`          | false    | Wrapping paragraph capped at four lines, or one line that scrolls sideways.    |
+| `title`   | `string`            | `''`               | false    | What the block is, in a word or two. Renders as a titled row above the prompt. |
+| `icon`    | `string`            | `'az az-sparkles'` | false    | Azion icon class for the glyph beside the title.                               |
+| `label`   | `string`            | `''`               | false    | Fallback prompt text when the default slot is empty.                           |
 
 ## Events
 
@@ -69,16 +71,17 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                               |
-| --------- | ----- | --------------------------------------------------------------------------------------------------- |
-| `default` | —     | The prompt itself: one or more sentences of literal text. Also the string the copy control carries. |
+| Slot      | Scope | Notes                                                                                                                                                            |
+| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The prompt itself: one or more sentences of literal text, drawn without the whitespace that opens and closes the slot. Also the string the copy control carries. |
 
 ## States
 
 - Visual states: `default`, `focus-visible` (on the `line` shape, which is a scroll container)
-- `data-kind` mirrors the `kind` prop: `block` | `line`
-- `data-expanded` — present on the prompt text when a capped `block` has been opened by the reader
+- `data-variant` mirrors the `variant` prop: `block` | `line`
+- `data-state` — `open` | `closed` on the prompt text of a capped `block`: `open` once the reader has opened it
 - `data-capped` — present on the root when a `block` prompt is taller than its four-line cap; absent when it fits, so a prompt that fits earns no disclosure control
+- Narrow container: below the `sm` container width (`@container/doc-prompt`) the `line` shape wraps instead of scrolling, so on a phone the reader sees the whole prompt the Copy button sends; it then has no overflow and draws no fades.
 - `data-overflow` — on the `line` shape: `start` | `end` | `both`, whichever edge has text scrolled behind it; absent when the line fits
 - `data-single-line` — on the prompt row when the prompt occupies exactly one line (`line` always; a `block` whose sentence fits its column). The row then centres the prompt against the copy control instead of top-aligning it — the control is 28px and one line of the prompt face is 19.5px, so a top-aligned pair leaves the sentence 4.25px above the control's middle. Absent the moment the prompt wraps.
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
@@ -86,10 +89,10 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 ## Motion & Animations
 
-| Trigger                         | Animation / Transition                                                                                                                                                                                                                 | Token (see `.claude/docs/DESIGN.md` § Animations)                                                                            | Reduced-motion fallback                                                                             |
+| Trigger                         | Animation / Transition                                                                                                                                                                                                                 | Token (see `contributing/docs/TOKENS.md` § Animations)                                                                       | Reduced-motion fallback                                                                             |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| disclosure open/close (`block`) | `transition-[max-height]` between the four-line cap and the prompt's own measured content height (pin the current height, commit it across two `requestAnimationFrame`s, set the far end, hand the cap back to CSS on `transitionend`) | `duration-moderate-02` · `ease-productive-entrance` opening / `ease-productive-exit` closing (DESIGN.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (the height snaps); `motion-reduce:transition-none` |
-| cap fade leaving (`block`)      | `transition-opacity` on the bottom gradient, so it leaves with the move it belongs to instead of being cut on the first frame                                                                                                          | `duration-moderate-01` · `ease-productive-exit` (DESIGN.md § Motion primitives)                                              | `motion-reduce:transition-none`                                                                     |
+| disclosure open/close (`block`) | `transition-[max-height]` between the four-line cap and the prompt's own measured content height (pin the current height, commit it across two `requestAnimationFrame`s, set the far end, hand the cap back to CSS on `transitionend`) | `duration-moderate-02` · `ease-productive-entrance` opening / `ease-productive-exit` closing (TOKENS.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (the height snaps); `motion-reduce:transition-none` |
+| cap fade leaving (`block`)      | `transition-opacity` on the bottom gradient, so it leaves with the move it belongs to instead of being cut on the first frame                                                                                                          | `duration-moderate-01` · `ease-productive-exit` (TOKENS.md § Motion primitives)                                              | `motion-reduce:transition-none`                                                                     |
 
 <!-- The disclosure is a measured height, not a keyframe: one end is a real length
      (the cap) and the other is the prompt's own content height — a runtime fact,
@@ -99,7 +102,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)       |
+| Region                      | Token (TOKENS.md)       |
 | --------------------------- | ----------------------- |
 | root surface                | `var(--bg-surface)`     |
 | root border                 | `var(--border-default)` |
@@ -115,7 +118,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 | spacing.y                   | `var(--spacing-sm)`     |
 | gap                         | `var(--spacing-sm)`     |
 | fade extent                 | `var(--spacing-lg)`     |
-| line shape                  | `var(--shape-elements)` |
+| line shape                  | `var(--shape-control)`  |
 | focus ring                  | `var(--ring-color)`     |
 
 ## Theme gaps
@@ -126,25 +129,32 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 <!-- `text-body-code-sm` — the code face's body register (mono family, xs size, relaxed
      line height) — already ships in the theme on this stack and is documented in
-     DESIGN.md § Available text styles. The `text-label-code-*` set collapses its line
+     TOKENS.md § Available text styles. The `text-label-code-*` set collapses its line
      height entirely, correct for one-row-per-line code (the row's own padding does the
      spacing) and wrong for a mono paragraph that wraps, whose lines then touch.
-     Line-height overrides are forbidden in components (`.claude/rules/styling.md`), so
+     Line-height overrides are forbidden in components (`contributing/rules/styling.md`), so
      the register lives in the token, not in a class override here. -->
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)` on the `line` shape
-- Keyboard map: the `line` shape takes a tab stop because it is a scroll container — a scroll container holding no focusable child is unreachable by keyboard (and an axe `scrollable-region-focusable` violation); arrow keys then scroll it. The `block` shape scrolls nothing, so it takes no tab stop. `Tab` reaches the disclosure control and the copy control; `Enter` / `Space` activate them.
+- Keyboard map: the `line` shape takes a tab stop because it is a scroll container — a scroll container holding no focusable child is unreachable by keyboard (and an axe `scrollable-region-focusable` violation); arrow keys then scroll it. The `block` shape scrolls nothing, so it takes no tab stop. `Tab` reaches the copy control, then the disclosure control, which sits in a full-width row under the prompt and the copy control, so focus order matches reading order; `Enter` / `Space` activate them.
 - ARIA: the full prompt text is in the DOM in every state, so the cap hides nothing from a screen reader — the disclosure is a visual convenience and the state it reports is the change in its own label (`Show more` / `Show less`). Every fade gradient is `aria-hidden="true"`; the title glyph is `aria-hidden="true"`. The copy control carries its own accessible name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — the prompt is `--text-default`, not the muted body ink, because the prompt IS the payload and everything around it is chrome
 - `motion-reduce:transition-none` on both animated states; the disclosure move is skipped rather than shortened
-- Touch target ≥40×40 px on both controls (both are `size="small"` webkit controls, which meet the floor)
+- Touch target ≥40×40 px on both controls (both are `size="small"` Azion UI controls, which meet the floor)
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Edge fades: the horizontal fades of a `line` prompt follow the prompt's own resolved direction (the fade row takes that `dir`, and each fade, `<testid>__fade-start` / `<testid>__fade-end`, draws its gradient toward the text), not the page's, so an English prompt in a right-to-left page fades on its real clipped edge.
+- Keyboard: no horizontal arrow-key logic.
+- User data: the prompt paragraph is `dir="auto"`: an English prompt runs left to right (its period stays at the end, the `line` shape opens on its first words) and an Arabic prompt still runs right to left.
+
+## Examples
 
 - Default
-- Kinds — composite story rendering `block` and `line` side by side. This is the component's only variant axis; it stands in for the template's `Types` story.
+- Variants — composite story rendering `block` and `line` side by side. This is the component's only variant axis; it stands in for the template's `Types` story.
 - Capped — a `block` prompt long enough to earn its disclosure control, which is the state the four-line cap exists for and the only one that renders the `Show more` button. Justified as a state story: `capped` is measured at runtime, not a prop, so no args delta can reach it from `Default`.
 - Bare — no `title`, the shape a "Prompts to try" list uses, where the heading above has already said what the prompts are. Justified: the bare anatomy (no title row, no divided surface) is a rendered-structure variant a `Default` args delta cannot show beside the titled shape.
 
@@ -158,19 +168,17 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

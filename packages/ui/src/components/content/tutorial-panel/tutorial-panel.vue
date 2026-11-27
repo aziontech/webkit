@@ -1,0 +1,294 @@
+<script setup lang="ts">
+  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import Button from '../../action/button/button.vue'
+  import EmptyState from '../../feedback/empty-state/empty-state.vue'
+  import HelpPanel from '../help-panel/help-panel.vue'
+  import HelpPanelHeader from '../help-panel/help-panel-header/help-panel-header.vue'
+  import Tag from '../tag/tag.vue'
+  import { useTutorialPanelContext } from './composables/use-tutorial-panel-context'
+  import type { TutorialPanelTaskStatus, TutorialPanelTutorial } from './injection-key'
+  import TutorialPanelTask from './parts/tutorial-panel-task.vue'
+  import TutorialPanelTasks from './parts/tutorial-panel-tasks.vue'
+
+  defineOptions({
+    name: 'TutorialPanel',
+    inheritAttrs: false
+  })
+
+  export interface TutorialPanelProps {
+    /** The panel's heading. Empty uses the locale catalog (`Tutorials`). */
+    title?: string
+    /** One line under the heading. Empty uses the locale catalog. */
+    description?: string
+    /** Accessible name for the panel's landmark. Empty uses the title. */
+    ariaLabel?: string
+    /** Renders skeleton lines in place of the content while the tutorials load. */
+    loading?: boolean
+  }
+
+  const props = withDefaults(defineProps<TutorialPanelProps>(), {
+    title: '',
+    description: '',
+    ariaLabel: '',
+    loading: false
+  })
+
+  defineSlots<{
+    /** Extra content on the completion screen, such as a feedback link. */
+    completion?(scope: { tutorial: TutorialPanelTutorial }): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ tutorialPanel: en.tutorialPanel })
+  const context = useTutorialPanelContext()
+  const uid = useId()
+
+  const testId = computed<string>(
+    () => (attrs['data-testid'] as string | undefined) ?? 'tutorial-panel'
+  )
+
+  const heading = computed<string>(() => props.title || t('tutorialPanel.title'))
+  const lede = computed<string>(() => props.description || t('tutorialPanel.description'))
+
+  const listHeadingEl = ref<globalThis.HTMLElement | null>(null)
+  const doneHeadingEl = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+
+  const taskRanges = computed(() => {
+    const ranges: { first: number; last: number }[] = []
+    let cursor = 0
+    context.active.value?.tasks.forEach((task) => {
+      ranges.push({ first: cursor, last: cursor + task.steps.length - 1 })
+      cursor += task.steps.length
+    })
+    return ranges
+  })
+
+  const taskStatus = (taskIndex: number): TutorialPanelTaskStatus => {
+    const range = taskRanges.value[taskIndex]
+    return range && context.step.value > range.last ? 'success' : 'pending'
+  }
+
+  const taskActive = (taskIndex: number): boolean => {
+    const range = taskRanges.value[taskIndex]
+    return Boolean(range && context.step.value >= range.first && context.step.value <= range.last)
+  }
+
+  const stepIndex = (taskIndex: number, local: number): number =>
+    (taskRanges.value[taskIndex]?.first ?? 0) + local
+
+  const stepCount = (tutorial: TutorialPanelTutorial): number =>
+    tutorial.tasks.reduce((sum, task) => sum + task.steps.length, 0)
+
+  const focusCurrentStep = () => {
+    rootEl.value
+      ?.querySelector<globalThis.HTMLElement>('[data-slot="tutorial-step"][aria-current="step"]')
+      ?.focus({ preventScroll: true })
+  }
+
+  watch(
+    () => context.focusRequest.value,
+    async () => {
+      await nextTick()
+      if (context.finished.value) return
+      const current = context.steps.value[context.step.value]
+      if (current && !context.hasHotspot(current.hotspotId)) focusCurrentStep()
+    },
+    { flush: 'post' }
+  )
+
+  watch(
+    () => context.finished.value,
+    async (finished) => {
+      if (!finished) return
+      await nextTick()
+      doneHeadingEl.value?.focus({ preventScroll: true })
+    },
+    { flush: 'post' }
+  )
+
+  const exit = async (event: Event) => {
+    context.exit(event)
+    await nextTick()
+    listHeadingEl.value?.focus({ preventScroll: true })
+  }
+</script>
+
+<template>
+  <div
+    ref="rootEl"
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-view="context.active.value ? (context.finished.value ? 'complete' : 'running') : 'list'"
+    class="flex w-full flex-col"
+  >
+    <HelpPanel
+      :aria-label="ariaLabel || heading"
+      :loading="loading"
+      :data-testid="`${testId}__panel`"
+    >
+      <HelpPanelHeader
+        :title="heading"
+        :description="lede"
+      />
+
+      <template v-if="!context.active.value">
+        <h3
+          ref="listHeadingEl"
+          tabindex="-1"
+          class="sr-only"
+        >
+          {{ t('tutorialPanel.listLabel') }}
+        </h3>
+        <EmptyState
+          v-if="context.tutorials.value.length === 0"
+          :title="t('tutorialPanel.emptyTitle')"
+          size="small"
+          :data-testid="`${testId}__empty`"
+        />
+        <ul
+          v-else
+          :data-testid="`${testId}__list`"
+          class="flex w-full flex-col gap-(--spacing-sm)"
+        >
+          <li
+            v-for="tutorial in context.tutorials.value"
+            :key="tutorial.id"
+            :data-testid="`${testId}__item`"
+            :data-completed="tutorial.completed || null"
+            class="flex w-full flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
+          >
+            <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+              <h3
+                :id="`${uid}-${tutorial.id}`"
+                class="text-title-sm text-(--text-default)"
+              >
+                {{ tutorial.title }}
+              </h3>
+              <Tag
+                v-if="tutorial.completed"
+                :label="t('tutorialPanel.completed')"
+                severity="success"
+                size="small"
+              />
+            </div>
+            <p
+              v-if="tutorial.description"
+              class="text-body-sm text-(--text-muted)"
+            >
+              {{ tutorial.description }}
+            </p>
+            <p class="text-label-sm text-(--text-muted)">
+              {{ t('tutorialPanel.taskCount', { count: tutorial.tasks.length }) }} ·
+              {{ t('tutorialPanel.stepCount', { count: stepCount(tutorial) }) }}
+            </p>
+            <div class="flex">
+              <Button
+                :label="tutorial.completed ? t('tutorialPanel.restart') : t('tutorialPanel.start')"
+                :variant="tutorial.completed ? 'outline' : 'primary'"
+                size="small"
+                :aria-describedby="`${uid}-${tutorial.id}`"
+                :data-testid="`${testId}__start`"
+                @click="(event: Event) => context.start(event, tutorial.id)"
+              />
+            </div>
+          </li>
+        </ul>
+      </template>
+
+      <template v-else>
+        <section
+          v-if="context.finished.value"
+          :aria-labelledby="`${uid}-done`"
+          :data-testid="`${testId}__completion`"
+          class="flex w-full flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
+        >
+          <h3
+            :id="`${uid}-done`"
+            ref="doneHeadingEl"
+            tabindex="-1"
+            class="flex items-center gap-(--spacing-2xs) text-title-sm text-(--text-default) outline-none"
+          >
+            <span
+              aria-hidden="true"
+              class="az az-circle-check text-(--success-mark)"
+            />
+            {{ t('tutorialPanel.completedTitle') }}
+          </h3>
+          <p class="text-body-sm text-(--text-muted)">
+            {{ t('tutorialPanel.completedDescription', { title: context.active.value.title }) }}
+          </p>
+          <slot
+            name="completion"
+            :tutorial="context.active.value"
+          />
+          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+            <Button
+              :label="t('tutorialPanel.restart')"
+              variant="outline"
+              size="small"
+              :data-testid="`${testId}__restart`"
+              @click="
+                (event: Event) =>
+                  context.active.value && context.start(event, context.active.value.id)
+              "
+            />
+            <Button
+              :label="t('tutorialPanel.back')"
+              variant="ghost"
+              size="small"
+              :data-testid="`${testId}__previous`"
+              @click="exit"
+            />
+          </div>
+        </section>
+
+        <TutorialPanelTasks
+          :title="context.active.value.title"
+          :description="context.active.value.description"
+          :completed="context.finished.value"
+          :data-testid="`${testId}__tutorial`"
+        >
+          <TutorialPanelTask
+            v-for="(task, taskIndex) in context.active.value.tasks"
+            :key="`${context.active.value.id}-${taskIndex}`"
+            :title="task.title"
+            :status="taskStatus(taskIndex)"
+            :active="taskActive(taskIndex)"
+          >
+            <ol class="flex w-full flex-col gap-(--spacing-2xs)">
+              <li
+                v-for="(item, local) in task.steps"
+                :key="item.hotspotId"
+                data-slot="tutorial-step"
+                :tabindex="stepIndex(taskIndex, local) === context.step.value ? -1 : undefined"
+                :aria-current="
+                  stepIndex(taskIndex, local) === context.step.value ? 'step' : undefined
+                "
+                class="text-body-sm text-(--text-muted) outline-none aria-[current=step]:text-label-md aria-[current=step]:text-(--text-default)"
+              >
+                {{ item.title }}
+              </li>
+            </ol>
+          </TutorialPanelTask>
+          <template
+            v-if="!context.finished.value"
+            #actions
+          >
+            <Button
+              :label="t('tutorialPanel.exit')"
+              variant="outline"
+              size="small"
+              icon="az az-log-out"
+              :data-testid="`${testId}__exit`"
+              @click="exit"
+            />
+          </template>
+        </TutorialPanelTasks>
+      </template>
+    </HelpPanel>
+  </div>
+</template>

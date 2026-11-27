@@ -1,0 +1,29 @@
+{
+ "variants": [
+  {
+   "name": "Empty",
+   "summary": "Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check.",
+   "file": "blocks/dashboard/dashboard-home/variants/empty.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "Populated Home whose data could not load: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
+   "file": "blocks/dashboard/dashboard-home/variants/error.vue"
+  },
+  {
+   "name": "Summary",
+   "summary": "The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources DataTable card and a Recent activity DataTable card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next.",
+   "file": "blocks/dashboard/dashboard-home/variants/summary.vue"
+  }
+ ],
+ "sfcFile": "blocks/dashboard/dashboard-home/dashboard-home.vue",
+ "guidelinesFile": "blocks/dashboard/dashboard-home/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "home-metrics.ts",
+  "parts/home-domain-check.vue",
+  "parts/home-first-access.vue",
+  "parts/home-panels.vue",
+  "parts/home-usage-band.vue"
+ ]
+}

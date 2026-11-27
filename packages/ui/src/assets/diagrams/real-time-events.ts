@@ -1,0 +1,100 @@
+import type { DiagramSpec } from '../../components/marketing/diagram/types'
+
+const spec: DiagramSpec = {
+  ariaLabel:
+    'Requests reach the workload; Real-Time Events makes each one queryable in seconds, from the Console or the GraphQL API',
+  nodes: [
+    {
+      key: 'user',
+      type: 'pill',
+      title: 'Requests',
+      icon: 'az az-user',
+      active: true
+    },
+    {
+      key: 'workload',
+      type: 'card',
+      eyebrow: 'Workload',
+      title: 'shop.example.com',
+      icon: 'az az-workloads',
+      active: true
+    },
+    {
+      key: 'events',
+      type: 'card',
+      eyebrow: 'Real-Time Events',
+      title: 'Every request, queryable',
+      icon: 'az az-real-time-events',
+      status: {
+        label: 'Seconds',
+        severity: 'success'
+      },
+      active: true,
+      lit: true
+    },
+    {
+      key: 'console',
+      type: 'item',
+      eyebrow: 'Console',
+      title: 'Filter, inspect, trace',
+      icon: 'az az-desktop',
+      active: true
+    },
+    {
+      key: 'graphql',
+      type: 'item',
+      eyebrow: 'GraphQL API',
+      title: 'Query from your tools',
+      icon: 'az az-graphql'
+    }
+  ],
+  layout: {
+    gap: 'wide',
+    row: [
+      {
+        node: 'user'
+      },
+      {
+        node: 'workload'
+      },
+      {
+        node: 'events'
+      },
+      {
+        branches: [
+          {
+            node: 'console'
+          },
+          {
+            node: 'graphql'
+          }
+        ]
+      }
+    ]
+  },
+  edges: [
+    {
+      from: 'user',
+      to: 'workload',
+      active: true
+    },
+    {
+      from: 'workload',
+      to: 'events',
+      active: true
+    },
+    {
+      from: 'events',
+      to: 'console',
+      label: 'inspect',
+      active: true
+    },
+    {
+      from: 'events',
+      to: 'graphql',
+      label: 'query'
+    }
+  ]
+}
+
+export default spec

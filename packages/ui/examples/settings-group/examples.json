@@ -1,0 +1,26 @@
+{
+  "component": "settings-group",
+  "title": "Components/Layout/SettingsGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One anchored band: the h2 with its Hint guidance and a gutter copy-link, over a flush Card of SettingsRow rows.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Stacked",
+      "summary": "A resource's Settings tab: the General and Features bands stacked one under the other at the section gap, with no rule between them.",
+      "file": "stacked.vue"
+    },
+    {
+      "name": "Collapsible",
+      "summary": "The collapsible Advanced band, closed: the cog glyph and the title are the disclosure trigger, and the body unfolds along the grid track when it opens.",
+      "file": "collapsible.vue"
+    },
+    {
+      "name": "WithInfo",
+      "summary": "A collapsible Advanced band with a help button in the info slot: it sits beside the heading, outside the disclosure, so pressing it opens the help without folding the band.",
+      "file": "with-info.vue"
+    }
+  ]
+}

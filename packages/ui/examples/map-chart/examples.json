@@ -1,0 +1,37 @@
+{
+  "component": "map-chart",
+  "title": "Components/Chart/MapChart",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Requests by country on the dotted network map, in five sequential steps from the lowest to the highest value. Focus the map and use the arrow keys to read each country, highest first.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Points",
+      "summary": "Locations as bubbles whose area follows the value, for data centers or cities.",
+      "file": "points.vue"
+    },
+    {
+      "name": "View",
+      "summary": "The map framed on one part of the world, with shaded countries and bubbles together.",
+      "file": "view.vue"
+    },
+    {
+      "name": "States",
+      "summary": "Loading holds the map footprint, empty says why nothing matched, error replaces the map with the chart family's error card, whose Try again action loads the map again, and table view shows the accessible twin.",
+      "file": "states.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same data written in a docs page: `DocMarkdown` turns a `<MapChart regions={[…]} />` tag into a real `MapChart`. The attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same data in the marketing site's page JSON: `MapChart` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"`) and `SitePage` renders the entry with no code.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
+    }
+  ]
+}

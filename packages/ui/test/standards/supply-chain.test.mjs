@@ -1,0 +1,138 @@
+import assert from 'node:assert/strict'
+import { readFileSync, readdirSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import test from 'node:test'
+import { fileURLToPath } from 'node:url'
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..')
+const DIR = resolve(ROOT, '.github/workflows')
+const files = readdirSync(DIR).filter((f) => f.endsWith('.yml'))
+
+function runBlocks(text) {
+  const blocks = []
+  const lines = text.split('\n')
+  lines.forEach((line, index) => {
+    const match = line.match(/^(\s*)(?:- )?run: ?(.*)$/)
+    if (!match) return
+    const indent = match[1].length
+    const body = [match[2]]
+    for (let next = index + 1; next < lines.length; next++) {
+      const value = lines[next]
+      if (value.trim() && value.search(/\S/) <= indent) break
+      body.push(value)
+    }
+    blocks.push({ line: index + 1, body: body.join('\n') })
+  })
+  return blocks
+}
+
+for (const file of files) {
+  const text = readFileSync(resolve(DIR, file), 'utf8')
+  const blocks = runBlocks(text)
+
+  test(`${file} passes secrets to scripts through env, never inline`, () => {
+    for (const { line, body } of blocks) {
+      assert.doesNotMatch(
+        body,
+        /\$\{\{\s*secrets\./,
+        `${file}:${line} interpolates a secret into a run script`
+      )
+    }
+  })
+
+  test(`${file} verifies the checksum of every binary it downloads`, () => {
+    for (const { line, body } of blocks) {
+      if (!/\b(curl|wget)\b/.test(body)) continue
+      assert.match(body, /sha256sum -c/, `${file}:${line} downloads without a sha256 check`)
+      assert.doesNotMatch(body, /\|\s*(ba|z)?sh\b/, `${file}:${line} pipes a download into a shell`)
+    }
+  })
+}
+
+test('Dependabot opens security updates for the npm dependencies, not version bumps', () => {
+  const text = readFileSync(resolve(ROOT, '.github/dependabot.yml'), 'utf8')
+  assert.match(
+    text,
+    /- package-ecosystem: npm\n {4}directory: \/\n[\s\S]*?open-pull-requests-limit: 0/
+  )
+})
+
+test('SECURITY.md sends reports to the Azion Security Office by email', () => {
+  const text = readFileSync(resolve(ROOT, 'SECURITY.md'), 'utf8')
+  assert.match(text, /mailto:security@azion\.com/)
+  assert.match(text, /Report a vulnerability/)
+  assert.doesNotMatch(text, /Security contact\s+request/)
+})
+
+test('the security suite gates every pull request and runs on main every week', () => {
+  const suite = readFileSync(resolve(DIR, 'security.yml'), 'utf8')
+  for (const tool of [
+    'semgrep scan',
+    'osv-scanner scan source',
+    'gitleaks git',
+    'dependency-review-action',
+    'generate:sbom'
+  ]) {
+    assert.ok(suite.includes(tool), `security.yml runs ${tool}`)
+  }
+  assert.match(suite, /--log-opts=HEAD/)
+  const governance = readFileSync(resolve(DIR, 'governance.yml'), 'utf8')
+  assert.match(governance, /uses: \.\/\.github\/workflows\/security\.yml/)
+  assert.match(governance, /\[security-suite\]="\$\{\{ needs\.security-suite\.result \}\}"/)
+  const main = readFileSync(resolve(DIR, 'security-main.yml'), 'utf8')
+  assert.match(main, /schedule:\n {4}- cron: /)
+  assert.match(main, /branches: \[main\]/)
+})
+
+test('the OSSF Scorecard blocks below its threshold', () => {
+  const text = readFileSync(resolve(DIR, 'ossf-scorecard.yml'), 'utf8')
+  assert.match(text, /MODE: 'enforce'/)
+})
+
+test('every container image is pinned by digest and every action SHA is commented with its release', () => {
+  for (const file of files) {
+    const text = readFileSync(resolve(DIR, file), 'utf8')
+    for (const [, image] of text.matchAll(/^\s*image:\s*(\S+)/gm))
+      assert.match(image, /@sha256:[0-9a-f]{64}$/, `${file}: ${image} is pinned by tag only`)
+    for (const [line, ref, comment] of text.matchAll(/uses:\s*[^@\s]+@(\S+)(?:\s*#\s*(\S+))?/g)) {
+      if (ref.startsWith('./')) continue
+      assert.match(ref, /^[0-9a-f]{40}$/, `${file}: ${line.trim()} is not pinned by SHA`)
+      assert.match(comment ?? '', /^v\d+(\.\d+)*$/, `${file}: ${line.trim()} names no release`)
+    }
+  }
+})
+
+test('no workflow runs on pull_request_target', () => {
+  for (const file of files) {
+    const text = readFileSync(resolve(DIR, file), 'utf8').replace(/^\s*#.*$/gm, '')
+    assert.ok(!/\bpull_request_target\b/.test(text), file)
+  }
+})
+
+test('every ignored advisory carries a review date that has not passed', () => {
+  const workspace = readFileSync(resolve(ROOT, 'pnpm-workspace.yaml'), 'utf8')
+  const block = workspace.slice(workspace.indexOf('ignoreGhsas:'))
+  const lines = block.split('\n').slice(1)
+  for (const [index, line] of lines.entries()) {
+    const ghsa = line.match(/^\s*- (GHSA-[\w-]+)/)?.[1]
+    if (!ghsa) {
+      if (line.trim() && !line.trim().startsWith('#')) break
+      continue
+    }
+    const date = lines[index - 1]?.match(/Review by (\d{4}-\d{2}-\d{2})\./)?.[1]
+    assert.ok(date, `${ghsa} has no "Review by YYYY-MM-DD." comment above it`)
+    assert.ok(
+      new Date(`${date}T23:59:59Z`) >= new Date(),
+      `${ghsa}: its review date ${date} has passed`
+    )
+  }
+})
+
+test('pull requests publish the Semgrep SARIF to code scanning, so OSSF Scorecard sees SAST on merged PRs', () => {
+  const text = readFileSync(resolve(DIR, 'governance.yml'), 'utf8')
+  const job = text.slice(text.indexOf('\n  code-scanning:'), text.indexOf('\n  lint-canaries:'))
+  assert.match(job, /needs: security-suite/)
+  assert.match(job, /security-events: write/)
+  assert.match(job, /github\/codeql-action\/upload-sarif@[0-9a-f]{40}/)
+  assert.match(job, /head\.repo\.full_name == github\.repository/)
+})

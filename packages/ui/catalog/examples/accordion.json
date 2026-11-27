@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Single-mode accordion with one item open via `default-value`.",
+   "file": "examples/accordion/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "`medium` and `large` sizes side by side.",
+   "file": "examples/accordion/sizes.vue"
+  },
+  {
+   "name": "IconPosition",
+   "summary": "`trailing` and `leading` chevron placement side by side.",
+   "file": "examples/accordion/icon-position.vue"
+  }
+ ]
+}

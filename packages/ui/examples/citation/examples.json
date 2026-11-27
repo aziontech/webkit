@@ -1,0 +1,11 @@
+{
+  "component": "citation",
+  "title": "Components/AI/Citation",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Two references in a sentence, each a small chip with the site's mark and name. The second cites two sources, so it shows `+1`. Hovering or pressing a chip opens one card that stacks every cited source: site, linked title, publisher and date.",
+      "file": "default.vue"
+    }
+  ]
+}

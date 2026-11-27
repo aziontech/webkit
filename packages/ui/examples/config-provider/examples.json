@@ -1,0 +1,26 @@
+{
+  "component": "config-provider",
+  "title": "Components/Layout/ConfigProvider",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Interactive controls for `locale`, `timeZone`, and `dir` with a fixed `now`: switch them to see `Timestamp`, `Pagination`, and the teleported `ConfirmDialog` update together.",
+      "file": "default.vue"
+    },
+    {
+      "name": "CustomMessages",
+      "summary": "`messages` replaces one built-in string for the whole subtree; the rest of the catalog stays.",
+      "file": "custom-messages.vue"
+    },
+    {
+      "name": "Rtl",
+      "summary": "`locale=\"ar\"` derives `dir=\"rtl\"`: the subtree reads right to left and strings with no Arabic catalog fall back to English.",
+      "file": "rtl.vue"
+    },
+    {
+      "name": "DeviceLocale",
+      "summary": "No `locale`: the picker prints dates in the device's language and format (Portuguese or Spanish when the device uses them, `en-US` on the server and until mount), while `v-model` keeps ISO 8601 instants for the server.",
+      "file": "device-locale.vue"
+    }
+  ]
+}

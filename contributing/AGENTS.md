@@ -1,0 +1,277 @@
+# AGENTS.md
+
+Guidelines for contributors and coding agents working in the Azion UI monorepo.
+
+## 1) Monorepo context
+
+This repository is a `pnpm` workspace with two top-level domains:
+
+- `apps/*`: runnable applications (for documentation and tooling)
+- `packages/*`: publishable/shared libraries used by Azion products
+
+Current main workspaces:
+
+- `apps/docs`: the docs site (components, blocks, foundations rendered from the files)
+- `apps/demos`: routed flows assembled from blocks with `azion-ui add`, on mock data
+- `apps/visual`: the styled visual suite (Playwright over examples, blocks and demos)
+- `apps/icons-gallery`: icon browsing/validation app
+- `packages/ui`: reusable Vue component library (`@aziontech/ui`)
+- `packages/theme`: tokens, theme, and styling foundations (`@aziontech/theme`)
+- `packages/icons`: icon font pipeline and package (`@aziontech/icons`)
+- `packages/ui-mcp`: the MCP server AI tools connect to (`@aziontech/ui-mcp`, bin `azion-ui-mcp`)
+
+## 2) Core principles
+
+1. Preserve consistency with existing patterns before introducing new ones.
+2. Make the smallest safe change that solves the problem.
+3. Keep docs and examples updated when behavior or API changes.
+4. Prefer semantic design tokens over hardcoded visual values.
+5. Keep workspace commands reproducible from repository root.
+
+## 3) Environment and tooling
+
+- Node.js: `>= 24` (`.nvmrc`, `engines.node`)
+- Package manager: `pnpm` (workspace-first)
+- Install dependencies from root only:
+
+```bash
+pnpm install
+```
+
+Prefer root scripts when available:
+
+```bash
+pnpm dev:docs
+pnpm build:docs
+pnpm dev:demos
+pnpm test:visual
+pnpm build:icons
+```
+
+## 4) Where to change what
+
+- Azion UI components: `packages/ui/src/**`
+- Theme tokens/styles: `packages/theme/**`
+- Icons and generation pipeline: `packages/icons/**`
+- Component examples: `packages/ui/examples/<name>/` (`examples.json` + one `.vue` each)
+- Docs site, demos, visual suite: `apps/docs`, `apps/demos`, `apps/visual`
+
+When changing UI components in `packages/ui`, update or add examples in the same branch. An
+example is enough: the docs page (`/components/<name>`, `/frame/example/<name>/<file>`) and the styled
+visual test of the first example follow from the files; refresh baselines with `/baselines-regenerate`.
+
+Changed a block in `packages/ui/blocks/` (its `.vue`, `variants/`, `block.json` or `guidelines.md`) or an example in `packages/ui/examples/`? They are what the AI copies: keep `block.json` intents and skills and `guidelines.md` current, run `pnpm --filter @aziontech/ui build:catalog`, then commit `catalog.json` and `catalog/` (`check:catalog` compares them). The docs pages and visual tests follow from the files. Consumer skills and rules live at the repo root in `skills/` and `rules/` (agents in `agents/`, the `AGENTS.md` block in `fragments/AGENTS.md`); `contributing/` is for people who maintain Azion UI. The full table is in CONTRIBUTING, "What to update when Azion UI changes".
+
+## 5) Component and styling standards
+
+For `@aziontech/ui`, its examples and blocks:
+
+- Reuse established component patterns and naming conventions.
+- Keep props semantic and explicit (avoid cryptic booleans when possible).
+- Maintain backward-compatible defaults unless a breaking change is intentional.
+- Use `@aziontech/theme` tokens/classes for colors, text, and surfaces.
+- Avoid hardcoded hex colors in components when semantic tokens exist.
+- Keep accessibility in mind (labels, states, disabled/readability, keyboard behavior).
+
+## 6) Examples and docs standards
+
+- The spec is the source of truth for component behavior; examples show it.
+- Add clear examples for new states/props (`packages/ui/examples/<name>/`).
+- Keep the `title` in `examples.json` consistent with the docs taxonomy (`Components/<Category>/<Name>`).
+- For foundations docs, keep content practical and copy-paste friendly.
+
+## 7) Git workflow and commits
+
+- Create focused branches by context (examples: `feat/...`, `fix/...`, `docs/...`).
+- Use conventional commit messages when possible:
+  - `feat(...)`: new feature/enhancement
+  - `fix(...)`: bug fix
+  - `docs(...)`: documentation changes
+  - `chore(...)`: maintenance
+- Keep commits scoped and coherent (one context per commit).
+- Never rewrite unrelated changes in a dirty working tree.
+
+## 8) Validation checklist before push
+
+Run the minimum relevant validations for the scope of your change.
+
+- Docs, examples or demos change:
+  - `pnpm build:docs`, `pnpm build:demos`, `pnpm test:visual`
+- Icons change:
+  - `pnpm build:icons`
+- Any change in `packages/ui/src/components/**`:
+  - `pnpm lint:ui`
+  - `pnpm typecheck:ui`
+  - `pnpm check:ui:type-coverage`
+  - `pnpm --filter @aziontech/ui test:ssr`
+
+If a full validation is too expensive, run targeted checks and document what was/was not validated.
+
+## 9) Documentation expectations
+
+When behavior changes, update docs close to the code:
+
+- Root overview: `README.md`
+- Docs site, demos and visual suite: `apps/docs/README.md`, `apps/demos/README.md`, `apps/visual/README.md`
+- Package-level docs in each `packages/*/README.md`
+
+For onboarding content, prioritize the docs site's `Foundations` pages.
+
+## 10) Safety rules
+
+- Do not commit secrets, credentials, or environment-specific private data.
+- Do not perform destructive git operations without explicit approval.
+- Avoid broad refactors during targeted fixes unless required for correctness.
+
+## 11) Azion UI Layer Components (mandatory for agents)
+
+**Scope:** any file under `packages/ui/src/components/<category>/<name>/` (categories `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `section` — the registry is [`contributing/hooks/lib/component-categories.mjs`](./hooks/lib/component-categories.mjs)).
+
+### 11.1) Sources of truth (read first)
+
+- `contributing/docs/TOKENS.md` — typography (generated classes such as `text-heading-md`, `text-body-sm`, `text-button-lg`), spacing (`var(--spacing-*)` from `spacing.js` only), max-width (`var(--container-*)`), shape (`var(--shape-*)`), semantic colors. In any visual conflict, **TOKENS.md wins**.
+- `contributing/docs/COMPONENT_REQUIREMENTS.md` § "Azion UI Layer Pattern (in-depth)" — TypeScript pattern, JSDoc on props, naming conventions, controlled/uncontrolled states, typed slots, Composition Pattern criteria, `data-testid` BEM-style, class structure, ARIA, usability, light/dark, Code Connect, examples.
+- Canonical components: `packages/ui/src/components/action/button/button.vue`, `packages/ui/src/components/action/icon-button/icon-button.vue`, `packages/ui/src/components/content/pricing-card/pricing-card.vue`.
+- External reference for Composition Pattern: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
+
+### 11.2) Spec-driven workflow (mandatory)
+
+The legacy monolithic skill `skills/component-create.md` has been **removed**. New components follow a spec-first pipeline with isolated sub-agents per phase.
+
+**Entry point — the AI flow (M1.3).** A new component or block starts from a GitHub issue
+(`.github/ISSUE_TEMPLATE/new-component.yml`, `new-block.yml`) and is built end to end by
+[`/component-new`](commands/component-new.md) or [`/block-new`](commands/block-new.md):
+read the issue → research benchmarks and reuse → `spec-create` (draft, `template: 2`) →
+`spec-reviewer` (second agent, fixed checklist) → `spec-validate` (approved + checksum) →
+`/component-create` (component, test, examples) → machine gates
+(`pnpm --filter @aziontech/ui run gates`, the same commands as the `toolkit` CI job) →
+`ui-craft` review → usage check (`packages/ui/scripts/check-usage.mjs`) → PR from
+`.github/pull_request_template.md`. Any failure stops the run. The two commands below are the
+building blocks it calls.
+
+**Two-step entry point (building blocks):**
+
+```text
+/spec-create <name> [--category <category>] [--figma <url>]
+# review .specs/<name>.md, mark status: approved (or let spec-validator do it)
+/component-create <name> [--dry-run]
+```
+
+**What lives where:**
+
+| Concern                                    | Location                                                                                                                                                                                                                                                                                                  |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Per-component contract                     | [`.specs/<name>.md`](../.specs/) (one file per component, reviewed BEFORE code)                                                                                                                                                                                                                           |
+| Frontmatter schema                         | [`.specs/_schema.json`](../.specs/_schema.json)                                                                                                                                                                                                                                                           |
+| Spec template                              | [`.specs/_template.md`](../.specs/_template.md)                                                                                                                                                                                                                                                           |
+| Slash commands                             | [`contributing/commands/`](commands/) (`component-new`, `block-new`, `spec-create`, `component-create`, `component-verify`, `animation-add`, `branch-create`, `pr-open`, `icons-add`, `baselines-regenerate`)                                                                                             |
+| Focused skills (one per phase)             | [`contributing/skills/`](skills/) — `spec-create`, `spec-validate`, `figma-extract`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `code-connect-write`, `component-validate`, `echo-report`, plus `ui-craft` (review gate), `animation-add`, `audit-fix`, `baselines-regenerate` |
+| Isolated sub-agent prompts                 | [`contributing/agents/`](agents/) — one per skill, plus `spec-reviewer` (second-agent spec review); no chat history, no cross-talk                                                                                                                                                                        |
+| Construction standards (injected verbatim) | [`contributing/rules/`](rules/) — 27 rules, indexed in [`rules/README.md`](rules/README.md) and registered in [`standards.mjs`](hooks/lib/standards.mjs)                                                                                                                                                  |
+| Centralized design docs (sources of truth) | [`contributing/docs/`](docs/) — `TOKENS.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + examples discipline)                                                                                                                                                 |
+| Owner decisions                            | [`contributing/docs/DECISIONS.md`](docs/DECISIONS.md) — one row per owner decision (date, decision, status, where it lives); a change that records or implements one updates its row                                                                                                                      |
+| Run logs (audit trail)                     | `contributing/logs/<run-id>.jsonl` (gitignored, written per run)                                                                                                                                                                                                                                          |
+
+**How `/component-create` runs:**
+
+1. **Preflight** — resolves `.specs/<name>.md`, validates checksum (tamper detection).
+2. **spec-validator** (blocking) — schema, body, Constraints block, animation table.
+3. **Parallel discovery** — `figma-extractor`, `reuse-auditor`, then `token-mapper`.
+4. **Reconciliation** (blocking) — every token in spec exists in TOKENS.md; every Figma region is covered by the spec.
+5. **component-scaffolder** — writes the `.vue` (plus `index.ts` and the `-root` export for composition) and the flat entry in `packages/ui/package.json#exports`; components ship no `package.json` of their own. Hooks fire on each Write.
+6. **test + examples** — the co-located `<name>.test.ts` and `examples/<name>/` with the examples the spec lists (Default + per variant + per size + Disabled).
+7. **code-connect-writer** — skips if `@figma/code-connect` missing.
+8. **echo-reporter** (cross-check) — independent parser; disagreement with the hook marks the run degraded.
+9. **component-validate** — `pnpm lint:ui && type-check && type-coverage && test:ssr`.
+10. **Finalize** — `status: approved → implemented`, refresh checksum, close log.
+
+**Why this is mandatory:** the previous workflow gave a single 749-line skill creative latitude — it sometimes added props, variants, or imports the user did not request. The new pipeline removes that latitude structurally: sub-agents see only the spec + their narrow rules; two hooks (`enforce-spec-exists`, `validate-spec-compliance`) verify the `.vue` matches the spec 1-to-1.
+
+### 11.3) Auto-invoke triggers (mandatory — do not wait for the user to mention the skill)
+
+- **Intent triggers (textual):** the user's request combines a creation verb (`criar`/`crie`/`gerar`/`adicionar`/`novo`/`create`/`add`/`make`/`build`) with a UI noun (`componente`/`component`/`button`/`botao`/`dialog`/`modal`/`drawer`/`sheet`/`tooltip`/`tabs`/`accordion`/`card`/`tag`/`badge`/`chip`/`input`/`select`/`dropdown`/`checkbox`/`radio`/`switch`/`spinner`/`toast`/`alert`/`message`/`breadcrumb`/`menu`/`popover`/`avatar`/`progress`/`skeleton`/`divider`) — or one of the categories (`action`/`content`/`data`/`feedback`/`input`/`layout`/`navigation`/`overlay`) — or any Figma reference (`figma.com/design/...`, `figma.com/proto/...`, "design", "frame", "mockup").
+- **File triggers (context):** the agent is about to `Write`/`Edit` any of:
+  - `packages/ui/src/components/**/*.vue`
+  - new entries in `packages/ui/package.json#exports` (flat `./<name>` keys pointing into `src/components/<category>/<name>/`)
+  - new examples under `packages/ui/examples/<name>/`
+
+When any trigger matches, the agent must (a) announce that the trigger fired and which skill will run; (b) collect missing inputs (name, category, Figma URL, monolithic vs composition) before writing any file; (c) execute the skill's workflow from the top.
+
+The trigger logic now lives in the orchestrator command [`contributing/commands/component-create.md`](commands/component-create.md) and the focused skill prompts under [`contributing/skills/`](skills/). Auto-invocation happens whenever the agent detects intent (creation verb + UI noun, Figma URL) or is about to `Write` under `packages/ui/src/components/**`.
+
+### 11.4) Hard rules (non-negotiable)
+
+- **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, **verify it exists**:
+  - `@aziontech/ui/<subpath>` → must be present in [`packages/ui/package.json#exports`](../packages/ui/package.json).
+  - Relative imports → the target file (with `.vue`/`.ts`/`.js`/`/index.*` fallbacks) must exist on disk.
+  - npm packages → must be installed in some `node_modules/` of the monorepo.
+  - Workspaces → `packages/<name>/package.json` must exist.
+  - If a needed module does **not** exist yet, do not import it speculatively. Either (1) install it first (`pnpm --filter <ws> add ...`), (2) create the file and its `package.json` entry first, or (3) annotate the gap explicitly in the report as `TODO: create <path>` or `TODO: install <pkg>` and skip the dependent code. The `validate-references.mjs` hook physically blocks imports that resolve to nothing — see § 12.
+- New components use `<script setup lang="ts">` with `defineProps<...>()`, `defineEmits<...>()`, `defineSlots<...>()` and `defineModel<...>()` where applicable. JSDoc on every public prop. Zero `any`. Zero `// @ts-ignore`.
+- The look is exposed as `variant` (the sort of part as `type`). Sizes as `size` (`'small' | 'medium' | 'large'`). Boolean state props have no `is`/`has` prefix.
+- Typography is **always** applied via the generated class from TOKENS.md (`text-heading-md`, `text-body-sm`, etc.). Never `text-(length:--text-*)`, `leading-*`, `tracking-*`, or `font-family` directly.
+- Colors, spacing, max-width, and shape come from semantic `var(--*)` tokens. No hex, no Tailwind palette names (`bg-gray-*`), no external/legacy color utilities (`text-color`, `surface-*`).
+- `defineOptions({ name, inheritAttrs: false })` + `useAttrs()`; the root merges the consumer `class` with `cn()` over a flat literal (no `rootClasses` computed, no class presets — see [`rules/styling.md`](rules/styling.md)). Never declare `class` in `defineProps`.
+- `data-testid`: the root falls back to the component's own kebab name (`'button'`, a sub-component its own name, `'dialog-header'`); inner parts are `${testId}__<part>` (two underscores). No category in a test id.
+- Composition Pattern only when the consumer needs to swap the order or omit parts (Dialog, a composed Card, Tabs, Accordion, DropdownMenu, Drawer, Form). When in doubt, stay monolithic. When applying it, ship the complete shadcn-vue anatomy (e.g. Dialog = Root + Trigger + Content + Header + Title + Description + Body + Footer + Close; Content renders the overlay and the teleport, so there is no Portal or Overlay part).
+- **shadcn-vue patterns** (see COMPONENT_REQUIREMENTS § 2.5-2.9):
+  - **Available today** (use immediately): `data-state`/`data-disabled`/`data-orientation` on root and stateful sub-components; variant unions exported as named types (`export type ButtonVariant = ...`); `cn` helper from `@aziontech/ui/utils/cn` for class merging; `<name>.figma.ts` Code Connect mappings (config at `packages/ui/figma.config.json`; publishing requires `FIGMA_ACCESS_TOKEN`); `userEvent` from `@testing-library/user-event` in browser tests.
+  - **No `asChild` / `as`** (`contributing/rules/root-element.md`; `azion-ui/no-polymorphic-as-prop` blocks it): link-or-button switches on `href`, and overlay Trigger parts forward onto the control in their slot. No Slot helper exists or is planned.
+- WCAG 2.1 AA: visible focus, full keyboard navigation, minimum ARIA, contrast >=4.5:1 / >=3:1 and APCA (Lc 75 body text, 60 other text, 45 icons, 30 marks, 15 borders; exceptions in `rules/azion-ui-tokens.md`), `motion-reduce:*` on animated components, touch target >=44x44px on a coarse pointer (decision TT01: an invisible `data-slot="touch-target"` hit area, or the row grows with `pointer-coarse:min-h-11`).
+- Light/dark validated by the styled visual suite (`apps/visual`) and the docs site's theme switch.
+- Each new public component (including each Composition Pattern sub-component) receives its own flat entry in `packages/ui/package.json#exports` (`./<name>`, never `./<category>/<name>`), a `.size-limit.json` budget for the root, and appears in an example.
+
+### 11.5) Examples
+
+`packages/ui/examples/<name>/examples.json` lists the examples (`name`, `summary`, `file`) and
+each `.vue` is a copyable SFC with real `@aziontech/ui/*` imports: Default + per `variant` + per
+`size` + Disabled + Loading + composition / controlled when the spec lists them. The docs site
+renders each beside its source; the first is screenshotted in light and dark by `apps/visual`.
+
+### 11.6) Validation gate (must pass before reporting done)
+
+```bash
+pnpm lint:ui
+pnpm typecheck:ui
+pnpm check:ui:type-coverage
+pnpm --filter @aziontech/ui test:ssr
+```
+
+### 11.7) Forbidden shortcuts
+
+- Skipping the `component-create` skill "because it is a small change".
+- Adding hex colors, raw typography classes, or Tailwind palette names "until the theme catches up". Register a theme gap with `TODO: tokenize` instead.
+- Applying Composition Pattern reflexively. Use the decision rule: "does the consumer need to swap order or omit parts?"
+- Removing `focus-visible`, `aria-*`, `data-testid`, `disabled` HTML, or `<a>`/`<button>` polymorphism to simplify code.
+- Editing `contributing/docs/TOKENS.md` or `COMPONENT_REQUIREMENTS.md` without explicit human approval (these are sources of truth).
+
+For deeper, package-specific instructions, agents should also read [`packages/ui/AGENTS.md`](../packages/ui/AGENTS.md) when working inside `packages/ui/`.
+
+## 12) Active enforcement (write-time hooks)
+
+Nine hooks in [`contributing/hooks/`](hooks/) act as physical guard rails on top of the cultural rules above. They are plain Node scripts; Claude Code runs them through its adapter, [`.claude/settings.json`](../.claude/settings.json), and the agent cannot bypass them. Every check they make also runs in CI, so work from any other agent is held to the same rules at the pull request.
+
+### 12.1) Tokens, references and authoring
+
+- **[`contributing/hooks/validate-tokens.mjs`](hooks/validate-tokens.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks new content introducing hex/rgb/hsl colors, Tailwind palette names, raw typography (`text-xs|sm|...`, `text-(length:--text-*)`, `leading-*`, `tracking-*`, `font-family`), legacy UI-kit color utilities (`text-color`, `surface-*`), `class` in `defineProps`, `any`, or `@ts-ignore`. Pre-existing violations are not retroactively flagged.
+- **[`contributing/hooks/validate-references.mjs`](hooks/validate-references.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks imports that don't resolve: `@aziontech/ui/<subpath>` without a matching `package.json#exports`, relative paths to no file, uninstalled npm packages, missing workspaces.
+- **[`contributing/hooks/validate-authoring.mjs`](hooks/validate-authoring.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — runs the shared authoring checks (prose comments, composable signatures, `as`/`asChild` props) over every write under `packages/` and blocks a write that adds a violation; the CI ratchet `check-authoring.mjs` runs the same engine.
+- **[`contributing/hooks/validate-naming.mjs`](hooks/validate-naming.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — runs the naming engine (`packages/ui/scripts/lib/naming-rules.mjs`) on the file being written and blocks only the naming violations the write adds ([`rules/naming.md`](rules/naming.md)).
+- **[`contributing/hooks/enforce-component-create.mjs`](hooks/enforce-component-create.mjs)** (PreToolUse `Write`) — blocks the first `Write` of a new `.vue` under `packages/ui/src/components/<category>/<name>/` when the session transcript shows no reference to the `component-create` skill/command. Forces the agent to invoke the orchestrator first.
+
+### 12.2) Spec-driven enforcement
+
+- **[`contributing/hooks/enforce-spec-exists.mjs`](hooks/enforce-spec-exists.mjs)** (PreToolUse `Write`) — blocks Writes of an azion-ui-layer `.vue` when `.specs/<name>.md` is missing, has `status ∉ {approved, implemented}`, misses a template-2 section (`Internationalization`, `Right-to-left`, `Responsive`, `Performance` — required with `template: 2` and on every spec created on or after 2026-11-12), or the body sha256 no longer matches the frontmatter `checksum` (tamper detection). Legacy components on the whitelist (`contributing/hooks/lib/legacy-components.json`) bypass this hook.
+- **[`contributing/hooks/validate-spec-compliance.mjs`](hooks/validate-spec-compliance.mjs)** (PostToolUse `Write|Edit|MultiEdit`) — re-reads the just-written `.vue`, parses `defineProps`/`defineEmits`/`defineSlots`/`defineOptions.name`/animation classes, and diffs them against `.specs/<name>.md`. Blocks on any divergence: missing prop, extra event, slot not in spec, animation class outside the Motion & Animations table, missing `motion-reduce:*` escape.
+- **[`contributing/hooks/enforce-test-exists.mjs`](hooks/enforce-test-exists.mjs)** (PostToolUse `Write|Edit|MultiEdit`) — blocks a root component `.vue` whose co-located `<name>.test.ts` is missing (see [`rules/testing.md`](rules/testing.md)).
+- **[`contributing/hooks/validate-authoring-docs.mjs`](hooks/validate-authoring-docs.mjs)** (PostToolUse `Write|Edit|MultiEdit`) — blocks a skill or agent doc whose frontmatter breaks [`rules/authoring-docs.md`](rules/authoring-docs.md).
+
+Shared parser library: [`contributing/hooks/lib/spec.mjs`](hooks/lib/spec.mjs). Legacy whitelist: [`contributing/hooks/lib/legacy-components.json`](hooks/lib/legacy-components.json).
+
+When a hook blocks a Write, the stderr message states the rule that fired and how to fix it — replace the offending tokens, install the missing dep, create the missing file, fix the spec or the `.vue` so they match, or invoke the skill. The hooks **fail open** on unexpected errors (e.g. invalid JSON input) — they never silently break workflows.
+
+These hooks make § 11.2 and § 11.4 enforceable in practice, not just by convention.
+
+---
+
+If in doubt, follow existing code style in the touched files, keep the change minimal, and leave the repository in a buildable and documented state.

@@ -14,34 +14,22 @@
     { "type": "style", "section": "Styles", "hidden": true },
     { "type": "chore", "section": "Miscellaneous Chores", "hidden": true }
   ],
+  "last-release-sha": "a238bf14a80c26f9f0a16e4bc9e6fa93af7b4c9e",
   "packages": {
-    "packages/webkit": {
+    ".": {
       "release-type": "node",
-      "component": "@aziontech/webkit",
-      "include-component-in-tag": true,
-      "include-v-in-tag": false,
-      "tag-separator": "@",
+      "package-name": "@aziontech/design-monorepo",
+      "component": "ui",
+      "include-component-in-tag": false,
+      "include-v-in-tag": true,
+      "changelog-path": "CHANGELOG.md",
       "extra-files": [
-        {
-          "type": "json",
-          "path": "catalog.json",
-          "jsonpath": "$.webkitVersion"
-        }
+        { "type": "json", "path": "packages/ui/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/theme/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/icons/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/ui-mcp/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "packages/ui/catalog.json", "jsonpath": "$.azionUiVersion" }
       ]
-    },
-    "packages/theme": {
-      "release-type": "node",
-      "component": "@aziontech/theme",
-      "include-component-in-tag": true,
-      "include-v-in-tag": false,
-      "tag-separator": "@"
-    },
-    "packages/icons": {
-      "release-type": "node",
-      "component": "@aziontech/icons",
-      "include-component-in-tag": true,
-      "include-v-in-tag": false,
-      "tag-separator": "@"
     }
   }
 }

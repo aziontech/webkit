@@ -1,0 +1,63 @@
+/** One exported column: `id` reads the field off each row, `header` is the label written to the file. */
+export interface CsvColumn {
+  id: string
+  header: string
+}
+
+export interface CsvSerializeOptions {
+  columns: readonly CsvColumn[]
+  /** Rows to write; any object type, each column reads the field named by its id. */
+  rows: readonly object[]
+  /** Field separator. Defaults to a comma. */
+  delimiter?: string
+}
+
+function escapeField(value: unknown, delimiter: string): string {
+  const raw = value === null || value === undefined ? '' : String(value)
+  const mustQuote =
+    raw.includes(delimiter) || raw.includes('"') || raw.includes('\n') || raw.includes('\r')
+  return mustQuote ? `"${raw.replace(/"/g, '""')}"` : raw
+}
+
+export function toCsv(options: CsvSerializeOptions): string {
+  const { columns, rows, delimiter = ',' } = options
+  const header = columns.map((column) => escapeField(column.header, delimiter)).join(delimiter)
+  const body = rows.map((row) =>
+    columns
+      .map((column) => escapeField((row as Record<string, unknown>)[column.id], delimiter))
+      .join(delimiter)
+  )
+  return [header, ...body].join('\r\n')
+}
+
+export function downloadCsv(filename: string, csv: string): void {
+  if (typeof globalThis.document === 'undefined') return
+  const blob = new globalThis.Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = globalThis.URL.createObjectURL(blob)
+  const link = globalThis.document.createElement('a')
+  link.href = url
+  link.download = filename || 'export.csv'
+  globalThis.document.body.appendChild(link)
+  link.click()
+  globalThis.document.body.removeChild(link)
+  globalThis.URL.revokeObjectURL(url)
+}
+
+export function splitCsvLine(line: string): string[] {
+  const cells: string[] = []
+  let cell = ''
+  let quoted = false
+  for (let i = 0; i < line.length; i += 1) {
+    const char = line[i]
+    if (quoted && char === '"' && line[i + 1] === '"') {
+      cell += '"'
+      i += 1
+    } else if (char === '"') quoted = !quoted
+    else if (char === ',' && !quoted) {
+      cells.push(cell.trim())
+      cell = ''
+    } else cell += char
+  }
+  cells.push(cell.trim())
+  return cells
+}

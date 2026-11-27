@@ -3,22 +3,23 @@ name: browser-frame
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 3
 created: 2026-10-20
-last_updated: 2026-10-20
-checksum: cc5002be8796c7fd33aaa629c4a59db8ad15996ff27a934a74704ee90563a9a2
+last_updated: 2026-11-25
+checksum: 121c5af8104762f0012f6d43bea252ad42cab9afd2fabda90d3a9d04bb6fdd74
 ---
 
 # BrowserFrame — Component Spec
 
 ## Purpose
 
-A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.
+A browser window that renders live Azion UI components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.
 
 ## When to use
 
-- Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.
-- Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, in Storybook or on a documentation page.
+- Use BrowserFrame to run real components inside a resizable device viewport (docs, stories); for a screenshot or clip in documentation use DocFrame, for third-party iframe content use Embed.
+- Showing a real screen — a site band, a console page, a template — built from Azion UI components, at a device size you choose.
+- Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.
 - Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.
 - Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`.
 
@@ -28,13 +29,14 @@ A browser window that renders live webkit components inside a viewport of its ow
 - For third-party content loaded from another origin → use `embed`.
 - For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.
 - For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.
-- For a framed page section or grid cell → use `frame-box`.
+- For a framed page section or grid cell → use `registration-frame`.
+- In a docs Markdown page or the site's page JSON. BrowserFrame is app-only (decision RV-K2-1, rule `azion-ui-content-channels`): it wraps a live Vue page in a resizable viewport, which neither Markdown nor page JSON can carry. A docs page writes `<Frame>` around a screenshot (`DocFrame`); a site band frames a scene or a `ConsoleMockup` itself.
 
 ## Related
 
 - `doc-frame` — the documentation figure frame for stills and clips; no live viewport.
 - `embed` — a titled `iframe` for another origin's document; `browser-frame` renders our own components.
-- `frame-box` — the page's registration frame (hairlines + corner marks), not a window.
+- `registration-frame` — the page's registration frame (hairlines + corner marks), not a window.
 - `copy-button` — the clipboard control the address bar composes; reach for it directly to copy any other value.
 
 ## Best practices
@@ -49,13 +51,13 @@ A browser window that renders live webkit components inside a viewport of its ow
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import BrowserFrame from '@aziontech/webkit/browser-frame'
-import SectionTitle from '@aziontech/webkit/section-title'
-import Button from '@aziontech/webkit/button'
+  import { ref } from 'vue'
+  import BrowserFrame from '@aziontech/ui/browser-frame'
+  import ModuleHeader from '@aziontech/ui/module-header'
+  import Button from '@aziontech/ui/button'
 
-const width = ref(768)
-const height = ref(1024)
+  const width = ref(768)
+  const height = ref(1024)
 </script>
 
 <template>
@@ -65,7 +67,7 @@ const height = ref(1024)
     address="https://www.azion.com/en/pricing"
     aria-label="Pricing page at tablet size"
   >
-    <SectionTitle title="Pricing that scales with you" />
+    <ModuleHeader title="Pricing that scales with you" />
     <Button label="Start for free" />
   </BrowserFrame>
 </template>
@@ -73,24 +75,24 @@ const height = ref(1024)
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `address` | `string` | `''` | false | Read-only URL shown in the chrome's address bar; the address bar is not rendered when empty. |
-| `minWidth` | `number` | `320` | false | Smallest viewport width the resize handles can reach, in pixels. |
-| `maxWidth` | `number` | `1920` | false | Largest viewport width the resize handles can reach, in pixels; widths wider than the container are scaled down to fit. |
-| `minHeight` | `number` | `320` | false | Smallest viewport height the resize handles can reach, in pixels. |
-| `maxHeight` | `number` | `1440` | false | Largest viewport height the resize handles can reach, in pixels. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the viewport; when empty it falls back to `address`, then to `Preview`. |
-| `copyAriaLabel` | `string` | `'Copy address'` | false | Accessible name of the address bar's copy button. |
-| `widthHandleAriaLabel` | `string` | `'Resize preview width'` | false | Accessible name of the right-edge width handle. |
-| `heightHandleAriaLabel` | `string` | `'Resize preview height'` | false | Accessible name of the bottom-edge height handle. |
+| Prop                    | Type     | Default | Required | JSDoc                                                                                                                   |
+| ----------------------- | -------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `address`               | `string` | `''`    | false    | Read-only URL shown in the chrome's address bar; the address bar is not rendered when empty.                            |
+| `minWidth`              | `number` | `320`   | false    | Smallest viewport width the resize handles can reach, in pixels.                                                        |
+| `maxWidth`              | `number` | `1920`  | false    | Largest viewport width the resize handles can reach, in pixels; widths wider than the container are scaled down to fit. |
+| `minHeight`             | `number` | `320`   | false    | Smallest viewport height the resize handles can reach, in pixels.                                                       |
+| `maxHeight`             | `number` | `1440`  | false    | Largest viewport height the resize handles can reach, in pixels.                                                        |
+| `ariaLabel`             | `string` | `''`    | false    | Accessible name of the viewport; when empty it falls back to `address`, then to `Preview`.                              |
+| `copyAriaLabel`         | `string` | `''`    | false    | Accessible name of the address bar's copy button. Empty uses the locale catalog (`Copy address`).                       |
+| `widthHandleAriaLabel`  | `string` | `''`    | false    | Accessible name of the right-edge width handle. Empty uses the locale catalog (`Resize preview width`).                 |
+| `heightHandleAriaLabel` | `string` | `''`    | false    | Accessible name of the bottom-edge height handle. Empty uses the locale catalog (`Resize preview height`).              |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model:width` | `number` | `undefined` | `update:width` | Simulated viewport width in pixels via `defineModel('width')`. Undefined fills the container; the width and corner handles write a number, clamped to `minWidth`…`maxWidth`, on every resize step. Works controlled or uncontrolled. |
-| `v-model:height` | `number` | `800` | `update:height` | Simulated viewport height in pixels via `defineModel('height', { default: 800 })`. The height and corner handles write a number, clamped to `minHeight`…`maxHeight`, on every resize step. Works controlled or uncontrolled. |
+| Model            | Type     | Default     | Emits           | Notes                                                                                                                                                                                                                                |
+| ---------------- | -------- | ----------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model:width`  | `number` | `undefined` | `update:width`  | Simulated viewport width in pixels via `defineModel('width')`. Undefined fills the container; the width and corner handles write a number, clamped to `minWidth`…`maxWidth`, on every resize step. Works controlled or uncontrolled. |
+| `v-model:height` | `number` | `800`       | `update:height` | Simulated viewport height in pixels via `defineModel('height', { default: 800 })`. The height and corner handles write a number, clamped to `minHeight`…`maxHeight`, on every resize step. Works controlled or uncontrolled.         |
 
 ## Events
 
@@ -98,9 +100,9 @@ _No plain events — the size flows through `v-model:width` and `v-model:height`
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The live content, teleported into the frame's viewport `iframe` once it is ready. Renders client-side only. |
+| Slot      | Scope | Notes                                                                                                       |
+| --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The live content, teleported into the frame's viewport `iframe` once it is ready. Renders client-side only. |
 
 ## States
 
@@ -112,53 +114,53 @@ The frame is static apart from its resize handles.
 - **Scale.** When the effective width exceeds the container, the viewport is scaled down by `container / effective` on both axes, and the frame's on-page height is `height × scale`. A frame narrower than its container is centered in it.
 - **Resizing.** Three handles resize the viewport:
   - the **width handle** on the right edge writes `width`;
-  - the **height handle** on the bottom edge writes `height`;
+  - the **height handle** on the bottom edge writes `height`; it sits in a 24px strip the frame reserves under the viewport (`pb-6`), so its grip never covers the preview's last line;
   - the **corner handle** at the bottom-right writes both at once.
-  Pointer drags use pointer capture. A width drag moves the right edge under the pointer (the frame is centered, so the width changes by twice the pointer's travel) and is clamped to `minWidth` and the container width; a height drag follows the pointer's travel divided by the current scale and is clamped to `minHeight`…`maxHeight`. The keyboard reaches up to `maxWidth` / `maxHeight`. While any handle is dragged the root sets `data-resizing` and the content ignores the pointer.
+    Pointer drags use pointer capture. A width drag moves the right edge under the pointer (the frame is centered, so the width changes by twice the pointer's travel) and is clamped to `minWidth` and the container width; a height drag follows the pointer's travel divided by the current scale and is clamped to `minHeight`…`maxHeight`. The keyboard reaches up to `maxWidth` / `maxHeight`. While any handle is dragged the root sets `data-resizing` and the content ignores the pointer.
 - **Size readout.** While any handle is dragged or focused, the chrome shows the viewport size (`768 × 1024`) at its trailing end; it is hidden otherwise.
 - **Scaled.** The root sets `data-scaled` while the viewport is scaled below 1.
 - **Address.** Rendered only when `address` is non-empty, centered in the chrome as a compact, fully rounded pill up to `--container-xs` wide and exactly as tall as the small copy button (28px), which sits flush at its trailing end, never overlapping the window dots or the readout. The pill is filled with the skeleton placeholder fill (static — no sweep) and edged with a muted hairline. Its text is set in the monospace code label and centered in the space left of the copy button; long addresses truncate in the middle: a leading part ellipsizes and the last 12 characters always stay visible.
-- **Copy.** The address bar's trailing end composes the package's `CopyButton` (`kind="transparent"`, `size="small"`) with `value` = the full `address`; its copied feedback is the `CopyButton`'s own.
-- **Test ids.** Root fallback `content-browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
+- **Copy.** The address bar's trailing end composes the package's `CopyButton` (`variant="ghost"`, `size="small"`) with `value` = the full `address`; its copied feedback is the `CopyButton`'s own.
+- **Test ids.** Root fallback `browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
 - **Composable.** The document mirroring and teleport target live in a co-located lifecycle composable, `composables/use-frame-document.ts`, that disconnects every observer on scope dispose.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| handle hover/focus color change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                         | Animation / Transition                    | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback         |
+| ------------------------------- | ----------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| handle hover/focus color change | `transition-colors duration-150 ease-out` | inline (matches catalog)                               | `motion-reduce:transition-none` |
 
 Resizing itself is not animated — the size follows the pointer or key press immediately.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| shape (root + viewport clip) | `var(--shape-card)` |
-| edge (root hairline) | `var(--border-default)` |
-| viewport surface | `var(--bg-canvas)` |
-| chrome surface | `var(--bg-surface)` |
+| Region                                  | Token (TOKENS.md)       |
+| --------------------------------------- | ----------------------- |
+| shape (root + viewport clip)            | `var(--shape-card)`     |
+| edge (root hairline)                    | `var(--border-default)` |
+| viewport surface                        | `var(--bg-canvas)`      |
+| chrome surface                          | `var(--bg-surface)`     |
 | chrome divider (bottom edge of the bar) | `var(--border-default)` |
-| window dots fill | `var(--border-strong)` |
-| address bar surface (skeleton fill) | `var(--bg-placeholder)` |
-| address bar edge | `var(--border-muted)` |
-| address bar max width | `var(--container-xs)` |
-| address typography | `.text-label-code-sm` |
-| size readout typography | `.text-label-sm` |
-| address + size readout color | `var(--text-muted)` |
-| chrome spacing (bar padding x) | `var(--spacing-sm)` |
-| dot gap | `var(--spacing-xs)` |
-| address padding (leading) | `var(--spacing-sm)` |
-| handle grip (rest) | `var(--border-strong)` |
-| handle grip (hover, focus, resizing) | `var(--text-default)` |
-| handle shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| window dots fill                        | `var(--border-strong)`  |
+| address bar surface (skeleton fill)     | `var(--bg-placeholder)` |
+| address bar edge                        | `var(--border-muted)`   |
+| address bar max width                   | `var(--container-xs)`   |
+| address typography                      | `.text-label-code-sm`   |
+| size readout typography                 | `.text-label-sm`        |
+| address + size readout color            | `var(--text-muted)`     |
+| chrome spacing (bar padding x)          | `var(--spacing-sm)`     |
+| dot gap                                 | `var(--spacing-xs)`     |
+| address padding (leading)               | `var(--spacing-sm)`     |
+| handle grip (rest)                      | `var(--border-strong)`  |
+| handle grip (hover, focus, resizing)    | `var(--text-default)`   |
+| handle shape                            | `var(--shape-control)`  |
+| ring                                    | `var(--ring-color)`     |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| — (documentation gap, not a token gap): address bar shape, a fully rounded pill | `var(--radius-full)` — ships in the theme as `9999px`, the same temporary primitive `stepper` records | `TODO: document --radius-full in DESIGN.md § Shape; there is no --shape-* alias for a pill` |
+| Figma variable                                                                  | Temporary primitive                                                                                   | Follow-up                                                                                   |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| — (documentation gap, not a token gap): address bar shape, a fully rounded pill | `var(--radius-full)` — ships in the theme as `9999px`, the same temporary primitive `stepper` records | `TODO: document --radius-full in TOKENS.md § Shape; there is no --shape-* alias for a pill` |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -178,13 +180,21 @@ Resizing itself is not animated — the size follows the pointer or key press im
 - `motion-reduce:transition-none` on the handles' color transition; nothing else moves.
 - Touch target: the edge handles' hit areas are 24px deep and run the frame's full width or height, and the corner handle is 24×24 — a justified deviation from 40×40: a deeper strip would cover more of the content's edge, and 24px meets WCAG 2.5.8.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: the width handle grows with `ArrowRight` and shrinks with `ArrowLeft` in reading order, swapped under `dir="rtl"` (`logicalArrowKey`).
+- Pointer: the width drag delta is inverted under `rtl`.
+- User data: the address bar renders `dir="ltr"`: a URL always reads left to right.
+
+## Examples
 
 - Default — a composed screen of real components filling the container width at the default height, with an address.
-- Breakpoints — composite story rendering the same composed screen at `375 × 812`, `768 × 1024` and `1280 × 800`, each pinned with `width` and `height`. Justified addition: showing device sizes is the component's purpose, and there is no `kind`/`size` axis that would otherwise demonstrate it.
+- Breakpoints — composite story rendering the same composed screen at `375 × 812`, `768 × 1024` and `1280 × 800`, each pinned with `width` and `height`. Justified addition: showing device sizes is the component's purpose, and there is no `variant`/`size` axis that would otherwise demonstrate it.
 - LongAddress — a single frame whose `address` is a long URL in a narrow container. Justified addition: middle truncation is the chrome's only behavior and nothing else shows it.
 
-<!-- Types/Sizes omitted: BrowserFrame has no `kind` or `size` axis. Loading/Disabled omitted: it declares neither prop. -->
+<!-- Types/Sizes omitted: BrowserFrame has no `variant` or `size` axis. Loading/Disabled omitted: it declares neither prop. -->
 
 ## Constraints — DO NOT
 
@@ -193,19 +203,17 @@ Resizing itself is not animated — the size follows the pointer or key press im
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

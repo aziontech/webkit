@@ -1,0 +1,174 @@
+{
+ "name": "tree",
+ "binding": "Tree",
+ "import": "@aziontech/ui/tree",
+ "treeShakeableImport": "@aziontech/ui/tree",
+ "category": "data",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron. It renders a nested `items` data structure on its own (recursively, through one internal row template) and follows the WAI-ARIA tree pattern, so it fits file and object browsers: the objects of a bucket, the source files of a deployment, the routes of an application. Unlike `sidebar-menu` it navigates data, not the app, and unlike `accordion` its nodes are rows of the same kind at any depth, not panels of free content.",
+ "setup": null,
+ "useWhen": [
+  "Use Tree for a nested data hierarchy (files, resources) the person expands and selects in, not for app navigation; for the navigation tree of the app use SidebarMenu inside Sidebar.",
+  "Browsing a hierarchy whose depth is not fixed: bucket objects under folders, the source tree of a deployment, functions grouped by application.",
+  "Picking one node out of a hierarchy (`selectable`) to show its detail beside the tree, or several (`selectable=\"multiple\"`) to act on them together (move, delete, download).",
+  "A hierarchy too large to send at once: mark unloaded parents `lazy` and fetch their children when they open.",
+  "A file browser where people rename nodes where they are (`editable`) and open a node with a double-click (`item-double-click`).",
+  "A hierarchy the user expands piece by piece, where showing every level at once would bury the node they are after."
+ ],
+ "avoidWhen": [
+  "Navigation between views of the app → use `sidebar-menu` inside `sidebar`.",
+  "Flat records with several attributes each → use `table`.",
+  "A few sections of free content that open and close → use `accordion`.",
+  "A two- or three-level directory of destinations on a marketing page → use `link-directory`."
+ ],
+ "related": [
+  "`table` — the flat, multi-column view of the same records; switch to it when columns matter more than nesting.",
+  "`sidebar-menu` — the hierarchical list for app navigation, with routes and active state instead of selection.",
+  "`accordion` — disclosure of free content panels rather than rows of one kind.",
+  "`empty-state` — what the tree renders when `items` is empty.",
+  "`skeleton` — the rows the tree renders while `loading`."
+ ],
+ "bestPractices": [
+  "Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:open-keys`, `v-model:selected-key` and focus are keyed by it.",
+  "Seed `v-model:open-keys` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.",
+  "Keep labels short and put secondary detail (size, count, modified date) in `description` so rows scan as names first.",
+  "Use `selectable` only when the selection drives something on the screen (a detail pane, a preview); for a tree whose rows only lead somewhere, listen to `item-click` instead.",
+  "Put per-row controls in the `actions` slot (an `IconButton` that opens a `dropdown`), never inside the `item` slot, so they do not take over the row's activation.",
+  "For children loaded on demand, mark the node `lazy`, listen to `update:openKeys`, set `loading` on the node while the request runs, then patch `children` in (an empty array when it has none) and clear `loading`.",
+  "With `editable`, apply the new label from the `rename` event yourself (the tree does not mutate `items`); offer a `Rename` entry in the row actions that calls the exposed `startRename(id)` so the feature is discoverable beyond F2.",
+  "Use `item-double-click` for a secondary \"open\" action only; single click and Enter stay `item-click`, so nothing requires a double-click."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "TreeItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Nodes to render; each is `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[] }`. A node with a non-empty `children` array is a parent."
+  },
+  {
+   "name": "selectable",
+   "type": "boolean | TreeSelectable",
+   "default": "false",
+   "required": "false",
+   "doc": "Enables selection: `true` or `'single'` writes one id to `v-model:selected`; `'multiple'` writes ids to `v-model:selected-keys`. Every treeitem then carries `aria-selected`."
+  },
+  {
+   "name": "editable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Lets the user rename a node in place with F2, or through the exposed `startRename(id)`; the result arrives as the `rename` event."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders Skeleton rows in place of the tree and sets `aria-busy`."
+  },
+  {
+   "name": "size",
+   "type": "TreeSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Row density: `small` is 24px rows, `medium` 32px, `large` 40px. Height, padding, type, glyph size and indentation step together (see Tokens)."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`)."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting line under the empty title."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the tree. Empty uses the locale catalog (`tree.label`, `Tree`), so the `tree` role always has a name."
+  },
+  {
+   "name": "openKeys",
+   "type": "string[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:openKeys`)."
+  },
+  {
+   "name": "selectedKey",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:selectedKey`)."
+  },
+  {
+   "name": "selectedKeys",
+   "type": "string[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:selectedKeys`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "item-click",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: TreeItem)",
+   "notes": "A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selectedKey` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron, inside the `actions` region or in the rename field. With `selectable=\"multiple\"`, Space toggles selection without firing it."
+  },
+  {
+   "name": "item-double-click",
+   "payload": "(event: MouseEvent, item: TreeItem)",
+   "notes": "A row was double-clicked, to open or preview the node. Not fired for a `disabled` node, the chevron, the `actions` region or the rename field. The two clicks before it still fire `item-click`."
+  },
+  {
+   "name": "rename",
+   "payload": "(event: KeyboardEvent | FocusEvent, payload: TreeRenamePayload)",
+   "notes": "An in-place rename was submitted (Enter, or the field losing focus) with a trimmed label that is non-empty and differs from `item.label`. `payload.item` is the consumer's node. Escape, an empty label or an unchanged one closes the field without emitting."
+  }
+ ],
+ "slots": [
+  {
+   "name": "item",
+   "scope": "{ item: TreeItem; level: number; expanded: boolean }",
+   "notes": "Replaces the label region of every row (glyph + label + description). The fallback inside the slot renders `item.icon`, `item.label` and `item.description`. `level` is 1 for top-level nodes; `expanded` is false for leaves. The chevron, indentation, row states and the `actions` region stay owned by the tree."
+  },
+  {
+   "name": "actions",
+   "scope": "{ item: TreeItem; level: number }",
+   "notes": "Trailing per-row controls, end-aligned in the row (e.g. an `IconButton` that opens a `dropdown`). Clicks and keys inside it do not activate the row nor move tree focus. No fallback; when unused, the region is not rendered."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the default empty state. The fallback inside the slot is `EmptyState` titled by `emptyTitle` with `emptyDescription`."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/tree/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "file": "examples/tree/sizes.vue"
+  },
+  {
+   "name": "Selectable",
+   "file": "examples/tree/selectable.vue"
+  }
+ ],
+ "docs": "components/tree.md"
+}

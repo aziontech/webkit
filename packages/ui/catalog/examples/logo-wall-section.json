@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as the customers page places it: the overline and headline over a nine-mark logo wall, with one signed quote from Zoop in the aside and a link out to its case study. A band with no logos and no quote renders only its title.",
+   "file": "examples/logo-wall-section/default.vue"
+  },
+  {
+   "name": "Quote band",
+   "summary": "`variant=\"quote\"` sets the quote alone as a full-width band, with no logos: the design sample's QuoteBand. `quote-variant=\"highlight\"` gives it the featured register with the mark beside the text.",
+   "file": "examples/logo-wall-section/quote-band.vue"
+  },
+  {
+   "name": "Registry",
+   "summary": "The wall built straight from the client registry: each entry's light/dark pair, or its single file with the `artwork` that says which theme inverts it, is drawn right on both themes by `ThirdPartyLogo`; the quote's company mark comes from the registry too, and an outlined `secondary-action` sits beside the primary one.",
+   "file": "examples/logo-wall-section/registry.vue"
+  }
+ ]
+}

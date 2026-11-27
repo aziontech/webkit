@@ -1,0 +1,202 @@
+---
+name: site-page
+category: marketing
+structure: monolithic
+status: implemented
+spec_version: 7
+template: 2
+checksum: ffb7bcadbc0dc0a9a713dfe60c30199b5414d440e6b8673edbf2f1b2c589dbe5
+created: 2026-11-12
+last_updated: 2026-11-24
+---
+
+# SitePage — Component Spec
+
+## Purpose
+
+The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/ui/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `Container max-width="site"` with a hatched `Spacer` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently.
+
+It reverses the earlier rule in `contributing/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it.
+
+**Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/section/` except `site-header-section` and `site-footer-section` (the frame, which `shell/shell-site` owns) to a `() => import('../../section/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry.
+
+**Retired `_id` aliases.** Page JSON lives outside this repo, so an `_id` retired by a 6.0 merge keeps rendering: `sitePageSectionAliases` in the same file maps each retired id to the section that absorbed it and an optional transform of its props (`'hero-copy-on-top-art'` and `'hero-with-opening'` → `hero-section`; `'closing-call-to-action-agents'` → `closing-call-to-action-section` `variant: 'primary'`; `'closing-call-to-action-templates'` → `template-gallery-section` `closing: true`; `'customer-spotlight'` → `client-story-columns-section` `reveal: 'hover'` (`items` → `cells`, `description` → `story`); `'sticky-carousel'` → `process-scroll-section` `pinned` (`items` → `steps`); `'sticky-scroll-code'` → `feature-scroll-section`; `'compare-support-tiers'` → `plan-comparison-section` (`tiers` → `plans`); `'article-index-blog'` / `'article-index-resource-hub'` → `article-index-section` `filters: 'category-search' | 'facets'`; `'use-case-links'` / `'resource-grid'` → `capability-grid-section`; `'code-split'` → `media-split-section`). `resolveSectionEntry(id, props)` applies it before the section is resolved and before the closing rules read the entry, and no warning is raised; the entry handed back on `submit` is the page's own. Renamed props travel the same way: before any alias transform, `resolveSectionEntry` translates the section's old prop names and values from the 6.0 rename map (`src/cli/migrations/v6-props.json`, copied into `lib/legacy-entries.ts` beside it and kept in step by the component test), for every entry whether its `_id` is retired or current, so `{ _id: 'hero-band', props: { kind: 'centered' } }` renders `hero-section` with `variant: 'center'`; an old name is dropped only when its new name is not already set. Layouts and media removed in 6.0 are translated after the renames: a hero `variant` (or v5 `kind`) `pixel-floor` renders as `title-band`; a closing band's `split` renders as `panel`, with `titleMuted` joined onto `title`; a media stack drops its old `variant` and each band's `diagram`; and a media band (`media-split-section`, or a retired `'code-split'` or `'media-split-band'` entry) with no picture is routed to the section that now shows its media, so code (`codeTabs`) renders as a `feature-scroll-section` with one step per file and a request-flow `diagram` as a `console-showcase-section` with `variant: 'diagram'` and the diagram in its `scene` slot (`resolveSectionEntry` hands back that `scenes` entry, and a scene the page JSON sets for the slot wins); a band that has a picture keeps it and drops the retired media props. This is the only alias the package keeps: no retired export or prop is re-exported.
+
+**Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-section` drew from a private map) and with `Diagram`, `ConsoleMockup` and `Illustration`, the components a scene slot already takes; `FlowDiagram` joined it for decision RV-F2-1, so a band places a diagram from data (`nodes`, `edges`), and the charts joined it for decision RV-C2-1 (`BarList`, `Chart` and its marks `ChartGrid`, `ChartAxis`, `ChartArea`, `ChartBar`, `ChartLine`, `ChartScatter`, `ChartReference`, `ChartCrosshair`, `ChartTooltip`, `ChartLegend`, `DonutChart`, `GaugeChart`, `MapChart`, `SparkChart`, `StatTile`, `StatTileGroup`, `Tracker`), then the content components for decision RV-K2-1 (`KeyValueList` with `KeyValueListItem` and `KeyValueListGroup`, `Accordion` with `AccordionItem`, `AccordionTrigger` and `AccordionContent`, `Card`, `CodeBlock`, `Embed`, `IntegrationCard`, `PlanFeatureList`), and `StatusIndicator` for decision A5P3-L02-1, so a `KeyValueListItem` status child draws the same dot and label as in Vue. A scene may list `children`, scenes or plain strings drawn in its default slot in order, so a `Chart` names its marks, a `StatTileGroup` its tiles and a `KeyValueListItem` its value as text in plain JSON; a mark used outside a `Chart` throws, as it does in Vue. `media-split-section` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there.
+
+**Root.** A plain `div` with no role, carrying `v-bind="$attrs"` and the `data-testid` fallback `site-page`.
+
+## When to use
+
+- Use SitePage inside SiteLayout to render a page from its JSON.
+- Rendering a marketing page stored as data (a CMS entry, a JSON file, the site's page modules) on Azion UI sections.
+- A campaign landing built from existing sections with no page-specific code.
+
+## When NOT to use
+
+- A page that composes marketing primitives by hand (`Hero`, `MediaSplit`, `CardGrid`) — write the SFC with `Container` / `Spacer` instead.
+- A console screen or a docs page — use `shell/shell-console` or `shell/shell-docs`.
+- One section on its own — import that section (`@aziontech/ui/<name>`) and bind its props.
+
+## Related
+
+- `container` — the column the renderer lays `sections` in.
+- `spacer` — the hatched break it draws before each band.
+- The page sections (`hero-section`, `customer-use-cases-section`, `faq-section`, …) — what each `_id` names.
+- `shell/shell-site` — the nav and footer frame a page renders inside.
+
+## Best practices
+
+- Write `_id` as the section's public subpath (`customer-use-cases-section` for `@aziontech/ui/customer-use-cases-section`); the `props` object is exactly what the section's own `site-*.json` example carries.
+- Put openings (`hero-section`, `hero-form-section`, `article-body-section`, `pricing-plans-section`) in `hero` and every band after them in `sections`.
+- Keep scenes as names (`{ component: 'BrandGlobeScene' }`), never as code, so the page stays plain JSON.
+- Use `gap` only to change the default break: `none` for a band that follows its neighbour with no break, `small` for two bands that belong together.
+- End a page on a closing band, or on `{ _id: 'closing-call-to-action-section', props: { variant: 'frame' } }` when its last band already carries its actions; never set `hatch` yourself on stacked closings, the renderer does.
+- Keep transport details of a form (`endpoint`, `hiddenFields`) in `submission`, next to `props`; the renderer passes the entry back on `submit` and the site sends.
+- Watch the development console after changing a page: an unknown `_id` or scene is named there.
+- Keep one opening per page: every opening renders the page `h1`, so two openings put two `h1` on the page.
+- Render the page on the server when layout shift matters: a section still loading on the client reserves no space.
+
+## Usage
+
+```vue
+<script setup>
+  import SitePage from '@aziontech/ui/site-page'
+
+  const page = {
+    hero: [
+      {
+        _id: 'hero-section',
+        props: { variant: 'centered-band', title: 'Deliver content fast, worldwide' }
+      }
+    ],
+    sections: [
+      {
+        _id: 'faq-section',
+        props: {
+          title: 'Frequently asked questions',
+          items: [{ value: 'what', question: 'What is it?', answer: 'A page from data.' }]
+        }
+      }
+    ]
+  }
+</script>
+
+<template>
+  <SitePage v-bind="page" />
+</template>
+```
+
+## Props
+
+| Prop       | Type                | Default    | Required | JSDoc                                                                                                                                                               |
+| ---------- | ------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hero`     | `SitePageSection[]` | `() => []` | false    | Opening sections, rendered full bleed above the column in order; each is `{ _id, props?, scenes?, gap?, submission? }`.                                             |
+| `sections` | `SitePageSection[]` | `() => []` | false    | Column sections, rendered in order inside the site column with a hatched gap before each and after the last; each is `{ _id, props?, scenes?, gap?, submission? }`. |
+
+Exported types, beside the component:
+
+- `SitePageSection` — `{ _id: string; props?: Record<string, unknown>; scenes?: Record<string, SitePageScene>; gap?: SitePageGap; submission?: Record<string, unknown> }`. `_id` is the section's public subpath; `props` is bound onto the section; `scenes` maps a slot name of the section to the scene drawn in it; `gap` sets the break before a column section (`none`, `small`, `medium`; default `medium`, ignored on openings); `submission` is opaque to the renderer and handed back on `submit`.
+- `SitePageScene` — `{ component: string; props?: Record<string, unknown>; children?: (SitePageScene | string)[] }`: a scene registry name, the props bound onto it and what is drawn in its default slot: scenes (each resolved the same way, an unknown name skipped with the same warning) and strings, drawn as plain text, merged with the slot's own props; on a key clash the slot's props win, so a live value the section passes (`console-showcase-section`'s `tab`) is never shadowed by page data.
+- `SitePageGap` — `'none' | 'small' | 'medium'`.
+- `SitePageSubmit` — `{ section: SitePageSection; values: Record<string, string> }`: the entry whose form was submitted and its values.
+
+## Events
+
+| Event    | Payload                                         | Notes                                                                                                                                                                                    |
+| -------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `submit` | `(event: SubmitEvent, payload: SitePageSubmit)` | A section's form passed its own validation (`hero-form-section`, `newsletter-section`); the site sends it and feeds `loading` / `submitted` / `error` back through that entry's `props`. |
+
+## Slots
+
+| _none_ | — | — |
+
+## States
+
+- No state of its own; each section owns its states (`loading`, `submitted`, `error` on a form band come from its `props`).
+- An unknown `_id` or scene name renders nothing in its place and warns once per name in development.
+- A retired `_id` renders with its successor through `sitePageSectionAliases`, with the props transform applied.
+- An old prop name or value of a section (`kind: 'centered'` on a hero) renders as its 6.0 successor (`variant: 'center'`).
+- Closing bands: a closing band followed directly by another is bound with `hatch: false` (an explicit `hatch` in its `props` is overridden), so stacked closings share the lower band's closing frame; a `closing-call-to-action-section` with `variant: 'frame'` takes no gap before it; when the last column entry is a closing band that draws its frame, the trailing gap is omitted.
+- A section or scene still loading renders nothing in its place until its chunk arrives.
+- A section or scene whose chunk fails to load (network failure, deploy skew) or takes longer than 10 s renders nothing in its place, the rest of the page keeps rendering, and a development warning names the `_id` or scene; it does not retry (`defineAsyncComponent` with `timeout` and `onError`).
+
+- A scene that is not a backdrop scene (`backdropScenes` in `src/assets/scene-registry.ts`: the console mock-up and console scenes, the globes, `Illustration`, `Diagram`) is stamped `data-plain-ground` on its root, so a band texture beside it hides itself; page JSON never puts content other than text on a texture (RV-T2-1).
+
+## Motion & Animations
+
+_none_
+
+## Tokens
+
+| Region           | Token (TOKENS.md)                                                   |
+| ---------------- | ------------------------------------------------------------------- |
+| column           | From `Container` (`max-width="site"`, `var(--layout-measure-site)`) |
+| breaks           | From `Spacer` (`hatch`, `small` / `medium`)                         |
+| sections, scenes | Their own tokens                                                    |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- The renderer adds no landmark, heading or focusable element of its own; each section owns its landmark (`<section>` named by its title) and its keyboard model.
+- Openings render before the column, so the page `h1` (in the opening) comes first in reading order.
+- The breaks are decorative (`Spacer` is `aria-hidden`).
+- Keyboard map: none of its own; focus moves through the sections in page order.
+
+## Internationalization
+
+- Built-in strings: none. Every visible string comes from the page data.
+- Development warnings are English and never rendered.
+
+## Right-to-left
+
+- Layout: block flow only; the column and the sections use logical utilities.
+- Icons: none of its own.
+- Keyboard: none of its own.
+- User data: none of its own; sections isolate their own user data.
+
+## Responsive
+
+- Container queries: none of its own; the column follows `Container` and each section its own breakpoints.
+- Narrow (≤ 640 px): the column runs edge to edge as `Container` does; sections stack themselves.
+- Touch: no targets of its own.
+- Reflow: no horizontal scroll at 320 px from the renderer; the sections hold the same contract.
+
+## Performance
+
+- Bundle budget: 2.6 KB gzip for `./site-page` in `.size-limit.json`, `entryOnly: true` (every section and scene is its own async chunk); raised from 2.5 KB for the closing-band rules (2.58 KB measured).
+- Runtime budget: none of its own; a page loads only the sections and scenes it lists.
+- Heavy parts: every section and every scene is lazy-loaded through `defineAsyncComponent`.
+
+## Examples
+
+- Default — a short product page from data: an opening `hero-section`, then `customer-use-cases-section`, `faq-section` and a `closing-call-to-action-section`, the column gaps included; the closing band draws the page's closing frame.
+- Closings — justification: the closing-band rules (stacked closings sharing one frame, the bare `frame` close with no gap) are renderer behaviour no other example shows.
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

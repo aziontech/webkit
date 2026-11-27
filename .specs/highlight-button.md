@@ -1,0 +1,191 @@
+---
+name: highlight-button
+category: action
+structure: monolithic
+status: implemented
+spec_version: 7
+template: 2
+figma:
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
+  node_id: 4313:20500
+checksum: 8837ba4be028114314decbb1c3e18497f7b0ddee0bc78cbdf8ac361939b89502
+created: 2026-06-01
+last_updated: 2026-11-22
+---
+
+# Button Highlight — Component Spec
+
+## Purpose
+
+Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button). Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient + glow); same prop surface as `Button` minus the `variant` axis.
+
+## When to use
+
+- Use HighlightButton only for the one AI entry point on a screen (Copilot); every other action is Button.
+- The single entry point to an AI assistant or highlight flow (for example "Ask Azion") that must stand out from the actions around it.
+- A headline action in a header or marketing band where a primary `button` would blend in.
+
+## When NOT to use
+
+- A regular primary or secondary action → use `button`.
+- An icon-only control → use `icon-button`.
+- A default action with related alternatives in a menu → use `split-button`.
+
+## Related
+
+- `button` — the default action control; adds `variant`, `iconPosition`, `animated`, `type` and a `leading` slot that this component does not have.
+- `icon-button` — icon-only action when there is no room for a label.
+
+## Best practices
+
+- Use at most one per view; the glow loses its meaning when it repeats.
+- Keep the label short and verb-led, and pair it with a leading `icon` (for example `az az-sparkles`).
+- It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
+- `disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
+- The glow turns once on mount and then rests, and it never moves under reduced motion, so never use it to convey state.
+
+## Usage
+
+```vue
+<script setup>
+  import HighlightButton from '@aziontech/ui/highlight-button'
+</script>
+
+<template>
+  <HighlightButton
+    label="Ask Azion"
+    icon="az az-sparkles"
+  />
+</template>
+```
+
+## Props
+
+| Prop       | Type                             | Default   | Required | JSDoc                                                                   |
+| ---------- | -------------------------------- | --------- | -------- | ----------------------------------------------------------------------- |
+| `label`    | `string`                         | `—`       | true     | Visible label text. Required — use `IconButton` for icon-only controls. |
+| `size`     | `'small' \| 'medium' \| 'large'` | `'large'` | false    | Size token; affects height, padding, and typography.                    |
+| `disabled` | `boolean`                        | `false`   | false    | Disables interaction and applies disabled tokens.                       |
+| `loading`  | `boolean`                        | `false`   | false    | Shows loading state and disables activation.                            |
+| `icon`     | `string`                         | `''`      | false    | Azion icon class for the leading icon.                                  |
+| `href`     | `string`                         | `''`      | false    | When set to a safe URL, renders as an anchor link; an unsafe URL is ignored (see Accessibility). |
+| `target`   | `'_blank' \| '_self'`            | `'_self'` | false    | Link target when `href` is set.                                         |
+
+## Events
+
+| Event   | Payload      | Notes                                                         |
+| ------- | ------------ | ------------------------------------------------------------- |
+| `click` | `MouseEvent` | Fires on activation; suppressed when `disabled` or `loading`. |
+
+## Slots
+
+| _none_ | — | — |
+
+## States
+
+- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `loading`
+- `data-disabled` mirrors the `disabled` prop
+- `data-loading` mirrors the `loading` prop
+- `data-size` mirrors the `size` prop
+
+## Motion & Animations
+
+| Trigger                                                                                    | Animation / Transition                                                                          | Token                                                                                                   | Reduced-motion fallback         |
+| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| hover / focus state change (border, text)                                                  | `transition-colors duration-fast-02 ease-productive-entrance`                                   | semantic (110ms · productive-entrance)                                                                  | `motion-reduce:transition-none` |
+| hover surface fade (violet base + dark scrim both fade to 25% to reveal the rotating glow) | `transition-opacity duration-300 ease-out` on the base and scrim layers                         | built-in (300ms · ease-out) — matches the `.3s ease` from `azion-console-kit` `.special-button-content` | `motion-reduce:transition-none` |
+| ambient glow rim (decorative), on mount                                                    | `animate-spin-settle` on a blurred multicolor gradient layer behind the surface: one eased turn | catalog `spin-settle` (4.2s, one run, rests on the static glow)                                         | `motion-reduce:animate-none`    |
+
+## Tokens
+
+| Region                    | Token (TOKENS.md)                |
+| ------------------------- | -------------------------------- |
+| typography (large)        | `.text-button-lg`                |
+| typography (medium/small) | `.text-button-md`                |
+| text                      | `var(--color-base-white)`        |
+| text (disabled)           | `var(--text-disabled)`           |
+| surface (disabled)        | `var(--bg-disabled)`             |
+| backdrop overlay          | `var(--bg-backdrop)`             |
+| gradient stop 1           | `var(--color-brand-accent-900)`  |
+| gradient stop 2           | `var(--color-brand-accent-100)`  |
+| gradient stop 3           | `var(--color-brand-accent-600)`  |
+| glow stop 1 (decorative)  | `var(--color-base-white)`        |
+| glow stop 2 (decorative)  | `var(--color-blue-500)`          |
+| glow stop 3 (decorative)  | `var(--color-brand-primary-500)` |
+| border                    | `var(--secondary-mask)`          |
+| border width              | `var(--border-width-default)`    |
+| shape                     | `var(--shape-button)`            |
+| spacing.x (large)         | `var(--spacing-md)`              |
+| spacing.x (medium)        | `var(--spacing-sm)`              |
+| spacing.x (small)         | `var(--spacing-xs)`              |
+| gap                       | `var(--spacing-xs)`              |
+| ring                      | `var(--ring-color)`              |
+| ring offset surface       | `var(--bg-canvas)`               |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Keyboard map: `Tab` focuses; `Enter` / `Space` activates.
+- ARIA: `<button>` role by default; renders `<a>` when `href` is set with `aria-disabled` / `aria-busy` mirroring `disabled` / `loading`.
+- Contrast: gradient passes ≥4.5:1 for the `--color-base-white` foreground due to the `--bg-backdrop` overlay; disabled state pairs `--bg-disabled` with `--text-disabled`.
+- `motion-reduce:transition-none` on every transition class.
+- Pause, Stop, Hide (WCAG 2.2.2): the glow turns once and stops by itself after 4.2 seconds, resting on the static glow; `motion-reduce:animate-none` keeps it still from the start.
+- Touch target: on a coarse pointer an invisible `[data-slot=touch-target]` span grows the hit area of every size to at least 44 × 44 px, as on `Button`.
+- Unsafe `href` (`javascript:`, `data:`, any non-web scheme, `//host`): stays a native button.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Internationalization
+
+- No built-in strings: the label is consumer copy.
+
+## Responsive
+
+- The control never wraps its label; drawn heights are 28 / 32 / 40 px. The glow is clipped by an inner layer, not the root, so the `[data-slot=touch-target]` span can extend the hit area to 44 px on a coarse pointer.
+- Consumer attributes (`id`, `aria-*`, `name`, `form`, `class`) land on the anchor or button (`v-bind="$attrs"`); the class is not merged with tailwind-merge, which keeps the entry near the Button budget.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entry `highlight-button`.
+- Runtime: one element and three decorative layers; the glow animation runs once (4.2s) and never under reduced motion.
+
+## Examples
+
+- Default
+- Sizes — composite story rendering every `size` value side-by-side.
+- Loading
+- Icon — composite story showcasing the highlight with a custom `icon`.
+- Disabled
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

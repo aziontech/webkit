@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "`LogViewer.Header` + `LogViewer.Content` over a realistic deploy log. Search filters lines and highlights matches in the body; with no `levels` set, the header offers the `warn` toggle alone, with its count, while the log has a warning.",
+   "file": "examples/log-viewer/default.vue"
+  },
+  {
+   "name": "Borderless",
+   "summary": "With `:bordered=\"false\"` the shell drops its own outline and corner radius so it sits flush inside a surface that already frames it — an accordion panel, a drawer, a card. Internal dividers (the header and footer edges) are unaffected. Left on, the two frames would nest and read as a box inside a box.",
+   "file": "examples/log-viewer/borderless.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "While `loading` is set, `LogViewer.Content` replaces the log body with a centered spinner and the `loadingLabel` text.",
+   "file": "examples/log-viewer/loading.vue"
+  }
+ ]
+}

@@ -1,0 +1,177 @@
+# Details page
+
+The second-level page of one resource. The user arrives from a list row or a deploy flow to answer three questions about it: where it lives and whether it is serving, what it is made of, and what to do next. The page names the resource in the breadcrumb, splits its concerns into tabs, and opens the Overview tab on one summary card of facts, followed by whatever the resource needs next: Get started for a resource made from the CLI, the production checklist and topology for a service. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`.
+
+## When to use
+
+- Use detail-resource for the tabbed overview of one resource, service, policy or application.
+- A user opens one resource, service, policy or application from its list or from a deploy flow.
+- The resource has more than one concern (overview, versions, build, deployments) that each deserve a tab.
+- The user needs the live address, the status and the latest deployment of a resource at a glance, with Visit and the resource actions one click away.
+
+## When not to use
+
+- Many resources of one type to compare and filter: use `view/view-table`.
+- Editing one version's settings, source or rules: use `detail/detail-version`.
+- Changing a resource's settings in a form: use `edit/edit-resource` or `settings/settings-form`.
+- One deployment, as it streams in a create flow or on its own page (live, failed, queued): use `detail/detail-deployment-logs`.
+- One function run end to end (summary, trace, logs): use `detail/detail-invocations`.
+- A key and value list that belongs to the resource: use `detail/detail-dns-zone`.
+
+## Building blocks
+
+### A. Tab bar — `PageTabs`, `Tabs`, `EmptyState` (required)
+
+A full-bleed `PageTabs` with one `Tabs.Trigger` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
+
+### B. Summary subject band — `Card`, `TableCellLink`, `Button`, `DropdownMenu`, `IconButton` (required)
+
+`Card :padded="false"` opens the tab. Its first band holds the resource glyph and its primary link, the live address as a `TableCellLink`, which opens it in a new tab and names it in its tooltip, then a secondary Visit `Button` that opens the same address in a new tab (`href`, `target="_blank"`) and an outlined Resource actions `IconButton` that opens a `DropdownMenu` placed `bottom-end` with Copy URL and, in its own group, Settings.
+
+### C. Summary facts band — `Link`, `Tag`, `StatusIndicator`, `Avatar`, `Tooltip` (required)
+
+A grid of label and value pairs, one column below `sm` so no value runs into the next: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links are `TableCellLink`s, whose tooltip says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
+
+### D. Summary state band — `Button` (optional)
+
+The last band, on the canvas fill, says what the user can do next in one sentence and ends on an outlined Documentation `Button`, e.g. how to deploy to production for a resource with nothing deployed.
+
+### E. Get started — `Subheader`, `ToggleGroup`, `Card`, `CodeBlock` (optional)
+
+For a resource made from the CLI, the `detail/detail-get-started` section follows the summary: a `Subheader` with the CLI or GitHub Actions `ToggleGroup`, then three numbered step `Card`s with a `CodeBlock` each.
+
+## Breadcrumb and environment
+
+- The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumb`. A page body never renders `Breadcrumb`, `AppHeader` or a `<main>`.
+- A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumb` with the module and the service as `items` and, in its default slot, a `Select` with `variant="ghost"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shell/shell-console` (DetailPage) show it.
+- The layout hides its breadcrumbs while compact, so below md the service summary's Deployment Settings band carries its own environment menu.
+
+## Topology tab
+
+- Use `FlowDiagram` (`nodes` + `edges`, with `FlowDiagramBind` in its `actions` slot) for the path a request takes to the resource (Application and ServiceOverview both do). A pick from a node's bind menu is pending on the node until its Apply control confirms it (Cancel or Escape drops it); only the confirmed `bind`, a change or a removal is staged on the node, counted beside Deploy and listed in the deploy `Drawer`; the run ends in the state-async-submit toast with Edit and Redeploy. A detail-production-checklist step that binds a slot (Bind Policy, Bind Error Page) scrolls to the topology and expands that node instead of opening a separate form.
+- Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
+- Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
+- Report the deploy through the state-async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
+- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`az az-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
+
+## Data
+
+The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `detail-resource.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs); their records are in `sample.ts` too.
+
+| Prop / model  | Type                     | What it does                                                                                                     |
+| ------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `resource`    | `ResourceDetailResource` | The summary: address, deployment and environment, status, creation, framework; its `name` builds the tab routes. |
+| `v-model:tab` | `ResourceDetailTab`      | The open tab (`overview` by default); a route-driven page binds it to the route.                                 |
+
+| Event                | Payload          | When                                                        |
+| -------------------- | ---------------- | ----------------------------------------------------------- |
+| `resource-action`    | `(event, value)` | Copy URL (`copy-url`) or Settings (`settings`) in the menu. |
+| `connect-repository` | `(event)`        | Connect Git repository under Source.                        |
+
+To go live, render the block from a page that owns the request and the route:
+
+```vue
+<script setup lang="ts">
+  import DetailResource, { type ResourceDetailTab } from './detail-resource.vue'
+
+  const route = useRoute()
+  const router = useRouter()
+  const { data } = useResource(route.params.id)
+  const tab = computed({
+    get: () => (route.params.tab ?? 'overview') as ResourceDetailTab,
+    set: (next) => router.push(`/resources/${route.params.id}/${next}`)
+  })
+</script>
+
+<template>
+  <DetailResource
+    v-if="data"
+    v-model:tab="tab"
+    :resource="data"
+    @connect-repository="router.push(`/resources/${route.params.id}/build`)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
+## Do
+
+- Keep the content in `layout-column` with its boundary inset, and let the tab bar run full-bleed above it.
+- Open the Overview tab on the summary card; every other section of the tab comes after it.
+- Name the resource in the breadcrumb, not in a `PageHeader` title above the card.
+- Put the one primary page action (Deploy) on the tab row, medium and outlined; keep Visit in the summary.
+- Give Versions and Deployments the same table shape as `view/view-table`, scoped to this resource, with a small section heading, pages of 10 and an `EmptyState` for none yet.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
+
+## Don't
+
+- Don't put the tab name in the breadcrumb, or repeat the resource name as a large heading.
+- Don't add a second primary button to the tab row or the summary card.
+- Don't spread the facts across several cards; one summary card holds them in bands.
+- Don't hide the live address behind the actions menu; it is the card's primary link.
+- Don't render empty facts as blank space; show the action that fills them, e.g. Connect Git repository under Source, or a muted word (None, Not deployed) when nothing can fill them yet.
+- Don't show Visit for a resource that has no address yet.
+
+## Copy
+
+- **Breadcrumb:** module, then the resource name as created, e.g. "Resources" › "analytics-app".
+- **Tabs:** one or two nouns, e.g. "Overview", "Versions", "Build", "Deployments".
+- **Fact labels:** a short noun, sentence case, no colon, e.g. "Deployment", "Domains", "Status", "Created", "Source", "Framework".
+- **Created:** relative time and author, e.g. "2 weeks ago by John Smith".
+- **Actions:** a verb, e.g. "Visit", "Deploy", "Redeploy"; menu options "Copy URL", "Settings".
+- **Link tooltips:** say where the link goes, e.g. "Open analytics-app-z1x2c3.example.com in a new tab".
+- **State band:** one sentence on the next step, e.g. "To deploy to Production, drop your project anywhere on this page, connect Git, or run platform deploy via the CLI."
+- **Failure banner:** what failed and what still serves, without an em dash, e.g. "A rule with the same behavior is already bound to this service, so the manifest was refused."
+- Follow `skills/azion-ui-microcopy`: sentence case, no "please", no exclamation marks.
+
+## Accessibility
+
+- The body renders no landmark of its own: the layout's single `main` holds the tab bar and the tab content, and the rail and header are the layout's.
+- The page names itself with a visually hidden `h1` of the resource name (the layout's breadcrumb shows it), so the tab panels' headings sit under it.
+- The tab bar is a tablist; arrow keys move between tabs and the active tab is announced.
+- Links that open a new tab add "(opens in a new tab)" in visually hidden text; decorative icons are `aria-hidden`.
+- Every icon-only button has an `aria-label` and a `Tooltip` with the same words, e.g. "Resource actions", "Add domain".
+- Status uses a `StatusIndicator` with a text label, never color alone.
+- In the build variants (Application build, Resource build, Resource build connected), `⌘ S` (`Ctrl S` off Apple) saves while the `SaveBar` shows unsaved changes, the same as Save; with no changes it does nothing. Save carries `aria-keyshortcuts` and a `Kbd` keycap.
+
+## States
+
+Grouped by the resource type the page shows. A deployment's own page is `detail/detail-deployment-logs` (DeploymentDetail, DeploymentError, DeploymentQueued) and one function invocation is `detail/detail-invocations`.
+
+### Resource
+
+- ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
+- Resource: the summary card alone, in its resource shape.
+- NoDeployment: the same page for a resource never deployed (`deploymentId: ''`): the summary reads Not deployed yet in place of the address, with None, None and Not deployed as muted values and no Visit.
+- FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
+- ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
+- ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
+- ResourceBuildConnected: the Build tab of a resource with a connected repository, its link and a danger Disconnect, the Production branch and Preview branch rows, the Build configuration and Deployment bands, and the save bar once a value changes.
+
+### Service
+
+- Service: the service summary with its domains, environment menu, ID and the Deployment Settings band.
+- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumb`), Deploy on the tab row, the production checklist and the deployment topology on `FlowDiagram` (policy, error page and origin slots staged until Deploy).
+
+### Policy
+
+- Policy: the policy summary with the resource it protects, a Rules shortcut, its status, environment, rule count and modules.
+
+### Application
+
+- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `Subheader` over a flush `DataTable`; Topology draws the request path with `FlowDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the state-async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
+- ApplicationBuild: an application page body with Overview, Versions, Build and Deployments. Dragging files over the page raises the dashed drop target of `state/state-project-intake`; dropping them or Deploy opens a deploy `Drawer` naming the source, and the run reports through the state-async-submit toast with Edit and Redeploy. Leaving the Build tab with unsaved changes asks first in a `ConfirmDialog`.
+
+## Related
+
+- `view/view-table` — the list a row of which leads here.
+- `detail/detail-get-started` — the section that follows the summary for a resource made from the CLI.
+- `detail/detail-production-checklist` — the card on a service overview.
+- `detail/detail-deployment-logs` — a deployment's own page, and the steps a create flow streams.
+- `detail/detail-version` — where a row of the Versions tab leads.
+- `create/create-deploy-drawer` — the drawer the Deploy action opens.
+- `state/state-project-intake` — the drop target an application page raises while files hover over it.
+- `detail/detail-invocations` — the page an invocation summary opens, with its request path, trace and logs; it owns the invocation summary card.
+- `edit/edit-resource` — the service Settings tab.
+- `shell/shell-console` — the `ConsoleLayout` this page body renders in; see `skills/azion-ui-navigation` and `skills/azion-ui-layout`.

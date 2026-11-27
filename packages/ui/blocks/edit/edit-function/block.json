@@ -1,0 +1,86 @@
+{
+  "id": "edit/edit-function",
+  "name": "EditFunction",
+  "title": "Blocks/Edit/EditFunction",
+  "surface": "app",
+  "summary": "The code editor page, a page body for ConsoleLayout (the layout's breadcrumb names the service): the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a `CodeEditor` filling its pane with zero-padded line numbers and the Monaco loader from the code-editor spec. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar: Save shows its loading state while Discard and the fields wait, a saved change raises a success toast, and a failed save keeps the bar with a danger `Alert`. Fields reorder with Move up and Move down buttons. Its page-level parts are `PageTabs`, `SettingsGroup`, `SettingsRow` and `SaveBar`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "code editor",
+    "code editor page",
+    "function code editor",
+    "editor page",
+    "code and arguments editor",
+    "split editor",
+    "monaco editor",
+    "editor de código",
+    "página do editor",
+    "editar código",
+    "function editor",
+    "function detail",
+    "function arguments",
+    "json schema arguments",
+    "function settings",
+    "editor de função",
+    "argumentos da função",
+    "detalhe da função",
+    "test run",
+    "function test",
+    "run trace",
+    "span waterfall",
+    "invocation trace",
+    "testar função",
+    "execução de teste",
+    "rastreamento da execução",
+    "function code page",
+    "edit function code",
+    "function arguments page"
+  ],
+  "skills": ["azion-ui-layout", "azion-ui-navigation", "azion-ui-form"],
+  "primary": {
+    "name": "Code",
+    "file": "edit-function.vue"
+  },
+  "files": [
+    "sample.ts",
+    "lib/function-editor.ts",
+    "composables/use-function-fields.ts",
+    "composables/use-function-test-run.ts",
+    "parts/function-arguments.vue",
+    "parts/function-field-item.vue",
+    "parts/function-field-settings.vue",
+    "parts/function-save-bar.vue",
+    "parts/function-settings-tab.vue",
+    "parts/function-test-run-pane.vue"
+  ],
+  "variants": [
+    {
+      "name": "Arguments",
+      "summary": "The Arguments document of image-optimizer: its form schema in the left pane and its two fields on the right, defaultFormat expanded into its settings and Choices and quality collapsed. The handle resizes the editor and collapses it past its minimum.",
+      "file": "variants/arguments.vue"
+    },
+    {
+      "name": "NoArguments",
+      "summary": "The Arguments document of auth-handler, a service with no form: the empty schema on the left and the This form has no fields empty state on the right.",
+      "file": "variants/no-arguments.vue"
+    },
+    {
+      "name": "Settings",
+      "summary": "The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar.",
+      "file": "variants/settings.vue"
+    },
+    {
+      "name": "TestRun",
+      "summary": "The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogViewer`. Run test again shows the running state until the run finishes.",
+      "file": "variants/test-run.vue"
+    },
+    {
+      "name": "Saving",
+      "summary": "The Code document of image-optimizer while a change is being saved: the save bar stays up, Save shows its loading state, Discard and the fields are disabled and the editors are read-only until the request ends.",
+      "file": "variants/saving.vue"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "component": "tabs",
+  "title": "Components/Navigation/Tabs",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three tabs with sliding indicator and horizontally animated panels. The active tab is held in `v-model`; clicking a tab or using Arrow / Home / End keys updates it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Centered",
+      "summary": "`Tabs.List align=\"center\"` centres the tabs over a centred catalog, as the Marketplace page does. The row still scrolls from its first tab when it overflows.",
+      "file": "centered.vue"
+    },
+    {
+      "name": "Scrollable",
+      "summary": "More tabs than fit the container: on narrow (mobile) widths the tab bar scrolls horizontally instead of overflowing or wrapping, the scrollbar is hidden, and the active indicator stays aligned while scrolling.",
+      "file": "scrollable.vue"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "description": "Blocks and examples that type a relative time as text ('2 days ago') instead of keeping a Date or an ISO string. Empty since 2026-11-21: test/standards/typed-times.test.mjs fails any new one. Show the moment with TableCellTime or Timestamp, or in a sentence with useLocale().formatRelativeTime.",
+  "known": {}
+}

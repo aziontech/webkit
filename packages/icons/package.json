@@ -1,11 +1,12 @@
 {
   "name": "@aziontech/icons",
   "version": "4.5.0",
-  "description": "Azion icon font library — azionicons + primeicons as CSS/woff2",
+  "type": "commonjs",
+  "description": "Azion icon font library — azionicons as CSS/woff2, plus colored brand icons",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aziontech/webkit.git",
+    "url": "git+https://github.com/aziontech/webkit.git",
     "directory": "packages/icons"
   },
   "publishConfig": {
@@ -13,22 +14,73 @@
   },
   "scripts": {
     "clean": "rm -rf dist/",
-    "build": "npm run clean; node scripts/build.mjs",
-    "validate": "node scripts/validate-svg.mjs",
-    "publish": "cd dist && npm publish && cd ..",
-    "pack:dry": "cd dist && npm pack --dry-run && cd ..",
-    "format": "prettier --write scripts/ src/"
+    "build": "npm run clean; node scripts/build-icons.mjs",
+    "check:svg": "node scripts/check-svg.mjs",
+    "check:manifest": "node scripts/check-manifest.mjs && node scripts/build-docs.mjs --check",
+    "release": "npm publish",
+    "pack:dry": "npm pack --dry-run",
+    "format": "prettier --write scripts/ src/",
+    "test": "node --test \"test/**/*.test.mjs\""
   },
-  "dependencies": {
+  "devDependencies": {
     "fantasticon": "^4.1.0"
   },
+  "keywords": [
+    "icons",
+    "icon-font",
+    "azionicons",
+    "css",
+    "woff2"
+  ],
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
+  "style": "./dist/index.css",
   "main": "./dist/index.css",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "azionicons": [
+        "./dist/index.d.ts"
+      ],
+      "azionicons-color": [
+        "./dist/index.d.ts"
+      ],
+      "azionicons-color-utilities": [
+        "./dist/index.d.ts"
+      ],
+      "catalog": [
+        "./dist/catalog.json"
+      ],
+      "color-catalog": [
+        "./dist/color-catalog.json"
+      ],
+      "manifest": [
+        "./dist/icons.json"
+      ]
+    }
+  },
   "exports": {
-    ".": "./dist/index.css",
-    "./azionicons": "./dist/azionicons.css",
-    "./azionicons-color": "./dist/azionicons-color.css",
-    "./primeicons": "./dist/primeicons.css",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.css"
+    },
+    "./azionicons": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/azionicons.css"
+    },
+    "./azionicons-color": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/azionicons-color.css"
+    },
+    "./azionicons-color-utilities": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/azionicons-color-utilities.css"
+    },
     "./catalog": "./dist/catalog.json",
-    "./color-catalog": "./dist/color-catalog.json"
+    "./color-catalog": "./dist/color-catalog.json",
+    "./manifest": "./dist/icons.json"
   }
 }

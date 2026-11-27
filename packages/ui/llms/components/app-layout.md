@@ -1,0 +1,452 @@
+# App Layout
+
+> The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shell/shell-console` block) keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame to `AppLayout`.
+
+- Import: `import AppLayout from '@aziontech/ui/app-layout'`
+- Category: layout · Surface: app · Structure: monolithic
+- API as JSON: [app-layout.json](app-layout.json)
+
+## When to use
+
+- Use AppLayout only to build a signed-in app shell other than the console; the console uses ConsoleLayout.
+- A product shell needs a navigation rail, a global header and a scrolling content area that turn into a drawer-based layout on phones.
+- A page offers contextual help beside the work (`HelpPanel` in the tools region) that the reader opens and closes.
+- A list or table needs a resizable detail panel under it or beside it (the split panel), showing the selected item without leaving the page.
+- Page-level flash messages (`Alert`) must sit above the content and stay visible while the content scrolls.
+
+## Do
+
+- One `AppLayout` per page, at the root. Do not nest them.
+- Keep the navigation in the `navigation` slot and read its `drawer` scope flag to drop rail-only controls (resize, collapse) when it renders inside the drawer; call `closeNavigation` from the scope when an item is chosen in the drawer.
+- Put the control that opens the navigation drawer in the header, and show it only when the header scope's `compact` is true.
+- Put a help button in the header that calls `toggleTools`; the tools region carries its own close button. In the console, `ConsoleLayout` wraps this layout and a page opens its own help from `ConsoleLayout.ToolsTrigger`, the `Info` link after the page title.
+- Use the split panel for the selected item of a collection. Close it when the selection clears.
+- Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.
+- Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background.
+- A page body that fills the screen (an empty state, a centred form) is `<main class="flex min-h-full flex-col">` in the default slot. Its height is what is left under the breadcrumbs, so it never scrolls by the breadcrumb row; do not subtract the breadcrumbs yourself.
+
+## Don’t
+
+- A single resizable split inside a page, with no shell around it → use `resizable`.
+- A navigation rail on its own (resize, collapse, footer) → use `sidebar`; put it in the `navigation` slot.
+- A one-off overlay for a task (a create form, a detail preview) → use `drawer`.
+- Marketing and documentation pages → use the `shell/shell-site` and `shell/shell-docs` blocks.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [sidebar](sidebar.md) — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.
+- [app-header](app-header.md) — the bar that goes in the `header` slot.
+- [help-panel](help-panel.md) — the content of the tools region.
+- [drawer](drawer.md) — what the navigation and tools regions become below `compactBelow`.
+- [resizable](resizable.md) — a split between panes inside a page, without the shell.
+- [alert](alert.md) — the flash messages composed into the `notifications` slot.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `navigationAriaLabel` | `string` | `''` | false | Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`). |
+| `toolsLabel` | `string` | `''` | false | Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`). |
+| `toolsWidth` | `number` | `320` | false | Width of the tools region in pixels while not compact. |
+| `splitPanelTitle` | `string` | `''` | false | Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`). |
+| `storageKey` | `string` | `''` | false | When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it. |
+| `compactBelow` | `number` | `768` | false | Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down. |
+| `navigationOpen` | `boolean` | `true` | false | Two-way value (`v-model:navigationOpen`). |
+| `toolsOpen` | `boolean` | `false` | false | Two-way value (`v-model:toolsOpen`). |
+| `splitPanelOpen` | `boolean` | `false` | false | Two-way value (`v-model:splitPanelOpen`). |
+| `splitPanelPosition` | `AppLayoutSplitPanelPosition` | `'bottom'` | false | Two-way value (`v-model:splitPanelPosition`). |
+| `splitPanelSize` | `number` | `320` | false | Two-way value (`v-model:splitPanelSize`). |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The page content (the consumer's `<main>`). Fills the content region under the breadcrumbs, so a full-height body (`min-h-full`) takes the rest of the height without overflowing; taller content scrolls. |
+| `navigation` | { drawer: boolean, closeNavigation: () => void } | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. `closeNavigation` closes the drawer, e.g. after an item is chosen. |
+| `header` | { compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void } | The global header, above content, tools and split panel. |
+| `notifications` | — | Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls. |
+| `breadcrumbs` | — | Breadcrumbs above the content, inside the scroll area; the page body fills the height left under them. |
+| `tools` | — | The tools region's body, usually a `HelpPanel`. |
+| `split-panel` | — | The split panel's body. |
+
+## v-model
+
+Each two-way value is a named `defineModel`, so its `update:*` event is generated, not hand-declared.
+Unbound, each one keeps its own local state.
+
+| Model                          | Type                 | Default    | Emits                       | Notes                                                                                                                                       |
+| ------------------------------ | -------------------- | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:navigation-open`      | `boolean`            | `true`     | `update:navigationOpen`     | Whether the navigation region shows beside the content. Not used while compact, where navigation is a drawer. Same name on `ConsoleLayout`. |
+| `v-model:tools-open`           | `boolean`            | `false`    | `update:toolsOpen`          | Whether the tools region (help) is open; while compact it drives the tools drawer.                                                          |
+| `v-model:split-panel-open`     | `boolean`            | `false`    | `update:splitPanelOpen`     | Whether the split panel is open.                                                                                                            |
+| `v-model:split-panel-position` | `'bottom' \| 'side'` | `'bottom'` | `update:splitPanelPosition` | Where the split panel sits: under the content or beside it. Bottom while compact.                                                           |
+| `v-model:split-panel-size`     | `number`             | `320`      | `update:splitPanelSize`     | Height (bottom) or width (side) of the split panel in pixels; emitted on every step.                                                        |
+
+## States
+
+- Visual states: `default`, `compact`; per region `open` / `closed`; the split separator `focus-visible` and `resizing`.
+- `data-compact` on the root while the layout is narrower than `compactBelow`.
+- `data-navigation`, `data-tools`, `data-split-panel` on the root: `open` | `closed`.
+- `data-split-panel-position` on the root: `bottom` | `side` (always `bottom` while compact).
+- `data-resizing` on the split separator while it is dragged.
+- Fill: while the body holds an element with `data-layout-fill`, the body is a `flex flex-col min-h-0` item of the content region, so a page that fills (a chat, an editor) gets the exact height under the header and scrolls inside itself instead of scrolling the content region.
+- First render (server and client) is the wide layout; the compact layout applies after mount, once the layout has measured itself.
+
+## Accessibility
+
+- Skip link: the first focusable element is a `SkipLink` (`Skip to content`, from its locale catalog), visually hidden until focused; activating it moves focus to the content region (`app-layout__content`, which takes `tabindex="-1"` for the jump), past the navigation and the header. Every layout built on `AppLayout` (`ConsoleLayout`) gets it by construction.
+- Visible focus: the separator shows `var(--accent)` and the focus ring (`focus-visible:ring-2 focus-visible:ring-(--ring-color)`, no offset: the separator sits on the panel edge) on `focus-visible`; the region buttons are `IconButton` with their own ring.
+- Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it. The split panel and tools bodies are focusable scroll regions (`tabindex="0"`, `role="group"` named by their heading), so a keyboard reader can scroll them when they hold no control.
+- ARIA: the tools region and the split panel are `<section aria-labelledby>` their header title (`<h2>`); the separator is `role="separator"` with `aria-orientation`, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` in pixels, `aria-controls` the split panel and an accessible name from the catalog. The compact drawers are named by `navigationAriaLabel` and `toolsLabel`. The layout adds no landmark of its own around the content; the consumer's `<main>` and `Sidebar` `<nav>` are the landmarks.
+- Contrast ≥4.5:1 for the region titles; ≥3:1 for the separator against the surfaces.
+- `motion-reduce:transition-none` on the separator transition.
+- Touch target: the separator's hit area is 16 px across (a `before:` pseudo-element) over a 4 px line; region buttons are 32 px `IconButton` (40 px on `pointer: coarse` from `IconButton`).
+
+## Right-to-left
+
+- Layout: logical utilities only (`border-s`, `border-e`, `ms-auto`); the navigation sits at the inline start and the tools and side split panel at the inline end.
+- Icons: the position toggle icons (`az az-app-window` family) are not mirrored; close is not mirrored.
+- Keyboard: on a side split panel, the arrow that points away from the panel grows it — `ArrowLeft` in LTR, `ArrowRight` in RTL.
+- User data: none.
+
+## Internationalization
+
+| Key                          | English source          | Override prop         |
+| ---------------------------- | ----------------------- | --------------------- |
+| `appLayout.navigation`       | Navigation              | `navigationAriaLabel` |
+| `appLayout.tools`            | Help                    | `toolsLabel`          |
+| `appLayout.closeTools`       | Close help              | —                     |
+| `appLayout.splitPanel`       | Details                 | `splitPanelTitle`     |
+| `appLayout.closeSplitPanel`  | Close panel             | —                     |
+| `appLayout.resizeSplitPanel` | Resize panel            | —                     |
+| `appLayout.showAtSide`       | Show beside the content | —                     |
+| `appLayout.showAtBottom`     | Show under the content  | —                     |
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: the root is `@container/app-layout`; a `ResizeObserver` on the root switches to compact when its own width is under `compactBelow` (768 px by default), so the layout also goes compact inside a narrow host, not only on a narrow viewport.
+- First paint: with the default `compactBelow` (768 px) the navigation rail and the tools region also carry a container query (`@max-3xl/app-layout:hidden`), so a server-rendered page never paints the rail on a phone before the script measures the root.
+- Narrow (compact): navigation renders in a `Drawer` from the inline end (the design sample's phone menu), the tools in a `Drawer`, the split panel is forced to the bottom and its position toggle hides; the split panel's maximum is 70 % of the layout height.
+- Touch: region buttons are `IconButton`; the separator has a 16 px hit area and pointer drag works with touch (pointer events).
+- Reflow: the content scrolls on its own; no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Alert from '@aziontech/ui/alert'
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import Command from '@aziontech/ui/command'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import IconButton from '@aziontech/ui/icon-button'
+  import KeyValueList from '@aziontech/ui/key-value-list'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import SearchTrigger from '@aziontech/ui/search-trigger'
+  import SidebarMenuGroup from '@aziontech/ui/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/ui/sidebar-menu-item'
+  import SidebarMenuRoot from '@aziontech/ui/sidebar-menu-root'
+  import Sidebar from '@aziontech/ui/sidebar-root'
+  import StatusIndicator from '@aziontech/ui/status-indicator'
+  import { ref } from 'vue'
+
+  const toolsOpen = ref(false)
+  const splitPanelOpen = ref(true)
+  const notice = ref(true)
+
+  const crumbs = [{ label: 'Services', href: '#' }, { label: 'web-app-prod' }]
+  const searchOpen = ref(false)
+  const searchPages = ['Applications', 'Workloads', 'Functions', 'Firewall']
+</script>
+
+<template>
+  <div class="h-dvh">
+    <AppLayout
+      v-model:tools-open="toolsOpen"
+      v-model:split-panel-open="splitPanelOpen"
+      split-panel-title="web-app-prod"
+      tools-label="Help: Services"
+    >
+      <template #navigation="{ drawer }">
+        <Sidebar
+          aria-label="Main navigation"
+          :resizable="!drawer"
+          :collapsible="!drawer"
+        >
+          <SidebarMenuRoot role="presentation">
+            <SidebarMenuGroup>
+              <SidebarMenuItem
+                label="Home"
+                icon="az az-home"
+                href="#"
+              />
+              <SidebarMenuItem
+                label="Services"
+                icon="az az-applications"
+                href="#"
+                active
+              />
+              <SidebarMenuItem
+                label="Variables"
+                icon="az az-variables"
+                href="#"
+              />
+            </SidebarMenuGroup>
+          </SidebarMenuRoot>
+        </Sidebar>
+      </template>
+
+      <template #header="{ compact, openNavigation, toggleTools }">
+        <div class="@container w-full">
+          <AppHeader aria-label="Console">
+            <AppHeader.Start>
+              <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+                <IconButton
+                  v-if="compact"
+                  icon="az az-menu"
+                  aria-label="Open navigation"
+                  variant="outline"
+                  size="medium"
+                  @click="openNavigation"
+                />
+              </div>
+            </AppHeader.Start>
+            <AppHeader.Center />
+            <AppHeader.End>
+              <SearchTrigger
+                collapsible
+                @open="searchOpen = true"
+              />
+              <IconButton
+                icon="az az-circle-help"
+                aria-label="Help"
+                variant="outline"
+                size="medium"
+                :aria-pressed="toolsOpen"
+                @click="toggleTools"
+              />
+            </AppHeader.End>
+          </AppHeader>
+          <Command v-model:open="searchOpen">
+            <Command.Input placeholder="Search the console" />
+            <Command.List>
+              <Command.Empty>No page matches your search.</Command.Empty>
+              <Command.Group label="Pages">
+                <Command.Item
+                  v-for="page in searchPages"
+                  :key="page"
+                  :value="page"
+                  >{{ page }}</Command.Item
+                >
+              </Command.Group>
+            </Command.List>
+          </Command>
+        </div>
+      </template>
+
+      <template #notifications>
+        <Alert
+          v-if="notice"
+          severity="info"
+          closable
+          @close="notice = false"
+        >
+          Scheduled maintenance on Nov 20 from 02:00 to 03:00 UTC. Services keep serving traffic.
+        </Alert>
+      </template>
+
+      <template #breadcrumbs>
+        <Breadcrumb :items="crumbs" />
+      </template>
+
+      <main class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
+        <PageHeader
+          title="web-app-prod"
+          description="The service that answers shop.example.com."
+        />
+        <div class="flex flex-wrap gap-(--spacing-xs)">
+          <Button
+            label="Show details"
+            variant="outline"
+            size="medium"
+            @click="splitPanelOpen = true"
+          />
+        </div>
+      </main>
+
+      <template #split-panel>
+        <KeyValueList aria-label="Service details">
+          <KeyValueList.Item label="Status">
+            <StatusIndicator
+              severity="success"
+              label="Active"
+            />
+          </KeyValueList.Item>
+          <KeyValueList.Item label="Domain">shop.example.com</KeyValueList.Item>
+          <KeyValueList.Item label="Last deploy">Nov 10, 2026, 14:32</KeyValueList.Item>
+        </KeyValueList>
+      </template>
+
+      <template #tools>
+        <HelpPanel aria-label="Help: Services">
+          <HelpPanel.Header
+            title="Services"
+            description="Where your domains meet the code that answers them."
+          />
+          <HelpPanel.Group label="What is a service?">
+            <p>A service binds one or more domains to the code and rules that answer them.</p>
+          </HelpPanel.Group>
+          <HelpPanel.Footer>
+            <Link
+              label="Services documentation"
+              href="https://example.com/docs"
+              target="_blank"
+            />
+          </HelpPanel.Footer>
+        </HelpPanel>
+      </template>
+    </AppLayout>
+  </div>
+</template>
+```
+
+### FullHeightPage
+
+```vue
+<script setup>
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import Button from '@aziontech/ui/button'
+  import EmptyState from '@aziontech/ui/empty-state'
+  import PageHeader from '@aziontech/ui/page-header'
+
+  const crumbs = [{ label: 'Workloads', href: '#' }, { label: 'Domains' }]
+</script>
+
+<template>
+  <div class="h-dvh">
+    <AppLayout>
+      <template #header>
+        <AppHeader aria-label="Console">
+          <AppHeader.Start />
+          <AppHeader.Center />
+          <AppHeader.End />
+        </AppHeader>
+      </template>
+
+      <template #breadcrumbs>
+        <Breadcrumb :items="crumbs" />
+      </template>
+
+      <main class="flex min-h-full flex-col gap-(--spacing-lg) p-(--spacing-md)">
+        <PageHeader
+          title="Domains"
+          description="The addresses this workload answers on."
+        />
+        <div class="flex flex-1 items-center justify-center">
+          <EmptyState
+            title="No domain yet"
+            description="Add a domain to route its traffic to this workload."
+            icon="az az-globe"
+          >
+            <template #actions>
+              <Button
+                variant="primary"
+                label="Add domain"
+              />
+            </template>
+          </EmptyState>
+        </div>
+      </main>
+    </AppLayout>
+  </div>
+</template>
+```
+
+### HelpOpen
+
+```vue
+<script setup>
+  import AppHeader from '@aziontech/ui/app-header'
+  import AppLayout from '@aziontech/ui/app-layout'
+  import Breadcrumb from '@aziontech/ui/breadcrumb-root'
+  import HelpPanel from '@aziontech/ui/help-panel'
+  import IconButton from '@aziontech/ui/icon-button'
+  import Link from '@aziontech/ui/link'
+  import PageHeader from '@aziontech/ui/page-header'
+  import { onMounted, ref } from 'vue'
+
+  const toolsOpen = ref(false)
+
+  onMounted(() => {
+    toolsOpen.value = window.matchMedia('(min-width: 48rem)').matches
+  })
+
+  const crumbs = [{ label: 'Workloads', href: '#' }, { label: 'Firewall' }]
+</script>
+
+<template>
+  <div class="h-dvh">
+    <AppLayout
+      v-model:tools-open="toolsOpen"
+      tools-label="Help: Firewall"
+    >
+      <template #header="{ toggleTools }">
+        <AppHeader aria-label="Console">
+          <AppHeader.Start />
+          <AppHeader.Center />
+          <AppHeader.End>
+            <IconButton
+              icon="az az-circle-help"
+              aria-label="Help"
+              variant="outline"
+              size="medium"
+              :aria-pressed="toolsOpen"
+              @click="toggleTools"
+            />
+          </AppHeader.End>
+        </AppHeader>
+      </template>
+
+      <template #breadcrumbs>
+        <Breadcrumb :items="crumbs" />
+      </template>
+
+      <main class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
+        <PageHeader
+          title="Firewall"
+          description="The rules that decide which requests reach your workloads."
+        />
+      </main>
+
+      <template #tools>
+        <HelpPanel aria-label="Help: Firewall">
+          <HelpPanel.Header
+            title="Firewall"
+            description="Rules run in order, before the request reaches your code."
+          />
+          <HelpPanel.Group label="How rules are matched">
+            <p>The first rule whose criteria match the request runs its behaviors.</p>
+          </HelpPanel.Group>
+          <HelpPanel.Footer>
+            <Link
+              label="Firewall documentation"
+              href="https://example.com/docs"
+              target="_blank"
+            />
+          </HelpPanel.Footer>
+        </HelpPanel>
+      </template>
+    </AppLayout>
+  </div>
+</template>
+```

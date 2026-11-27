@@ -1,0 +1,4 @@
+iframe[src^='http:'],
+iframe[src^='https:'] {
+  visibility: hidden;
+}

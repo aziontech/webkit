@@ -4,6 +4,6 @@ Fully filled-out specs that demonstrate how every section of `.specs/_template.m
 
 | Example | What it demonstrates |
 |---|---|
-| `tooltip.md` | Monolithic overlay with open/close state, motion via semantic animation utilities, controlled + uncontrolled pattern, anchored placement, full a11y. Open/close defaults to **closed** per the Storybook discipline. |
+| `tooltip.md` | Monolithic overlay with open/close state, motion via semantic animation utilities, controlled + uncontrolled pattern, anchored placement, full a11y. Open/close defaults to **closed** per the examples discipline. |
 
 When starting a new spec, copy `.specs/_template.md` (not these files). Use the examples as a reference to see how a real component fills each section.

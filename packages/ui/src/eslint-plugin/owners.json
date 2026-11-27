@@ -1,0 +1,264 @@
+{
+  "elements": {
+    "button": {
+      "use": "Button or IconButton",
+      "owners": {
+        "src/components/action/button": "Button: the action control.",
+        "src/components/action/icon-button": "IconButton: the icon-only action control.",
+        "src/components/action/highlight-button": "HighlightButton: the emphasised action control.",
+        "src/composables/use-button-root": "Renders the anchor-or-button root that Button, IconButton and HighlightButton share.",
+        "src/components/content/accordion/accordion-trigger": "Accordion.Trigger: the disclosure button of an accordion item.",
+        "src/components/navigation/tabs/tabs-trigger.vue": "Tabs.Trigger: the tab control.",
+        "src/components/input/select/parts/select-trigger-button.vue": "Select trigger: the button that opens the listbox (select-only combobox pattern).",
+        "src/components/input/multi-select/multi-select-trigger": "MultiSelect.Trigger: the button that opens the listbox (select-only combobox pattern).",
+        "src/components/input/switch": "Switch: a button with role switch.",
+        "src/components/navigation/sidebar-menu": "SidebarMenu items, back row and sub-trigger: menu rows.",
+        "src/components/navigation/navigation-menu": "NavigationMenu trigger: the disclosure button of a menu entry.",
+        "src/components/navigation/dropdown-menu": "DropdownMenu items: menu items.",
+        "src/components/data/pagination/pagination-button": "Pagination.Button: the page control.",
+        "src/components/action/copy-prompt-button": "CopyPromptButton: an action component whose root is the copy control.",
+        "src/components/action/search-trigger": "SearchTrigger: an action component whose root is the control that opens search.",
+        "src/components/action/toggle-group": "ToggleGroup: each segment is a button with role radio.",
+        "src/components/input/theme-switcher": "ThemeSwitcher: each segment is a button with role radio.",
+        "src/components/input/number-input": "NumberInput: the increment and decrement steppers of the spin button.",
+        "src/components/input/date-picker/parts/date-picker-trigger.vue": "DatePicker trigger: the button that opens the calendar dialog.",
+        "src/components/input/date-picker/parts/date-picker-grid.vue": "DatePicker grid: each day cell is the button of a calendar grid cell.",
+        "src/components/chart/contribution-graph/contribution-graph.vue": "ContributionGraph: each day is the button of a calendar grid cell.",
+        "src/components/navigation/stepper/stepper-step": "Stepper.Step: the step header is the button that moves to the step (aria-current step).",
+        "src/components/chart/chart/parts/chart-legend-button.vue": "Chart legend entry: a toggle button (aria-pressed) that shows or hides its series.",
+        "src/components/chart/chart-card/chart-card-drag-handle": "ChartCard.DragHandle: the reorder handle, with its own keyboard model.",
+        "src/components/data/tree/parts/tree-node.vue": "Tree node: the expand toggle of a tree item.",
+        "src/components/data/filter-menu": "FilterMenu: its rows are menu items (field, option with role checkbox or radio, custom range, clear).",
+        "src/components/code/code-block": "CodeBlock: its file tabs are buttons with role tab.",
+        "src/components/marketing/quote-tabs": "QuoteTabs: its client pickers are buttons with role tab.",
+        "src/components/section/article-highlight-section": "ArticleHighlightSection: its article pickers are buttons with role tab.",
+        "src/components/marketing/media-tabs": "MediaTabs: each entry is the button that shows its media (aria-current).",
+        "src/components/marketing/media-scroll": "MediaScroll: each entry is the button that scrolls to its media (aria-current).",
+        "src/components/ai/agent-activity": "AgentActivity: the disclosure button (aria-expanded) that shows and hides its own region, the job of Accordion.Trigger.",
+        "src/components/ai/reasoning": "Reasoning: the disclosure button (aria-expanded) that shows and hides its own region, the job of Accordion.Trigger.",
+        "src/components/ai/sources": "Sources: the disclosure button (aria-expanded) that shows and hides its own region, the job of Accordion.Trigger.",
+        "src/components/ai/citation": "Citation: the inline chip inside a sentence (aria-expanded) that opens the card over its sources; it sits in running text, where Button's heights do not fit.",
+        "src/components/ai/subagent-card": "SubagentCard: the disclosure button (aria-expanded) that shows and hides its own region, the job of Accordion.Trigger.",
+        "src/components/ai/tool-call": "ToolCall: the disclosure button (aria-expanded) that shows and hides its own region, the job of Accordion.Trigger.",
+        "src/components/layout/settings-group": "SettingsGroup: the disclosure button (aria-expanded) that shows and hides its own region, the job of Accordion.Trigger.",
+        "src/components/data/flow-diagram/parts/flow-diagram-card.vue": "FlowDiagram card: the disclosure button (aria-expanded) that shows and hides its own region, the job of Accordion.Trigger.",
+        "src/components/ai/conversation-history": "ConversationHistory: each row is the button that opens that conversation (aria-current).",
+        "src/components/content/image-gallery": "ImageGallery: each thumbnail tile is the button that opens the viewer (aria-haspopup dialog).",
+        "src/components/content/tutorial-panel/tutorial-panel-hotspot": "TutorialPanel.Hotspot: the marker is the button that opens its step.",
+        "src/components/content/timestamp": "Timestamp: the time text is the button that opens its own detail (aria-haspopup dialog).",
+        "src/components/content/integration-card": "IntegrationCard: its title button is stretched over the card, so the whole card is one target.",
+        "src/components/docs/doc-frame": "DocFrame: the framed image is the button that opens its full-screen zoom.",
+        "src/components/code/log-viewer/log-viewer-header.vue": "LogViewer.Header: its level filters are toggle buttons (aria-pressed) with a dot and a count.",
+        "src/components/code/code-editor": "CodeEditor: each problem row is the button that moves the caret to its marker.",
+        "src/components/input/hint": "Hint: the component is the inline info trigger of its tooltip, sized to the label beside it.",
+        "src/components/input/date-picker/parts/date-picker-control-button.vue": "DatePicker field segment: the in-field calendar and clear segments that fill the field height and draw its divider, part of the date field control.",
+        "src/components/input/chip": "Chip: the remove button is part of the token itself, a round 16 or 24 px hit inside the 24 or 32 px pill with its own coarse-pointer target; IconButton's smallest step (28 px) does not fit inside the chip.",
+        "src/components/layout/app-header/app-header-account.vue": "AppHeaderAccount: the account control at the end of the header, an avatar that opens the account menu (or acts alone).",
+        "src/components/ai/suggestion-group": "SuggestionGroup: each prompt is a suggestion chip whose label wraps to the reader's whole question, a group of buttons Button cannot draw (one line, fixed height).",
+        "src/components/content/avatar-group": "AvatarGroup: the +N overflow is the last circle of the overlapping avatar stack and the disclosure button (popovertarget) of the hidden names.",
+        "src/components/ai/prompt-queue/prompt-queue.vue": "PromptQueue: the Show more toggle of a clamped message, a native button so the entry stays small (A5P3-050).",
+        "src/components/ai/prompt-input/prompt-input-model-picker": "PromptInput.ModelPicker: the provider rail tabs and the model and mode rows of its picker panel (rows with an icon, a trailing check and a shortcut or description)."
+      }
+    },
+    "a": {
+      "use": "Link (in a sentence: an anchor with class text-link)",
+      "owners": {
+        "src/components/navigation/link": "Link: the navigation control.",
+        "src/components/navigation/skip-link": "SkipLink: the skip-to-content link.",
+        "src/components/navigation/breadcrumb": "Breadcrumb.Item: a crumb link.",
+        "src/components/navigation/navigation-menu": "NavigationMenu links: menu entries.",
+        "src/components/navigation/sidebar-menu": "SidebarMenu items: menu rows that navigate.",
+        "src/components/navigation/dropdown-menu": "DropdownMenu items that navigate.",
+        "src/composables/use-button-root": "Renders the anchor-or-button root that Button, IconButton and HighlightButton share.",
+        "src/components/data/table/table-cell-link": "Table.CellLink: the link cell.",
+        "src/components/layout/footer/footer-link": "Footer.Link: the footer navigation link.",
+        "src/components/docs/doc-table-of-contents": "DocTableOfContents: a navigation list of in-page links.",
+        "src/components/docs/doc-previous-next": "DocPreviousNext: the previous and next page links.",
+        "src/components/docs/doc-heading": "DocHeading: the heading links to its own anchor (permalink).",
+        "src/components/docs/doc-changelog-entry": "DocChangelogEntry: the entry heading links to its own anchor (permalink).",
+        "src/components/docs/doc-card": "DocCard: the whole card is the link surface (one tab stop).",
+        "src/components/docs/doc-item": "DocItem: the title link is stretched over the whole item, so the item is one link.",
+        "src/components/marketing/feature-item": "FeatureItem: a linked feature item is an anchor, and the whole item is the link surface.",
+        "src/components/marketing/link-directory/link-directory-item": "LinkDirectory.Item: each directory row is a link to its destination.",
+        "src/components/marketing/media-split": "MediaSplit: a linked media cell is an anchor whose content is the media frame.",
+        "src/components/marketing/logo-wall": "LogoWall: a linked logo is an anchor whose only content is the logo mark.",
+        "src/components/section/article-body-section": "ArticleBodySection: renders the article prose, whose link runs DocProse styles, and the community list, a navigation list of icon links.",
+        "src/components/section/article-cards-section": "ArticleCardsSection: each article card is an anchor over the whole card.",
+        "src/components/section/article-highlight-section": "ArticleHighlightSection: the article title link is stretched over the whole highlight card.",
+        "src/components/section/article-index-section": "ArticleIndexSection: each row title link is stretched over the whole row.",
+        "src/components/section/card-carousel-section": "CardCarouselSection: each card title link is stretched over the whole card.",
+        "src/components/section/client-mosaic-section": "ClientMosaicSection: a linked logo cell is an anchor whose only content is the client logo.",
+        "src/components/section/client-story-columns-section": "ClientStoryColumnsSection: each story card is an anchor over the whole card, with a hidden duplicate for the reveal face.",
+        "src/components/section/compliance-logos-section": "ComplianceLogosSection: the more tile is an anchor that fills its whole grid cell.",
+        "src/components/section/investor-marks-section": "InvestorMarksSection: each logo cell is one link to the investor's site; the logo is its only content.",
+        "src/components/section/listing-index-section": "ListingIndexSection: each row's name is the row's link, stretched over the row on narrow screens.",
+        "src/components/section/listing-table-section": "ListingTableSection: each row's name is the row's link, stretched over the row on narrow screens.",
+        "src/components/section/site-header-section": "SiteHeaderSection: the brand mark is the home link.",
+        "src/components/section/story-index-section": "StoryIndexSection: each story card is one link surface.",
+        "src/components/section/template-gallery-section": "TemplateGallerySection: the anchor stretched over each card is the card's link surface.",
+        "src/components/section/subject-grid-section": "SubjectGridSection: each subject is a directory of wrapping article links, a link list.",
+        "src/components/ai/citation": "Citation: the superscript reference link to its source is the component itself.",
+        "src/components/ai/sources": "Sources: each entry is the link to a cited source, a reference list whose job is links.",
+        "src/components/content/integration-card": "IntegrationCard: its title link is stretched over the card, so the whole card is one target.",
+        "src/components/content/overflow-count": "OverflowCount: its popover lists the hidden entries as full-width link rows.",
+        "src/components/layout/app-header/app-header-brand.vue": "AppHeader.Brand: the brand mark is the home link of the header.",
+        "src/components/data/flow-diagram/flow-diagram-title": "FlowDiagram.Title: a linked title is the resource's name as its link, in the title's type and colour, truncating while its open glyph stays visible (the job Table.CellLink has in a row); Link draws link-coloured controls or underlined links in prose.",
+        "src/components/data/flow-diagram/parts/flow-diagram-card.vue": "FlowDiagram card: a linked field value is the value itself as its link, in the field's type and colour and truncating (the job Table.CellLink has in a row); Link draws link-coloured controls or underlined links in prose.",
+        "src/components/content/card/card.vue": "Card: with href the whole card is one link (the root renders as an anchor).",
+        "src/components/layout/bento-grid/bento-grid-cell": "BentoGrid.Cell: with href the whole tile is one link (the cell surface renders as an anchor).",
+        "src/components/layout/footer/footer.vue": "Footer: with homeHref the brand is the home link of the bottom bar."
+      }
+    },
+    "input": {
+      "use": "Input, or the input family member for the type (Checkbox, RadioGroup, Switch, Slider, NumberInput, PasswordInput, OtpInput, PhoneInput, FileDropzone)",
+      "owners": {
+        "src/components/input/input/input.vue": "Input: the text field.",
+        "src/components/input/input-group/input-group-input": "InputGroup.Input: the text field inside an input group.",
+        "src/components/input/password-input": "PasswordInput: the password field.",
+        "src/components/input/number-input": "NumberInput: the number field.",
+        "src/components/input/otp-input": "OtpInput: the one-time code field.",
+        "src/components/input/phone-input": "PhoneInput: the phone field.",
+        "src/components/input/checkbox": "Checkbox: the checkbox.",
+        "src/components/input/radio-group/radio-group-item": "RadioGroup.Item: the radio.",
+        "src/components/input/slider": "Slider: the range input.",
+        "src/components/input/rating": "Rating: one native radio per star, named 1 star to N stars.",
+        "src/components/input/multi-select/multi-select-trigger": "MultiSelect.Trigger: the search field of a searchable multi-select (combobox pattern).",
+        "src/components/ai/prompt-input/prompt-input-attach-button": "PromptInput.AttachButton: the hidden file input its button opens.",
+        "src/components/ai/prompt-input/parts/prompt-input-add-menu.vue": "PromptInput add menu: the hidden camera, photo and file inputs its menu items open.",
+        "src/components/section/job-posting-section": "JobPostingSection: the hidden file input its Browse button opens for the resume field.",
+        "src/components/data/data-grid": "DataGrid: the in-cell text editor of an editable grid cell, sized to the cell.",
+        "src/components/data/tree/parts/tree-node.vue": "Tree node: the in-place rename field of a tree item, sized to the row.",
+        "src/components/input/date-range-picker/parts/date-range-relative.vue": "DateRangePicker: the quick ranges are a staged single choice (native radios, applied with Apply, the Cloudscape relative-range list) drawn as compact popover option rows with a trailing check in a column-filled two-column grid; RadioGroup draws circles or cards.",
+        "src/components/ai/prompt-input/prompt-input-model-picker": "PromptInput.ModelPicker: the borderless search field at the top of its picker panel."
+      }
+    },
+    "textarea": {
+      "use": "Textarea",
+      "owners": {
+        "src/components/input/textarea": "Textarea: the multi-line field.",
+        "src/components/ai/prompt-input/prompt-input.vue": "PromptInput: the composer field (combobox pattern with its mention list).",
+        "src/components/code/code-editor": "CodeEditor: the editing surface of each pane."
+      }
+    },
+    "select": {
+      "use": "Select",
+      "owners": {
+        "src/components/data/data-grid": "DataGrid: the in-cell select editor of an editable grid cell, sized to the cell.",
+        "src/components/data/pagination/pagination-page-size": "Pagination.PageSize: the native page-size picker is the part itself."
+      }
+    },
+    "dialog": {
+      "use": "Dialog, Drawer or Popover",
+      "owners": {}
+    },
+    "table": {
+      "use": "Table",
+      "owners": {
+        "src/components/section/competitor-comparison-section": "CompetitorComparisonSection: its whole job is a comparison data table with grouped row headers.",
+        "src/components/section/plan-comparison-section": "PlanComparisonSection: its whole job is the plan comparison data table with a sticky header and footer.",
+        "src/components/ai/streaming-response": "StreamingResponse: draws the table block of the markdown it renders.",
+        "src/components/chart/chart/parts/chart-data-table.vue": "ChartDataTable: the data-table view of a chart, the accessible alternative to the drawing."
+      }
+    },
+    "progress": {
+      "use": "Progress",
+      "owners": {}
+    },
+    "hr": {
+      "use": "Separator",
+      "owners": {}
+    },
+    "kbd": {
+      "use": "Kbd",
+      "owners": {
+        "src/components/content/kbd": "Kbd: the keyboard key.",
+        "src/components/navigation/dropdown-menu/dropdown-menu-item": "DropdownMenu.Item: prints its shortcut hint as one plain key run, so every menu stays in budget without importing Kbd (A6-073)."
+      }
+    }
+  },
+  "roles": {
+    "dialog": {
+      "use": "Dialog, Drawer or Popover",
+      "owners": {
+        "src/components/overlay/dialog": "Dialog.Content: the modal dialog.",
+        "src/components/overlay/drawer": "Drawer.Content: the side dialog.",
+        "src/components/overlay/popover": "Popover.Content: the non-modal dialog.",
+        "src/components/overlay/confirm-dialog": "ConfirmDialog: the alert dialog.",
+        "src/components/input/date-picker/parts/date-picker-popover.vue": "DatePicker popover: the calendar dialog.",
+        "src/components/content/tutorial-panel/tutorial-panel-hotspot": "TutorialPanel.Hotspot: the step dialog its marker opens.",
+        "src/components/docs/doc-frame": "DocFrame: the full-screen zoom of its image is a modal dialog that grows from the inline image."
+      }
+    },
+    "menu": {
+      "use": "DropdownMenu",
+      "owners": {
+        "src/components/navigation/dropdown-menu": "DropdownMenu: the menu.",
+        "src/components/ai/prompt-input/prompt-input-model-picker": "PromptInput.ModelPicker: the model and mode columns of its picker panel (menuitemradio rows)."
+      }
+    },
+    "listbox": {
+      "use": "Select, MultiSelect or Combobox",
+      "owners": {
+        "src/components/input/select": "Select: the listbox.",
+        "src/components/input/multi-select": "MultiSelect: the listbox.",
+        "src/components/input/combobox": "Combobox: the listbox.",
+        "src/components/ai/prompt-input/parts/prompt-input-menu-list.vue": "PromptInput: the mention list of the composer combobox.",
+        "src/components/overlay/command": "Command: the result list of the command palette combobox.",
+        "src/components/data/property-filter": "PropertyFilter: the suggestion list of its combobox.",
+        "src/components/data/transfer-list": "TransferList: each panel is a multi-select listbox.",
+        "src/components/code/trace": "Trace: the span list is a listbox of selectable spans."
+      }
+    },
+    "tab": {
+      "use": "Tabs",
+      "owners": {
+        "src/components/navigation/tabs": "Tabs.Trigger: the tab.",
+        "src/components/code/code-block": "CodeBlock: its file tabs.",
+        "src/components/marketing/quote-tabs": "QuoteTabs: its client pickers.",
+        "src/components/section/article-highlight-section": "ArticleHighlightSection: its article pickers.",
+        "src/components/ai/prompt-input/prompt-input-model-picker": "PromptInput.ModelPicker: the provider filter rail of its picker panel."
+      }
+    },
+    "switch": {
+      "use": "Switch",
+      "owners": {
+        "src/components/input/switch": "Switch: the switch."
+      }
+    },
+    "checkbox": {
+      "use": "Checkbox",
+      "owners": {
+        "src/components/input/checkbox": "Checkbox: the checkbox.",
+        "src/components/data/filter-menu": "FilterMenu: a multiple-choice option row."
+      }
+    },
+    "tooltip": {
+      "use": "Tooltip",
+      "owners": {
+        "src/components/overlay/tooltip": "Tooltip: the tooltip.",
+        "src/components/docs/doc-prose/parts/doc-prose-copy-tip.vue": "DocProse copy tip: the tooltip that confirms a copied block."
+      }
+    },
+    "progressbar": {
+      "use": "Progress",
+      "owners": {
+        "src/components/feedback/progress": "Progress: the progress bar."
+      }
+    }
+  },
+  "classes": {
+    "animate-spin": {
+      "use": "Spinner",
+      "owners": {
+        "src/components/feedback/spinner": "Spinner: the spinning loading mark."
+      }
+    },
+    "animate-pulse": {
+      "use": "Skeleton",
+      "owners": {
+        "src/components/feedback/skeleton": "Skeleton: the loading placeholder.",
+        "src/components/ai/response-loading": "ResponseLoading: its pulsing dots are the loading indicator itself, the job Spinner has for animate-spin."
+      }
+    }
+  }
+}

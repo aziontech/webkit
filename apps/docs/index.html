@@ -1,0 +1,54 @@
+<!doctype html>
+<html
+  lang="en"
+  class="azion"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="color-scheme"
+      content="dark light"
+    />
+    <link
+      rel="icon"
+      href="data:,"
+    />
+    <script>
+      ;(function () {
+        try {
+          var params = new URLSearchParams(location.search)
+          var stored = params.get('theme') || localStorage.getItem('azion-ui-docs:theme') || 'system'
+          var dark =
+            stored === 'dark' ||
+            (stored === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
+          var root = document.documentElement
+          root.dataset.theme = dark ? 'dark' : 'light'
+          var path = location.pathname
+          var saved = localStorage.getItem('azion-ui-docs:locale')
+          var match = path.match(/^\/(pt-BR|es)(?=\/|$)/)
+          var current = match ? match[1] : 'en'
+          if (
+            path.indexOf('/frame/') !== 0 &&
+            (saved === 'en' || saved === 'pt-BR' || saved === 'es') &&
+            saved !== current
+          ) {
+            var bare = (match ? path.slice(match[0].length) : path) || '/'
+            var target = saved === 'en' ? bare : '/' + saved + (bare === '/' ? '' : bare)
+            location.replace(target + location.search + location.hash)
+          }
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script
+      type="module"
+      src="/src/boot.ts"
+    ></script>
+  </body>
+</html>

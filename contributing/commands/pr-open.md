@@ -1,0 +1,89 @@
+---
+description: Open a PR to `main`. Analyzes the diff to pick the Conventional Commit type/scope (drives the release-please bump), prompts for the related issue (optional), commits by context, pushes, and opens the PR.
+argument-hint: [PR title or focus]
+---
+
+You are running `/pr-open`. Land the current working changes as a pull request against `main`, following the repo's commit + versioning conventions end to end.
+
+**User input:** $ARGUMENTS
+
+## Source of truth
+
+- Commit format and type→release mapping: [`CONTRIBUTING.md`](../../CONTRIBUTING.md) § Commit convention, [`commitlint.config.js`](../../commitlint.config.js), and [`release-types.md`](../rules/release-types.md).
+- Release automation: [`release-please-config.json`](../../release-please-config.json) — merges to `main` update the pending Release PR; merging the Release PR cuts the version. Stock release-please: only `feat` / `fix` / breaking release.
+
+## Steps
+
+### 0. Preflight
+
+- Run `git fetch origin --prune` and `git status`. If there is nothing to commit and nothing unpushed → tell the user there is nothing to open a PR for, and stop.
+
+### 1. Analyze the diff (drives the version bump)
+
+Run `git diff` (staged + unstaged) and determine, from the change itself:
+
+- **type** → `feat` (new component / prop / event / slot / public export), `fix` (bug, a11y, visual regression — anything that must ship), `refactor`, `perf`, `docs`, `style`, `chore`, `test`, `ci`, `revert`. Release effect (release-please): `feat`→minor; `fix`→patch; breaking→major; **every other type → no release on its own** (urgent production fixes are `fix` — there is no `hotfix` type).
+- **scope** → the package without its namespace (`ui`, `theme`, `icons`), inferred from the changed paths.
+- **breaking?** → a removed or renamed public prop, event, slot, or export ⇒ major. Mark it with `!` and a `BREAKING CHANGE:` footer. **Confirm with the user before marking a change breaking.**
+
+### 1b. Version gate — before any commit or PR
+
+State the bump the change will produce for each touched package (`major` / `minor` / `patch` / `none`), derived from step 1 plus any commit already on the branch (`git log origin/main..HEAD` — a `!` or `BREAKING CHANGE:` anywhere in the branch makes the squash-merged PR a major).
+
+- **`major`:** stop. Ask the user explicitly: "This will release a **major** of `@aziontech/<scope>` (`<current>` → `<next>`). Is that what you want?" Do not commit, push, or open the PR until they answer yes. If they say no, drop the `!`/footer and re-derive the type, or split the breaking part into its own PR the user chooses to open.
+- **`minor` / `patch` / `none`:** state it and continue; the plan in step 5 shows it again.
+
+Never infer consent to a major from the task itself — a request to "remove the deprecated prop" still gets the question.
+
+If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTING: "one package per commit when possible").
+
+### 2. Related issue (optional)
+
+- Ask: "Which issue does this relate to? (`ENG-1234`, or leave blank if none)". With an issue, the tag goes **in the subject, after the colon** (`fix(ui): [ENG-1234] …`) — never before the type. **No issue → no tag** — never write `[NO-ISSUE]` (dead characters; commitlint rejects it).
+
+### 3. Ensure a `main`-based feature branch
+
+- If on `main` (or not on a `main`-based feature branch), run the `/branch-create` flow (type from step 1, issue from step 2), carrying the working changes over.
+- **Never** open a PR directly from `main`.
+
+### 4. Commit by context
+
+- **Split shared docs/rules from code.** If the diff mixes code with shared docs/rules/templates (`contributing/rules/*`, `contributing/skills/*`, `.specs/_template.md`, …), tell the user those belong in a **separate PR** and offer to split them out. A component's own new `.specs/<name>.md` stays with the component.
+- Header (commitlint-valid, ≤100 chars): `<type>(<scope>): [<ISSUE>] <subject>` — the `[<ISSUE>]` tag only when an issue exists; with none, plain `<type>(<scope>): <subject>`.
+  - Breaking: `<type>(<scope>)!: [<ISSUE>] <subject>` plus a `BREAKING CHANGE: <what + migration>` footer.
+  - The header **starts with the bare type**. A leading ticket tag (`[ENG-1234] fix: …`) is unparseable by release-please — the merge would release **nothing** — and commitlint now rejects it (as it rejects `[NO-ISSUE]` anywhere).
+- **Never** add a `Co-Authored-By` trailer or any "Generated with Claude" / attribution footer.
+- Let the hooks run — `commit-msg` runs commitlint and the header must pass. **Do not** use `--no-verify` to skip commitlint. If `pre-commit` (lint-staged) fails for an environmental reason, report it and ask the user before retrying.
+
+### 5. Show the plan and confirm
+
+- Show the planned commit header(s), the implied version bump (minor/patch/major/none), and the target base (`main`). Confirm with the user before pushing. A `major` here must already have been confirmed in step 1b — if it was not, go back and ask.
+
+### 6. Push and open the PR
+
+- `git push -u origin <branch>`.
+- If a PR already exists for the branch, update it; otherwise `gh pr create --base main --head <branch>`.
+- **Title:** the conventional commit header (normalize `$ARGUMENTS` into that form when given). Merges are **squash merges**, so the PR title is the commit release-please parses — it must **start with the bare type**, with the ticket tag after the colon only when an issue exists (`<type>(<scope>): [<ISSUE>] <subject>`), and put `!` in the title for a breaking change.
+- **Body — fixed structure.** These three sections, in this order (the same skeleton as [`pull_request_template.md`](../../.github/pull_request_template.md)). A component or block PR from the AI flow (`/component-new`, `/block-new`) also fills the template's AI-flow sections (request and spec, gates, `ui-craft` review, usage check, screenshots):
+
+  ```md
+  ## Summary
+  - <1–3 bullets: what changed and why>
+
+  ## How to test
+  1. <numbered, concrete steps to verify THIS PR: the command to run (`pnpm dev:docs`, `pnpm dev:demos`, `pnpm test:browser-webkit`, `pnpm test:visual`, …), where to look (docs page / demo route / component), and the expected result>
+
+  ## Notes
+  - <breaking change (what + migration), new dependency, related issue — `None` when there is nothing>
+  ```
+
+  Keep the three sections terse: Summary never restates the diff (max 3 bullets); "How to test" is the minimum end-to-end path a reviewer can follow, each step with its expected result; no intro prose. No Figma links, no attribution footer.
+
+- Report the PR URL.
+
+## Rules
+
+- The base branch is always `main`.
+- A major bump is never decided by the command. Every commit and PR passes the version gate (step 1b); a `major` needs the user's explicit yes first.
+- Commit and push only as part of this command (running it is the authorization). Do not commit unrelated changes.
+- Keep imports/exports in the public flat form per [`contributing/rules/imports.md`](../rules/imports.md) when the diff touches `package.json#exports` or examples.

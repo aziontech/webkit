@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "All four rules plus the corner registration squares. Toggle `hatch`, `marks` and `borders` to see the frame change.",
+   "file": "examples/registration-frame/default.vue"
+  },
+  {
+   "name": "Borders",
+   "summary": "Every `borders` value side by side. `y` is the full-bleed band that keeps only the two dividing rules; `none` hands every edge over to a surrounding grid and contributes just the corner marks.",
+   "file": "examples/registration-frame/borders.vue"
+  },
+  {
+   "name": "Marks",
+   "summary": "Each pair of corner ticks is drawn independently. `top` and `bottom` are what a stack needs: the frame above keeps its `bottom` pair and the frame below asks for `bottom` only, so a shared junction carries one mark per corner instead of two a few pixels apart.",
+   "file": "examples/registration-frame/marks.vue"
+  }
+ ]
+}

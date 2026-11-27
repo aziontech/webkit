@@ -1,0 +1,24 @@
+{
+ "variants": [
+  {
+   "name": "Empty",
+   "summary": "No event in the selected period (the last 15 minutes): the controls stay, and a flush EmptyState offers the next longer period, Show the last hour.",
+   "file": "blocks/account/account-activity-history/variants/empty.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The first load: the controls and the table's loading rows.",
+   "file": "blocks/account/account-activity-history/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The log did not load: a danger Alert with Retry replaces the table; Retry loads the events.",
+   "file": "blocks/account/account-activity-history/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/account/account-activity-history/account-activity-history.vue",
+ "guidelinesFile": "blocks/account/account-activity-history/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
+}

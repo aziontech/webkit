@@ -1,0 +1,56 @@
+{
+ "variants": [
+  {
+   "name": "Streaming",
+   "summary": "A response arriving: the reader asked why storefront returns 502 errors and the answer streams in with its caret, a table on the way, the region busy and Stop in the composer; when it ends the sources, actions and follow-up questions appear.",
+   "file": "blocks/ai/ai-chat/variants/streaming.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "A response that failed mid-stream: the partial text stays, the error line says the connection was interrupted and Try again regenerates the response in place.",
+   "file": "blocks/ai/ai-chat/variants/error.vue"
+  },
+  {
+   "name": "LongThread",
+   "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response and its Sources pill, stops following when the reader scrolls up, and the round Scroll to the latest message button above the composer brings them back; follow-up questions close the thread.",
+   "file": "blocks/ai/ai-chat/variants/long-thread.vue"
+  },
+  {
+   "name": "Artifact",
+   "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane of the same chat shell (the `turn-end` and `canvas` slots of the chat) (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question is sent like in every other state. While a new version is written the canvas takes `streaming`, which locks its pager.",
+   "file": "blocks/ai/ai-chat/variants/artifact.vue"
+  },
+  {
+   "name": "Media",
+   "summary": "A prompt with an attached image, then an answer with a chart tool result, two charts in an `ImageGallery`, a structured answer, a CSV in a `FilePreview` and an audio summary; the composer attaches files.",
+   "file": "blocks/ai/ai-chat/variants/media.vue"
+  },
+  {
+   "name": "Agent",
+   "summary": "`AgentActivity` steps, a finished `SubagentCard` and a pending `AgentQuestion` that keeps its answer.",
+   "file": "blocks/ai/ai-chat/variants/agent.vue"
+  }
+ ],
+ "sfcFile": "blocks/ai/ai-chat/ai-chat.vue",
+ "guidelinesFile": "blocks/ai/ai-chat/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "lib/ai-chat-failure.ts",
+  "composables/use-composer-focus.ts",
+  "composables/use-wide-screen.ts",
+  "parts/ai-chat-artifact.vue",
+  "parts/ai-chat-composer.vue",
+  "parts/ai-chat-connection-status.vue",
+  "parts/ai-chat-header.vue",
+  "parts/ai-chat-history.vue",
+  "parts/ai-chat-history-list.vue",
+  "parts/ai-chat-remove-dialog.vue",
+  "parts/ai-chat-media-segment.vue",
+  "parts/ai-chat-skeleton.vue",
+  "parts/ai-chat-split.vue",
+  "parts/ai-chat-start.vue",
+  "parts/ai-chat-tool-segment.vue",
+  "parts/ai-chat-turn.vue",
+  "parts/ai-chat-voice.vue"
+ ]
+}

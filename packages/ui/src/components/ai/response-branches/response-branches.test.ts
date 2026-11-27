@@ -1,0 +1,142 @@
+import { cleanup, fireEvent, render } from '@testing-library/vue'
+import { afterEach, describe, expect, it } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
+
+import Default from '../../../../examples/response-branches/default.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
+import ResponseBranches from './response-branches.vue'
+
+afterEach(() => cleanup())
+
+const versions = ['First', 'Second', 'Third']
+
+const Harness = defineComponent({
+  props: {
+    start: { type: Number, default: 0 },
+    disabled: Boolean,
+    count: { type: Number, default: 3 }
+  },
+  setup(props) {
+    const index = ref(props.start)
+    return () =>
+      h(
+        ResponseBranches,
+        {
+          modelValue: index.value,
+          'onUpdate:modelValue': (value: number) => (index.value = value),
+          count: props.count,
+          disabled: props.disabled
+        },
+        { default: ({ index: i }: { index: number }) => h('p', versions[i]) }
+      )
+  }
+})
+
+describe('ResponseBranches', () => {
+  it('shows the active version and pages through the others', async () => {
+    const view = render(Harness)
+    const group = view.getByRole('group', { name: 'Response versions' })
+    expect(view.getByText('First')).toBeTruthy()
+    expect(view.getByTestId('response-branches__position')).toHaveTextContent('1/3')
+    expect(view.getByTestId('response-branches__position')).toHaveAttribute('aria-hidden', 'true')
+    expect(view.getByText('Version 1 of 3')).toHaveAttribute('aria-live', 'polite')
+    expect(view.getByRole('button', { name: 'Previous version' })).toBeDisabled()
+
+    await fireEvent.click(view.getByRole('button', { name: 'Next version' }))
+    expect(view.getByText('Second')).toBeTruthy()
+    expect(view.getByText('Version 2 of 3')).toBeTruthy()
+    await fireEvent.click(view.getByRole('button', { name: 'Next version' }))
+    expect(view.getByRole('button', { name: 'Next version' })).toBeDisabled()
+    await fireEvent.click(view.getByRole('button', { name: 'Previous version' }))
+    expect(view.getByText('Second')).toBeTruthy()
+    expect(group.closest('[data-testid="response-branches"]')).toHaveAttribute('data-index', '1')
+  })
+
+  it('moves focus to the other arrow when the focused one reaches an end', async () => {
+    const view = render(Harness, { props: { start: 1 } })
+    const previous = view.getByRole('button', { name: 'Previous version' })
+    const next = view.getByRole('button', { name: 'Next version' })
+    previous.focus()
+    await fireEvent.click(previous)
+    await nextTick()
+    expect(previous).toBeDisabled()
+    expect(document.activeElement).toBe(next)
+    await fireEvent.click(next)
+    await fireEvent.click(next)
+    await nextTick()
+    expect(next).toBeDisabled()
+    expect(document.activeElement).toBe(previous)
+  })
+
+  it('clamps an out-of-range index and hides the pager for one version', async () => {
+    const view = render(Harness, { props: { start: 9 } })
+    expect(view.getByText('Third')).toBeTruthy()
+    view.unmount()
+    const single = render(Harness, { props: { count: 1 } })
+    expect(single.queryByRole('group')).toBeNull()
+    expect(single.getByText('First')).toBeTruthy()
+  })
+
+  it('locks both buttons while disabled', () => {
+    const view = render(Harness, { props: { start: 1, disabled: true } })
+    expect(view.getByRole('button', { name: 'Previous version' })).toBeDisabled()
+    expect(view.getByRole('button', { name: 'Next version' })).toBeDisabled()
+  })
+
+  it('reads its strings from the locale catalog', () => {
+    const view = render(ConfigProvider, {
+      props: { locale: 'pt-BR', catalogs: LOCALES },
+      slots: { default: () => h(Harness) }
+    })
+    expect(view.getByRole('group', { name: 'Versões da resposta' })).toBeTruthy()
+    expect(view.getByText('Versão 1 de 3')).toBeTruthy()
+    expect(view.getByText('1/3')).toBeTruthy()
+  })
+
+  it('keeps the previous button at the inline start under rtl', () => {
+    const host = document.createElement('div')
+    host.dir = 'rtl'
+    document.body.appendChild(host)
+    const view = render(Harness, { container: host })
+    const [first] = view.getAllByRole('button')
+    expect(first).toHaveAccessibleName('Previous version')
+    host.remove()
+  })
+
+  it('regenerates into a new version in the example, without axe violations', async () => {
+    const view = render(Default)
+    expect(view.getByText('Version 3 of 3')).toBeTruthy()
+    await expectNoA11yViolations(view.container)
+    await fireEvent.click(view.getByRole('button', { name: 'Regenerate response' }))
+    await new Promise((resolve) => setTimeout(resolve, 900))
+    await nextTick()
+    expect(view.getByText('Version 4 of 4')).toBeTruthy()
+  })
+
+  it('renders the pager alone when given no slot, as in an action row', () => {
+    const view = render(ResponseBranches, { props: { count: 2, modelValue: 1 } })
+    expect(view.getByRole('group', { name: 'Response versions' })).toBeTruthy()
+    expect(view.getByTestId('response-branches__position')).toHaveTextContent('2/2')
+  })
+
+  describe('naming and test ids', () => {
+    it('names the pager from ariaLabel, not from the removed label', () => {
+      const named = render(ResponseBranches, { props: { count: 3, ariaLabel: 'Answers' } })
+      expect(named.getByRole('group', { name: 'Answers' })).toBeInTheDocument()
+      named.unmount()
+      const legacy = render(ResponseBranches, { props: { count: 3, label: 'Drafts' } as never })
+      expect(legacy.queryByRole('group', { name: 'Drafts' })).toBeNull()
+    })
+
+    it('lets a consumer data-testid win over the fallback', () => {
+      const { getByTestId } = render(ResponseBranches, {
+        props: { count: 3 },
+        attrs: { 'data-testid': 'branches' }
+      })
+      expect(getByTestId('branches')).toBeInTheDocument()
+      expect(getByTestId('branches__pager')).toBeInTheDocument()
+    })
+  })
+})

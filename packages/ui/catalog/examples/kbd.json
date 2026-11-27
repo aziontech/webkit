@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A single keycap driven by the controls.",
+   "file": "examples/kbd/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All sizes side by side.",
+   "file": "examples/kbd/sizes.vue"
+  },
+  {
+   "name": "Keys",
+   "summary": "A `keys` list drawn as one keycap (`combined`) and as one keycap per key (`separate`), with the arrow keys and the Return glyph in a navigation hint.",
+   "file": "examples/kbd/keys.vue"
+  }
+ ]
+}

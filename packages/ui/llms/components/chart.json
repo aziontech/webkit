@@ -1,0 +1,271 @@
+{
+ "name": "chart",
+ "binding": "Chart",
+ "import": "@aziontech/ui/chart",
+ "treeShakeableImport": "@aziontech/ui/chart-root",
+ "category": "chart",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/ui/chart-area",
+  "@aziontech/ui/chart-axis",
+  "@aziontech/ui/chart-bar",
+  "@aziontech/ui/chart-brush",
+  "@aziontech/ui/chart-crosshair",
+  "@aziontech/ui/chart-grid",
+  "@aziontech/ui/chart-legend",
+  "@aziontech/ui/chart-line",
+  "@aziontech/ui/chart-reference",
+  "@aziontech/ui/chart-scatter",
+  "@aziontech/ui/chart-tooltip"
+ ],
+ "purpose": "A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Reference`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
+ "setup": null,
+ "useWhen": [
+  "A measure over time — requests, threats, bandwidth per bucket — as one or more lines or areas.",
+  "Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.",
+  "Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.",
+  "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals.",
+  "Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).",
+  "How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.",
+  "A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`.",
+  "A measure against the limit it must stay under or the range it should stay in — a quota, an SLO, an alert threshold, a normal band: add `Chart.Reference` with a `value` (a line) or `from` and `to` (a band)."
+ ],
+ "avoidWhen": [
+  "A single headline number with a delta → use `stat-tile`.",
+  "Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.",
+  "More than about seven classes that all carry meaning → use `table`; color stops separating past the eight series slots.",
+  "Two measures on different scales → two charts side by side; this component never draws a second value axis.",
+  "One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.",
+  "Values by country or location → use `map-chart`."
+ ],
+ "related": [
+  "`chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
+  "`donut-chart` — part-to-whole at a glance, sharing this chart's palette, legend and states.",
+  "`stat-tile` — one figure with a delta and a sparkline, for a KPI row above the charts.",
+  "`table` — the exact numbers; a chart's own table view is the accessible twin, a `table` is the primary surface."
+ ],
+ "bestPractices": [
+  "Pass series in a stable order: the slot follows the series position, so color follows the entity. A filter that hides a series keeps the others' colors.",
+  "Keep one value axis. Index two measures to a common base or split them into two charts.",
+  "Let the legend carry identity for two or more series; a single series needs no legend, its title names it.",
+  "Leave `color` unset by default: each series takes the next categorical slot (`--chart-series-1` … `-8`) in order, and the palette follows the theme. Most series name an entity (a host, a country, a metric), not a state.",
+  "Set a status `color` only when the series itself means a state, and keep it to that series: blocked requests or an error rate take `color: 'danger'`, while the series around it keep their categorical slots. Never reuse a status color as series 4.",
+  "Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.",
+  "Keep filters and the time range in one row above the dashboard, never inside a chart.",
+  "While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).",
+  "Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.",
+  "Use `labelScale=\"linear\"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.",
+  "Name every `Chart.Reference` with a `label` (`SLO 300 ms`, `Quota`): the label is drawn at the inline end of the line and read in the chart summary, so the limit never rests on a dashed line alone. Color it with a `severity` only when crossing it means that state (`danger` for a hard limit, `warning` for an alert threshold); a plain target stays `neutral`. Place a labelled `Chart.Reference` after the series it frames: parts paint in order, so the label's canvas halo then sits over the line instead of under it, and the band's light tint does not hide the line.",
+  "Place a band (`from` + `to`) before the marks so it sits under them, and a line after the marks so it stays readable over them.",
+  "Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar type=\"histogram\"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another."
+ ],
+ "props": [
+  {
+   "name": "series",
+   "type": "ChartSeries[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Series to plot. The first eight take the fixed categorical slots in order; the rest fold into Other."
+  },
+  {
+   "name": "labels",
+   "type": "ChartLabel[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "One category label per index: a string, a number, or a Date."
+  },
+  {
+   "name": "orientation",
+   "type": "'vertical' | 'horizontal'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Value axis direction. Horizontal lays categories down the side, for ordered bars."
+  },
+  {
+   "name": "labelScale",
+   "type": "'category' | 'linear'",
+   "default": "'category'",
+   "required": "false",
+   "doc": "How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets."
+  },
+  {
+   "name": "min",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Floor of the value axis. Marks grow from one baseline."
+  },
+  {
+   "name": "max",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Ceiling of the value axis. When absent, the nice ceiling of the visible data."
+  },
+  {
+   "name": "cap",
+   "type": "number",
+   "default": "8",
+   "required": "false",
+   "doc": "Series kept before the rest fold into Other."
+  },
+  {
+   "name": "otherLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Name of the folded series. Empty uses the locale catalog (`Other`)."
+  },
+  {
+   "name": "formatValue",
+   "type": "(value: number) => string",
+   "default": "formatCompact",
+   "required": "false",
+   "doc": "Formats ticks, tooltip values and legend totals."
+  },
+  {
+   "name": "formatLabel",
+   "type": "(label: ChartLabel) => string",
+   "default": "formatLabel",
+   "required": "false",
+   "doc": "Formats category labels on the axis and in the tooltip."
+  },
+  {
+   "name": "timeZone",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "IANA time zone the default label format prints Date labels in. Empty prints UTC on the server and in the first client render, then the runtime's zone."
+  },
+  {
+   "name": "height",
+   "type": "number",
+   "default": "240",
+   "required": "false",
+   "doc": "Minimum plot height in pixels; the plot grows to fill a taller container."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders a Skeleton sized to the plot and suppresses interaction."
+  },
+  {
+   "name": "refetching",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Holds the previous render at reduced opacity while new data loads."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error message; when set, the plot renders a danger Alert instead of marks."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the empty state shown when no series has a value. Empty uses the locale catalog (`No data available`)."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting line under the empty title: why the range is empty, or what to do next."
+  },
+  {
+   "name": "tableView",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the data table in place of the marks. The table is always present for assistive tech."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the chart when it is not inside a ChartCard with a title."
+  },
+  {
+   "name": "activeIndex",
+   "type": "number | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model:activeIndex`)."
+  },
+  {
+   "name": "hiddenSeries",
+   "type": "string[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:hiddenSeries`)."
+  },
+  {
+   "name": "range",
+   "type": "ChartRange | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model:range`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "point-click",
+   "payload": "(event: MouseEvent | KeyboardEvent, point: ChartPoint)",
+   "notes": "Click or tap on the plot, or Enter / Space on the focused chart, at the active index (a tap with no active index uses the point under the finger). `point` carries the index, the label and every visible series value."
+  },
+  {
+   "name": "legend-toggle",
+   "payload": "(event: MouseEvent, series: ChartSeries)",
+   "notes": "A legend entry toggled; `series` is the consumer's own series object."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Reference, Crosshair, Tooltip, Legend, in paint order."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the default EmptyState."
+  },
+  {
+   "name": "empty-actions",
+   "scope": "—",
+   "notes": "Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it."
+  },
+  {
+   "name": "error",
+   "scope": "—",
+   "notes": "Replaces the default danger Alert."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/chart/default.vue"
+  },
+  {
+   "name": "Forms",
+   "file": "examples/chart/forms.vue"
+  },
+  {
+   "name": "Stacked",
+   "file": "examples/chart/stacked.vue"
+  }
+ ],
+ "docs": "components/chart.md"
+}

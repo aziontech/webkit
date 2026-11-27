@@ -1,0 +1,18 @@
+{
+ "variants": [
+  {
+   "name": "CliCreated",
+   "summary": "A resource made from the CLI that nothing serves yet: no deployment card, the resource as the only row, next steps that deploy it here (Recommended) or on a new service, and Get started with the CLI and GitHub Actions paths.",
+   "file": "blocks/create/create-deploy-success/variants/cli-created.vue"
+  }
+ ],
+ "sfcFile": "blocks/create/create-deploy-success/create-deploy-success.vue",
+ "guidelinesFile": "blocks/create/create-deploy-success/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "lib/connect-paths.ts",
+  "parts/connect-paths.vue",
+  "parts/deployment-card.vue",
+  "types.ts"
+ ]
+}

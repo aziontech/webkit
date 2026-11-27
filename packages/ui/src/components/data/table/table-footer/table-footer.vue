@@ -1,0 +1,28 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  defineOptions({
+    name: 'TableFooter',
+    inheritAttrs: false
+  })
+
+  defineSlots<{
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+
+  const testId = computed<string>(
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-footer'
+  )
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    :data-testid="testId"
+    class="flex min-w-full flex-col bg-(--bg-surface) text-(--text-muted) border-t-(length:--border-width-default) border-solid border-(--border-default)"
+  >
+    <slot />
+  </div>
+</template>

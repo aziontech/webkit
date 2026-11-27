@@ -8,4 +8,14 @@ export const shadow = {
   '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)'
 }
 
-export default { shadow }
+const DARK_EDGE = '0 0 0 1px rgb(255 255 255 / 0.06)'
+
+export const shadowDark = {
+  '2xs': '0 1px rgb(0 0 0 / 0.5)',
+  xs: '0 1px 2px 0 rgb(0 0 0 / 0.6)',
+  sm: `${DARK_EDGE}, 0 1px 3px 0 rgb(0 0 0 / 0.6), 0 1px 2px -1px rgb(0 0 0 / 0.6)`,
+  md: `${DARK_EDGE}, 0 4px 6px -1px rgb(0 0 0 / 0.6), 0 2px 4px -2px rgb(0 0 0 / 0.6)`,
+  lg: `${DARK_EDGE}, 0 10px 15px -3px rgb(0 0 0 / 0.6), 0 4px 6px -4px rgb(0 0 0 / 0.6)`,
+  xl: `${DARK_EDGE}, 0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.6)`,
+  '2xl': `${DARK_EDGE}, 0 25px 50px -12px rgb(0 0 0 / 0.8)`
+}

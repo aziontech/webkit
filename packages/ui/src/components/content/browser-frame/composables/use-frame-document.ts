@@ -1,0 +1,107 @@
+import { useEventListener, useMutationObserver } from '@vueuse/core'
+import {
+  type MaybeRefOrGetter,
+  onMounted,
+  onScopeDispose,
+  readonly,
+  type ShallowRef,
+  shallowRef,
+  toValue
+} from 'vue'
+
+export interface UseFrameDocumentReturn {
+  bodyEl: Readonly<ShallowRef<globalThis.HTMLElement | null>>
+}
+
+const STYLE_SOURCES = 'style, link[rel="stylesheet"]'
+
+const THEME_ATTRIBUTES = ['data-theme', 'class']
+
+const refresh = (existing: globalThis.Element, source: globalThis.Element) => {
+  if (source.tagName === 'STYLE' && existing.textContent !== source.textContent) {
+    existing.textContent = source.textContent
+  }
+  const href = source.getAttribute('href')
+  if (source.tagName === 'LINK' && href && existing.getAttribute('href') !== href) {
+    existing.setAttribute('href', href)
+  }
+}
+
+const copyTheme = (frameDocument: globalThis.Document | null) => {
+  const root = frameDocument?.documentElement
+  const hostRoot = globalThis.document?.documentElement
+  if (!root || !hostRoot) return
+  for (const name of THEME_ATTRIBUTES) {
+    const value = hostRoot.getAttribute(name)
+    if (value === null) root.removeAttribute(name)
+    else root.setAttribute(name, value)
+  }
+}
+
+export function useFrameDocument(
+  iframe: MaybeRefOrGetter<globalThis.HTMLIFrameElement | null>
+): UseFrameDocumentReturn {
+  const bodyEl = shallowRef<globalThis.HTMLElement | null>(null)
+
+  let frameDocument: globalThis.Document | null = null
+  let clones = new Map<globalThis.Element, globalThis.Element>()
+
+  const syncStyles = () => {
+    const head = frameDocument?.head
+    const hostHead = globalThis.document?.head
+    if (!frameDocument || !head || !hostHead) return
+    const next = new Map<globalThis.Element, globalThis.Element>()
+    for (const source of Array.from(hostHead.querySelectorAll(STYLE_SOURCES))) {
+      const existing = clones.get(source)
+      const clone = existing ?? frameDocument.importNode(source, true)
+      if (existing) refresh(existing, source)
+      if (!clone.isConnected) head.appendChild(clone)
+      next.set(source, clone)
+    }
+    clones.forEach((clone, source) => {
+      if (!next.has(source)) clone.remove()
+    })
+    clones = next
+  }
+
+  const syncTheme = () => copyTheme(frameDocument)
+
+  const detach = () => {
+    clones.forEach((clone) => clone.remove())
+    clones = new Map()
+    frameDocument = null
+    bodyEl.value = null
+  }
+
+  const attach = () => {
+    const doc = toValue(iframe)?.contentDocument ?? null
+    if (!doc || doc === frameDocument || doc.URL === 'about:blank' || !doc.body) return
+    detach()
+    frameDocument = doc
+    doc.body.style.margin = '0'
+    syncStyles()
+    syncTheme()
+    bodyEl.value = doc.body
+  }
+
+  useEventListener(iframe, 'load', attach)
+
+  useMutationObserver(() => globalThis.document?.head, syncStyles, {
+    childList: true,
+    subtree: true,
+    characterData: true
+  })
+
+  useMutationObserver(() => globalThis.document?.documentElement, syncTheme, {
+    attributes: true,
+    attributeFilter: THEME_ATTRIBUTES
+  })
+
+  onMounted(attach)
+
+  onScopeDispose(detach)
+
+  return {
+    bodyEl: readonly(bodyEl) as Readonly<ShallowRef<globalThis.HTMLElement | null>>
+  }
+}

@@ -1,0 +1,64 @@
+{
+ "name": "skip-link",
+ "binding": "SkipLink",
+ "import": "@aziontech/ui/skip-link",
+ "treeShakeableImport": "@aziontech/ui/skip-link",
+ "category": "navigation",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The first focusable element of a page: a link that is visually hidden until it receives keyboard focus, then appears at the top-start corner and jumps to the page's main content, so a keyboard or screen-reader user bypasses the repeated header and navigation (WCAG 2.4.1 Bypass Blocks). On activation it also moves focus into the target, so the next `Tab` continues from the main content in every browser. It differs from `link` in that it is invisible at rest and owns its placement and focus hand-off.",
+ "setup": null,
+ "useWhen": [
+  "Every page shell (console, marketing site, docs) that renders repeated navigation before the main content: place it as the first child of the shell.",
+  "A layout whose `<main>` (or other main landmark) carries the `id` the link targets (`main` by default)."
+ ],
+ "avoidWhen": [
+  "A link inside content that should always be visible → use `link`.",
+  "Jumping between sections of one page (an in-page table of contents) → use `link` with a `#hash` `href`.",
+  "A page with no repeated block before its content (a bare sign-in form) gains nothing from one; do not add it there."
+ ],
+ "related": [
+  "`link` — the always-visible navigation link; use it for any visible jump.",
+  "`console-layout`, `site-layout`, `doc-layout` — the page shells that render the main landmark the skip link targets."
+ ],
+ "bestPractices": [
+  "Render one skip link per page, as the first element inside the shell, before the header; do not wrap it in `nav` or move it into the header.",
+  "Give the main landmark the `id` the link points at (`id=\"main\"` for the default `href`); a missing target makes the link a no-op.",
+  "Keep the label short and name the destination (\"Skip to content\"); override it with `label` or the default slot only when the target is not the main content."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible label, the default slot's fallback. Empty uses the locale catalog (`Skip to content`)."
+  },
+  {
+   "name": "href",
+   "type": "string",
+   "default": "'#main'",
+   "required": "false",
+   "doc": "In-page hash of the element to jump to; the element with that `id` receives focus on activation."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The link text. Fallback: `label`, then the locale catalog."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/skip-link/default.vue"
+  }
+ ],
+ "docs": "components/skip-link.md"
+}

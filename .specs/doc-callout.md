@@ -1,34 +1,35 @@
 ---
 name: doc-callout
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 6b1bfae5f1f00f6b4f9b463764799a4c24d11c1d825b5e65874c8c54f2e1964e
+spec_version: 4
+checksum: ad84ffe3256dc869319549be61e56512483e9759c4a366ca9ce49585a2883c60
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-25
 ---
 
 # DocCallout — Component Spec
 
 ## Purpose
 
-The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Message` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
+The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the Azion UI `Alert` surface, so the border, the icon and the radius come from the design system rather than from this layer. Every variant sits on the calm `--bg-surface` of the reading column: the severity reads from the border and the glyph colour, never from a full status fill. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
 ## When to use
 
+- Use DocCallout only in documentation prose (Note, Tip, Warning); console pages use Alert.
 - An aside the reader must not miss mid-prose: a caveat, a prerequisite, a warning about data loss.
 - A short confirmation that a step worked (`check`), or a shortcut worth knowing (`tip`).
 
 ## When NOT to use
 
 - For a block that needs its own box — a fenced sample, a table, a card grid. Those belong outside the callout; its body is prose, at most a short list.
-- For an application-screen banner or a form error — use `Message` directly, which is what this composes.
+- For an application-screen banner or a form error — use `Alert` directly, which is what this composes.
 - As a section heading. A callout is an interruption, not structure.
 
 ## Related
 
-- `Message` — the webkit surface this renders on; reach for it directly outside documentation prose.
+- `Alert` — the Azion UI surface this renders on; reach for it directly outside documentation prose.
 - `DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder.
 
 ## Best practices
@@ -41,11 +42,11 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ```vue
 <script setup>
-  import DocCallout from '@aziontech/webkit/doc-callout'
+  import DocCallout from '@aziontech/ui/doc-callout'
 </script>
 
 <template>
-  <DocCallout kind="warning">
+  <DocCallout variant="warning">
     Deleting a workload releases its domain. Anything still pointing at it will stop resolving.
   </DocCallout>
 </template>
@@ -53,10 +54,12 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ## Props
 
-| Prop    | Type                                                            | Default  | Required | JSDoc                                                             |
-| ------- | --------------------------------------------------------------- | -------- | -------- | ----------------------------------------------------------------- |
-| `kind`  | `'note' \| 'info' \| 'tip' \| 'check' \| 'warning' \| 'danger'` | `'note'` | false    | Which admonition this is; drives the severity color and the icon. |
-| `label` | `string`                                                        | `''`     | false    | Fallback copy when the default slot is empty.                     |
+| Prop      | Type                                                            | Default  | Required | JSDoc                                                             |
+| --------- | --------------------------------------------------------------- | -------- | -------- | ----------------------------------------------------------------- |
+| `variant` | `'note' \| 'info' \| 'tip' \| 'check' \| 'warning' \| 'danger'` | `'note'` | false    | Which admonition this is; drives the severity color and the icon. |
+| `label`   | `string`                                                        | `''`     | false    | Fallback copy when the default slot is empty.                     |
+
+`variant` names the admonition type (Mintlify's Note, Info, Tip, Check, Warning, Danger), not a severity: `note` and `tip` are not severities. It maps onto `Alert` severities for color and adds an icon (`note` → info, `info` → info drawn neutral with the info glyph (Mintlify's grey Info, decision A5P3-L02-2), `tip` → info drawn neutral with the lightbulb glyph, so no two variants look alike, `check` → success, `warning` → warning, `danger` → danger), which is why it is not called `severity`.
 
 ## Events
 
@@ -70,30 +73,39 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ## States
 
-- Visual states: `default` (the component is not interactive and holds no state)
-- `data-kind` mirrors the `kind` prop, so a test or a consumer can target one flavour
-- `data-neutral` is present only for `tip`, the one kind that carries no severity
+- Visual states: `default`, plus `hover` and `focus-visible` on an inline code chip (a ring, and a tooltip offering the copy)
+- `data-variant` mirrors the `variant` prop, so a test or a consumer can target one flavour
+- `data-neutral` is present only for `info` and `tip`, the two variants drawn without a severity colour; they differ by glyph
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
+- Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap; code inside `pre` never takes the chip (`src/test/inline-code.test.ts`)
+- Inline code: the chip `DocProse` defines (`.text-label-code-sm`, no vertical padding, `var(--spacing-2xs)` inline padding, outline as an `inset-ring` with a `border` only under `forced-colors`, `wrap-anywhere` + `box-decoration-clone`), so it is never taller than the `.text-body-sm` line and chips on consecutive wrapped lines keep at least a 1px gap (`src/test/inline-code.test.ts`)
+- Inline code copies like it does in `DocProse` (the shared `useInlineCodeCopy`): clicking a chip copies and selects its whole text with a `Copy` / `Copied` tooltip (`<testid>__copy-tip`, teleported) and a polite announcement (`<testid>__copy-status`); a chip marked `<code data-command>` is also a `role="button"` stop that `Enter` / `Space` copies. A chip inside a link, inside `pre`, or generated by a component is left alone. Inside `DocProse` the callout handles its own chips, so a copy runs once
 
 ## Motion & Animations
 
-_none_
+| Trigger                  | Animation / Transition                               | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback      |
+| ------------------------ | ---------------------------------------------------- | ------------------------------------------------------ | ---------------------------- |
+| copy tooltip enter/leave | `animate-popup-scale-in` / `animate-popup-scale-out` | `popup-scale-in` / `popup-scale-out`                   | `motion-reduce:animate-none` |
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)                                                                                 |
-| --------------------------------- | ------------------------------------------------------------------------------------------------- |
-| typography (copy)                 | `.text-body-sm`                                                                                   |
-| typography (inline code)          | `.text-label-code-sm`                                                                             |
-| text                              | `var(--text-default)`                                                                             |
-| surface (neutral kind)            | `var(--bg-surface)`                                                                               |
-| border (neutral kind)             | `var(--border-default)`                                                                           |
-| glyph (neutral kind)              | `var(--primary)`                                                                                  |
-| surface + border (severity kinds) | `Message`'s own `data-severity` tokens                                                            |
-| surface (inline code, neutral)    | `var(--bg-hover)`                                                                                 |
-| border (inline code, severity)    | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
-| shape (inline code)               | `var(--shape-flat)`                                                                               |
-| spacing                           | `var(--spacing-sm)`                                                                               |
+| Region                             | Token (TOKENS.md)                                                                                 |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------- |
+| typography (copy)                  | `.text-body-sm`                                                                                   |
+| typography (inline code)           | `.text-label-code-sm`                                                                             |
+| text                               | `var(--text-default)`                                                                             |
+| surface (every variant)            | `var(--bg-surface)`                                                                               |
+| border (neutral variant)           | `var(--border-default)`                                                                           |
+| glyph (neutral variant)            | `var(--primary)`                                                                                  |
+| border (severity variants)         | `Alert`'s own `data-severity` border tokens                                                       |
+| glyph (severity variants)          | `var(--info-mark)` / `var(--success-mark)` / `var(--warning-mark)` / `var(--danger-mark)`         |
+| surface (inline code)              | `var(--bg-hover)`                                                                                 |
+| inset ring (inline code, severity) | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
+| shape (inline code)                | `var(--shape-control)`                                                                            |
+| spacing (inline code)              | `var(--spacing-2xs)` inline, no vertical padding                                                  |
+| spacing                            | `var(--spacing-sm)`                                                                               |
+| surface (copy tooltip)             | `var(--bg-contrast)` / `var(--text-contrast)`                                                     |
+| focus (command chip)               | `var(--ring-color)`                                                                               |
 
 ## Theme gaps
 
@@ -103,17 +115,18 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the callout is not focusable; a link inside it inherits the prose focus ring.
-- Keyboard map: none of its own — `Tab` reaches only a link in the copy.
-- ARIA: the role comes from `Message`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
-- Contrast ≥4.5:1: the copy is `--text-default` in every kind, measured 13.31:1–18.97:1 across the six fills in both themes. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
+- Visible focus: the callout is not focusable; a link inside it inherits the prose focus ring, and a command chip draws `var(--ring-color)`.
+- Keyboard map: `Tab` reaches a link or a command chip (`<code data-command>`) in the copy; `Enter` / `Space` on a command chip copies it. A plain chip is not a stop.
+- Copy feedback: the tooltip is `role="tooltip"`; the result is announced in a polite live region teleported to `body`, which binds `dir` and `lang` from the nearest `ConfigProvider`.
+- ARIA: the role comes from `Alert`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
+- Contrast ≥4.5:1: the copy is `--text-default` in every variant, on `--bg-surface` in every variant, so it keeps the surface's body-text contrast in both themes; the glyph is the `-mark` token, which passes the icon target on a surface. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
 - `tip` deliberately does **not** speak in `--text-muted` (3.95:1 light, under AA).
-- Touch target: not applicable; the component is not interactive.
+- Touch target: the callout itself is not interactive; a chip is an inline text control (WCAG 2.5.8 inline exception).
 
-## Stories (Storybook)
+## Examples
 
-- Default — a single callout with the default `kind`.
-- Kinds — composite story rendering all six kinds side by side, which is the only way to read the severity ladder and the neutral `tip` against each other.
+- Default — a single callout with the default `variant`.
+- Variants — composite story rendering all six variants side by side, which is the only way to read the severity ladder and the neutral `tip` against each other.
 
 ## Constraints — DO NOT
 
@@ -122,19 +135,17 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

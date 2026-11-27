@@ -1,0 +1,16 @@
+{
+  "component": "site-page",
+  "title": "Components/Marketing/Elements/SitePage",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A short product page rendered from data: an opening `hero-section` in `hero`, then `customer-use-cases-section`, `faq-section` and a `closing-call-to-action-section` in `sections`, each entry an `_id` naming the section and the `props` bound onto it. The column draws a hatched gap before each band; the closing band draws the page's closing frame, so no gap follows it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Closings",
+      "summary": "Two closing bands in a row: the renderer turns the upper band's `hatch` off, so the page closes once, on the lower band's frame. Below, a page whose last band carries its own content closes on `{ _id: 'closing-call-to-action-section', props: { variant: 'frame' } }`, the frame alone with no gap before it.",
+      "file": "closings.vue"
+    }
+  ]
+}

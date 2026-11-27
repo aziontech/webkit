@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "",
+   "file": "examples/textarea/default.vue"
+  },
+  {
+   "name": "Disabled",
+   "summary": "",
+   "file": "examples/textarea/disabled.vue"
+  },
+  {
+   "name": "Invalid",
+   "summary": "Invalid state inside a Field: the danger border and a Field.Error saying what to fix.",
+   "file": "examples/textarea/invalid.vue"
+  }
+ ]
+}

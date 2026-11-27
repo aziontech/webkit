@@ -1,0 +1,75 @@
+{
+ "name": "doc-heading",
+ "binding": "DocHeading",
+ "import": "@aziontech/ui/doc-heading",
+ "treeShakeableImport": "@aziontech/ui/doc-heading",
+ "category": "docs",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNavigation`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift. Inside `DocLayout`, a level 2 or 3 heading with an `anchor` registers itself (through `useHeadingOutline`) as an entry of the layout's \"On this page\" rail, with its rendered text and its level, once it mounts, and leaves the rail when it unmounts; the page never lists its headings anywhere else.",
+ "setup": null,
+ "useWhen": [
+  "Use DocHeading only for h2/h3 inside documentation pages; a console page band uses Subheader.",
+  "Every `h2`–`h4` on a docs page that the page rail lists.",
+  "Section headings on a designed docs page composed in Vue."
+ ],
+ "avoidWhen": [
+  "For the page title — use `DocPageHeader`.",
+  "On marketing pages — use `ModuleHeader`."
+ ],
+ "related": [
+  "`DocTableOfContents` — the rail that points at the ids.",
+  "`useHeadingNavigation` — the page-provided scroll handler.",
+  "`DocProse` — skips `[data-doc-anchor]` in its link rules."
+ ],
+ "bestPractices": [
+  "Give every heading a stable, slug-like `anchor`.",
+  "Without an `anchor` the heading renders plain text with no anchor — a link to nowhere is never drawn — and stays out of the layout's outline; a page with no outline rail (the docs home) leaves its headings unanchored."
+ ],
+ "props": [
+  {
+   "name": "level",
+   "type": "1 | 2 | 3 | 4",
+   "default": "2",
+   "required": "false",
+   "doc": "Heading level; drives the tag and the prose type scale."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page anchor: the heading's id, what the page rail entry and the copied URL point at. Empty renders the heading without a link."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback text when the default slot is empty."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The heading text."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/doc-heading/default.vue"
+  },
+  {
+   "name": "Levels",
+   "file": "examples/doc-heading/levels.vue"
+  }
+ ],
+ "docs": "components/doc-heading.md"
+}

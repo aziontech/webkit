@@ -3,28 +3,92 @@ name: panel
 category: overlay
 structure: composition
 status: implemented
-spec_version: 1
-checksum: e43932adb94c9ff2d1d1557c897336b8973c63ecc0f95d86e02c1b6011a10f4c
+spec_version: 8
+checksum: 3f6d00127ce2e1342fde51b7dbaba51dd0438212c324ac7c816570de1b8bcea7
 created: 2026-05-22
-last_updated: 2026-05-29
+last_updated: 2026-11-25
 ---
+
 # Panel — Component Spec
 
 ## Purpose
 
-Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/panel/`.
+The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions. `DialogContent` and `DrawerContent` lay their regions out with it, and a page can render it on its own as a static preview of an overlay.
+
+## When to use
+
+- Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title (the overlay adds its close control), `PanelBody` for the body that scrolls, `PanelFooter` for the actions.
+- A static preview of an overlay surface outside a live overlay, for example a frozen dialog on a docs or marketing page.
+
+## When NOT to use
+
+- The surface has to open over the page and trap focus → use `dialog`.
+- The surface slides in from a screen edge → use `drawer`.
+- Rich content anchored to a trigger that leaves the page interactive → use `popover`.
+- A card in the page layout, with header, content and footer slots → use `card`.
+
+## Related
+
+- `dialog` — renders a `Panel` inside `DialogContent`; compose the `Panel*` regions directly in it.
+- `drawer` — renders a `Panel` inside `DrawerContent`; there `PanelBody` scrolls through a `ScrollArea`.
+- `card` — in-page card with header, content and footer slots. `Panel` is the elevated overlay shell, with a large shadow and max-width presets.
+
+## Best practices
+
+- Inside a dialog or drawer, use only `PanelHeader`, `PanelBody` and `PanelFooter`. The overlay already renders the `Panel` root, so a second `Panel` inside it nests two shells.
+- Put long content in `PanelBody`. It is the only region that scrolls; the header and footer stay in place.
+- `PanelBody` is the dominant block. Its copy defaults to `.text-body-sm` (14px) in `var(--text-default)`, its padding (`var(--spacing-lg)`) is larger than the header and footer block padding (`var(--spacing-md)`), and it is at least `min-h-24` tall, so a one-line body still reads taller than the header and footer bands. The extra height falls after the text. Children with their own text class keep it.
+- `size` caps the max width (`small`, `medium`, `large` map to the `--container-sm` / `--container-xl` / `--container-2xl` tokens). `sizeAtMd` applies that cap from `md` up only and is meant for the dialog's mobile bottom sheet.
+- `Panel` has no open state, no dismissal and no focus management. Don't use it alone as a modal.
+
+## Usage
+
+```vue
+<script setup>
+  import Button from '@aziontech/ui/button'
+  import Panel from '@aziontech/ui/panel'
+</script>
+
+<template>
+  <Panel size="medium">
+    <Panel.Header>
+      <h2 class="text-heading-sm text-(--text-default)">Cache settings</h2>
+    </Panel.Header>
+    <Panel.Body>
+      <p class="text-body-sm text-(--text-muted)">
+        Objects are cached at the edge for the TTL set on each rule.
+      </p>
+    </Panel.Body>
+    <Panel.Footer>
+      <Button
+        label="Cancel"
+        variant="outline"
+      />
+      <Button
+        label="Save"
+        variant="primary"
+      />
+    </Panel.Footer>
+  </Panel>
+</template>
+```
+
+Tree-shaking: `@aziontech/ui/panel-root` is the root alone, and `panel-header`, `panel-body` and `panel-footer` keep their own paths.
 
 ## Sub-components
 
-- `panel-content.vue` — Public sub-component `panel-content`.
+- `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Body` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/ui/panel`; the root alone is `@aziontech/ui/panel-root`.
+- `panel-body.vue` — Public sub-component `panel-body`. Inside a drawer it wraps its content in a `ScrollArea` (`panel-body`) around the padded region (`panel-body__content`).
 - `panel-footer.vue` — Public sub-component `panel-footer`.
-- `panel-header.vue` — Public sub-component `panel-header`.
+- `panel-header.vue` — Public sub-component `panel-header`. Inside `DialogContent` / `DrawerContent` it appends the overlay's close button after its content (the content then sits in one flex row that keeps its own start/end spread), while the overlay's `closable` is true; a `PanelHeader` of a nested `Panel` gets nothing. Standalone it renders only its slot.
+- Test ids: each region falls back to its own name (`panel-header`, `panel-body`, `panel-footer`) and a `data-testid` passed to the region wins; the shell's `data-testid` does not rename the regions.
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `size` | `PanelSize` | `undefined` | false | Max width of the panel shell. |
+| Prop       | Type        | Default    | Required | JSDoc                                                                                   |
+| ---------- | ----------- | ---------- | -------- | --------------------------------------------------------------------------------------- |
+| `size`     | `PanelSize` | `'medium'` | false    | Max width of the panel shell.                                                           |
+| `sizeAtMd` | `boolean`   | `false`    | false    | When true, the `size` max-width applies from `md` up only (dialog mobile bottom sheet). |
 
 ## Events
 
@@ -32,14 +96,16 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | — |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | —     |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
+- `data-width` on the root carries the resolved width: `small` | `medium` | `large`, the same with `-md` when `sizeAtMd` is set, or `fluid` when the internal `data-fluid` attribute is passed (Drawer). Tailwind `data-[width=…]:` variants map it to the container tokens; there is no JS class map.
+- Responsive: `PanelBody` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`. A footer the consumer stacks as a column (`flex-col`) keeps every child at its own height (`max-sm:[&.flex-col]:*:flex-none`), so stacked buttons never collapse below their drawn height. Stacked actions keep DOM order, with the primary action last, at the bottom nearest the thumb, so the screen order is the focus order in every Dialog, Drawer and ConfirmDialog footer.
 
 ## Motion & Animations
 
@@ -47,20 +113,23 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region                          | Token (TOKENS.md)                                    |
+| ------------------------------- | ---------------------------------------------------- |
+| surface                         | `var(--bg-surface)`                                  |
+| shape (root)                    | `var(--shape-card)`                                  |
+| region dividers                 | `var(--border-muted)`                                |
+| body copy (inherited)           | `.text-body-sm`, `var(--text-default)`               |
+| body padding                    | `var(--spacing-lg)`                                  |
+| body minimum height             | `min-h-24`                                           |
+| header and footer block padding | `var(--spacing-md)`                                  |
+| header and footer inline pad    | `var(--spacing-lg)` (header end `var(--spacing-md)`) |
+| ring (scrollable body)          | `var(--ring-color)`                                  |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -70,8 +139,9 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Scroll region: when `PanelBody` (outside a drawer's `ScrollArea`) overflows and holds nothing focusable, it takes `tabindex="0"` with an inset focus ring, so a keyboard user can scroll it (WCAG 2.1.1, axe `scrollable-region-focusable`); it is measured on resize and on content changes.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 
@@ -82,16 +152,15 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

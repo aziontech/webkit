@@ -1,0 +1,152 @@
+<script setup lang="ts">
+  import { computed, type CSSProperties, provide, ref, useAttrs, watch } from 'vue'
+
+  import { useDirection } from '../../../../composables/use-direction'
+  import { cn } from '../../../../utils/cn'
+  import { useNavigationMenuContext } from '../composables/use-navigation-menu-context'
+  import { useNavigationMenuPositioner } from '../composables/use-navigation-menu-positioner'
+  import { NavigationMenuPositionerInjectionKey } from '../injection-key'
+
+  defineOptions({ name: 'NavigationMenuPositioner', inheritAttrs: false })
+
+  export type NavigationMenuSide = 'top' | 'bottom' | 'start' | 'end'
+  export type NavigationMenuAlign = 'start' | 'center' | 'end'
+  /** Collision padding: one number for both axes, or an inset per axis. */
+  export type NavigationMenuCollisionPadding = number | { x: number; y: number }
+
+  interface Props {
+    /** Preferred placement relative to the active trigger. */
+    side?: NavigationMenuSide
+    /** Alignment along the anchor edge. */
+    align?: NavigationMenuAlign
+    /** Offset from the anchor on the side axis (px). */
+    sideOffset?: number
+    /** Offset along the alignment axis (px). */
+    alignOffset?: number
+    /** Padding reserved for the arrow (px). */
+    arrowPadding?: number
+    /** Distance kept from the boundary edges (px); an object insets each axis on its own. */
+    collisionPadding?: NavigationMenuCollisionPadding
+    /** Sticky positioning while scrolling. */
+    sticky?: boolean
+    /** Tracks the active trigger as the anchor; false keeps the popup where it first opened. */
+    trackAnchor?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    side: 'bottom',
+    align: 'center',
+    sideOffset: 8,
+    alignOffset: 0,
+    arrowPadding: 8,
+    collisionPadding: 8,
+    sticky: false,
+    trackAnchor: true
+  })
+
+  defineSlots<{ default(): unknown }>()
+
+  const attrs = useAttrs()
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-positioner'
+  )
+
+  const root = useNavigationMenuContext()
+  const positionerEl = ref<HTMLElement | null>(null)
+  const arrowEl = ref<HTMLElement | null>(null)
+
+  const anchorEl = computed(() => (props.trackAnchor ? root.activeTriggerEl.value : null))
+  const direction = useDirection(() => root.activeTriggerEl.value ?? positionerEl.value)
+
+  const positionerOptions = computed(() => ({
+    side: props.side,
+    align: props.align,
+    sideOffset: props.sideOffset,
+    alignOffset: props.alignOffset,
+    arrowPadding: props.arrowPadding,
+    collisionPadding: props.collisionPadding,
+    dir: direction.value
+  }))
+
+  const {
+    floatingStyles,
+    resolvedSide,
+    resolvedAlign,
+    availableWidth,
+    availableHeight,
+    arrowStyles,
+    placed,
+    popupOrigin,
+    resetPlacement
+  } = useNavigationMenuPositioner(
+    anchorEl,
+    positionerEl,
+    arrowEl,
+    positionerOptions,
+    root.popupSize
+  )
+
+  watch(
+    () => root.menuPopupMounted.value,
+    (mounted) => {
+      if (!mounted) {
+        resetPlacement()
+      }
+    }
+  )
+
+  provide(NavigationMenuPositionerInjectionKey, {
+    setArrowEl: (element) => {
+      arrowEl.value = element
+    },
+    arrowStyles,
+    resolvedSide,
+    resolvedAlign
+  })
+
+  const ROOT_CLASS =
+    'transition-[transform] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none ' +
+    'data-[instant]:transition-none data-[starting-style]:transition-none ' +
+    'group/positioner fixed z-50'
+
+  const positionerHidden = computed(() => !root.menuPopupMounted.value)
+
+  const constrained = computed(
+    () => availableWidth.value !== null || availableHeight.value !== null
+  )
+
+  const positionerStyle = computed((): CSSProperties => ({
+    ...floatingStyles.value,
+    '--popup-origin': popupOrigin.value,
+    '--navigation-menu-available-width':
+      availableWidth.value === null ? '100vw' : `${availableWidth.value}px`,
+    '--navigation-menu-available-height':
+      availableHeight.value === null ? '100vh' : `${availableHeight.value}px`,
+    ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
+  }))
+
+  const onPointerenter = () => {
+    root.cancelTimers()
+  }
+</script>
+
+<template>
+  <div
+    ref="positionerEl"
+    :hidden="positionerHidden"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
+    :style="positionerStyle"
+    role="presentation"
+    :data-testid="testId"
+    :data-instant="root.instant.value ? '' : undefined"
+    :data-starting-style="
+      !placed || root.popupTransitionStatus.value === 'starting' ? '' : undefined
+    "
+    :data-side="resolvedSide"
+    :data-align="resolvedAlign"
+    :data-constrained="constrained ? '' : undefined"
+    @pointerenter="onPointerenter"
+  >
+    <slot />
+  </div>
+</template>

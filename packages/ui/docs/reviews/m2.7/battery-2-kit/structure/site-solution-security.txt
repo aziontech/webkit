@@ -1,0 +1,166 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Protect your applications and APIs at the speed of AI']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ Application Security
+      h1 "Protect your applications and APIs at the speed of AI"
+      p "A unified, globally distributed security platform that stops DDoS attacks, exploits, malicious bots, fraud, and AI-driven threats before they reach your applications and APIs."
+      button "Start free" → https://console.azion.com/signup
+      button "Talk to a specialist" → https://www.azion.com/en/contact/
+[marketing-section-container width=site]
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Planet-scale defense"
+          p "Battle-tested against the largest attacks. Always-on mitigation autonomously blocks multiple hyper-volumetric attacks every day across our globally distributed infrastructure."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Instant hardening"
+          p "Active protection by default. Deploy enterprise-grade WAF, rate limiting, mTLS, Origin Shield, and Bot Manager with a single DNS change — no agents, no appliances."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "AI-native programmability"
+          p "Real-time programmability for agentic AI. Give AI agents the security controls and telemetry they need — build your own workflows or start from pre-built configurations."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "No zero-day exploits in 10 years"
+          p "Our unique detection and blocking engine is built to stop zero-day attacks, blocking unknown threats before they reach your code without custom rules or emergency patches."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Unified control plane"
+          p "Manage WAF, API security, and bot protection from the console, API, Terraform, or CLI — one policy engine, not stitched-together tools."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "No performance trade-off"
+          p "Inline protection that boosts application performance — applications stay highly available and run faster than any cloud."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-solutions kind=media-end]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Web application protection']
+          h2 "Web application protection"
+          p "Block OWASP Top 10 and zero-day attacks with WAF, bot scoring, and DDoS Protection in one policy."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/protect-web-applications-from-owasp-top-10-and-zero-day-attacks/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='API protection']
+          h2 "API protection"
+          p "Stop scraping, token misuse, and request floods before they reach your APIs, with rate limits per client."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/protect-public-apis-from-abuse/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Account takeover protection']
+          h2 "Account takeover protection"
+          p "Score every login, signup, and checkout request for automation, and stop credential stuffing and card testing."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/block-account-takeover-on-login-and-checkout-flows/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Automated threat response']
+          h2 "Automated threat response"
+          p "Turn SIEM detections into blocks automatically, updating the network lists your firewall already enforces."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/block-attackers-automatically-from-siem-detections/
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          blockquote "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
+          figcaption "Julian H. IT OPS, SRE & SEC Manager at Dafiti Group"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Serverless AI-native primitives for autonomous workloads']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Serverless AI-native primitives for autonomous workloads"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-network-section kind=outcomes aria-label='One distributed infrastructure without the complexity of managing, securing, and scaling it']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=small]
+        text: // ⏎ Region: Earth.
+        h2 "One distributed infrastructure without the complexity of managing, securing, and scaling it"
+      p "Built around your users. Distributed around your data."
+      list (4): 100+ data centers · 100+ Tbps network capacity · 30 ms median latency · 100% availability
+      [marketing-card-grid kind=frame columns=4 mobile-columns=1 filled=true]
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "Global resilience beyond anycast. Azion's software-defined global router steers traffic around failures and network degradation faster than BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide."
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "Low latency everywhere. Compute, AI, databases, and security run across all data centers, close to your users, keeping median global latency under 30 ms, with a built-in CDN and tiered caching for every app."
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "Zero-ops autoscaling and failover. Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run."
+  · section-gap (hatched spacer band)
+  [block-recognition-marquee aria-label='Recognized as a market leader']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        text: // ⏎ Recognition and awards
+        h2 "Recognized as a market leader"
+      list (4): Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools. G2 Spring 2026 Reports · Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions. G2 Winter 2026 Reports · Named a Leader and the only platform purpose-built for the edge, whose capabilities meet all key criteria in the report. GigaOm Radar for Edge Platforms · Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations. 2023 North American New Product Innovation Award
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently asked questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What does Azion Firewall protect against?"
+          [content-accordion-item]
+            h3 "How does Network Shield protect my applications?"
+          [content-accordion-item]
+            h3 "What is the difference between Firewall and Web Application Firewall?"
+          [content-accordion-item]
+            h3 "Can I create custom security logic?"
+          [content-accordion-item]
+            h3 "How does API Gateway improve API security?"
+          [content-accordion-item]
+            h3 "How does AI threat detection and takedown work?"
+          [content-accordion-item]
+            h3 "What certifications does Azion provide?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Protected by default.']
+        text: // ⏎ Secure
+        h2 "Protected by default. Always on."
+        button "Start free" → https://console.azion.com/signup?tck=secure_cta
+        p "Get stronger protection, less attack exposure, and less operational overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

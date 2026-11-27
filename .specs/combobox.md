@@ -1,0 +1,249 @@
+---
+name: combobox
+category: input
+structure: monolithic
+status: implemented
+spec_version: 9
+template: 2
+checksum: 20db6e88bcead22421b722de8f506d01e1d7bce7f25c7d1bb81271a6b7be86b3
+created: 2026-11-11
+last_updated: 2026-11-25
+---
+
+# Combobox — Component Spec
+
+## Purpose
+
+A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field. Naming: this is the ARIA 1.2 combobox (an editable field with suggestions, free text by default). In shadcn, `Combobox` is a searchable select whose value must come from the list; get that here with `allow-custom="false"` (or `Select` with a search field). `allowCustom` and `filter` default to `true` and are recorded as exceptions to the default-false rule: inverting them would break every consumer. `emptyTitle` is the empty-list text prop, the name `table` and `select` use; AttributeEditor's `empty` names the same idea.
+
+## When to use
+
+- Use Combobox when the person may type a value that is not in the list and the list only suggests. When the value must come from the list use Select; for several values use MultiSelect.
+- A form field whose usual values are known but a new one is valid: an environment variable name, a header, a path, a region tag, a branch.
+- A long option list the user would rather type than scroll, with the list as a reminder.
+- Options that come from the server as the user types (`search` event, `loading`, `filter: false`).
+- Suggestions grouped by origin (Recent, Suggested, System) in one field.
+
+## When NOT to use
+
+- The value must be one of a short fixed list → use `select` (or `radio-group` for two to seven visible choices).
+- Several values at once → use `multi-select`.
+- Searching and running commands or jumping to a page → use `command`.
+- Filtering a collection by properties → use `property-filter`.
+- Key/value pairs or tags → use `attribute-editor` or `tag-editor` (their key cells may hold a Combobox).
+
+## Related
+
+- `select` — closed list, button trigger, no free entry.
+- `input` — the field Combobox is built on; use it alone when there are no suggestions.
+- `field` — label, description and error around the Combobox; it reads id, invalid, disabled and required from it.
+- `command` — palette of actions, not a form value.
+- `property-filter` — token-based filtering with the same listbox look.
+
+## Best practices
+
+- Put the Combobox in a `Field` so it gets a visible label; use `ariaLabel` only where no label can be shown.
+- Keep `allowCustom` on only when a new value is genuinely valid; with it off, the field restores the last valid value when the typed text matches nothing.
+- Give options a `description` for what tells them apart (a scope, a count), not a second copy of the label.
+- For server data set `filter` to `false`, listen to `search` (debounce on your side), and drive `loading` from the request.
+- Validate the committed value (`update:modelValue`) in the form, not each keystroke; `search` is for suggestions only.
+- Use `group` when options come from distinct sources; keep group titles one or two words.
+
+## Usage
+
+```vue
+<script setup>
+  import Combobox from '@aziontech/ui/combobox'
+  import Field from '@aziontech/ui/field'
+  import { ref } from 'vue'
+
+  const name = ref('')
+  const options = [
+    { value: 'API_URL', description: 'Suggested' },
+    { value: 'NODE_ENV', description: 'System' },
+    { value: 'LOG_LEVEL' }
+  ]
+</script>
+
+<template>
+  <Field>
+    <Field.Label>Variable name</Field.Label>
+    <Combobox
+      v-model="name"
+      :options="options"
+      placeholder="Search or type a name"
+      clearable
+    />
+    <Field.Description>Pick a known variable or type a new one.</Field.Description>
+  </Field>
+</template>
+```
+
+## Sub-components
+
+_none_ — one `.vue` file. The list is rendered by the component itself (teleported to `body`, positioned with `usePlacement`); options are data, rendered through the optional `option` slot.
+
+## Props
+
+| Prop          | Type                             | Default          | Required | JSDoc                                                                                                                            |
+| ------------- | -------------------------------- | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `options`     | `ComboboxOption[]`               | `[]`             | false    | Suggestions: `{ value, label?, description?, group?, disabled? }`.                                                               |
+| `placeholder` | `string`                         | `''`             | false    | Placeholder of the field.                                                                                                        |
+| `icon`        | `string`                         | `'az az-search'` | false    | Leading icon of the field. Empty shows none (a time field passes `az az-clock`).                                                 |
+| `ariaLabel`   | `string`                         | `''`             | false    | Accessible name when no `Field` label names the field.                                                                           |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`       | false    | Size token, as `Input`: 28 / 32 / 40 px.                                                                                         |
+| `allowCustom` | `boolean`                        | `true`           | false    | Accepts a typed value that matches no option, offered as `Use "…"`.                                                              |
+| `filter`      | `boolean`                        | `true`           | false    | Filters `options` by the typed text. Turn off when the server filters on `search`.                                               |
+| `clearable`   | `boolean`                        | `false`          | false    | Shows a clear button while the field has a value.                                                                                |
+| `loading`     | `boolean`                        | `false`          | false    | Shows a spinner and the loading row while options are fetched.                                                                   |
+| `emptyTitle`  | `string`                         | `''`             | false    | Text of the list when nothing matches. Empty uses the locale catalog. Same name as `table`, `select` and the other empty states. |
+| `disabled`    | `boolean`                        | `false`          | false    | Disables the field.                                                                                                              |
+| `readonly`    | `boolean`                        | `false`          | false    | Shows the value without the list or editing.                                                                                     |
+| `required`    | `boolean`                        | `false`          | false    | Marks the field required (`aria-required`).                                                                                      |
+| `invalid`     | `boolean`                        | `false`          | false    | Marks the field invalid (`aria-invalid`, danger border).                                                                         |
+| `defaultOpen` | `boolean`                        | `false`          | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                   |
+
+`ComboboxOption`: `value: string` (committed and matched), `label?: string` (shown instead of the value), `description?: string` (muted, at the end of the row), `group?: string` (rows with the same group sit under one title, in first-seen order), `disabled?: boolean`.
+
+## v-model
+
+| Model          | Type      | Default     | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------- | --------- | ----------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `string`  | `''`        | `update:modelValue` | The committed value via `defineModel`. Changes on pick, Enter, Tab, blur and clear, not on each keystroke.                                                                                                                                                                                                                                                                                                                                                     |
+| `v-model:open` | `boolean` | `undefined` | `update:open`       | Whether the list is open, via `defineModel('open')`: focus, typing, ArrowDown / ArrowUp, Alt+ArrowDown / ArrowUp, Escape, pick and blur update it. The list shows while it is open and has rows, is loading or has a no-match row. Unbound, the field keeps it itself and starts at `defaultOpen`; bound, the parent can open or close it, and every open and close the combobox makes emits `update:open`. Opening is refused while `disabled` or `readonly`. |
+
+## Events
+
+| Event    | Payload                                                             | Notes                                                                      |
+| -------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `search` | `string`                                                            | The typed text, on each keystroke while the list is open (server filters). |
+| `create` | `(event: MouseEvent \| KeyboardEvent \| FocusEvent, value: string)` | A value that matches no option was committed (`allowCustom`).              |
+
+## Slots
+
+| Slot     | Scope                                                            | Notes                                   |
+| -------- | ---------------------------------------------------------------- | --------------------------------------- |
+| `option` | `{ option: ComboboxOption, active: boolean, selected: boolean }` | Replaces the content of one option row. |
+
+## States
+
+- Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`, `readonly`, `invalid`, `loading`, empty list
+- `data-state` on the root: `open` | `closed`
+- `data-disabled`, `data-invalid` on the root mirror the resolved props (prop or `Field`)
+- Option rows: `data-active` (the keyboard/pointer highlight), `data-selected` (equals the committed value), `data-disabled`
+- The field shows the selected option's `label` when the value equals an option's `value`, otherwise the value itself
+- `data-side` (`bottom` | `top`) and `data-align` (`start`) on the listbox panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
+
+## Motion & Animations
+
+| Trigger          | Animation / Transition                    | Token                           | Reduced-motion fallback         |
+| ---------------- | ----------------------------------------- | ------------------------------- | ------------------------------- |
+| list opens       | `animate-popup-scale-in`                  | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none`    |
+| list closes      | `animate-popup-scale-out`                 | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none`    |
+| option highlight | `transition-colors duration-150 ease-out` | inline (matches catalog)        | `motion-reduce:transition-none` |
+| loading          | `Spinner`                                 | component                       | `Spinner` handles it            |
+
+## Tokens
+
+| Region                      | Token (TOKENS.md)                                                       |
+| --------------------------- | ----------------------------------------------------------------------- |
+| field                       | the `Input` tokens (surface, border, ring, sizes)                       |
+| list surface                | `var(--bg-surface-raised)`, `var(--border-default)`, `var(--shadow-xs)` |
+| list shape                  | `var(--shape-control)`                                                  |
+| list padding / section gap  | `var(--spacing-2xs)`                                                    |
+| option text                 | `.text-label-sm`, `var(--text-default)`                                 |
+| option description          | `.text-label-sm`, `var(--text-muted)` (the option label's step)         |
+| option active / selected    | `var(--bg-hover)` / `var(--bg-selected)`                                |
+| row fill inset (2px gap)    | `border-y border-transparent bg-clip-padding`                           |
+| group title, empty, loading | `.text-label-sm` / `.text-body-sm`, `var(--text-muted)`                 |
+| layer                       | `var(--z-control-overlay)`                                              |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- ARIA 1.2 combobox: the `<input>` has `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` (the listbox id) and `aria-activedescendant` (the highlighted option); the list is `role="listbox"`, rows are `role="option"` with `aria-selected` and `aria-disabled`; grouped rows sit in `role="group"` named by their title (`aria-labelledby`).
+- Keyboard map: focus or `ArrowDown` opens the list, scrolled so the committed option (when the value is one of the options) sits in the middle of the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
+- Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (focus stays in the input), so inside a `Popover`, `Dialog` or `Drawer` picking a suggestion or pressing `Escape` closes only the list; the host overlay stays open.
+- Focus stays in the input the whole time; pointer clicks on rows do not move focus (`mousedown.prevent`).
+- A polite status region announces the number of options after each change of the typed text ("3 options"), "No matches" and "Loading options"; it is visually hidden.
+- The clear button is a real button with an accessible name ("Clear"), reachable by Tab only while there is a value, and returns focus to the input.
+- `Field` integration through `Input`: label `for`/`id`, `aria-describedby`, `aria-invalid`, `aria-required`, disabled.
+- Contrast: option text and muted descriptions ≥4.5:1 on `--bg-surface-raised` in both themes; the active row is marked by its fill and `aria-activedescendant`, never colour alone for selection (a check icon marks the selected row).
+- Touch targets: rows are 32 px tall, 44 px on `pointer: coarse`.
+
+## Internationalization
+
+| Key                    | English source                                | Override prop |
+| ---------------------- | --------------------------------------------- | ------------- |
+| `combobox.noMatch`     | `No matches`                                  | `emptyTitle`  |
+| `combobox.loading`     | `Loading options`                             | —             |
+| `combobox.useValue`    | `Use "{value}"`                               | —             |
+| `combobox.clear`       | `Clear`                                       | —             |
+| `combobox.suggestions` | `Suggestions`                                 | —             |
+| `combobox.count`       | `{count} option` / `{count} options` (plural) | —             |
+
+- Formatting: plural rules through the locale catalog (`Intl.PluralRules`); matching is case- and accent-insensitive with `String.prototype.normalize('NFD')` and `toLocaleLowerCase(locale)`.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ps-`/`pe-`, `text-start`, `ms-auto`); the list anchors at `side="bottom"` + `align="start"`, which lines it up with the field's right edge under `rtl`.
+- Icons: the search glyph and the check mark are not mirrored.
+- Keyboard: arrows are vertical, no change under rtl; `Home`/`End` keep their meaning.
+- User data: option labels and the field value render with `dir="auto"` / `<bdi>`, so Latin identifiers inside rtl text keep their order.
+
+## Responsive
+
+- Container queries: none; the field fills its container and the list is at least as wide as the field (`matchTriggerWidth` floor, may grow to the longest row within the viewport).
+- Narrow (≤ 640 px): the list flips above the field when there is no room below, and rows truncate with an ellipsis.
+- Touch: rows grow to 44 px on `pointer: coarse`; no hover-only affordance (the highlight follows the pointer and the keyboard).
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entry `combobox` (Input, Spinner and usePlacement included).
+- Runtime budget: `combobox-1k` in `perf-budgets.json` (focus to open a 1,000-option list, then type). The list renders only the matches, and above 300 rows a section mounts in chunks of 100 as they scroll near view (`LazyNodes`, 34 px per row); moving the active option by keyboard mounts every chunk first, so `aria-activedescendant` always points at a rendered option.
+- Heavy parts: none; long server lists should be paged by the server (`search`).
+
+## Examples
+
+- Default — a Field-wrapped Combobox of variable names with descriptions and free entry.
+- Groups — options with `group` (Recent / Suggested).
+- Server — `filter: false`, `search` and `loading` driving a fake request.
+- States — `disabled`, `invalid` and `loading` side by side (the state examples for those props).
+
+Justification: Combobox has no `variant`; `size` is shown in Default's controls. Grouped and Server show the two data shapes a consumer must wire differently.
+
+## Decisions and open questions
+
+- **Commit on leave, not on each keystroke.** The value changes on pick, Enter, Tab, blur and clear; `search` carries the keystrokes. Forms validate a stable value and `Escape` can restore it. The design sample wrote on each keystroke; its visible design is kept.
+- **The field shows the label** of the matching option, the value otherwise. The sample shows the value with the label muted beside it; here the row shows `label ?? value` with `description` muted, which covers both.
+- **Opens on focus** like the sample, so the suggestions are visible without a key press.
+- **No virtualisation.** Very long lists go through server filtering.
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

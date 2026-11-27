@@ -1,0 +1,74 @@
+<script setup lang="ts">
+  import Tag from '../../tag/tag.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
+  import MockupElevator from '../parts/mockup-elevator.vue'
+  import MockupFragment from '../parts/mockup-fragment.vue'
+
+  defineOptions({ name: 'KvStoreSecurityListFragment' })
+
+  interface Props {
+    /** Whether this fragment is the one showing. */
+    active?: boolean
+    /** Whether the pointer is over the fragment's card; the elevator runs only while it is. */
+    hovered?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), { active: true, hover: false })
+
+  const ROWS = [
+    { key: 'ip:203.0.113.24', type: 'String', expiration: 'EX 86400' },
+    { key: 'ip:198.51.100.7', type: 'String', expiration: 'EX 86400' },
+    { key: 'asn:64500', type: 'JSON', expiration: 'No expiration' },
+    { key: 'ua:sqlmap/1.7', type: 'String', expiration: 'No expiration' },
+    { key: 'ip:192.0.2.181', type: 'String', expiration: 'EX 3600' },
+    { key: 'sig:cve-2024-3400', type: 'JSON', expiration: 'No expiration' },
+    { key: 'ip:203.0.113.90', type: 'String', expiration: 'EX 86400' },
+    { key: 'token:revoked:4f1c', type: 'JSON', expiration: 'EX 3600' }
+  ]
+</script>
+
+<template>
+  <MockupFragment
+    shell="legacy"
+    fade="none"
+    :active="active"
+  >
+    <div class="flex h-full flex-col py-(--spacing-xs)">
+      <ConsoleMockupShellItem
+        :order="0"
+        class="min-h-0 flex-1"
+      >
+        <MockupElevator
+          :count="ROWS.length"
+          :active="hovered"
+        >
+          <template #default="{ index }">
+            <div
+              class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
+            >
+              <i
+                class="az az-key shrink-0 text-body-md leading-none text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <span class="truncate text-body-sm text-(--text-default)">
+                {{ ROWS[index].key }}
+              </span>
+              <span class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
+                <Tag
+                  :label="ROWS[index].type"
+                  severity="neutral"
+                  size="small"
+                />
+                <Tag
+                  :label="ROWS[index].expiration"
+                  :severity="ROWS[index].expiration === 'No expiration' ? 'neutral' : 'warning'"
+                  size="small"
+                />
+              </span>
+            </div>
+          </template>
+        </MockupElevator>
+      </ConsoleMockupShellItem>
+    </div>
+  </MockupFragment>
+</template>

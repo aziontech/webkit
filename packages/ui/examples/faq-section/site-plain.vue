@@ -1,0 +1,41 @@
+<script setup>
+  import Container from '@aziontech/ui/container'
+  import FaqSection from '@aziontech/ui/faq-section'
+  import Spacer from '@aziontech/ui/spacer'
+
+  const items = [
+    {
+      question: 'What are Functions?',
+      answer:
+        'Azion Functions runs JavaScript and TypeScript in the request flow of an application or a firewall, across ' +
+        '100+ data centers, with no cold starts. A Rules Engine rule calls the function, and it answers with a ' +
+        'Response. There is no server to provision or scale.'
+    },
+    {
+      question: 'Are there cold starts?',
+      answer:
+        'No. Each function runs in a V8 isolate, so the first request performs like every request after it. That matters most for user-facing APIs, authentication and inference.'
+    },
+    {
+      question: 'Which languages and frameworks are supported?',
+      answer:
+        'JavaScript and TypeScript, plus WebAssembly through the WebAssembly API. The runtime follows web standards ' +
+        'such as fetch, Streams and Web Crypto, and can import 68 Node.js modules. azion init ships 25 presets, ' +
+        'including Next.js, Nuxt, React, Vue, Astro, Angular, Svelte, Qwik and Hono.'
+    }
+  ]
+</script>
+
+<template>
+  <Container max-width="site">
+    <Spacer hatch />
+
+    <FaqSection
+      anchor="faq"
+      title="Frequently asked questions"
+      :items="items"
+    />
+
+    <Spacer hatch />
+  </Container>
+</template>

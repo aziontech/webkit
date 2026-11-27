@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Idle copy button. Activating it writes the value to the clipboard and briefly confirms success.",
+   "file": "examples/copy-button/default.vue"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled state — interaction is blocked and disabled tokens are applied.",
+   "file": "examples/copy-button/disabled.vue"
+  }
+ ]
+}

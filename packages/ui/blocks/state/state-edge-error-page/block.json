@@ -1,0 +1,67 @@
+{
+  "id": "state/state-edge-error-page",
+  "name": "StateEdgeErrorPage",
+  "title": "Blocks/State/StateEdgeErrorPage",
+  "surface": "edge",
+  "summary": "The page Azion serves to a visitor of a customer's site when a request fails: a standalone page, no Azion product chrome, no account actions. Left-aligned and diagnostic: the `StatusCode` with its reason phrase, a title in plain words, the request path You → Azion → Application drawn with `FlowDiagram` (one data card per hop, `uniform` so every card has the same width and height, each with its status dot and text; one `orientation=\"responsive\"` diagram, side by side when the row fits and stacked when it does not), What happened? and What can I do? side by side, Try again or Go to home page with Go back, then the request details in a `KeyValueList` (request ID with `CopyButton`, `Timestamp` in UTC, data center, host) and a Served by `Brand` footer. Azion here is Azion's infrastructure; the Application is the site's application, on Azion's infrastructure or on the customer's own servers. The primary is the 502 (application unreachable); variants cover 504, 500, 503, 403 (blocked by the site's firewall), 429 and 404. Azion's own console, site and docs use `state/state-error-page` instead.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "edge error page",
+    "502 bad gateway page",
+    "504 gateway timeout page",
+    "application unreachable page",
+    "application error page",
+    "origin unreachable page",
+    "503 service unavailable page",
+    "firewall blocked page",
+    "waf blocked request page",
+    "rate limited page",
+    "429 page for visitors",
+    "error page for site visitors",
+    "custom error page",
+    "página de erro do edge",
+    "aplicação indisponível",
+    "requisição bloqueada pelo firewall",
+    "página de error del edge"
+  ],
+  "skills": ["azion-ui-errors", "azion-ui-states", "azion-ui-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "state-edge-error-page.vue"
+  },
+  "variants": [
+    {
+      "name": "ApplicationTimeout",
+      "summary": "504: Azion reached the application, but it did not answer in time. The Application hop reads Timed out; Try again and Go back.",
+      "file": "variants/application-timeout.vue"
+    },
+    {
+      "name": "ApplicationError",
+      "summary": "500: the application answered with an error while building the page. The Application hop reads Error; Try again and Go back.",
+      "file": "variants/application-error.vue"
+    },
+    {
+      "name": "ApplicationUnavailable",
+      "summary": "503: the application is down for maintenance or too busy. The Application hop reads Unavailable; the copy says the site usually comes back on its own.",
+      "file": "variants/application-unavailable.vue"
+    },
+    {
+      "name": "Blocked",
+      "summary": "403: a firewall or WAF rule the site owner set on Azion matched the request, so it never reached the application. The Azion hop reads Blocked and the Application Not reached; Go to home page and Go back, and the advice is to contact the site owner with the request ID.",
+      "file": "variants/blocked.vue"
+    },
+    {
+      "name": "RateLimited",
+      "summary": "429: the visitor's connection sent more requests than the site allows. The Azion hop reads Rate limited and the Application Not reached; wait a minute, then Try again.",
+      "file": "variants/rate-limited.vue"
+    },
+    {
+      "name": "NotFound",
+      "summary": "404: the application has no page at the address. Every hop worked and the Application reads Not found; Go to home page and Go back.",
+      "file": "variants/not-found.vue"
+    }
+  ]
+}

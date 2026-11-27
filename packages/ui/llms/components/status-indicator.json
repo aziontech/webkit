@@ -1,0 +1,77 @@
+{
+ "name": "status-indicator",
+ "binding": "StatusIndicator",
+ "import": "@aziontech/ui/status-indicator",
+ "treeShakeableImport": "@aziontech/ui/status-indicator",
+ "category": "feedback",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Use StatusIndicator for the current state of one resource (Active, Failed, Deploying) in a table column or detail header — the default answer for 'status'. A category or outcome word is a Tag, a number is a Badge, a level on the critical → info scale is a SeverityTag, and an HTTP code is a StatusCode. Shows the settled or transitional state of one resource as a colored dot (or a spinner while `loading`) beside a short label: Active, Failed, Paused, Deploying. It is the status column of tables and lists and the status line of a detail header, so it is static text, not a live region.",
+ "setup": null,
+ "useWhen": [
+  "The state of a resource in a table cell, a list row or a detail header: Active, Failed, Paused.",
+  "A transitional state such as Deploying or Propagating, with `loading`."
+ ],
+ "avoidWhen": [
+  "A count or a very short label attached to another element → use `badge`.",
+  "A category or status chip with an optional icon → use `tag`.",
+  "A page or section notice with copy and actions → use `alert`.",
+  "Measurable progress → use `progress`."
+ ],
+ "related": [
+  "`badge` — filled count indicator, usually overlaid on an icon or avatar.",
+  "`tag` — labelled chip for categories and statuses.",
+  "`spinner` — replaces the dot while `loading` is true.",
+  "`progress` — continuous progress instead of a discrete state."
+ ],
+ "bestPractices": [
+  "Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.",
+  "Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens and `neutral` is muted.",
+  "With `loading`, pass the bare verb (`\"Deploying\"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner. A label that already ends in `…` or `...` (copy pasted from a design: `\"Building...\"`) is trimmed first, so it renders `Building…`, never `Building......`.",
+  "It is a non-interactive element with no role, no click and no keyboard behavior. Don't attach handlers to it. When a status change must be announced (a single deploy you are watching), announce it through a toast or a live region the page owns, not by making every indicator live."
+ ],
+ "props": [
+  {
+   "name": "severity",
+   "type": "`Severity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`)",
+   "default": "'success'",
+   "required": "false",
+   "doc": "Severity token driving the status dot color. `Severity` is the shared status scale, exported from this component (and from `badge` and `tag`)."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis (`…`), so pass the bare verb; a trailing `…` or `...` already in the label is not doubled."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible label text. Empty uses the locale catalog (`Status`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/status-indicator/default.vue"
+  },
+  {
+   "name": "Status",
+   "file": "examples/status-indicator/status.vue"
+  },
+  {
+   "name": "Loading",
+   "file": "examples/status-indicator/loading.vue"
+  }
+ ],
+ "docs": "components/status-indicator.md"
+}

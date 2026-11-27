@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "An official diagram picked by `name`: the AI Gateway cost routing. It carries its own description, so it needs no `aria-label`. Switch `name` in Controls to see every registered diagram.",
+   "file": "examples/diagram/default.vue"
+  },
+  {
+   "name": "Spec",
+   "summary": "A one-off diagram passed as `spec`. The request path of a workload. The workload is the one `lit` node, the path the request takes is `active` on its nodes and edges, and the row is `wide` so the `hit` and `miss` chips have room. Narrow the canvas and the row stacks, the branches indent under the workload, and the connectors follow.",
+   "file": "examples/diagram/spec.vue"
+  },
+  {
+   "name": "Nodes",
+   "summary": "One node of each type: `app`, the quiet window of the consumer application; `pill`, the client; `card`, a platform piece with its eyebrow, icon and status; `item`, a model or provider with a mono line under its title; and `tile`, an icon-only cell whose name shows on hover.",
+   "file": "examples/diagram/nodes.vue"
+  }
+ ]
+}

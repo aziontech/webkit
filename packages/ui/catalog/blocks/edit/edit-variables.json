@@ -1,0 +1,38 @@
+{
+ "variants": [
+  {
+   "name": "Create",
+   "summary": "The list page with the create drawer open on load (`defaultOpen`): one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed, then emits `save` with the pairs and their scope.",
+   "file": "blocks/edit/edit-variables/variants/create.vue"
+  },
+  {
+   "name": "PasteEnv",
+   "summary": "The Variables page header with its drawer already open, so the state shows what it names: Create variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env.",
+   "file": "blocks/edit/edit-variables/variants/paste-env.vue"
+  },
+  {
+   "name": "NetworkList",
+   "summary": "A Network lists page header with its drawer already open, so the state shows what it names: Create network list opens a drawer with a Name, a type `ToggleGroup` (IP/CIDR, ASN, Countries) and the entries as an `AttributeEditor` of address and comment rows; Paste list holds a pasted list of nine lines whose report counts 7 entries, names the 2 lines that are not valid addresses and the line already in the list, and Add 7 entries appends them as rows where each invalid line shows its own error. Countries is a `MultiSelect`; Save checks every row and raises a success toast.",
+   "file": "blocks/edit/edit-variables/variants/network-list.vue"
+  }
+ ],
+ "sfcFile": "blocks/edit/edit-variables/edit-variables.vue",
+ "guidelinesFile": "blocks/edit/edit-variables/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "lib/paste-report.ts",
+  "lib/variables-format.ts",
+  "lib/variables-rows.ts",
+  "lib/variables-scope.ts",
+  "lib/network-list.ts",
+  "composables/use-variables-form.ts",
+  "composables/use-network-list-form.ts",
+  "parts/variables-list.vue",
+  "parts/variables-drawer-form.vue",
+  "parts/variables-entries.vue",
+  "parts/variables-scope-group.vue",
+  "parts/paste-panel.vue",
+  "parts/env-paste-panel.vue",
+  "parts/network-list-fields.vue"
+ ]
+}

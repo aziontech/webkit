@@ -1,0 +1,39 @@
+{
+ "variants": [
+  {
+   "name": "Loading",
+   "summary": "The first load: the plan name and every value as skeletons, Change plan and Contact sales disabled, and the invoices table's loading rows.",
+   "file": "blocks/account/account-billing/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The billing data did not load: a danger Alert with Retry replaces the tab's content; Retry loads it.",
+   "file": "blocks/account/account-billing/variants/error.vue"
+  },
+  {
+   "name": "NoInvoices",
+   "summary": "A new account before its first billing cycle closes: the plan cards, then a flush EmptyState that says when the first invoice appears.",
+   "file": "blocks/account/account-billing/variants/no-invoices.vue"
+  },
+  {
+   "name": "NoMatch",
+   "summary": "A Status = Overdue filter that matches no invoice: the table's empty slot says so and offers Clear filters.",
+   "file": "blocks/account/account-billing/variants/no-match.vue"
+  },
+  {
+   "name": "PaymentMethods",
+   "summary": "The Payment methods tab: Payment information with Update, then the cards with the default one tagged; Set as default and Remove (after confirmation) are wired.",
+   "file": "blocks/account/account-billing/variants/payment-methods.vue"
+  }
+ ],
+ "sfcFile": "blocks/account/account-billing/account-billing.vue",
+ "guidelinesFile": "blocks/account/account-billing/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "billing-format.ts",
+  "parts/billing-invoices.vue",
+  "parts/billing-payment-details.vue",
+  "parts/billing-payment-methods.vue",
+  "parts/billing-plan-cards.vue"
+ ]
+}

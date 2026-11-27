@@ -1,0 +1,121 @@
+<script setup lang="ts">
+  import { computed, nextTick, ref, useAttrs } from 'vue'
+
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import IconButton from '../../action/icon-button/icon-button.vue'
+
+  defineOptions({
+    name: 'ResponseBranches',
+    inheritAttrs: false
+  })
+
+  export interface ResponseBranchesProps {
+    /** How many versions exist. With one or none the pager is not drawn. */
+    count: number
+    /** Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). */
+    ariaLabel?: string
+    /** Locks the pager, for example while a new version streams. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<ResponseBranchesProps>(), {
+    ariaLabel: '',
+    disabled: false
+  })
+
+  const model = defineModel<number>({ default: 0 })
+
+  defineSlots<{
+    /** The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in a message's action row. */
+    default?(scope: { index: number }): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ responseBranches: en.responseBranches })
+
+  const testId = computed<string>(
+    () => (attrs['data-testid'] as string | undefined) ?? 'response-branches'
+  )
+
+  const last = computed<number>(() => Math.max(0, Math.floor(props.count) - 1))
+  const index = computed<number>(() =>
+    Math.min(last.value, Math.max(0, Math.floor(model.value || 0)))
+  )
+
+  const pagerEl = ref<HTMLElement | null>(null)
+
+  function keepFocus(step: number): void {
+    const buttons = pagerEl.value?.querySelectorAll<HTMLButtonElement>('button')
+    if (!buttons?.length || !pagerEl.value?.contains(document.activeElement)) return
+    void nextTick(() => {
+      const active = document.activeElement
+      const lost =
+        !active ||
+        active === document.body ||
+        (active instanceof HTMLButtonElement && active.disabled)
+      if (lost) buttons[step < 0 ? buttons.length - 1 : 0]?.focus()
+    })
+  }
+
+  const go = (step: number): void => {
+    if (props.disabled) return
+    const next = Math.min(last.value, Math.max(0, index.value + step))
+    if (next === index.value) return
+    model.value = next
+    keepFocus(step)
+  }
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-count="count"
+    :data-index="index"
+    class="flex min-w-0 flex-col gap-(--spacing-xs)"
+  >
+    <slot :index="index" />
+    <div
+      v-if="count > 1"
+      ref="pagerEl"
+      role="group"
+      :aria-label="ariaLabel || t('responseBranches.label')"
+      :data-testid="`${testId}__pager`"
+      :data-disabled="disabled || null"
+      class="group inline-flex items-center gap-(--spacing-2xs) self-start"
+    >
+      <IconButton
+        icon="az az-chevron-left"
+        :ariaLabel="t('responseBranches.previous')"
+        variant="ghost"
+        size="small"
+        :disabled="disabled || index === 0"
+        :data-testid="`${testId}__previous`"
+        @click="go(-1)"
+      />
+      <span
+        aria-hidden="true"
+        dir="ltr"
+        :data-testid="`${testId}__position`"
+        class="min-w-8 text-center text-label-sm text-(--text-muted) tabular-nums group-data-[disabled]:text-(--text-disabled)"
+        >{{ t('responseBranches.position', { current: index + 1, total: count }) }}</span
+      >
+      <span
+        aria-live="polite"
+        :data-testid="`${testId}__status`"
+        class="sr-only"
+        >{{ t('responseBranches.positionLabel', { current: index + 1, total: count }) }}</span
+      >
+      <IconButton
+        icon="az az-chevron-right"
+        :ariaLabel="t('responseBranches.next')"
+        variant="ghost"
+        size="small"
+        :disabled="disabled || index === last"
+        :data-testid="`${testId}__next`"
+        @click="go(1)"
+      />
+    </div>
+  </div>
+</template>

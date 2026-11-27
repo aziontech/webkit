@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Multi-select over a flat option list; one option is pre-selected through v-model.",
+   "file": "examples/multi-select/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three trigger sizes (small, medium, large) matching Input.",
+   "file": "examples/multi-select/sizes.vue"
+  },
+  {
+   "name": "Groups",
+   "summary": "Options organised into labelled sections via MultiSelectGroup.",
+   "file": "examples/multi-select/groups.vue"
+  }
+ ]
+}

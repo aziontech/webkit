@@ -1,0 +1,79 @@
+{
+ "name": "sources",
+ "binding": "Sources",
+ "import": "@aziontech/ui/sources",
+ "treeShakeableImport": "@aziontech/ui/sources",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The sources a generative AI response drew on (ChatGPT's Sources, Cloudscape's sources section, AI Elements Sources): a small `Sources` pill with the overlapping marks of up to three cited sources that opens, in place, a `DropdownMenu` of link items, one per source. Sources the answer searched but did not cite (`cited: false`) are listed under More, after the Citations. The pill ends the message's action row (`ChatMessage.Actions` `#trailing`), on the same line as the actions. Each mark is the site's favicon (`image`), its icon, or its first letter on a colour of its own, so three sources never look alike.",
+ "setup": null,
+ "useWhen": [
+  "A response is grounded in documents, pages or records the reader may want to open or verify."
+ ],
+ "avoidWhen": [
+  "Related links that the response did not use → `help-panel` links or a plain list.",
+  "A single source → cite it inline with `Citation`; a list of one is noise."
+ ],
+ "related": [
+  "`citation` — the inline chip whose numbers point at these items.",
+  "`streaming-response` — renders the citations; pass it the same items.",
+  "`chat-message` — the pill goes in the `#trailing` slot of `ChatMessage.Actions`, after the icon actions.",
+  "`dropdown-menu` — the menu the pill opens; its items draw every row."
+ ],
+ "bestPractices": [
+  "Order items as the response first cites them, so `[1]` is item 1; put uncited items (`cited: false`) last so the numbers stay aligned.",
+  "Use the page title as the title and the site's own name as `site` (`Azion`, `GitHub`); without `site` the host of `href` shows.",
+  "Pass `publisher` and `publishedAt` when you have them.",
+  "Keep the panel closed by default; the inline citations are the primary path.",
+  "Give `image` the site's favicon URL when the app has one (from the search tool's result); otherwise `icon` for a site in the icon set, or nothing for the lettered mark."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "SourcesItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The sources behind the response, in citation order; item `n` is what `[n]` points at."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the pill that opens the panel. Empty shows `Sources` and names the pill with the count (`3 sources`)."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/sources/default.vue"
+  },
+  {
+   "name": "Open",
+   "file": "examples/sources/open.vue"
+  }
+ ],
+ "docs": "components/sources.md"
+}

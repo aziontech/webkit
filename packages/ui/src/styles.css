@@ -1,0 +1,28 @@
+@import '@aziontech/icons/azionicons-color-utilities';
+
+@layer components {
+  :is(
+    .az-chevron-left,
+    .az-chevron-right,
+    .az-circle-chevron-left,
+    .az-circle-chevron-right,
+    .az-chevrons-left,
+    .az-chevrons-right,
+    .az-arrow-left,
+    .az-arrow-right,
+    .az-arrow-left-to-line,
+    .az-arrow-right-to-line,
+    .az-circle-arrow-left,
+    .az-circle-arrow-right,
+    .az-arrow-down-left,
+    .az-arrow-down-right,
+    .az-caret-left,
+    .az-caret-right,
+    .az-log-in,
+    .az-log-out,
+    .az-reply,
+    .az-undo
+  ):where([dir='rtl'], [dir='rtl'] *) {
+    scale: -1 1;
+  }
+}

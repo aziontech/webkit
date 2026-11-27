@@ -1,0 +1,224 @@
+# Doc Markdown
+
+> Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<FlowDiagram>`, the chart and content tags, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `Tabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for a standalone `DocTableOfContents`; inside `DocLayout` the rendered `DocHeading`s fill the outline on their own) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
+
+- Import: `import DocMarkdown from '@aziontech/ui/doc-markdown'`
+- Category: docs · Surface: docs · Structure: monolithic
+- API as JSON: [doc-markdown.json](doc-markdown.json)
+
+## When to use
+
+- Use DocMarkdown for a whole documentation page written in MDX; model Markdown that arrives while it renders uses StreamingResponse.
+- A docs page whose content is authored as `.mdx` / Markdown text (a content folder, a CMS field, a string in data) instead of hand-composed Doc components.
+- Copy held in data that carries inline markup (a sentence with code and a link in a block's fixture) and should render the same as a page paragraph.
+
+## Do
+
+- Wrap it in `DocProse`; inside `DocLayout` the headings it renders register with the layout's outline, so the page passes nothing. Read the frontmatter (and, for a standalone `DocTableOfContents`, the headings) from the same source: `const { headings, frontmatter } = parseDocMarkdown(source)`.
+- Write one component tag per line block; a one-line callout (`<Note>Copy.</Note>`) is fine. Attribute values are strings, numbers, booleans or braced JSON: a list (`tags={["API", "CLI"]}`) or arrays and objects of data (`nodes={[{ "id": "you", "title": "You" }]}`, unquoted keys and single quotes accepted); a braced value that is not JSON stays literal text.
+- Repeated headings are fine: the second `Test it` gets the id `test-it-2`, so anchors and the outline stay unique.
+- Use `components` to swap the component a tag mounts (your own `Card`) or to add a block tag your docs use; never fork the parser.
+- Write in-app links as root-relative paths (`/docs/domains`): they follow the app's router. `javascript:`, protocol-relative and other unsafe URLs render as their link text.
+
+## Don’t
+
+- A page composed by hand from `DocHeading`, `DocCallout`, `DocSteps` … → compose them directly inside `DocProse`; there is nothing to parse.
+- Chat or AI responses streamed as Markdown → `StreamingResponse` / `ChatMessage`.
+- Arbitrary MDX with JSX expressions, imports or custom script → compile it with an MDX toolchain in the app; this component reads a fixed subset only.
+- Code with no prose around it → `CodeBlock` or `DocCodeGroup`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- `DocProse` — wrap this component in it; it owns the type scale, the block rhythm and the copyable inline code chips.
+- `DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.
+- `DocLayout` — its outline lists the rendered `DocHeading`s with no wiring. `DocTableOfContents` — takes `parseDocMarkdown(source).headings` as `items` when used without the layout.
+- `DocPageHeader` — takes the frontmatter's `title` and `description`.
+- `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `Tabs` (a `<Tabs>` tag renders `Tabs` with one `Tabs.Trigger` and `Tabs.Content` per `<Tab title>` child), `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry`, `FlowDiagram` — what the tags mount.
+- `BarList`, `Chart`, `DonutChart`, `GaugeChart`, `MapChart`, `SparkChart`, `StatTile`, `StatTileGroup`, `Tracker` — the chart tags, under their own names (decision RV-C2-1). A `<Chart>` tag takes its marks as tags inside it (`<ChartGrid />`, `<ChartAxis />`, `<ChartArea />`, `<ChartBar />`, `<ChartLine />`, `<ChartScatter />`, `<ChartReference />`, `<ChartCrosshair />`, `<ChartTooltip />`, `<ChartLegend />`), and a `<StatTileGroup>` its `<StatTile />` tags; the tags inside render as the root's parts, without the prose styles or the block spacing.
+- `KeyValueList`, `Quote`, `Stats`, `Faq`, `ThirdPartyLogo`, `PricingCard`, `IntegrationCard`, `PlanFeatureList`, `Embed`, `Illustration`, `Diagram`, `ConsoleMockup`, `NetworkMap`, `Carousel` — content components under their own names (decision RV-K2-1), each loaded as an async chunk. A `<KeyValueList>` takes `<KeyValueListItem label="…">` and `<KeyValueListGroup label="…">` tags inside it, and the text between a part's tags is its value, with inline Markdown (bold, emphasis, code, links as `Link`). A `<Carousel>` takes `<CarouselItem>` tags whose content is other tags (a `<Quote />`, a `<Card />`), and `DocMarkdown` adds the previous and next controls. `ConsoleMockup` and `NetworkMap` fill their container, so `DocMarkdown` sets each in a framed box (16:9 and 2:1).
+- `AgentCard`, `CallToAction` — `DocAgentCard` and `DocCallToAction` (decision RV-K2-1); the text inside `<CallToAction>` is its offer copy.
+- `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
+- `StatusIndicator` — an inline `<StatusIndicator severity label loading />` tag renders the status dot and label in running text or a `KeyValueListItem` value, so a status reads the same as in Vue and page JSON (decision A5P3-L02-1); a `severity` outside the shared set falls back to the component default.
+- `RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.
+- `StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `source` | `string` | `''` | false | The page source: optional frontmatter, then Markdown with MDX component tags. |
+| `components` | `Record<string, Component>` | `{}` | false | Replaces the component a block tag mounts, or adds a block tag, keyed by tag name (`Card`, `Note`). The tag's attributes become props. |
+
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+- Diagrams: every valid name is in [diagrams.md](../foundations/diagrams.md) (MCP `list_assets({ kind: "diagrams" })`). An unknown name draws nothing.
+
+## States
+
+- Visual states: `default` only; the component renders what the source holds.
+- Lazy tags: a code group, tabs, an accordion, a frame, an item row or a prompt renders once its async chunk loads (in place on the server and on hydration).
+- Empty: an empty `source` renders the empty root (no placeholder; the page owns its empty state).
+- Unknown or malformed input: an unknown capitalized tag, an unclosed tag or an unsupported attribute expression stays literal text rather than disappearing; an unclosed tag runs to the end of the source.
+- Links: a root-relative `href` is followed with the app's router (`useAppNavigation`); an `http(s)` link opens in a new tab with `rel="noreferrer"` and an announced suffix; a URL that is not `http(s)`, `mailto`, root-relative or a `#fragment` renders as plain text (the shared `safeHref` of the AI layer's Markdown reader).
+- Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid` (static content).
+
+## Accessibility
+
+- Semantics: headings are real `h1`–`h4` (`DocHeading`) in source order with unique ids; lists are `ul` / `ol`; a pipe table renders as the Azion UI `Table` (decision RV-K2-1: `role="table"`, `columnheader` and `cell` roles, bordered, lines wrapping, its own focusable horizontal scroll region), so a docs table looks like an app table; a rule is `hr`; a quote is `blockquote`.
+- Keyboard map: no keyboard handling of its own; links, heading anchors, tabs, accordions and code copy buttons are the mounted components' and follow their maps.
+- Links: an external link announces `(opens in a new tab)` through a visually hidden suffix; link text is the author's.
+- Visible focus: owned by `DocProse` (links) and the mounted components.
+- Contrast: table header text `var(--text-muted)` and body text `var(--text-default)` on `var(--bg-surface)` meet 4.5:1 in both themes; no disabled state.
+- Pattern: native document semantics; no WAI-ARIA APG widget of its own.
+- Inside a callout, an item row or a prompt, paragraphs render as block spans so no `p` nests inside the component's own paragraph.
+
+## Right-to-left
+
+- Layout: logical utilities only (`text-start` on table cells, logical list padding from `DocProse`); a column aligned with `:---:` / `---:` keeps the author's `center` / `end` alignment, with `right` mapped to `end`.
+- Icons: none of its own; the mounted components mirror their glyphs.
+- Keyboard: none of its own.
+- User data: the source text renders as is; code renders inside `DocCodeGroup`, which isolates its direction.
+
+## Internationalization
+
+| Key             | English source         | Override prop |
+| --------------- | ---------------------- | ------------- |
+| `common.newTab` | `(opens in a new tab)` | —             |
+
+- Formatting: none. All visible text is the source's; code sample labels fall back to `DocCodeGroup`'s language names.
+
+## Responsive
+
+- Container queries: none of its own; `DocCardGroup`, `DocChangelogEntry` and the other mounted components respond to their containers.
+- Narrow (≤ 640 px): a wide table scrolls inside its own region instead of the page; everything else reflows with `DocProse`.
+- Touch: targets are the mounted components'; inline links follow `DocProse`.
+- Reflow: no horizontal page scroll at 320 px and 200 % zoom; the exception is a wide table, which scrolls inside its region (WCAG 1.4.10 data-table exception).
+
+## Examples
+
+### Default
+
+````vue
+<script setup lang="ts">
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
+
+  const source = [
+    '---',
+    'title: First deploy',
+    'description: Deploy a template and see it served from the edge.',
+    '---',
+    '',
+    '## Before you start',
+    '',
+    'You need an Acme account. Log in with `acme login`, then read the [CLI reference](https://example.com/docs/cli).',
+    '',
+    '- A project folder with a `package.json`',
+    '- Node.js 22 or later',
+    '',
+    '<Note>A first deploy takes about a minute.</Note>',
+    '',
+    '## Deploy with the CLI',
+    '',
+    '<Steps>',
+    '  <Step title="Install the CLI">',
+    '    <CodeGroup>',
+    '    ```bash npm',
+    '    npm install -g acme-cli',
+    '    ```',
+    '    ```bash pnpm',
+    '    pnpm add -g acme-cli',
+    '    ```',
+    '    </CodeGroup>',
+    '  </Step>',
+    '  <Step title="Deploy">Run `acme deploy` from the project folder.</Step>',
+    '</Steps>',
+    '',
+    '## Limits',
+    '',
+    '| Plan | Builds per day |',
+    '| :--- | ---: |',
+    '| Free | 100 |',
+    '| Pro | 1,000 |',
+    '',
+    '## Next steps',
+    '',
+    '<CardGroup cols={2}>',
+    '  <Card title="Domains" icon="az az-globe" href="/docs/domains">Point your own domain at the deploy.</Card>',
+    '  <Card title="Cache" icon="az az-bolt" href="/docs/cache">Cache static assets at the edge.</Card>',
+    '</CardGroup>'
+  ].join('\n')
+</script>
+
+<template>
+  <DocProse>
+    <DocMarkdown :source="source" />
+  </DocProse>
+</template>
+````
+
+### Components
+
+```vue
+<script setup lang="ts">
+  import Alert from '@aziontech/ui/alert'
+  import DocMarkdown, { parseDocMarkdown } from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
+  import DocTableOfContents from '@aziontech/ui/doc-table-of-contents'
+
+  const components = { Alert }
+
+  const source = [
+    '## Maintenance',
+    '',
+    '<Alert severity="warning" label="Deploys pause on March 9, 2026, from 02:00 to 03:00 UTC." />',
+    '',
+    'Requests keep being served during the window; only new deploys wait.',
+    '',
+    '## Changelog',
+    '',
+    '<Update label="March 2, 2026" description="v2.4.0" tags={["CLI"]}>Deploys start 30% faster.</Update>'
+  ].join('\n')
+
+  const { headings } = parseDocMarkdown(source, components)
+</script>
+
+<template>
+  <div class="flex w-full flex-col gap-(--spacing-lg) md:flex-row">
+    <DocProse class="min-w-0 flex-1">
+      <DocMarkdown
+        :source="source"
+        :components="components"
+      />
+    </DocProse>
+    <div class="md:w-(--container-3xs)">
+      <DocTableOfContents :items="headings" />
+    </div>
+  </div>
+</template>
+```
+
+### Term
+
+```vue
+<script setup lang="ts">
+  import DocMarkdown from '@aziontech/ui/doc-markdown'
+  import DocProse from '@aziontech/ui/doc-prose'
+
+  const source = [
+    'Every response leaves the',
+    '<Tooltip title="Origin shield"',
+    'tip="One cache layer between the edge and your origin, so a miss asks the origin once instead of once per location."',
+    'href="https://example.com/docs/cache/origin-shield" linkLabel="Learn more">origin shield</Tooltip>',
+    'before it reaches your server, so the origin sees a fraction of the traffic.'
+  ].join(' ')
+</script>
+
+<template>
+  <DocProse>
+    <DocMarkdown :source="source" />
+  </DocProse>
+</template>
+```

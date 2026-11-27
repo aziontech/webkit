@@ -1,0 +1,93 @@
+{
+ "name": "message-thread",
+ "binding": "MessageThread",
+ "import": "@aziontech/ui/message-thread",
+ "treeShakeableImport": "@aziontech/ui/message-thread-root",
+ "category": "content",
+ "surface": "app",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/ui/message-thread-item",
+  "@aziontech/ui/message-thread-group"
+ ],
+ "purpose": "The conversation of a support ticket, oldest first, as Help Scout, Front, Plain and the Zendesk Agent Workspace show it: each message names its author (avatar, name, customer or agent), the channel it came by, when it was sent and, for email, who received it; then the body, the attachments and the quoted previous messages behind a toggle. Three types of item share the list: a public reply, an internal note (a warning band labelled \"Internal note\", so it never reads as a reply sent to the customer), and a system event line (\"Jane Doe changed status to Pending\"). A long middle collapses behind \"Show 6 earlier messages\". It is not `ChatMessage`, which is the generative AI chat (decision SUP-03).",
+ "setup": null,
+ "useWhen": [
+  "The conversation on a support ticket or a customer case: the customer's emails and chats, the agents' replies, the internal notes agents leave each other, and the status changes in between.",
+  "An email-style message history where each message shows its sender, recipients (To, Cc), channel, attachments and the quoted text of earlier messages.",
+  "A ticket that mixes public replies and private notes, where an agent must see at a glance which messages the customer can read."
+ ],
+ "avoidWhen": [
+  "A chat with the generative AI assistant → `chat-message` inside `conversation`.",
+  "A log of what happened to a resource, with no messages (deploys, status changes, audit entries) → the Timeline component planned in SUP-01.",
+  "A single notice on a page → `alert`.",
+  "Comments on a code line or a review → not this component; it carries support semantics (channels, recipients, internal notes)."
+ ],
+ "related": [
+  "`chat-message` — the AI conversation turn (`from: user | assistant | system`, feedback thumbs, regenerate). A ticket has customers and agents, notes, channels and recipients instead (SUP-03).",
+  "Timeline (planned in SUP-01) — an activity log of events; a thread interleaves a few event lines between messages.",
+  "`timestamp` — the sent time of each item; it opens the full date in every zone.",
+  "`avatar` — the author's picture or initials.",
+  "`file-token-group`, `file-preview` — the attachments composed into an item's `attachments` slot.",
+  "`icon-button`, `dropdown-menu` — the Reply button and the More menu (Forward, …) composed into an item's `actions` slot."
+ ],
+ "bestPractices": [
+  "Render the items oldest first; the newest message sits at the end, next to the reply composer.",
+  "Put every message after the first two and before the last three in a `MessageThread.Group` once a thread holds more than eight, so the newest messages stay in view.",
+  "Pass `count` on the Group with the number of items it holds; the button reads it.",
+  "Use `type=\"note\"` for anything only agents can read; never colour a reply to make it look private.",
+  "Put the text of earlier messages that an email quotes in the `quoted` slot, not in the body, so the reader sees only what is new.",
+  "Keep the `actions` slot short: Reply as an `IconButton`, Forward and the rest as items of a More `DropdownMenu`.",
+  "Write an event line as one short sentence that names who did what (\"Jane Doe changed status to Pending\")."
+ ],
+ "props": [
+  {
+   "name": "timestampFormat",
+   "type": "TimestampFormat",
+   "default": "'local'",
+   "required": "false",
+   "doc": "How every item's sent time reads: `relative` (`2 hours ago`), `local` date and time, `utc`, or `time` (hour and minute only) — Timestamp's own union."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows three placeholder messages in place of the items while the thread loads, and marks it busy."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The `MessageThread.Item` and `MessageThread.Group` children, oldest first. Not rendered while `loading`."
+  }
+ ],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/message-thread/default.vue"
+  },
+  {
+   "name": "Types",
+   "file": "examples/message-thread/types.vue"
+  },
+  {
+   "name": "Channels",
+   "file": "examples/message-thread/channels.vue"
+  }
+ ],
+ "docs": "components/message-thread.md"
+}

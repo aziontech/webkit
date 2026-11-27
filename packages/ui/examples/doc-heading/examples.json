@@ -1,0 +1,16 @@
+{
+  "component": "doc-heading",
+  "title": "Components/Docs/DocHeading",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A section heading that links to itself. Hover or focus it to see the underline and the link glyph; neither takes layout. It sits in `DocProse`, which owns the heading type scale; a bare `DocHeading` renders at the surrounding text size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Levels",
+      "summary": "Levels one to four, each a real heading tag with its own anchor, inside `DocProse` so each level takes its size from the prose scale.",
+      "file": "levels.vue"
+    }
+  ]
+}

@@ -1,35 +1,64 @@
 ---
 name: copy-button
-category: actions
+category: action
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 5530c5669e227017fe27ed86aaa44b617b69a6c41e197f26ac7679382dc530f6
+spec_version: 8
+template: 2
+checksum: 0480d6541736873f0228ed889cb42b238897636f5afb1e5453b0437a11fbccb5
 created: 2026-06-02
-last_updated: 2026-08-19
+last_updated: 2026-11-25
 ---
+
 # Copy Button — Component Spec
 
 ## Purpose
 
 Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens, and `Tooltip` for its name: an icon-only button is silent to a pointer user until hovered, so the glyph is always labelled on hover/focus. The tooltip text is the same string as the accessible name — `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — so the confirmation is seen as well as announced. It is suppressed with `disabled`.
 
+## When to use
+
+- Use CopyButton next to any value (API key, ID, snippet) to copy it; to copy a ready-made agent prompt without showing it use CopyPromptButton.
+- Next to a value the user will paste elsewhere: an ID, a domain, a token, a CLI command.
+- Inside key/value rows, terminal mocks and code samples that need a one-click copy.
+
+## When NOT to use
+
+- The action is anything other than copying → use `icon-button`.
+- A labelled "Copy" action in a form or dialog footer → use `button`.
+- A full code sample with its own copy control → use `code-block`.
+
+## Related
+
+- `icon-button` — the control it composes; `variant` and `size` are forwarded to it.
+- `tooltip` — composed to show `ariaLabel` and then `copiedLabel` on hover and focus.
+- `code-block` — already embeds a copy-button for its content.
+
+## Best practices
+
+- Pass the exact text in `value`; an empty `value` makes the click a no-op.
+- Localize `ariaLabel` and `copiedLabel`: each is both the accessible name and the tooltip text.
+- Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.
+- The click stops propagation, so it is safe inside clickable rows and cards.
+- Set `size="small"` in dense rows; the default is `large`, the house size of an action.
+
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `value` | `string` | `—` | true | Text copied to the clipboard on activation. |
-| `ariaLabel` | `string` | `'Copy'` | false | Accessible name while idle. |
-| `copiedLabel` | `string` | `'Copied'` | false | Accessible name while the copied state is shown. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'transparent'` | false | Visual variant forwarded to `IconButton`. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'small'` | false | Size token forwarded to `IconButton`. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+| Prop          | Type                                                           | Default        | Required | JSDoc                                                                                                     |
+| ------------- | -------------------------------------------------------------- | -------------- | -------- | --------------------------------------------------------------------------------------------------------- |
+| `value`       | `string`                                                       | `—`            | true     | Text copied to the clipboard on activation.                                                               |
+| `ariaLabel`   | `string`                                                       | `''`           | false    | Accessible name while idle. Empty uses the locale catalog (`Copy`).                                       |
+| `copiedLabel` | `string`                                                       | `''`           | false    | Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`).                |
+| `variant`     | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'ghost'`      | false    | Visual variant forwarded to `IconButton`.                                                                 |
+| `size`        | `'small' \| 'medium' \| 'large'`                               | `'large'`      | false    | Size token forwarded to `IconButton`.                                                                     |
+| `disabled`    | `boolean`                                                      | `false`        | false    | Disables interaction and applies disabled tokens.                                                         |
+| `icon`        | `string`                                                       | `'az az-copy'` | false    | Idle glyph; `az az-link` when the value is a link to a section. The check glyph replaces it after a copy. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `copy` | `string` | Emitted after a successful clipboard write with the copied value. |
+| Event  | Payload                              | Notes                                                                   |
+| ------ | ------------------------------------ | ----------------------------------------------------------------------- |
+| `copy` | `(event: MouseEvent, value: string)` | Emitted after a successful clipboard write; `value` is the copied text. |
 
 ## Slots
 
@@ -37,58 +66,87 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ## States
 
-- Visual states: `default`, `copied`, `disabled`
-- `data-state` mirrors `default` or `copied`
+- Visual states: `idle`, `copied`, `disabled`
+- `data-state` mirrors `idle` or `copied`
 - `data-disabled` mirrors the `disabled` prop
 - The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
+- Fallback: the button first writes with `navigator.clipboard.writeText`; when that API is missing (a page served over plain `http`) or rejects, it copies silently through a hidden selected field, the browser's older copy path, and confirms as usual. Only when both fail (permission denied, unfocused document) does the button load a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from `copyButton.fallbackTitle`, `fallbackField` and `fallbackHint`.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` (via `IconButton`) | inline | `motion-reduce:transition-none` |
-| tooltip open / close | popup scale-in / scale-out, owned by the composed `Tooltip` (see `.specs/tooltip.md`) | `semantic/animations.js` | reduced-motion fallback handled by `Tooltip` |
+| Trigger                      | Animation / Transition                                                                                         | Token                                        | Reduced-motion fallback                      |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
+| hover / active and icon swap | inherited from `IconButton` (`before:transition-opacity before:duration-fast-02`, icon enter/leave transition) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none`              |
+| tooltip open / close         | popup scale-in / scale-out, owned by the composed `Tooltip` (see `.specs/tooltip.md`)                          | `semantic/animations.js`                     | reduced-motion fallback handled by `Tooltip` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-button-lg |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region                 | Token (TOKENS.md)                                             |
+| ---------------------- | ------------------------------------------------------------- |
+| typography             | .text-button-lg                                               |
+| surface                | `var(--bg-surface)`                                           |
+| text                   | `var(--text-default)`                                         |
+| spacing                | `var(--spacing-3)`                                            |
+| shape                  | `var(--shape-control)`                                        |
+| ring                   | `var(--ring-color)`                                           |
 | tooltip surface / text | `var(--bg-contrast)` / `var(--text-contrast)` (via `Tooltip`) |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`)
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates copy.
-- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied.
+- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied, and a visually hidden `role="status"` region (`<testId>__status`) announces the copied label for 2 s, since a name change on the focused button is not announced by most screen readers. The root is `relative`, so the hidden region is positioned against the button and never extends the page when the button sits deep in a scrolling pane.
+- Attributes: consumer `class`, `id`, `aria-describedby` and listeners land on the root `span` (`inheritAttrs: false` + `v-bind="$attrs"`).
+- Fallback popover: `role="dialog"` named by its title and described by the key hint; focus moves into the selected read-only field and returns to the button on close.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none` on animated states (the icon swap comes from IconButton).
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Usage
 
 ```vue
 <script setup>
-import CopyButton from '@aziontech/webkit/copy-button'
+  import CopyButton from '@aziontech/ui/copy-button'
 </script>
 
 <template>
-  <CopyButton value="https://example.com/deploy/abc123" ariaLabel="Copy URL" />
+  <CopyButton
+    value="https://example.com/deploy/abc123"
+    ariaLabel="Copy URL"
+  />
 </template>
 ```
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: a single icon button; nothing to mirror. The copy, link and check glyphs do not mirror.
+- Keyboard: no arrow-key logic.
+- User data: the copied value is not rendered.
+
+## Internationalization
+
+| Key             | English source | Override prop |
+| --------------- | -------------- | ------------- |
+| `common.copy`   | `Copy`         | `ariaLabel`   |
+| `common.copied` | `Copied`       | `copiedLabel` |
+
+## Responsive
+
+- Size follows `size` (IconButton 28 / 32 / 40 px) with IconButton's 44 px coarse-pointer target.
+- The tooltip opens on focus as well as hover.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entry `copy-button`; the manual-copy fallback popover is an async chunk loaded only when the clipboard is blocked.
+- Runtime: one timer for the 2 s copied state, cleared on unmount.
+
+## Examples
 
 - Default
 - Disabled
@@ -100,16 +158,15 @@ import CopyButton from '@aziontech/webkit/copy-button'
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

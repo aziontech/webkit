@@ -1,0 +1,41 @@
+{
+  "component": "avatar",
+  "title": "Components/Content/Avatar",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default circle avatar with initials.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "Both shape variants side by side: circle and square at medium size.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All three size presets (24 / 32 / 48 px) with initials.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Fallbacks",
+      "summary": "Content precedence: photo when `src` is set, initials from `label` when there is no image, and the fallback icon when neither is provided.",
+      "file": "fallbacks.vue"
+    },
+    {
+      "name": "VariantGrid",
+      "summary": "Full matrix of shapes and sizes across the three content modes (initials, icon, image).",
+      "file": "variant-grid.vue"
+    },
+    {
+      "name": "Pattern",
+      "summary": "Generated marble marks for organizations with no logo: each name seeds its own mark, in the default palette and in a palette passed through colors.",
+      "file": "pattern.vue"
+    },
+    {
+      "name": "Presence",
+      "summary": "Each `presence` value on initials, and the dot on a photo and a square avatar at every size; the presence joins the accessible name (\"John Smith, away\").",
+      "file": "presence.vue"
+    }
+  ]
+}

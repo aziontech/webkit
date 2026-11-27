@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as the analyst-recognitions page places it: the eyebrow and headline above a framed strip of seven signed recognitions, each marked by its firm logo. A band with no items renders nothing at all.",
+   "file": "examples/recognition-marquee-section/default.vue"
+  }
+ ]
+}

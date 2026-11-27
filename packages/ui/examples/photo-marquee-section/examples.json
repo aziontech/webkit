@@ -1,0 +1,24 @@
+{
+  "component": "photo-marquee-section",
+  "title": "Components/Marketing/Sections/PhotoMarqueeSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the careers page places it: the headline and wide description over a strip of six office photographs that scrolls continuously and pauses on hover or focus. A band with no photos renders nothing at all. Azion UI ships no editorial media, so the photos here are the neutral `@aziontech/ui/assets/placeholder-image.svg`; pass your own image URLs.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The six office photos Careers runs, at ten seconds per photo. Azion UI ships no editorial media, so the photos here are the neutral `@aziontech/ui/assets/placeholder-image.svg`; pass your own image URLs.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

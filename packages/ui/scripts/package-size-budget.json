@@ -1,0 +1,9 @@
+{
+  "unpackedBytes": 36400000,
+  "packedBytes": 9200000,
+  "generated": ["skills/", "rules/", "agents/", "fragments/", "types/"],
+  "files": {
+    "src/assets/illustrations/": 4490000,
+    "src/assets/logos/": 2260000
+  }
+}

@@ -1,0 +1,8 @@
+@import 'tailwindcss/utilities' source(none);
+@reference "@aziontech/theme";
+@import '@aziontech/ui/styles/all';
+@import '../../.build/css/docs.css';
+@source '../';
+@source '../../../../packages/ui/blocks';
+@source '../../../../packages/ui/examples';
+@source '../../../../packages/ui/catalog.json';

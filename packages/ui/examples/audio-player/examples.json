@@ -1,0 +1,31 @@
+{
+  "component": "audio-player",
+  "title": "Components/Content/AudioPlayer",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A spoken reply with its title, duration and transcript.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Playback rates",
+      "summary": "The speed control cycles through `playback-rates`; `downloadable` adds a Download link that saves as `file-name`.",
+      "file": "playback-rates.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The speech is still being generated: Play shows a spinner and the other controls wait.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The audio cannot play: the app's message replaces the time, the controls are disabled and Try again sits at the end of the line.",
+      "file": "error.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Every control disabled.",
+      "file": "disabled.vue"
+    }
+  ]
+}

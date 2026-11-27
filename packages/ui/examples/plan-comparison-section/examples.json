@@ -1,0 +1,45 @@
+{
+  "component": "plan-comparison-section",
+  "title": "Components/Marketing/Sections/PlanComparisonSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Hobby, Pro and Enterprise across the four Pricing product bands, closing on the link to the on-demand rates. Narrow the canvas below 1024px to see the plan picker, which opens on Pro.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Band links",
+      "summary": "A plan `description` under each name says who the plan is for, and a band `action` closes a product band with its own rates page.",
+      "file": "band-links.vue"
+    },
+    {
+      "name": "Hints and marks",
+      "summary": "Rows with a `hint` open a popover titled by the label; included and not-included cells draw their marks with a tooltip of the label. With no closing link, the last row draws the closing rule. Below 1024px the plan picker carries a search field.",
+      "file": "hints-and-marks.vue"
+    },
+    {
+      "name": "Support tiers",
+      "summary": "The same matrix on the Support page: Developer, Business, Enterprise and Mission-Critical as the columns, across the Support and the Professional Services bands, each closing on its pricing link. Narrow the canvas below 1024px to see the picker, which opens on Enterprise.",
+      "file": "support-tiers.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "PlanMatrix",
+      "summary": "Hobby, Pro and Enterprise across four of the Pricing product sections. Each plan button repeats the action of its card, and the last row links to the on-demand rates. Narrow the canvas below 1024px to see the plan picker, which opens on Pro.",
+      "file": "site-plan-matrix.vue",
+      "json": "site-plan-matrix.json"
+    },
+    {
+      "name": "TierMatrix",
+      "summary": "Developer, Business, Enterprise and Mission-Critical across the Support and the Professional Services bands. Developer is the free tier, so its button starts a free account; the other three hand off to the contact page, with Enterprise as the recommended tier. Narrow the canvas below 1024px to see the picker; it opens on Enterprise.",
+      "file": "site-tier-matrix.vue",
+      "json": "site-tier-matrix.json"
+    }
+  ],
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["PlanMatrix", "PlanMatrixJson", "TierMatrix", "TierMatrixJson"]
+}

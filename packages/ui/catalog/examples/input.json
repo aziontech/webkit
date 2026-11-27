@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default empty input at medium size.",
+   "file": "examples/input/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three sizes stacked: `small` (28px), `medium` (32px) and `large` (40px).",
+   "file": "examples/input/sizes.vue"
+  },
+  {
+   "name": "Icons",
+   "summary": "The `leading` slot, the `trailing` slot, and both.",
+   "file": "examples/input/icons.vue"
+  }
+ ]
+}

@@ -1,0 +1,279 @@
+{
+  "ciFactor": 1.5,
+  "calibration": {
+    "hostMs": 65,
+    "maxFactor": 6
+  },
+  "note": "Milliseconds, median of 5 runs in Vitest browser mode (Chromium), measured by src/test/performance.test.ts. Each budget is about 3x the median of three suite runs on the shared development host (25 ms floor), never above the previous budget, so a 2x slowdown fails while CI retry absorbs noise. Budgets are relative to the machine: the suite first times a fixed reference render (median of 9) and multiplies every budget by that time over calibration.hostMs (the same render on the host), never by less than 1 (ciFactor when process.env.CI is set) and never by more than calibration.maxFactor. A slow or busy shared runner moves every budget with it, so a scenario fails only when the component got slower relative to the machine. mount = first render + layout; update = the change named in the scenario + layout. A scenario's name says what it renders: lazy-50 and collapsed mean the component draws only that part of the data.",
+  "scenarios": {
+    "chart-10k": {
+      "mount": 520,
+      "update": 190,
+      "update_is": "replace both 10k-point series"
+    },
+    "chart-10k-hover": {
+      "mount": 700,
+      "update": 50,
+      "update_is": "move the active index 40 times over three 10k-point series (lines and dots)"
+    },
+    "tree-5k-collapsed": {
+      "mount": 50,
+      "update": 140,
+      "update_is": "expand two folders of 99 nodes (50 folders rendered collapsed at mount, about 250 rows after)"
+    },
+    "tree-5k-expanded": {
+      "mount": 90,
+      "update": 50,
+      "update_is": "collapse one of 50 expanded folders of 99 nodes"
+    },
+    "tree-1k-expanded": {
+      "mount": 55,
+      "update": 25,
+      "update_is": "collapse all 20 folders of 49 nodes"
+    },
+    "tree-5k-multi-select": {
+      "mount": 70,
+      "update": 35,
+      "update_is": "select all 5k ids with 1k visible rows"
+    },
+    "select-1k": {
+      "mount": 30,
+      "update": 160,
+      "update_is": "open the list, then filter it"
+    },
+    "multi-select-1k": {
+      "mount": 30,
+      "update": 360,
+      "update_is": "open the list, then filter it"
+    },
+    "multi-select-1k-toggle": {
+      "mount": 100,
+      "update": 350,
+      "update_is": "toggle 20 options one by one with all 1k options selected"
+    },
+    "multi-select-1k-typed": {
+      "mount": 30,
+      "update": 630,
+      "update_is": "mount a searchable chips field with 3 selected values, open it, then type a filter"
+    },
+    "dropdown-menu-1k": {
+      "mount": 1190,
+      "update": 30,
+      "update_is": "20 document mousedowns and window keydowns with 1k closed menus mounted"
+    },
+    "donut-chart-500": {
+      "mount": 30,
+      "update": 30,
+      "update_is": "replace the 500 slices"
+    },
+    "bar-list-1k": {
+      "mount": 220,
+      "update": 120,
+      "update_is": "replace the 1k rows"
+    },
+    "log-viewer-10k": {
+      "mount": 50,
+      "update": 50,
+      "update_is": "search the 10k lines (the log view renders only the visible window)"
+    },
+    "log-viewer-10k-tail": {
+      "mount": 200,
+      "update": 1100,
+      "update_is": "append 20 lines one at a time to a searched 10k-line log"
+    },
+    "code-block-5k-lines": {
+      "mount": 230,
+      "update": 260,
+      "update_is": "switch to the second 5k-line tab"
+    },
+    "table-1k-lazy-50": {
+      "mount": 180,
+      "update": 170,
+      "update_is": "sort 1k rows under useCollection (the table renders the first 50 rows; the rest load on scroll)"
+    },
+    "code-block-diff-5k-lines": {
+      "mount": 260,
+      "update": 45,
+      "update_is": "switch the 5k-line computed diff from split to unified"
+    },
+    "table-10k-virtual": {
+      "mount": 110,
+      "update": 150,
+      "update_is": "sort 10k virtual rows under useCollection"
+    },
+    "table-10k-virtual-filter": {
+      "mount": 110,
+      "update": 50,
+      "update_is": "filter 10k virtual rows by text under useCollection"
+    },
+    "table-10k-virtual-select-all": {
+      "mount": 120,
+      "update": 60,
+      "update_is": "select every matching row of 10k virtual rows under useCollection"
+    },
+    "command-1k": {
+      "mount": 50,
+      "update": 1000,
+      "update_is": "open the palette over 1k items in 20 groups, then type four queries"
+    },
+    "conversation-history-5k": {
+      "mount": 80,
+      "update": 40,
+      "update_is": "select a conversation"
+    },
+    "ai-chat-long-thread": {
+      "mount": 165,
+      "update": 35,
+      "update_is": "add a prompt and its answer to the 12-message thread at phone width"
+    },
+    "conversation-500": {
+      "mount": 370,
+      "update": 30,
+      "update_is": "stream 20 tokens into the last message"
+    },
+    "streaming-response-2k-lines": {
+      "mount": 320,
+      "update": 40,
+      "update_is": "stream 20 tokens"
+    },
+    "streaming-response-code-fences": {
+      "mount": 200,
+      "update": 25,
+      "update_is": "stream 20 tokens after three closed code fences of 400, 300 and 500 lines"
+    },
+    "doc-markdown-5k-lines": {
+      "mount": 420,
+      "update": 140,
+      "update_is": "replace the page source"
+    },
+    "doc-layout-1k": {
+      "mount": 410,
+      "update": 550,
+      "update_is": "open the search palette"
+    },
+    "item-list-1k": {
+      "mount": 380,
+      "update": 240,
+      "update_is": "reverse the 1k rows"
+    },
+    "key-value-list-1k": {
+      "mount": 170,
+      "update": 90,
+      "update_is": "change the 1k values"
+    },
+    "upload-progress-1k": {
+      "mount": 70,
+      "update": 50,
+      "update_is": "one progress tick on all 1k running files (the list renders about 100 rows)"
+    },
+    "listing-table-1k": {
+      "mount": 200,
+      "update": 200,
+      "update_is": "replace the 1k rows"
+    },
+    "listing-index-1k": {
+      "mount": 300,
+      "update": 150,
+      "update_is": "type a query into the search of 1k grouped rows"
+    },
+    "select-1k-preselected": {
+      "mount": 30,
+      "update": 130,
+      "update_is": "open the list, then filter it (mount collects the selected option's label)"
+    },
+    "multi-select-1k-preselected": {
+      "mount": 30,
+      "update": 210,
+      "update_is": "open the list, then filter it (mount collects the 10 selected labels)"
+    },
+    "schema-form-200-fields": {
+      "mount": 260,
+      "update": 110,
+      "update_is": "set one of the 200 values from the parent"
+    },
+    "combobox-1k": {
+      "mount": 30,
+      "update": 90,
+      "update_is": "focus the field to open the list, then type a filter"
+    },
+    "chart-scatter-10k": {
+      "mount": 380,
+      "update": 30,
+      "update_is": "move the active index to the middle point"
+    },
+    "chart-bar-1k-x3": {
+      "mount": 230,
+      "update": 90,
+      "update_is": "replace the three 1k-category series"
+    },
+    "map-chart-1k-points": {
+      "mount": 190,
+      "update": 30,
+      "update_is": "make one of the 1k points active"
+    },
+    "tracker-1k": {
+      "mount": 110,
+      "update": 30,
+      "update_is": "make the middle block active"
+    },
+    "trace-1k": {
+      "mount": 190,
+      "update": 30,
+      "update_is": "search the 1k spans"
+    },
+    "code-editor-5k-lines": {
+      "mount": 300,
+      "update": 110,
+      "update_is": "append one typed line"
+    },
+    "code-editor-5k-lines-char": {
+      "mount": 300,
+      "update": 100,
+      "update_is": "type one character in the middle of the document"
+    },
+    "property-filter-1k": {
+      "mount": 30,
+      "update": 30,
+      "update_is": "focus the field, then type a word matching every value"
+    },
+    "filter-menu-1k": {
+      "mount": 30,
+      "update": 30,
+      "update_is": "open the menu, open the 1k-option field, then search it"
+    },
+    "transfer-list-1k": {
+      "mount": 130,
+      "update": 110,
+      "update_is": "move every source item to the target"
+    },
+    "cards-1k": {
+      "mount": 80,
+      "update": 50,
+      "update_is": "select all 1k cards"
+    },
+    "table-1k-presets-lazy-50": {
+      "mount": 300,
+      "update": 280,
+      "update_is": "sort 1k rows of link and tag preset cells (the table renders the first 50 rows; the rest load on scroll)"
+    },
+    "timestamp-1k": {
+      "mount": 360,
+      "update": 60,
+      "update_is": "change the provider time zone of 1k timestamps"
+    },
+    "data-grid-1k": {
+      "mount": 600,
+      "update": 340,
+      "update_is": "move the cell cursor 40 times with the arrow keys over 1,000 rows x 8 columns"
+    }
+  },
+  "styleRecalc": {
+    "note": "Measured by src/test/table-scroll-performance.test.ts (styled, Chromium): the number of elements Chromium restyles while scrolling (the elementCount of its UpdateLayoutTree trace events), divided by the number it restyles when the whole table restyles on as many frames. Element counts do not depend on the machine or its load, unlike style-recalc time. A scroll that restyles only the rows it mounts measures about 0.10. One sibling rule whose subject is the universal selector (a border-top variant for every child but the last, leaked from a token-check test fixture until src/test/reflow.css excluded the test folder) made every frame restyle three quarters of the table, 0.74 (audit 6, A6-269); a :has() read from the scroll frame did the same in round 5. This file is imported by the suite, so Tailwind reads it as source: never spell a class in this note.",
+    "data-table-10k-virtual-scroll": {
+      "maxRatio": 0.15
+    },
+    "data-table-frozen-sideways-scroll": {
+      "maxRatio": 0.15
+    }
+  }
+}

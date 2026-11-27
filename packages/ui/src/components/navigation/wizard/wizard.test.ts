@@ -1,0 +1,638 @@
+import '../../../test/reflow.css'
+
+import userEvent from '@testing-library/user-event'
+import { render, within } from '@testing-library/vue'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
+import { defineComponent, nextTick } from 'vue'
+
+import Default from '../../../../examples/wizard/default.vue'
+import Optional from '../../../../examples/wizard/optional.vue'
+import Validation from '../../../../examples/wizard/validation.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
+import ConfigProvider from '../../layout/config-provider/config-provider.vue'
+import { useWizardContext } from './composables/use-wizard-context'
+import Wizard, { WizardStep } from './index'
+
+const FlowDiagram = defineComponent({
+  components: { Wizard, WizardStep },
+  props: {
+    start: { type: Number, default: 0 },
+    loading: { type: Boolean, default: false },
+    block: { type: Boolean, default: false },
+    invalidStep: { type: Number, default: -1 }
+  },
+  emits: ['next', 'submit', 'cancel'],
+  data() {
+    return { step: this.start }
+  },
+  methods: {
+    onNext(event: MouseEvent, step: number) {
+      if (this.block) event.preventDefault()
+      this.$emit('next', event, step)
+    }
+  },
+  template: `
+    <Wizard
+      v-model="step"
+      aria-label="Create resource"
+      submit-label="Deploy"
+      :loading="loading"
+      @next="onNext"
+      @submit="$emit('submit', $event)"
+      @cancel="$emit('cancel', $event)"
+    >
+      <WizardStep
+        title="Configure"
+        description="Name the resource and choose where it runs."
+        :invalid="invalidStep === 0"
+      >
+        <label>Name <input type="text" /></label>
+      </WizardStep>
+      <WizardStep title="Settings" optional :invalid="invalidStep === 1">
+        <p>Settings fields</p>
+      </WizardStep>
+      <WizardStep title="Review">
+        <p>Review summary</p>
+      </WizardStep>
+    </Wizard>
+    <output data-testid="model">{{ step }}</output>
+  `
+})
+
+beforeAll(async () => {
+  await page.viewport(1280, 900)
+})
+
+const mount = async (props: Record<string, unknown> = {}) => {
+  const view = render(FlowDiagram, { props })
+  await nextTick()
+  await nextTick()
+  return view
+}
+
+const rootOf = (view: ReturnType<typeof render>) => view.getByTestId('wizard')
+
+const headingOf = (view: ReturnType<typeof render>) => view.getByRole('heading', { level: 2 })
+
+const railButtons = (view: ReturnType<typeof render>) =>
+  within(view.getByRole('navigation')).getAllByRole('button') as globalThis.HTMLButtonElement[]
+
+const button = (view: ReturnType<typeof render>, name: string) =>
+  view.getByRole('button', { name }) as globalThis.HTMLButtonElement
+
+describe('Wizard', () => {
+  describe('compound API', () => {
+    it('attaches Step to the root for dot-notation', () => {
+      expect(Wizard.Step).toBe(WizardStep)
+    })
+  })
+
+  describe('rendering & testid', () => {
+    it('renders a named section with the derived testid, the rail and the first step', async () => {
+      const view = await mount()
+      const root = rootOf(view)
+
+      expect(root.tagName).toBe('SECTION')
+      expect(root.getAttribute('aria-label')).toBe('Create resource')
+      expect(root.getAttribute('data-active-step')).toBe('0')
+      expect(railButtons(view)).toHaveLength(3)
+      expect(headingOf(view).textContent?.trim()).toBe('Configure')
+      expect(within(view.getByRole('group')).getByText('Step 1 of 3')).toBeInTheDocument()
+      expect(view.getByText('Name the resource and choose where it runs.')).toBeInTheDocument()
+    })
+
+    it('renders only the active step and hides the others', async () => {
+      const view = await mount()
+      const steps = view.getAllByTestId('wizard-step')
+
+      expect(steps).toHaveLength(3)
+      expect(steps.map((step) => step.hasAttribute('data-active'))).toEqual([true, false, false])
+      expect(steps.map((step) => step.hidden)).toEqual([false, true, true])
+      expect(view.queryByText('Settings fields')).not.toBeInTheDocument()
+    })
+
+    it('lets a consumer-supplied data-testid win on the root and on a step', async () => {
+      const Custom = defineComponent({
+        components: { Wizard, WizardStep },
+        template: `
+          <Wizard data-testid="create-flow" aria-label="Create">
+            <WizardStep title="Only" data-testid="create-flow-only" />
+          </Wizard>
+        `
+      })
+      const view = render(Custom)
+      await nextTick()
+
+      expect(view.getByTestId('create-flow')).toBeInTheDocument()
+      expect(view.queryByTestId('wizard')).not.toBeInTheDocument()
+      expect(view.getByTestId('create-flow-only')).toBeInTheDocument()
+      expect(view.queryByTestId('wizard-step')).not.toBeInTheDocument()
+    })
+
+    it('omits aria-label when the consumer sets none', async () => {
+      const Bare = defineComponent({
+        components: { Wizard, WizardStep },
+        template: `<Wizard><WizardStep title="Only" /></Wizard>`
+      })
+      const view = render(Bare)
+      await nextTick()
+      expect(rootOf(view).hasAttribute('aria-label')).toBe(false)
+    })
+  })
+
+  describe('navigation', () => {
+    it('hides Previous on the first step and moves forward and back with Next and Previous', async () => {
+      const view = await mount()
+      expect(view.queryByRole('button', { name: 'Previous' })).not.toBeInTheDocument()
+
+      await userEvent.click(button(view, 'Next'))
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('1')
+      expect(headingOf(view).textContent?.trim()).toBe('Settings')
+      expect(within(view.getByRole('group')).getByText('Step 2 of 3')).toBeInTheDocument()
+      expect(button(view, 'Previous').getAttribute('data-variant')).toBe('outline')
+
+      await userEvent.click(button(view, 'Previous'))
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('0')
+      expect(headingOf(view).textContent?.trim()).toBe('Configure')
+    })
+
+    it('emits next with the index of the step being left', async () => {
+      const view = await mount({ start: 1 })
+      await userEvent.click(button(view, 'Next'))
+
+      const calls = view.emitted('next') as [MouseEvent, number][]
+      expect(calls).toHaveLength(1)
+      expect(calls[0][0]).toBeInstanceOf(MouseEvent)
+      expect(calls[0][1]).toBe(1)
+    })
+
+    it('stays on the step when the next handler calls preventDefault', async () => {
+      const view = await mount({ block: true })
+      await userEvent.click(button(view, 'Next'))
+
+      expect(view.emitted('next')).toHaveLength(1)
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('0')
+      expect(view.getByTestId('model').textContent).toBe('0')
+      expect(headingOf(view).textContent?.trim()).toBe('Configure')
+    })
+
+    it('turns Next into the submit action on the last step', async () => {
+      const view = await mount({ start: 2 })
+      expect(view.queryByRole('button', { name: 'Next' })).not.toBeInTheDocument()
+
+      await userEvent.click(button(view, 'Deploy'))
+
+      const calls = view.emitted('submit') as [MouseEvent][]
+      expect(calls).toHaveLength(1)
+      expect(calls[0][0]).toBeInstanceOf(MouseEvent)
+      expect(view.emitted('next')).toBeUndefined()
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('2')
+    })
+
+    it('makes the primary action the submit action from the start on a single step', async () => {
+      const Single = defineComponent({
+        components: { Wizard, WizardStep },
+        template: `<Wizard aria-label="Create"><WizardStep title="Only" /></Wizard>`
+      })
+      const view = render(Single)
+      await nextTick()
+
+      expect(view.queryByRole('button', { name: 'Previous' })).not.toBeInTheDocument()
+      expect(view.getByRole('button', { name: 'Create' })).toBeInTheDocument()
+    })
+
+    it('emits cancel without changing the step', async () => {
+      const view = await mount({ start: 1 })
+      await userEvent.click(button(view, 'Cancel'))
+
+      const calls = view.emitted('cancel') as [MouseEvent][]
+      expect(calls).toHaveLength(1)
+      expect(calls[0][0]).toBeInstanceOf(MouseEvent)
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('1')
+    })
+  })
+
+  describe('loading', () => {
+    it('busies the primary action, disables Cancel, Previous and the rail, and suppresses every event', async () => {
+      const view = await mount({ start: 2, loading: true })
+      const root = rootOf(view)
+      expect(root.getAttribute('data-loading')).toBe('true')
+
+      const submit = button(view, 'Deploy')
+      expect(submit.getAttribute('aria-busy')).toBe('true')
+      expect(button(view, 'Cancel').disabled).toBe(true)
+      expect(button(view, 'Previous').disabled).toBe(true)
+      expect(railButtons(view).every((rail) => rail.disabled)).toBe(true)
+
+      await userEvent.click(submit)
+      await userEvent.click(button(view, 'Cancel'))
+      await userEvent.click(button(view, 'Previous'))
+      await userEvent.click(railButtons(view)[0])
+
+      expect(view.emitted('submit')).toBeUndefined()
+      expect(view.emitted('cancel')).toBeUndefined()
+      expect(root.getAttribute('data-active-step')).toBe('2')
+    })
+
+    it('does not mark the root loading by default', async () => {
+      const view = await mount()
+      expect(rootOf(view).hasAttribute('data-loading')).toBe(false)
+    })
+  })
+
+  describe('v-model', () => {
+    const Bound = defineComponent({
+      components: { Wizard, WizardStep },
+      data() {
+        return { step: 0 }
+      },
+      template: `
+        <button type="button" @click="step = 2">Jump</button>
+        <output data-testid="bound">{{ step }}</output>
+        <Wizard v-model="step" aria-label="Create">
+          <WizardStep title="One" />
+          <WizardStep title="Two" />
+          <WizardStep title="Three" />
+        </Wizard>
+      `
+    })
+
+    it('writes Next back to the default v-model', async () => {
+      const view = render(Bound)
+      await nextTick()
+      await userEvent.click(button(view, 'Next'))
+      expect(view.getByTestId('bound').textContent).toBe('1')
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('1')
+    })
+
+    it('follows the default v-model when the consumer changes it', async () => {
+      const view = render(Bound)
+      await nextTick()
+      await userEvent.click(view.getByRole('button', { name: 'Jump' }))
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('2')
+      expect(headingOf(view).textContent?.trim()).toBe('Three')
+    })
+  })
+
+  describe('v-model', () => {
+    it('writes Next back to the bound model', async () => {
+      const view = await mount()
+      await userEvent.click(button(view, 'Next'))
+      expect(view.getByTestId('model').textContent).toBe('1')
+    })
+
+    it('follows the bound model when the consumer changes it', async () => {
+      const Controlled = defineComponent({
+        components: { Wizard, WizardStep },
+        data() {
+          return { step: 0 }
+        },
+        template: `
+          <button type="button" @click="step = 2">Jump</button>
+          <Wizard v-model="step" aria-label="Create">
+            <WizardStep title="One" />
+            <WizardStep title="Two" />
+            <WizardStep title="Three" />
+          </Wizard>
+        `
+      })
+      const view = render(Controlled)
+      await nextTick()
+
+      await userEvent.click(view.getByRole('button', { name: 'Jump' }))
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('2')
+      expect(headingOf(view).textContent?.trim()).toBe('Three')
+    })
+
+    it('ignores the removed active-step model', async () => {
+      const view = render(
+        defineComponent({
+          components: { Wizard, WizardStep },
+          template: `
+            <Wizard :active-step="2" aria-label="Create">
+              <WizardStep title="One" />
+              <WizardStep title="Two" />
+              <WizardStep title="Three" />
+            </Wizard>
+          `
+        })
+      )
+      await nextTick()
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('0')
+    })
+
+    it('clamps an out-of-range model without writing it back', async () => {
+      const view = await mount({ start: 7 })
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('2')
+      expect(view.getByTestId('model').textContent).toBe('7')
+    })
+  })
+
+  describe('the rail', () => {
+    it('marks earlier steps complete and disables every later step', async () => {
+      const view = await mount({ start: 1 })
+      const states = view
+        .getAllByTestId('stepper-step')
+        .map((step) =>
+          step.hasAttribute('data-active') ? 'active' : step.getAttribute('data-status')
+        )
+
+      expect(states).toEqual(['success', 'active', 'pending'])
+      expect(railButtons(view).map((rail) => rail.disabled)).toEqual([false, false, true])
+      expect(railButtons(view)[1].getAttribute('aria-current')).toBe('step')
+    })
+
+    it('jumps back to a completed step when it is activated', async () => {
+      const view = await mount({ start: 2 })
+      await userEvent.click(railButtons(view)[0])
+
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('0')
+      expect(view.getByTestId('model').textContent).toBe('0')
+      expect(headingOf(view).textContent?.trim()).toBe('Configure')
+      expect(view.emitted('next')).toBeUndefined()
+    })
+
+    it('keeps every step already reached reachable, forward too, without firing next', async () => {
+      const view = await mount()
+      await userEvent.click(button(view, 'Next'))
+      await userEvent.click(button(view, 'Next'))
+      expect(view.emitted('next')).toHaveLength(2)
+
+      await userEvent.click(railButtons(view)[0])
+      expect(view.getByTestId('model').textContent).toBe('0')
+      expect(railButtons(view).map((rail) => rail.disabled)).toEqual([false, false, false])
+      expect(
+        view
+          .getAllByTestId('stepper-step')
+          .map((step) =>
+            step.hasAttribute('data-active') ? 'active' : step.getAttribute('data-status')
+          )
+      ).toEqual(['active', 'success', 'pending'])
+
+      await userEvent.click(railButtons(view)[2])
+      expect(view.getByTestId('model').textContent).toBe('2')
+      expect(headingOf(view).textContent?.trim()).toBe('Review')
+      expect(view.emitted('next')).toHaveLength(2)
+    })
+
+    it('keeps steps past the furthest one reached disabled after going back', async () => {
+      const view = await mount()
+      await userEvent.click(button(view, 'Next'))
+      await userEvent.click(button(view, 'Previous'))
+
+      expect(railButtons(view).map((rail) => rail.disabled)).toEqual([false, false, true])
+    })
+  })
+
+  describe('invalid', () => {
+    it('marks an invalid step in the rail and on the step, and reads the error word to screen readers', async () => {
+      const view = await mount({ start: 1, invalidStep: 0 })
+      const [first, second] = view.getAllByTestId('stepper-step')
+
+      expect(first.getAttribute('data-status')).toBe('error')
+      expect(first.hasAttribute('data-invalid')).toBe(true)
+      expect(first.textContent).toContain('Needs attention')
+      expect(second.hasAttribute('data-invalid')).toBe(false)
+      expect(railButtons(view)[0].disabled).toBe(false)
+
+      const steps = view.getAllByTestId('wizard-step')
+      expect(steps[0].hasAttribute('data-invalid')).toBe(true)
+      expect(steps[1].hasAttribute('data-invalid')).toBe(false)
+    })
+
+    it('clears the error state once the step is no longer invalid', async () => {
+      const view = await mount({ start: 1, invalidStep: 0 })
+      await view.rerender({ start: 1, invalidStep: -1 })
+      await nextTick()
+      const [first] = view.getAllByTestId('stepper-step')
+
+      expect(first.getAttribute('data-status')).toBe('success')
+      expect(first.hasAttribute('data-invalid')).toBe(false)
+      expect(view.getAllByTestId('wizard-step')[0].hasAttribute('data-invalid')).toBe(false)
+    })
+
+    it('has no violations with an invalid step', async () => {
+      const view = await mount({ start: 1, invalidStep: 0 })
+      await expectNoA11yViolations(view.container)
+    })
+  })
+
+  describe('focus', () => {
+    it('does not steal focus on the initial render', async () => {
+      const view = await mount({ start: 1 })
+      expect(document.activeElement).not.toBe(headingOf(view))
+    })
+
+    it('moves focus to the new step heading on every step change', async () => {
+      const view = await mount()
+      await userEvent.click(button(view, 'Next'))
+
+      await vi.waitFor(() => expect(document.activeElement).toBe(headingOf(view)))
+      expect(headingOf(view).textContent?.trim()).toBe('Settings')
+      expect(headingOf(view).getAttribute('tabindex')).toBe('-1')
+
+      await userEvent.click(button(view, 'Previous'))
+      await vi.waitFor(() => expect(document.activeElement).toBe(headingOf(view)))
+      expect(headingOf(view).textContent?.trim()).toBe('Configure')
+    })
+
+    it('a blocked Next moves focus to the invalid field, which names its error', async () => {
+      const view = render(Validation)
+      const next = view.getByRole('button', { name: 'Next' })
+      next.focus()
+      await userEvent.keyboard('{Enter}')
+
+      const name = view.getByRole('textbox', { name: /Name/ })
+      await vi.waitFor(() => expect(document.activeElement).toBe(name))
+      expect(name.getAttribute('aria-invalid')).toBe('true')
+      const describedBy = (name.getAttribute('aria-describedby') ?? '').split(' ')
+      const error = view.getByText('Enter a name to continue.')
+      expect(describedBy).toContain(error.closest('[id]')?.id)
+      await expectNoA11yViolations(view.container)
+    })
+  })
+
+  describe('optional', () => {
+    it('shows Optional in the rail and, on its own step, in the header', async () => {
+      const view = await mount()
+      const steps = view.getAllByTestId('wizard-step')
+      expect(steps.map((step) => step.hasAttribute('data-optional'))).toEqual([false, true, false])
+      expect(view.getAllByText('Optional')).toHaveLength(1)
+
+      await userEvent.click(button(view, 'Next'))
+      expect(view.getAllByText('Optional')).toHaveLength(2)
+    })
+  })
+
+  describe('ARIA', () => {
+    it('labels the active step group by its heading and describes the heading by the counter', async () => {
+      const view = await mount()
+      const group = view.getByRole('group')
+      const heading = headingOf(view)
+
+      expect(group.getAttribute('aria-labelledby')).toBe(heading.id)
+      const counter = document.getElementById(heading.getAttribute('aria-describedby') ?? '')
+      expect(counter?.textContent?.trim()).toBe('Step 1 of 3')
+    })
+  })
+
+  describe('accessibility', () => {
+    it('has no violations on a realistic flow', async () => {
+      const { container } = await mount({ start: 1 })
+      await expectNoA11yViolations(container)
+    })
+
+    it('has no violations while loading on the last step', async () => {
+      const { container } = await mount({ start: 2, loading: true })
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('useWizardContext', () => {
+    it('throws when a step renders outside a Wizard', () => {
+      const Loose = defineComponent({
+        setup() {
+          useWizardContext()
+          return () => null
+        }
+      })
+
+      expect(() => render(Loose)).toThrow(/must be used within a Wizard/)
+    })
+
+    it('throws when a Wizard.Step renders outside a Wizard', () => {
+      expect(() => render(WizardStep, { props: { title: 'Loose' } })).toThrow(
+        /must be used within a Wizard/
+      )
+    })
+  })
+
+  describe('on devices', () => {
+    const inBox = (width: number, locale = 'en') =>
+      defineComponent({
+        components: { FlowDiagram, ConfigProvider },
+        setup: () => ({ width: `${width}px`, locale, catalogs: LOCALES }),
+        template: `<ConfigProvider :locale="locale" :catalogs="catalogs"><div :style="{ width }"><FlowDiagram /></div></ConfigProvider>`
+      })
+
+    const progressOf = (view: ReturnType<typeof render>) => view.getByTestId('wizard__progress')
+
+    it('shows a polite Step n of N line when the rail hides in a narrow box', async () => {
+      const view = render(inBox(400))
+      await nextTick()
+      await nextTick()
+      const progress = progressOf(view)
+
+      expect(progress.getAttribute('aria-live')).toBe('polite')
+      expect(progress.textContent?.trim()).toBe('Step 1 of 3')
+      expect(getComputedStyle(progress).display).not.toBe('none')
+      const counter = within(view.getByRole('group')).getByText('Step 1 of 3')
+      expect(getComputedStyle(counter).display).toBe('none')
+
+      await userEvent.click(view.getByRole('button', { name: 'Next' }))
+      await nextTick()
+      expect(progress.textContent?.trim()).toBe('Step 2 of 3')
+    })
+
+    it('hides the line when the rail is visible', async () => {
+      const view = render(inBox(1200))
+      await nextTick()
+      await nextTick()
+
+      expect(getComputedStyle(progressOf(view)).display).toBe('none')
+      const counter = within(view.getByRole('group')).getByText('Step 1 of 3')
+      expect(getComputedStyle(counter).display).not.toBe('none')
+    })
+
+    it('writes the counter as plain sentence-case body text, not a monospace kicker', async () => {
+      const wide = render(inBox(1200))
+      await nextTick()
+      await nextTick()
+      const counter = within(wide.getByRole('group')).getByText('Step 1 of 3')
+      expect(getComputedStyle(counter).textTransform).toBe('none')
+      expect(getComputedStyle(counter).fontFamily).not.toMatch(/mono/i)
+      wide.unmount()
+      const narrow = render(inBox(400))
+      await nextTick()
+      await nextTick()
+      expect(getComputedStyle(progressOf(narrow)).textTransform).toBe('none')
+      expect(getComputedStyle(progressOf(narrow)).fontFamily).not.toMatch(/mono/i)
+    })
+
+    const footerButtons = (view: ReturnType<typeof render>) =>
+      within(view.getByTestId('wizard__footer')).getAllByRole('button')
+
+    it('wraps the footer in a narrow box: Cancel and Previous on one row, the primary action below at full width', async () => {
+      const view = render(inBox(288))
+      await nextTick()
+      await nextTick()
+      await userEvent.click(view.getByRole('button', { name: 'Next' }))
+      await nextTick()
+
+      const footer = view.getByTestId('wizard__footer').getBoundingClientRect()
+      const [cancel, previous, primary] = footerButtons(view).map((item) =>
+        item.getBoundingClientRect()
+      )
+      expect(footerButtons(view).map((item) => item.textContent?.trim())).toEqual([
+        'Cancel',
+        'Previous',
+        'Next'
+      ])
+      expect(Math.abs(cancel!.top - previous!.top)).toBeLessThan(1)
+      expect(cancel!.left).toBeLessThan(previous!.left)
+      expect(primary!.top).toBeGreaterThanOrEqual(cancel!.bottom)
+      expect(primary!.width).toBeGreaterThan(footer.width - 2)
+      for (const rect of [cancel!, previous!, primary!]) {
+        expect(rect.left).toBeGreaterThanOrEqual(footer.left - 1)
+        expect(rect.right).toBeLessThanOrEqual(footer.right + 1)
+      }
+    })
+
+    it('keeps the footer on one row from the sm box width up', async () => {
+      const view = render(inBox(640))
+      await nextTick()
+      await nextTick()
+      await userEvent.click(view.getByRole('button', { name: 'Next' }))
+      await nextTick()
+
+      const tops = footerButtons(view).map((item) => Math.round(item.getBoundingClientRect().top))
+      expect(tops).toHaveLength(3)
+      expect(new Set(tops).size).toBe(1)
+    })
+
+    it('mirrors the footer under rtl: Cancel at the inline start on the right', async () => {
+      const view = render(
+        defineComponent({
+          components: { FlowDiagram },
+          template: `<div dir="rtl" style="width: 288px"><FlowDiagram /></div>`
+        })
+      )
+      await nextTick()
+      await nextTick()
+      const footer = view.getByTestId('wizard__footer').getBoundingClientRect()
+      const cancel = footerButtons(view)[0]!.getBoundingClientRect()
+      expect(Math.abs(cancel.right - footer.right)).toBeLessThan(1)
+    })
+
+    it('translates the line', async () => {
+      const view = render(inBox(400, 'pt-BR'))
+      await nextTick()
+      await nextTick()
+
+      expect(progressOf(view).textContent?.trim()).toBe('Etapa 1 de 3')
+    })
+  })
+
+  it.each([
+    ['default', Default],
+    ['optional', Optional],
+    ['validation', Validation]
+  ])('opens the %s example on a blank first step', (_, Example) => {
+    const view = render(Example)
+    expect((view.getByRole('textbox', { name: /Name/ }) as HTMLInputElement).value).toBe('')
+    expect(view.container.textContent).toContain('Choose a region')
+    expect(view.container.textContent).not.toContain('South America')
+  })
+})

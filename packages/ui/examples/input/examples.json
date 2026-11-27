@@ -1,0 +1,51 @@
+{
+  "component": "input",
+  "title": "Components/Input/Input",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default empty input at medium size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three sizes stacked: `small` (28px), `medium` (32px) and `large` (40px).",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Icons",
+      "summary": "The `leading` slot, the `trailing` slot, and both.",
+      "file": "icons.vue"
+    },
+    {
+      "name": "Filled",
+      "summary": "Pre-populated value to show the filled visual state (driven by `:not(:placeholder-shown)`).",
+      "file": "filled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid: danger border, `aria-invalid`, and a `Field.Error` that says how to fix it.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Email",
+      "summary": "Native `type=\"email\"`. **Submit** validates: the field turns invalid with a `Field.Error`, cleared on the next keystroke.",
+      "file": "email.vue"
+    },
+    {
+      "name": "MaxLength",
+      "summary": "A cap of 10 via native `maxlength`; the rule stays visible in `Field.Description`.",
+      "file": "max-length.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Readonly",
+      "summary": "Read-only fields keep the filled look and drop the hover border. `monospace` sets code-like values (an ID, a CLI command beside a `CopyButton`) in the code face.",
+      "file": "readonly.vue"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+ "variants": [
+  {
+   "name": "Loading",
+   "summary": "The first load: every tile, chart and the table hold a Skeleton, and Needs attention shows three placeholder rows.",
+   "file": "blocks/dashboard/dashboard-security/variants/loading.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "No security rules set up yet: the tiles read as dashes, and one bordered EmptyState names the reason and offers Add rule set instead of a grid of empty charts.",
+   "file": "blocks/dashboard/dashboard-security/variants/empty.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
+   "file": "blocks/dashboard/dashboard-security/variants/error.vue"
+  },
+  {
+   "name": "ByActor",
+   "summary": "Request activity per actor: a Time range Select and a Refresh IconButton in the header over a FilterMenu (actor, outcome, category) with its chips and a destination Input; seven outcome StatTiles (requests, allowed, blocked, held, approved, denied, over budget), outcomes over time as stacked bars in status colors, three BarList breakdowns (actor, category, destination) and a request log DataTable with an outcome Tag, a SeverityTag and the rule that decided each request. A filter that matches nothing shows Clear filters.",
+   "file": "blocks/dashboard/dashboard-security/variants/by-actor.vue"
+  }
+ ],
+ "sfcFile": "blocks/dashboard/dashboard-security/dashboard-security.vue",
+ "guidelinesFile": "blocks/dashboard/dashboard-security/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "parts/attention-card.vue",
+  "parts/matched-chart.vue",
+  "parts/security-card.vue",
+  "parts/security-dialog.vue",
+  "parts/source-ip-search.vue",
+  "security-cards.ts"
+ ]
+}

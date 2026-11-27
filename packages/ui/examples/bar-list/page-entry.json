@@ -1,0 +1,39 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "eyebrow": "Analytics",
+    "title": "See where your traffic goes",
+    "description": "Every path ranked by the requests it served in the last 24 hours."
+  },
+  "scenes": {
+    "scene": {
+      "component": "BarList",
+      "props": {
+        "ariaLabel": "Top paths",
+        "items": [
+          {
+            "name": "/home",
+            "value": 843
+          },
+          {
+            "name": "/documentation",
+            "value": 384
+          },
+          {
+            "name": "/blocks",
+            "value": 108
+          },
+          {
+            "name": "/imprint",
+            "value": 46
+          },
+          {
+            "name": "/cancellation",
+            "value": 3
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,212 @@
+import { fireEvent, render } from '@testing-library/vue'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { page } from 'vitest/browser'
+import { nextTick } from 'vue'
+
+import { expectNoA11yViolations } from '../../../test/axe'
+import ArchitectureTabsSection, {
+  type ArchitectureTabsSectionTab
+} from './architecture-tabs-section.vue'
+
+const TESTID = 'architecture-tabs-section'
+const EYEBROW = 'Routing'
+const TITLE = 'Every AI request through one control point'
+const DESCRIPTION = 'Every client calls one endpoint.'
+const primaryAction = { label: 'Docs', href: '/docs', trailing: true }
+
+const tabs: ArchitectureTabsSectionTab[] = [
+  {
+    value: 'request-path',
+    title: 'Request path',
+    description: 'A call crosses Firewall before it reaches a model.',
+    diagram: 'ai-gateway'
+  },
+  {
+    value: 'failover',
+    title: 'Provider failover',
+    description: 'The gateway moves to the next model on the alias.',
+    diagram: 'ai-gateway-provider-failover'
+  },
+  {
+    value: 'cache',
+    title: 'Response cache',
+    description: 'A repeated prompt is answered from cache.',
+    diagram: 'ai-gateway-response-cache'
+  }
+]
+
+const band = (props: Record<string, unknown> = {}) =>
+  render(ArchitectureTabsSection, {
+    props: {
+      eyebrow: EYEBROW,
+      title: TITLE,
+      description: DESCRIPTION,
+      tabsSide: 'bottom',
+      tabs,
+      primaryAction,
+      ...props
+    }
+  })
+
+const tabButtons = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll<HTMLButtonElement>('li h3 button'))
+
+const isShown = (button?: Element) =>
+  button?.getAttribute('aria-selected') === 'true' ||
+  button?.getAttribute('aria-expanded') === 'true'
+
+describe('ArchitectureTabsSection', () => {
+  it('renders the band under the default testid', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+  })
+
+  it('lets a consumer data-testid win over the fallback', () => {
+    const { getByTestId, queryByTestId } = render(ArchitectureTabsSection, {
+      props: { title: TITLE, tabs },
+      attrs: { 'data-testid': 'routing-band' }
+    })
+
+    expect(getByTestId('routing-band')).toBeInTheDocument()
+    expect(queryByTestId(TESTID)).toBeNull()
+  })
+
+  it('names the section by its title and renders it as the h2', () => {
+    const { getByRole, getByText } = band()
+
+    expect(getByRole('region', { name: TITLE })).toBeInTheDocument()
+    expect(getByRole('heading', { level: 2, name: TITLE })).toBeInTheDocument()
+    expect(getByText(EYEBROW)).toBeInTheDocument()
+    expect(getByText(DESCRIPTION)).toBeInTheDocument()
+  })
+
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'platform-architecture' })
+
+    expect(getByTestId(TESTID).id).toBe('platform-architecture')
+  })
+
+  it('renders no id when the anchor is empty', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(TESTID).hasAttribute('id')).toBe(false)
+  })
+
+  it('renders no header and leaves the section unnamed when no title is set', () => {
+    const { getByTestId, queryByRole } = band({ title: '' })
+
+    expect(queryByRole('heading', { level: 2 })).toBeNull()
+    expect(getByTestId(TESTID).hasAttribute('aria-label')).toBe(false)
+  })
+
+  it('renders one tab per entry, in order', () => {
+    const { container } = band()
+
+    expect(
+      tabButtons(container as HTMLElement).map((button) => button.textContent?.trim())
+    ).toEqual(tabs.map((tab) => tab.title))
+  })
+
+  it('forwards the tabs side to the tab row', () => {
+    const { getByTestId } = band({ tabsSide: 'start' })
+
+    expect(getByTestId('media-tabs').getAttribute('data-tabs-side')).toBe('start')
+  })
+
+  it('draws the named diagram of every tab', () => {
+    const { container } = band()
+
+    const names = Array.from(container.querySelectorAll('[data-testid="diagram"]')).map((diagram) =>
+      diagram.getAttribute('data-name')
+    )
+    tabs.forEach((tab) => expect(names).toContain(tab.diagram))
+  })
+
+  it('names a diagram by its tab diagramAriaLabel', () => {
+    const label = 'Requests routed through the gateway to three model providers'
+    const { container } = band({
+      tabs: [{ ...tabs[0], diagramAriaLabel: label }, tabs[1]]
+    })
+
+    const labelled = Array.from(container.querySelectorAll('[data-testid="diagram"]')).filter(
+      (diagram) => diagram.getAttribute('data-name') === tabs[0]?.diagram
+    )
+    expect(labelled.length).toBeGreaterThan(0)
+    labelled.forEach((diagram) => expect(diagram.getAttribute('aria-label')).toBe(label))
+  })
+
+  it('moves the active tab on click', async () => {
+    const { container } = band()
+
+    const buttons = tabButtons(container as HTMLElement)
+    expect(isShown(buttons[0])).toBe(true)
+    await fireEvent.click(buttons[1] as HTMLButtonElement)
+    expect(isShown(tabButtons(container as HTMLElement)[1])).toBe(true)
+    expect(isShown(tabButtons(container as HTMLElement)[0])).toBe(false)
+  })
+
+  it('links the primary action', () => {
+    const { getByRole } = band()
+
+    expect(getByRole('link', { name: primaryAction.label }).getAttribute('href')).toBe(
+      primaryAction.href
+    )
+  })
+
+  it('renders no button when no action is set', () => {
+    const { queryByRole } = band({ primaryAction: undefined })
+
+    expect(queryByRole('link')).toBeNull()
+  })
+
+  it('renders only the section when tabs is empty', () => {
+    const { getByTestId, queryByRole, queryByTestId } = band({ tabs: [] })
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+    expect(queryByRole('heading', { level: 2 })).toBeNull()
+    expect(queryByTestId('media-tabs')).toBeNull()
+  })
+
+  describe('autoplay timing', () => {
+    beforeEach(async () => {
+      await page.viewport(1280, 800)
+      await vi.waitFor(() => expect(window.matchMedia('(min-width: 64rem)').matches).toBe(true))
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    const activeAfter = async (props: Record<string, unknown>, ms: number) => {
+      vi.useFakeTimers()
+      const { container } = band(props)
+      vi.advanceTimersByTime(ms)
+      await nextTick()
+      return tabButtons(container as HTMLElement).findIndex((button) => isShown(button))
+    }
+
+    it('holds each tab for autoplayInterval', async () => {
+      expect(await activeAfter({ autoplayInterval: 1000 }, 1000)).toBe(1)
+    })
+
+    it('ignores the removed interval prop', async () => {
+      expect(await activeAfter({ interval: 1000 }, 1000)).toBe(0)
+    })
+
+    it('stays on the first tab with autoplay off', async () => {
+      expect(await activeAfter({ autoplay: false, autoplayInterval: 1000 }, 3000)).toBe(0)
+    })
+
+    it('carries the composed pause control', () => {
+      const { getByRole } = band()
+      expect(getByRole('button', { name: 'Pause rotation' })).toBeInTheDocument()
+    })
+  })
+
+  it('has no a11y violations', async () => {
+    const { container } = band()
+
+    await expectNoA11yViolations(container)
+  })
+})

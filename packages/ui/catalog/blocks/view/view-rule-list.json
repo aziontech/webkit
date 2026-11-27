@@ -1,0 +1,66 @@
+{
+ "variants": [
+  {
+   "name": "Firewall",
+   "summary": "A firewall's rules: one Request phase, five rules and no locked rule, so every rule moves; the page says rules run until one refuses the request.",
+   "file": "blocks/view/view-rule-list/variants/firewall.vue"
+  },
+  {
+   "name": "ReviewChanges",
+   "summary": "After two moves and one rule turned on: the SaveBar counts the changes and the Review changes dialog is open, listing Docs rewrite moving from 5 to 3 (and the rules it pushed down), Maintenance page turned on, and Security headers moving to the top of the Response phase.",
+   "file": "blocks/view/view-rule-list/variants/review-changes.vue"
+  },
+  {
+   "name": "SaveError",
+   "summary": "The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; pressing it emits `save` once more, and when `saving` turns off with no `saveError` the dialog closes with the success toast.",
+   "file": "blocks/view/view-rule-list/variants/save-error.vue"
+  },
+  {
+   "name": "Searching",
+   "summary": "A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.",
+   "file": "blocks/view/view-rule-list/variants/searching.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "A firewall with no rules: the Request phase panel shows a small EmptyState with Add rule instead of the table.",
+   "file": "blocks/view/view-rule-list/variants/empty.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.",
+   "file": "blocks/view/view-rule-list/variants/loading.vue"
+  },
+  {
+   "name": "LoadError",
+   "summary": "The rules could not load: the heading and the disabled search stay, Add rule is disabled, and a danger Alert with Retry takes the phases' place.",
+   "file": "blocks/view/view-rule-list/variants/load-error.vue"
+  },
+  {
+   "name": "EditRule",
+   "summary": "The list composed with `edit/edit-rule-builder`: a rule's name opens the large edit-rule-builder `Drawer` as Edit rule, seeded with that rule's criteria and behaviors and its phase locked; Add rule in the header (or in an empty phase) opens it as Add rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches.",
+   "file": "blocks/view/view-rule-list/variants/edit-rule.vue"
+  }
+ ],
+ "sfcFile": "blocks/view/view-rule-list/view-rule-list.vue",
+ "guidelinesFile": "blocks/view/view-rule-list/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "composables/use-behavior-drag.ts",
+  "composables/use-narrow-viewport.ts",
+  "composables/use-rule-behaviors.ts",
+  "composables/use-rule-builder-form.ts",
+  "composables/use-rule-editing.ts",
+  "composables/use-rule-list-announcement.ts",
+  "composables/use-rule-list-draft.ts",
+  "composables/use-rule-list-position.ts",
+  "composables/use-rule-list-reorder.ts",
+  "lib/rule-builder.ts",
+  "lib/rule-list.ts",
+  "parts/rule-behaviors-card.vue",
+  "parts/rule-builder-drawer.vue",
+  "parts/rule-criteria-editor.vue",
+  "parts/rule-move-cell.vue",
+  "parts/rule-phase-table.vue",
+  "parts/rule-review-dialog.vue"
+ ]
+}

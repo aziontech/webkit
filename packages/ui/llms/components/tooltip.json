@@ -1,0 +1,122 @@
+{
+ "name": "tooltip",
+ "binding": "Tooltip",
+ "import": "@aziontech/ui/tooltip",
+ "treeShakeableImport": "@aziontech/ui/tooltip",
+ "category": "overlay",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `popover` instead.",
+ "setup": null,
+ "useWhen": [
+  "Use Tooltip for a one-line plain-text name or hint on a control, shown on hover or focus; it cannot hold links. For rich or interactive content opened by a click use Popover; for a read-only rich preview on hover use HoverCard.",
+  "Naming an icon-only control on hover and focus.",
+  "Revealing the full text of a truncated label, or expanding an abbreviation.",
+  "One short, plain-text hint that the user can do without."
+ ],
+ "avoidWhen": [
+  "The content has links, buttons or more than one line of structure → use `popover`.",
+  "An explanation, an info glyph, or anything over a few words (about 80 characters) → use `hint`.",
+  "A read-only rich preview (a definition, a glossed term in documentation prose) → use `hover-card`.",
+  "Guidance or errors the user needs to complete a field → use `field-error`."
+ ],
+ "related": [
+  "`popover` — click-opened, interactive, with a header, body and footer.",
+  "`hint` — the info glyph that opens a short note on click; use it for explanations, never a tooltip.",
+  "`hover-card` — read-only rich preview on hover or focus; DocMarkdown's `<Tooltip>` tag renders one.",
+  "`icon-button` — the most common trigger; it still needs its own `ariaLabel`."
+ ],
+ "bestPractices": [
+  "Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.",
+  "Keep `content` to a few words (about 80 characters at most): a name, a shortcut or an abbreviation, as plain text. Never an explanation.",
+  "The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.",
+  "Use `disabled` to suppress the tooltip. An empty `content` also blocks opening, but it reads as a bug.",
+  "Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
+ ],
+ "props": [
+  {
+   "name": "content",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "Plain text shown inside the tooltip."
+  },
+  {
+   "name": "side",
+   "type": "'top' | 'bottom' | 'start' | 'end' | 'auto'",
+   "default": "'top'",
+   "required": "false",
+   "doc": "Side of the trigger the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time."
+  },
+  {
+   "name": "align",
+   "type": "'start' | 'center' | 'end'",
+   "default": "'center'",
+   "required": "false",
+   "doc": "Alignment along the trigger edge."
+  },
+  {
+   "name": "sideOffset",
+   "type": "number",
+   "default": "8",
+   "required": "false",
+   "doc": "Pixel gap between the trigger and the tooltip."
+  },
+  {
+   "name": "delay",
+   "type": "number",
+   "default": "200",
+   "required": "false",
+   "doc": "Hover-open delay in milliseconds."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables tooltip activation."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The trigger element. Tooltip anchors to its bounding box."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/tooltip/default.vue"
+  },
+  {
+   "name": "Placements",
+   "file": "examples/tooltip/placements.vue"
+  },
+  {
+   "name": "AutoPlacement",
+   "file": "examples/tooltip/auto-placement.vue"
+  }
+ ],
+ "docs": "components/tooltip.md"
+}

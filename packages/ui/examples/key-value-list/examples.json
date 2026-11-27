@@ -1,0 +1,42 @@
+{
+  "component": "key-value-list",
+  "title": "Components/Content/KeyValueList",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The facts band of a resource detail page: an ID with its copy button, a status, the creation date, a region and a linked domain, in one column.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Columns",
+      "summary": "The same facts at 2, 3 and 4 columns. Below md every grid collapses to one column, and 3 or 4 columns fall back to two at md.",
+      "file": "columns.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "Facts split into titled columns, one group per column. The Region key carries an info hint, and the custom certificate has no value, so it shows the empty-value marker.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the data loads, every value becomes a skeleton and the labels stay in place, so the layout does not jump when the values arrive.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Split",
+      "summary": "A subscription plan card with `variant=\"split\"`: each label at the start and its value at the end of one row, the way a summary card reads. The payment method is not set, so it shows the empty-value marker.",
+      "file": "split.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same facts written in a docs page: `DocMarkdown` turns a `<KeyValueList>` tag with `<KeyValueListItem label=\"…\">` tags inside into a real `KeyValueList`. Each value is the text between the item tags, with inline Markdown (`**bold**`, `` `code` ``, links); an empty item shows the empty-value marker.",
+      "file": "markdown.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same facts in the marketing site's page JSON: `KeyValueList` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"`). Its items are the scene's `children`, and each item's value is a text child.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
+    }
+  ]
+}

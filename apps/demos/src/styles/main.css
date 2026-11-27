@@ -1,0 +1,22 @@
+:root {
+  --demo-bar-height: 4rem;
+  --demo-viewport-height: calc(100dvh - var(--demo-bar-height));
+  --toast-offset-bottom: var(--demo-bar-height);
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--bg-canvas);
+  color: var(--text-default);
+}
+
+body {
+  overflow-x: clip;
+}
+
+.azion {
+  font-family: Rubik, ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizelegibility;
+}

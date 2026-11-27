@@ -1,0 +1,36 @@
+{
+  "component": "page-header",
+  "title": "Components/Layout/PageHeader",
+  "examples": [
+    {
+      "name": "ListPage",
+      "summary": "A first-level list page: medium h1, one-line description, and the medium actions on the right, the outlined Documentation and the primary create action at one height; on a phone they stack, each at full width.",
+      "file": "default.vue"
+    },
+    {
+      "name": "SettingsPage",
+      "summary": "A settings sub-page or a detail tab: small title and description, no actions.",
+      "file": "settings-page.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three heading scales: large for a creation hub headline, medium for a first-level page, small for detail tabs and settings sub-pages.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "DetailPage",
+      "summary": "A resource detail header: the `breadcrumbs` trail above, a decorative `icon` before the title, status tags in `meta` beside it, the actions on the right and the section `tabs` across the bottom.",
+      "file": "detail-page.vue"
+    },
+    {
+      "name": "RichDescription",
+      "summary": "The `description` slot carries inline actions — Buttons with `variant=\"link\"` — when one plain sentence is not enough.",
+      "file": "rich-description.vue"
+    },
+    {
+      "name": "WithInfo",
+      "summary": "Page help: `ConsoleLayout.ToolsTrigger` first in the `meta` slot puts the `Info` link right after the title, on the same line. Inside `ConsoleLayout` it opens the page's `HelpPanel` in the tools region; here, rendered alone, it only emits `click`.",
+      "file": "with-info.vue"
+    }
+  ]
+}

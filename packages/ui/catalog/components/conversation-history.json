@@ -1,0 +1,24 @@
+{
+ "purpose": "The chat list of an assistant, in a side panel or a `Drawer` on phones: rows grouped by last activity (Today, Yesterday, Previous 7 days, Previous 30 days, Older) or by status (Working, Settled), the open one current, pinned chats on top, an optional Projects section of folders that expand in place, and on top a New chat row, a search field or a toolbar whose Search button opens the app's palette. A row is a title or a rich row (tag, description, age, status); per-row actions (pin, rename, share, lock, move, archive, delete) sit on hover and in a `DropdownMenu`. Choosing a row sets `v-model` to its id.",
+ "useWhen": [
+  "An assistant keeps past conversations and the person returns to one.",
+  "The left rail or a drawer of a chat page."
+ ],
+ "avoidWhen": [
+  "Messages of the open conversation → `Conversation`.",
+  "Navigation between product areas → `Sidebar` or `NavigationMenu`.",
+  "A searchable table of records → `TableRoot`."
+ ],
+ "related": [
+  "`conversation` — shows the conversation the history selects.",
+  "`drawer` — holds the history on narrow screens."
+ ],
+ "bestPractices": [
+  "Title each conversation from its first prompt, short.",
+  "Put it beside the conversation on wide screens and in a start-side `Drawer` on phones; close the drawer from `update:modelValue` and `create`.",
+  "Fix `now` on the app's `ConfigProvider` (or here) so groups and ages match on the server and the client.",
+  "The component never changes `items`: apply each action event to the data (flip `pinned`, `archived`, `locked`, set `projectId`, the new `title`).",
+  "Never delete on the first tap: open a `ConfirmDialog` from `remove` / `project-remove`, or remove at once and offer Undo.",
+  "With `showToolbar`, open the app's `Command` palette from `search-open`; a mounted `Command` claims ⌘K, so the Search button does not bind it twice."
+ ]
+}

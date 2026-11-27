@@ -1,0 +1,256 @@
+import { cpSync, createReadStream, existsSync, readFileSync, statSync } from 'node:fs'
+import { dirname, extname, join, normalize, relative } from 'node:path'
+
+import type { Plugin, ResolvedConfig } from 'vite'
+
+import { FOUNDATION_SLUGS } from '../src/lib/foundations.ts'
+import {
+  buildAssets,
+  buildComponent,
+  buildIndex,
+  buildTokens,
+  highlight,
+  highlighter,
+  navIndex,
+  renderGuidelinesFile,
+  renderMarkdownFile
+} from './content.ts'
+import { CATALOG, LLMS, readCatalog, SKILLS, THEME, walk, AZION_UI } from './paths.ts'
+
+const INDEX = 'virtual:docs-index'
+const NAV = 'virtual:docs-nav'
+const TOKENS = 'virtual:docs-tokens'
+const ASSETS = 'virtual:docs-assets'
+const ASSET_LLMS = ['illustrations', 'brand-marks']
+const LOADERS = 'virtual:docs-component-loaders'
+const COMPONENT = 'virtual:docs-component:'
+const EXAMPLE_LOADERS = 'virtual:docs-example-loaders'
+const EXAMPLES = 'virtual:docs-examples:'
+const BLOCK_LOADERS = 'virtual:docs-block-loaders'
+const BLOCK = 'virtual:docs-block-files:'
+const EXAMPLES_DIR = join(AZION_UI, 'examples')
+const BLOCKS_DIR = join(AZION_UI, 'blocks')
+const HIGHLIGHT = '\0docs-highlight:'
+const MARKDOWN = '\0docs-markdown:'
+const GUIDELINES = '\0docs-guidelines:'
+
+const STATIC_DIRS: { prefix: string; dir: string }[] = [
+  { prefix: '/llms/', dir: LLMS },
+  { prefix: '/skills/', dir: SKILLS }
+]
+
+const PROPOSALS: { route: string; file: string }[] = [
+  {
+    route: '/proposal/error-pages.html',
+    file: join(AZION_UI, 'docs/reviews/error-page-alternatives.html')
+  },
+  {
+    route: '/proposal/date-picker.html',
+    file: join(AZION_UI, 'docs/reviews/date-picker-proposal.html')
+  },
+  {
+    route: '/proposal/diagram.html',
+    file: join(AZION_UI, 'docs/reviews/diagram-proposal.html')
+  },
+  {
+    route: '/proposal/date-picker-compact.html',
+    file: join(AZION_UI, 'docs/reviews/date-picker-compact-proposal.html')
+  }
+]
+
+const MIME: Record<string, string> = {
+  '.html': 'text/html; charset=utf-8',
+  '.md': 'text/markdown; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+  '.mp4': 'video/mp4'
+}
+
+function exampleFiles(): Map<string, string[]> {
+  const byDir = new Map<string, string[]>()
+  for (const file of walk(EXAMPLES_DIR, (name) => /\.(vue|json)$/.test(name))) {
+    const dir = relative(EXAMPLES_DIR, dirname(file))
+    byDir.set(dir, [...(byDir.get(dir) ?? []), file])
+  }
+  return byDir
+}
+
+function loaderMap(entries: [string, string][]): string {
+  return `{\n${entries.map(([key, value]) => `  ${JSON.stringify(key)}: ${value}`).join(',\n')}\n}`
+}
+
+const importDefault = (id: string) => `() => import(${JSON.stringify(id)}).then((m) => m.default)`
+
+function examplesModule(dir: string): string {
+  const files = (exampleFiles().get(dir) ?? []).map((file) => [
+    relative(join(EXAMPLES_DIR, dir), file),
+    file
+  ])
+  const components = files.filter(([name]) => name.endsWith('.vue'))
+  return [
+    `export const components = ${loaderMap(components.map(([name, file]) => [name, importDefault(file)]))}`,
+    `export const sources = ${loaderMap(files.map(([name, file]) => [name, importDefault(`${file}?highlight`)]))}`
+  ].join('\n')
+}
+
+function blockModule(dir: string): string {
+  const block = buildIndex().blocks.find((item) => item.dir === dir)
+  const base = join(BLOCKS_DIR, dir)
+  const states = (block?.states ?? []).map((state) => [state.file, join(base, state.file)])
+  const guidelines = join(base, 'guidelines.md')
+  return [
+    `export const components = ${loaderMap(states.map(([name, file]) => [name, importDefault(file)]))}`,
+    `export const sources = ${loaderMap(states.map(([name, file]) => [name, importDefault(`${file}?highlight`)]))}`,
+    `export const manifest = ${importDefault(join(base, 'block.json'))}`,
+    `export const guidelines = ${existsSync(guidelines) ? importDefault(`${guidelines}?guidelines`) : 'undefined'}`
+  ].join('\n')
+}
+
+function languageOf(file: string): string {
+  const ext = extname(file).slice(1)
+  return ext === 'mjs' ? 'js' : ext
+}
+
+export function docsPlugin(): Plugin {
+  let config: ResolvedConfig
+  return {
+    name: 'azion-ui-docs',
+    enforce: 'pre',
+    configResolved(resolved) {
+      config = resolved
+    },
+    async resolveId(id, importer) {
+      if (
+        id === INDEX ||
+        id === NAV ||
+        id === TOKENS ||
+        id === ASSETS ||
+        id === LOADERS ||
+        id === EXAMPLE_LOADERS ||
+        id === BLOCK_LOADERS ||
+        id.startsWith(COMPONENT) ||
+        id.startsWith(EXAMPLES) ||
+        id.startsWith(BLOCK)
+      ) {
+        return `\0${id}`
+      }
+      const query = id.match(/\?(highlight|markdown|guidelines)$/)
+      if (query) {
+        const resolved = await this.resolve(id.slice(0, -query[0].length), importer, {
+          skipSelf: true
+        })
+        if (!resolved) return null
+        const prefix =
+          query[1] === 'highlight' ? HIGHLIGHT : query[1] === 'guidelines' ? GUIDELINES : MARKDOWN
+        return `${prefix}${resolved.id}.js`
+      }
+      return null
+    },
+    async load(id) {
+      if (id === `\0${NAV}`) {
+        this.addWatchFile(CATALOG)
+        return `export default ${JSON.stringify(navIndex(buildIndex(undefined, [...FOUNDATION_SLUGS, ...ASSET_LLMS])))}`
+      }
+      if (id === `\0${INDEX}`) {
+        this.addWatchFile(CATALOG)
+        return `export default ${JSON.stringify(buildIndex(undefined, [...FOUNDATION_SLUGS, ...ASSET_LLMS]))}`
+      }
+      if (id === `\0${TOKENS}`) {
+        this.addWatchFile(join(THEME, 'dist/globals.css'))
+        return `export default ${JSON.stringify(buildTokens())}`
+      }
+      if (id === `\0${ASSETS}`) {
+        this.addWatchFile(join(AZION_UI, 'catalog/assets/icons.json'))
+        return `export default ${JSON.stringify(buildAssets())}`
+      }
+      if (id === `\0${LOADERS}`) {
+        this.addWatchFile(CATALOG)
+        const { components } = buildIndex()
+        const lines = components.map(
+          (item) =>
+            `  ${JSON.stringify(item.name)}: () => import(${JSON.stringify(COMPONENT + item.name)})`
+        )
+        return `export default {\n${lines.join(',\n')}\n}`
+      }
+      if (id === `\0${EXAMPLE_LOADERS}`) {
+        const dirs = [...exampleFiles().keys()].sort()
+        for (const dir of dirs) this.addWatchFile(join(EXAMPLES_DIR, dir))
+        return `export default ${loaderMap(dirs.map((dir) => [dir, `() => import(${JSON.stringify(EXAMPLES + dir)})`]))}`
+      }
+      if (id.startsWith(`\0${EXAMPLES}`)) {
+        const dir = id.slice(EXAMPLES.length + 1)
+        this.addWatchFile(join(EXAMPLES_DIR, dir))
+        return examplesModule(dir)
+      }
+      if (id === `\0${BLOCK_LOADERS}`) {
+        const dirs = buildIndex().blocks.map((block) => block.dir)
+        return `export default ${loaderMap(dirs.map((dir) => [dir, `() => import(${JSON.stringify(BLOCK + dir)})`]))}`
+      }
+      if (id.startsWith(`\0${BLOCK}`)) {
+        const dir = id.slice(BLOCK.length + 1)
+        this.addWatchFile(join(BLOCKS_DIR, dir, 'block.json'))
+        return blockModule(dir)
+      }
+      if (id.startsWith(`\0${COMPONENT}`)) {
+        this.addWatchFile(CATALOG)
+        const data = await buildComponent(id.slice(COMPONENT.length + 1), readCatalog())
+        return `export default ${JSON.stringify(data)}`
+      }
+      if (id.startsWith(HIGHLIGHT)) {
+        const file = id.slice(HIGHLIGHT.length, -3)
+        this.addWatchFile(file)
+        const code = readFileSync(file, 'utf8').trimEnd()
+        const html = highlight(await highlighter(), code, languageOf(file))
+        return `export default ${JSON.stringify({ code, html })}`
+      }
+      if (id.startsWith(GUIDELINES)) {
+        const file = id.slice(GUIDELINES.length, -3)
+        this.addWatchFile(file)
+        return `export default ${JSON.stringify(await renderGuidelinesFile(file))}`
+      }
+      if (id.startsWith(MARKDOWN)) {
+        const file = id.slice(MARKDOWN.length, -3)
+        this.addWatchFile(file)
+        return `export default ${JSON.stringify(await renderMarkdownFile(file))}`
+      }
+      return null
+    },
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = decodeURIComponent((req.url ?? '').split('?')[0])
+        const proposal = PROPOSALS.find((item) => item.route === url)
+        if (proposal && existsSync(proposal.file)) {
+          res.setHeader('Content-Type', MIME['.html'])
+          createReadStream(proposal.file).pipe(res)
+          return
+        }
+        for (const { prefix, dir } of STATIC_DIRS) {
+          if (!url.startsWith(prefix)) continue
+          const file = normalize(join(dir, url.slice(prefix.length)))
+          if (!file.startsWith(dir) || !existsSync(file) || !statSync(file).isFile()) continue
+          res.setHeader('Content-Type', MIME[extname(file)] ?? 'application/octet-stream')
+          createReadStream(file).pipe(res)
+          return
+        }
+        next()
+      })
+    },
+    writeBundle() {
+      if (config.build.ssr) return
+      const out = config.build.outDir
+      if (existsSync(LLMS)) {
+        cpSync(LLMS, join(out, 'llms'), { recursive: true })
+        if (existsSync(join(LLMS, 'llms.txt')))
+          cpSync(join(LLMS, 'llms.txt'), join(out, 'llms.txt'))
+      }
+      if (existsSync(SKILLS)) cpSync(SKILLS, join(out, 'skills'), { recursive: true })
+      for (const { route, file } of PROPOSALS) {
+        if (existsSync(file)) cpSync(file, join(out, route))
+      }
+    }
+  }
+}

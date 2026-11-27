@@ -1,0 +1,41 @@
+{
+  "component": "console-layout",
+  "title": "Components/Layout/ConsoleLayout",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The console chrome around a list page: navigation as data with a drill level and a Preview badge, the breadcrumb, Create and Agent in the actions slot (icon-only while compact), recent resources in the ⌘K palette and the account menu, whose choice (pointer or keyboard) arrives through `@account-select`. The page body is only the slot content.",
+      "file": "default.vue"
+    },
+    {
+      "name": "PageOpensSearch",
+      "summary": "A page inside the layout opens the shared ⌘K palette from its own button with `useConsoleLayout().openSearch()`; it never mounts a second palette.",
+      "file": "page-opens-search.vue"
+    },
+    {
+      "name": "NavigationOpen",
+      "summary": "`v-model:navigation-open` binds the rail: a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot folds and restores it, and the app can persist the value. Press ⌘K (Ctrl K off Apple) and choose Collapse sidebar to fold the rail.",
+      "file": "navigation-open.vue"
+    },
+    {
+      "name": "PageBreadcrumbs",
+      "summary": "A detail page body sets its own trail with `ConsoleLayout.Breadcrumb`: Applications and the application as crumbs, then the environment as a control crumb, a `Select` with `variant=\"ghost\"` and `size=\"small\"`. While the page is mounted its trail replaces the layout's `breadcrumbs`; it is cleared when the page unmounts.",
+      "file": "page-breadcrumbs.vue"
+    },
+    {
+      "name": "FillPage",
+      "summary": "A workspace page body whose root carries `data-layout-fill`: the layout's main becomes a fixed-height region under the header that does not scroll, the body fills it, and its own panes scroll. Below 768px the panes stack (`orientation=\"vertical\"`), because two side-by-side panes on a phone leave neither readable.",
+      "file": "fill-page.vue"
+    },
+    {
+      "name": "SidebarHeader",
+      "summary": "An account switcher in the `sidebar-header` slot: full width in the rail under the wordmark, with the organization's generated mark and name; while the layout is compact the slot renders nothing and the same switcher, mark and chevron only, moves to `header-leading`.",
+      "file": "sidebar-header.vue"
+    },
+    {
+      "name": "HelpInfo",
+      "summary": "Page help: `ConsoleLayout.ToolsTrigger` first in `PageHeader`'s `meta` slot puts the `Info` link right after the title, and opens and closes the layout's tools region (`v-model:tools-open`), whose `tools` slot holds the page's `HelpPanel` topic. The trigger carries `aria-expanded` and `aria-controls`; the region's close button and the link both close it.",
+      "file": "help-info.vue"
+    }
+  ]
+}

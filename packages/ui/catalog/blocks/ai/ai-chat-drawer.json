@@ -1,0 +1,32 @@
+{
+ "variants": [
+  {
+   "name": "Streaming",
+   "summary": "The drawer open on a response streaming in about the 502 errors of the workload behind it, with the caret, Stop in the composer and the busy region.",
+   "file": "blocks/ai/ai-chat-drawer/variants/streaming.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "A response that failed mid-stream inside the drawer: the partial text, the error line and Try again.",
+   "file": "blocks/ai/ai-chat-drawer/variants/error.vue"
+  },
+  {
+   "name": "LongThread",
+   "summary": "Six earlier turns about the workload in the narrow drawer: the log opens on the newest response and Scroll to the latest message returns after scrolling up.",
+   "file": "blocks/ai/ai-chat-drawer/variants/long-thread.vue"
+  }
+ ],
+ "sfcFile": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
+ "guidelinesFile": "blocks/ai/ai-chat-drawer/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "parts/ai-chat-connection-status.vue",
+  "parts/ai-chat-media-segment.vue",
+  "parts/ai-chat-tool-segment.vue",
+  "parts/ai-chat-turn.vue",
+  "parts/drawer-chat-composer.vue",
+  "parts/drawer-chat-header.vue",
+  "parts/drawer-chat-start.vue",
+  "parts/workload-overview.vue"
+ ]
+}

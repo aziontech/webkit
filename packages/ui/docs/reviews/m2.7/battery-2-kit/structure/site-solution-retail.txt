@@ -1,0 +1,213 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Shopping experiences that convert']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ Retail
+      h1 "Shopping experiences that convert"
+      p "Deploy fast, secure storefronts on distributed infrastructure designed for high-stakes retail experiences. Handle peak events, prevent fraud, and lower cloud costs without overprovisioning."
+      button "Start free" → https://console.azion.com/signup
+      button "Talk to a specialist" → https://www.azion.com/en/contact/
+[marketing-section-container width=site]
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Speed that converts"
+          p "Deliver fast storefront experiences with consistent page speed and Core Web Vitals, lifting conversion, SEO visibility, and average order value across web and mobile."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Built for peak season"
+          p "Stay online during Black Friday, Cyber Monday, and flash sales with automatic scaling and a distributed architecture that absorbs traffic surges without overprovisioning."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Security built in"
+          p "Protect transactions, customer data, and storefront availability with DDoS mitigation, WAF, and zero trust controls integrated into the same distributed architecture."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Fraud and bots blocked"
+          p "Block bots, scraping, credential stuffing, account takeover, and payment fraud with bot management and application security applied before requests reach your origin."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "AI-powered personalization"
+          p "Deliver tailored recommendations, search, and content with AI Inference and Functions executed at request time, improving conversion without round-tripping to centralized origins."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Lower costs at scale"
+          p "Offload origin traffic, optimize images, and serve cached responses from a distributed architecture to cut cloud, egress, and CDN costs while scaling automatically with demand."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-solutions kind=media-end]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='E-commerce']
+          h2 "E-commerce"
+          p "Build secure storefronts that protect checkout and account flows while maintaining fast, reliable experiences under peak traffic."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-e-commerce-storefronts/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Account takeover protection']
+          h2 "Account takeover protection"
+          p "Score every login, signup, and checkout request for automation, and stop credential stuffing and card testing."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/block-account-takeover-on-login-and-checkout-flows/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Image processing']
+          h2 "Image processing"
+          p "Image Processor resizes, crops, and converts images on the fly to the size and format each page needs, and Azion caches every variant. You keep just one original per image."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/optimize-images-for-websites-and-mobile-apps/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Content delivery network (CDN)']
+          h2 "Content delivery network (CDN)"
+          p "Put Azion in front of your origin. Cacheable content is served from Azion's CDN, close to your users, and requests that still need the origin get there faster. Your application stays right where it is."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/accelerate-websites-and-apis-with-a-cdn/
+  · section-gap (hatched spacer band)
+  [block-template-gallery]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Quick start with templates']
+        text: // ⏎ Your stack, your way
+        h2 "Quick start with templates"
+        p "Launch storefronts faster with pre-built templates and starter kits for headless commerce, marketing pages, and product catalogs. Deploy complete projects in seconds with popular frameworks."
+        button "Deploy now" → https://www.azion.com/en/documentation/platform/marketplace/templates/#application-development
+        [layout-scroll-area orientation=vertical aria-label='Templates you can deploy']
+          [marketing-card-grid kind=frame columns=2 mobile-columns=1 filled=true]
+            [marketing-card-grid-cell]
+              text: Astro E-commerce ⏎ Astro storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/astro-ecommerce-collection/
+            [marketing-card-grid-cell]
+              text: Azion Starter Kit ⏎ Basic stack to explore Azion Web Platform.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/azion-starter-kit/
+            [marketing-card-grid-cell]
+              text: Book Store React ⏎ Storefront built with React.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/book-store-react/
+            [marketing-card-grid-cell]
+              text: Eleventy E-commerce ⏎ Eleventy storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/eleventy-ecommerce-collection/
+            [marketing-card-grid-cell]
+              text: Gatsby E-commerce Theme ⏎ Storefront built with Gatsby.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/gatsby-ecommerce-theme/
+            [marketing-card-grid-cell]
+              text: Hugo E-commerce ⏎ Hugo storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/hugo-ecommerce-collection/
+            [marketing-card-grid-cell]
+              text: Jekyll E-commerce ⏎ Jekyll storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/jekyll-ecommerce-collection/
+            [marketing-card-grid-cell]
+              text: Next.js E-commerce ⏎ Next.js storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/next-js-ecommerce-collection/
+      [marketing-section-module kind=left]
+        [marketing-ticker kind=plain size=small content=marks]
+          text "Compatible with Your Stack"
+          list (30): Next.js · Astro · React · Vue · Angular · Nuxt · Gatsby · Hugo · Preact · Remix · Qwik · Vite · VitePress · Docusaurus · Eleventy · Hexo · Jekyll · Hono · Node.js · AWS · Google Cloud · Azure · Cloudflare Workers · Terraform · GitHub · OpenAI · Anthropic · Groq · SQLite · Drizzle
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          blockquote "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
+          figcaption "Julian H. IT OPS, SRE & SEC Manager at Dafiti Group"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-compliance-badges]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Security and compliance for high-stakes digital experiences']
+        text: // ⏎ Scale with confidence
+        h2 "Security and compliance for high-stakes digital experiences"
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Security and Compliance for High-Stakes Digital Experiences']
+          [marketing-card-grid-cell]
+            img "AICPA SOC 2 Type 2 and SOC 3 badge"
+            text "SOC 2 & 3"
+          [marketing-card-grid-cell]
+            img "PCI DSS badge"
+            text "PCI DSS"
+          [marketing-card-grid-cell]
+            img "LGPD badge"
+            text "LGPD"
+          [marketing-card-grid-cell]
+            img "GDPR badge"
+            text "GDPR"
+          [marketing-card-grid-cell]
+            img "CCPA badge"
+            text "CCPA"
+          [marketing-card-grid-cell]
+            link "See more" → /en/compliance/
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Serverless AI-native primitives for autonomous workloads']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Serverless AI-native primitives for autonomous workloads"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-recognition-marquee aria-label='Recognized as a market leader']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        text: // ⏎ Recognition and awards
+        h2 "Recognized as a market leader"
+      list (4): Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools. G2 Spring 2026 Reports · Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions. G2 Winter 2026 Reports · Named a Leader and the only platform purpose-built for the edge, whose capabilities meet all key criteria in the report. GigaOm Radar for Edge Platforms · Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations. 2023 North American New Product Innovation Award
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently asked questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What types of storefronts can I build and deploy on Azion?"
+          [content-accordion-item]
+            h3 "Which frameworks are compatible?"
+          [content-accordion-item]
+            h3 "How do preview deployments work?"
+          [content-accordion-item]
+            h3 "Can I personalize pages without hurting performance?"
+          [content-accordion-item]
+            h3 "Can I integrate my existing commerce platform, CMS, and APIs?"
+          [content-accordion-item]
+            h3 "How does Azion help with SEO and Core Web Vitals?"
+          [content-accordion-item]
+            h3 "What happens during peak shopping events like Black Friday?"
+          [content-accordion-item]
+            h3 "Can I migrate gradually from my current cloud or CDN setup?"
+          [content-accordion-item]
+            h3 "Is Azion ready for enterprise compliance requirements?"
+          [content-accordion-item]
+            h3 "How do I get started quickly?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-primary kind=primary]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=primary aria-label='Build, secure, and scale applications everywhere.']
+        [marketing-section-title kind=centered size=large]
+          h2 "Build, secure, and scale applications everywhere."
+          p "Get faster launches, lower latency, and less infrastructure overhead from day one."
+          button "Start free" → https://console.azion.com/signup?tck=generic_cta
+          button "Talk to a specialist" → https://www.azion.com/en/contact/

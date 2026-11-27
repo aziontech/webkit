@@ -1,0 +1,168 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Make your applications fast and always reliable']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ Performance and Reliability
+      h1 "Make your applications fast and always reliable"
+      p "Serve websites, web apps, and APIs from Azion's globally distributed infrastructure, keep them online when an origin fails, and cut origin load and egress costs during your biggest traffic peaks."
+      button "Start free" → https://console.azion.com/signup
+      button "Talk to a specialist" → https://www.azion.com/en/contact/
+[marketing-section-container width=site]
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Global resilience beyond anycast"
+          p "Azion's software-defined global router steers traffic around failures and network degradation faster than BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Low latency everywhere"
+          p "Compute, AI, databases, and security run across all data centers, close to your users, keeping median global latency under 30 ms, with a built-in CDN and tiered caching for every app."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Zero-ops autoscaling and failover"
+          p "Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Tune delivery, not your origin"
+          p "Instantly change how each request is cached, routed, and answered without editing your application or waiting for the next release."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Lower cost at scale"
+          p "Requests served before they reach your origin never show up on your cloud bill. What speeds up your pages also cuts compute and egress costs."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Detect anomalies instantly"
+          p "Spot traffic spikes and error surges as they happen, so you can react before issues impact your business."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-solutions kind=media-end]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Content delivery network (CDN)']
+          h2 "Content delivery network (CDN)"
+          p "Put Azion in front of your origin. Cacheable content is served from Azion's CDN, close to your users, and requests that still need the origin get there faster. Your application stays right where it is."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/accelerate-websites-and-apis-with-a-cdn/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Load balancing and failover']
+          h2 "Load balancing and failover"
+          p "Load Balancer spreads requests across two or more origins, shifts traffic away from any origin that fails, and supports primary and backup origins for active-passive setups."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/keep-an-application-online-when-an-origin-fails/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Image processing']
+          h2 "Image processing"
+          p "Image Processor resizes, crops, and converts images on the fly to the size and format each page needs, and Azion caches every variant. You keep just one original per image."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/optimize-images-for-websites-and-mobile-apps/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Performance monitoring']
+          h2 "Performance monitoring"
+          p "Collect real-user metrics from browsers and a log of every request, with no agents on your servers. Query the data in real time or stream it to the observability tools your team already uses."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/monitor-website-and-api-performance/
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          blockquote "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
+          figcaption "Julian H. IT OPS, SRE & SEC Manager at Dafiti Group"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Serverless AI-native primitives for autonomous workloads']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Serverless AI-native primitives for autonomous workloads"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-network-section kind=outcomes aria-label='One distributed infrastructure without the complexity of managing, securing, and scaling it']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=small]
+        text: // ⏎ Region: Earth.
+        h2 "One distributed infrastructure without the complexity of managing, securing, and scaling it"
+      p "Built around your users. Distributed around your data."
+      list (4): 100+ data centers · 100+ Tbps network capacity · 30 ms median latency · 100% availability
+      [marketing-card-grid kind=frame columns=4 mobile-columns=1 filled=true]
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img "Dafiti"
+            blockquote "86% faster load times , with a 45% cost reduction in data transfer."
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img "MadeiraMadeira"
+            blockquote "90% lower cloud costs and faster applications at scale."
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img "Renner"
+            blockquote "67% saved on data transfer, even during massive traffic spikes."
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img "Fourbank"
+            blockquote "DDoS mitigated on applications and APIs, with a programmable security layer."
+  · section-gap (hatched spacer band)
+  [block-recognition-marquee aria-label='Recognized as a market leader']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        text: // ⏎ Recognition and awards
+        h2 "Recognized as a market leader"
+      list (4): Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools. G2 Spring 2026 Reports · Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions. G2 Winter 2026 Reports · Named a Leader and the only platform purpose-built for the edge, whose capabilities meet all key criteria in the report. GigaOm Radar for Edge Platforms · Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations. 2023 North American New Product Innovation Award
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently asked questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "How does Azion speed up an application that runs in one cloud region?"
+          [content-accordion-item]
+            h3 "Do I need to move my application to use Azion?"
+          [content-accordion-item]
+            h3 "What happens when my origin fails?"
+          [content-accordion-item]
+            h3 "How does Azion reduce origin load and egress costs?"
+          [content-accordion-item]
+            h3 "How does Azion optimize images?"
+          [content-accordion-item]
+            h3 "How do I measure performance for real users?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Fast everywhere.']
+        text: // ⏎ Scale
+        h2 "Fast everywhere. Always reliable."
+        button "Start free" → https://console.azion.com/signup?tck=performance_cta
+        p "Get lower latency, less origin load, and fewer outages during your biggest traffic peaks."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

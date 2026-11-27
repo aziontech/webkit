@@ -1,0 +1,29 @@
+{
+  "component": "media-split-stack-section",
+  "title": "Components/Marketing/Sections/MediaSplitStackSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Five solution areas under a section title and description, every picture at the closing end. Each band carries its own overline; the AI band draws a live `ConsoleMockup` scene, and the performance band links as a whole to its own `href` while its button keeps its own. Under the section title each band headline is an `h3`. Clear the `title` to drop the header.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Product media",
+      "summary": "Bands whose pictures show the product itself: a ConsoleMockup console screen (`widget`), which plays its beat while the pointer is over the band, and a registry `illustration` of the product's metrics. The widget loads only when a band uses it.",
+      "file": "product-media.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Solutions",
+      "summary": "The five solution areas of Home: large, centered bands, every picture at the closing end, each with an outlined \"Learn more\" button.",
+      "file": "site-solutions.vue",
+      "json": "site-solutions.json"
+    }
+  ],
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Solutions", "SolutionsJson"]
+}

@@ -1,0 +1,94 @@
+{
+ "name": "feature-tiles-section",
+ "binding": "FeatureTilesSection",
+ "import": "@aziontech/ui/feature-tiles-section",
+ "treeShakeableImport": "@aziontech/ui/feature-tiles-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each a registry illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles-section', props }` entry and binds `props` straight onto it — and it composes `module`, `module-header`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.",
+ "setup": null,
+ "useWhen": [
+  "Use FeatureTilesSection for a static set of picture tiles.",
+  "To state three or four reasons to buy, each with a picture, under a product or pricing argument."
+ ],
+ "avoidWhen": [
+  "For linked use cases or a grid of claims without pictures → use `capability-grid-section`.",
+  "For a scroll-driven walkthrough with one screen per feature → use `feature-scroll-section`."
+ ],
+ "related": [
+  "`media-tile` — the picture-over-copy cell each tile is rendered with.",
+  "`feature-widgets-section` — the sibling band whose cells carry an action each."
+ ],
+ "bestPractices": [
+  "Match the tile count to the variant: four tiles for `artwork`, three for `illustrated`.",
+  "Give a tile its art as `illustration`, a name of the illustration registry; a tile without one renders without a picture. `scale` sizes the illustration in its frame.",
+  "Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band."
+ ],
+ "props": [
+  {
+   "name": "variant",
+   "type": "FeatureTilesSectionVariant",
+   "default": "'artwork'",
+   "required": "false",
+   "doc": "Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Eyebrow above the section title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting sentence under the headline."
+  },
+  {
+   "name": "tiles",
+   "type": "FeatureTilesSectionTile[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid above the caption, and `scale` its media scale."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [
+  {
+   "kind": "illustrations",
+   "page": "foundations/illustrations.md"
+  }
+ ],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/feature-tiles-section/default.vue"
+  },
+  {
+   "name": "Variants",
+   "file": "examples/feature-tiles-section/variants.vue"
+  }
+ ],
+ "docs": "components/feature-tiles-section.md"
+}

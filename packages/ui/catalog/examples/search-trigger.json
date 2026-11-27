@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The field-shaped button that opens the command palette, with its ⌘K / Ctrl K keycap.",
+   "file": "examples/search-trigger/default.vue"
+  },
+  {
+   "name": "Collapsible",
+   "summary": "The same trigger in a narrow and a wide container: folded to the magnifier, then the full field.",
+   "file": "examples/search-trigger/collapsible.vue"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled: out of the tab order and no click.",
+   "file": "examples/search-trigger/disabled.vue"
+  }
+ ]
+}

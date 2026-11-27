@@ -4,18 +4,15 @@
     "allow": [
       "Bash(pnpm install)",
       "Bash(pnpm install:*)",
-      "Bash(pnpm webkit:lint)",
-      "Bash(pnpm webkit:lint:*)",
-      "Bash(pnpm webkit:type-check)",
-      "Bash(pnpm webkit:type-coverage)",
-      "Bash(pnpm webkit:format)",
-      "Bash(pnpm webkit:format:check)",
-      "Bash(pnpm storybook:build)",
-      "Bash(pnpm storybook:dev)",
-      "Bash(pnpm storybook:preview)",
-      "Bash(pnpm icons:build)",
-      "Bash(pnpm icons:validate)",
-      "Bash(pnpm governance)",
+      "Bash(pnpm lint:ui)",
+      "Bash(pnpm lint:ui:*)",
+      "Bash(pnpm typecheck:ui)",
+      "Bash(pnpm check:ui:type-coverage)",
+      "Bash(pnpm format:ui)",
+      "Bash(pnpm check:ui:format)",
+      "Bash(pnpm build:icons)",
+      "Bash(pnpm check:icons)",
+      "Bash(pnpm gates)",
       "Bash(pnpm --filter:*)",
       "Bash(npx prettier:*)",
       "Bash(npx eslint:*)",
@@ -42,19 +39,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-tokens.mjs"
+            "command": "node contributing/hooks/validate-tokens.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-references.mjs"
+            "command": "node contributing/hooks/validate-references.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-story-source.mjs"
+            "command": "node contributing/hooks/validate-authoring.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-authoring.mjs"
+            "command": "node contributing/hooks/validate-naming.mjs"
           }
         ]
       },
@@ -63,11 +60,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/enforce-component-create.mjs"
+            "command": "node contributing/hooks/enforce-component-create.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/enforce-spec-exists.mjs"
+            "command": "node contributing/hooks/enforce-spec-exists.mjs"
           }
         ]
       }
@@ -78,15 +75,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-spec-compliance.mjs"
+            "command": "node contributing/hooks/validate-spec-compliance.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/enforce-test-exists.mjs"
+            "command": "node contributing/hooks/enforce-test-exists.mjs"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/validate-authoring-docs.mjs"
+            "command": "node contributing/hooks/validate-authoring-docs.mjs"
           }
         ]
       }

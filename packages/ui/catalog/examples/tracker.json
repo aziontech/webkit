@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Ninety days of uptime for an application: one degraded day, one partial outage, and a last day with no data yet. Hover a block, or focus the strip and use the arrow keys, to read its day.",
+   "file": "examples/tracker/default.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "A Skeleton strip holds the place of the blocks while the history loads.",
+   "file": "examples/tracker/loading.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "No periods for the range: the strip renders one neutral block and is announced as No data.",
+   "file": "examples/tracker/empty.vue"
+  }
+ ]
+}

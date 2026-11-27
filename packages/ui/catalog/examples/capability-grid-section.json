@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Three capabilities in a framed grid under a section title with one action. A grid with no items renders nothing.",
+   "file": "examples/capability-grid-section/default.vue"
+  },
+  {
+   "name": "Points",
+   "summary": "Four capabilities at four columns, each with two bullet points under its sentence.",
+   "file": "examples/capability-grid-section/points.vue"
+  },
+  {
+   "name": "Left title",
+   "summary": "`titleAlign: 'start'` sets the section title at the start edge over the grid; the capabilities stay `h3` under the band's `h2`.",
+   "file": "examples/capability-grid-section/title-start.vue"
+  }
+ ]
+}

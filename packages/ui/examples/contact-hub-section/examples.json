@@ -1,0 +1,29 @@
+{
+  "component": "contact-hub-section",
+  "title": "Components/Marketing/Sections/ContactHubSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Contact page band: Sales and Support lanes, Support with its system status link, over three self-serve channels. A band with no lanes and no channels renders nothing.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Secondary action",
+      "summary": "The Sales lane leads with its action and adds an outlined second button; two channels share the frame under the lanes, and the band carries an anchor for #hash links.",
+      "file": "secondary-action.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "Sales and Support lanes over three self-serve channels: emergency attack mitigation, the Discord community and the documentation.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default overline label without prefix or cursor.",
+   "file": "examples/eyebrow/default.vue"
+  },
+  {
+   "name": "Prefixes",
+   "summary": "All preset prefixes side by side: `//`, `<>`, and `</>`.",
+   "file": "examples/eyebrow/prefixes.vue"
+  },
+  {
+   "name": "Cursor",
+   "summary": "Blinking terminal-style cursor at the end of the text, shown with and without a prefix.",
+   "file": "examples/eyebrow/cursor.vue"
+  }
+ ]
+}

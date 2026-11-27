@@ -1,0 +1,12 @@
+dist
+*.min.css
+node_modules
+*.d.ts
+*.d.ts.map
+coverage
+catalog.json
+scripts/api-snapshot.json
+/catalog/
+CHANGELOG.md
+llms/
+docs/migration-v6-maps.md

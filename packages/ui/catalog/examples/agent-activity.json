@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "An agent at work: the running step shows with a spinner and the file it reads, and `4 steps` expands the two finished steps and the one still pending.",
+   "file": "examples/agent-activity/default.vue"
+  },
+  {
+   "name": "Statuses",
+   "summary": "Every status of the shared set in the open list: done, failed with its reason, running, canceled, skipped and pending.",
+   "file": "examples/agent-activity/statuses.vue"
+  },
+  {
+   "name": "Streaming",
+   "summary": "Run the agent and the steps tick over: each one runs, then turns done while the next starts, and screen readers hear a step only once it stays current for a second.",
+   "file": "examples/agent-activity/streaming.vue"
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "texture": "none",
+    "eyebrow": "Workloads",
+    "title": "One place for every workload",
+    "description": "A card frames a short summary in the band."
+  },
+  "scenes": {
+    "scene": {
+      "component": "Card",
+      "props": {
+        "title": "Production"
+      },
+      "children": [
+        "Serves shop.example.com from 120 locations, with the cache on and the firewall in blocking mode."
+      ]
+    }
+  }
+}

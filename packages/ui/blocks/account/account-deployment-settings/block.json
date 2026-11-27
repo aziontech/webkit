@@ -1,0 +1,63 @@
+{
+  "id": "account/account-deployment-settings",
+  "name": "AccountDeploymentSettings",
+  "title": "Blocks/Account/AccountDeploymentSettings",
+  "surface": "app",
+  "summary": "The account's Build and deployment settings. A `PageHeader` with Documentation and the primary Create Deployment Setting, a closable info `Alert` that explains what a Deployment Setting is, then three `SettingsGroup`s. New service defaults: a flush `Card` of `SettingsRow`s in an `Item.List` with a binding policy `Select`, a deployment policy `Select` and an Apply to existing `Switch`, saved through a `SaveBar` that appears only with unsaved changes (Discard, Save). All services: a collapsible `Accordion` whose trigger counts the services and tags how many share a setting; inside, a search `Input` (a small `EmptyState` with Clear search when nothing matches) and, ten services per page with `Pagination`, one row per environment with environment and policy `Tag`s, a `Select` that rebinds it to a matching Deployment Setting (inactive ones disabled), and Linked automatically and Shared `Tag`s; a rebind ends in a toast that warns when the setting now reaches several services. Deployment Settings: the view-table controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s with a `Tooltip`, `CollectionPreferences`) over a `DataTable` on one `useCollection` (Name with a System `Tag` for Default, Services with a Shared `Tag` and the service names on a `Tooltip`, Type hidden by default, Binding policy, Deployment policy, `TableCellStatus`, `TableCellTime` for Last modified, `TableCellActions` with Edit, Clone and Delete behind a `ConfirmDialog`). Create and Edit open a large `Drawer` form (Name, Description, Active `Switch`, binding and deployment policy `RadioGroup`s). Loading draws `Skeleton`s; no services draws an `EmptyState`. Its toasts go through `toast` into the app's one toast region. A page body for ConsoleLayout, rendered in its default slot.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "build and deployment",
+    "deployment settings",
+    "deployment defaults",
+    "binding policy",
+    "deployment policy",
+    "environment bindings",
+    "rebind environment",
+    "shared deployment setting",
+    "build e deploy",
+    "configurações de deploy",
+    "padrões de deploy",
+    "política de deploy",
+    "vincular ambiente"
+  ],
+  "skills": [
+    "azion-ui-form",
+    "azion-ui-tables",
+    "azion-ui-lists",
+    "azion-ui-states",
+    "azion-ui-microcopy"
+  ],
+  "primary": {
+    "name": "Default",
+    "file": "account-deployment-settings.vue"
+  },
+  "files": [
+    "sample.ts",
+    "deployment-policies.ts",
+    "parts/deployment-defaults-group.vue",
+    "parts/deployment-save-bar.vue",
+    "parts/deployment-services-group.vue",
+    "parts/deployment-setting-drawer.vue",
+    "parts/deployment-settings-table.vue"
+  ],
+  "variants": [
+    {
+      "name": "UnsavedChanges",
+      "summary": "The binding policy default changed from Strict to Flexible: the SaveBar says You have unsaved changes. with Discard and Save; Save confirms with a toast and Discard puts the saved value back.",
+      "file": "variants/unsaved-changes.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "An account with no service yet: All services shows a small EmptyState and the Deployment Settings table holds only Default.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: Skeletons in place of the default Selects and the services, and the table's loading rows.",
+      "file": "variants/loading.vue"
+    }
+  ]
+}

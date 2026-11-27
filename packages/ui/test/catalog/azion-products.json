@@ -1,0 +1,178 @@
+{
+  "source": "azioncorp/azion-ai-toolkit: teams/shared/knowledge-base/company-definitions/product-naming.md (Product Catalog and Deprecated Names)",
+  "lastUpdated": "2026-11-18",
+  "categories": ["Build", "Store", "Secure", "Observe"],
+  "products": [
+    {
+      "category": "Build",
+      "product": "AI Inference"
+    },
+    {
+      "category": "Build",
+      "product": "Application Accelerator"
+    },
+    {
+      "category": "Build",
+      "product": "Cache"
+    },
+    {
+      "category": "Build",
+      "product": "Durable Objects"
+    },
+    {
+      "category": "Build",
+      "product": "Functions"
+    },
+    {
+      "category": "Build",
+      "product": "Image Processor"
+    },
+    {
+      "category": "Build",
+      "product": "Live Ingest"
+    },
+    {
+      "category": "Build",
+      "product": "LoRA Fine-Tune"
+    },
+    {
+      "category": "Build",
+      "product": "Orchestrator"
+    },
+    {
+      "category": "Store",
+      "product": "KV Store"
+    },
+    {
+      "category": "Store",
+      "product": "Object Storage"
+    },
+    {
+      "category": "Store",
+      "product": "SQL Database"
+    },
+    {
+      "category": "Secure",
+      "product": "AI Gateway"
+    },
+    {
+      "category": "Secure",
+      "product": "Bot Manager"
+    },
+    {
+      "category": "Secure",
+      "product": "Edge DNS"
+    },
+    {
+      "category": "Secure",
+      "product": "Load Balancer"
+    },
+    {
+      "category": "Secure",
+      "product": "Network Shield"
+    },
+    {
+      "category": "Secure",
+      "product": "Origin Shield"
+    },
+    {
+      "category": "Secure",
+      "product": "Secure Internet Access"
+    },
+    {
+      "category": "Secure",
+      "product": "Web Application Firewall (WAF)",
+      "shortName": "WAF",
+      "icon": "waf"
+    },
+    {
+      "category": "Observe",
+      "product": "Data Stream"
+    },
+    {
+      "category": "Observe",
+      "product": "Edge Pulse"
+    },
+    {
+      "category": "Observe",
+      "product": "Real-Time Events"
+    }
+  ],
+  "deprecatedNames": [
+    {
+      "deprecated": "Edge Application",
+      "official": "Applications",
+      "type": "Platform resource"
+    },
+    {
+      "deprecated": "Edge Firewall",
+      "official": "Firewall",
+      "type": "Platform resource"
+    },
+    {
+      "deprecated": "Edge Connector",
+      "official": "Connectors",
+      "type": "Platform resource"
+    },
+    {
+      "deprecated": "Real-Time Manager",
+      "official": "Console",
+      "type": "Platform resource"
+    },
+    {
+      "deprecated": "Edge AI",
+      "official": "AI Inference",
+      "type": "Build product"
+    },
+    {
+      "deprecated": "Application Acceleration",
+      "official": "Application Accelerator",
+      "type": "Build product"
+    },
+    {
+      "deprecated": "Edge Cache",
+      "official": "Cache",
+      "type": "Build product"
+    },
+    {
+      "deprecated": "Edge Functions",
+      "official": "Functions",
+      "type": "Build product"
+    },
+    {
+      "deprecated": "Image Processing",
+      "official": "Image Processor",
+      "type": "Build product"
+    },
+    {
+      "deprecated": "Edge Orchestrator",
+      "official": "Orchestrator",
+      "type": "Build product"
+    },
+    {
+      "deprecated": "Edge KV",
+      "official": "KV Store",
+      "type": "Store product"
+    },
+    {
+      "deprecated": "Edge Storage",
+      "official": "Object Storage",
+      "type": "Store product"
+    },
+    {
+      "deprecated": "Edge SQL",
+      "official": "SQL Database",
+      "type": "Store product"
+    },
+    {
+      "deprecated": "Network Layer Protection",
+      "official": "Network Shield",
+      "type": "Secure product"
+    },
+    {
+      "deprecated": "Data Streaming",
+      "official": "Data Stream",
+      "type": "Observe product"
+    }
+  ]
+}

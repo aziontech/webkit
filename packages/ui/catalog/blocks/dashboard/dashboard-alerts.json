@@ -1,0 +1,28 @@
+{
+ "variants": [
+  {
+   "name": "Loading",
+   "summary": "While the period loads, the tiles, the chart, the bar list and both tables render their own Skeleton, and Open by severity holds Skeleton rows, so nothing reflows when data arrives.",
+   "file": "blocks/dashboard/dashboard-alerts/variants/loading.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "A period with no alerts. The tiles print 0 with no delta, and one bordered page-level EmptyState, No alerts in the last 30 days with Show the last 90 days as the next step, replaces the cards.",
+   "file": "blocks/dashboard/dashboard-alerts/variants/empty.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
+   "file": "blocks/dashboard/dashboard-alerts/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/dashboard/dashboard-alerts/dashboard-alerts.vue",
+ "guidelinesFile": "blocks/dashboard/dashboard-alerts/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "parts/alerts-card.vue",
+  "parts/entity-table.vue",
+  "parts/open-alert-table.vue",
+  "parts/open-by-severity.vue"
+ ]
+}

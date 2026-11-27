@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A finished response in Markdown: a heading, bold and inline code, a numbered list with a nested list, a table, a fenced code block drawn as a filled CodeBlock card with its language and copy in the header, and a quote.",
+   "file": "examples/streaming-response/default.vue"
+  },
+  {
+   "name": "Streaming",
+   "summary": "Tokens arriving: the text grows every few milliseconds with a blinking caret at the end, the region is busy, and the code fence stays plain until it closes. Replay restarts it.",
+   "file": "examples/streaming-response/streaming.vue"
+  },
+  {
+   "name": "WithCitations",
+   "summary": "Citations in the text resolve against the sources: each `[n]` becomes a chip with the site's mark and name, and a run such as `[2][3]` one chip with `+1`. A chip opens a card with the source's title and snippet; the Sources pill under the response lists them all.",
+   "file": "examples/streaming-response/with-citations.vue"
+  }
+ ]
+}

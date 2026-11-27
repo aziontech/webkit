@@ -1,0 +1,50 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "eyebrow": "Firewall",
+    "title": "Know where attacks come from",
+    "description": "Blocked threat requests by country, this week."
+  },
+  "scenes": {
+    "scene": {
+      "component": "DonutChart",
+      "props": {
+        "ariaLabel": "Top WAF threat requests by country",
+        "totalLabel": "Blocked threats",
+        "series": [
+          {
+            "id": "United States",
+            "name": "United States",
+            "values": [48210]
+          },
+          {
+            "id": "United Kingdom",
+            "name": "United Kingdom",
+            "values": [31620]
+          },
+          {
+            "id": "Germany",
+            "name": "Germany",
+            "values": [18930]
+          },
+          {
+            "id": "India",
+            "name": "India",
+            "values": [12480]
+          },
+          {
+            "id": "Netherlands",
+            "name": "Netherlands",
+            "values": [9370]
+          },
+          {
+            "id": "Singapore",
+            "name": "Singapore",
+            "values": [6120]
+          }
+        ]
+      }
+    }
+  }
+}

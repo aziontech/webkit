@@ -1,0 +1,6985 @@
+{
+ "items": [
+  {
+   "name": "az-ai-gateway",
+   "class": "az az-ai-gateway",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "AI Gateway",
+   "product": "AI Gateway",
+   "keywords": [
+    "artificial intelligence",
+    "llm",
+    "model",
+    "proxy",
+    "api",
+    "routing"
+   ]
+  },
+  {
+   "name": "az-ai-inference",
+   "class": "az az-ai-inference",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "AI Inference",
+   "product": "AI Inference",
+   "keywords": [
+    "artificial intelligence",
+    "llm",
+    "model",
+    "serverless ai",
+    "edge ai"
+   ]
+  },
+  {
+   "name": "az-application-accelerator",
+   "class": "az az-application-accelerator",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Application Accelerator",
+   "product": "Application Accelerator",
+   "keywords": [
+    "performance",
+    "speed",
+    "product",
+    "app accelerator"
+   ]
+  },
+  {
+   "name": "az-applications",
+   "class": "az az-applications",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Applications",
+   "product": "Applications",
+   "keywords": [
+    "app",
+    "delivery",
+    "cache",
+    "rules",
+    "edge application"
+   ]
+  },
+  {
+   "name": "az-bot-manager",
+   "class": "az az-bot-manager",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Bot Manager",
+   "product": "Bot Manager",
+   "keywords": [
+    "robot",
+    "automation",
+    "security"
+   ]
+  },
+  {
+   "name": "az-certificate-manager",
+   "class": "az az-certificate-manager",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Certificate Manager",
+   "product": "Certificate Manager",
+   "keywords": [
+    "tls",
+    "ssl",
+    "security",
+    "https"
+   ]
+  },
+  {
+   "name": "az-connectors",
+   "class": "az az-connectors",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Connectors",
+   "product": "Connectors",
+   "keywords": [
+    "integration",
+    "origin",
+    "edge connectors"
+   ]
+  },
+  {
+   "name": "az-custom-pages",
+   "class": "az az-custom-pages",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Custom Pages",
+   "product": "Custom Pages",
+   "keywords": [
+    "product"
+   ]
+  },
+  {
+   "name": "az-data-stream",
+   "class": "az az-data-stream",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Data Stream",
+   "product": "Data Stream",
+   "keywords": [
+    "logs",
+    "events"
+   ]
+  },
+  {
+   "name": "az-durable-objects",
+   "class": "az az-durable-objects",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Durable Objects",
+   "product": "Durable Objects",
+   "keywords": [
+    "product"
+   ]
+  },
+  {
+   "name": "az-edge-dns",
+   "class": "az az-edge-dns",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Edge DNS",
+   "product": "Edge DNS",
+   "keywords": [
+    "network",
+    "distributed",
+    "domain",
+    "name server",
+    "zone",
+    "records"
+   ]
+  },
+  {
+   "name": "az-orchestrator",
+   "class": "az az-orchestrator",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Orchestrator",
+   "product": "Orchestrator",
+   "keywords": [
+    "infrastructure",
+    "deploy",
+    "edge orchestrator"
+   ]
+  },
+  {
+   "name": "az-edge-pulse",
+   "class": "az az-edge-pulse",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Edge Pulse",
+   "product": "Edge Pulse",
+   "keywords": [
+    "network",
+    "distributed"
+   ]
+  },
+  {
+   "name": "az-firewall",
+   "class": "az az-firewall",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Firewall",
+   "product": "Firewall",
+   "keywords": [
+    "security",
+    "waf",
+    "protection",
+    "edge firewall"
+   ]
+  },
+  {
+   "name": "az-functions",
+   "class": "az az-functions",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Functions",
+   "product": "Functions",
+   "keywords": [
+    "serverless",
+    "compute",
+    "code",
+    "edge functions"
+   ]
+  },
+  {
+   "name": "az-image-processor",
+   "class": "az az-image-processor",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Image Processor",
+   "product": "Image Processor",
+   "keywords": [
+    "picture",
+    "photo",
+    "media"
+   ]
+  },
+  {
+   "name": "az-kv-store",
+   "class": "az az-kv-store",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "KV Store",
+   "product": "KV Store",
+   "keywords": [
+    "key value",
+    "storage",
+    "shop",
+    "marketplace",
+    "edge kv"
+   ]
+  },
+  {
+   "name": "az-live-ingest",
+   "class": "az az-live-ingest",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Live Ingest",
+   "product": "Live Ingest",
+   "keywords": [
+    "product"
+   ]
+  },
+  {
+   "name": "az-load-balancer",
+   "class": "az az-load-balancer",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Load Balancer",
+   "product": "Load Balancer",
+   "keywords": [
+    "traffic",
+    "distribution",
+    "origin"
+   ]
+  },
+  {
+   "name": "az-marketplace",
+   "class": "az az-marketplace",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Marketplace",
+   "product": "Marketplace",
+   "keywords": [
+    "templates",
+    "store",
+    "integrations"
+   ]
+  },
+  {
+   "name": "az-network-lists",
+   "class": "az az-network-lists",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Network Lists",
+   "product": "Network Lists",
+   "keywords": [
+    "connectivity"
+   ]
+  },
+  {
+   "name": "az-object-storage",
+   "class": "az az-object-storage",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Object Storage",
+   "product": "Object Storage",
+   "keywords": [
+    "bucket",
+    "files",
+    "edge storage"
+   ]
+  },
+  {
+   "name": "az-real-time-events",
+   "class": "az az-real-time-events",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Real-Time Events",
+   "product": "Real-Time Events",
+   "keywords": [
+    "product"
+   ]
+  },
+  {
+   "name": "az-real-time-metrics",
+   "class": "az az-real-time-metrics",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Real-Time Metrics",
+   "product": "Real-Time Metrics",
+   "keywords": [
+    "analytics",
+    "observability",
+    "charts"
+   ]
+  },
+  {
+   "name": "az-real-time-purge",
+   "class": "az az-real-time-purge",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Real-Time Purge",
+   "product": "Real-Time Purge",
+   "keywords": [
+    "cache",
+    "clear",
+    "invalidate"
+   ]
+  },
+  {
+   "name": "az-sql-database",
+   "class": "az az-sql-database",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "SQL Database",
+   "product": "SQL Database",
+   "keywords": [
+    "query",
+    "data",
+    "storage",
+    "edge sql"
+   ]
+  },
+  {
+   "name": "az-variables",
+   "class": "az az-variables",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Variables",
+   "product": "Variables",
+   "keywords": [
+    "environment",
+    "env",
+    "config"
+   ]
+  },
+  {
+   "name": "az-waf",
+   "class": "az az-waf",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "WAF",
+   "product": "WAF",
+   "keywords": [
+    "web application firewall",
+    "security",
+    "rules",
+    "waf rules"
+   ]
+  },
+  {
+   "name": "az-workloads",
+   "class": "az az-workloads",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Workloads",
+   "product": "Workloads",
+   "keywords": [
+    "domains",
+    "deploy",
+    "traffic"
+   ]
+  },
+  {
+   "name": "az-domains",
+   "class": "az az-domains",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Domains (inside Workloads)",
+   "product": "Workloads",
+   "keywords": [
+    "dns",
+    "url",
+    "workload"
+   ]
+  },
+  {
+   "name": "az-edge-libraries",
+   "class": "az az-edge-libraries",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Edge Libraries, where Orchestrator keeps the services it can install",
+   "product": "Orchestrator",
+   "keywords": [
+    "network",
+    "distributed"
+   ]
+  },
+  {
+   "name": "az-edge-nodes",
+   "class": "az az-edge-nodes",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Edge Nodes, the servers Orchestrator manages",
+   "product": "Orchestrator",
+   "keywords": [
+    "network",
+    "distributed",
+    "infrastructure"
+   ]
+  },
+  {
+   "name": "az-edge-services",
+   "class": "az az-edge-services",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Edge Services, the services Orchestrator installs on an edge node",
+   "product": "Orchestrator",
+   "keywords": [
+    "network",
+    "distributed"
+   ]
+  },
+  {
+   "name": "az-rules-engine",
+   "class": "az az-rules-engine",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Rules Engine (part of Applications)",
+   "product": "Applications",
+   "keywords": [
+    "logic",
+    "conditions",
+    "behavior"
+   ]
+  },
+  {
+   "name": "az-ask-azion",
+   "class": "az az-ask-azion",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "Ask Azion (the Azion assistant)",
+   "keywords": [
+    "question",
+    "chat",
+    "brand",
+    "logo",
+    "company"
+   ]
+  },
+  {
+   "name": "az-azion",
+   "class": "az az-azion",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "Azion",
+   "keywords": [
+    "brand",
+    "logo",
+    "company"
+   ]
+  },
+  {
+   "name": "az-azion-api",
+   "class": "az az-azion-api",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "Azion API",
+   "keywords": [
+    "brand",
+    "logo",
+    "company",
+    "endpoint",
+    "integration",
+    "developer"
+   ]
+  },
+  {
+   "name": "az-azion-cli",
+   "class": "az az-azion-cli",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "Azion CLI",
+   "keywords": [
+    "brand",
+    "logo",
+    "company",
+    "terminal",
+    "command line",
+    "console"
+   ]
+  },
+  {
+   "name": "az-build-pillar",
+   "class": "az az-build-pillar",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Build pillar of the platform",
+   "keywords": [
+    "product family"
+   ]
+  },
+  {
+   "name": "az-deploy-pillar",
+   "class": "az az-deploy-pillar",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Deploy pillar of the platform",
+   "keywords": [
+    "release",
+    "publish",
+    "ship",
+    "product family"
+   ]
+  },
+  {
+   "name": "az-observe-pillar",
+   "class": "az az-observe-pillar",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Observe pillar of the platform",
+   "keywords": [
+    "observability",
+    "monitoring",
+    "product family"
+   ]
+  },
+  {
+   "name": "az-secure-pillar",
+   "class": "az az-secure-pillar",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Secure pillar of the platform",
+   "keywords": [
+    "security",
+    "protection",
+    "product family"
+   ]
+  },
+  {
+   "name": "az-store-pillar",
+   "class": "az az-store-pillar",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "platform",
+   "label": "The Store pillar of the platform",
+   "keywords": [
+    "shop",
+    "marketplace",
+    "product family"
+   ]
+  },
+  {
+   "name": "az-application-development",
+   "class": "az az-application-development",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Build and run applications (Application Development)",
+   "keywords": [
+    "web apps",
+    "websites",
+    "apis",
+    "serverless"
+   ]
+  },
+  {
+   "name": "az-performance-and-reliability",
+   "class": "az az-performance-and-reliability",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Improve application performance and reliability (Performance and Reliability)",
+   "keywords": [
+    "content delivery",
+    "speed",
+    "availability",
+    "uptime",
+    "cdn"
+   ]
+  },
+  {
+   "name": "az-artificial-intelligence",
+   "class": "az az-artificial-intelligence",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Build and run AI workloads (Artificial Intelligence)",
+   "keywords": [
+    "inference",
+    "agents",
+    "machine learning"
+   ]
+  },
+  {
+   "name": "az-application-security",
+   "class": "az az-application-security",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Secure applications and networks (Application Security)",
+   "keywords": [
+    "protection",
+    "shield",
+    "abuse prevention",
+    "adaptive security",
+    "sase",
+    "network security",
+    "fraud",
+    "zero trust"
+   ]
+  },
+  {
+   "name": "az-media-and-streaming",
+   "class": "az az-media-and-streaming",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Deliver media and streaming content (Media and Streaming)",
+   "keywords": [
+    "video",
+    "live streaming",
+    "broadcast"
+   ]
+  },
+  {
+   "name": "az-retail",
+   "class": "az az-retail",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Retail (industry solution)",
+   "keywords": [
+    "ecommerce",
+    "commerce",
+    "store"
+   ]
+  },
+  {
+   "name": "az-technology",
+   "class": "az az-technology",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Technology (industry solution)",
+   "keywords": [
+    "tech companies",
+    "saas",
+    "software"
+   ]
+  },
+  {
+   "name": "az-financial-services",
+   "class": "az az-financial-services",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "solution",
+   "label": "Financial Services (industry solution)",
+   "keywords": [
+    "banking",
+    "fintech",
+    "payments",
+    "finance"
+   ]
+  },
+  {
+   "name": "az-business-support",
+   "class": "az az-business-support",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Business support plan",
+   "keywords": [
+    "help",
+    "service"
+   ]
+  },
+  {
+   "name": "az-configuration-service",
+   "class": "az az-configuration-service",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Configuration service (professional service)",
+   "keywords": [
+    "settings",
+    "preferences"
+   ]
+  },
+  {
+   "name": "az-integration-services",
+   "class": "az az-integration-services",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Integration services (professional service)",
+   "keywords": [
+    "service"
+   ]
+  },
+  {
+   "name": "az-practices-review",
+   "class": "az az-practices-review",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Best practices review (professional service)",
+   "keywords": [
+    "audit",
+    "pratices review"
+   ]
+  },
+  {
+   "name": "az-professional-services",
+   "class": "az az-professional-services",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Professional services",
+   "keywords": [
+    "service"
+   ]
+  },
+  {
+   "name": "az-security-team",
+   "class": "az az-security-team",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Security team (managed service)",
+   "keywords": [
+    "protection",
+    "shield"
+   ]
+  },
+  {
+   "name": "az-technical-account",
+   "class": "az az-technical-account",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Technical account manager",
+   "keywords": [
+    "service"
+   ]
+  },
+  {
+   "name": "az-technical-support",
+   "class": "az az-technical-support",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "service",
+   "label": "Technical support",
+   "keywords": [
+    "help",
+    "service"
+   ]
+  },
+  {
+   "name": "az-arrow-down",
+   "class": "az az-arrow-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move down or go down",
+   "keywords": [
+    "direction",
+    "navigate",
+    "sort down"
+   ]
+  },
+  {
+   "name": "az-arrow-down-0-1",
+   "class": "az az-arrow-down-0-1",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, 0 to 9",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort numeric down"
+   ]
+  },
+  {
+   "name": "az-arrow-down-1-0",
+   "class": "az az-arrow-down-1-0",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, 9 to 0",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort numeric down alt"
+   ]
+  },
+  {
+   "name": "az-arrow-down-a-z",
+   "class": "az az-arrow-down-a-z",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, A to Z",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort alpha down"
+   ]
+  },
+  {
+   "name": "az-arrow-down-left",
+   "class": "az az-arrow-down-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move toward the lower left",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-down-narrow-wide",
+   "class": "az az-arrow-down-narrow-wide",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, smallest first",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort amount down alt"
+   ]
+  },
+  {
+   "name": "az-arrow-down-right",
+   "class": "az az-arrow-down-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move toward the lower right",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-down-wide-narrow",
+   "class": "az az-arrow-down-wide-narrow",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, largest first",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort amount down"
+   ]
+  },
+  {
+   "name": "az-arrow-down-z-a",
+   "class": "az az-arrow-down-z-a",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, Z to A",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort alpha down alt"
+   ]
+  },
+  {
+   "name": "az-arrow-left",
+   "class": "az az-arrow-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go back or move left",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-right",
+   "class": "az az-arrow-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go forward or move right",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-left-to-line",
+   "class": "az az-arrow-left-to-line",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move all the way to the start",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-right-to-line",
+   "class": "az az-arrow-right-to-line",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move all the way to the end",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-right-left",
+   "class": "az az-arrow-right-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Swap or exchange",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "az-arrow-up",
+   "class": "az az-arrow-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move up or go up",
+   "keywords": [
+    "direction",
+    "navigate",
+    "sort up"
+   ]
+  },
+  {
+   "name": "az-arrow-up-0-1",
+   "class": "az az-arrow-up-0-1",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, 0 to 9",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort numeric up"
+   ]
+  },
+  {
+   "name": "az-arrow-up-1-0",
+   "class": "az az-arrow-up-1-0",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, 9 to 0",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort numeric up alt"
+   ]
+  },
+  {
+   "name": "az-arrow-up-a-z",
+   "class": "az az-arrow-up-a-z",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, A to Z",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort alpha up"
+   ]
+  },
+  {
+   "name": "az-arrow-up-left",
+   "class": "az az-arrow-up-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move toward the upper left",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-up-narrow-wide",
+   "class": "az az-arrow-up-narrow-wide",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending, smallest first",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort amount up alt"
+   ]
+  },
+  {
+   "name": "az-arrow-up-right",
+   "class": "az az-arrow-up-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Open externally or move toward the upper right",
+   "keywords": [
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-arrow-up-wide-narrow",
+   "class": "az az-arrow-up-wide-narrow",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending, largest first",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort amount up"
+   ]
+  },
+  {
+   "name": "az-arrow-up-z-a",
+   "class": "az az-arrow-up-z-a",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort Z to A, upwards",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move",
+    "sort alpha up alt"
+   ]
+  },
+  {
+   "name": "az-caret-down",
+   "class": "az az-caret-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Expand or open a dropdown",
+   "keywords": [
+    "arrow",
+    "triangle"
+   ]
+  },
+  {
+   "name": "az-caret-left",
+   "class": "az az-caret-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Previous or collapse left",
+   "keywords": [
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "az-caret-right",
+   "class": "az az-caret-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Next or expand right",
+   "keywords": [
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "az-caret-up",
+   "class": "az az-caret-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Collapse or move up",
+   "keywords": [
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "az-chevron-down",
+   "class": "az az-chevron-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Expand or open a menu downward",
+   "keywords": [
+    "arrow",
+    "collapse",
+    "direction",
+    "angle",
+    "angle down"
+   ]
+  },
+  {
+   "name": "az-chevron-left",
+   "class": "az az-chevron-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go back or previous",
+   "keywords": [
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "angle",
+    "angle left"
+   ]
+  },
+  {
+   "name": "az-chevron-right",
+   "class": "az az-chevron-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go forward or next",
+   "keywords": [
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "angle",
+    "angle right"
+   ]
+  },
+  {
+   "name": "az-chevron-up",
+   "class": "az az-chevron-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Collapse or move up",
+   "keywords": [
+    "arrow",
+    "expand",
+    "direction",
+    "angle",
+    "angle up"
+   ]
+  },
+  {
+   "name": "az-chevrons-down",
+   "class": "az az-chevrons-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Expand all or jump down",
+   "keywords": [
+    "double",
+    "arrow",
+    "first",
+    "last",
+    "direction",
+    "angle double down"
+   ]
+  },
+  {
+   "name": "az-chevrons-left",
+   "class": "az az-chevrons-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go to the first item or page",
+   "keywords": [
+    "double",
+    "arrow",
+    "last",
+    "direction",
+    "angle double left"
+   ]
+  },
+  {
+   "name": "az-chevrons-right",
+   "class": "az az-chevrons-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go to the last item or page",
+   "keywords": [
+    "double",
+    "arrow",
+    "first",
+    "direction",
+    "angle double right"
+   ]
+  },
+  {
+   "name": "az-chevrons-up",
+   "class": "az az-chevrons-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Collapse all or jump to the top",
+   "keywords": [
+    "double",
+    "arrow",
+    "first",
+    "last",
+    "direction",
+    "angle double up"
+   ]
+  },
+  {
+   "name": "az-circle-arrow-down",
+   "class": "az az-circle-arrow-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move down or download",
+   "keywords": [
+    "status",
+    "shape",
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-circle-arrow-left",
+   "class": "az az-circle-arrow-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go back or move left",
+   "keywords": [
+    "status",
+    "shape",
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-circle-arrow-right",
+   "class": "az az-circle-arrow-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Go forward or proceed",
+   "keywords": [
+    "status",
+    "shape",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "az-circle-arrow-up",
+   "class": "az az-circle-arrow-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move up or upload",
+   "keywords": [
+    "status",
+    "shape",
+    "direction",
+    "navigate"
+   ]
+  },
+  {
+   "name": "az-circle-chevron-down",
+   "class": "az az-circle-chevron-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Expand or show more below",
+   "keywords": [
+    "status",
+    "shape",
+    "arrow",
+    "collapse",
+    "direction",
+    "angle"
+   ]
+  },
+  {
+   "name": "az-circle-chevron-left",
+   "class": "az az-circle-chevron-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Previous",
+   "keywords": [
+    "status",
+    "shape",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "angle"
+   ]
+  },
+  {
+   "name": "az-circle-chevron-right",
+   "class": "az az-circle-chevron-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Next",
+   "keywords": [
+    "status",
+    "shape",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "angle"
+   ]
+  },
+  {
+   "name": "az-circle-chevron-up",
+   "class": "az az-circle-chevron-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Collapse or show less",
+   "keywords": [
+    "status",
+    "shape",
+    "arrow",
+    "expand",
+    "direction",
+    "angle"
+   ]
+  },
+  {
+   "name": "az-move",
+   "class": "az az-move",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move or drag in any direction",
+   "keywords": [
+    "reposition",
+    "arrows",
+    "arrows alt"
+   ]
+  },
+  {
+   "name": "az-move-horizontal",
+   "class": "az az-move-horizontal",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move or resize horizontally",
+   "keywords": [
+    "drag",
+    "reposition",
+    "arrows",
+    "arrows h"
+   ]
+  },
+  {
+   "name": "az-move-vertical",
+   "class": "az az-move-vertical",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Move or resize vertically",
+   "keywords": [
+    "drag",
+    "reposition",
+    "arrows",
+    "arrows v"
+   ]
+  },
+  {
+   "name": "az-sort",
+   "class": "az az-sort",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort",
+   "keywords": [
+    "order",
+    "arrange",
+    "sort alt"
+   ]
+  },
+  {
+   "name": "az-sort-down-fill",
+   "class": "az az-sort-down-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort descending",
+   "keywords": [
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "az-sort-off",
+   "class": "az az-sort-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sorting off, not sorted",
+   "keywords": [
+    "order",
+    "arrange",
+    "sort alt slash"
+   ]
+  },
+  {
+   "name": "az-sort-up-fill",
+   "class": "az az-sort-up-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "arrow",
+   "label": "Sort ascending",
+   "keywords": [
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "az-arrow-up-from-line",
+   "class": "az az-arrow-up-from-line",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Eject",
+   "keywords": [
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "az-circle-plus",
+   "class": "az az-circle-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Add or create",
+   "keywords": [
+    "status",
+    "shape",
+    "new"
+   ]
+  },
+  {
+   "name": "az-cloud-download",
+   "class": "az az-cloud-download",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Download from the cloud",
+   "keywords": [
+    "hosting",
+    "storage",
+    "save",
+    "export"
+   ]
+  },
+  {
+   "name": "az-cloud-upload",
+   "class": "az az-cloud-upload",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Upload to the cloud",
+   "keywords": [
+    "hosting",
+    "storage",
+    "import",
+    "send"
+   ]
+  },
+  {
+   "name": "az-copy",
+   "class": "az az-copy",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Copy",
+   "keywords": [
+    "duplicate",
+    "clipboard",
+    "clone"
+   ]
+  },
+  {
+   "name": "az-delete-left",
+   "class": "az az-delete-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Backspace, delete the previous character",
+   "keywords": [
+    "remove",
+    "erase"
+   ]
+  },
+  {
+   "name": "az-download",
+   "class": "az az-download",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Download",
+   "keywords": [
+    "save",
+    "export"
+   ]
+  },
+  {
+   "name": "az-eraser",
+   "class": "az az-eraser",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Erase or clear",
+   "keywords": [
+    "action"
+   ]
+  },
+  {
+   "name": "az-external-link",
+   "class": "az az-external-link",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Open in a new tab or external site",
+   "keywords": [
+    "link out",
+    "url",
+    "chain",
+    "hyperlink"
+   ]
+  },
+  {
+   "name": "az-eye",
+   "class": "az az-eye",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Show or view",
+   "keywords": [
+    "visible",
+    "preview"
+   ]
+  },
+  {
+   "name": "az-eye-off",
+   "class": "az az-eye-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Hide",
+   "keywords": [
+    "hidden",
+    "invisible",
+    "view",
+    "show",
+    "visible",
+    "preview",
+    "eye slash"
+   ]
+  },
+  {
+   "name": "az-filter",
+   "class": "az az-filter",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Filter a list",
+   "keywords": [
+    "funnel",
+    "refine",
+    "narrow",
+    "filter alt"
+   ]
+  },
+  {
+   "name": "az-filter-fill",
+   "class": "az az-filter-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Filter (active filter applied)",
+   "keywords": [
+    "funnel",
+    "refine",
+    "narrow"
+   ]
+  },
+  {
+   "name": "az-filter-off",
+   "class": "az az-filter-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Remove the filter",
+   "keywords": [
+    "funnel",
+    "refine",
+    "narrow",
+    "filter slash"
+   ]
+  },
+  {
+   "name": "az-history",
+   "class": "az az-history",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "History or recent activity",
+   "keywords": [
+    "audit",
+    "log"
+   ]
+  },
+  {
+   "name": "az-link",
+   "class": "az az-link",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Link or URL",
+   "keywords": [
+    "chain",
+    "hyperlink"
+   ]
+  },
+  {
+   "name": "az-log-in",
+   "class": "az az-log-in",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Sign in",
+   "keywords": [
+    "login",
+    "enter"
+   ]
+  },
+  {
+   "name": "az-log-out",
+   "class": "az az-log-out",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Sign out",
+   "keywords": [
+    "logout",
+    "exit"
+   ]
+  },
+  {
+   "name": "az-minus",
+   "class": "az az-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Remove, subtract or collapse",
+   "keywords": [
+    "action"
+   ]
+  },
+  {
+   "name": "az-pencil",
+   "class": "az az-pencil",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Edit",
+   "keywords": [
+    "write",
+    "rename"
+   ]
+  },
+  {
+   "name": "az-plus",
+   "class": "az az-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Add or create",
+   "keywords": [
+    "new"
+   ]
+  },
+  {
+   "name": "az-power-off",
+   "class": "az az-power-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Power off or shut down",
+   "keywords": [
+    "logout"
+   ]
+  },
+  {
+   "name": "az-refresh",
+   "class": "az az-refresh",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Refresh or reload",
+   "keywords": [
+    "sync",
+    "update"
+   ]
+  },
+  {
+   "name": "az-replay",
+   "class": "az az-replay",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Replay or restart from the beginning",
+   "keywords": [
+    "repeat",
+    "retry"
+   ]
+  },
+  {
+   "name": "az-save",
+   "class": "az az-save",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Save changes",
+   "keywords": [
+    "disk",
+    "store"
+   ]
+  },
+  {
+   "name": "az-scissors",
+   "class": "az az-scissors",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Cut",
+   "keywords": [
+    "scizors"
+   ]
+  },
+  {
+   "name": "az-search",
+   "class": "az az-search",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Search",
+   "keywords": [
+    "find",
+    "magnifier",
+    "lookup"
+   ]
+  },
+  {
+   "name": "az-settings",
+   "class": "az az-settings",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Open settings",
+   "keywords": [
+    "gear",
+    "cog",
+    "preferences",
+    "configuration"
+   ]
+  },
+  {
+   "name": "az-share",
+   "class": "az az-share",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Share",
+   "keywords": [
+    "send",
+    "social",
+    "share alt"
+   ]
+  },
+  {
+   "name": "az-square-pen",
+   "class": "az az-square-pen",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Edit",
+   "keywords": [
+    "write",
+    "pen to square"
+   ]
+  },
+  {
+   "name": "az-sync",
+   "class": "az az-sync",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Synchronize",
+   "keywords": [
+    "refresh"
+   ]
+  },
+  {
+   "name": "az-trash",
+   "class": "az az-trash",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Delete",
+   "keywords": [
+    "remove",
+    "bin"
+   ]
+  },
+  {
+   "name": "az-undo",
+   "class": "az az-undo",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Undo",
+   "keywords": [
+    "revert",
+    "back"
+   ]
+  },
+  {
+   "name": "az-upload",
+   "class": "az az-upload",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Upload",
+   "keywords": [
+    "import",
+    "send"
+   ]
+  },
+  {
+   "name": "az-x",
+   "class": "az az-x",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Close or dismiss",
+   "keywords": [
+    "cancel",
+    "times"
+   ]
+  },
+  {
+   "name": "az-zoom-in",
+   "class": "az az-zoom-in",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Zoom in",
+   "keywords": [
+    "magnify",
+    "scale",
+    "search plus"
+   ]
+  },
+  {
+   "name": "az-zoom-out",
+   "class": "az az-zoom-out",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "action",
+   "label": "Zoom out",
+   "keywords": [
+    "magnify",
+    "scale",
+    "search minus"
+   ]
+  },
+  {
+   "name": "az-attack",
+   "class": "az az-attack",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "An attack or threat",
+   "keywords": [
+    "security",
+    "ddos"
+   ]
+  },
+  {
+   "name": "az-ban",
+   "class": "az az-ban",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Not allowed or blocked",
+   "keywords": [
+    "block",
+    "forbidden",
+    "deny"
+   ]
+  },
+  {
+   "name": "az-check",
+   "class": "az az-check",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Done, confirmed or selected",
+   "keywords": [
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "az-circle",
+   "class": "az az-circle",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Unselected or inactive state",
+   "keywords": [
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-alert",
+   "class": "az az-circle-alert",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Warning or error alert",
+   "keywords": [
+    "exclamation",
+    "status",
+    "shape",
+    "notification",
+    "exclamation circle"
+   ]
+  },
+  {
+   "name": "az-circle-check",
+   "class": "az az-circle-check",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Success or completed",
+   "keywords": [
+    "status",
+    "shape",
+    "done",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "az-circle-fill",
+   "class": "az az-circle-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Active or status dot",
+   "keywords": [
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-half",
+   "class": "az az-circle-half",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Partial, half done; also light and dark contrast",
+   "keywords": [
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-help",
+   "class": "az az-circle-help",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Help or more information",
+   "keywords": [
+    "question",
+    "faq",
+    "status",
+    "shape",
+    "question circle"
+   ]
+  },
+  {
+   "name": "az-circle-info",
+   "class": "az az-circle-info",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Information",
+   "keywords": [
+    "status",
+    "shape",
+    "help",
+    "about"
+   ]
+  },
+  {
+   "name": "az-circle-minus",
+   "class": "az az-circle-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Remove, collapse",
+   "keywords": [
+    "status",
+    "shape",
+    "subtract"
+   ]
+  },
+  {
+   "name": "az-circle-off",
+   "class": "az az-circle-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Off, disabled or not available",
+   "keywords": [
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-on",
+   "class": "az az-circle-on",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "On or selected (radio state)",
+   "keywords": [
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "az-circle-x",
+   "class": "az az-circle-x",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Error, cancel or clear",
+   "keywords": [
+    "close",
+    "times",
+    "status",
+    "shape",
+    "times circle"
+   ]
+  },
+  {
+   "name": "az-disabled",
+   "class": "az az-disabled",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Disabled status",
+   "keywords": [
+    "off",
+    "inactive"
+   ]
+  },
+  {
+   "name": "az-enabled",
+   "class": "az az-enabled",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Enabled status",
+   "keywords": [
+    "on",
+    "active"
+   ]
+  },
+  {
+   "name": "az-hourglass",
+   "class": "az az-hourglass",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Waiting, pending or time running",
+   "keywords": [
+    "wait"
+   ]
+  },
+  {
+   "name": "az-info",
+   "class": "az az-info",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Information",
+   "keywords": [
+    "help",
+    "about"
+   ]
+  },
+  {
+   "name": "az-question",
+   "class": "az az-question",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Help or question",
+   "keywords": [
+    "faq",
+    "support"
+   ]
+  },
+  {
+   "name": "az-spinner",
+   "class": "az az-spinner",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Loading in progress",
+   "keywords": [
+    "busy"
+   ]
+  },
+  {
+   "name": "az-spinner-dotted",
+   "class": "az az-spinner-dotted",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Loading in progress",
+   "keywords": [
+    "busy"
+   ]
+  },
+  {
+   "name": "az-square-check",
+   "class": "az az-square-check",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Checked or selected",
+   "keywords": [
+    "checkbox",
+    "done",
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "az-triangle-alert",
+   "class": "az az-triangle-alert",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Warning",
+   "keywords": [
+    "exclamation",
+    "caution",
+    "notification",
+    "exclamation triangle"
+   ]
+  },
+  {
+   "name": "az-verified",
+   "class": "az az-verified",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "status",
+   "label": "Verified",
+   "keywords": [
+    "check",
+    "approved",
+    "badge",
+    "digital certificates"
+   ]
+  },
+  {
+   "name": "az-clipboard",
+   "class": "az az-clipboard",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Clipboard or paste",
+   "keywords": [
+    "copy"
+   ]
+  },
+  {
+   "name": "az-file",
+   "class": "az az-file",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "File or document",
+   "keywords": [
+    "page",
+    "file o"
+   ]
+  },
+  {
+   "name": "az-file-arrow-up",
+   "class": "az az-file-arrow-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Upload a file",
+   "keywords": [
+    "document",
+    "page",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "az-file-check",
+   "class": "az az-file-check",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "File approved or verified",
+   "keywords": [
+    "document",
+    "page",
+    "done",
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "az-file-excel",
+   "class": "az az-file-excel",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Spreadsheet or Excel file",
+   "keywords": [
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "az-file-export",
+   "class": "az az-file-export",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Export to a file",
+   "keywords": [
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "az-file-import",
+   "class": "az az-file-import",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Import from a file",
+   "keywords": [
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "az-file-pdf",
+   "class": "az az-file-pdf",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "PDF file",
+   "keywords": [
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "az-file-pen",
+   "class": "az az-file-pen",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Edit a file",
+   "keywords": [
+    "document",
+    "page",
+    "write"
+   ]
+  },
+  {
+   "name": "az-file-plus",
+   "class": "az az-file-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Create a new file",
+   "keywords": [
+    "document",
+    "page",
+    "add"
+   ]
+  },
+  {
+   "name": "az-file-word",
+   "class": "az az-file-word",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Word document file",
+   "keywords": [
+    "page"
+   ]
+  },
+  {
+   "name": "az-folder",
+   "class": "az az-folder",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Folder",
+   "keywords": [
+    "directory",
+    "files"
+   ]
+  },
+  {
+   "name": "az-folder-open",
+   "class": "az az-folder-open",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Open folder",
+   "keywords": [
+    "directory",
+    "files"
+   ]
+  },
+  {
+   "name": "az-folder-plus",
+   "class": "az az-folder-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Create a new folder",
+   "keywords": [
+    "directory",
+    "files",
+    "add"
+   ]
+  },
+  {
+   "name": "az-json",
+   "class": "az az-json",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "JSON or code object",
+   "keywords": [
+    "data",
+    "format"
+   ]
+  },
+  {
+   "name": "az-json-text",
+   "class": "az az-json-text",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "JSON as a file type",
+   "keywords": [
+    "data",
+    "format",
+    "code"
+   ]
+  },
+  {
+   "name": "az-paperclip",
+   "class": "az az-paperclip",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "file",
+   "label": "Attachment",
+   "keywords": [
+    "attach"
+   ]
+  },
+  {
+   "name": "az-backward",
+   "class": "az az-backward",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Rewind or skip back",
+   "keywords": [
+    "previous"
+   ]
+  },
+  {
+   "name": "az-camera",
+   "class": "az az-camera",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Take a photo",
+   "keywords": [
+    "picture"
+   ]
+  },
+  {
+   "name": "az-circle-pause",
+   "class": "az az-circle-pause",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Pause",
+   "keywords": [
+    "status",
+    "shape",
+    "stop",
+    "hold"
+   ]
+  },
+  {
+   "name": "az-circle-play",
+   "class": "az az-circle-play",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Play or start",
+   "keywords": [
+    "status",
+    "shape",
+    "run",
+    "video"
+   ]
+  },
+  {
+   "name": "az-circle-stop",
+   "class": "az az-circle-stop",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Stop",
+   "keywords": [
+    "status",
+    "shape",
+    "halt",
+    "end"
+   ]
+  },
+  {
+   "name": "az-forward",
+   "class": "az az-forward",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Fast forward or skip ahead",
+   "keywords": [
+    "next"
+   ]
+  },
+  {
+   "name": "az-image",
+   "class": "az az-image",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Image or photo",
+   "keywords": [
+    "picture",
+    "media"
+   ]
+  },
+  {
+   "name": "az-images",
+   "class": "az az-images",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Image gallery or multiple images",
+   "keywords": [
+    "pictures",
+    "photos",
+    "media"
+   ]
+  },
+  {
+   "name": "az-microphone",
+   "class": "az az-microphone",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Microphone, voice input or recording",
+   "keywords": [
+    "audio",
+    "record"
+   ]
+  },
+  {
+   "name": "az-microphone-off",
+   "class": "az az-microphone-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Muted or disabled microphone",
+   "keywords": [
+    "audio",
+    "voice",
+    "record"
+   ]
+  },
+  {
+   "name": "az-audio-lines",
+   "class": "az az-audio-lines",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Live voice conversation or audio waveform",
+   "keywords": [
+    "media"
+   ]
+  },
+  {
+   "name": "az-pause",
+   "class": "az az-pause",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Pause",
+   "keywords": [
+    "stop",
+    "hold"
+   ]
+  },
+  {
+   "name": "az-play",
+   "class": "az az-play",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Play",
+   "keywords": [
+    "start",
+    "run",
+    "video"
+   ]
+  },
+  {
+   "name": "az-skip-back",
+   "class": "az az-skip-back",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Skip to the start or previous track",
+   "keywords": [
+    "next",
+    "fast backward",
+    "step backward alt"
+   ]
+  },
+  {
+   "name": "az-skip-forward",
+   "class": "az az-skip-forward",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Skip to the end or next track",
+   "keywords": [
+    "previous",
+    "fast forward",
+    "step forward alt"
+   ]
+  },
+  {
+   "name": "az-step-back",
+   "class": "az az-step-back",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Skip back or previous",
+   "keywords": [
+    "step backward"
+   ]
+  },
+  {
+   "name": "az-step-forward",
+   "class": "az az-step-forward",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Skip forward or next",
+   "keywords": [
+    "media"
+   ]
+  },
+  {
+   "name": "az-stop",
+   "class": "az az-stop",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Stop playback",
+   "keywords": [
+    "halt",
+    "end"
+   ]
+  },
+  {
+   "name": "az-video",
+   "class": "az az-video",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Video",
+   "keywords": [
+    "movie",
+    "media"
+   ]
+  },
+  {
+   "name": "az-volume-down",
+   "class": "az az-volume-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Lower the volume",
+   "keywords": [
+    "sound",
+    "audio"
+   ]
+  },
+  {
+   "name": "az-volume-off",
+   "class": "az az-volume-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Mute",
+   "keywords": [
+    "sound",
+    "audio"
+   ]
+  },
+  {
+   "name": "az-volume-up",
+   "class": "az az-volume-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "media",
+   "label": "Raise the volume",
+   "keywords": [
+    "sound",
+    "audio"
+   ]
+  },
+  {
+   "name": "az-at",
+   "class": "az az-at",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Email address or mention",
+   "keywords": [
+    "communication"
+   ]
+  },
+  {
+   "name": "az-bell",
+   "class": "az az-bell",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Notifications",
+   "keywords": [
+    "notification",
+    "alert"
+   ]
+  },
+  {
+   "name": "az-bell-off",
+   "class": "az az-bell-off",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Notifications turned off",
+   "keywords": [
+    "notification",
+    "alert",
+    "bell slash"
+   ]
+  },
+  {
+   "name": "az-comment",
+   "class": "az az-comment",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Comment or message",
+   "keywords": [
+    "chat",
+    "feedback"
+   ]
+  },
+  {
+   "name": "az-comments",
+   "class": "az az-comments",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Conversation or discussion",
+   "keywords": [
+    "chat",
+    "messages"
+   ]
+  },
+  {
+   "name": "az-inbox",
+   "class": "az az-inbox",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Inbox or received items",
+   "keywords": [
+    "messages",
+    "mail",
+    "empty"
+   ]
+  },
+  {
+   "name": "az-mail",
+   "class": "az az-mail",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Email",
+   "keywords": [
+    "envelope",
+    "message"
+   ]
+  },
+  {
+   "name": "az-megaphone",
+   "class": "az az-megaphone",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Announcement or marketing",
+   "keywords": [
+    "news"
+   ]
+  },
+  {
+   "name": "az-phone",
+   "class": "az az-phone",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Phone call",
+   "keywords": [
+    "contact"
+   ]
+  },
+  {
+   "name": "az-reply",
+   "class": "az az-reply",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Reply to a message",
+   "keywords": [
+    "answer",
+    "respond"
+   ]
+  },
+  {
+   "name": "az-rss",
+   "class": "az az-rss",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "RSS feed",
+   "keywords": [
+    "subscribe",
+    "news"
+   ]
+  },
+  {
+   "name": "az-send",
+   "class": "az az-send",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Send a message",
+   "keywords": [
+    "submit",
+    "paper plane"
+   ]
+  },
+  {
+   "name": "az-webhook",
+   "class": "az az-webhook",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "communication",
+   "label": "Webhook",
+   "keywords": [
+    "integration",
+    "callback",
+    "events"
+   ]
+  },
+  {
+   "name": "az-barcode",
+   "class": "az az-barcode",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Barcode or product code",
+   "keywords": [
+    "scan"
+   ]
+  },
+  {
+   "name": "az-cart-arrow-down",
+   "class": "az az-cart-arrow-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Add to cart",
+   "keywords": [
+    "shopping",
+    "commerce",
+    "buy",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "az-cart-minus",
+   "class": "az az-cart-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Remove from cart",
+   "keywords": [
+    "shopping",
+    "commerce",
+    "buy",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "az-cart-plus",
+   "class": "az az-cart-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Add to cart",
+   "keywords": [
+    "shopping",
+    "commerce",
+    "buy",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "az-credit-card",
+   "class": "az az-credit-card",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Payment or billing",
+   "keywords": [
+    "commerce"
+   ]
+  },
+  {
+   "name": "az-dollar",
+   "class": "az az-dollar",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Money, price or USD",
+   "keywords": [
+    "billing",
+    "currency"
+   ]
+  },
+  {
+   "name": "az-euro",
+   "class": "az az-euro",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Money, price or EUR",
+   "keywords": [
+    "currency"
+   ]
+  },
+  {
+   "name": "az-gift",
+   "class": "az az-gift",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Gift, reward or promotion",
+   "keywords": [
+    "present"
+   ]
+  },
+  {
+   "name": "az-indian-rupee",
+   "class": "az az-indian-rupee",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Indian rupee currency",
+   "keywords": [
+    "commerce"
+   ]
+  },
+  {
+   "name": "az-money-bill",
+   "class": "az az-money-bill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Money, payment or cash",
+   "keywords": [
+    "billing"
+   ]
+  },
+  {
+   "name": "az-pound",
+   "class": "az az-pound",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "British pound currency",
+   "keywords": [
+    "money",
+    "gbp"
+   ]
+  },
+  {
+   "name": "az-receipt",
+   "class": "az az-receipt",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Receipt, invoice or billing",
+   "keywords": [
+    "payment"
+   ]
+  },
+  {
+   "name": "az-shop",
+   "class": "az az-shop",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "A shop or store",
+   "keywords": [
+    "commerce"
+   ]
+  },
+  {
+   "name": "az-shopping-bag",
+   "class": "az az-shopping-bag",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Shopping bag or purchases",
+   "keywords": [
+    "commerce",
+    "buy"
+   ]
+  },
+  {
+   "name": "az-shopping-cart",
+   "class": "az az-shopping-cart",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Shopping cart",
+   "keywords": [
+    "commerce",
+    "buy"
+   ]
+  },
+  {
+   "name": "az-ticket",
+   "class": "az az-ticket",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "A ticket or pass",
+   "keywords": [
+    "support",
+    "issue"
+   ]
+  },
+  {
+   "name": "az-turkish-lira",
+   "class": "az az-turkish-lira",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Turkish lira currency",
+   "keywords": [
+    "commerce"
+   ]
+  },
+  {
+   "name": "az-wallet",
+   "class": "az az-wallet",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "commerce",
+   "label": "Wallet or payment method",
+   "keywords": [
+    "money"
+   ]
+  },
+  {
+   "name": "az-address-book",
+   "class": "az az-address-book",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Contacts or address book",
+   "keywords": [
+    "people",
+    "docs",
+    "documentation",
+    "read"
+   ]
+  },
+  {
+   "name": "az-face-smile",
+   "class": "az az-face-smile",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Happy, emoji or positive feedback",
+   "keywords": [
+    "person"
+   ]
+  },
+  {
+   "name": "az-id-card",
+   "class": "az az-id-card",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Identity, profile or account details",
+   "keywords": [
+    "person"
+   ]
+  },
+  {
+   "name": "az-mars",
+   "class": "az az-mars",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Male gender",
+   "keywords": [
+    "person"
+   ]
+  },
+  {
+   "name": "az-user",
+   "class": "az az-user",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "A user or account",
+   "keywords": [
+    "person",
+    "profile"
+   ]
+  },
+  {
+   "name": "az-user-minus",
+   "class": "az az-user-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Remove a user",
+   "keywords": [
+    "person",
+    "account",
+    "profile",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "az-user-pen",
+   "class": "az az-user-pen",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Edit a user",
+   "keywords": [
+    "person",
+    "account",
+    "profile",
+    "write"
+   ]
+  },
+  {
+   "name": "az-user-plus",
+   "class": "az az-user-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Add a user",
+   "keywords": [
+    "person",
+    "account",
+    "profile",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "az-users",
+   "class": "az az-users",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Users or a group",
+   "keywords": [
+    "people",
+    "team",
+    "members"
+   ]
+  },
+  {
+   "name": "az-venus",
+   "class": "az az-venus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "person",
+   "label": "Female",
+   "keywords": [
+    "gender"
+   ]
+  },
+  {
+   "name": "az-desktop",
+   "class": "az az-desktop",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Desktop computer or desktop view",
+   "keywords": [
+    "screen",
+    "device"
+   ]
+  },
+  {
+   "name": "az-headphones",
+   "class": "az az-headphones",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Audio, listening or support",
+   "keywords": [
+    "device"
+   ]
+  },
+  {
+   "name": "az-microchip",
+   "class": "az az-microchip",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Processor or hardware",
+   "keywords": [
+    "compute"
+   ]
+  },
+  {
+   "name": "az-microchip-ai",
+   "class": "az az-microchip-ai",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "AI processing or AI model",
+   "keywords": [
+    "hardware",
+    "processor",
+    "compute",
+    "artificial intelligence",
+    "llm"
+   ]
+  },
+  {
+   "name": "az-mobile",
+   "class": "az az-mobile",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Mobile device",
+   "keywords": [
+    "phone",
+    "smartphone"
+   ]
+  },
+  {
+   "name": "az-print",
+   "class": "az az-print",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Print",
+   "keywords": [
+    "printer"
+   ]
+  },
+  {
+   "name": "az-server",
+   "class": "az az-server",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "A server or host",
+   "keywords": [
+    "infrastructure",
+    "compute"
+   ]
+  },
+  {
+   "name": "az-tablet",
+   "class": "az az-tablet",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "A tablet device",
+   "keywords": [
+    "ipad"
+   ]
+  },
+  {
+   "name": "az-wifi",
+   "class": "az az-wifi",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "device",
+   "label": "Wi-Fi or wireless connection",
+   "keywords": [
+    "network"
+   ]
+  },
+  {
+   "name": "az-calculator",
+   "class": "az az-calculator",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Calculate or estimate",
+   "keywords": [
+    "math",
+    "pricing"
+   ]
+  },
+  {
+   "name": "az-chart-bar",
+   "class": "az az-chart-bar",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Bar chart",
+   "keywords": [
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "az-chart-line",
+   "class": "az az-chart-line",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Line chart or trend",
+   "keywords": [
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "az-chart-pie",
+   "class": "az az-chart-pie",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Pie chart or share",
+   "keywords": [
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "az-chart-scatter",
+   "class": "az az-chart-scatter",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Scatter plot",
+   "keywords": [
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "az-database",
+   "class": "az az-database",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "A database in general (not a product)",
+   "keywords": [
+    "data",
+    "storage",
+    "sql"
+   ]
+  },
+  {
+   "name": "az-gauge",
+   "class": "az az-gauge",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Gauge, performance or speed metric",
+   "keywords": [
+    "meter"
+   ]
+  },
+  {
+   "name": "az-list",
+   "class": "az az-list",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "List or list view",
+   "keywords": [
+    "items",
+    "bullets"
+   ]
+  },
+  {
+   "name": "az-list-check",
+   "class": "az az-list-check",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Checklist or completed tasks",
+   "keywords": [
+    "todo",
+    "items",
+    "bullets",
+    "done",
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "az-sheet",
+   "class": "az az-sheet",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "A table or spreadsheet",
+   "keywords": [
+    "grid",
+    "cells",
+    "datasheet"
+   ]
+  },
+  {
+   "name": "az-sql",
+   "class": "az az-sql",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "SQL as a language (not the product)",
+   "keywords": [
+    "database",
+    "query"
+   ]
+  },
+  {
+   "name": "az-table",
+   "class": "az az-table",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "A table",
+   "keywords": [
+    "grid",
+    "data",
+    "rows"
+   ]
+  },
+  {
+   "name": "az-wave-pulse",
+   "class": "az az-wave-pulse",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "data",
+   "label": "Activity or monitoring",
+   "keywords": [
+    "health"
+   ]
+  },
+  {
+   "name": "az-align-center",
+   "class": "az az-align-center",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Center-align text",
+   "keywords": [
+    "alignment",
+    "format"
+   ]
+  },
+  {
+   "name": "az-align-justify",
+   "class": "az az-align-justify",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Justify text",
+   "keywords": [
+    "alignment",
+    "format"
+   ]
+  },
+  {
+   "name": "az-bold",
+   "class": "az az-bold",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Bold text",
+   "keywords": [
+    "layout"
+   ]
+  },
+  {
+   "name": "az-italic",
+   "class": "az az-italic",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Italic text",
+   "keywords": [
+    "layout"
+   ]
+  },
+  {
+   "name": "az-list-ordered",
+   "class": "az az-list-ordered",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Numbered list",
+   "keywords": [
+    "items",
+    "bullets"
+   ]
+  },
+  {
+   "name": "az-quote",
+   "class": "az az-quote",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Quoted text or a block quote",
+   "keywords": [
+    "layout"
+   ]
+  },
+  {
+   "name": "az-align-left",
+   "class": "az az-align-left",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Left-align text",
+   "keywords": [
+    "alignment",
+    "format"
+   ]
+  },
+  {
+   "name": "az-align-right",
+   "class": "az az-align-right",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Right-align text",
+   "keywords": [
+    "alignment",
+    "format"
+   ]
+  },
+  {
+   "name": "az-columns-3",
+   "class": "az az-columns-3",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "A column layout, show or hide columns",
+   "keywords": [
+    "layout"
+   ]
+  },
+  {
+   "name": "az-ellipsis",
+   "class": "az az-ellipsis",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "More options",
+   "keywords": [
+    "menu",
+    "actions",
+    "overflow",
+    "ellipsis h"
+   ]
+  },
+  {
+   "name": "az-ellipsis-vertical",
+   "class": "az az-ellipsis-vertical",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "More options menu",
+   "keywords": [
+    "actions",
+    "overflow",
+    "ellipsis v"
+   ]
+  },
+  {
+   "name": "az-expand",
+   "class": "az az-expand",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Expand or full screen",
+   "keywords": [
+    "fullscreen",
+    "maximize"
+   ]
+  },
+  {
+   "name": "az-layers",
+   "class": "az az-layers",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Layers or stacked levels",
+   "keywords": [
+    "stack"
+   ]
+  },
+  {
+   "name": "az-layout-grid",
+   "class": "az az-layout-grid",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Grid view",
+   "keywords": [
+    "tiles",
+    "dashboard",
+    "objects column",
+    "th large"
+   ]
+  },
+  {
+   "name": "az-maximize",
+   "class": "az az-maximize",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Maximize or enter full screen",
+   "keywords": [
+    "fullscreen",
+    "expand",
+    "enlarge",
+    "arrow up right and arrow down left from center"
+   ]
+  },
+  {
+   "name": "az-menu",
+   "class": "az az-menu",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Open the menu",
+   "keywords": [
+    "hamburger",
+    "navigation",
+    "bars"
+   ]
+  },
+  {
+   "name": "az-minimize",
+   "class": "az az-minimize",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Minimize or exit full screen",
+   "keywords": [
+    "exit fullscreen",
+    "collapse",
+    "shrink",
+    "arrow down left and arrow up right to center"
+   ]
+  },
+  {
+   "name": "az-sitemap",
+   "class": "az az-sitemap",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Sitemap or hierarchy",
+   "keywords": [
+    "tree",
+    "structure"
+   ]
+  },
+  {
+   "name": "az-sliders-horizontal",
+   "class": "az az-sliders-horizontal",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Adjust settings or filters",
+   "keywords": [
+    "controls",
+    "sliders h"
+   ]
+  },
+  {
+   "name": "az-sliders-vertical",
+   "class": "az az-sliders-vertical",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Adjust settings or levels",
+   "keywords": [
+    "controls",
+    "filters",
+    "sliders v"
+   ]
+  },
+  {
+   "name": "az-app-window",
+   "class": "az az-app-window",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "A window or an app; open something in a window",
+   "keywords": [
+    "browser",
+    "window maximize"
+   ]
+  },
+  {
+   "name": "az-window-minimize",
+   "class": "az az-window-minimize",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "layout",
+   "label": "Minimize the window",
+   "keywords": [
+    "browser",
+    "app",
+    "exit fullscreen",
+    "collapse",
+    "shrink"
+   ]
+  },
+  {
+   "name": "az-asterisk",
+   "class": "az az-asterisk",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Required field or wildcard",
+   "keywords": [
+    "star"
+   ]
+  },
+  {
+   "name": "az-bolt",
+   "class": "az az-bolt",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Power, energy or speed",
+   "keywords": [
+    "fast",
+    "lightning"
+   ]
+  },
+  {
+   "name": "az-book",
+   "class": "az az-book",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Documentation or reading",
+   "keywords": [
+    "docs",
+    "read"
+   ]
+  },
+  {
+   "name": "az-bookmark",
+   "class": "az az-bookmark",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Save for later",
+   "keywords": [
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-bookmark-fill",
+   "class": "az az-bookmark-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Saved item",
+   "keywords": [
+    "save",
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-box",
+   "class": "az az-box",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Package, product or bundle",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-briefcase",
+   "class": "az az-briefcase",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Work or business",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-building",
+   "class": "az az-building",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Company or organization",
+   "keywords": [
+    "office"
+   ]
+  },
+  {
+   "name": "az-building-columns",
+   "class": "az az-building-columns",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Bank or institution",
+   "keywords": [
+    "company",
+    "organization",
+    "office"
+   ]
+  },
+  {
+   "name": "az-bullseye",
+   "class": "az az-bullseye",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Goal or target",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-calendar",
+   "class": "az az-calendar",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Date or schedule",
+   "keywords": [
+    "time"
+   ]
+  },
+  {
+   "name": "az-calendar-clock",
+   "class": "az az-calendar-clock",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Scheduled date and time",
+   "keywords": [
+    "schedule",
+    "history"
+   ]
+  },
+  {
+   "name": "az-calendar-minus",
+   "class": "az az-calendar-minus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Remove an event or date",
+   "keywords": [
+    "schedule",
+    "time",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "az-calendar-plus",
+   "class": "az az-calendar-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Add an event or date",
+   "keywords": [
+    "schedule",
+    "time",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "az-calendar-x",
+   "class": "az az-calendar-x",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Cancel an event or clear a date",
+   "keywords": [
+    "schedule",
+    "time",
+    "calendar times"
+   ]
+  },
+  {
+   "name": "az-car",
+   "class": "az az-car",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Vehicle or transport",
+   "keywords": [
+    "automotive"
+   ]
+  },
+  {
+   "name": "az-clock",
+   "class": "az az-clock",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Time, schedule or history",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-cloud",
+   "class": "az az-cloud",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Cloud or hosted service",
+   "keywords": [
+    "hosting",
+    "storage"
+   ]
+  },
+  {
+   "name": "az-code",
+   "class": "az az-code",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Code or source view",
+   "keywords": [
+    "developer",
+    "snippet"
+   ]
+  },
+  {
+   "name": "az-compass",
+   "class": "az az-compass",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Explore or navigate",
+   "keywords": [
+    "navigation"
+   ]
+  },
+  {
+   "name": "az-crown",
+   "class": "az az-crown",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Premium, owner or top rank",
+   "keywords": [
+    "plan",
+    "pro"
+   ]
+  },
+  {
+   "name": "az-directions",
+   "class": "az az-directions",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Directions or route",
+   "keywords": [
+    "navigation",
+    "map"
+   ]
+  },
+  {
+   "name": "az-equals",
+   "class": "az az-equals",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Equals or equal to",
+   "keywords": [
+    "math"
+   ]
+  },
+  {
+   "name": "az-flag",
+   "class": "az az-flag",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Flag, mark or report an item",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-flag-fill",
+   "class": "az az-flag-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Flagged item",
+   "keywords": [
+    "report",
+    "mark"
+   ]
+  },
+  {
+   "name": "az-globe",
+   "class": "az az-globe",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "World, internet or language/region",
+   "keywords": [
+    "global",
+    "web"
+   ]
+  },
+  {
+   "name": "az-graduation-cap",
+   "class": "az az-graduation-cap",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Education, learning or courses",
+   "keywords": [
+    "learn",
+    "course",
+    "instructor"
+   ]
+  },
+  {
+   "name": "az-hammer",
+   "class": "az az-hammer",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Build, tools or settings",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-hash",
+   "class": "az az-hash",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Number, ID or hashtag",
+   "keywords": [
+    "tag",
+    "channel"
+   ]
+  },
+  {
+   "name": "az-heart",
+   "class": "az az-heart",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Favorite or like",
+   "keywords": [
+    "love"
+   ]
+  },
+  {
+   "name": "az-heart-fill",
+   "class": "az az-heart-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Favorited or liked",
+   "keywords": [
+    "like",
+    "favorite",
+    "love"
+   ]
+  },
+  {
+   "name": "az-home",
+   "class": "az az-home",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Home, overview",
+   "keywords": [
+    "house",
+    "start",
+    "dashboard"
+   ]
+  },
+  {
+   "name": "az-key",
+   "class": "az az-key",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Key, credentials or access",
+   "keywords": [
+    "password",
+    "token",
+    "secret",
+    "credential"
+   ]
+  },
+  {
+   "name": "az-language",
+   "class": "az az-language",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Language or translation",
+   "keywords": [
+    "translate",
+    "locale",
+    "i18n"
+   ]
+  },
+  {
+   "name": "az-lightbulb",
+   "class": "az az-lightbulb",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Idea, tip or hint",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-lock",
+   "class": "az az-lock",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Locked or secure",
+   "keywords": [
+    "private",
+    "password"
+   ]
+  },
+  {
+   "name": "az-lock-open",
+   "class": "az az-lock-open",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Unlocked",
+   "keywords": [
+    "unlock",
+    "public",
+    "secure",
+    "private",
+    "password",
+    "locked"
+   ]
+  },
+  {
+   "name": "az-map",
+   "class": "az az-map",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Map",
+   "keywords": [
+    "location",
+    "geo"
+   ]
+  },
+  {
+   "name": "az-map-pin",
+   "class": "az az-map-pin",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Location",
+   "keywords": [
+    "marker",
+    "place",
+    "geo",
+    "thumbtack",
+    "pushpin",
+    "fixed",
+    "map marker"
+   ]
+  },
+  {
+   "name": "az-moon",
+   "class": "az az-moon",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Dark mode or night",
+   "keywords": [
+    "theme"
+   ]
+  },
+  {
+   "name": "az-palette",
+   "class": "az az-palette",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Colors, theme or appearance",
+   "keywords": [
+    "color",
+    "design"
+   ]
+  },
+  {
+   "name": "az-percentage",
+   "class": "az az-percentage",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Percentage or discount",
+   "keywords": [
+    "percent",
+    "rate"
+   ]
+  },
+  {
+   "name": "az-pin",
+   "class": "az az-pin",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Pin an item",
+   "keywords": [
+    "thumbtack",
+    "pushpin",
+    "fixed"
+   ]
+  },
+  {
+   "name": "az-qrcode",
+   "class": "az az-qrcode",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "QR code",
+   "keywords": [
+    "scan"
+   ]
+  },
+  {
+   "name": "az-route",
+   "class": "az az-route",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "A route or path",
+   "keywords": [
+    "routing",
+    "directions",
+    "gateway"
+   ]
+  },
+  {
+   "name": "az-shield",
+   "class": "az az-shield",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Security or protection",
+   "keywords": [
+    "safe"
+   ]
+  },
+  {
+   "name": "az-signpost",
+   "class": "az az-signpost",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Directions, routing or navigation",
+   "keywords": [
+    "route",
+    "directions alt"
+   ]
+  },
+  {
+   "name": "az-sparkles",
+   "class": "az az-sparkles",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "AI features and generated content; also the AI pillar of the platform",
+   "keywords": [
+    "magic",
+    "new",
+    "generate"
+   ]
+  },
+  {
+   "name": "az-star",
+   "class": "az az-star",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Favorite or rating",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-star-fill",
+   "class": "az az-star-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Favorited or full rating",
+   "keywords": [
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-star-half",
+   "class": "az az-star-half",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Half-star rating",
+   "keywords": [
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-star-half-fill",
+   "class": "az az-star-half-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Half a point in a rating",
+   "keywords": [
+    "favorite"
+   ]
+  },
+  {
+   "name": "az-stopwatch",
+   "class": "az az-stopwatch",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Timer or elapsed time",
+   "keywords": [
+    "duration"
+   ]
+  },
+  {
+   "name": "az-sun",
+   "class": "az az-sun",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Light mode or daytime",
+   "keywords": [
+    "day",
+    "theme"
+   ]
+  },
+  {
+   "name": "az-tag",
+   "class": "az az-tag",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "A tag or label",
+   "keywords": [
+    "category"
+   ]
+  },
+  {
+   "name": "az-tags",
+   "class": "az az-tags",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Tags or labels",
+   "keywords": [
+    "categories"
+   ]
+  },
+  {
+   "name": "az-thumbs-down",
+   "class": "az az-thumbs-down",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Dislike or negative feedback",
+   "keywords": [
+    "bad"
+   ]
+  },
+  {
+   "name": "az-thumbs-down-fill",
+   "class": "az az-thumbs-down-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Disliked",
+   "keywords": [
+    "dislike",
+    "bad",
+    "feedback"
+   ]
+  },
+  {
+   "name": "az-thumbs-up",
+   "class": "az az-thumbs-up",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Like or positive feedback",
+   "keywords": [
+    "good"
+   ]
+  },
+  {
+   "name": "az-thumbs-up-fill",
+   "class": "az az-thumbs-up-fill",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Liked",
+   "keywords": [
+    "like",
+    "good",
+    "feedback"
+   ]
+  },
+  {
+   "name": "az-trophy",
+   "class": "az az-trophy",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Achievement or winner",
+   "keywords": [
+    "award"
+   ]
+  },
+  {
+   "name": "az-truck",
+   "class": "az az-truck",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Shipping or delivery",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-warehouse",
+   "class": "az az-warehouse",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "A warehouse or storage",
+   "keywords": [
+    "inventory"
+   ]
+  },
+  {
+   "name": "az-wrench",
+   "class": "az az-wrench",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "Tools or configuration",
+   "keywords": [
+    "settings",
+    "fix",
+    "maintenance"
+   ]
+  },
+  {
+   "name": "az-git-branch",
+   "class": "az az-git-branch",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A git branch",
+   "keywords": [
+    "version control",
+    "source",
+    "repository",
+    "version"
+   ]
+  },
+  {
+   "name": "az-git-branch-delete",
+   "class": "az az-git-branch-delete",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "Delete a branch",
+   "keywords": [
+    "version control",
+    "source",
+    "repository",
+    "version",
+    "remove",
+    "erase"
+   ]
+  },
+  {
+   "name": "az-git-branch-plus",
+   "class": "az az-git-branch-plus",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "Create a branch",
+   "keywords": [
+    "version control",
+    "source",
+    "repository",
+    "version",
+    "add",
+    "new"
+   ]
+  },
+  {
+   "name": "az-git-cherry-pick",
+   "class": "az az-git-cherry-pick",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "Cherry-pick a commit",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-commit",
+   "class": "az az-git-commit",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A commit",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-compare",
+   "class": "az az-git-compare",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "Compare two versions",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-diff",
+   "class": "az az-git-diff",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A diff",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-fork",
+   "class": "az az-git-fork",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A fork",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-graph",
+   "class": "az az-git-graph",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A commit graph",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-merge",
+   "class": "az az-git-merge",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A merge",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-merge-conflict",
+   "class": "az az-git-merge-conflict",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A merge conflict",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-pull-request",
+   "class": "az az-git-pull-request",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A pull request",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-pull-request-closed",
+   "class": "az az-git-pull-request-closed",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A closed pull request",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-pull-request-draft",
+   "class": "az az-git-pull-request-draft",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A draft pull request",
+   "keywords": [
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "az-git-repository",
+   "class": "az az-git-repository",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "git",
+   "label": "A repository",
+   "keywords": [
+    "version control",
+    "source",
+    "code"
+   ]
+  },
+  {
+   "name": "az-angular",
+   "class": "az az-angular",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Angular (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-astro",
+   "class": "az az-astro",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Astro (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-docusaurus",
+   "class": "az az-docusaurus",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Docusaurus (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-eleventy",
+   "class": "az az-eleventy",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Eleventy (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-gatsby",
+   "class": "az az-gatsby",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Gatsby (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hexo",
+   "class": "az az-hexo",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Hexo (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hono",
+   "class": "az az-hono",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Hono (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hugo",
+   "class": "az az-hugo",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Hugo (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-jekyll",
+   "class": "az az-jekyll",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Jekyll (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nextjs",
+   "class": "az az-nextjs",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Next.js (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nitro",
+   "class": "az az-nitro",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Nitro (framework)",
+   "keywords": [
+    "server",
+    "unjs",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nuxt",
+   "class": "az az-nuxt",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Nuxt (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-preact",
+   "class": "az az-preact",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Preact (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-qwik",
+   "class": "az az-qwik",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Qwik (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-react",
+   "class": "az az-react",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "React (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-remix",
+   "class": "az az-remix",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Remix (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-stencil",
+   "class": "az az-stencil",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Stencil (framework)",
+   "keywords": [
+    "web components",
+    "compiler",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-svelte",
+   "class": "az az-svelte",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Svelte (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vitepress",
+   "class": "az az-vitepress",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "VitePress (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vue",
+   "class": "az az-vue",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "Vue (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vuepress",
+   "class": "az az-vuepress",
+   "set": "azionicons",
+   "group": "external",
+   "category": "framework",
+   "label": "VuePress (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-claude",
+   "class": "az az-claude",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Claude (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-deepseek",
+   "class": "az az-deepseek",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "DeepSeek (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-gemini",
+   "class": "az az-gemini",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Gemini (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-grok",
+   "class": "az az-grok",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Grok (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-meta",
+   "class": "az az-meta",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Meta (AI models)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-microsoft-copilot",
+   "class": "az az-microsoft-copilot",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Microsoft Copilot",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-mistral",
+   "class": "az az-mistral",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Mistral (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-openai",
+   "class": "az az-openai",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "OpenAI",
+   "keywords": [
+    "chatgpt",
+    "gpt",
+    "brand",
+    "logo",
+    "open"
+   ]
+  },
+  {
+   "name": "az-perplexity",
+   "class": "az az-perplexity",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Perplexity (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-qwen",
+   "class": "az az-qwen",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Qwen (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-cursor",
+   "class": "az az-cursor",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Cursor (code editor)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-github",
+   "class": "az az-github",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "GitHub",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-mcp",
+   "class": "az az-mcp",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Model Context Protocol",
+   "keywords": [
+    "agent",
+    "integration",
+    "brand",
+    "logo",
+    "mcp logo"
+   ]
+  },
+  {
+   "name": "az-redis",
+   "class": "az az-redis",
+   "set": "azionicons",
+   "group": "external",
+   "category": "database",
+   "label": "Redis",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-terraform",
+   "class": "az az-terraform",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Terraform",
+   "keywords": [
+    "infrastructure as code",
+    "iac",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-turso",
+   "class": "az az-turso",
+   "set": "azionicons",
+   "group": "external",
+   "category": "database",
+   "label": "Turso (database)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vite",
+   "class": "az az-vite",
+   "set": "azionicons",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Vite (build tool)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-windsurf",
+   "class": "az az-windsurf",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Windsurf (code editor)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-graphql",
+   "class": "az az-graphql",
+   "set": "azionicons",
+   "group": "external",
+   "category": "language",
+   "label": "GraphQL",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-html",
+   "class": "az az-html",
+   "set": "azionicons",
+   "group": "external",
+   "category": "language",
+   "label": "HTML",
+   "keywords": [
+    "markup",
+    "web",
+    "brand"
+   ]
+  },
+  {
+   "name": "az-discord",
+   "class": "az az-discord",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Discord (community)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-facebook",
+   "class": "az az-facebook",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Facebook (social network)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-google",
+   "class": "az az-google",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Google (search and cloud services)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-instagram",
+   "class": "az az-instagram",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Instagram (photo social network)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-linkedin",
+   "class": "az az-linkedin",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "LinkedIn (professional social network)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-medium",
+   "class": "az az-medium",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Medium (blog)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-reddit",
+   "class": "az az-reddit",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Reddit (online discussion community)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-slack",
+   "class": "az az-slack",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Slack (team messaging app)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-twitch",
+   "class": "az az-twitch",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "Twitch",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-whatsapp",
+   "class": "az az-whatsapp",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "WhatsApp (messaging app)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-x-brand",
+   "class": "az az-x-brand",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "X (social network)",
+   "keywords": [
+    "twitter",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-youtube",
+   "class": "az az-youtube",
+   "set": "azionicons",
+   "group": "external",
+   "category": "online-service",
+   "label": "YouTube",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-angular",
+   "class": "az-color az-angular",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Angular (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-astro",
+   "class": "az-color az-astro",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Astro (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-flutter",
+   "class": "az-color az-flutter",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Flutter (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nextjs",
+   "class": "az-color az-nextjs",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Next.js (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-nuxt",
+   "class": "az-color az-nuxt",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Nuxt (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-react",
+   "class": "az-color az-react",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "React (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-redwood",
+   "class": "az-color az-redwood",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "RedwoodJS (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-solidjs",
+   "class": "az-color az-solidjs",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "SolidJS (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-svelte",
+   "class": "az-color az-svelte",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Svelte (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vue",
+   "class": "az-color az-vue",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Vue (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-claude",
+   "class": "az-color az-claude",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Claude (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-deepseek",
+   "class": "az-color az-deepseek",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "DeepSeek (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-gemini",
+   "class": "az-color az-gemini",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Gemini (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-grok",
+   "class": "az-color az-grok",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Grok (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-meta",
+   "class": "az-color az-meta",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Meta (AI models)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-microsoft-copilot",
+   "class": "az-color az-microsoft-copilot",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Microsoft Copilot",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-mistral",
+   "class": "az-color az-mistral",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Mistral (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-openai",
+   "class": "az-color az-openai",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "OpenAI",
+   "keywords": [
+    "chatgpt",
+    "gpt",
+    "brand",
+    "logo",
+    "open"
+   ]
+  },
+  {
+   "name": "az-perplexity",
+   "class": "az-color az-perplexity",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Perplexity (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-qwen",
+   "class": "az-color az-qwen",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Qwen (AI model)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-azure-devops",
+   "class": "az-color az-azure-devops",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Azure DevOps",
+   "keywords": [
+    "brand",
+    "logo",
+    "azuredevops"
+   ]
+  },
+  {
+   "name": "az-bitbucket",
+   "class": "az-color az-bitbucket",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Bitbucket",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-cursor",
+   "class": "az-color az-cursor",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Cursor (code editor)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-gitlab",
+   "class": "az-color az-gitlab",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "GitLab",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-terraform",
+   "class": "az-color az-terraform",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Terraform",
+   "keywords": [
+    "infrastructure as code",
+    "iac",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-windsurf",
+   "class": "az-color az-windsurf",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Windsurf (code editor)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-graphql",
+   "class": "az-color az-graphql",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "GraphQL",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-html",
+   "class": "az-color az-html",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "HTML",
+   "keywords": [
+    "markup",
+    "web",
+    "brand"
+   ]
+  },
+  {
+   "name": "az-javascript",
+   "class": "az-color az-javascript",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "JavaScript",
+   "keywords": [
+    "brand",
+    "logo",
+    "js"
+   ]
+  },
+  {
+   "name": "az-kotlin",
+   "class": "az-color az-kotlin",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "Kotlin",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-typescript",
+   "class": "az-color az-typescript",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "TypeScript",
+   "keywords": [
+    "brand",
+    "logo",
+    "ts"
+   ]
+  },
+  {
+   "name": "az-discord",
+   "class": "az-color az-discord",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Discord (community)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-google",
+   "class": "az-color az-google",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Google",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-x-brand",
+   "class": "az-color az-x-brand",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "X (social network)",
+   "keywords": [
+    "twitter",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-youtube",
+   "class": "az-color az-youtube",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "YouTube",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-cache",
+   "class": "az az-cache",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Cache",
+   "product": "Cache",
+   "keywords": [
+    "product"
+   ]
+  },
+  {
+   "name": "az-tiered-cache",
+   "class": "az az-tiered-cache",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "feature",
+   "label": "Tiered Cache (Cache feature)",
+   "product": "Cache",
+   "keywords": [
+    "feature"
+   ]
+  },
+  {
+   "name": "az-network-shield",
+   "class": "az az-network-shield",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Network Shield",
+   "product": "Network Shield",
+   "keywords": [
+    "connectivity",
+    "security",
+    "protection",
+    "safe"
+   ]
+  },
+  {
+   "name": "az-ddos-protection",
+   "class": "az az-ddos-protection",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "DDoS Protection",
+   "product": "DDoS Protection",
+   "keywords": [
+    "product"
+   ]
+  },
+  {
+   "name": "az-secure-internet-access",
+   "class": "az az-secure-internet-access",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Secure Internet Access",
+   "product": "Secure Internet Access",
+   "keywords": [
+    "security",
+    "protection"
+   ]
+  },
+  {
+   "name": "az-lora-fine-tune",
+   "class": "az az-lora-fine-tune",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "LoRA Fine-Tune",
+   "product": "LoRA Fine-Tune",
+   "keywords": [
+    "fine-tuning",
+    "ai",
+    "model"
+   ]
+  },
+  {
+   "name": "az-origin-shield",
+   "class": "az az-origin-shield",
+   "set": "azionicons",
+   "group": "azion",
+   "category": "product",
+   "label": "Origin Shield",
+   "product": "Origin Shield",
+   "keywords": [
+    "backend",
+    "server",
+    "security",
+    "protection",
+    "safe"
+   ]
+  },
+  {
+   "name": "az-langgraph",
+   "class": "az az-langgraph",
+   "set": "azionicons",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "LangGraph (agent framework)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-neon",
+   "class": "az az-neon",
+   "set": "azionicons",
+   "group": "external",
+   "category": "database",
+   "label": "Neon (serverless Postgres)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-nodejs",
+   "class": "az az-nodejs",
+   "set": "azionicons",
+   "group": "external",
+   "category": "language",
+   "label": "Node.js (runtime)",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-python",
+   "class": "az az-python",
+   "set": "azionicons",
+   "group": "external",
+   "category": "language",
+   "label": "Python",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-upstash",
+   "class": "az az-upstash",
+   "set": "azionicons",
+   "group": "external",
+   "category": "database",
+   "label": "Upstash (serverless data)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-wordpress",
+   "class": "az az-wordpress",
+   "set": "azionicons",
+   "group": "external",
+   "category": "cms",
+   "label": "WordPress (CMS)",
+   "keywords": [
+    "cms"
+   ]
+  },
+  {
+   "name": "az-terminal",
+   "class": "az az-terminal",
+   "set": "azionicons",
+   "group": "interface",
+   "category": "object",
+   "label": "A terminal or command line",
+   "keywords": [
+    "object"
+   ]
+  },
+  {
+   "name": "az-docusaurus",
+   "class": "az-color az-docusaurus",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Docusaurus (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-eleventy",
+   "class": "az-color az-eleventy",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Eleventy (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-gatsby",
+   "class": "az-color az-gatsby",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Gatsby (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hexo",
+   "class": "az-color az-hexo",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Hexo (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hono",
+   "class": "az-color az-hono",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Hono (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-hugo",
+   "class": "az-color az-hugo",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Hugo (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-jekyll",
+   "class": "az-color az-jekyll",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Jekyll (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-langgraph",
+   "class": "az-color az-langgraph",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "LangGraph (agent framework)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-neon",
+   "class": "az-color az-neon",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "Neon (serverless Postgres)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-nodejs",
+   "class": "az-color az-nodejs",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "Node.js (runtime)",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-preact",
+   "class": "az-color az-preact",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Preact (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-python",
+   "class": "az-color az-python",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "Python",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-qwik",
+   "class": "az-color az-qwik",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Qwik (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-remix",
+   "class": "az-color az-remix",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Remix (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-turso",
+   "class": "az-color az-turso",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "Turso (edge database)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-upstash",
+   "class": "az-color az-upstash",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "Upstash (serverless data)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-vite",
+   "class": "az-color az-vite",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Vite (build tool)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vitepress",
+   "class": "az-color az-vitepress",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "VitePress (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-vuepress",
+   "class": "az-color az-vuepress",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "VuePress (framework)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-wordpress",
+   "class": "az-color az-wordpress",
+   "set": "color",
+   "group": "external",
+   "category": "cms",
+   "label": "WordPress (CMS)",
+   "keywords": [
+    "cms"
+   ]
+  },
+  {
+   "name": "az-stencil",
+   "class": "az-color az-stencil",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "Stencil (framework)",
+   "keywords": [
+    "web components",
+    "compiler",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-htmx",
+   "class": "az-color az-htmx",
+   "set": "color",
+   "group": "external",
+   "category": "framework",
+   "label": "htmx (framework)",
+   "keywords": [
+    "framework"
+   ]
+  },
+  {
+   "name": "az-rust",
+   "class": "az-color az-rust",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "Rust (language)",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-webassembly",
+   "class": "az-color az-webassembly",
+   "set": "color",
+   "group": "external",
+   "category": "language",
+   "label": "WebAssembly (language)",
+   "keywords": [
+    "language"
+   ]
+  },
+  {
+   "name": "az-kimi",
+   "class": "az-color az-kimi",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Kimi by Moonshot AI (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-zhipu",
+   "class": "az-color az-zhipu",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Zhipu AI, maker of GLM (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-minimax",
+   "class": "az-color az-minimax",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "MiniMax (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-ernie",
+   "class": "az-color az-ernie",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "ERNIE by Baidu (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-hunyuan",
+   "class": "az-color az-hunyuan",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Hunyuan by Tencent (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-doubao",
+   "class": "az-color az-doubao",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Doubao by ByteDance (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-yi",
+   "class": "az-color az-yi",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Yi by 01.AI (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-stepfun",
+   "class": "az-color az-stepfun",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "StepFun (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-baichuan",
+   "class": "az-color az-baichuan",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Baichuan (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-iflytek-spark",
+   "class": "az-color az-iflytek-spark",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Spark by iFlytek (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-sensenova",
+   "class": "az-color az-sensenova",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "SenseNova by SenseTime (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-internlm",
+   "class": "az-color az-internlm",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "InternLM and InternVL by Shanghai AI Laboratory (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-baai",
+   "class": "az-color az-baai",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "BAAI, maker of the BGE embedding and reranker models (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-nanonets",
+   "class": "az-color az-nanonets",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Nanonets, maker of Nanonets-OCR (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-hugging-face",
+   "class": "az-color az-hugging-face",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Hugging Face (AI model hub)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-suno",
+   "class": "az-color az-suno",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Suno, maker of the Bark audio model (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-fish-audio",
+   "class": "az-color az-fish-audio",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Fish Audio, maker of Fish Speech (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-stability-ai",
+   "class": "az-color az-stability-ai",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Stability AI, maker of Stable Audio Open (AI model)",
+   "keywords": [
+    "artificial intelligence",
+    "llm"
+   ]
+  },
+  {
+   "name": "az-nvidia",
+   "class": "az-color az-nvidia",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "NVIDIA, maker of the Parakeet and Canary speech models (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-coqui",
+   "class": "az-color az-coqui",
+   "set": "color",
+   "group": "external",
+   "category": "ai-model",
+   "label": "Coqui, maker of the XTTS speech model (AI model)",
+   "keywords": [
+    "ai model"
+   ]
+  },
+  {
+   "name": "az-mcp",
+   "class": "az-color az-mcp",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Model Context Protocol (AI tool)",
+   "keywords": [
+    "agent",
+    "integration",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-github-copilot",
+   "class": "az-color az-github-copilot",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "GitHub Copilot (AI tool)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-codex",
+   "class": "az-color az-codex",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Codex by OpenAI (AI tool)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-opencode",
+   "class": "az-color az-opencode",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "OpenCode (AI tool)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-warp",
+   "class": "az-color az-warp",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Warp (AI tool)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-kiro",
+   "class": "az-color az-kiro",
+   "set": "color",
+   "group": "external",
+   "category": "ai-tool",
+   "label": "Kiro (AI tool)",
+   "keywords": [
+    "ai tool"
+   ]
+  },
+  {
+   "name": "az-datadog",
+   "class": "az-color az-datadog",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Datadog (observability)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-splunk",
+   "class": "az-color az-splunk",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Splunk (observability)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-elasticsearch",
+   "class": "az-color az-elasticsearch",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Elasticsearch (observability)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-grafana",
+   "class": "az-color az-grafana",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Grafana (observability)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-apache-kafka",
+   "class": "az-color az-apache-kafka",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Apache Kafka (data streaming)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-amazon-kinesis",
+   "class": "az-color az-amazon-kinesis",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Amazon Kinesis Data Firehose (data streaming)",
+   "keywords": [
+    "aws",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-amazon-s3",
+   "class": "az-color az-amazon-s3",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Amazon S3 (storage)",
+   "keywords": [
+    "aws",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-microsoft-azure",
+   "class": "az-color az-microsoft-azure",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Microsoft Azure: Azure Monitor and Azure Blob Storage",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-google-bigquery",
+   "class": "az-color az-google-bigquery",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "Google BigQuery (analytics)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-ibm",
+   "class": "az-color az-ibm",
+   "set": "color",
+   "group": "external",
+   "category": "observability",
+   "label": "IBM, maker of IBM QRadar (security analytics)",
+   "keywords": [
+    "observability"
+   ]
+  },
+  {
+   "name": "az-supabase",
+   "class": "az-color az-supabase",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "Supabase (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-postgresql",
+   "class": "az-color az-postgresql",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "PostgreSQL (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-mysql",
+   "class": "az-color az-mysql",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "MySQL (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-mongodb",
+   "class": "az-color az-mongodb",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "MongoDB (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-tidb",
+   "class": "az-color az-tidb",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "TiDB (database)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-drizzle",
+   "class": "az-color az-drizzle",
+   "set": "color",
+   "group": "external",
+   "category": "database",
+   "label": "Drizzle ORM (database tool)",
+   "keywords": [
+    "database"
+   ]
+  },
+  {
+   "name": "az-sanity",
+   "class": "az-color az-sanity",
+   "set": "color",
+   "group": "external",
+   "category": "cms",
+   "label": "Sanity (content management)",
+   "keywords": [
+    "cms"
+   ]
+  },
+  {
+   "name": "az-cosmic",
+   "class": "az-color az-cosmic",
+   "set": "color",
+   "group": "external",
+   "category": "cms",
+   "label": "Cosmic (content management)",
+   "keywords": [
+    "cms"
+   ]
+  },
+  {
+   "name": "az-okta",
+   "class": "az-color az-okta",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Okta (identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-microsoft-entra",
+   "class": "az-color az-microsoft-entra",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Microsoft Entra ID (identity provider)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-auth0",
+   "class": "az-color az-auth0",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Auth0 by Okta (identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-keycloak",
+   "class": "az-color az-keycloak",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Keycloak (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-authentik",
+   "class": "az-color az-authentik",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "authentik (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-authelia",
+   "class": "az-color az-authelia",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Authelia (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-ory",
+   "class": "az-color az-ory",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "Ory (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-zitadel",
+   "class": "az-color az-zitadel",
+   "set": "color",
+   "group": "external",
+   "category": "identity",
+   "label": "ZITADEL (open source identity provider)",
+   "keywords": [
+    "identity"
+   ]
+  },
+  {
+   "name": "az-hcaptcha",
+   "class": "az-color az-hcaptcha",
+   "set": "color",
+   "group": "external",
+   "category": "security",
+   "label": "hCaptcha (bot protection)",
+   "keywords": [
+    "security"
+   ]
+  },
+  {
+   "name": "az-recaptcha",
+   "class": "az-color az-recaptcha",
+   "set": "color",
+   "group": "external",
+   "category": "security",
+   "label": "reCAPTCHA by Google (bot protection)",
+   "keywords": [
+    "security"
+   ]
+  },
+  {
+   "name": "az-fingerprint-brand",
+   "class": "az-color az-fingerprint-brand",
+   "set": "color",
+   "group": "external",
+   "category": "security",
+   "label": "Fingerprint, the device identification service (security)",
+   "keywords": [
+    "security"
+   ]
+  },
+  {
+   "name": "az-github",
+   "class": "az-color az-github",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "GitHub (developer tool)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-github-actions",
+   "class": "az-color az-github-actions",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "GitHub Actions (developer tool)",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "az-visual-studio-code",
+   "class": "az-color az-visual-studio-code",
+   "set": "color",
+   "group": "external",
+   "category": "developer-tool",
+   "label": "Visual Studio Code (developer tool)",
+   "keywords": [
+    "source",
+    "snippet"
+   ]
+  },
+  {
+   "name": "az-stripe",
+   "class": "az-color az-stripe",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Stripe (payments)",
+   "keywords": [
+    "online service"
+   ]
+  },
+  {
+   "name": "az-resend",
+   "class": "az-color az-resend",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Resend (email)",
+   "keywords": [
+    "online service"
+   ]
+  },
+  {
+   "name": "az-browserless",
+   "class": "az-color az-browserless",
+   "set": "color",
+   "group": "external",
+   "category": "online-service",
+   "label": "Browserless (headless browsers)",
+   "keywords": [
+    "online service"
+   ]
+  }
+ ]
+}

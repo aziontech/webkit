@@ -1,4 +1,5 @@
 @font-face {
+  font-display: block;
   font-family: '{{name}}';
   src: url('{{fontsUrl}}{{name}}.woff2') format('woff2');
 }
@@ -11,9 +12,14 @@
   font-variant: normal;
   text-transform: none;
   line-height: 1;
-  display: inline-block;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  .{{prefix}} {
+    display: inline-block;
+  }
 }
 
 {{#each codepoints}}

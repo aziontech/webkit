@@ -1,0 +1,52 @@
+import { type InjectionKey, type Ref } from 'vue'
+
+/** Side of the trigger the panel opens on; `start` and `end` follow the text direction. */
+export type PopoverSide = 'top' | 'bottom' | 'start' | 'end'
+
+/** Alignment of the panel along the trigger edge. */
+export type PopoverAlign = 'start' | 'center' | 'end'
+
+/** Panel width preset. */
+export type PopoverSize = 'small' | 'medium' | 'large'
+
+export interface PopoverContext {
+  /** Stable test-id prefix derived from the root component. */
+  testId: string
+  /** Current open state, exposed reactively to sub-components. */
+  isOpen: Ref<boolean>
+  /** Whether the root is disabled — trigger refuses to open. */
+  disabled: Ref<boolean>
+  /** Side the panel landed on, rendered as data-side. */
+  side: Readonly<Ref<PopoverSide>>
+  /** Alignment the panel landed on, rendered as data-align. */
+  align: Readonly<Ref<PopoverAlign>>
+  /** Panel width preset (data-size); undefined = fluid default. */
+  size: Ref<PopoverSize | undefined>
+  /** Fixed-position style (top/left/z-index/--popup-origin) for the floating panel. */
+  panelStyle: Readonly<Ref<Record<string, string>>>
+  /** Stable element ids used to wire aria-controls / aria-labelledby / aria-describedby. */
+  triggerId: string
+  contentId: string
+  titleId: string
+  descriptionId: string
+  /** Mutable refs the sub-components attach DOM elements to. */
+  triggerEl: Ref<globalThis.HTMLElement | null>
+  /** The floating panel element. `Popover.Content` renders the panel and assigns this. */
+  panelEl: Ref<globalThis.HTMLElement | null>
+  /** Drives open state. Sub-components never call defineEmits directly. */
+  setOpen: (value: boolean) => void
+  /** Returns focus to the trigger element (used on Esc and Popover.Close). */
+  focusTrigger: () => void
+  /** Title registers presence so the panel wires aria-labelledby only when a title exists. */
+  registerTitle: () => void
+  unregisterTitle: () => void
+  /** Description registers presence so the panel wires aria-describedby only when present. */
+  registerDescription: () => void
+  unregisterDescription: () => void
+  /** Whether a Popover.Title is mounted; gates aria-labelledby on the panel. */
+  hasTitle: Ref<boolean>
+  /** Whether a Popover.Description is mounted; gates aria-describedby on the panel. */
+  hasDescription: Ref<boolean>
+}
+
+export const PopoverInjectionKey: InjectionKey<PopoverContext> = Symbol('Popover')

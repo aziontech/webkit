@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Eleven client marks looping under an eyebrow, at the scale of the Azion site's logo row: every mark is 24 px tall at its own width, with one fixed gap between marks. Every mark is an inline SVG drawn in `currentColor`, so the row takes one ink from the surface it sits on and follows the theme without a second asset or a filter. The track holds the row twice and travels exactly -50%, which is why the seam never shows; the second copy is `aria-hidden`, so a screen reader hears each company once. Hover anywhere on the strip to pause it. Leave `duration` at 0 and the pass is derived from the mark count.",
+   "file": "examples/marquee/default.vue"
+  },
+  {
+   "name": "Frameworks",
+   "summary": "The same component making a different claim: frameworks, clouds and tooling rather than customers. The registry holds both populations, so a framework mark resolves exactly as a client mark does. A square icon keeps its own width, so the icons sit one gap apart instead of each floating in a wide cell, and the row drifts slowly. Marks load on demand, so a page carries only the ones it names.",
+   "file": "examples/marquee/frameworks.vue"
+  },
+  {
+   "name": "Benefits",
+   "summary": "The same loop carrying short claims instead of marks: `items` replaces `marks`, and each item is a label with an optional leading icon. A cell sizes to its text rather than to a fixed pitch, so the row gap is the only rhythm, and the labels rest at full ink because they are real text a reader has to read. It floors the closing band of `CallToAction`, and it is slow on purpose: a claim is read, so each item gets six seconds of the pass where a mark gets two.",
+   "file": "examples/marquee/benefits.vue"
+  }
+ ]
+}

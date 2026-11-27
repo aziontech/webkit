@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A help topic: a header, two sections that each answer one question, and the Learn more links at the end.",
+   "file": "examples/help-panel/default.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "While the topic loads, skeleton lines reserve the space and the landmark is marked busy.",
+   "file": "examples/help-panel/loading.vue"
+  }
+ ]
+}

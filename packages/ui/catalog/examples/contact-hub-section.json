@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The Contact page band: Sales and Support lanes, Support with its system status link, over three self-serve channels. A band with no lanes and no channels renders nothing.",
+   "file": "examples/contact-hub-section/default.vue"
+  },
+  {
+   "name": "Secondary action",
+   "summary": "The Sales lane leads with its action and adds an outlined second button; two channels share the frame under the lanes, and the band carries an anchor for #hash links.",
+   "file": "examples/contact-hub-section/secondary-action.vue"
+  }
+ ]
+}

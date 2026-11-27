@@ -1,0 +1,1169 @@
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+
+import ComputedDiff from '../../../../examples/code-block/computed-diff.vue'
+import Default from '../../../../examples/code-block/default.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import { diffLines, pairDiffLines } from '../../../utils/line-diff'
+import CodeBlock from './code-block.vue'
+import { highlightCodeLine } from './lib/highlight-code'
+
+// The real Clipboard API rejects in headless Chromium ("Document is not
+// focused"), so writeText is stubbed to resolve. This is NOT a layout/focus
+// mock — it substitutes the external clipboard side effect so the component's
+// own logic (await write -> emit 'copy') can be exercised.
+function stubClipboardResolved() {
+  return vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
+}
+
+const CODE_ONE = 'const one = 1\nconst two = 2\nconst three = 3'
+const CODE_TWO = 'let a = 10\nlet b = 20'
+
+const twoTabs = [
+  { label: 'First', value: 'first', language: 'javascript', code: CODE_ONE },
+  { label: 'Second', value: 'second', language: 'javascript', code: CODE_TWO }
+]
+
+const singleTab = [{ label: 'Only', value: 'only', language: 'javascript', code: CODE_ONE }]
+
+const fileNameTab = [
+  {
+    label: 'File',
+    value: 'file',
+    language: 'javascript',
+    fileName: 'handler.js',
+    code: CODE_ONE
+  }
+]
+
+const diffTab = [
+  {
+    label: 'Diff',
+    value: 'diff',
+    language: 'javascript',
+    code: CODE_ONE,
+    lineChanges: [
+      { line: 1, change: 'added' as const },
+      { line: 2, change: 'removed' as const }
+    ]
+  }
+]
+
+afterEach(() => {
+  vi.restoreAllMocks()
+})
+
+describe('CodeBlock', () => {
+  it('mounts a long file in chunks and still copies the whole file', () => {
+    const code = Array.from({ length: 2000 }, (_, i) => `const v${i} = ${i}`).join('\n')
+    const view = render(CodeBlock, {
+      props: { tabs: [{ label: 'Long', value: 'long', language: 'javascript', code }] }
+    })
+    const mounted = view.getAllByTestId('code-block__line').length
+    expect(mounted).toBeGreaterThan(0)
+    expect(mounted).toBeLessThan(2000)
+    expect(view.getByTestId('code-block__lines').querySelectorAll('[data-chunk]').length).toBe(
+      Math.ceil((2000 - mounted) / 100)
+    )
+  })
+
+  describe('rendering & testid', () => {
+    it('renders with the default testid', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      expect(getByTestId('code-block')).toBeTruthy()
+    })
+
+    it('honors a consumer-supplied data-testid', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab },
+        attrs: { 'data-testid': 'my-code' }
+      })
+
+      expect(getByTestId('my-code')).toBeTruthy()
+    })
+
+    it('merges a consumer-supplied class onto the root', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab },
+        attrs: { class: 'consumer-class' }
+      })
+
+      expect(getByTestId('code-block').classList.contains('consumer-class')).toBe(true)
+    })
+
+    it('renders the highlighted line content of the active tab', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only' }
+      })
+
+      // Three source lines -> three line rows.
+      const content = getByTestId('code-block__content')
+      expect(content.textContent).toContain('const one = 1')
+      expect(content.textContent).toContain('const three = 3')
+    })
+  })
+
+  describe('tab header visibility', () => {
+    it('renders a tablist with a tab per tab when more than one tab is given', () => {
+      const { getByRole, getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      expect(getByRole('tablist')).toBeTruthy()
+      expect(getAllByRole('tab')).toHaveLength(2)
+    })
+
+    it('renders the tab-icon slot inside each tab with that tab as its payload', () => {
+      const { getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' },
+        slots: {
+          'tab-icon': '<template #tab-icon="{ tab }"><i :data-mark="tab.value" /></template>'
+        }
+      })
+
+      const marks = getAllByRole('tab').map((tab) => tab.querySelector('i')?.dataset.mark)
+
+      expect(marks).toEqual(twoTabs.map((tab) => tab.value))
+    })
+
+    it('renders no icon region in a tab when the tab-icon slot is empty', () => {
+      const { getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      getAllByRole('tab').forEach((tab) =>
+        expect(tab.querySelector('span:not([data-slot="touch-target"])')).toBeNull()
+      )
+    })
+
+    it('does not render a tab header when only one tab is given', () => {
+      const { queryByRole } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      expect(queryByRole('tablist')).toBeNull()
+      expect(queryByRole('tab')).toBeNull()
+    })
+  })
+
+  describe('tab selection & v-model', () => {
+    it('marks the defaultValue tab as selected initially', () => {
+      const { getAllByRole } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'second' }
+      })
+
+      const tabs = getAllByRole('tab')
+      const [first, second] = tabs
+
+      expect(second.getAttribute('aria-selected')).toBe('true')
+      expect(second.getAttribute('data-state')).toBe('active')
+      expect(second.getAttribute('tabindex')).toBe('0')
+      expect(first.getAttribute('aria-selected')).toBe('false')
+      expect(first.getAttribute('data-state')).toBe('inactive')
+      expect(first.getAttribute('tabindex')).toBe('-1')
+    })
+
+    it('emits update:modelValue with the clicked tab value', async () => {
+      const { getAllByRole, emitted } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      const [, second] = getAllByRole('tab')
+      await fireEvent.click(second)
+
+      // update:modelValue carries the user selection (it may also carry a mount-time
+      // model sync), so assert its latest emission is the clicked value.
+      const updateValue = emitted()['update:modelValue'] as string[][]
+      expect(updateValue).toBeTruthy()
+      expect(updateValue[updateValue.length - 1]).toEqual(['second'])
+    })
+
+    it('does not fire a user-selection change when the already-active tab is clicked', async () => {
+      const { getAllByRole, emitted } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      const before = (emitted()['update:modelValue'] ?? []).length
+      const [first] = getAllByRole('tab')
+      await fireEvent.click(first)
+
+      // Clicking the active tab is a no-op in setActiveTab, so no new
+      // update:modelValue is emitted beyond any mount-time sync.
+      expect((emitted()['update:modelValue'] ?? []).length).toBe(before)
+    })
+
+    it('honors the controlled modelValue prop and updates the active tab when it changes', async () => {
+      const { getAllByRole, rerender } = render(CodeBlock, {
+        props: { tabs: twoTabs, modelValue: 'first' }
+      })
+
+      expect(getAllByRole('tab')[0].getAttribute('aria-selected')).toBe('true')
+
+      await rerender({ tabs: twoTabs, modelValue: 'second' })
+
+      const tabs = getAllByRole('tab')
+      expect(tabs[1].getAttribute('aria-selected')).toBe('true')
+      expect(tabs[0].getAttribute('aria-selected')).toBe('false')
+    })
+
+    it('renders the replacement when the single tab is swapped for another', async () => {
+      const { getAllByTestId, queryByRole, rerender } = render(CodeBlock, {
+        props: { tabs: [twoTabs[0]] }
+      })
+
+      expect(getAllByTestId('code-block__line')).toHaveLength(3)
+
+      await rerender({ tabs: [twoTabs[1]] })
+
+      expect(queryByRole('tablist')).toBeNull()
+      const lines = getAllByTestId('code-block__line')
+      expect(lines).toHaveLength(2)
+      expect(lines[0].textContent?.replace(/\s+/g, ' ').trim()).toContain('let a = 10')
+    })
+
+    it('renders the new source when the active tab code is replaced in place', async () => {
+      const { getAllByTestId, rerender } = render(CodeBlock, {
+        props: { tabs: singleTab }
+      })
+
+      expect(getAllByTestId('code-block__line')).toHaveLength(3)
+
+      await rerender({ tabs: [{ ...singleTab[0], code: CODE_TWO }] })
+
+      const lines = getAllByTestId('code-block__line')
+      expect(lines).toHaveLength(2)
+      expect(lines[1].textContent?.replace(/\s+/g, ' ').trim()).toContain('let b = 20')
+    })
+  })
+
+  describe('keyboard navigation', () => {
+    it('activates a tab with Enter', async () => {
+      const { getAllByRole, emitted } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      const [, second] = getAllByRole('tab')
+      await fireEvent.keyDown(second, { key: 'Enter' })
+
+      expect(emitted()['update:modelValue']).toBeTruthy()
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
+    })
+
+    it('activates a tab with Space', async () => {
+      const { getAllByRole, emitted } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      const [, second] = getAllByRole('tab')
+      await fireEvent.keyDown(second, { key: ' ' })
+
+      expect(emitted()['update:modelValue']).toBeTruthy()
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
+    })
+
+    it('moves to the next tab with ArrowRight and wraps to the first from the last', async () => {
+      const { getAllByRole, emitted } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      const [first] = getAllByRole('tab')
+      await fireEvent.keyDown(first, { key: 'ArrowRight' })
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
+
+      // From the last tab, ArrowRight wraps back to the first.
+      const [, second] = getAllByRole('tab')
+      await fireEvent.keyDown(second, { key: 'ArrowRight' })
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['first'])
+    })
+
+    it('moves to the previous tab with ArrowLeft and wraps to the last from the first', async () => {
+      const { getAllByRole, emitted } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      const [first] = getAllByRole('tab')
+      await fireEvent.keyDown(first, { key: 'ArrowLeft' })
+
+      // From the first tab, ArrowLeft wraps to the last tab.
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
+    })
+
+    it('jumps to the first tab with Home and the last with End', async () => {
+      const { getAllByRole, emitted } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      const [first] = getAllByRole('tab')
+      await fireEvent.keyDown(first, { key: 'End' })
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
+
+      const [, second] = getAllByRole('tab')
+      await fireEvent.keyDown(second, { key: 'Home' })
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['first'])
+    })
+  })
+
+  describe('copy', () => {
+    it('writes the active tab code to the clipboard and emits copy with that code', async () => {
+      const writeText = stubClipboardResolved()
+      const { getByTestId, emitted } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only' }
+      })
+
+      await fireEvent.click(within(getByTestId('code-block__copy')).getByRole('button'))
+
+      await waitFor(() => {
+        expect(emitted().copy).toBeTruthy()
+      })
+      expect(writeText).toHaveBeenCalledWith(CODE_ONE)
+      const events = emitted().copy as [Event, string][]
+      expect(events).toHaveLength(1)
+      expect(events[0][0]).toBeInstanceOf(MouseEvent)
+      expect(events[0][1]).toBe(CODE_ONE)
+    })
+
+    it('copies the code of the active tab after switching tabs', async () => {
+      const writeText = stubClipboardResolved()
+      const { getAllByRole, getByTestId, emitted } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      await fireEvent.click(getAllByRole('tab')[1])
+      await fireEvent.click(within(getByTestId('code-block__copy')).getByRole('button'))
+
+      await waitFor(() => {
+        expect(emitted().copy).toBeTruthy()
+      })
+      expect(writeText).toHaveBeenCalledWith(CODE_TWO)
+    })
+
+    it('uses the copyAriaLabel prop as the copy control accessible name', () => {
+      const { getByRole } = render(CodeBlock, {
+        props: { tabs: singleTab, copyAriaLabel: 'Copy snippet' }
+      })
+
+      expect(getByRole('button', { name: 'Copy snippet' }).tagName).toBe('BUTTON')
+    })
+
+    it('renders the copy anchor and marks the root copyable by default', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      expect(getByTestId('code-block').hasAttribute('data-copyable')).toBe(true)
+      expect(getByTestId('code-block__copy-anchor')).toBeTruthy()
+      expect(within(getByTestId('code-block__copy')).getByRole('button')).toBeTruthy()
+    })
+
+    it('omits the copy anchor and the copyable marker when copyable is false', () => {
+      const { getByTestId, queryByTestId, queryByRole } = render(CodeBlock, {
+        props: { tabs: singleTab, copyable: false, copyAriaLabel: 'Copy snippet' }
+      })
+
+      expect(getByTestId('code-block').hasAttribute('data-copyable')).toBe(false)
+      expect(queryByTestId('code-block__copy-anchor')).toBeNull()
+      expect(queryByTestId('code-block__copy')).toBeNull()
+      expect(queryByRole('button', { name: 'Copy snippet' })).toBeNull()
+    })
+  })
+
+  describe('line numbers gutter', () => {
+    it('insets each line less in a block narrower than --container-sm', () => {
+      const { queryAllByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only' }
+      })
+      const line = queryAllByTestId('code-block__line-number')[0]!.parentElement!
+      expect(line.classList.contains('px-(--spacing-sm)')).toBe(true)
+      expect(line.classList.contains('@sm:px-(--spacing-lg)')).toBe(true)
+    })
+
+    it('renders the line-number gutter by default', () => {
+      const { queryAllByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only' }
+      })
+
+      // Three source lines -> a line-number cell per line.
+      expect(queryAllByTestId('code-block__line-number')).toHaveLength(3)
+    })
+
+    it('hides the line-number gutter when showLineNumbers is false', () => {
+      const { queryAllByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only', showLineNumbers: false }
+      })
+
+      expect(queryAllByTestId('code-block__line-number')).toHaveLength(0)
+    })
+  })
+
+  describe('single snippet (code + language)', () => {
+    it('renders the code prop when tabs is empty, with no tab strip', () => {
+      const view = render(CodeBlock, {
+        props: { code: CODE_TWO, language: 'javascript', showLabel: true }
+      })
+      expect(view.queryByRole('tablist')).toBeNull()
+      expect(view.getAllByTestId('code-block__line')).toHaveLength(2)
+      expect(view.getByTestId('code-block__label-text').textContent?.trim()).toBe('JavaScript')
+    })
+
+    it('ignores code when tabs are set', () => {
+      const view = render(CodeBlock, { props: { code: CODE_TWO, tabs: singleTab } })
+      expect(view.getAllByTestId('code-block__line')).toHaveLength(3)
+    })
+  })
+
+  describe('tab ids', () => {
+    it('gives two tabbed blocks on one page unique ids and correct labelling', async () => {
+      const spaced = [
+        { label: 'Node js', value: 'node js', language: 'javascript', code: CODE_ONE },
+        { label: 'Deno', value: 'deno', language: 'javascript', code: CODE_TWO }
+      ]
+      const view = render({
+        components: { CodeBlock },
+        setup: () => ({ spaced }),
+        template: '<div><CodeBlock :tabs="spaced" /><CodeBlock :tabs="spaced" /></div>'
+      })
+      const ids = Array.from(view.container.querySelectorAll('[id]')).map((el) => el.id)
+      expect(new Set(ids).size).toBe(ids.length)
+      ids.forEach((id) => expect(id).not.toMatch(/\s/))
+      const panels = view.getAllByRole('tabpanel')
+      expect(panels).toHaveLength(2)
+      panels.forEach((panel) => {
+        const tab = document.getElementById(panel.getAttribute('aria-labelledby') ?? '')
+        expect(tab?.getAttribute('aria-selected')).toBe('true')
+        expect(tab?.getAttribute('aria-controls')).toBe(panel.id)
+        expect(view.container.contains(tab)).toBe(true)
+        expect(panel.parentElement?.closest('[data-testid="code-block"]')).toBe(
+          tab?.closest('[data-testid="code-block"]')
+        )
+      })
+      const inactive = view.getAllByRole('tab', { selected: false })
+      inactive.forEach((tab) => expect(tab.hasAttribute('aria-controls')).toBe(false))
+    })
+  })
+
+  describe('filename bar', () => {
+    it('renders the filename bar with the active tab fileName', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: fileNameTab, defaultValue: 'file' }
+      })
+
+      expect(getByTestId('code-block__filename-label').textContent?.trim()).toBe('handler.js')
+    })
+
+    it('keeps the label typography off the file icon so the icon font applies', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: {
+          tabs: [{ ...fileNameTab[0], fileIcon: 'ai ai-json' }],
+          defaultValue: 'file'
+        }
+      })
+
+      const holder = getByTestId('code-block__filename-icon')
+      const icon = holder.querySelector('i')
+
+      expect(holder.classList.contains('text-label-code-sm')).toBe(true)
+      expect(icon?.classList.contains('text-label-code-sm')).toBe(false)
+      expect(icon?.classList.contains('ai-json')).toBe(true)
+    })
+
+    it('omits the filename bar when the active tab has no fileName', () => {
+      const { queryByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only' }
+      })
+
+      expect(queryByTestId('code-block__filename')).toBeNull()
+    })
+  })
+
+  describe('diff gutter', () => {
+    it('renders diff markers when the active tab has lineChanges', () => {
+      const { queryAllByTestId, getByTestId } = render(CodeBlock, {
+        props: { tabs: diffTab, defaultValue: 'diff' }
+      })
+
+      const markers = queryAllByTestId('code-block__diff-marker')
+      expect(markers.length).toBeGreaterThan(0)
+
+      // The added/removed lines carry the corresponding data-state.
+      const lines = getByTestId('code-block__lines').querySelectorAll(
+        '[data-testid="code-block__line"]'
+      )
+      expect(lines[0].getAttribute('data-state')).toBe('added')
+      expect(lines[1].getAttribute('data-state')).toBe('removed')
+    })
+
+    it('does not render diff markers when the active tab has no lineChanges', () => {
+      const { queryAllByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only' }
+      })
+
+      expect(queryAllByTestId('code-block__diff-marker')).toHaveLength(0)
+    })
+  })
+
+  describe('bordered', () => {
+    it('draws the outer border by default (data-bordered set)', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      expect(getByTestId('code-block').getAttribute('data-bordered')).toBe('true')
+    })
+
+    it('drops the outer border when bordered is false (data-bordered absent)', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, bordered: false }
+      })
+
+      expect(getByTestId('code-block').getAttribute('data-bordered')).toBeNull()
+    })
+  })
+
+  describe('line entrance', () => {
+    it('transitions the translate property the offset utility sets', () => {
+      const { getAllByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, animateLines: true }
+      })
+
+      for (const line of getAllByTestId('code-block__line')) {
+        const properties = line.style.transitionProperty.split(',').map((name) => name.trim())
+
+        expect(properties).toContain('translate')
+        expect(properties).not.toContain('transform')
+      }
+    })
+
+    it('leaves lines without an entrance transition when animateLines is off', () => {
+      const { getAllByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      for (const line of getAllByTestId('code-block__line')) {
+        expect(line.style.transitionProperty).toBe('')
+      }
+    })
+  })
+
+  describe('a11y (axe against styled DOM)', () => {
+    it('single-tab layout has no violations', async () => {
+      const { container } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only' }
+      })
+
+      await expectNoA11yViolations(container)
+    })
+
+    it('tabbed layout has no violations', async () => {
+      const { container } = render(CodeBlock, {
+        props: { tabs: twoTabs, defaultValue: 'first' }
+      })
+
+      await expectNoA11yViolations(container)
+    })
+
+    it('filename + diff layout has no violations', async () => {
+      const { container } = render(CodeBlock, {
+        props: { tabs: diffTab, defaultValue: 'diff' }
+      })
+
+      await expectNoA11yViolations(container)
+    })
+
+    it('non-copyable layout has no violations', async () => {
+      const { container } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only', copyable: false }
+      })
+
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('story fixture', () => {
+    it('renders the Default story cleanly', async () => {
+      const { getByTestId, container } = render(Default)
+
+      expect(getByTestId('code-block')).toBeTruthy()
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('javascript highlighting', () => {
+    const typeOf = (language: string, line: string, text: string) =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it.each(['javascript', 'js', 'typescript', 'ts'])(
+      'treats a full-line // as a comment in %s',
+      (lang) => {
+        expect(highlightCodeLine(lang, '// Route every request to the origin')).toEqual([
+          { text: '// Route every request to the origin', type: 'comment' }
+        ])
+      }
+    )
+
+    it('keeps a trailing comment separate from the code before it', () => {
+      const line = 'const ttl = 3600 // one hour'
+
+      expect(typeOf('js', line, 'const')).toBe('keyword')
+      expect(typeOf('js', line, '// one hour')).toBe('comment')
+    })
+
+    it('does not read // inside a string as a comment', () => {
+      const line = "fetch('https://api.azion.com/v4')"
+
+      expect(typeOf('js', line, "'https://api.azion.com/v4'")).toBe('string')
+      expect(highlightCodeLine('js', line).some((token) => token.type === 'comment')).toBe(false)
+    })
+  })
+
+  // Shell is tokenised so a CLI snippet gets the same code-syntax palette as JS —
+  // asserted on the token stream, never on class strings.
+  describe('shell highlighting', () => {
+    // Adjacent same-type chunks are merged by design (whitespace rides along with the
+    // identifier next to it), so a token is matched on its trimmed text.
+    const typeOf = (language: string, line: string, text: string) =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('tokenises a command line: program, flag, operator', () => {
+      const line = 'curl -fsSL https://cli.azion.app/install.sh | bash'
+
+      expect(typeOf('bash', line, 'curl')).toBe('function')
+      expect(typeOf('bash', line, '-fsSL')).toBe('keyword')
+      expect(typeOf('bash', line, '|')).toBe('punctuation')
+      // the program after a pipe starts a new command
+      expect(typeOf('bash', line, 'bash')).toBe('function')
+      expect(typeOf('bash', line, 'https://cli.azion.app/install.sh')).toBe('identifier')
+    })
+
+    it('marks a sub-command as data, not as a second program', () => {
+      expect(typeOf('bash', 'azion deploy', 'azion')).toBe('function')
+      expect(typeOf('bash', 'azion deploy', 'deploy')).toBe('identifier')
+    })
+
+    it('treats a full-line # as a comment', () => {
+      const tokens = highlightCodeLine('bash', '# Install the Azion CLI')
+
+      expect(tokens).toHaveLength(1)
+      expect(tokens[0]).toEqual({ text: '# Install the Azion CLI', type: 'comment' })
+    })
+
+    it('keeps a trailing comment separate from the command before it', () => {
+      const line = 'azion link # link this project'
+
+      expect(typeOf('bash', line, 'azion')).toBe('function')
+      expect(typeOf('bash', line, '# link this project')).toBe('comment')
+    })
+
+    it('reads quoted text as a string and an expansion as a type', () => {
+      const line = 'export TOKEN="$AZION_TOKEN"'
+
+      expect(typeOf('bash', line, 'export')).toBe('keyword')
+      expect(typeOf('bash', line, '"$AZION_TOKEN"')).toBe('string')
+      expect(typeOf('bash', 'echo $HOME', '$HOME')).toBe('type')
+    })
+
+    it('covers every shell alias, and leaves an unknown language flat', () => {
+      for (const lang of ['bash', 'sh', 'shell', 'zsh', 'console']) {
+        expect(typeOf(lang, 'azion deploy', 'azion')).toBe('function')
+      }
+
+      expect(highlightCodeLine('json', 'azion deploy')).toEqual([
+        { text: 'azion deploy', type: 'identifier' }
+      ])
+    })
+
+    it('renders markdown prose as a single comment token', () => {
+      for (const lang of ['markdown', 'md']) {
+        expect(highlightCodeLine(lang, '1. Install the Azion CLI:')).toEqual([
+          { text: '1. Install the Azion CLI:', type: 'comment' }
+        ])
+      }
+    })
+  })
+
+  describe('hcl highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'hcl') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads a block header as keyword and labels', () => {
+      const line = 'resource "azion_application" "storefront" {'
+
+      expect(typeOf(line, 'resource')).toBe('keyword')
+      expect(typeOf(line, '"azion_application"')).toBe('string')
+      expect(typeOf(line, '{')).toBe('punctuation')
+    })
+
+    it('reads an attribute key, its value and a literal', () => {
+      expect(typeOf('  name = "storefront"', 'name')).toBe('function')
+      expect(typeOf('  name = "storefront"', '"storefront"')).toBe('string')
+      expect(typeOf('  edge_functions = true', 'true')).toBe('type')
+      expect(typeOf('  ttl = 3600', '3600')).toBe('type')
+    })
+
+    it('reads a nested block, a reference and a trailing comment', () => {
+      expect(typeOf('  application {', 'application')).toBe('keyword')
+      expect(typeOf('    id = azion_application.storefront.id', 'azion_application')).toBe(
+        'identifier'
+      )
+      expect(typeOf('  count = length(var.x) # one per domain', 'length')).toBe('function')
+      expect(typeOf('  count = length(var.x) # one per domain', '# one per domain')).toBe('comment')
+    })
+
+    it('covers every hcl alias', () => {
+      for (const lang of ['hcl', 'terraform', 'tf']) {
+        expect(typeOf('resource "a" "b" {', 'resource', lang)).toBe('keyword')
+      }
+    })
+  })
+
+  describe('graphql highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'graphql') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads an operation header: keyword, name, variables and types', () => {
+      const line = 'query RequestsByStatus($begin: DateTime!) {'
+
+      expect(typeOf(line, 'query')).toBe('keyword')
+      expect(typeOf(line, 'RequestsByStatus')).toBe('function')
+      expect(typeOf(line, '$begin')).toBe('type')
+      expect(typeOf(line, 'DateTime')).toBe('type')
+    })
+
+    it('reads a field with arguments as a call, and plain fields as identifiers', () => {
+      expect(typeOf('  httpMetrics(', 'httpMetrics')).toBe('function')
+      expect(typeOf('    requests: sum(field: requests)', 'sum')).toBe('function')
+      expect(typeOf('    limit: 100', 'limit')).toBe('identifier')
+      expect(typeOf('    limit: 100', '100')).toBe('type')
+      expect(typeOf('    status', 'status')).toBe('identifier')
+    })
+
+    it('reads a directive, a spread and a comment', () => {
+      expect(typeOf('    ...Metrics @include(if: true)', '@include')).toBe('keyword')
+      expect(typeOf('    ...Metrics @include(if: true)', '...')).toBe('punctuation')
+      expect(highlightCodeLine('gql', '# requests per status')).toEqual([
+        { text: '# requests per status', type: 'comment' }
+      ])
+    })
+  })
+
+  describe('json highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'json') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads a key apart from its string value', () => {
+      const line = '  "name": "waf-to-siem",'
+
+      expect(typeOf(line, '"name"')).toBe('function')
+      expect(typeOf(line, '"waf-to-siem"')).toBe('string')
+      expect(typeOf(line, ':')).toBe('punctuation')
+    })
+
+    it('reads numbers and literals as values', () => {
+      expect(typeOf('  "enabled": true }', 'true')).toBe('type')
+      expect(typeOf('  "ttl": 3600,', '3600')).toBe('type')
+      expect(typeOf('  "parent": null', 'null')).toBe('type')
+    })
+
+    it('keeps a # or // inside a string as part of the value', () => {
+      expect(
+        highlightCodeLine('json', '  "url": "https://api.azion.com/v4#docs"').some(
+          (token) => token.type === 'comment'
+        )
+      ).toBe(false)
+    })
+  })
+
+  describe('sql highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'sql') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads keywords in any case, identifiers and strings', () => {
+      const line = "SELECT id, text FROM comments WHERE text = 'Hello'"
+
+      expect(typeOf(line, 'SELECT')).toBe('keyword')
+      expect(typeOf(line, 'FROM')).toBe('keyword')
+      expect(typeOf(line, 'comments')).toBe('identifier')
+      expect(typeOf(line, "'Hello'")).toBe('string')
+      expect(typeOf('select 1', 'select')).toBe('keyword')
+    })
+
+    it('reads column types, calls and a trailing -- comment', () => {
+      const line = 'CREATE TABLE docs (id INTEGER PRIMARY KEY, embedding F32_BLOB(4)) -- vectors'
+
+      expect(typeOf(line, 'INTEGER')).toBe('type')
+      expect(typeOf(line, 'F32_BLOB')).toBe('function')
+      expect(typeOf(line, '-- vectors')).toBe('comment')
+    })
+  })
+
+  describe('python highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'python') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads a definition, its name and a call', () => {
+      expect(typeOf('def list_objects(bucket):', 'def')).toBe('keyword')
+      expect(typeOf('def list_objects(bucket):', 'list_objects')).toBe('function')
+      expect(typeOf('class Storage:', 'Storage')).toBe('type')
+      expect(typeOf("    s3 = boto3.client('s3')", 'client')).toBe('function')
+    })
+
+    it('reads strings, literals, decorators and a comment', () => {
+      expect(typeOf("    s3 = boto3.client('s3')", "'s3'")).toBe('string')
+      expect(typeOf('print(f"{name} uploaded")', 'f"{name} uploaded"')).toBe('string')
+      expect(typeOf('    return None', 'None')).toBe('type')
+      expect(typeOf('@app.route("/")', '@app.route')).toBe('keyword')
+      expect(typeOf('total = 10 # objects', '# objects')).toBe('comment')
+    })
+
+    it('reads // as floor division, not a comment', () => {
+      expect(typeOf('pages = total // 100', '//')).toBe('punctuation')
+    })
+  })
+
+  describe('line comments', () => {
+    const typeOf = (language: string, line: string, text: string) =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it.each(['bash', 'javascript', 'typescript', 'hcl', 'graphql', 'yaml', 'toml'])(
+      'reads both # and // as a full-line comment in %s',
+      (lang) => {
+        expect(highlightCodeLine(lang, '# Install the Azion CLI')).toEqual([
+          { text: '# Install the Azion CLI', type: 'comment' }
+        ])
+        expect(highlightCodeLine(lang, '// Install the Azion CLI')).toEqual([
+          { text: '// Install the Azion CLI', type: 'comment' }
+        ])
+      }
+    )
+
+    it('keeps a trailing // apart from the shell command before it', () => {
+      const line = 'azion deploy // ship the current branch'
+
+      expect(typeOf('bash', line, 'azion')).toBe('function')
+      expect(typeOf('bash', line, '// ship the current branch')).toBe('comment')
+    })
+
+    it('keeps a trailing # apart from the javascript before it', () => {
+      const line = 'const ttl = 3600 # one hour'
+
+      expect(typeOf('js', line, 'const')).toBe('keyword')
+      expect(typeOf('js', line, '# one hour')).toBe('comment')
+    })
+
+    it('reads a trailing comment after a yaml value', () => {
+      expect(typeOf('yaml', 'ttl: 3600 # one hour', '# one hour')).toBe('comment')
+      expect(typeOf('yaml', 'ttl: 3600 // one hour', '// one hour')).toBe('comment')
+    })
+
+    it('does not open a comment inside a word, a URL or quoted text', () => {
+      const hasComment = (language: string, line: string) =>
+        highlightCodeLine(language, line).some((token) => token.type === 'comment')
+
+      expect(hasComment('bash', 'curl -fsSL https://cli.azion.app/install.sh | bash')).toBe(false)
+      expect(hasComment('bash', 'echo "step # 2" ${#items[@]}')).toBe(false)
+      expect(hasComment('graphql', 'query Q { url(path: "a // b") }')).toBe(false)
+      expect(hasComment('yaml', 'endpoint: https://api.azion.com/v4#docs')).toBe(false)
+    })
+
+    it('leaves a javascript private field as code', () => {
+      expect(
+        highlightCodeLine('ts', '  #count = 0').some((token) => token.type === 'comment')
+      ).toBe(false)
+      expect(
+        highlightCodeLine('js', 'this.#count += 1').some((token) => token.type === 'comment')
+      ).toBe(false)
+    })
+  })
+
+  describe('docs surfaces', () => {
+    const shell = [{ label: 'Shell', value: 'sh', language: 'bash', code: 'azion deploy' }]
+
+    describe('label header', () => {
+      it('is off by default', () => {
+        const { queryByTestId } = render(CodeBlock, { props: { tabs: shell } })
+        expect(queryByTestId('code-block__label')).toBeNull()
+      })
+
+      it('names the block with the tab label when showLabel is on', () => {
+        const { getByTestId } = render(CodeBlock, { props: { tabs: shell, showLabel: true } })
+        expect(getByTestId('code-block__label-text').textContent?.trim()).toBe('Shell')
+      })
+
+      it('falls back to the readable language name when the tab label is empty', () => {
+        const { getByTestId } = render(CodeBlock, {
+          props: {
+            tabs: [{ label: '', value: 'js', language: 'js', code: 'const a = 1' }],
+            showLabel: true
+          }
+        })
+        expect(getByTestId('code-block__label-text').textContent?.trim()).toBe('JavaScript')
+      })
+
+      it('uses title over the tab label', () => {
+        const { getByTestId } = render(CodeBlock, {
+          props: { tabs: shell, title: 'Terminal' }
+        })
+        expect(getByTestId('code-block__label-text').textContent?.trim()).toBe('Terminal')
+      })
+
+      it('holds the copy control at its end instead of the floating anchor', () => {
+        const { getByTestId, queryByTestId } = render(CodeBlock, {
+          props: { tabs: shell, showLabel: true }
+        })
+        const root = getByTestId('code-block')
+        expect(root.hasAttribute('data-copyable')).toBe(true)
+        expect(root.hasAttribute('data-copy-gutter')).toBe(false)
+        expect(queryByTestId('code-block__copy-anchor')).toBeNull()
+        expect(within(getByTestId('code-block__label')).getByRole('button')).toBeTruthy()
+      })
+
+      it('keeps the floating copy anchor and its gutter without a header', () => {
+        const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
+        expect(getByTestId('code-block').hasAttribute('data-copy-gutter')).toBe(true)
+        expect(getByTestId('code-block__copy-anchor')).toBeTruthy()
+        expect(
+          getByTestId('code-block__scroll').classList.contains('in-data-[copy-gutter]:me-10')
+        ).toBe(true)
+      })
+
+      it('sticks to the top of the scroller and drops its divider when unbordered', () => {
+        const { getByTestId } = render(CodeBlock, {
+          props: { tabs: shell, showLabel: true, bordered: false }
+        })
+        const label = getByTestId('code-block__label')
+        expect(label.classList.contains('sticky')).toBe(true)
+        expect(label.classList.contains('in-data-[bordered]:border-b')).toBe(true)
+        expect(getByTestId('code-block').hasAttribute('data-bordered')).toBe(false)
+      })
+
+      it('moves the copy control into the tab strip or the filename bar, off the first lines', () => {
+        const tabs = render(CodeBlock, { props: { tabs: twoTabs } })
+        expect(tabs.getByTestId('code-block').hasAttribute('data-copy-gutter')).toBe(false)
+        expect(tabs.queryByTestId('code-block__copy-anchor')).toBeNull()
+        expect(
+          within(tabs.getByTestId('code-block__header')).getByTestId('code-block__copy')
+        ).toBeTruthy()
+        tabs.unmount()
+        const file = render(CodeBlock, { props: { tabs: fileNameTab } })
+        expect(file.getByTestId('code-block').hasAttribute('data-copy-gutter')).toBe(false)
+        expect(file.queryByTestId('code-block__copy-anchor')).toBeNull()
+        expect(
+          within(file.getByTestId('code-block__filename')).getByTestId('code-block__copy')
+        ).toBeTruthy()
+      })
+
+      it('gives way to the tab strip and to the filename bar', () => {
+        const tabs = render(CodeBlock, { props: { tabs: twoTabs, showLabel: true } })
+        expect(tabs.queryByTestId('code-block__label')).toBeNull()
+        tabs.unmount()
+        const file = render(CodeBlock, { props: { tabs: fileNameTab, showLabel: true } })
+        expect(file.queryByTestId('code-block__label')).toBeNull()
+      })
+    })
+
+    describe('output type', () => {
+      const output = [
+        { label: 'Text', value: 'out', language: 'bash', code: 'HTTP/2 200\nx-cache: HIT' }
+      ]
+
+      it('labels the block Output, drops the copy control and marks the root', () => {
+        const { getByTestId, queryByTestId } = render(CodeBlock, {
+          props: { tabs: output, type: 'output' }
+        })
+        const root = getByTestId('code-block')
+        expect(root.getAttribute('data-type')).toBe('output')
+        expect(root.hasAttribute('data-copyable')).toBe(false)
+        expect(queryByTestId('code-block__copy-anchor')).toBeNull()
+        expect(getByTestId('code-block__label-text').textContent?.trim()).toBe('Output')
+      })
+
+      it('draws every line flat, without syntax tokens', () => {
+        const { getAllByTestId } = render(CodeBlock, { props: { tabs: output, type: 'output' } })
+        for (const line of getAllByTestId('code-block__line-content')) {
+          expect(line.children).toHaveLength(1)
+        }
+      })
+
+      it('keeps a copy control, in its label header, when copyable is set explicitly', () => {
+        const { getByTestId, queryByTestId } = render(CodeBlock, {
+          props: { tabs: output, type: 'output', copyable: true }
+        })
+        expect(
+          within(getByTestId('code-block__label')).getByTestId('code-block__copy')
+        ).toBeTruthy()
+        expect(queryByTestId('code-block__copy-anchor')).toBeNull()
+      })
+
+      it('a code block stays copyable by default', () => {
+        const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
+        expect(getByTestId('code-block').getAttribute('data-type')).toBe('code')
+        expect(getByTestId('code-block').hasAttribute('data-copyable')).toBe(true)
+      })
+
+      it('has no a11y violations beside its command', async () => {
+        const { container } = render({
+          components: { CodeBlock },
+          setup: () => ({ shell, output }),
+          template: `<div><CodeBlock :tabs="shell" show-label /><CodeBlock :tabs="output" type="output" data-testid="out" /></div>`
+        })
+        await expectNoA11yViolations(container)
+      })
+    })
+
+    describe('shell prompt', () => {
+      it('draws a leading $ as a prompt token and the rest as a command', () => {
+        const tokens = highlightCodeLine('bash', '$ azion deploy')
+        expect(tokens[0]).toEqual({ text: '$ ', type: 'prompt' })
+        expect(tokens.find((token) => token.text.trim() === 'azion')?.type).toBe('function')
+      })
+
+      it('copies the commands without their prompts, and skips unprompted lines', async () => {
+        const writeText = stubClipboardResolved()
+        const { getByTestId, emitted } = render(CodeBlock, {
+          props: {
+            tabs: [
+              {
+                label: 'Shell',
+                value: 'sh',
+                language: 'bash',
+                code: '$ azion login\n$ azion deploy \\\n  --local\nDeploy finished'
+              }
+            ]
+          }
+        })
+        await fireEvent.click(within(getByTestId('code-block__copy')).getByRole('button'))
+        await waitFor(() => expect(emitted().copy).toBeTruthy())
+        expect(writeText).toHaveBeenCalledWith('azion login\nazion deploy \\\n  --local')
+      })
+
+      it('copies a block without prompts as written', async () => {
+        const writeText = stubClipboardResolved()
+        const { getByTestId, emitted } = render(CodeBlock, { props: { tabs: shell } })
+        await fireEvent.click(within(getByTestId('code-block__copy')).getByRole('button'))
+        await waitFor(() => expect(emitted().copy).toBeTruthy())
+        expect(writeText).toHaveBeenCalledWith('azion deploy')
+      })
+    })
+  })
+
+  describe('computed diff', () => {
+    const original = 'a\nb\nc\nd'
+    const modified = 'a\nx\nc\nd\ne'
+    const tab = [{ label: 'Diff', value: 'diff', language: 'plaintext', code: modified, original }]
+    const states = (view: ReturnType<typeof render>, id: string) =>
+      view.getAllByTestId(id).map((line) => line.getAttribute('data-state'))
+    const texts = (view: ReturnType<typeof render>, id: string) =>
+      view.getAllByTestId(id).map((line) => line.textContent?.trim())
+
+    it('computes a minimal line diff that rebuilds both versions', () => {
+      const rows = diffLines(original, modified)
+      expect(rows.map((row) => row.change)).toEqual([
+        'unchanged',
+        'removed',
+        'added',
+        'unchanged',
+        'unchanged',
+        'added'
+      ])
+      const before = original.split('\n')
+      const after = modified.split('\n')
+      expect(
+        rows.filter((row) => row.change !== 'added').map((row) => before[(row.oldNumber ?? 0) - 1])
+      ).toEqual(before)
+      expect(
+        rows.filter((row) => row.change !== 'removed').map((row) => after[(row.newNumber ?? 0) - 1])
+      ).toEqual(after)
+      expect(pairDiffLines(rows)).toHaveLength(5)
+    })
+
+    it('falls back to removed then added when the edits pass the limit', () => {
+      const rows = diffLines('a\nb', 'c\nd', 1)
+      expect(rows.map((row) => row.change)).toEqual(['removed', 'removed', 'added', 'added'])
+    })
+
+    it('diffs 5,000-line versions with scattered edits quickly', () => {
+      const before = Array.from({ length: 5000 }, (_, i) => `line ${i}`)
+      const after = before.map((line, i) => (i % 50 === 0 ? `${line} changed` : line))
+      const start = performance.now()
+      const rows = diffLines(before.join('\n'), after.join('\n'))
+      expect(performance.now() - start).toBeLessThan(200)
+      expect(rows.filter((row) => row.change === 'added')).toHaveLength(100)
+    })
+
+    it('draws a unified diff with markers, side numbers and spoken changes', () => {
+      const view = render(CodeBlock, { props: { tabs: tab } })
+      expect(states(view, 'code-block__line')).toEqual([
+        'default',
+        'removed',
+        'added',
+        'default',
+        'default',
+        'added'
+      ])
+      expect(texts(view, 'code-block__line-content')).toEqual(['a', 'b', 'x', 'c', 'd', 'e'])
+      expect(texts(view, 'code-block__line-number')).toEqual(['01', '02', '02', '03', '04', '05'])
+      expect(texts(view, 'code-block__diff-marker')).toEqual(['', '-', '+', '', '', '+'])
+      const lines = view.getAllByTestId('code-block__line')
+      expect(lines[1]?.querySelector('.sr-only')?.textContent).toBe('Removed')
+      expect(lines[2]?.querySelector('.sr-only')?.textContent).toBe('Added')
+    })
+
+    it('draws a split diff with aligned, paired columns and copies the modified code', async () => {
+      const writeText = stubClipboardResolved()
+      const view = render(CodeBlock, { props: { tabs: tab, diffView: 'split' } })
+      expect(view.getByTestId('code-block__panel').hasAttribute('data-split')).toBe(true)
+      expect(view.queryAllByTestId('code-block__line')).toHaveLength(0)
+      const [left, right] = view.getAllByRole('group') as HTMLElement[]
+      expect(left?.getAttribute('aria-label')).toBe('Original')
+      expect(right?.getAttribute('aria-label')).toBe('Modified')
+      const leftLines = within(left as HTMLElement).getAllByTestId('code-block__split-line')
+      const rightLines = within(right as HTMLElement).getAllByTestId('code-block__split-line')
+      expect(leftLines.map((line) => line.getAttribute('data-state'))).toEqual([
+        'default',
+        'removed',
+        'default',
+        'default',
+        'empty'
+      ])
+      expect(rightLines.map((line) => line.getAttribute('data-state'))).toEqual([
+        'default',
+        'added',
+        'default',
+        'default',
+        'added'
+      ])
+      await fireEvent.click(within(view.getByTestId('code-block__copy')).getByRole('button'))
+      await waitFor(() => expect(writeText).toHaveBeenCalledWith(modified))
+    })
+
+    it('mounts a long split diff in chunks', () => {
+      const before = Array.from({ length: 2000 }, (_, i) => `const v${i} = ${i}`)
+      const after = before.map((line, i) => (i % 100 === 0 ? `${line} + 1` : line))
+      const view = render(CodeBlock, {
+        props: {
+          diffView: 'split',
+          tabs: [
+            {
+              label: 'Long',
+              value: 'long',
+              language: 'javascript',
+              code: after.join('\n'),
+              original: before.join('\n')
+            }
+          ]
+        }
+      })
+      const mounted = view.getAllByTestId('code-block__split-line').length
+      expect(mounted).toBeGreaterThan(0)
+      expect(mounted).toBeLessThan(4000)
+    })
+
+    it('has no axe violations in the computed diff example', async () => {
+      const view = render(ComputedDiff)
+      await expectNoA11yViolations(view.container)
+    })
+  })
+
+  it('spells the language names and file names of its examples the way apps copy them', () => {
+    const files = import.meta.glob('../../../../examples/code-block/*.vue', {
+      query: '?raw',
+      import: 'default',
+      eager: true
+    }) as Record<string, string>
+    const sources = Object.values(files).join('\n')
+    expect(sources).toContain("'JavaScript'")
+    expect(sources).not.toMatch(/'Javascript'|'Typescript'|file name\./)
+  })
+})

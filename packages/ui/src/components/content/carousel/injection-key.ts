@@ -1,0 +1,23 @@
+import type { ComputedRef, InjectionKey, Ref } from 'vue'
+
+/** Layout of the row: one ruled strip, or standalone cards with a gutter. */
+export type CarouselLayout = 'strip' | 'cards'
+
+export interface CarouselContext {
+  /** Layout of the row the items render in. */
+  variant: ComputedRef<CarouselLayout>
+  /** The scrollable track element, or null before the root mounts. */
+  trackEl: Readonly<Ref<globalThis.HTMLUListElement | null>>
+  /** Whether the track has room left to step back toward its start. */
+  canScrollPrev: ComputedRef<boolean>
+  /** Whether the track has room left to step forward toward its end. */
+  canScrollNext: ComputedRef<boolean>
+  /** Whether the track's content overflows the row it sits in. */
+  canScroll: ComputedRef<boolean>
+  /** Steps the track back by one slide. */
+  scrollPrev: () => void
+  /** Steps the track forward by one slide. */
+  scrollNext: () => void
+}
+
+export const CarouselInjectionKey: InjectionKey<CarouselContext> = Symbol('Carousel')

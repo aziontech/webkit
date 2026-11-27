@@ -1,0 +1,222 @@
+---
+name: transfer-list
+category: data
+structure: composition
+status: implemented
+spec_version: 6
+checksum: d91645996eed234b323bf2e795bbd2b9ab7b7584f0d46ce4564e1783c515382b
+created: 2026-06-25
+last_updated: 2026-11-21
+---
+
+# Transfer List — Component Spec
+
+## Purpose
+
+Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them. Use it when the consumer needs to build a subset from a pool of options where both the chosen set and the remaining pool stay visible. Named after the MUI Transfer List (Ant Design calls it Transfer; it was PickList before 6.0), written to our conventions (no Figma); the visual surface is a best-effort first draft to validate.
+
+Compound, composition API: the root (`<TransferList>`) owns the bound data (`v-model` = `[sourceItems, targetItems]`) and the shared selection/move state, and provides it through `provide`/`inject`. The consumer composes the anatomy — `<TransferList.Source>`, `<TransferList.Controls>`, `<TransferList.Target>` — and the context-aware `<TransferList.Controls>` wires the move buttons with no props. Each list is data-driven: items come from the root's bound pair and render through the list's `#item` slot (repeated data stays as props, not hand-authored rows). Double-clicking an option moves it to the opposite list (emitting `item-double-click`); this auto-move can be turned off with `move-on-double-click`. The two lists sit side by side on wider viewports and stack vertically (with the controls as a horizontal row between them) on narrow ones; the move arrows point left/right side-by-side and up/down when stacked.
+
+## When to use
+
+- Use TransferList only when the person builds a large subset and must see the chosen and remaining items side by side. To pick several values in a compact form field use MultiSelect; for two to five options use a Checkbox per option.
+- Building a subset from a pool where both the chosen and the remaining items stay visible (domains assigned to an application, members of a team).
+- Moving many items at once with move-all and multi-selection.
+- Lists that load separately, each with its own `loading` state.
+
+## When NOT to use
+
+- Picking a few values in a compact field → use `multi-select`.
+- Selecting rows of tabular data with columns, sorting, or pagination → use `table` with row selection.
+- A handful of fixed options → use a horizontal `field` with a `checkbox` for each.
+
+## Related
+
+- `multi-select` — compact dropdown for multi-pick when the remaining pool does not need to stay visible.
+- `table` — row selection over tabular data.
+- `checkbox` — independent boolean or small-set multi-pick.
+
+## Best practices
+
+- Set `item-key` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.
+- Set `title` on both `TransferList.Source` and `TransferList.Target`; it is the listbox's accessible name.
+- Listen to `move` for side effects such as saving the assignment instead of diffing `v-model`.
+- Set `:move-on-double-click="false"` when double-click should do something else; `item-double-click` still fires.
+
+## Usage
+
+Composition — one import of the root; every part is reached via dot-notation (`<TransferList.Source>`, `<TransferList.Controls>`, `<TransferList.Target>`). The root binding must be PascalCase (`TransferList`).
+
+```vue
+<script setup>
+  import TransferList from '@aziontech/ui/transfer-list'
+  import { ref } from 'vue'
+
+  const model = ref([
+    [
+      { id: 1, label: 'Functions' },
+      { id: 2, label: 'WAF' }
+    ],
+    [{ id: 3, label: 'Cache' }]
+  ])
+</script>
+
+<template>
+  <TransferList
+    v-model="model"
+    item-key="id"
+  >
+    <TransferList.Source title="Available">
+      <template #item="{ item }">{{ item.label }}</template>
+    </TransferList.Source>
+
+    <TransferList.Controls />
+
+    <TransferList.Target title="Selected">
+      <template #item="{ item }">{{ item.label }}</template>
+    </TransferList.Target>
+  </TransferList>
+</template>
+```
+
+Each part is also a standalone import (`import TransferListSource from '@aziontech/ui/transfer-list-source'`, …), and the root is published standalone (tree-shakeable) as `@aziontech/ui/transfer-list-root` — the path to use when only a few parts are needed.
+
+## Sub-components
+
+- `transfer-list-source/transfer-list-source.vue` — The source listbox (the left/top list). Reads its items and selection from the injected context. Props: `title` (heading text / accessible name), `loading` (shows a spinner in place of options and locks its controls). Slots: `item` (`{ item, index, list }`) renders one option row; `title` overrides the heading content. Double-clicking an option moves it to the target (driven by the root via the injected context).
+- `transfer-list-target/transfer-list-target.vue` — The target listbox (the right/bottom list). Same anatomy, props, and slots as `transfer-list-source`, bound to the target side of the pair; double-clicking an option moves it back to the source.
+- `transfer-list-controls/transfer-list-controls.vue` — The context-aware control column between the lists. Renders the four move buttons (move selected / move all, in each direction) as `IconButton`s (`ghost`, `large`) with the `az-arrow-right`, `az-chevrons-right`, `az-arrow-left` and `az-chevrons-left` glyphs (a single arrow moves the selection, a double chevron moves every item; never the arrow-to-line glyph, which reads as download); reads selection, item counts, loading, and disabled from the injected context and drives the moves. Takes no props. The arrows point toward the target list when the lists are side by side (mirrored in right-to-left, where the target list is on the left, like every directional glyph) and rotate to up/down when they stack on narrow viewports, in both reading directions.
+
+<!-- Resulting layout (composition):
+
+  packages/ui/src/components/data/transfer-list/
+  ├── transfer-list.vue
+  ├── index.ts                    (entry: attaches TransferList.Source / TransferList.Target / TransferList.Controls)
+  ├── injection-key.ts            (shared context: items, selection, move, double-click, loading)
+  ├── presets/
+  │   └── transitions.ts          (item fade motion: duration/curve from @aziontech/theme/animations)
+  ├── transfer-list-source/
+  │   └── transfer-list-source.vue
+  ├── transfer-list-target/
+  │   └── transfer-list-target.vue
+  └── transfer-list-controls/
+      └── transfer-list-controls.vue
+
+  The compound `./transfer-list` entry (index.ts) attaches the sub-components for
+  dot-notation (`TransferList.Source`, `TransferList.Target`, `TransferList.Controls`) and
+  re-exports them as named bindings from `@aziontech/ui/transfer-list`. The root
+  is also published standalone (tree-shakeable) as `./transfer-list-root`, and each
+  sub-component as a flat export (`./transfer-list-source`, `./transfer-list-target`,
+  `./transfer-list-controls`). There is no per-component `package.json` — the root
+  `packages/ui/package.json#exports` points every public path at source. -->
+
+## Props
+
+| Prop                | Type      | Default | Required | JSDoc                                                                                                                                                                                                                               |
+| ------------------- | --------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `itemKey`           | `string`  | `''`    | false    | Item field that identifies a record, the same name as `card-list`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index. |
+| `disabled`          | `boolean` | `false` | false    | Disables all selection and move controls and applies disabled tokens.                                                                                                                                                               |
+| `moveOnDoubleClick` | `boolean` | `true`  | false    | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move.                                                                                                    |
+
+## v-model
+
+| Model     | Type                     | Default          | Emits               | Notes                                                                                                                                                                                          |
+| --------- | ------------------------ | ---------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `[unknown[], unknown[]]` | `() => [[], []]` | `update:modelValue` | Bound pair of lists as `[sourceItems, targetItems]`, two-way through `defineModel`. Each move writes the new pair back; without a bound `v-model` the component keeps the pair as local state. |
+
+## Events
+
+| Event               | Payload                                                                                      | Notes                                                                                                                                                                                                                                    |
+| ------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `move`              | `(event: Event, payload: { direction: 'to-target' \| 'to-source'; items: unknown[] })`       | Fired after items move between lists; the DOM event of the control (or the double-click) first, then the direction and the moved items.                                                                                                  |
+| `item-double-click` | `(event: MouseEvent, payload: { list: 'source' \| 'target'; item: unknown; index: number })` | Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading. |
+
+## Slots
+
+| Slot      | Scope                                                       | Notes                                                                                                                                                                                                                                                                                      |
+| --------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `default` | `{ move, moveAll, hasSelection, count, disabled, loading }` | Composition slot; receives `<TransferList.Source>`, `<TransferList.Controls>`, and `<TransferList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<TransferList.Controls>`. |
+
+The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its instance (via `defineExpose`), so controls rendered **outside** the root can drive it through a template ref. The signatures match the slot scope above: `move(event, direction)` and `moveAll(event, direction)` take the DOM event of the activating control first, so the `move` event can forward it.
+
+## States
+
+- Visual states: `default`, `hover` (option), `focus-visible` (option / control), `selected` (option), `disabled`, `loading`
+- `data-disabled` on the root mirrors the `disabled` prop
+- `data-loading` on a list (`transfer-list-source` / `transfer-list-target`) mirrors that list's `loading` prop
+- A loading list renders a centered spinner instead of its options and sets `aria-busy="true"`; while any list is loading, both the move controls and double-click-to-move are disabled until loading clears
+- Each option carries `data-selected` mirroring its selection and `aria-selected`
+- Empty list (not loading, no items): the package `EmptyState` (small, `transferList.emptyTitle`, `No items`) is laid over the list box, outside the listbox element (a `status` region is not an allowed listbox child); test id `<list testid>__empty`
+- Server render and hydration: the options are the direct `v-for` children of the `TransitionGroup` list (an empty list while loading) and the spinner a sibling `v-if`, so the server renders no fragment markers inside the list and the HTML hydrates as is.
+
+## Motion & Animations
+
+| Trigger                  | Animation / Transition                                                                                                                                                                                                                                                                                                                                                                                                              | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                         |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------- |
+| control hover/focus      | `transition-colors duration-150 ease-out` on move buttons                                                                                                                                                                                                                                                                                                                                                                           | inline (matches catalog)                               | `motion-reduce:transition-none`                                 |
+| item moved between lists | each list (`transfer-list-source` / `transfer-list-target`) is a `TransitionGroup`; an arriving item fades in (`opacity-0` → `opacity-100`) and a departing item fades out, via an inline `transition: opacity` built from the `duration` / `curve` primitives in `@aziontech/theme/animations` (centralized in `presets/transitions.ts`, mirroring `message` / `toast`). The same swap covers the loading spinner toggling in/out. | semantic (`duration` / `curve` from animate.js)        | `motion-reduce:transition-none` on the enter/leave active class |
+| loading                  | the composed `Spinner` component rotates continuously inside a loading list                                                                                                                                                                                                                                                                                                                                                         | semantic (owned by `Spinner`)                          | the `Spinner` carries its own reduced-motion fallback           |
+
+## Tokens
+
+| Region                    | Token (TOKENS.md)       |
+| ------------------------- | ----------------------- |
+| typography (title)        | `.text-label-lg`        |
+| typography (option)       | `.text-body-md`         |
+| surface (list)            | `var(--bg-surface)`     |
+| surface (option hover)    | `var(--bg-hover)`       |
+| surface (option selected) | `var(--bg-selected)`    |
+| text                      | `var(--text-default)`   |
+| text (title)              | `var(--text-muted)`     |
+| text (disabled)           | `var(--text-disabled)`  |
+| surface (disabled)        | `var(--bg-disabled)`    |
+| border                    | `var(--border-default)` |
+| ring                      | `var(--ring-color)`     |
+| spacing (list padding)    | `var(--spacing-xs)`     |
+| spacing (option padding)  | `var(--spacing-sm)`     |
+| gap (lists + controls)    | `var(--spacing-sm)`     |
+| shape (list)              | `var(--shape-card)`     |
+| shape (option)            | `var(--shape-control)`  |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each option and on every move control.
+- Keyboard map: `Tab` moves between the two listboxes and the control column, one tab stop per listbox (roving `tabindex`: the last focused option, the first by default); within a listbox `ArrowDown`/`ArrowUp` move focus, `Home`/`End` go to the first and last option, `Space`/`Enter` toggle the focused option's selection, and `Shift`+`ArrowDown`/`ArrowUp` extend the selection to the next option; the move controls are activated with `Enter`/`Space`. Double-click on an option is a pointer affordance for moving it to the opposite list; the same move is reachable via select + the move controls (no keyboard-only feature is double-click-only).
+- ARIA: each list is `role="listbox"` with `aria-label` from its title text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled` on both listboxes, and a disabled root becomes `role="group"` with `aria-disabled="true"`, so the titles dimmed by the root's `opacity-60` belong to a disabled control (WCAG 1.4.3 inactive-component exemption) instead of reading as low-contrast live text.
+- Contrast ≥4.5:1 (text) / ≥3:1 (borders + icons), including the disabled state.
+- A loading list sets `aria-busy="true"`; its `Spinner` is decorative (`aria-hidden`) and carries its own reduced-motion fallback. Control hover transitions pair with `motion-reduce:transition-none`.
+- Touch target ≥40×40 px for every move control (large icon-button height).
+
+## Examples
+
+- Default — also documents double-click-to-move (on by default); the `moveOnDoubleClick` control toggles the auto-move while `item-double-click` keeps firing.
+- Disabled
+- Loading — justified: the list `loading` prop swaps a list's items for a spinner and locks the move controls; the story documents both-sides and single-side loading, which no other story exercises.
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

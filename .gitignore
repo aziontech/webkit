@@ -8,7 +8,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-*storybook.log
 
 node_modules
 dist
@@ -23,7 +22,6 @@ dist-ssr
 packages/theme/dist/v3/output.css
 coverage
 *.local
-storybook-static
 
 # Secrets — keep .env files local; commit .env.example only.
 .env
@@ -42,17 +40,44 @@ storybook-static
 .edge
 
 package-lock.json
+!.github/tools/usage-check/package-lock.json
 yarn.lock
 
 .DS_Store
 *.tsbuildinfo
 *.d.ts
 *d.ts.map
+# Declarations for Azion UI's runtime .js modules (node packages/ui/scripts/build-js-dts.mjs)
+!packages/ui/src/components/actions/icon-button/presets/icon-transition.d.ts
+!packages/ui/src/components/content/item/merge-as-child.d.ts
+!packages/ui/src/components/inputs/presets/interactive-states.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/create-change-event-details.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/get-css-dimensions.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/navigation-menu-css-vars.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/resolve-host-element.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-context.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-list-highlight-context.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-list-highlight.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner-context.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-positioner.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-navigation-menu-root.d.ts
+!packages/ui/src/components/navigation/navigation-menu/composables/use-transition-status.d.ts
+!packages/ui/src/components/navigation/navigation-menu/presets/animations.d.ts
+!packages/ui/src/components/navigation/navigation-menu/presets/styles.d.ts
+!packages/ui/src/components/overlay/drawer/presets/sizes.d.ts
+!packages/ui/src/components/overlay/panel/presets/sizes.d.ts
+!packages/ui/src/components/overlay/presets/bottom-sheet-transitions.d.ts
+!packages/ui/src/components/overlay/presets/mobile-position.d.ts
+!packages/ui/src/components/overlay/tooltip/presets/popup-scale-transition.d.ts
+!packages/ui/src/composables/use-focus-trap/index.d.ts
+!apps/docs/src/env.d.ts
+!apps/docs/src/lib/virtual/*.d.ts
 
 CLAUDE.md
 # Claude Code — personal state and runtime caches (ignored)
-# Versioned in .claude/: settings.json, agents/, hooks/, commands/, skills/, rules/, docs/
+# .claude/ holds only settings.json and links into contributing/ (the Claude Code adapter)
 .claude/settings.local.json
+.claude/launch.json
 .claude/sessions/
 .claude/projects/
 .claude/file-history/
@@ -73,6 +98,7 @@ CLAUDE.md
 .claude/stats-cache.json
 .claude/mcp-needs-auth-cache.json
 .claude/.last-cleanup
+.claude/worktrees/
 
 # packages folder to ignore
 packages/icons/tmp/
@@ -82,11 +108,25 @@ tmp
 # Vitest browser-mode failure screenshots (regenerated on demand)
 **/__screenshots__/
 # Vitest browser-mode attachments (failure artifacts, same nature as __screenshots__)
-packages/webkit/.vitest-attachments/
+packages/ui/.vitest-attachments/
 
-# Visual regression (Storybook test-runner) — linux baselines are the CI
-# contract and ARE committed; other platforms and diff output are local-only.
-apps/storybook/.storybook/test-visual/__diff_output__/
-apps/storybook/.storybook/test-visual/__image_snapshots__/*
-!apps/storybook/.storybook/test-visual/__image_snapshots__/linux/
-apps/storybook/.storybook/test-visual/__image_snapshots__/darwin/
+# Visual regression (Playwright, apps/visual) — the baselines in apps/visual/baselines
+# are the CI contract and ARE committed; results and reports are local-only.
+apps/visual/test-results/
+apps/visual/playwright-report/
+apps/visual/baseline-review/
+
+# AI bundle copies made by packages/ui's prepack (sources live in skills/, rules/, agents/, fragments/)
+packages/ui/skills/
+packages/ui/rules/
+packages/ui/agents/
+packages/ui/fragments/
+packages/ui/test/docs/.snippets-*/
+
+# Release supply-chain files written by .github/workflows/release-package.yml
+sbom-*.json
+*.sigstore-bundle
+SHA256SUMS
+grype-report-sarif.json
+# CycloneDX SBOMs written by pnpm run generate:sbom
+/sbom/

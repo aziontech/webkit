@@ -1,0 +1,226 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import type { Severity } from '../../../utils/severity'
+  import Button from '../../action/button/button.vue'
+  import StatusIndicator, {
+    type StatusIndicatorSeverity
+  } from '../../feedback/status-indicator/status-indicator.vue'
+  import CardGrid from '../../layout/card-grid/card-grid.vue'
+  import CardGridCell from '../../layout/card-grid/card-grid-cell/card-grid-cell.vue'
+  import type { ModuleHeaderAction } from '../../layout/module-header/module-header.vue'
+  import FeatureItem from '../../marketing/feature-item/feature-item.vue'
+  import SectionBand from '../parts/section-band.vue'
+
+  defineOptions({
+    name: 'ContactHubSection',
+    inheritAttrs: false
+  })
+
+  export type { ModuleHeaderAction }
+
+  /** The system status link beside a lane's action. */
+  export type ContactHubSectionStatusLink = {
+    /** Visible label of the link. */
+    label: string
+    /** URL of the status page. */
+    href: string
+    /** Browsing context the link opens in, such as `_blank` for a new tab. */
+    target?: string
+    /** The live system status, drawn as a coloured dot. Omitted, the link shows a neutral glyph and claims no status. */
+    severity?: StatusIndicatorSeverity
+  }
+
+  /** One team the reader can reach, rendered as a lane of the two-column frame. */
+  export type ContactHubSectionLane = {
+    /** Icon class for the glyph that leads the lane's heading. */
+    icon: string
+    /** The team, rendered as the lane's h2. */
+    title: string
+    /** One sentence stating what the team handles. */
+    description: string
+    /** The button that reaches the team; `{ label, href, trailing? }`. Omitted when absent. */
+    action?: ModuleHeaderAction
+    /** A second, outlined button after the action; `{ label, href, trailing? }`. Omitted when absent. */
+    secondaryAction?: ModuleHeaderAction
+    /** The system status link beside the action; `{ label, href, target? }`. Omitted when absent. */
+    statusLink?: ContactHubSectionStatusLink
+  }
+
+  /** Status colour of a channel's glyph: danger marks the emergency channel. */
+  export type ContactHubSectionChannelSeverity = Extract<Severity, 'danger'>
+
+  /** One self-serve channel, rendered as a linked topic of the channel row. */
+  export type ContactHubSectionChannel = {
+    /** Icon class for the glyph that leads the channel's heading. */
+    icon: string
+    /** The channel, rendered as its h2. */
+    title: string
+    /** One sentence explaining the channel. */
+    description: string
+    /** Destination the channel links to. */
+    href: string
+    /** Browsing context the link opens in, such as `_blank` for a new tab. */
+    target?: string
+    /** Draws the channel's glyph in the danger mark so an emergency channel is found at a glance. Omitted, the glyph is the brand mark. */
+    severity?: ContactHubSectionChannelSeverity
+  }
+
+  export interface ContactHubSectionProps {
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
+    /**
+     * The team lanes side by side, in order; each is `{ icon, title, description, action?,
+     * secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an
+     * outlined button after it, and `statusLink` the system status link beside them.
+     */
+    lanes?: ContactHubSectionLane[]
+    /** The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target?, severity? }`, rendered as a linked topic. */
+    channels?: ContactHubSectionChannel[]
+  }
+
+  const props = withDefaults(defineProps<ContactHubSectionProps>(), {
+    anchor: '',
+    lanes: () => [],
+    channels: () => []
+  })
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ common: en.common })
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'contact-hub-section'
+  )
+
+  const hasContent = computed(() => props.lanes.length > 0 || props.channels.length > 0)
+
+  const relOf = (target?: string) => (target === '_blank' ? 'noopener noreferrer' : undefined)
+  const statusLinkName = (link: ContactHubSectionStatusLink) =>
+    link.target === '_blank' ? `${link.label} ${t('common.newTab')}` : undefined
+</script>
+
+<template>
+  <SectionBand
+    v-bind="$attrs"
+    :anchor="anchor"
+    :data-testid="testId"
+    :filled="hasContent"
+    marks="bottom"
+  >
+    <CardGrid
+      v-if="lanes.length > 0"
+      key="lanes"
+      flush
+      variant="frame"
+      :columns="2"
+    >
+      <CardGridCell
+        v-for="lane in lanes"
+        :key="lane.title"
+        variant="canvas"
+      >
+        <div class="flex h-full flex-col gap-(--spacing-xl)">
+          <div class="flex flex-col gap-(--spacing-sm)">
+            <h2 class="m-0 flex items-center gap-(--spacing-xs) text-body-md text-(--text-muted)">
+              <i
+                :class="lane.icon"
+                class="shrink-0 text-(--primary)"
+                aria-hidden="true"
+              />
+              {{ lane.title }}
+            </h2>
+            <p class="m-0 max-w-(--container-md) text-pretty text-heading-sm text-(--text-default)">
+              {{ lane.description }}
+            </p>
+          </div>
+          <div
+            v-if="lane.action || lane.secondaryAction || lane.statusLink"
+            class="mt-auto flex flex-wrap gap-(--spacing-sm)"
+          >
+            <Button
+              v-if="lane.action"
+              key="action"
+              :label="lane.action.label"
+              :href="lane.action.href"
+              variant="secondary"
+              size="large"
+              :icon="lane.action.trailing ? 'az az-chevron-right' : ''"
+              icon-position="trailing"
+              :animated="Boolean(lane.action.trailing)"
+            />
+            <Button
+              v-if="lane.secondaryAction"
+              key="secondary-action"
+              :label="lane.secondaryAction.label"
+              :href="lane.secondaryAction.href"
+              variant="outline"
+              size="large"
+              :icon="lane.secondaryAction.trailing ? 'az az-chevron-right' : ''"
+              icon-position="trailing"
+              :animated="Boolean(lane.secondaryAction.trailing)"
+            />
+            <Button
+              v-if="lane.statusLink"
+              key="status"
+              :href="lane.statusLink.href"
+              :target="lane.statusLink.target === '_blank' ? '_blank' : '_self'"
+              :aria-label="statusLinkName(lane.statusLink)"
+              variant="outline"
+              size="large"
+            >
+              <StatusIndicator
+                v-if="lane.statusLink.severity"
+                :severity="lane.statusLink.severity"
+                :label="lane.statusLink.label"
+              />
+              <span
+                v-else
+                class="inline-flex items-center gap-(--spacing-xs)"
+              >
+                <i
+                  class="az az-wave-pulse text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                {{ lane.statusLink.label }}
+              </span>
+            </Button>
+          </div>
+        </div>
+      </CardGridCell>
+    </CardGrid>
+
+    <CardGrid
+      v-if="channels.length > 0"
+      key="channels"
+      flush
+      variant="frame"
+      :columns="3"
+    >
+      <CardGridCell
+        v-for="channel in channels"
+        :key="channel.title"
+        variant="canvas"
+      >
+        <FeatureItem
+          :heading-level="2"
+          :icon="channel.icon"
+          :title="channel.title"
+          :href="channel.href"
+          :target="channel.target"
+          :rel="relOf(channel.target)"
+          :data-severity="channel.severity"
+          class="data-[severity=danger]:[&_i]:text-(--danger-mark)"
+        >
+          {{ channel.description }}
+          <span
+            v-if="channel.target === '_blank'"
+            class="sr-only"
+            >{{ ' ' + t('common.newTab') }}</span
+          >
+        </FeatureItem>
+      </CardGridCell>
+    </CardGrid>
+  </SectionBand>
+</template>

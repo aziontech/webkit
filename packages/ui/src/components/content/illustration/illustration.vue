@@ -1,0 +1,109 @@
+<script setup lang="ts">
+  import { computed, shallowRef, useAttrs, useId, useTemplateRef, watch } from 'vue'
+
+  import { illustrationFrame } from '../../../assets/illustrations/frames'
+  import type { IllustrationAssetLoader } from '../../../assets/illustrations/registry'
+  import type { IllustrationScene } from '../../../assets/illustrations/scene'
+
+  defineOptions({
+    name: 'Illustration',
+    inheritAttrs: false
+  })
+
+  export interface IllustrationProps {
+    /** Name of an official scene in the illustration asset library. */
+    name?: string
+    /** Accessible name; empty keeps the illustration decorative and hidden from assistive tech. */
+    ariaLabel?: string
+  }
+
+  const props = withDefaults(defineProps<IllustrationProps>(), {
+    name: '',
+    ariaLabel: ''
+  })
+
+  const attrs = useAttrs()
+  const scope = useId()
+  const rootEl = useTemplateRef<globalThis.SVGSVGElement>('rootEl')
+
+  const scene = shallowRef<IllustrationScene | null>(null)
+  const showPlaceholder = shallowRef(false)
+
+  const paint = (load: IllustrationAssetLoader) =>
+    Promise.all([load(), import('../../../assets/illustrations/scene')]).then(
+      ([asset, { loadIllustrationScene }]) => loadIllustrationScene(asset.default)
+    )
+
+  const warnUnloaded = (error: unknown) => {
+    console.warn(`[azion-ui] <Illustration>: could not load "${props.name}".`, error)
+  }
+
+  watch(
+    () => props.name,
+    (name) => {
+      if (typeof document === 'undefined') return
+      import('../../../assets/illustrations/registry')
+        .then(({ loadIllustrationPlaceholder, resolveIllustrationAsset }) => {
+          if (props.name !== name) return
+          const load = name ? resolveIllustrationAsset(name) : null
+          if (!load && name) {
+            console.warn(
+              `[azion-ui] <Illustration>: no scene named "${name}". Names: llms/foundations/illustrations.md or the MCP tool list_assets.`
+            )
+          }
+          return paint(load ?? loadIllustrationPlaceholder).then((painted) => {
+            if (props.name !== name) return
+            scene.value = painted
+            showPlaceholder.value = !load
+          })
+        })
+        .catch(warnUnloaded)
+    },
+    { immediate: true }
+  )
+
+  watch(
+    [rootEl, scene],
+    ([element, painted]) => {
+      if (element && painted) {
+        element.replaceChildren(...painted.draw(scope))
+      }
+    },
+    { flush: 'post' }
+  )
+
+  const frame = computed(() => illustrationFrame(props.name))
+
+  const viewBox = computed(
+    () => scene.value?.viewBox || `0 0 ${frame.value.width} ${frame.value.height}`
+  )
+
+  const decorative = computed(
+    () => !scene.value || showPlaceholder.value || props.ariaLabel.length === 0
+  )
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'illustration')
+
+  const passthroughAttrs = computed(() => {
+    const rest = { ...attrs }
+    delete rest['data-testid']
+    return rest
+  })
+</script>
+
+<template>
+  <svg
+    ref="rootEl"
+    :viewBox="viewBox"
+    :role="decorative ? undefined : 'img'"
+    :aria-label="decorative ? undefined : ariaLabel"
+    :aria-hidden="decorative || undefined"
+    :data-testid="testId"
+    :data-placeholder="showPlaceholder || undefined"
+    :width="frame.width"
+    :height="frame.height"
+    fill="none"
+    class="block h-auto w-full"
+    v-bind="passthroughAttrs"
+  />
+</template>

@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as the reach section of a marketing page places it: three figures, each with its unit as suffix and a caption beneath. A band with no items renders nothing at all.",
+   "file": "examples/stats-section/default.vue"
+  }
+ ]
+}

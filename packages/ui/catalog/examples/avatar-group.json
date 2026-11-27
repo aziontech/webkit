@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Five people, three shown overlapping and a `+2` button that lists the other names.",
+   "file": "examples/avatar-group/default.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Every `size` side by side: `small` for table cells, `medium` for cards and headers, `large` for a profile band.",
+   "file": "examples/avatar-group/sizes.vue"
+  },
+  {
+   "name": "Overflow",
+   "summary": "A 40-person team: four avatars and a `+36` button whose list scrolls through the hidden names.",
+   "file": "examples/avatar-group/overflow.vue"
+  }
+ ]
+}

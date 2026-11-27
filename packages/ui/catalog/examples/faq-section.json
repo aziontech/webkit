@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The Retail page questions. The second answer carries a markdown link inside its sentence; open it to see the link rendered in place. A band with no items renders nothing.",
+   "file": "examples/faq-section/default.vue"
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+  "component": "brand",
+  "title": "Components/Content/Brand",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The default AZION wordmark lockup.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "All brand lockups side by side: default (AZION wordmark), reduced (the \"A\" glyph), and extended (wordmark over \"technologies\"), each at the large size and captioned with its value.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The lockup at each size token \u2014 small (16px), medium (24px), and large (32px) tall \u2014 with width scaling to preserve the aspect ratio.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Treatments",
+      "summary": "The mark inked three ways: color (the orange mark, with the tagline in the text colour so it reads on white and on dark), monochrome (black on light, white on dark) and knockout (on an orange fill), each tile captioned with its treatment and the extended lockup at the large size.",
+      "file": "treatments.vue"
+    }
+  ]
+}

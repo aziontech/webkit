@@ -1,0 +1,42 @@
+<!doctype html>
+<html
+  lang="en"
+  class="azion"
+  data-type-set="console"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="color-scheme"
+      content="dark light"
+    />
+    <title>Azion UI demos</title>
+    <link
+      rel="icon"
+      href="data:,"
+    />
+    <script>
+      ;(function () {
+        try {
+          var params = new URLSearchParams(location.search)
+          var stored = params.get('theme') || localStorage.getItem('azion-ui-demos:theme')
+          if (stored !== 'light' && stored !== 'dark')
+            stored = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          var root = document.documentElement
+          root.dataset.theme = stored
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script
+      type="module"
+      src="/src/main.ts"
+    ></script>
+  </body>
+</html>

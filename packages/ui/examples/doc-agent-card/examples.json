@@ -1,0 +1,21 @@
+{
+  "component": "doc-agent-card",
+  "title": "Components/Docs/DocAgentCard",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The reference card from the catalog strings: the title, what the prompt gives the agent and the inline `CopyPromptButton` on the left; \"Prefer the guided route?\" and the orange `Agent setup` over the halftone on the right, behind a vertical divider.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Narrow",
+      "summary": "The same card in a phone-width container: the columns stack and the divider turns horizontal; the halftone stays in the guided row's corner.",
+      "file": "narrow.vue"
+    },
+    {
+      "name": "Markdown",
+      "summary": "The same content written in a docs page: `DocMarkdown` turns a `<AgentCard>` tag into a real `DocAgentCard`. Braced attribute values are JSON, so a docs author copies them from the props or a page entry and never imports the component.",
+      "file": "markdown.vue"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "component": "textarea",
+  "title": "Components/Input/Textarea",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "",
+      "file": "default.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state inside a Field: the danger border and a Field.Error saying what to fix.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "A required Textarea inside a Field: the label carries the Required marker and the border stays neutral until the field is invalid.",
+      "file": "required.vue"
+    },
+    {
+      "name": "Readonly",
+      "summary": "A read-only certificate keeps the filled look, drops the hover border and reads in the code face (`monospace`); the field description says why the value cannot change.",
+      "file": "readonly.vue"
+    },
+    {
+      "name": "Monospace",
+      "summary": "A zone-file paste box: `monospace` draws the records in the code face, so columns and characters read as code; `:spellcheck=\"false\"` keeps the browser from flagging record names.",
+      "file": "monospace.vue"
+    },
+    {
+      "name": "AutoResize",
+      "summary": "A question box that starts at one line and grows with the text up to six lines, then scrolls: `auto-resize` with `:min-rows` and `:max-rows`.",
+      "file": "auto-resize.vue"
+    },
+    {
+      "name": "Resizable",
+      "summary": "The `resize` prop on each axis: `vertical` (the default), `horizontal`, `both` and `none`.",
+      "file": "resizable.vue"
+    }
+  ]
+}

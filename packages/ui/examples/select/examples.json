@@ -1,0 +1,66 @@
+{
+  "component": "select",
+  "title": "Components/Input/Select",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Single-select with four flat options at large size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All three trigger sizes side by side, sharing one bound value.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Ghost",
+      "summary": "`variant=\"ghost\"`: no border or fill until hover, sized to its value and set like a breadcrumb crumb. The environment switcher that ends a resource's breadcrumb; the panel keeps a readable minimum width instead of the trigger's.",
+      "file": "ghost.vue"
+    },
+    {
+      "name": "Single",
+      "summary": "Each option shows a radio-style indicator, choosing one closes the panel, and `modelValue` is one value. To pick several values use MultiSelect.",
+      "file": "single.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "`<Select.Group label=\"…\">` renders an uppercase heading above each set of options.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "WithSearchAndFooter",
+      "summary": "The `#search` and `#footer` slots on `<Select.Content>` host a filter input and a \"Create new\" action; the option list scrolls between them.",
+      "file": "with-search-and-footer.vue"
+    },
+    {
+      "name": "WithOptionExtras",
+      "summary": "Per-option affordances on `<Select.Item>`: the `icon` prop, the `#left` slot, and the trailing `#tag` slot.",
+      "file": "with-option-extras.vue"
+    },
+    {
+      "name": "LongList",
+      "summary": "A long option list; the panel caps its height and scrolls internally.",
+      "file": "long-list.vue"
+    },
+    {
+      "name": "Filled",
+      "summary": "Pre-selected value shows the filled trigger treatment.",
+      "file": "filled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state inside a Field: the danger border and a Field.Error saying what to choose; both clear once a region is selected.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "A required Select inside a Field: the label carries the Required marker from the start and the border stays neutral. Press Submit with nothing selected: the field turns invalid with a Field.Error, which clears once a region is chosen.",
+      "file": "required.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled trigger; the dropdown cannot open.",
+      "file": "disabled.vue"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+ "purpose": "Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name. It comes in a circle or a square at three sizes, so the same person reads the same way in a header, a list row or a comment thread. An optional presence dot on its bottom inline-end edge says whether the person is online, away, busy or offline.",
+ "useWhen": [
+  "Identify a person next to their name: comment threads, member lists, \"Last modified\" cells, quotes.",
+  "The user entry in a header or account menu.",
+  "Show whether a teammate or support agent is reachable now (`presence`): an assignee picker, a ticket's agent list, a conversation header.",
+  "The mark of an organization or account that has no logo: `pattern=\"marble\"` draws a soft generated mark seeded by its name, the same for the same name everywhere (account switcher, create organization, onboarding)."
+ ],
+ "avoidWhen": [
+  "The Azion logo → use `brand`.",
+  "A count or short status → use `badge`.",
+  "A loading placeholder → use `skeleton`.",
+  "The outcome of a job or a deploy → use `status-indicator`; `presence` is only whether a person is reachable."
+ ],
+ "related": [
+  "`badge` — overlay on an avatar to show a count.",
+  "`quote` — composes an avatar for the speaker.",
+  "`brand` — the product mark, not a person."
+ ],
+ "bestPractices": [
+  "Pass initials or the full name in `label`: a name of several words shows the first letter of its first and last word (`\"Jane Doe\"` shows `JD`), and one word keeps its first two characters (`\"JD\"` stays `JD`).",
+  "Set `alt` to the person's name (\"Jane Doe\"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role=\"img\"`), so a screen reader hears \"Jane Doe\", not \"JD\". Without `alt` the name falls back to the initials, then \"Avatar\" for an image or \"User avatar\" for the icon.",
+  "Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `az az-user`).",
+  "For a generated mark, pass the full name in `label` (`\"Acme Inc.\"`) with `pattern=\"marble\"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.",
+  "Set `presence` only when the value is live (`online`, `away`, `busy`, `offline`); leave it empty when the app does not know, rather than showing `offline`. The presence joins the accessible name (\"Jane Doe, away\"), so keep `alt` to the name alone.",
+  "`size` maps to 24 / 32 / 48 px with `medium` as the default; `variant` is `circle` (default) or `square`."
+ ]
+}

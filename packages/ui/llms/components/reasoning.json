@@ -1,0 +1,97 @@
+{
+ "name": "reasoning",
+ "binding": "Reasoning",
+ "import": "@aziontech/ui/reasoning",
+ "treeShakeableImport": "@aziontech/ui/reasoning",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is done, with the trace inside. Collapsed by default in a chat, where the response is the main content. The duration comes from the server (`duration`) or is measured from `streaming` turning on to turning off, rounded to whole seconds. An optional `Skip thinking` lets the reader ask for the response now.",
+ "setup": null,
+ "useWhen": [
+  "The model performs extended reasoning before answering, and the trace helps the reader trust or check the response."
+ ],
+ "avoidWhen": [
+  "Ordinary loading with no reasoning → `response-loading`.",
+  "Agent actions with side effects (calls, commands) → `tool-call` and `tool-approval`.",
+  "Progressive steps of a long task → a `stepper` or a list of `tool-call`s."
+ ],
+ "related": [
+  "`response-loading` — loading without a trace.",
+  "`tool-call` — what the agent did, rather than what it thought.",
+  "`streaming-response` — renders a Markdown trace inside the slot."
+ ],
+ "bestPractices": [
+  "Keep it collapsed in chat; open it by default only where reasoning is the point (an editor, a review).",
+  "Never show secrets, token counts or system prompts in the trace.",
+  "Do not replace the label with trace text; the label stays `Thinking` until done.",
+  "Offer `skippable` only when the model can answer meaningfully without finishing."
+ ],
+ "props": [
+  {
+   "name": "streaming",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "The model is still reasoning: the label reads `Thinking` and pulses; when it turns false the label shows how long it took."
+  },
+  {
+   "name": "duration",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content."
+  },
+  {
+   "name": "skippable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "skip",
+   "payload": "(event: MouseEvent)",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The trace: short narration, steps, inline code. Kept as it was once thinking ends."
+  }
+ ],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/reasoning/default.vue"
+  },
+  {
+   "name": "Streaming",
+   "file": "examples/reasoning/streaming.vue"
+  }
+ ],
+ "docs": "components/reasoning.md"
+}

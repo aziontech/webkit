@@ -1,0 +1,165 @@
+{
+ "name": "media-split-section",
+ "binding": "MediaSplitSection",
+ "import": "@aziontech/ui/media-split-section",
+ "treeShakeableImport": "@aziontech/ui/media-split-section",
+ "category": "section",
+ "surface": "site",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-section', props }` entry and binds `props` straight onto it — and it composes `module`, a framed `media-split`, `button`, `illustration`, `console-mockup` and the Azion UI scene assets. The media is required and is a drawn asset: an illustration (a name of the illustration registry) or a registered scene, of which a product console widget (`widget`) is one; request-flow diagrams and code do not go in a media band; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.",
+ "setup": null,
+ "useWhen": [
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).",
+  "Use MediaSplitSection for one marketing claim beside its picture or scene.",
+  "To make one point beside one picture and move on (a values statement, a single product claim)."
+ ],
+ "avoidWhen": [
+  "For several claims stacked one after the other → use `media-split-stack-section`.",
+  "For a claim beside the code that delivers it → use `feature-scroll-section` (each item's `code`); a media band shows no code.",
+  "For a request-flow diagram → use `console-showcase-section` with `variant: 'diagram'` (the diagram as its `scene`) or `architecture-tabs-section`; a media band shows no diagram.",
+  "For a full-width terminal session with no copy column → use `cli-terminal-section`.",
+  "For copy beside one piece of media in a hand-built SFC that needs the `media` slot → use `media-split`."
+ ],
+ "related": [
+  "`media-split` — the band primitive the section is rendered with.",
+  "`media-split-stack-section` — the stacked sibling for a run of claims."
+ ],
+ "bestPractices": [
+  "Give the band exactly one media: `scene`, `widget` (a `ConsoleMockup` name) or `illustration` (a registry name); when several are set the first of that order wins. A band with a title and no media logs a development warning, and the site-composition check (`test/standards/site-composition.test.mjs`) fails it in the shipped page JSON. A `Diagram` scene counts as no media.",
+  "Use `size=\"large\"` for a band that carries only its headline and description.",
+  "Use `orientation=\"vertical\"` for a wide scene that needs the full width of the frame under the copy.",
+  "Turn `linked` off when the media holds controls of its own, so a click in it is not taken as a click on the band.",
+  "Set `anchor` when another part of the page links to the band.",
+  "Name a registry scene in `illustration` for art; the band takes no picture URL."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Short overline above the headline."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Paragraph under the headline."
+  },
+  {
+   "name": "size",
+   "type": "MediaSplitSectionSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media, `medium` aligns it to the top of the media."
+  },
+  {
+   "name": "orientation",
+   "type": "MediaSplitSectionOrientation",
+   "default": "'horizontal'",
+   "required": "false",
+   "doc": "Axis the band splits on; `vertical` stacks the media under the copy for a wide scene."
+  },
+  {
+   "name": "texture",
+   "type": "TextureVariant",
+   "default": "'pixelate'",
+   "required": "false",
+   "doc": "Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`."
+  },
+  {
+   "name": "linked",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Links the whole band to a lone action; turn it off when the media holds controls of its own."
+  },
+  {
+   "name": "scene",
+   "type": "MediaSplitSectionScene",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Scene drawn in the media cell, `{ component, props? }` naming an Azion UI scene asset other than `Diagram` and the props bound onto it; wins over every other media."
+  },
+  {
+   "name": "widget",
+   "type": "ConsoleMockupName",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Name of the product console widget drawn in the media cell when no scene is set."
+  },
+  {
+   "name": "illustration",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Registry name of the illustration drawn in the media cell when neither a scene nor a widget is set."
+  },
+  {
+   "name": "illustrationAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the illustration; empty keeps it decorative."
+  },
+  {
+   "name": "primaryAction",
+   "type": "MediaSplitSectionAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it; `variant` overrides the drawn variant."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "MediaSplitSectionAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [
+  {
+   "kind": "illustrations",
+   "page": "foundations/illustrations.md"
+  },
+  {
+   "kind": "diagrams",
+   "page": "foundations/diagrams.md"
+  }
+ ],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/media-split-section/default.vue"
+  },
+  {
+   "name": "Product media",
+   "file": "examples/media-split-section/product-media.vue"
+  },
+  {
+   "name": "Vertical",
+   "file": "examples/media-split-section/vertical.vue"
+  }
+ ],
+ "docs": "components/media-split-section.md"
+}

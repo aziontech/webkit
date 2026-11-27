@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default card with a title header and body content in the default slot.",
+   "file": "examples/card/default.vue"
+  },
+  {
+   "name": "Header",
+   "summary": "An action rendered through the `header` slot stays visible, aligned to the end of the header.",
+   "file": "examples/card/header.vue"
+  },
+  {
+   "name": "Footer",
+   "summary": "Filling the `footer` slot renders the footer bar with actions or metadata.",
+   "file": "examples/card/footer.vue"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The full field for a settings form: inside a `Field` and bound to `ConfigProvider`'s `locale`, each option shows its round flag and its name in its own language. Pick one and the pagination under it, the picker's search box and its empty line change language. Type a language, a tag or a country to filter.",
+   "file": "examples/language-select/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "`variant=\"ghost\"` is the compact switcher for a header or a toolbar: a round flag and the language tag in capitals (`EN`, `PT-BR`), no border until hover, so it sits beside the search and the outlined icon buttons without a second outline colour. The default `outline` is the full field for a form.",
+   "file": "examples/language-select/variants.vue"
+  },
+  {
+   "name": "Options",
+   "summary": "`options` replaces the built-in languages with your own list of BCP 47 tags: the bare language for its main variant (`en`, `es`) and the region for each regional one (`en-GB`, `en-CA`, `es-MX`). The compact switcher shows the tag in capitals (`EN`, `EN-GB`). An option with no `label` is named in its own language (`fr-FR` → `Français (France)`); the flag comes from the tag's region, its likely region (`en` → `US`), or `country` (`ar` → `SA`).",
+   "file": "examples/language-select/options.vue"
+  }
+ ]
+}

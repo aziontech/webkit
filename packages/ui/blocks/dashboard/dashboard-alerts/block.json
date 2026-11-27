@@ -1,0 +1,52 @@
+{
+  "id": "dashboard/dashboard-alerts",
+  "name": "DashboardAlerts",
+  "title": "Blocks/Dashboard/DashboardAlerts",
+  "surface": "app",
+  "summary": "An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `PageHeader`, `Select`, `SeverityTag`, `Skeleton`, `StatTile`, `DataTable`, `DataTable`, `Tag` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "alerts dashboard",
+    "open alerts",
+    "alerts by severity",
+    "incident dashboard",
+    "false positive rate",
+    "alert triage",
+    "painel de alertas",
+    "alertas abertos",
+    "alertas por severidade",
+    "triage open alerts"
+  ],
+  "skills": ["azion-ui-data-viz", "azion-ui-tables", "azion-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "dashboard-alerts.vue"
+  },
+  "files": [
+    "sample.ts",
+    "parts/alerts-card.vue",
+    "parts/entity-table.vue",
+    "parts/open-alert-table.vue",
+    "parts/open-by-severity.vue"
+  ],
+  "variants": [
+    {
+      "name": "Loading",
+      "summary": "While the period loads, the tiles, the chart, the bar list and both tables render their own Skeleton, and Open by severity holds Skeleton rows, so nothing reflows when data arrives.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A period with no alerts. The tiles print 0 with no delta, and one bordered page-level EmptyState, No alerts in the last 30 days with Show the last 90 days as the next step, replaces the cards.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The request for the period failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
+      "file": "variants/error.vue"
+    }
+  ]
+}

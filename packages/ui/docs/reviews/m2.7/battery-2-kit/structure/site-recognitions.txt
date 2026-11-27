@@ -1,0 +1,62 @@
+[block-hero-centered-band kind=centered]
+  [marketing-hero kind=screen size=large align=center width=site aria-label='Recognition and Awards']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Recognition and awards
+      h1 "Recognition and Awards"
+      p "See what customers and experts think about Azion"
+[marketing-section-container width=site]
+  [block-recognition-marquee]
+    [marketing-section-module kind=left]
+      list (5): Leader in CDN and DDoS Protection: High Performer in Web Application Firewall (WAF), Bot Detection and Mitigation, SSL & TLS Certificate Tools, Web Security, Cloud Security, and API Security Tools G2 Spring 2026 Reports · Leader in CDN: High Performer in Web Security Software, DDoS Protection, Web Application Firewall (WAF), Bot Detection and Mitigation, SSL & TLS Tools and DNS Security G2 Winter 2026 Reports · Azion was named a Leader and identified as the only purpose-built edge platform whose capabilities meet all of the key criteria outlined in the report GigaOm Radar for Edge Platforms · Gartner clients note that Azion excels at providing a consultative approach to orchestration and serverless edge application environments Gartner Competitive Landscape for CDN and Edge Services · Frost & Sullivan pointed out that Azion's serverless edge platform increases business agility by empowering developers to build and scale their applications Frost & Sullivan Best Practices Award, North
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-solutions kind=media-end aria-label='G2 Winter 2026 and G2 Spring 2026 Reports']
+    [marketing-section-title kind=centered size=large]
+      text: // ⏎ Highlights
+      h2 "G2 Winter 2026 and G2 Spring 2026 Reports"
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='CDN (Content Delivery Network)']
+          h2 "CDN (Content Delivery Network)"
+          p "The Azion platform is recognized as a Leader in the CDN category in the G2 Winter and G2 Spring 2026 Reports."
+          img "G2 badge of Leader"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='DDoS Protection']
+          h2 "DDoS Protection"
+          p "Azion is recognized as a Leader in the G2 Spring 2026 Reports and as a High Performer in G2 Winter 2026 in the DDoS Protection category."
+          img "G2 badge of High Performer"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Web Application Firewall (WAF)']
+          h2 "Web Application Firewall (WAF)"
+          p "Azion is recognized as a High Performer in the G2 Spring and G2 Winter 2026 Reports."
+          img "G2 badge of High Performer"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Web Security Software']
+          h2 "Web Security Software"
+          p "Azion is recognized as a High Performer in the G2 Spring and G2 Winter 2026 Reports."
+          img "G2 badge of High Performer"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Bot Detection & Mitigation']
+          h2 "Bot Detection & Mitigation"
+          p "Azion is recognized as a High Performer in the G2 Spring and G2 Winter 2026 Reports."
+          img "G2 badge of High Performer"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='SSL & TLS Certificate Tools']
+          h2 "SSL & TLS Certificate Tools"
+          p "Azion is recognized as a High Performer in the G2 Winter and G2 Spring 2026 Reports."
+          img "G2 badge of High Performer"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Cloud Security']
+          h2 "Cloud Security"
+          p "Azion is recognized as a High Performer in the Cloud Security category in the G2 Spring 2026 Reports."
+          img "G2 badge of High Performer"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='API Security Tools']
+          h2 "API Security Tools"
+          p "Azion is recognized as a High Performer in the API Security Tools category in the G2 Spring 2026 Reports."
+          img "G2 badge of High Performer"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='DNS Security']
+          h2 "DNS Security"
+          p "Azion is recognized as a High Performer in the DNS Security category in the G2 Winter 2026 Reports."
+          button "Learn More" → https://www.g2.com/products/azion/reviews#reviews
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-primary kind=primary]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=primary aria-label='Build, secure, and scale applications everywhere.']
+        [marketing-section-title kind=centered size=large]
+          h2 "Build, secure, and scale applications everywhere."
+          p "Get faster launches, lower latency, and less infrastructure overhead from day one."
+          button "Start free" → https://console.azion.com/signup?tck=generic_cta
+          button "Talk to a specialist" → https://www.azion.com/en/contact/

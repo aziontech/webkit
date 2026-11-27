@@ -1,0 +1,43 @@
+{
+  "description": "The fixed tasks of the usage check: intent-only prompts a product team would write, and the components a fresh agent must reach for without being told their names. Run one with `node scripts/check-usage.mjs --task <id>`, list them with `--list-tasks`. Run them all before a release; each run is a paid agent session.",
+  "tasks": [
+    {
+      "id": "token-expiry",
+      "target": "date-picker",
+      "also": ["field"],
+      "prompt": "Build a page with a form to create an API token: a name, an optional description, and the exact day and time the token stops working, which must be in the future. Show what would be sent to the server when the form is submitted."
+    },
+    {
+      "id": "maintenance-window",
+      "target": "date-range-picker",
+      "prompt": "Build a page where an operator schedules a maintenance window by choosing when it starts and when it ends, down to the minute, and sees the chosen window summarized below."
+    },
+    {
+      "id": "contact-details",
+      "target": "phone-input",
+      "also": ["field"],
+      "prompt": "Build a contact details form for an account: full name, work e-mail and an international number to call the person on, with a Save action and validation on submit."
+    },
+    {
+      "id": "cache-settings",
+      "target": "number-input",
+      "prompt": "Build a cache settings form: how many seconds a response stays cached, the largest size of a cached file in megabytes, and whether stale content is served while the origin is down."
+    },
+    {
+      "id": "resource-tags",
+      "target": "tag-editor",
+      "prompt": "Build the form section where a person labels a resource with key and value pairs such as team and environment, adding and removing them before saving."
+    },
+    {
+      "id": "deployments-list",
+      "target": "data-table",
+      "also": ["table-cell-time"],
+      "prompt": "Build a page that lists the deployments of a project: name, state, who triggered it and when it was created, newest first, with sorting. Use sample data."
+    },
+    {
+      "id": "verify-sign-in",
+      "target": "otp-input",
+      "prompt": "Build the second step of signing in, where the person types the six digits shown by their authenticator app and continues."
+    }
+  ]
+}

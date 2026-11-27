@@ -1,0 +1,50 @@
+{
+ "variants": [
+  {
+   "name": "ValidationErrors",
+   "summary": "Save pressed with gaps: Requester and Description are empty and a CC entry is not an email address, so each turns invalid with its message under it and focus moves to Requester; the typed Subject stays.",
+   "file": "blocks/create/create-ticket/variants/validation-errors.vue"
+  },
+  {
+   "name": "ContactError",
+   "summary": "Add new contact chosen and Save pressed: Contact email holds an address with no domain ending and turns invalid, Subject and Description are empty and invalid too, and Search contacts goes back to the contact search.",
+   "file": "blocks/create/create-ticket/variants/contact-error.vue"
+  },
+  {
+   "name": "Submitting",
+   "summary": "A filled ticket in flight: Save spins, every field, Cancel and Save and add another are disabled until the answer comes back.",
+   "file": "blocks/create/create-ticket/variants/submitting.vue"
+  },
+  {
+   "name": "SubmitError",
+   "summary": "The request failed: a danger Alert under the page title says the ticket wasn't created, with Retry, and every value stays as entered.",
+   "file": "blocks/create/create-ticket/variants/submit-error.vue"
+  },
+  {
+   "name": "Success",
+   "summary": "After Save and add another: a success toast names Ticket #4840 with Open ticket, and the form is empty again with focus on Requester.",
+   "file": "blocks/create/create-ticket/variants/success.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The contacts, groups and agents are still arriving: skeleton rows hold the three bands and both create buttons are disabled.",
+   "file": "blocks/create/create-ticket/variants/loading.vue"
+  }
+ ],
+ "sfcFile": "blocks/create/create-ticket/create-ticket.vue",
+ "guidelinesFile": "blocks/create/create-ticket/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "lib/ticket-form.ts",
+  "parts/ticket-creation-header.vue",
+  "parts/ticket-requester-band.vue",
+  "parts/ticket-requester-field.vue",
+  "parts/ticket-person-option.vue",
+  "parts/ticket-request-band.vue",
+  "parts/ticket-description-field.vue",
+  "parts/ticket-assignment-band.vue",
+  "parts/ticket-loading-bands.vue",
+  "parts/ticket-save-actions.vue",
+  "parts/ticket-discard-dialog.vue"
+ ]
+}

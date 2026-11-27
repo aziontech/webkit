@@ -1,0 +1,85 @@
+@reference "@aziontech/theme";
+@import '@aziontech/ui/styles';
+
+html,
+body {
+  min-height: 100%;
+  background: var(--bg-canvas);
+  color: var(--text-default);
+}
+
+[data-route-focus]:focus {
+  outline: none;
+}
+
+.azion {
+  font-family: Rubik, ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizelegibility;
+}
+
+.docs-code .shiki {
+  margin: 0;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  font-family: var(--text-body-code-sm-font-family);
+  font-size: var(--text-body-code-sm-font-size);
+  line-height: var(--text-body-code-sm-line-height);
+  letter-spacing: var(--text-body-code-sm-letter-spacing);
+  background: transparent !important;
+  direction: ltr;
+  text-align: start;
+}
+
+.docs-code .shiki span {
+  color: var(--shiki-light);
+}
+
+[data-theme='dark'] .docs-code .shiki span {
+  color: var(--shiki-dark);
+}
+
+.docs-html pre.shiki {
+  padding: var(--spacing-md);
+  font-family: var(--text-body-code-sm-font-family);
+  font-size: var(--text-body-code-sm-font-size);
+  line-height: var(--text-body-code-sm-line-height);
+  letter-spacing: var(--text-body-code-sm-letter-spacing);
+  overflow-x: auto;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface) !important;
+  direction: ltr;
+}
+
+.docs-code .docs-html pre.shiki {
+  border: 0;
+  border-radius: 0;
+}
+
+.docs-pair-code .docs-html pre.shiki {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+}
+
+.docs-html pre.shiki code {
+  padding: 0;
+  border: 0;
+  background: transparent !important;
+}
+
+.docs-html pre.shiki span {
+  color: var(--shiki-light);
+}
+
+[data-theme='dark'] .docs-html pre.shiki span {
+  color: var(--shiki-dark);
+}
+
+.docs-frame {
+  resize: horizontal;
+  overflow: hidden;
+  max-width: 100%;
+  min-width: min(320px, 100%);
+}

@@ -1,0 +1,52 @@
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  import { usePortalLocale } from '../../../../composables/use-translate'
+  import { cn } from '../../../../utils/cn'
+  import { useNavigationMenuContext } from '../composables/use-navigation-menu-context'
+
+  defineOptions({ name: 'NavigationMenuPortal', inheritAttrs: false })
+
+  interface Props {
+    /** Teleport container element or selector. */
+    container?: object | string
+    /** Keeps portal mounted when the popup is closed. */
+    keepMounted?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    container: undefined,
+    keepMounted: true
+  })
+
+  defineSlots<{ default(): unknown }>()
+
+  const attrs = useAttrs()
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-portal'
+  )
+
+  const root = useNavigationMenuContext()
+
+  const teleportTarget = computed(() => props.container ?? 'body')
+
+  const shouldMount = computed(() => props.keepMounted || root.menuPopupMounted.value)
+
+  const portalLocale = usePortalLocale()
+</script>
+
+<template>
+  <Teleport
+    v-if="shouldMount"
+    :to="teleportTarget"
+  >
+    <div
+      :class="cn(attrs.class as string | undefined)"
+      :dir="portalLocale.dir"
+      :lang="portalLocale.lang"
+      :data-testid="testId"
+    >
+      <slot />
+    </div>
+  </Teleport>
+</template>

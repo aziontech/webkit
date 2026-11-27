@@ -1,0 +1,424 @@
+<script setup lang="ts">
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
+  import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
+  import LogViewer from '../../../code/log-viewer/log-viewer.vue'
+  import LogViewerContent from '../../../code/log-viewer/log-viewer-content.vue'
+  import Progress from '../../../feedback/progress/progress.vue'
+  import Spinner from '../../../feedback/spinner/spinner.vue'
+  import Accordion from '../../accordion/index'
+  import Tag from '../../tag/tag.vue'
+  import {
+    DEFAULT_DEPLOYMENT_STEPS,
+    type DeploymentLogView,
+    type DeploymentPhase,
+    type DeploymentStep,
+    formatDuration,
+    indexOfKey,
+    LOG_VIEWS,
+    outcomeOf,
+    STEP_GAP_MS,
+    STEP_TAGS,
+    stepDurationLabel,
+    stepStatusOf,
+    toLine,
+    tuplesFor
+  } from '../lib/deployment-steps'
+
+  defineOptions({ name: 'DeploymentLogs' })
+
+  interface Props {
+    /** Steps of the deployment, each with its log lines. */
+    steps?: DeploymentStep[]
+    /** Streams through the steps instead of drawing a settled deployment. */
+    live?: boolean
+    /** Milliseconds between revealed log lines. */
+    autoplayInterval?: number
+    /** Key of the step that failed. */
+    failAt?: string
+    /** Key of the step a settled deployment is currently on. */
+    activeAt?: string
+    /** Wall-clock of the whole deployment, when known. */
+    totalLabel?: string
+    /** Milliseconds already elapsed when the view mounts. */
+    seek?: number
+    /** Heading on the logs row. */
+    label?: string
+    /** Draws the logs row. */
+    showHeader?: boolean
+    /** Offers the per-step copy control. */
+    copyable?: boolean
+    /** Draws the flush progress bar while the run is in flight. */
+    showProgress?: boolean
+    /** Draws the view switch and the wall-clock on the logs row. */
+    showControls?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    steps: () => DEFAULT_DEPLOYMENT_STEPS,
+    live: false,
+    autoplayInterval: 200,
+    failAt: '',
+    activeAt: '',
+    totalLabel: '',
+    seek: 0,
+    label: 'Deployment Logs',
+    showHeader: true,
+    copyable: true,
+    showProgress: true,
+    showControls: true
+  })
+
+  const emit = defineEmits<{
+    /** Fires once the live run has finished every step. */
+    complete: []
+    /** Fires when the live run stops on its failing step. */
+    error: [key: string]
+  }>()
+
+  const view = defineModel<DeploymentLogView>('view', { default: 'phased' })
+
+  const stepList = computed(() =>
+    props.steps.map((step) => ({ ...step, logs: tuplesFor(step, props.failAt) }))
+  )
+  const lastIndex = computed(() => stepList.value.length - 1)
+  const failIndex = computed(() => indexOfKey(stepList.value, props.failAt))
+  const activeAtIndex = indexOfKey(props.steps, props.activeAt)
+
+  const settledIndex = failIndex.value !== -1 ? failIndex.value : activeAtIndex
+  const staticStep = settledIndex !== -1 ? settledIndex : lastIndex.value
+
+  const phase = ref<DeploymentPhase>(
+    props.live || activeAtIndex !== -1 ? 'running' : failIndex.value !== -1 ? 'error' : 'success'
+  )
+  const settled = computed(() => phase.value !== 'running')
+  const activeStep = ref(props.live ? -1 : staticStep)
+  const revealed = ref(
+    stepList.value.map((step, i) => (props.live || i > staticStep ? 0 : step.logs.length))
+  )
+  const measured = ref(stepList.value.map(() => 0))
+  const openStep = ref<string | null>(props.live ? null : (stepList.value[staticStep]?.key ?? null))
+
+  const totalDuration = stepList.value.reduce((n, step) => n + (step.duration ?? 0), 0)
+  const elapsed = ref(props.live ? Math.round(props.seek / 1000) : totalDuration)
+  const stepStartedAt = ref(0)
+
+  const timers: ReturnType<typeof globalThis.setTimeout>[] = []
+  const after = (ms: number, fn: () => void) => timers.push(globalThis.setTimeout(fn, ms))
+
+  let tick: ReturnType<typeof globalThis.setInterval> | null = null
+  let stream: ReturnType<typeof globalThis.setInterval> | null = null
+
+  const stopTick = () => {
+    if (tick) globalThis.clearInterval(tick)
+    tick = null
+  }
+
+  const clearAll = () => {
+    timers.forEach((timer) => globalThis.clearTimeout(timer))
+    timers.length = 0
+    stopTick()
+    if (stream) globalThis.clearInterval(stream)
+    stream = null
+  }
+
+  const stepStatus = (i: number) => stepStatusOf(phase.value, activeStep.value, i)
+  const stepTag = (i: number) => STEP_TAGS[stepStatus(i)] ?? null
+
+  const durationLabel = (i: number) => {
+    const step = stepList.value[i]
+    const seconds = props.live ? (measured.value[i] ?? 0) : (step?.duration ?? 0)
+    return step ? stepDurationLabel(step, seconds) : ''
+  }
+
+  const linesByStep = computed(() =>
+    stepList.value.map((step, i) => step.logs.slice(0, revealed.value[i]).map(toLine))
+  )
+
+  const allLines = computed(() =>
+    linesByStep.value.flatMap((lines, step) =>
+      lines.map((line) => ({ ...line, id: `${step}-${line.id}` }))
+    )
+  )
+
+  const totalLines = computed(() => stepList.value.reduce((n, step) => n + step.logs.length, 0))
+  const progress = computed(() => {
+    if (phase.value === 'success') return 100
+    const done = revealed.value.reduce((sum, n) => sum + n, 0)
+    return Math.round((done / totalLines.value) * 100)
+  })
+
+  const failedTitle = computed(() => stepList.value[failIndex.value]?.title ?? '')
+
+  const activeTitle = computed(() => stepList.value[activeStep.value]?.title ?? '')
+
+  const progressLabel = computed(() => {
+    const done = stepList.value.filter((_step, i) => stepStatus(i) === 'success').length
+    return `${done}/${stepList.value.length} steps`
+  })
+
+  const timeLabel = computed(() => {
+    if (props.totalLabel) return props.totalLabel
+    return props.live || totalDuration > 0 ? formatDuration(elapsed.value) : ''
+  })
+
+  const outcomeLabel = computed(() => outcomeOf(phase.value, timeLabel.value))
+
+  const failOn = (i: number) => {
+    measured.value[i] = Math.max(1, elapsed.value - stepStartedAt.value)
+    phase.value = 'error'
+    emit('error', stepList.value[i]?.key ?? '')
+  }
+
+  const runStep = (i: number, from = 0) => {
+    const step = stepList.value[i]
+    if (!step) return
+    activeStep.value = i
+    openStep.value = step.key
+    stepStartedAt.value = elapsed.value
+    revealed.value[i] = from
+
+    stream = globalThis.setInterval(() => {
+      if ((revealed.value[i] ?? 0) < step.logs.length) {
+        revealed.value[i] = (revealed.value[i] ?? 0) + 1
+        return
+      }
+
+      if (stream) globalThis.clearInterval(stream)
+      stream = null
+
+      if (i === failIndex.value) {
+        failOn(i)
+        return
+      }
+
+      measured.value[i] = Math.max(1, elapsed.value - stepStartedAt.value)
+
+      if (i + 1 < stepList.value.length) {
+        after(STEP_GAP_MS, () => runStep(i + 1))
+      } else {
+        phase.value = 'success'
+        after(500, () => {
+          openStep.value = null
+        })
+        after(2200, () => emit('complete'))
+      }
+    }, props.autoplayInterval)
+  }
+
+  const resumeFrom = (ms: number) => {
+    let remaining = Math.floor(ms / props.autoplayInterval)
+
+    for (let i = 0; i < stepList.value.length; i++) {
+      const step = stepList.value[i]
+      if (!step) return
+      const count = step.logs.length
+      if (remaining < count) {
+        runStep(i, remaining)
+        return
+      }
+      revealed.value[i] = count
+      measured.value[i] = step.duration ?? 1
+      remaining -= count
+
+      if (i === failIndex.value) {
+        activeStep.value = i
+        openStep.value = step.key
+        phase.value = 'error'
+        emit('error', step.key)
+        return
+      }
+    }
+
+    runStep(lastIndex.value, stepList.value[lastIndex.value]?.logs.length ?? 0)
+  }
+
+  watch(phase, (next) => {
+    if (next !== 'running') stopTick()
+  })
+
+  onMounted(() => {
+    if (!props.live) return
+    tick = globalThis.setInterval(() => {
+      if (phase.value === 'running') elapsed.value += 1
+    }, 1000)
+    if (props.seek > 0) resumeFrom(props.seek)
+    else runStep(0)
+  })
+
+  onBeforeUnmount(clearAll)
+
+  const STEP_DESCRIPTION_CLASS =
+    'min-w-0 truncate text-body-sm text-(--text-muted) ' +
+    'data-[status=error]:whitespace-normal data-[status=error]:text-pretty data-[status=error]:text-(--danger-foreground) data-[status=running]:text-(--text-default)'
+</script>
+
+<template>
+  <div class="flex w-full flex-col">
+    <div
+      v-if="showHeader"
+      class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+    >
+      <p
+        v-if="label"
+        class="shrink-0 text-heading-2xs text-(--text-default)"
+      >
+        {{ label }}
+      </p>
+
+      <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
+        <template v-if="!settled">
+          <span class="shrink-0 text-label-sm text-(--text-default)">{{ progressLabel }}</span>
+          <span
+            v-if="activeTitle"
+            class="truncate text-label-sm text-(--text-muted)"
+          >
+            {{ activeTitle }}
+          </span>
+        </template>
+
+        <Tag
+          v-else-if="phase === 'success'"
+          key="success"
+          label="Completed"
+          severity="success"
+        />
+        <Tag
+          v-else
+          key="error"
+          :label="failedTitle ? `Failed: ${failedTitle}` : 'Failed'"
+          severity="danger"
+        />
+
+        <template v-if="showControls && settled">
+          <span class="text-label-sm text-(--text-muted)">{{ outcomeLabel }}</span>
+          <ToggleGroup
+            v-model="view"
+            :options="LOG_VIEWS"
+            size="medium"
+            aria-label="Log view"
+          />
+        </template>
+      </div>
+    </div>
+
+    <Accordion
+      v-if="view === 'phased'"
+      v-model="openStep"
+      type="single"
+      collapsible
+    >
+      <Accordion.Item
+        v-for="(step, i) in stepList"
+        :key="step.key"
+        :value="step.key"
+      >
+        <Accordion.Trigger>
+          <span class="flex min-h-10 flex-1 items-center gap-(--spacing-sm)">
+            <span class="flex size-5 shrink-0 items-center justify-center">
+              <i
+                v-if="stepStatus(i) === 'success'"
+                class="az az-circle-check text-(--success-mark)"
+                aria-hidden="true"
+              />
+              <i
+                v-else-if="stepStatus(i) === 'error'"
+                class="az az-circle-x text-(--danger-mark)"
+                aria-hidden="true"
+              />
+              <i
+                v-else-if="stepStatus(i) === 'skipped'"
+                class="az az-circle-minus text-(--text-muted) opacity-60"
+                aria-hidden="true"
+              />
+              <Spinner
+                v-else-if="stepStatus(i) === 'running'"
+                key="running"
+                class="size-4 text-(--text-default)"
+              />
+              <span
+                v-else
+                class="size-3.5 rounded-full border border-dashed border-(--border-default)"
+              />
+            </span>
+
+            <span
+              :data-status="stepStatus(i)"
+              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[status=error]:flex-wrap"
+            >
+              <span
+                :data-status="stepStatus(i)"
+                class="shrink-0 text-label-md text-(--text-default) data-[status=pending]:text-(--text-muted) data-[status=skipped]:text-(--text-muted)"
+              >
+                {{ step.title }}
+              </span>
+              <Tag
+                v-if="stepTag(i)"
+                :label="stepTag(i)?.label"
+                :severity="stepTag(i)?.severity"
+                size="small"
+              />
+              <span
+                :data-status="stepStatus(i)"
+                :class="STEP_DESCRIPTION_CLASS"
+              >
+                {{ step.description }}
+              </span>
+            </span>
+
+            <span class="ms-auto flex shrink-0 items-center">
+              <span
+                v-if="durationLabel(i)"
+                class="text-label-code-md text-(--text-muted)"
+              >
+                {{ durationLabel(i) }}
+              </span>
+            </span>
+          </span>
+        </Accordion.Trigger>
+        <Accordion.Content :padded="false">
+          <LogViewer
+            :lines="linesByStep[i]"
+            :bordered="false"
+            :copyable="copyable && settled"
+            :loading="stepStatus(i) === 'pending'"
+            loading-label="Waiting to start…"
+          >
+            <LogViewerContent>
+              <template #empty>
+                <template v-if="stepStatus(i) === 'skipped'">
+                  Never ran — the deployment stopped at
+                  {{ failedTitle || 'an earlier step' }}.
+                </template>
+                <template v-else>No log lines yet.</template>
+              </template>
+            </LogViewerContent>
+          </LogViewer>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion>
+
+    <LogViewer
+      v-else
+      :lines="allLines"
+      :bordered="false"
+      :copyable="settled"
+      :loading="!settled && !allLines.length"
+      loading-label="Waiting to start…"
+    >
+      <LogViewerContent>
+        <template #empty>No log lines yet.</template>
+      </LogViewerContent>
+    </LogViewer>
+
+    <Progress
+      v-if="showProgress && !settled"
+      :value="progress"
+      :max="100"
+      size="small"
+      variant="flat"
+      class="w-full"
+      aria-label="Deployment progress"
+    />
+  </div>
+</template>

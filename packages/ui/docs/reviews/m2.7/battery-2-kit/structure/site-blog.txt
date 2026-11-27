@@ -1,0 +1,35 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=medium align=center width=5xl aria-label='Blog']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ Resources
+      h1 "Blog"
+      p "Explore the latest in tech and Edge Computing on Azion's blog. Stay informed with updates on Edge technology and industry insights."
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-article-highlight kind=left]
+    img (decorative)
+    text "Company News • AUG 28, 2026"
+    h2 "Azion Named Leader in Four Categories — G2 Fall 2026 Reports"
+    p "Azion earned Leader status in CDN, Web Security, DDoS Protection, and Bot Detection and Mitigation (Enterprise) in the G2 Fall 2026 Reports, plus High Performer recognition in five more categories."
+    text "5 min read"
+    button "Read article" → /en/blog/azion-leader-g2-fall-reports-2026/
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true aria-label='Highlight articles']
+      [marketing-card-grid-cell]
+        button "Company News • AUG 28, 2026 Azion Named Leader in Four Categories — G2 Fall 2026 Reports"
+      [marketing-card-grid-cell]
+        button "performance • NOV 12, 2026 Can your store handle Black Friday? Prepare your cache before the peak"
+      [marketing-card-grid-cell]
+        button "Security • NOV 11, 2026 WAF, Firewall, and WAAP: how Azion organizes protection"
+      [marketing-card-grid-cell]
+        button "Security • NOV 10, 2026 Black Friday bots: protect login, checkout, and APIs"
+      [marketing-card-grid-cell]
+        button "Security • OCT 28, 2026 How to structure an AI SaaS with security on Azion"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-newsletter aria-label='Subscribe to our newsletter']
+    [marketing-section-module kind=left]
+      text: // ⏎ Stay up to date
+      h2 "Product updates, event highlights, and industry insights, delivered to your inbox."
+      label "Subscribe to our newsletter"
+      [input-field-text size=large]
+        input[text] name=email placeholder="Your e-mail"
+      button "Subscribe"

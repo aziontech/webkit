@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://aziontech.github.io/webkit/.specs/_schema.json",
-  "title": "Webkit Component Spec — frontmatter",
-  "description": "Schema for the YAML frontmatter of every .specs/<name>.md. Body sections (Props/Events/Slots/...) are validated separately by .claude/hooks/_lib/spec.mjs.",
+  "title": "Azion UI Component Spec — frontmatter",
+  "description": "Schema for the YAML frontmatter of every .specs/<name>.md. Body sections (Props/Events/Slots/...) are validated separately by contributing/hooks/lib/spec.mjs.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -23,20 +23,20 @@
     "category": {
       "type": "string",
       "enum": [
-        "actions",
+        "action",
+        "ai",
+        "chart",
         "code",
         "content",
         "data",
-        "documentation",
+        "docs",
         "feedback",
-        "inputs",
+        "input",
         "layout",
         "marketing",
         "navigation",
         "overlay",
-        "sections",
-        "templates",
-        "utils"
+        "section"
       ]
     },
     "structure": {
@@ -50,6 +50,11 @@
     "spec_version": {
       "type": "integer",
       "minimum": 1
+    },
+    "template": {
+      "type": "integer",
+      "enum": [1, 2],
+      "description": "Version of .specs/_template.md the spec follows. Absent means 1. spec-create writes 2, which requires the Internationalization, Right-to-left, Responsive and Performance sections (checked by check:spec-template and enforce-spec-exists). Every spec created on or after 2026-11-12 must be on 2."
     },
     "figma": {
       "type": "object",
@@ -71,6 +76,11 @@
       "type": "string",
       "pattern": "^[a-f0-9]{64}$",
       "description": "sha256 of the spec body (everything after the frontmatter). Written by spec-validator on approval; verified by enforce-spec-exists on every Write."
+    },
+    "stability": {
+      "type": "string",
+      "enum": ["preview", "ga"],
+      "description": "Release stability of the public API, orthogonal to status (the authoring pipeline). preview: the API may still change in a minor release, named in the commit body, with no deprecation cycle. ga: the API is frozen and contributing/rules/deprecation.md applies. Absent means ga. spec-create writes preview; only the owner flips a part to ga."
     },
     "deprecated": {
       "type": "boolean",

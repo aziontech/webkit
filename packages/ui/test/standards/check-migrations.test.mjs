@@ -1,0 +1,146 @@
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import test from 'node:test'
+import { fileURLToPath } from 'node:url'
+
+import {
+  apiFromCatalog,
+  diffApi,
+  literalValues,
+  loadMigrations
+} from '../../scripts/check-migrations.mjs'
+
+const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+
+const none = { components: {}, removed: {}, props: {}, blocks: {} }
+const api = (exports, props = {}, blocks = []) => ({ exports, props, blocks })
+
+test('literalValues reads closed string unions only', () => {
+  assert.deepEqual(literalValues("'small' | 'large'"), ['large', 'small'])
+  assert.equal(literalValues('string'), null)
+  assert.equal(literalValues("'a' | string"), null)
+  assert.equal(literalValues(undefined), null)
+})
+
+test('apiFromCatalog keeps export ids, block ids and component props', () => {
+  const out = apiFromCatalog({
+    imports: {
+      button: { kind: 'component', props: [{ name: 'kind', type: "'primary' | 'danger'" }] },
+      'assets/logo.svg': { kind: 'asset' }
+    },
+    blocks: { 'auth/auth-sign-in': {} }
+  })
+  assert.deepEqual(out.exports, ['assets/logo.svg', 'button'])
+  assert.deepEqual(out.blocks, ['auth/auth-sign-in'])
+  assert.deepEqual(out.props, { button: { kind: ['danger', 'primary'] } })
+})
+
+test('a removed export fails unless a migration renames or retires it', () => {
+  const before = api(['paginator', 'field-text', 'gone'])
+  const after = api(['pagination'])
+  const migrations = {
+    ...none,
+    components: { paginator: { to: 'pagination', from: 'Paginator', binding: 'Pagination' } },
+    removed: { 'field-text': 'Field + Input' }
+  }
+  const { uncovered } = diffApi(before, after, migrations)
+  assert.equal(uncovered.length, 1)
+  assert.match(uncovered[0], /export gone was removed/)
+})
+
+test('a removed block fails unless v<N>-blocks.json maps it', () => {
+  const before = api([], {}, ['platform/a', 'platform/b'])
+  const after = api([], {}, ['platform/c'])
+  const { uncovered } = diffApi(before, after, { ...none, blocks: { 'platform/a': 'platform/c' } })
+  assert.deepEqual(uncovered, [
+    'block platform/b was removed or renamed (add it to v<N>-blocks.json)'
+  ])
+})
+
+test('a removed prop or prop value fails unless v<N>-props.json maps it', () => {
+  const before = api(['log-viewer', 'button'], {
+    'log-viewer': { border: null, showCopy: null, dense: null },
+    button: { kind: ['primary', 'text'], size: ['large', 'tiny'] }
+  })
+  const after = api(['log-viewer', 'button'], {
+    'log-viewer': { bordered: null, copyable: null },
+    button: { kind: ['primary', 'transparent'], size: ['large'] }
+  })
+  const migrations = {
+    ...none,
+    props: {
+      'log-viewer': { border: 'bordered', showCopy: 'copyable' },
+      button: { kind: { to: 'kind', values: { text: 'transparent' } } }
+    }
+  }
+  const { uncovered } = diffApi(before, after, migrations)
+  assert.deepEqual(uncovered.sort(), [
+    'button: size="tiny" is no longer allowed (add "values": { "tiny": … } to v<N>-props.json["button"].size)',
+    'log-viewer: prop dense was removed or renamed (add it to v<N>-props.json["log-viewer"])'
+  ])
+})
+
+test('props of a renamed component are compared under its new subpath', () => {
+  const before = api(['tab-view'], { 'tab-view': { value: null, size: null } })
+  const after = api(['tabs'], { tabs: { size: null } })
+  const migrations = {
+    ...none,
+    components: { 'tab-view': { to: 'tabs', from: 'TabView', binding: 'Tabs' } },
+    props: { tabs: { value: 'modelValue' } }
+  }
+  assert.deepEqual(diffApi(before, after, migrations).uncovered, [])
+})
+
+test('a prop renamed to a fallthrough attribute passes only when the rule says attribute', () => {
+  const before = api(['checkbox'], { checkbox: { inputId: null, size: null } })
+  const after = api(['checkbox'], { checkbox: { size: null } })
+  const rule = (spec) => ({ ...none, props: { checkbox: { inputId: spec } } })
+  assert.equal(diffApi(before, after, rule('id')).uncovered.length, 1)
+  assert.deepEqual(diffApi(before, after, rule({ to: 'id', attribute: true })).uncovered, [])
+})
+
+test('additions never fail and are counted', () => {
+  const { uncovered, additions } = diffApi(
+    api(['a'], { a: { x: null } }),
+    api(['a', 'b'], { a: { x: null, y: null } }),
+    none
+  )
+  assert.deepEqual(uncovered, [])
+  assert.equal(additions, 2)
+})
+
+test('a preview part or block may be removed or reshaped without a codemod entry', () => {
+  const before = apiFromCatalog({
+    imports: {
+      ticket: {
+        kind: 'component',
+        stability: 'preview',
+        props: [{ name: 'size', type: "'small' | 'large'" }]
+      },
+      'ticket-row': { kind: 'subcomponent', stability: 'preview' },
+      button: { kind: 'component', props: [{ name: 'size', type: "'small' | 'large'" }] }
+    },
+    blocks: { 'view/view-ticket': { stability: 'preview' }, 'view/view-table': {} }
+  })
+  assert.deepEqual(before.preview, ['ticket', 'ticket-row'])
+  assert.deepEqual(before.previewBlocks, ['view/view-ticket'])
+  const after = api(['button', 'ticket'], { button: { size: ['large', 'small'] }, ticket: {} })
+  assert.deepEqual(diffApi(before, after, none).uncovered, [
+    'block view/view-table was removed or renamed (add it to v<N>-blocks.json)'
+  ])
+})
+
+test('apiFromCatalog adds no preview keys when nothing is preview', () => {
+  const out = apiFromCatalog({ imports: { button: { kind: 'component' } }, blocks: {} })
+  assert.equal('preview' in out, false)
+  assert.equal('previewBlocks' in out, false)
+})
+
+test('the recorded snapshot is covered by the shipped migrations', () => {
+  const snapshot = JSON.parse(readFileSync(resolve(PKG, 'scripts/api-snapshot.json'), 'utf8'))
+  const catalog = JSON.parse(readFileSync(resolve(PKG, 'catalog.json'), 'utf8'))
+  const migrations = loadMigrations()
+  assert.ok(Object.keys(migrations.components).length >= 14)
+  assert.deepEqual(diffApi(snapshot, apiFromCatalog(catalog), migrations).uncovered, [])
+})

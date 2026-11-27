@@ -1,0 +1,47 @@
+# Known test failures
+
+The register of tests that fail for a reason we know and have not fixed yet: flaky tests that
+pass alone and fail under load, and pre-existing failures that are not caused by the change under
+review. A failure listed here does not block a PR on its own; a failure that is not listed does.
+
+Keep it current: add a row when a failure is seen twice and understood, remove the row in the
+commit that fixes it, and re-check every row before a release. The test environment (Vitest
+browser mode in real Chromium, unstyled DOM) is described in [`OVERVIEW_TESTS.md`](./OVERVIEW_TESTS.md)
+and [`testing.md`](../rules/testing.md).
+
+All commands run from `packages/ui`:
+
+```bash
+CI= PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm exec vitest run <test file> -t "<test name>"
+```
+
+## Pre-existing failures
+
+Fail on every run, alone too.
+
+None.
+
+## Flaky under load
+
+Pass alone, fail now and then in a full or sharded run on a busy host. Re-run the file alone before
+treating one of these as a regression.
+
+| Test                                                                                                                                                                    | Symptom in the failing run                                                                                                                     | Status (checked 2026-11-16) |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `src/components/overlay/hover-card/hover-card.test.ts` › `hover opens after the open delay and leaving closes after the close delay`                                    | The card is still open after the close delay (`expected <div id="v-0-hover-card"> to be null`): timer-based, slips when the host is loaded.    | Open. Passes alone.         |
+| `src/components/content/avatar/avatar.test.ts` › `draws the marble pattern in place of the initials and names it with the full label`                                   | `Unable to find an element by: [data-testid="avatar__pattern"]`.                                                                               | Open. Passes alone.         |
+| `src/test/blocks/account/account-team-permissions.test.ts` › `EditTeam` tests (asks for a user before Add, removes a member and Discard restores, asks before deleting) | `Unable to find an element with the text: Choose a user to add.` and similar: the drawer content is not there yet.                             | Open. Passes alone.         |
+| `src/components/section/article-body/article-body.test.ts` › `scrolls to a heading from the outline and writes its hash`                                                | `expected '' to be '#results-and-impact'`: the hash is read before the scroll handler writes it.                                               | Open. Passes alone.         |
+| `src/test/performance.test.ts` › `Tracker with 1k items: mount and move`                                                                                                | Over its mount or update budget in a full run. Alone, three runs measured mount 65.5–68.9 ms (budget 110) and update 12.0–15.8 ms (budget 30). | Open. Passes alone.         |
+
+Other engines (Firefox and WebKit runs only) and the styled visual suite: see `ROADMAP.md`, M2.10
+rows 52, 74 and 83 (OtpInput Backspace in Firefox, MapChart keyboard walk and a 320 px reflow in
+Azion UI, the console account-switch geometry check). Those rows were not re-checked for this register.
+
+### Styled visual suite (`apps/visual`), seen 2026-11-23 in the Playwright container
+
+| Test                                                    | Symptom in the failing run                                                             | Alone            |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------- |
+| `geometry shell/shell-console account-switch dark-1920` | Account table column widths differ (Type, ID and Client ID shift); now fails alone too | 1 of 3 runs pass |
+| `blocks ai/ai-chat agent light-320` and `dark-320`      | Whole page 3 px lower (scroll position)                                                | passes           |
+| `keyboard example card-carousel-section/default`        | `Tab never reaches button carousel-previous "Previous slide"`                          | passes           |

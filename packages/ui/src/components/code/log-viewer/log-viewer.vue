@@ -1,0 +1,218 @@
+<script setup lang="ts">
+  import { computed, provide, ref, useAttrs } from 'vue'
+
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import { cn } from '../../../utils/cn'
+  import { formatLogLineText } from './composables/format-log-line-text'
+  import type { LogViewerLine, LogViewerLineLevel } from './injection-key'
+  import { lineLevel, LogViewerInjectionKey } from './injection-key'
+
+  export type {
+    LogViewerLine,
+    LogViewerLineLevel,
+    LogViewerLineType,
+    LogViewerStep,
+    LogViewerStepStatus,
+    LogViewerStepsView
+  } from './injection-key'
+
+  defineOptions({
+    name: 'LogViewer',
+    inheritAttrs: false
+  })
+
+  export interface LogViewerProps {
+    /** Log entries (filtered in LogViewerContent by search and level). */
+    lines?: LogViewerLine[]
+    /** Draw the outer card border and corner radius around the log shell. On by default; set to false to render flush inside a surface that already frames it. */
+    bordered?: boolean
+    /** Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`). */
+    searchPlaceholder?: string
+    /** Shows the copy-to-clipboard control: a CopyButton at the end of LogViewerHeader, or pinned top-right beside the log body when no header is composed. */
+    copyable?: boolean
+    /** Disables toolbar controls in LogViewerHeader. */
+    disabled?: boolean
+    /** Replaces the LogViewerContent log body with a centered spinner and label. */
+    loading?: boolean
+    /** Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`). */
+    loadingLabel?: string
+    /** Levels the header offers as filter toggles, each with its line count; a level with no line is still offered. Empty hides the level filter. */
+    levels?: LogViewerLineLevel[]
+    /** Message shown in place of the log body when the log failed to load. Empty shows the log. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<LogViewerProps>(), {
+    lines: () => [],
+    bordered: true,
+    searchPlaceholder: '',
+    copyable: true,
+    disabled: false,
+    loading: false,
+    loadingLabel: '',
+    levels: () => [],
+    error: ''
+  })
+
+  /** Bound to LogViewerHeader search; filters LogViewerContent when set. */
+  const search = defineModel<string>('search', { default: '' })
+  /** The level the log is filtered to; empty shows every level. */
+  const level = defineModel<LogViewerLineLevel | ''>('level', { default: '' })
+
+  const emit = defineEmits<{
+    copy: [event: MouseEvent, value: string]
+  }>()
+
+  defineSlots<{
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ logViewer: en.logViewer })
+
+  const passthroughAttrs = computed(() => {
+    const rest = { ...attrs }
+
+    delete rest.class
+    delete rest['data-testid']
+
+    return rest
+  })
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'log-viewer')
+
+  const levelCounts = computed(() => {
+    const counts: Record<LogViewerLineLevel, number> = { debug: 0, info: 0, warn: 0, error: 0 }
+    for (const line of props.lines) {
+      const value = lineLevel(line)
+      if (value) counts[value] += 1
+    }
+    return counts
+  })
+
+  const haystacks = new WeakMap<LogViewerLine, { message: string; text: string }>()
+
+  const haystackOf = (line: LogViewerLine): string => {
+    const cached = haystacks.get(line)
+    if (cached && cached.message === line.message) return cached.text
+    const text = [
+      line.time,
+      line.level,
+      line.message,
+      line.folderType,
+      line.size,
+      line.gzipSize,
+      line.suffix
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+    haystacks.set(line, { message: line.message, text })
+    return text
+  }
+
+  const filteredLines = computed(() => {
+    const query = search.value.trim().toLowerCase()
+    let result = props.lines
+
+    if (level.value) {
+      result = result.filter((line) => lineLevel(line) === level.value)
+    }
+
+    if (query) {
+      result = result.filter((line) => haystackOf(line).includes(query))
+    }
+
+    return result
+  })
+
+  const lineCountLabel = computed(() => t('logViewer.lines', { count: filteredLines.value.length }))
+
+  const copyLines = new WeakMap<LogViewerLine, { message: string; text: string }>()
+
+  const copyLineOf = (line: LogViewerLine): string => {
+    const cached = copyLines.get(line)
+    if (cached && cached.message === line.message) return cached.text
+    const text = formatLogLineText(line)
+    copyLines.set(line, { message: line.message, text })
+    return text
+  }
+
+  const copyText = computed(() => filteredLines.value.map(copyLineOf).join('\n'))
+
+  const canCopy = computed(
+    () =>
+      props.copyable &&
+      !props.disabled &&
+      !props.loading &&
+      !props.error &&
+      filteredLines.value.length > 0
+  )
+
+  const setSearch = (value: string) => {
+    search.value = value
+  }
+
+  const toggleLevel = (next: LogViewerLineLevel) => {
+    if (props.disabled) return
+
+    level.value = level.value === next ? '' : next
+  }
+
+  const emitCopy = (event: MouseEvent, value: string) => {
+    emit('copy', event, value)
+  }
+
+  const headers = ref<number>(0)
+  const registerHeader = (): (() => void) => {
+    headers.value += 1
+    return () => {
+      headers.value -= 1
+    }
+  }
+
+  provide(LogViewerInjectionKey, {
+    testId,
+    lines: computed(() => props.lines),
+    filteredLines,
+    search: computed(() => search.value),
+    levels: computed(() => props.levels),
+    level: computed(() => level.value),
+    levelCounts,
+    disabled: computed(() => props.disabled),
+    copyable: computed(() => props.copyable),
+    loading: computed(() => props.loading),
+    loadingLabel: computed(() => props.loadingLabel || t('logViewer.loading')),
+    error: computed(() => props.error),
+    searchPlaceholder: computed(() => props.searchPlaceholder || t('logViewer.searchPlaceholder')),
+    lineCountLabel,
+    canCopy,
+    copyText,
+    setSearch,
+    toggleLevel,
+    emitCopy,
+    headerMounted: computed(() => headers.value > 0),
+    registerHeader
+  })
+</script>
+
+<template>
+  <div
+    v-bind="passthroughAttrs"
+    :data-testid="testId"
+    :data-bordered="bordered || null"
+    :data-disabled="disabled || null"
+    :data-loading="loading || null"
+    :data-error="error ? true : null"
+    :data-level="level || null"
+    :class="
+      cn(
+        'flex h-fit min-h-0 w-full min-w-0 max-w-full flex-col overflow-hidden data-[bordered]:rounded-(--shape-control) data-[bordered]:border data-[bordered]:border-(--border-muted)',
+        attrs.class
+      )
+    "
+  >
+    <slot />
+  </div>
+</template>

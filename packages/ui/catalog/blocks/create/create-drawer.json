@@ -1,0 +1,64 @@
+{
+ "variants": [
+  {
+   "name": "AddEnvironment",
+   "summary": "The same form opened from Add Environment in the resource environment menu, titled and saved as Add Environment.",
+   "file": "blocks/create/create-drawer/variants/add-environment.vue"
+  },
+  {
+   "name": "EditDomain",
+   "summary": "Edit from a domain row menu: the drawer opens on www.example.com as a domain of its own, so the Certificate select shows with example.com wildcard and the footer saves the domain.",
+   "file": "blocks/create/create-drawer/variants/edit-domain.vue"
+  },
+  {
+   "name": "AddRecord",
+   "summary": "Closed until Add Record opens it, here as a DNS zone renders it: Name with the zone as an addon, Record type, TTL, Value with the placeholder and helper of the selected type, and Description under Settings; Policy type under Policy, with Weight appearing only for the weighted policy. Save on an empty form flags Name and Value as required.",
+   "file": "blocks/create/create-drawer/variants/add-record.vue"
+  },
+  {
+   "name": "ItemRows",
+   "summary": "An in-context add whose body is the settings layout: an Origins page inside the storefront resource whose heading action opens a large right-side drawer, and inside it section-titled groups of `Item` rows, each a small heading over a flush `Card`, saved together by the one Add Origin in the footer. An origin lives inside its resource, so it adds in a drawer; a first-level resource such as a service creates on a page instead. General, Connection and Options are the sections. The drawer clears its fields and errors each time it opens, so its content stays in place while it closes. Name and Protocol flag only after Add Origin is pressed. Built from `PageHeader`, `SettingsRow`, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Card`, `Item`, `Input`, `Select`, `Switch` and `FieldError`. The page is a page body for ConsoleLayout.",
+   "file": "blocks/create/create-drawer/variants/item-rows.vue"
+  },
+  {
+   "name": "NestedDrawer",
+   "summary": "A create drawer whose select needs another item of the same resource that may not exist yet: the Rules Engine page of the storefront resource opens a large Add Rule drawer, and the Create Origin option pinned to the foot of its Origin select opens a second, medium drawer stacked above it on raised layers. Rule and origin both live inside the resource, so both create in drawers; a first-level resource such as a service is never created this way, it creates on a page. Saving the child adds the new origin and selects it back into the rule. Each drawer is its own scoped save, and each clears its fields and errors when it opens, so its content stays in place while it closes. Built from `PageHeader`, `SettingsRow`, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Card`, `Item`, `Input`, `Select` and `FieldError`. The page is a page body for ConsoleLayout.",
+   "file": "blocks/create/create-drawer/variants/nested-drawer.vue"
+  },
+  {
+   "name": "DeploymentSettings",
+   "summary": "The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build and deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `SettingsGroup`, `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea` and `Switch` choice cards, `RadioGroup`, `Field.Legend`, `FieldError`, `Hint` and `Button`.",
+   "file": "blocks/create/create-drawer/variants/deployment-settings.vue"
+  },
+  {
+   "name": "Certificate",
+   "summary": "Create Certificate: a Server certificate or Trusted CA `ToggleGroup`, a PEM `Textarea` with Upload file, a details panel read from the pasted certificate (issued to, issued by, valid from, and the expiry with a `StatusIndicator` that warns within 30 days and blocks an expired one) and, for a server certificate, the private key; opened with a sample certificate pasted and the key empty.",
+   "file": "blocks/create/create-drawer/variants/certificate.vue"
+  },
+  {
+   "name": "CreateEnvironment",
+   "summary": "Create Environment: Name, Description, a Deployment policy and a Robots policy Select whose helpers say what each choice does, an IP allowlist Switch that reveals a Textarea of IPv4 addresses and CIDR ranges checked on submit, and a Branch tracking Switch that reveals the match Mode and the Branch match. It opens on its own at large size, or stacked at medium size above Add Domain from the Environment select's Create Environment option, and the new environment comes back selected.",
+   "file": "blocks/create/create-drawer/variants/create-environment.vue"
+  },
+  {
+   "name": "FunctionInstance",
+   "summary": "Add or edit a function instance from a resource's instance list: a Function Select and a Name, then the function's arguments as a `SchemaForm` built from the schema it declares, with a Fields or JSON `ToggleGroup`; the JSON view is a `CodeEditor` whose edits update the fields and whose parse errors show as markers. Required arguments show their messages only after submit, and changing the function clears the arguments.",
+   "file": "blocks/create/create-drawer/variants/function-instance.vue"
+  },
+  {
+   "name": "SaveError",
+   "summary": "Add Domain after a failed save: the drawer stays open with acme-store and Production kept, the fieldset released, and a danger `Alert` above the footer says the domain was not added, with Retry.",
+   "file": "blocks/create/create-drawer/variants/save-error.vue"
+  }
+ ],
+ "sfcFile": "blocks/create/create-drawer/create-drawer.vue",
+ "guidelinesFile": "blocks/create/create-drawer/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "composables/use-drawer-guard.ts",
+  "lib/certificate-match.ts",
+  "parts/form-drawer.vue",
+  "parts/submit-button.vue",
+  "parts/unsaved-changes-dialog.vue"
+ ]
+}

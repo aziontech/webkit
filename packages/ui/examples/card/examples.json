@@ -1,0 +1,37 @@
+{
+  "component": "card",
+  "title": "Components/Content/Card",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default card with a title header and body content in the default slot.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Header",
+      "summary": "An action rendered through the `header` slot stays visible, aligned to the end of the header.",
+      "file": "header.vue"
+    },
+    {
+      "name": "Footer",
+      "summary": "Filling the `footer` slot renders the footer bar with actions or metadata.",
+      "file": "footer.vue"
+    },
+    {
+      "name": "Flush",
+      "summary": "Set `padded=false` for edge-to-edge content such as an ItemList with full-width dividers.",
+      "file": "flush.vue"
+    },
+    {
+      "name": "Link",
+      "summary": "Set `href` and the whole card is one link: the root renders as an anchor with its own focus ring, and the card's text, title first, is the link's name. Keep buttons and other links out of a linked card.",
+      "file": "link.vue"
+    },
+    {
+      "name": "Page JSON",
+      "summary": "The same content in the marketing site's page JSON: `Card` is a scene, so a band places it by name in its `scene` slot (here `console-showcase-section` with `variant: \"diagram\"` and `texture: \"none\"`, so nothing is painted behind it) and `SitePage` renders the entry with no code. The card body is a text child of the scene.",
+      "file": "page-entry.vue",
+      "json": "page-entry.json"
+    }
+  ]
+}

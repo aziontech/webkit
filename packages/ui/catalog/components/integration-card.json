@@ -1,0 +1,32 @@
+{
+ "purpose": "Use IntegrationCard for one tile of a catalog of integrations, extensions or plugins; for a bordered box of related content use Card, and for a collection of resource records shown as cards use CardList. A catalog tile laid out from props: a logo mark, the item name, its vendor, a short description, badges, the installed state and one action. The name is the tile's single target: a link when `href` is set, otherwise a button that emits `select`, stretched over the whole tile. `featured` gives the centred, raised layout used for a short row of picks above the full catalog. It was the `integration` variant of `Card` until 6.0, split out because a tile shares neither the header nor the footer of a content card.",
+ "useWhen": [
+  "A catalog tile for an integration, an extension or a plugin: the logo, the name, the vendor, a short description, badges, the installed state and one action.",
+  "A short row of highlighted integrations above the full catalog (Featured): add `featured` for the centred, raised layout with the badges in the corner.",
+  "A starter template or next-step tile that carries a mark, a name and a short description and links somewhere."
+ ],
+ "avoidWhen": [
+  "A bordered box of related content with a title, a body and a footer → use `card`.",
+  "One record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).",
+  "One tier of a pricing comparison → use `pricing-card`.",
+  "A single row of title, description, media and actions → use `item`."
+ ],
+ "related": [
+  "`card` — the content box this tile was split from; shares its surface tokens.",
+  "`tag` — renders the badges and the Installed state.",
+  "`card-list` — the resource list in card form, with selection.",
+  "`view/view-marketplace` — the block that lays these tiles out in a filtered grid."
+ ],
+ "bestPractices": [
+  "The tile is laid out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole tile so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.",
+  "Keep the description to one or two sentences; the tile clamps it to three lines.",
+  "Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.",
+  "Tiles sit under a section heading, so their title is an `h3`.",
+  "`featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, and a badge without `severity` or `variant` stays `info`, as on the plain tile. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain tile."
+ ],
+ "channels": [
+  "app",
+  "docs",
+  "site"
+ ]
+}

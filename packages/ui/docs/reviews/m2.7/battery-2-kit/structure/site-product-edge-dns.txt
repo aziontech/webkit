@@ -1,0 +1,145 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Secure, highly available authoritative DNS']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Edge DNS
+      h1 "Secure, highly available authoritative DNS"
+      p "Manage your zones on Azion's global infrastructure with DNSSEC, DDoS protection, and AI enabled management on a single platform."
+      button "Start free" → https://console.azion.com/signup/
+      button "Docs" → https://www.azion.com/en/documentation/products/secure/edge-dns/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Global distributed architecture"
+          p "Host DNS zones with automatic redundancy, keeping domains accessible worldwide."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Protection without another security layer"
+          p "Use native DDoS protection and DNSSEC without additional security products."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Unified operation of your DNS"
+          p "Operate DNS, delivery, and security in one environment, all in one place."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Optimized global DNS performance"
+          p "Automatic routing resolves queries from the nearest location, delivering consistent DNS resolution."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Monitor DNS performance and availability"
+          p "Connect DNS activity with application telemetry to investigate incidents without crossing disconnected monitoring tools."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Developer-first API"
+          p "REST APIs and MCPs enable automated zone management, record operations, and DNSSEC configuration."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating aria-label='Easy management and complete control']
+    [marketing-section-title kind=centered size=large]
+      text: // ⏎ Built for reliability
+      h2 "Easy management and complete control"
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='DNSSEC and cryptographic authentication']
+          h2 "DNSSEC and cryptographic authentication"
+          p "Protect against DNS spoofing, poisoning, and hijacking with DNSSEC digital signatures backed by automatic Chain of Trust validation for every DNS response."
+          img "Diagram: a resolver protected by DNSSEC accepts the signed answer from Edge DNS and rejects forged answers from attackers, backed by a chain of trust from the root to .com to example.com"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Native DDoS protection and threat detection']
+          h2 "Native DDoS protection and threat detection"
+          p "Stop DNS flood attacks, amplification attempts, and malicious queries automatically. Every query is analyzed and rate-limited in real time, no configuration needed."
+          img "DDoS Protection filtering traffic before it reaches Edge DNS nameservers on the Azion platform"
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Split traffic with weighted policies']
+          h2 "Split traffic with weighted policies"
+          p "Give records with the same name and type a weight from 0 to 255 to set the share of queries each one answers. Shift traffic between origins gradually, or set a weight to 0 to take a record out of rotation without deleting it."
+          img "Weighted policy splitting queries for www.example.com across three A records at 60%, 40%, and a disabled record at 0%"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Point your apex domain to Azion']
+          h2 "Point your apex domain to Azion"
+          p "Use ANAME records for CNAME-like behavior on the root domain, so example.com can point straight to an Azion application. MX and TXT records keep working on the same name."
+          img "Zone for example.com with an ANAME record at the apex alongside MX and TXT records, resolving to an Azion application"
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "GPA"
+          blockquote "Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers."
+          figcaption "Allan Monteiro CISO & Head of Technology"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Serverless AI-native primitives for autonomous workloads']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Serverless AI-native primitives for autonomous workloads"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is an authoritative DNS service?"
+          [content-accordion-item]
+            h3 "How does Edge DNS implement high availability?"
+          [content-accordion-item]
+            h3 "What is DNSSEC and do I need it?"
+          [content-accordion-item]
+            h3 "How is Edge DNS different from my current DNS provider?"
+          [content-accordion-item]
+            h3 "Can I manage Edge DNS programmatically?"
+          [content-accordion-item]
+            h3 "What happens during a DDoS attack on my DNS?"
+          [content-accordion-item]
+            h3 "How does Edge DNS pricing work?"
+          [content-accordion-item]
+            h3 "Can I migrate my existing DNS to Edge DNS?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Protected by default.']
+        text: // ⏎ Secure
+        h2 "Protected by default. Always on."
+        button "Start free" → https://console.azion.com/signup?tck=secure_cta
+        p "Get stronger protection, less attack exposure, and less operational overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

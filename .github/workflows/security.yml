@@ -1,0 +1,283 @@
+# The company security suite, run on GitHub-hosted runners because this repository is public:
+# Semgrep (code scanning), osv-scanner (known vulnerabilities in the lockfiles), Gitleaks (secrets
+# in the whole history), dependency review (new dependencies: vulnerabilities and licenses) and a
+# CycloneDX SBOM per package. One report goes on the pull request.
+# Called by governance.yml on every pull request (its result feeds the Governance Gate) and by
+# security-main.yml after every merge to main and every week.
+name: Security
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  semgrep:
+    name: Code scanning (Semgrep)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    container:
+      image: semgrep/semgrep:1.184.0@sha256:cc1b68266f267878b39739373ea9985b9a78e5d64497dd875c8de100b22695ed
+    outputs:
+      findings: ${{ steps.scan.outputs.findings }}
+      blocking: ${{ steps.scan.outputs.blocking }}
+    env:
+      SEMGREP_CONFIGS: --config p/default --config p/javascript --config p/typescript --config p/github-actions --config p/secrets
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Scan the code (every severity, for the report and the Security tab)
+        id: scan
+        run: |
+          # shellcheck disable=SC2086
+          semgrep scan --metrics=off $SEMGREP_CONFIGS --quiet \
+            --json-output=semgrep.json --sarif-output=semgrep.sarif .
+          findings=$(python3 -c "import json; print(len(json.load(open('semgrep.json'))['results']))")
+          blocking=$(python3 -c "import json; print(sum(r['extra']['severity'] == 'ERROR' for r in json.load(open('semgrep.json'))['results']))")
+          echo "findings=$findings" >> "$GITHUB_OUTPUT"
+          echo "blocking=$blocking" >> "$GITHUB_OUTPUT"
+
+      - name: Keep the SARIF file
+        if: ${{ !cancelled() && hashFiles('semgrep.sarif') != '' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sarif-semgrep
+          path: semgrep.sarif
+          retention-days: 14
+
+      - name: Fail on a high or critical finding (severity ERROR)
+        run: |
+          # shellcheck disable=SC2086
+          semgrep scan --metrics=off $SEMGREP_CONFIGS --severity ERROR --error .
+
+  osv:
+    name: Dependency check (osv-scanner)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      vulnerabilities: ${{ steps.scan.outputs.vulnerabilities }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install osv-scanner (pinned release binary, checksum verified)
+        env:
+          OSV_SCANNER_VERSION: 2.7.0
+          OSV_SCANNER_SHA256: 160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b
+        run: |
+          bin="$RUNNER_TEMP/osv-scanner"
+          mkdir -p "$bin"
+          curl -fsSL -o "$bin/osv-scanner" "https://github.com/google/osv-scanner/releases/download/v${OSV_SCANNER_VERSION}/osv-scanner_linux_amd64"
+          echo "${OSV_SCANNER_SHA256}  $bin/osv-scanner" | sha256sum -c -
+          chmod +x "$bin/osv-scanner"
+          echo "$bin" >> "$GITHUB_PATH"
+
+      - name: Scan every lockfile for known vulnerabilities
+        id: scan
+        run: |
+          set +e
+          osv-scanner scan source --recursive --format sarif --output-file osv.sarif .
+          code=$?
+          osv-scanner scan source --recursive --format table . | tee osv.txt
+          set -e
+          if [ "$code" -gt 1 ]; then
+            echo "::error::osv-scanner stopped with exit code $code"
+            exit "$code"
+          fi
+          count=$(jq '[.runs[].results[]?] | length' osv.sarif)
+          echo "vulnerabilities=$count" >> "$GITHUB_OUTPUT"
+          echo "exit=$code" >> "$GITHUB_OUTPUT"
+
+      - name: Keep the SARIF file
+        if: ${{ !cancelled() && hashFiles('osv.sarif') != '' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sarif-osv-scanner
+          path: osv.sarif
+          retention-days: 14
+
+      - name: Fail on a known vulnerability
+        env:
+          OSV_EXIT: ${{ steps.scan.outputs.exit }}
+        run: |
+          if [ "$OSV_EXIT" != "0" ]; then
+            echo "::error::osv-scanner found a known vulnerability; see the table in the previous step"
+            exit 1
+          fi
+
+  gitleaks:
+    name: Secrets in the whole history (Gitleaks)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      leaks: ${{ steps.scan.outputs.leaks }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Install Gitleaks (pinned release binary, checksum verified)
+        env:
+          GITLEAKS_VERSION: 8.30.1
+          GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+        run: |
+          bin="$RUNNER_TEMP/gitleaks"
+          mkdir -p "$bin"
+          curl -fsSL -o "$RUNNER_TEMP/gitleaks.tar.gz" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$bin" gitleaks
+          echo "$bin" >> "$GITHUB_PATH"
+
+      - name: Scan every commit (findings already in the history are listed in .gitleaksignore)
+        id: scan
+        run: |
+          set +e
+          gitleaks git --no-banner --redact --config .gitleaks.toml --log-opts=HEAD \
+            --report-format sarif --report-path gitleaks.sarif .
+          code=$?
+          set -e
+          count=$(jq '[.runs[].results[]?] | length' gitleaks.sarif)
+          echo "leaks=$count" >> "$GITHUB_OUTPUT"
+          echo "exit=$code" >> "$GITHUB_OUTPUT"
+
+      - name: Keep the SARIF file
+        if: ${{ !cancelled() && hashFiles('gitleaks.sarif') != '' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sarif-gitleaks
+          path: gitleaks.sarif
+          retention-days: 14
+
+      - name: Fail on a secret
+        env:
+          GITLEAKS_EXIT: ${{ steps.scan.outputs.exit }}
+        run: |
+          if [ "$GITLEAKS_EXIT" != "0" ]; then
+            echo "::error::Gitleaks found a secret. Rotate it first, then remove it; a sample value goes in .gitleaks.toml"
+            exit 1
+          fi
+
+  dependencies:
+    name: New dependencies (vulnerabilities and licenses)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Review the dependencies this pull request adds or changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          config-file: ./.github/dependency-review.yml
+
+  sbom:
+    name: Software bill of materials (CycloneDX)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          package-manager-cache: false
+          node-version-file: '.nvmrc'
+
+      - name: Write one SBOM per published package (runtime dependencies, from the lockfile)
+        run: pnpm run generate:sbom
+
+      - name: Check every SBOM names its package
+        run: |
+          for file in sbom/*.cdx.json; do
+            jq -e '.bomFormat == "CycloneDX" and (.metadata.component.name | length > 0)' "$file" > /dev/null
+            echo "$file: $(jq -r '.metadata.component.name + "@" + .metadata.component.version' "$file"), $(jq '.components | length' "$file") components"
+          done
+
+      - name: Keep the SBOMs
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sbom
+          path: sbom/
+          retention-days: 30
+
+  report:
+    name: Security report
+    needs: [semgrep, osv, gitleaks, dependencies, sbom]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Write the report
+        env:
+          SEMGREP_RESULT: ${{ needs.semgrep.result }}
+          SEMGREP_FINDINGS: ${{ needs.semgrep.outputs.findings }}
+          SEMGREP_BLOCKING: ${{ needs.semgrep.outputs.blocking }}
+          OSV_RESULT: ${{ needs.osv.result }}
+          OSV_VULNERABILITIES: ${{ needs.osv.outputs.vulnerabilities }}
+          GITLEAKS_RESULT: ${{ needs.gitleaks.result }}
+          GITLEAKS_LEAKS: ${{ needs.gitleaks.outputs.leaks }}
+          DEPENDENCIES_RESULT: ${{ needs.dependencies.result }}
+          SBOM_RESULT: ${{ needs.sbom.result }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          mark() {
+            case "$1" in
+              success) echo "✅ passed" ;;
+              skipped) echo "➖ skipped" ;;
+              *) echo "❌ $1" ;;
+            esac
+          }
+          {
+            echo "<!-- azion-ui-security-report -->"
+            echo "### Security report"
+            echo ""
+            echo "| Scan | Result | Details |"
+            echo "| --- | --- | --- |"
+            echo "| Code scanning (Semgrep) | $(mark "$SEMGREP_RESULT") | ${SEMGREP_BLOCKING:-?} high or critical, ${SEMGREP_FINDINGS:-?} in all |"
+            echo "| Dependency check (osv-scanner) | $(mark "$OSV_RESULT") | ${OSV_VULNERABILITIES:-?} known vulnerabilities |"
+            echo "| Secrets in the whole history (Gitleaks) | $(mark "$GITLEAKS_RESULT") | ${GITLEAKS_LEAKS:-?} new findings |"
+            echo "| New dependencies, vulnerabilities and licenses | $(mark "$DEPENDENCIES_RESULT") | pull requests only |"
+            echo "| SBOM (CycloneDX, one per package) | $(mark "$SBOM_RESULT") | kept as the \`sbom\` artifact |"
+            echo ""
+            echo "Only a high or critical finding, a known vulnerability, a new secret or a dependency outside the license list blocks. [Logs and artifacts]($RUN_URL)."
+          } > "$RUNNER_TEMP/security-report.md"
+          cat "$RUNNER_TEMP/security-report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Post the report on the pull request (one comment, updated on every run)
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          body="$RUNNER_TEMP/security-report.md"
+          existing=$(gh api "repos/$GH_REPO/issues/$PR_NUMBER/comments" --paginate \
+            --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- azion-ui-security-report -->"))) | .id' | head -n 1)
+          if [ -n "$existing" ]; then
+            gh api --method PATCH "repos/$GH_REPO/issues/comments/$existing" -F "body=@$body" > /dev/null
+          else
+            gh api --method POST "repos/$GH_REPO/issues/$PR_NUMBER/comments" -F "body=@$body" > /dev/null
+          fi

@@ -1,0 +1,27 @@
+{
+ "variants": [
+  {
+   "name": "Loading",
+   "summary": "While the quarter loads, the tiles and charts render their own Skeleton and the goals and commentary hold Skeleton rows, so the page does not reflow when data arrives.",
+   "file": "blocks/dashboard/dashboard-executive-summary/variants/loading.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "A quarter with nothing reported. The tiles show a dash with no delta, and one bordered page-level EmptyState names the quarter and offers the next later one in place of the trend cards, goals and commentary.",
+   "file": "blocks/dashboard/dashboard-executive-summary/variants/empty.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The request for the quarter failed: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
+   "file": "blocks/dashboard/dashboard-executive-summary/variants/error.vue"
+  }
+ ],
+ "sfcFile": "blocks/dashboard/dashboard-executive-summary/dashboard-executive-summary.vue",
+ "guidelinesFile": "blocks/dashboard/dashboard-executive-summary/guidelines.md",
+ "fileSources": [
+  "sample.ts",
+  "executive-summary-metrics.ts",
+  "parts/commentary-card.vue",
+  "parts/goals-card.vue"
+ ]
+}

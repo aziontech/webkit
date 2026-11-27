@@ -1,0 +1,254 @@
+import { render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+
+import HeroDefault from '../../../../../examples/hero/default.vue'
+import Centered from '../../../../../examples/hero-title/centered.vue'
+import Default from '../../../../../examples/hero-title/default.vue'
+import Highlight from '../../../../../examples/hero-title/highlight.vue'
+import MobileCentered from '../../../../../examples/hero-title/mobile-centered.vue'
+import WithActions from '../../../../../examples/hero-title/with-actions.vue'
+import { expectNoA11yViolations } from '../../../../test/axe'
+import HeroTitle from './hero-title.vue'
+
+const TESTID = 'hero-title'
+
+const props = { title: 'Run it everywhere.' }
+
+describe('HeroTitle', () => {
+  it('renders the headline as an h1 under the default testid', () => {
+    const { getByTestId, getByRole } = render(HeroTitle, { props })
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+    expect(getByRole('heading', { level: 1 })).toHaveTextContent('Run it everywhere.')
+  })
+
+  it('renders no highlight span and aligns to the start by default', () => {
+    const { getByTestId } = render(HeroTitle, { props })
+    const root = getByTestId(TESTID)
+
+    expect(root).toHaveAttribute('data-align', 'start')
+    expect(root.querySelector('h1 span')).toBeNull()
+  })
+
+  it('renders the highlight inside the same h1, so the accessible name is one sentence', () => {
+    const { getByRole } = render(HeroTitle, {
+      props: { ...props, titleHighlight: 'Build anything.' }
+    })
+    const heading = getByRole('heading', { level: 1 })
+
+    expect(heading.querySelector('span')).toHaveTextContent('Build anything.')
+    expect(heading.textContent?.replace(/\s+/g, ' ').trim()).toBe(
+      'Build anything. Run it everywhere.'
+    )
+  })
+
+  it('marks the root sticky only when the sticky prop is set', () => {
+    const off = render(HeroTitle, { props })
+    expect(off.getByTestId(TESTID)).not.toHaveAttribute('data-sticky')
+    off.unmount()
+
+    const on = render(HeroTitle, { props: { ...props, sticky: true } })
+    expect(on.getByTestId(TESTID)).toHaveAttribute('data-sticky', 'true')
+  })
+
+  it('marks the root centered when align is center', () => {
+    const { getByTestId } = render(HeroTitle, { props: { ...props, align: 'center' } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'center')
+  })
+
+  it('sets the mobile alignment only when mobileAlign is set', async () => {
+    const { getByTestId, rerender } = render(HeroTitle, { props })
+    expect(getByTestId(TESTID)).not.toHaveAttribute('data-mobile-align')
+
+    await rerender({ ...props, mobileAlign: 'center' })
+    const root = getByTestId(TESTID)
+    expect(root).toHaveAttribute('data-mobile-align', 'center')
+    expect(root).toHaveAttribute('data-align', 'start')
+  })
+
+  it('sets the headline size to medium by default, the house default', () => {
+    const { container } = render(HeroTitle, { props })
+
+    expect(container.querySelector('h1')).toHaveAttribute('data-size', 'medium')
+  })
+
+  it('sets the headline size to the given size', () => {
+    const { container } = render(HeroTitle, { props: { ...props, size: 'medium' } })
+
+    expect(container.querySelector('h1')).toHaveAttribute('data-size', 'medium')
+  })
+
+  it('sets a page-opening headline on the display rungs, never a body-sized heading', () => {
+    const { container } = render(HeroTitle, { props })
+    const h1 = container.querySelector('h1')
+
+    expect(h1?.className).toContain('data-[size=medium]:text-heading-2xl')
+    expect(h1?.className).toContain('data-[size=large]:text-heading-3xl')
+    expect(h1?.className).not.toMatch(/text-heading-(xl|lg|md)\b/)
+  })
+
+  it('ends the first hero example on its primary action', () => {
+    const { getByRole } = render(HeroDefault)
+
+    expect(getByRole('link', { name: 'Start for free' })).toBeInTheDocument()
+  })
+
+  it('caps the block at 4xl by default', () => {
+    const { getByTestId } = render(HeroTitle, { props })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-width', '4xl')
+  })
+
+  it('caps the block at the given maxWidth', () => {
+    const { getByTestId } = render(HeroTitle, { props: { ...props, maxWidth: 'lg' } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-width', 'lg')
+  })
+
+  it('renders no description paragraph when neither the prop nor the slot is set', () => {
+    const { container } = render(HeroTitle, { props })
+
+    expect(container.querySelector('p')).toBeNull()
+  })
+
+  it('renders the description prop', () => {
+    const { getByText } = render(HeroTitle, {
+      props: { ...props, description: 'Ship from one platform.' }
+    })
+
+    expect(getByText('Ship from one platform.')).toBeInTheDocument()
+  })
+
+  it('lets the default slot replace the description prop', () => {
+    const { getByText, queryByText } = render(HeroTitle, {
+      props: { ...props, description: 'ignored' },
+      slots: { default: 'slotted description' }
+    })
+
+    expect(getByText('slotted description')).toBeInTheDocument()
+    expect(queryByText('ignored')).toBeNull()
+  })
+
+  it('renders no eyebrow when the prop is empty', () => {
+    const { queryByText } = render(HeroTitle, { props })
+
+    expect(queryByText('Edge platform')).toBeNull()
+  })
+
+  it('renders the eyebrow when the prop is set', () => {
+    const { getByText } = render(HeroTitle, { props: { ...props, eyebrow: 'Edge platform' } })
+
+    expect(getByText('Edge platform')).toBeInTheDocument()
+  })
+
+  it('closes the eyebrow with the blinking cursor', () => {
+    const { container } = render(HeroTitle, { props: { ...props, eyebrow: 'Edge platform' } })
+
+    expect(container.querySelectorAll('.animate-blink-settle')).toHaveLength(1)
+  })
+
+  it('renders no cursor when there is no eyebrow', () => {
+    const { container } = render(HeroTitle, { props })
+
+    expect(container.querySelector('.animate-blink-settle')).toBeNull()
+  })
+
+  it('renders the eyebrow label alone by default', () => {
+    const { getByText } = render(HeroTitle, { props: { ...props, eyebrow: 'Edge platform' } })
+
+    expect(getByText('Edge platform').parentElement?.textContent?.trim()).toBe('Edge platform')
+  })
+
+  it.each(['//', '<>', '</>'] as const)(
+    'sets the %s prefix before the eyebrow',
+    (eyebrowPrefix) => {
+      const { getByText } = render(HeroTitle, {
+        props: { ...props, eyebrow: 'Edge platform', eyebrowPrefix }
+      })
+      const label = getByText('Edge platform')
+      const prefix = getByText(eyebrowPrefix)
+      const FOLLOWING = 4
+
+      expect(prefix.compareDocumentPosition(label) & FOLLOWING).toBe(FOLLOWING)
+    }
+  )
+
+  it('renders no actions row when the slot is empty', () => {
+    const { queryByRole } = render(HeroTitle, { props })
+
+    expect(queryByRole('button')).toBeNull()
+  })
+
+  it('renders the actions slot when it is filled', () => {
+    const { getByRole } = render(HeroTitle, {
+      props,
+      slots: { actions: '<button type="button">Start for free</button>' }
+    })
+
+    expect(getByRole('button', { name: 'Start for free' })).toBeInTheDocument()
+  })
+
+  it('forwards a consumer data-testid and class onto the root', () => {
+    const { getByTestId } = render(HeroTitle, {
+      props,
+      attrs: { 'data-testid': 'my-hero', class: 'max-w-(--container-3xl)' }
+    })
+
+    const root = getByTestId('my-hero')
+    expect(root.tagName).toBe('HEADER')
+    expect(root.className).toContain('max-w-(--container-3xl)')
+  })
+
+  it('has no a11y violations with the full copy block', async () => {
+    const { container } = render(HeroTitle, {
+      props: {
+        ...props,
+        eyebrow: 'Edge platform',
+        titleHighlight: 'Build anything.',
+        description: 'Ship from one platform.'
+      }
+    })
+    await expectNoA11yViolations(container)
+  })
+
+  describe('stories', () => {
+    it('renders the Default story fixture', () => {
+      const { getByTestId, getByRole } = render(Default)
+
+      expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'start')
+      expect(getByRole('heading', { level: 1 })).toHaveTextContent('Run it everywhere.')
+    })
+
+    it('renders the Highlight story with the accent phrase in the h1', () => {
+      const { getByRole } = render(Highlight)
+
+      expect(getByRole('heading', { level: 1 }).querySelector('span')).toHaveTextContent(
+        'Build anything.'
+      )
+    })
+
+    it('renders the Centered story centered', () => {
+      const { getByTestId } = render(Centered)
+
+      expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'center')
+    })
+
+    it('marks the MobileCentered story centered below md only', () => {
+      const { getByTestId } = render(MobileCentered)
+      const root = getByTestId(TESTID)
+
+      expect(root).toHaveAttribute('data-mobile-align', 'center')
+      expect(root).toHaveAttribute('data-align', 'start')
+    })
+
+    it('renders the WithActions story with both CTAs', () => {
+      const { getAllByRole } = render(WithActions)
+
+      expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
+        'Start for free',
+        'Talk to sales'
+      ])
+    })
+  })
+})

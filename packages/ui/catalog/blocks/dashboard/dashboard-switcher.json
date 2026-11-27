@@ -1,0 +1,29 @@
+{
+ "variants": [
+  {
+   "name": "OwnPeriod",
+   "summary": "Executive summary chosen: a dashboard that owns its period, so the shared Filter and its Period chip are hidden and a quarter `ToggleGroup` takes their place in the controls row; the tiles compare against the previous quarter and the chart runs week by week.",
+   "file": "blocks/dashboard/dashboard-switcher/variants/own-period.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "The body of the chosen dashboard while it loads: the controls stay usable, the tiles, the chart and the ranked list render their own Skeleton in their final boxes, so nothing reflows when the data arrives.",
+   "file": "blocks/dashboard/dashboard-switcher/variants/loading.vue"
+  },
+  {
+   "name": "Error",
+   "summary": "The chosen dashboard could not load: one danger `Alert` under the page heading names what did not load and offers Retry; the tiles read as dashes over a quiet band and every card keeps its header over a quiet `Not available.` line.",
+   "file": "blocks/dashboard/dashboard-switcher/variants/error.vue"
+  },
+  {
+   "name": "Empty",
+   "summary": "The period has no data: the tiles show dashes, the chart and the ranked list show their empty state (`No data in this period`), and the controls stay usable to widen the period.",
+   "file": "blocks/dashboard/dashboard-switcher/variants/empty.vue"
+  }
+ ],
+ "sfcFile": "blocks/dashboard/dashboard-switcher/dashboard-switcher.vue",
+ "guidelinesFile": "blocks/dashboard/dashboard-switcher/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
+}

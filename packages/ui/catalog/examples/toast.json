@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A title, a description, and an inline \"Undo\" action — raised with a single `toast()` call.",
+   "file": "examples/toast/default.vue"
+  },
+  {
+   "name": "Severities",
+   "summary": "Each type (neutral, success, info, warning, error, loading) with its own icon and copy that fits it. The triggers share one neutral look, so the row does not suggest the toast colours. Loading spins.",
+   "file": "examples/toast/severities.vue"
+  },
+  {
+   "name": "WithDescription",
+   "summary": "A two-line body — a title plus a supporting `description` line — raised with a single `toast()` call.",
+   "file": "examples/toast/with-description.vue"
+  }
+ ]
+}

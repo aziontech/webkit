@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A four-step flow that creates a generic resource. Next advances, Previous goes back, and the rail jumps to any step already reached, back or forward; on Review the primary action reads the submit label.",
+   "file": "examples/wizard/default.vue"
+  },
+  {
+   "name": "Optional",
+   "summary": "The middle step is optional: the rail and the step header both show Optional beside its title, and Next moves past it without asking for anything.",
+   "file": "examples/wizard/optional.vue"
+  },
+  {
+   "name": "Loading",
+   "summary": "Parked on the last step while the request runs: the submit action shows its spinner, and Cancel, Previous and every rail step are disabled.",
+   "file": "examples/wizard/loading.vue"
+  }
+ ]
+}

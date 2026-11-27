@@ -1,0 +1,185 @@
+# Multipage create
+
+The page a first-level resource is created on one step at a time. It is the `Wizard` component in a creation page: the user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. The Wizard's rail shows how far they are and lets them return to any step already passed; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read. The same frame creates a resource that must be bound and deployed in one act (CreateAndDeploy).
+
+## When to use
+
+- Use create-wizard when a first-level resource is created in ordered steps (a later answer changes what is asked); it is the Wizard component in a creation page.
+- A first-level resource whose fields fall into groups that make sense one at a time (general, then type, then entries) and where a later group depends on an earlier answer.
+- The resource must first bind to a host (a policy, an application) and that choice can change what is asked next.
+- A resource that is useless until it is bound to another and deployed, such as a service that serves a project on a domain: use the CreateAndDeploy variant, whose last action creates and deploys.
+- A code resource whose editor needs a whole step to itself.
+
+## When not to use
+
+- Everything fits on one screen without order: use `create/create-page`.
+- The resource is created inside another one: use `create/create-drawer`.
+- A new project from a code source (Git, a template, an upload): start at `create/create-hub` and deploy with `create/create-deploy-template`.
+- Binding an existing or new resource inside a form step: use `create/create-resource-picker`.
+- Deploying an existing package from inside a resource: use `create/create-deploy-drawer`.
+
+## Building blocks
+
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `AppHeaderAccount` (required)
+
+The `top-bar/top-bar-creation` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `AppHeaderAccount`. The breadcrumb's last item repeats the create button's label exactly.
+
+### B. Page heading — `PageHeader` (required)
+
+`PageHeader size="small"` over the wizard, on the create measure (`layout-form-create`): the create label as the page's `h1` and one or two sentences on what the resource is and what the last step does. It stays the same on every step.
+
+### C. Wizard — `Wizard`, `Wizard.Step` (required)
+
+One `Wizard` labelled with the create label, `v-model` bound to the step index, `submit-label` set to the create label and `loading` bound to the create request. Each step is a `Wizard.Step` with a short noun title and a one-sentence description; the Wizard draws the rail (completed steps reachable, later ones locked), the step heading (`h2`), the "Step 2 of 4" line on a narrow box, and the footer: Cancel on the start side, Previous and Next on the end side, Next becoming the create action on the last step. A conditional step is a `Wizard.Step` with `v-if`; the Wizard numbers steps in the order they render. Validation runs in the `next` handler, which calls `preventDefault()` to keep the user on a failed step.
+
+### D. Where it runs — `Input`, `Item`, `Tag`, `FieldError`, `Button` (required)
+
+The first step: a large search `Input` and up to five host rows. The rows are one `radiogroup` named Policies; each row is a small `clickable` `Item` (a native `button`) with `role="radio"` and `aria-checked`, which fills the chosen row, and an empty or filled radio circle at its end at rest; a host missing the module the resource needs carries a small warning `Tag`. Picking a row answers the step and moves on. A chosen host past the first five is kept visible. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one. Next with no answer stays and shows a `FieldDescription` asking for one.
+
+### E. Module step — `Card`, `Alert`, `Field`, `Switch` (conditional)
+
+Inserted only when the chosen host has the needed module off. A flush `Card` holds a small warning `Alert` that states the consequence, a horizontal `Field` choice card whose `Switch` turns the module on when the resource is created, and one muted line on what leaving it off means. Leaving it off is allowed.
+
+### F. Field steps — `Card`, `Item`, `SettingsRow`, `Input`, `FieldError` (required)
+
+Each step's fields are `SettingsRow`s in an `Item.List` inside a flush `Card`, the same anatomy as a single page create. A large `Input` takes an `aria-label` matching the row title. Next validates only the current step: an empty required field gets `:required` and a `FieldError` with the message, cleared as soon as the field is edited.
+
+### G. Choice cards — `RadioGroup` (optional)
+
+A choice that changes what follows, such as the list type, is a `SettingsRow variant="stacked"` holding a `RadioGroup` with `variant="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
+
+### H. Long entry — `Textarea`, `FieldError` (optional)
+
+A stacked row with a five-row `Textarea` whose label, placeholder and guidance follow the choice above it. Its required message is a `FieldError` tied by `aria-describedby`.
+
+### I. Review — `Subheader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
+
+The last step, read-only: three bands under small `Subheader`s (Where it runs, What gets created, What can reference it), each with Edit back to its step; see Review step below.
+
+### J. Create and deploy — `Card`, `Field`, `Input`, `Item`, `RadioGroup` (CreateAndDeploy)
+
+Two steps, Project then Domain and deployment, with the last action reading "Create and deploy".
+
+- **Project.** The `create/create-resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingsRow` whose `Switch` opens a `RadioGroup variant="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
+- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsGroup` titled Advanced holding only fields that have defaults.
+- **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/detail-deployment-logs` (InCreateFlow) and ends on `create/create-deploy-success`.
+
+### K. Leaving with typed work — `useUnsavedChanges`, `ConfirmDialog` (required)
+
+The Wizard's Cancel and the header Back both leave the flow, so both ask first once the form or the chosen policy differs from what the flow opened with: `useUnsavedChanges(() => form)` tracks it, Cancel and Back `await guard.confirmLeave()` before the page emits `cancel`, and one `ConfirmDialog v-bind="guard.dialogProps"` asks "Unsaved changes" with Keep editing and Discard changes. A clean form leaves at once, with no dialog, and the browser's own prompt covers a reload or a tab close while dirty. In a router app pair it with `onBeforeRouteLeave(() => guard.confirmLeave())` so a link or the browser Back asks too. Escape runs the same Cancel path through `useEscapeToCancel(onCancel)`.
+
+CreateAndDeploy does the same: Cancel and Back to Services ask once the project choice, the project's cache and origin settings or the domain and deployment fields differ from the opened page, and the page emits `cancel` only after a clean leave or Discard changes.
+
+## Data
+
+The block keeps the form as a local draft, validates each step and emits `submit` with the values; it sends no request. `CreateWizardPolicy`, `CreateWizardValues`, `CreateWizardSubmission` and `CreateWizardProps` are exported from `create-wizard.vue`, and `sample.ts` holds the sample policies the chooser lists when `policies` is left out. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the list.
+
+| Prop            | Type                          | What it does                                                                        |
+| --------------- | ----------------------------- | ----------------------------------------------------------------------------------- |
+| `policies`      | `CreateWizardPolicy[]`        | The policies Where it runs offers; `ready` says whether IP filtering is on in each. |
+| `defaultStep`   | `CreateWizardStep`            | The step the wizard opens on; `where-it-runs` by default.                           |
+| `defaultPolicy` | `string`                      | The policy already picked; empty, Where it runs waits for an answer.                |
+| `defaultValues` | `Partial<CreateWizardValues>` | The Name, Type and List the form starts from.                                       |
+| `loading`       | `boolean`                     | The create request is in flight; Create Access List spins and the wizard locks.     |
+| `error`         | `string`                      | Why the request failed, the description of the error toast with Retry.              |
+
+| Event    | Payload           | When                                                                                                             |
+| -------- | ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `submit` | `(event, values)` | Create Access List on a valid form, and Retry in the error toast; `values` adds the `policy` and `enableModule`. |
+| `cancel` | `(event)`         | Cancel in the footer or the header Back, once the user confirms leaving a dirty form.                            |
+
+To go live, render the block from a page that owns the policies and the request:
+
+```vue
+<script setup lang="ts">
+  import { toast } from '@aziontech/ui/toast'
+  import CreateWizard, { type CreateWizardSubmission } from './create-wizard.vue'
+
+  const { data: policies } = usePolicies()
+  const { mutate, pending, error } = useCreateAccessList()
+  const create = async (_event: MouseEvent, values: CreateWizardSubmission) => {
+    await mutate(values)
+    toast.success(`${values.name} created.`)
+  }
+</script>
+
+<template>
+  <CreateWizard
+    :policies="policies ?? []"
+    :loading="pending"
+    :error="error ? 'The service did not answer. Check your connection and try again.' : ''"
+    @submit="create"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
+## Do
+
+- Ask where the resource runs first, and insert the module step only when the chosen host needs it.
+- Validate one step at a time in the `next` handler, and show the message under the field that failed.
+- Keep Cancel apart from Previous and Next, on the opposite side; the Wizard footer does this.
+- Keep the create action on the last step only; every step before it says Next.
+- Keep the chosen host visible in the chooser even when it falls outside the first six.
+- Label the final action with every act it performs: "Create and deploy" when it also deploys.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/shell-console` does), so this page body never renders a `Toaster`.
+
+## Don't
+
+- Don't build the rail, the step heading or the footer by hand; the `Wizard` owns them.
+- Don't let the user skip ahead to steps not reached yet.
+- Don't block the create when a module is off; warn, offer the switch and let the user go on.
+- Don't repeat the step title as a second heading inside the card.
+- Don't validate fields of later steps, or judge a field while it is being typed.
+- Don't put a required field inside Advanced, or show both the existing list and the new fields at once.
+
+## Copy
+
+- **Title, breadcrumb and last submit:** the create label with the entity's capitalization, e.g. "Create Access List"; "Create and deploy" when the last step also deploys.
+- **Step titles:** short nouns, e.g. "Where it runs", "General", "List settings", "Project", "Domain and deployment".
+- **Step descriptions:** one sentence with a period, e.g. "Select the policy whose rules match it. It needs IP filtering on."
+- **Chooser:** the search placeholder and `aria-label` name what is searched, e.g. "Search policies"; Next with no answer says "Select a policy, or continue without one."
+- **Module tag:** the missing module and its state, e.g. "IP filtering off".
+- **Module alert:** the consequence in one sentence, e.g. "acme-staging has IP filtering off, so no rule reads this list until the module is on."
+- **Escape routes:** verb first, e.g. "Create a policy", "Continue without a policy".
+- **Required message:** "This field is required.", or what to do, e.g. "Select the project this service serves, or create a new one."
+- Follow `skills/azion-ui-microcopy`: "Select", never "Choose"; no em dash; no "simply".
+
+## Accessibility
+
+- **Escape on the page = Cancel.** `useEscapeToCancel(onCancel)` runs the same path as the Wizard's Cancel, in every step and in CreateAndDeploy: a clean form leaves at once, an edited one opens the Unsaved changes dialog. It stays inert while the create request is in flight, while an IME is composing, when another handler already used the key, while a menu, listbox, popover, tooltip or dialog is open (the open Select or DatePicker closes first, and Escape on the Unsaved changes dialog only keeps editing) and when focus is in a control that uses Escape itself (an open combobox, a search field). Edit and settings pages are places, not tasks: Escape stays inert there.
+- **The page opens with the cursor in the first field of its step** (Search policies, the checked choice, or the Project choice in CreateAndDeploy).
+- **⌘ Enter runs the Wizard's primary button (`Ctrl Enter` off Apple):** Next with the same step check, Create Access List or Create and deploy on the last step. It fires from any field, a textarea included, stays inert while the create request is in flight and is listed in the `?` dialog as Next step or the create action.
+- The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
+- The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
+- Host rows are native `button`s with `role="radio"` and `aria-checked` inside one named `radiogroup`, so a screen reader hears "radio, 1 of 5, checked"; the chooser's search has an `aria-label` and Enter selects the first match.
+- Choice cards are a `RadioGroup` named with `aria-label`; each `RadioGroup.Item` is labelled by its card.
+- Required messages are tied to their control with `aria-describedby`; focus stays on the step after a failed Next.
+- Step transitions honour reduced motion.
+
+## States
+
+- WhereItRuns: the first step (the default `defaultStep`); the chooser of policies with search, module tags and the two escape routes.
+- ModuleOff: acme-staging was chosen with IP filtering off (`defaultStep="module"`, `defaultPolicy="acme-staging"`), so the IP filtering step shows the warning, the switch card and the note.
+- ListSettings: the settings step (`defaultStep="settings"`, a `defaultPolicy` and a Name in `defaultValues`); Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
+- Review: the last step (`defaultStep="review"` with a `defaultPolicy` and `defaultValues`), read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created lists each value under its plain label (never the API property name) and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error; on success it emits `submit`, `loading` spins it and `error` raises the error toast with Retry.
+- CreateAndDeploy: Create Service on its Project step with the paged project list; Next is gated on the project, and step two ends on Create and deploy with its loading state. Cancel and Back to Services emit `cancel`, asking first once anything is answered.
+
+## Review step
+
+- Add a Review step when the create has three or more steps or binds the resource to something; skip it for a one-step create.
+- Show values as they will be sent, under plain labels (no API property names or dotted paths), and never show secrets in clear.
+- Put Edit on each band, and on a value whose step differs from its band's (Name, on General); after the edit, Next walks forward through the later steps, already filled, back to Review.
+- Say plainly when nothing will read the resource yet (unbound, or a module off) with a warning `Alert`, not a disabled create.
+
+## Related
+
+- `Wizard` — the component this block is built on; see `skills/azion-ui-form`.
+- `create/create-page` — the same job when the fields fit one screen.
+- `create/create-hub` and `create/create-deploy-template` — a new project from Git, a template or an upload.
+- `create/create-resource-picker` — the Existing or New band CreateAndDeploy binds its project with.
+- `detail/detail-deployment-logs` — the build log Create and deploy hands the column to (InCreateFlow).
+- `create/create-deploy-success` — the screen a create-and-deploy ends on.
+- `edit/edit-function` — the editor a code resource can use as one step.
+- `state/state-form-validation` — required and invalid states on Next.

@@ -1,0 +1,158 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Accelerate content delivery globally']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Cache
+      h1 "Accelerate content delivery globally"
+      p "Serve cached content with fast response times. Reduce origin load and keep applications fast during traffic spikes."
+      button "Start free" → https://console.azion.com/signup
+      button "Docs" → https://www.azion.com/en/documentation/products/build/applications/cache/
+    [marketing-ticker kind=plain size=small width=site content=marks]
+      text "Your Stack, Your Way"
+      list (30): Next.js · Astro · React · Vue · Angular · Nuxt · Gatsby · Hugo · Preact · Remix · Qwik · Vite · VitePress · Docusaurus · Eleventy · Hexo · Jekyll · Hono · Node.js · AWS · Google Cloud · Azure · Cloudflare Workers · Terraform · GitHub · OpenAI · Anthropic · Groq · SQLite · Drizzle
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Global content delivery close to users"
+          p "Serve cached websites, APIs, and files from Azion's distributed architecture to reduce latency and absorb demand before it reaches your origin."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Faster responses with less origin work"
+          p "Improve cache-hit performance while cutting repeated origin requests, infrastructure load, and bandwidth pressure during peak traffic."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Simple control over freshness"
+          p "Configure TTLs, cache keys, stale content, and global purges so teams can keep content fast without complex CDN operations."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Configure smarter cache policies']
+          h2 "Configure smarter cache policies"
+          p "Set browser and edge TTLs, enable tiered cache, and keep content fresh with stale revalidation. Azion Web Platform helps improve hit ratio, lower latency, and reduce origin bandwidth."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='High-availability caching for critical traffic']
+          h2 "High-availability caching for critical traffic"
+          p "Use protocol optimizations, persistent connections, and stale cache to keep serving the latest cached responses during origin failures or revalidation, so websites and APIs stay fast."
+  · section-gap (hatched spacer band)
+  [block-code-split-accelerator kind=left]
+    h2 "Fine-tune cache policies for your content"
+    p "Configure caching policies that match your content strategy."
+    button "Learn More" → https://www.azion.com/en/documentation/products/build/applications/cache-settings/
+    [code-code-block]
+      text "cache-settings.json"
+      icon-button "Copy the code sample"
+      text: browser_cache_settings": { ⏎ ttl": 3600, ⏎ honor_origin_headers": true ⏎ }, ⏎ cdn_cache_settings": { ⏎ ttl": 86400, ⏎ stale_cache_enabled": true, ⏎ tiered_cache_enabled": true ⏎ }, ⏎ cache_key_settings": { ⏎ query_strings": "all", ⏎ cookies": [] ⏎ }, ⏎ large_file_optimization": { ⏎ enabled": true, ⏎ fragment_size_kb": 1024
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='Use cases']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "Use cases"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true linked=true]
+        link "Speed up checkout during flash sales Handle traffic spikes with intelligent caching that keeps checkout fast under load. E-commerce sites maintain conversion rates during peak events." → https://www.azion.com/en/solutions/retail/
+        [marketing-topic icon=true described=true linked=true]
+        link "Stream content without buffering Deliver video and large files efficiently with large file optimization. Media companies reduce playback interruptions and improve viewer experience." → https://www.azion.com/en/documentation/use-cases/deliver-media-and-streaming/stream-live-events-to-large-audiences/
+        [marketing-topic icon=true described=true linked=true]
+        link "Accelerate API responses Cache API responses on a distributed architecture to reduce latency and origin load. SaaS applications deliver consistent performance for repeated queries." → https://www.azion.com/en/documentation/products/build/applications/cache/
+        [marketing-topic icon=true described=true linked=true]
+        link "Configure cache policies Set TTL, enable stale cache, and control cache keys for optimal performance. Fine-tune caching behavior for your specific content types." → https://www.azion.com/en/documentation/products/build/applications/cache-settings/
+        [marketing-topic icon=true described=true linked=true]
+        link "Micro-cache dynamic content Use short TTLs to cache personalized content while maintaining freshness. Reduce origin load for semi-dynamic pages without sacrificing personalization." → https://www.azion.com/en/learning/cdn/what-is-micro-caching/
+        [marketing-topic icon=true described=true linked=true]
+        link "Scale multi-tenant applications Reduce infrastructure costs with tiered cache for static assets. SaaS platforms serve shared assets efficiently across multiple tenants." → https://www.azion.com/en/documentation/products/build/applications/cache/tiered-cache/
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='A full-stack platform that scales instantly']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "A full-stack platform that scales instantly"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is Azion Cache?"
+          [content-accordion-item]
+            h3 "What's the difference between Browser Cache Settings and CDN Cache Settings?"
+          [content-accordion-item]
+            h3 "Can Cache honor Cache-Control and Expires headers from my origin?"
+          [content-accordion-item]
+            h3 "How can I set short cache TTLs?"
+          [content-accordion-item]
+            h3 "How do I control what defines the cache key (cookies and query strings)?"
+          [content-accordion-item]
+            h3 "How do I purge or invalidate cached content?"
+          [content-accordion-item]
+            h3 "What happens if my origin is slow or unavailable?"
+          [content-accordion-item]
+            h3 "How does Cache handle large files?"
+          [content-accordion-item]
+            h3 "Can I cache POST or OPTIONS requests?"
+          [content-accordion-item]
+            h3 "How do I keep long-lived assets cached longer with an additional cache layer?"
+          [content-accordion-item]
+            h3 "What is the difference between Azion Cache and standard CDNs?"
+          [content-accordion-item]
+            h3 "How does Cache integrate with other Azion products?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Build once.']
+        text: // ⏎ Build
+        h2 "Build once. Run everywhere."
+        button "Start free" → https://console.azion.com/signup?tck=build_cta
+        p "Get a faster path to launch, lower latency, and less infrastructure overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

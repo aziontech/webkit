@@ -1,0 +1,70 @@
+{
+  "_id": "console-showcase-section",
+  "props": {
+    "variant": "diagram",
+    "texture": "none",
+    "eyebrow": "Workloads",
+    "title": "Every fact about a workload, in one place",
+    "description": "The ID, status, region and domain the console shows after a deploy."
+  },
+  "scenes": {
+    "scene": {
+      "component": "KeyValueList",
+      "props": {
+        "ariaLabel": "Workload details",
+        "columns": 2
+      },
+      "children": [
+        {
+          "component": "KeyValueListItem",
+          "props": {
+            "label": "Workload ID"
+          },
+          "children": ["1752167890"]
+        },
+        {
+          "component": "KeyValueListItem",
+          "props": {
+            "label": "Status"
+          },
+          "children": [
+            {
+              "component": "StatusIndicator",
+              "props": {
+                "severity": "success",
+                "label": "Active"
+              }
+            }
+          ]
+        },
+        {
+          "component": "KeyValueListItem",
+          "props": {
+            "label": "Created"
+          },
+          "children": ["Nov 10, 2026, 2:32 PM"]
+        },
+        {
+          "component": "KeyValueListItem",
+          "props": {
+            "label": "Region"
+          },
+          "children": ["US East (Virginia)"]
+        },
+        {
+          "component": "KeyValueListItem",
+          "props": {
+            "label": "Domain"
+          },
+          "children": ["shop.example.com"]
+        },
+        {
+          "component": "KeyValueListItem",
+          "props": {
+            "label": "Custom certificate"
+          }
+        }
+      ]
+    }
+  }
+}

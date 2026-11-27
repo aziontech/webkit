@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Interactive controls for `locale`, `timeZone`, and `dir` with a fixed `now`: switch them to see `Timestamp`, `Pagination`, and the teleported `ConfirmDialog` update together.",
+   "file": "examples/config-provider/default.vue"
+  },
+  {
+   "name": "CustomMessages",
+   "summary": "`messages` replaces one built-in string for the whole subtree; the rest of the catalog stays.",
+   "file": "examples/config-provider/custom-messages.vue"
+  },
+  {
+   "name": "Rtl",
+   "summary": "`locale=\"ar\"` derives `dir=\"rtl\"`: the subtree reads right to left and strings with no Arabic catalog fall back to English.",
+   "file": "examples/config-provider/rtl.vue"
+  }
+ ]
+}

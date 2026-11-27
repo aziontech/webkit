@@ -1,0 +1,31 @@
+{
+  "component": "markdown-editor",
+  "title": "Components/Input/MarkdownEditor",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A reply field: write Markdown, format it from the toolbar or with Ctrl/⌘+B, I and K, check it on the Preview tab, and type @ to mention a teammate from `mentions`.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` turns off the field, the toolbar, the tabs and the mention menu.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Readonly",
+      "summary": "`readonly` opens on the Preview tab and hides the toolbar, so a reader sees the rendered note; Write still shows the source. This note uses every format.",
+      "file": "readonly.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Inside a Field with an error: `invalid` draws the danger border on the field and the preview.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "WithFooter",
+      "summary": "The composer of a ticket: the `footer` slot holds an attach button and the Send reply button under the field.",
+      "file": "with-footer.vue"
+    }
+  ]
+}

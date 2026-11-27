@@ -1,0 +1,23 @@
+<script setup>
+  import placeholderImage from '@aziontech/ui/assets/placeholder-image.svg'
+  import Item from '@aziontech/ui/item'
+</script>
+
+<template>
+  <Item variant="outline">
+    <Item.Media type="image">
+      <img
+        :src="placeholderImage"
+        alt="Midnight City Lights"
+        class="object-cover size-10 grayscale rounded-(--shape-card)"
+      />
+    </Item.Media>
+    <Item.Content>
+      <Item.Title>Midnight City Lights</Item.Title>
+      <Item.Description>Neon Dreams · Electric Nights</Item.Description>
+    </Item.Content>
+    <Item.Content>
+      <Item.Description>3:45</Item.Description>
+    </Item.Content>
+  </Item>
+</template>

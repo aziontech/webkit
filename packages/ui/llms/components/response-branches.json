@@ -1,0 +1,80 @@
+{
+ "name": "response-branches",
+ "binding": "ResponseBranches",
+ "import": "@aziontech/ui/response-branches",
+ "treeShakeableImport": "@aziontech/ui/response-branches",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Pages through alternative versions of one assistant response or one edited prompt: after Try again, after the reader edits a prompt, or when the model returned several candidates, the message shows one version at a time with a `‹ 2/3 ›` pager under it, or alone in the message's action row when no slot is given. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on Azion UI's `IconButton` and tokens.",
+ "setup": null,
+ "useWhen": [
+  "Use ResponseBranches to page through alternative versions of one AI response; rows of a table or list use Pagination.",
+  "A response was regenerated and the earlier versions stay available to compare.",
+  "A model returned several candidates and the person picks the one to keep reading."
+ ],
+ "avoidWhen": [
+  "Pages of one long list → use `Pagination`.",
+  "Steps of a flow → use `Stepper`.",
+  "Different documents side by side → use `Tabs`."
+ ],
+ "related": [
+  "`chat-message` — the message whose body the branches wrap; its actions hold Regenerate.",
+  "`streaming-response` — a new version streams in the slot while the pager already counts it."
+ ],
+ "bestPractices": [
+  "Move to the new version when Regenerate finishes (set `v-model` to the last index) so the person sees what they asked for.",
+  "Keep the versions in the order they were made; the newest is last.",
+  "Do not render the pager inside the slot; it belongs to the component so its position and labels stay the same across versions."
+ ],
+ "props": [
+  {
+   "name": "count",
+   "type": "number",
+   "default": "—",
+   "required": "true",
+   "doc": "How many versions exist. With one or none the pager is not drawn."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the pager group. Empty uses the locale catalog (`Response versions`)."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Locks the pager, for example while a new version streams."
+  },
+  {
+   "name": "modelValue",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "{ index: number }",
+   "notes": "Optional. The active version. Rendered once; the owner switches its content by `index`. Left out, only the pager renders, as in `ChatMessage.Actions`' `#leading` slot."
+  }
+ ],
+ "styleSeam": false,
+ "stability": "preview",
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/response-branches/default.vue"
+  }
+ ],
+ "docs": "components/response-branches.md"
+}

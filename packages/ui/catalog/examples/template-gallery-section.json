@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The Retail page's band: the storefront pitch beside a scrolling wall of eight deploy templates, closed by a marquee of compatible frameworks and clouds. Marks flagged `invertInDark` invert under the dark theme. A band with no templates renders nothing at all. Every card with an `href` links as a whole: a click anywhere on it follows the template, while its deploy button stays the one tab stop. The band carries an `anchor`.",
+   "file": "examples/template-gallery-section/default.vue"
+  },
+  {
+   "name": "Closing",
+   "summary": "The templates band as a page's close: with `closing` set the hatched closing frame follows it. Here `hatch` is off because a `panel` closing call to action stacks right under it and draws the page's one closing frame.",
+   "file": "examples/template-gallery-section/closing.vue"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A single badge driven by the controls.",
+   "file": "examples/badge/default.vue"
+  },
+  {
+   "name": "Severities",
+   "summary": "Both variants and every severity side by side.",
+   "file": "examples/badge/severities.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All sizes side by side.",
+   "file": "examples/badge/sizes.vue"
+  }
+ ]
+}

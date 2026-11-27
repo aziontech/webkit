@@ -1,0 +1,154 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Accelerate dynamic APIs and apps']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Application Accelerator
+      h1 "Accelerate dynamic APIs and apps"
+      p "Speed up web applications with protocol optimizations and advanced cache rules. Cache POST requests and use short TTLs for real-time data."
+      button "Start free" → https://console.azion.com/signup
+      button "Docs" → https://www.azion.com/en/documentation/products/build/applications/application-accelerator/
+    [marketing-ticker kind=plain size=small width=site content=marks]
+      text "Your Stack, Your Way"
+      list (30): Next.js · Astro · React · Vue · Angular · Nuxt · Gatsby · Hugo · Preact · Remix · Qwik · Vite · VitePress · Docusaurus · Eleventy · Hexo · Jekyll · Hono · Node.js · AWS · Google Cloud · Azure · Cloudflare Workers · Terraform · GitHub · OpenAI · Anthropic · Groq · SQLite · Drizzle
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Faster dynamic applications"
+          p "Accelerate APIs and web apps with protocol optimizations, connection reuse, and cache rules that reduce latency before requests reach your origin."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Fine-grained cache control"
+          p "Define how content varies by method, path, query string, cookie, or header so teams can cache dynamic experiences without breaking personalization."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Global acceleration without replatforming"
+          p "Apply acceleration on a distributed architecture in front of existing origins, improving performance without rewriting applications or changing where data lives."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Optimize dynamic delivery']
+          h2 "Optimize dynamic delivery"
+          p "Define acceleration rules for APIs, personalized content, and dynamic routes without changing your stack. Azion Web Platform helps improve performance, SEO, and reliability across distributed applications."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Advanced Cache Key for personalized content delivery']
+          h2 "Advanced Cache Key for personalized content delivery"
+          p "Control how content is segmented in cache beyond the URL path. Configure cache variation rules based on query strings, cookies, and headers—enabling fine-grained control for personalized experiences."
+  · section-gap (hatched spacer band)
+  [block-code-split-accelerator kind=left]
+    h2 "From basic caching to advanced acceleration"
+    p "Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content."
+    button "Learn More" → https://www.azion.com/en/documentation/products/build/applications/application-accelerator/
+    [code-code-block]
+      text "cache-settings.json"
+      icon-button "Copy the code sample"
+      text: cache_settings": { ⏎ name": "api-cache", ⏎ browser_cache_settings": { ⏎ ttl": 60 ⏎ }, ⏎ cdn_cache_settings": { ⏎ ttl": 30 ⏎ }, ⏎ cache_key": { ⏎ query_string": "whitelist", ⏎ query_string_fields": ["user_id", "category"], ⏎ cookie": "whitelist", ⏎ cookie_names": ["session_id", "region"] ⏎ }, ⏎ methods": ["GET", "POST", "OPTIONS"], ⏎ stale_cache": true
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='See how to use']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "See how to use"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true linked=true]
+        link "Accelerate REST and GraphQL APIs Cache API responses with query string and cookie-based segmentation for faster client applications." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/protect-public-apis-from-abuse/
+        [marketing-topic icon=true described=true linked=true]
+        link "Optimize product catalogs Segment listings by category, region, and user preferences with cache key rules." → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/accelerate-websites-and-apis-with-a-cdn/
+        [marketing-topic icon=true described=true linked=true]
+        link "Personalize multi-tenant apps Serve tenant-specific content with cookie-based cache variation rules." → https://www.azion.com/en/documentation/products/build/applications/application-accelerator/
+        [marketing-topic icon=true described=true linked=true]
+        link "Stream content faster Cache playlists and user preferences while serving browsing content efficiently." → https://www.azion.com/en/documentation/products/build/applications/application-accelerator/
+        [marketing-topic icon=true described=true linked=true]
+        link "Reduce API latency Short TTLs for rapidly changing data endpoints and real-time applications." → https://www.azion.com/en/documentation/products/build/applications/application-accelerator/
+        [marketing-topic icon=true described=true linked=true]
+        link "Deliver personalized experiences Cache user-specific content with session-based cookie variation for tailored delivery." → https://www.azion.com/en/documentation/products/build/applications/application-accelerator/
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='A full-stack platform that scales instantly']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "A full-stack platform that scales instantly"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is Application Accelerator?"
+          [content-accordion-item]
+            h3 "What is Advanced Cache Key?"
+          [content-accordion-item]
+            h3 "Can I vary cached content by query string fields?"
+          [content-accordion-item]
+            h3 "Can I vary cached content by cookies?"
+          [content-accordion-item]
+            h3 "How do I apply cache settings in production?"
+          [content-accordion-item]
+            h3 "Can I set short cache TTLs?"
+          [content-accordion-item]
+            h3 "Can I cache POST or OPTIONS requests?"
+          [content-accordion-item]
+            h3 "How does Application Accelerator compare to traditional CDN caching?"
+          [content-accordion-item]
+            h3 "What are the default TTL limits?"
+          [content-accordion-item]
+            h3 "Does enabling Application Accelerator affect costs?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Build once.']
+        text: // ⏎ Build
+        h2 "Build once. Run everywhere."
+        button "Start free" → https://console.azion.com/signup?tck=build_cta
+        p "Get a faster path to launch, lower latency, and less infrastructure overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

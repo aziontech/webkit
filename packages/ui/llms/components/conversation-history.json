@@ -1,0 +1,275 @@
+{
+ "name": "conversation-history",
+ "binding": "ConversationHistory",
+ "import": "@aziontech/ui/conversation-history",
+ "treeShakeableImport": "@aziontech/ui/conversation-history",
+ "category": "ai",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The chat list of an assistant, in a side panel or a `Drawer` on phones: rows grouped by last activity (Today, Yesterday, Previous 7 days, Previous 30 days, Older) or by status (Working, Settled), the open one current, pinned chats on top, an optional Projects section of folders that expand in place, and on top a New chat row, a search field or a toolbar whose Search button opens the app's palette. A row is a title or a rich row (tag, description, age, status); per-row actions (pin, rename, share, lock, move, archive, delete) sit on hover and in a `DropdownMenu`. Choosing a row sets `v-model` to its id.",
+ "setup": null,
+ "useWhen": [
+  "An assistant keeps past conversations and the person returns to one.",
+  "The left rail or a drawer of a chat page."
+ ],
+ "avoidWhen": [
+  "Messages of the open conversation → `Conversation`.",
+  "Navigation between product areas → `Sidebar` or `NavigationMenu`.",
+  "A searchable table of records → `TableRoot`."
+ ],
+ "related": [
+  "`conversation` — shows the conversation the history selects.",
+  "`drawer` — holds the history on narrow screens."
+ ],
+ "bestPractices": [
+  "Title each conversation from its first prompt, short.",
+  "Put it beside the conversation on wide screens and in a start-side `Drawer` on phones; close the drawer from `update:modelValue` and `create`.",
+  "Fix `now` on the app's `ConfigProvider` (or here) so groups and ages match on the server and the client.",
+  "The component never changes `items`: apply each action event to the data (flip `pinned`, `archived`, `locked`, set `projectId`, the new `title`).",
+  "Never delete on the first tap: open a `ConfirmDialog` from `remove` / `project-remove`, or remove at once and offer Undo.",
+  "With `showToolbar`, open the app's `Command` palette from `search-open`; a mounted `Command` claims ⌘K, so the Search button does not bind it twice."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "ConversationHistoryItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Conversations, any order; sorted newest first in their group or project."
+  },
+  {
+   "name": "projects",
+   "type": "ConversationHistoryProject[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Projects shown in a Projects section above Recents; empty keeps the plain groups."
+  },
+  {
+   "name": "now",
+   "type": "string | number | Date",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Reference time for groups and ages. Empty uses the nearest ConfigProvider now, then the current time."
+  },
+  {
+   "name": "removable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Lets each row be deleted (emits `remove`): a Delete button, or Delete in the row menu when `itemActions` is set."
+  },
+  {
+   "name": "creatable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows New chat (a row, or a toolbar button with `showToolbar`) that emits `create`."
+  },
+  {
+   "name": "projectCreatable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows New project (in the Projects header, or the toolbar) that emits `project-create`."
+  },
+  {
+   "name": "searchable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a search field that hides conversations whose title does not contain the typed text."
+  },
+  {
+   "name": "showToolbar",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a top toolbar: a Search button that emits `search-open`, then New project and New chat as icon buttons."
+  },
+  {
+   "name": "itemActions",
+   "type": "('pin' | 'rename' | 'share' | 'lock' | 'move' | 'archive')[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Row actions: a Pin button and a More menu on each row; `move` needs `projects`."
+  },
+  {
+   "name": "projectActions",
+   "type": "('pin' | 'settings' | 'remove' | 'chat-create')[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Project row actions: a More menu (pin, settings, remove) and a New chat button (`chat-create`)."
+  },
+  {
+   "name": "groupBy",
+   "type": "'date' | 'status'",
+   "default": "'date'",
+   "required": "false",
+   "doc": "Groups chats outside projects by last activity, or into Working (`status: 'running'`) and Settled (the rest and archived chats)."
+  },
+  {
+   "name": "showTime",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows each chat's age (`10m`, `15h`, `3d`) at the end of its row."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows placeholder rows while the history loads."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation history`)."
+  },
+  {
+   "name": "modelValue",
+   "type": "string | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "openKeys",
+   "type": "string[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:openKeys`)."
+  },
+  {
+   "name": "projectsOpen",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Two-way value (`v-model:projectsOpen`)."
+  },
+  {
+   "name": "projectSort",
+   "type": "ConversationHistoryProjectSort",
+   "default": "'recent'",
+   "required": "false",
+   "doc": "Two-way value (`v-model:projectSort`)."
+  },
+  {
+   "name": "openSectionKeys",
+   "type": "string[]",
+   "default": "—",
+   "required": "false",
+   "doc": "Two-way value (`v-model:openSectionKeys`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "remove",
+   "payload": "(event: MouseEvent | KeyboardEvent, id: string)",
+   "notes": ""
+  },
+  {
+   "name": "create",
+   "payload": "(event: MouseEvent)",
+   "notes": ""
+  },
+  {
+   "name": "project-create",
+   "payload": "(event: MouseEvent)",
+   "notes": ""
+  },
+  {
+   "name": "search-open",
+   "payload": "(event: MouseEvent | KeyboardEvent)",
+   "notes": ""
+  },
+  {
+   "name": "item-pin",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+   "notes": ""
+  },
+  {
+   "name": "item-rename",
+   "payload": "(event: KeyboardEvent | FocusEvent, payload: { item; title: string })",
+   "notes": ""
+  },
+  {
+   "name": "item-share",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+   "notes": ""
+  },
+  {
+   "name": "item-lock",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+   "notes": ""
+  },
+  {
+   "name": "item-move",
+   "payload": "(event: MouseEvent | KeyboardEvent, payload: { item; project })",
+   "notes": ""
+  },
+  {
+   "name": "item-archive",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: ConversationHistoryItem)",
+   "notes": ""
+  },
+  {
+   "name": "project-pin",
+   "payload": "(event: MouseEvent | KeyboardEvent, project: ConversationHistoryProject)",
+   "notes": ""
+  },
+  {
+   "name": "project-settings-open",
+   "payload": "(event: MouseEvent | KeyboardEvent, project: ConversationHistoryProject)",
+   "notes": ""
+  },
+  {
+   "name": "project-remove",
+   "payload": "(event: MouseEvent | KeyboardEvent, project: ConversationHistoryProject)",
+   "notes": ""
+  },
+  {
+   "name": "project-chat-create",
+   "payload": "(event: MouseEvent, project: ConversationHistoryProject)",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "item",
+   "scope": "{ item: ConversationHistoryItem }",
+   "notes": "Replaces a chat row's tag, title and description; the row keeps its button and actions."
+  },
+  {
+   "name": "item-meta",
+   "scope": "{ item: ConversationHistoryItem }",
+   "notes": "Replaces the end of a chat row (age, lock, status)."
+  },
+  {
+   "name": "item-actions",
+   "scope": "{ item: ConversationHistoryItem }",
+   "notes": "Replaces the row actions (Pin, More, Delete) with the app's own controls, outside the row button; they show like the built-in actions. The row content keeps its place while they show; set `--conversation-history-item-actions-width` on the list to make the row end that wide while they show (default: the row's own end padding, so nothing moves)."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/conversation-history/default.vue"
+  },
+  {
+   "name": "States",
+   "file": "examples/conversation-history/states.vue"
+  },
+  {
+   "name": "Projects",
+   "file": "examples/conversation-history/projects.vue"
+  }
+ ],
+ "docs": "components/conversation-history.md"
+}

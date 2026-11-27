@@ -1,0 +1,52 @@
+<script setup>
+  import dafitiExtendedMono from '@aziontech/ui/assets/dafiti-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/ui/assets/fourbank-extended-reversed.svg'
+  import madeiramadeiraExtendedReversed from '@aziontech/ui/assets/madeiramadeira-extended-reversed.svg'
+  import rennerExtendedColor from '@aziontech/ui/assets/renner-extended-color.svg'
+  import NetworkSection from '@aziontech/ui/network-section'
+</script>
+
+<template>
+  <NetworkSection
+    variant="outcomes"
+    eyebrow="Region: Earth."
+    title="One distributed infrastructure without the complexity of managing, securing and scaling it"
+    claims-eyebrow="Built around your users. Distributed around your data."
+    :claims="[
+      '100+ data centers',
+      '100+ Tbps network capacity',
+      '30 ms median latency',
+      '100% availability'
+    ]"
+    :outcomes="[
+      {
+        logo: dafitiExtendedMono,
+        logoAlt: 'Dafiti',
+        logoTreatment: 'monochrome',
+        text: '86% faster load times, with a 45% cost reduction in data transfer.',
+        highlights: ['86% faster load times', '45% cost reduction']
+      },
+      {
+        logo: madeiramadeiraExtendedReversed,
+        logoAlt: 'MadeiraMadeira',
+        logoTreatment: 'monochrome',
+        text: '90% lower cloud costs and faster applications at scale.',
+        highlights: ['90% lower cloud costs']
+      },
+      {
+        logo: rennerExtendedColor,
+        logoAlt: 'Renner',
+        logoTreatment: 'color',
+        text: '67% saved on data transfer, even during massive traffic spikes.',
+        highlights: ['67% saved']
+      },
+      {
+        logo: fourbankExtendedReversed,
+        logoAlt: 'Fourbank',
+        logoTreatment: 'monochrome',
+        text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
+        highlights: ['DDoS mitigated']
+      }
+    ]"
+  />
+</template>

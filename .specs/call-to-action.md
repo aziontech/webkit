@@ -3,85 +3,90 @@ name: call-to-action
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: d7ec09fa0b54b0c01cc3f8de575a1ec5bb99bad24cc71c19be47b487d3724be9
+spec_version: 6
+checksum: 71778b4bc93d54233e1aed9b140f5335457ff999072ceadb2b591a8b22bcc05c
 created: 2026-09-22
-last_updated: 2026-10-20
+last_updated: 2026-11-16
 ---
 
 # Call To Action — Component Spec
 
 ## Purpose
 
-The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one.
+The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `module-header` opens a section, `call-to-action` closes one.
 
 Four registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line.
 
 `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight.
 
+`announcement` is the loud mid-page interruption: the announcement, its eyebrow and its actions in a wide leading column on the surface, and a short supporting note set large on a raised trailing column (a third of the band from `md` up, stacked under it below). The note is the `description`, or the default slot when it carries a link.
+
 `primary` is the loud close: one centred ask standing alone as a billboard, on the page canvas lit from above by the brand. The texture composed into the band — a pixelated layer whose two waves travel across it in the primary colour — is lit by its waves alone and carries the band's colour, so the ground stays the canvas and the copy keeps its ordinary ink. The texture is composed in through the `background` slot and the strip along the floor through `bottom`, so the band owns the light and the page owns what is drawn on it.
 
 ## When to use
 
+- Use CallToAction (primitive) for an ask panel inside a hand-built SFC, mid-page or closing; set `variant="announcement"` for a loud mid-page announcement.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`closing-call-to-action-section`). Building an SFC by hand, needing slots, or nesting inside another band → this primitive.
 - At the end of a marketing page or section, to carry the reader into signup, docs or sales.
 - Whenever a page needs one visually separated block whose whole job is the action.
 - Between two sections, as a mid-page ask that should not read as a new section header.
 - In `split`, when the ask has two paths of unequal weight — a primary one to start and a secondary one to talk to someone.
 - In `primary`, when the page ends on a single ask and the close should be the most lit band on the page, with benefits or proof running along its floor.
 - In `lead`, when the band's actions are peers and belong in one row, so an aside cell would have nothing of its own to carry.
+- In `announcement`, to announce a launch, programme or offer part-way down a marketing page, with its actions in a wide leading column and a short supporting note on a raised trailing column. Once per page.
 
 ## When NOT to use
 
-- To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.
+- To open a section with a headline and optional actions → use `module-header`, which draws a header rule rather than a panel.
 - For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.
-- For a dismissible or time-bound announcement → use `message`.
+- For a dismissible or time-bound notice inside the product → use `alert`.
 - For a close that sits quietly in the column → use `split` or `panel`; `primary` fills a whole brand-coloured band and should appear once per page.
-- For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row.
+- For a plan's call to action inside pricing → use `pricing-card`, which owns its own action row.
 
 ## Related
 
-- `section-title` — opens a section with a header rule; this closes one with a panel.
+- `module-header` — opens a section with a header rule; this closes one with a panel.
 - `hero` — the page's leading band; its `Hero.Title` owns the statement and the `h1`.
-- `frame-box` — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.
+- `registration-frame` — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.
 - `button` — the controls composed into the `actions` and `aside-actions` slots.
-- `overline` — the `//`-prefixed eyebrow the band renders above the headline.
-- `texture-material` — the pixelated, waving texture composed into `background` in `primary`.
-- `ticker` — the strip of benefits composed into `bottom` in `primary`.
+- `eyebrow` — the `//`-prefixed eyebrow the band renders above the headline.
+- `texture` — the pixelated, waving texture composed into `background` in `primary`.
+- `marquee` — the strip of benefits composed into `bottom` in `primary`.
 
 ## Best practices
 
-- `framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
+- `framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.
-- Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.
-- Lead with the primary action and keep secondary ones `outlined` or `text`, so the panel has one obvious target.
+- Put the controls in the `actions` slot; the panel lays them out as a row right after the copy from `md` up (a `--spacing-2xl` gap, never pushed to the far edge of a wide band, so the eye goes from the promise to its action); the copy takes a fixed measure (`--layout-measure-content`), so two panels stacked on a page start their actions at the same place whatever their headline length and stacks them full-width below it.
+- Lead with the primary action and keep secondary ones `outline` or `text`, so the panel has one obvious target.
 - Use `eyebrow` only when the panel needs naming out of context; the headline usually carries the ask on its own.
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.
 - In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.
 - In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.
-- `lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-xxl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-xxl` stops reading as a floor and starts reading as a hole.
+- `lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-2xl` the other two use. In `split` that larger number is the _floor_ of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-2xl` stops reading as a floor and starts reading as a hole.
 - In `primary`, the band is centred and carries `title` and `description` only; `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
-- In `primary`, compose one `texture-material` into `background` — `pixelate` at `small` with `fade="bottom"` — and a `ticker` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.
-- In `primary`, give the ticker enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.
-- Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `frame-box` — two frames draw two hairlines on the same edge.
+- In `primary`, compose one `texture` into `background` — `pixelate` at `small` with `fade="bottom"` — and a `marquee` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.
+- In `primary`, give the marquee enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.
+- Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `registration-frame` — two frames draw two hairlines on the same edge.
 
 ## Usage
 
 ```vue
 <script setup>
-import CallToAction from '@aziontech/webkit/call-to-action'
-import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
   <CallToAction
     eyebrow="Get started"
     title="Ship your first application today."
-    description="Deploy to every edge location in seconds. No credit card required."
+    description="Deploy to every data center in seconds. No credit card required."
   >
     <template #actions>
       <Button label="Start for free" />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Talk to sales"
       />
     </template>
@@ -93,13 +98,13 @@ The `lead` register, the lead cell standing alone:
 
 ```vue
 <script setup>
-import CallToAction from '@aziontech/webkit/call-to-action'
-import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
   <CallToAction
-    kind="lead"
+    variant="lead"
     eyebrow="Build"
     title="Built by you,"
     title-muted="or your agents."
@@ -107,11 +112,11 @@ import Button from '@aziontech/webkit/button'
   >
     <template #actions>
       <Button
-        kind="secondary"
+        variant="secondary"
         label="Deploy now"
       />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Read the docs"
       />
     </template>
@@ -119,17 +124,17 @@ import Button from '@aziontech/webkit/button'
 </template>
 ```
 
-The `split` register, which a product page closes on:
+The `split` register, for a hand-built close with two paths of unequal weight:
 
 ```vue
 <script setup>
-import CallToAction from '@aziontech/webkit/call-to-action'
-import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/ui/call-to-action'
+  import Button from '@aziontech/ui/button'
 </script>
 
 <template>
   <CallToAction
-    kind="split"
+    variant="split"
     eyebrow="Build"
     title="Build once."
     title-muted="Run anywhere."
@@ -137,13 +142,13 @@ import Button from '@aziontech/webkit/button'
   >
     <template #actions>
       <Button
-        kind="secondary"
+        variant="secondary"
         label="Start for free"
       />
     </template>
     <template #aside>
       <Button
-        kind="outlined"
+        variant="outline"
         label="Talk to our team"
       />
     </template>
@@ -153,14 +158,14 @@ import Button from '@aziontech/webkit/button'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `—` | true | Headline of the band, rendered as its `h2`. |
-| `titleMuted` | `string` | `''` | false | Second line of the headline, set in muted ink; rendered as a second span of the same `h2`. |
-| `description` | `string` | `''` | false | Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`; overridden by the default slot. |
-| `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `kind` | `CallToActionKind` | `'panel'` | false | Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor. |
-| `framed` | `boolean` | `false` | false | Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. |
+| Prop          | Type                  | Default   | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------- | --------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | `string`              | `—`       | true     | Headline of the band, rendered as its `h2`.                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `titleMuted`  | `string`              | `''`      | false    | Second line of the headline, set in muted ink; rendered as a second span of the same `h2`.                                                                                                                                                                                                                                                                                                                                                                                          |
+| `description` | `string`              | `''`      | false    | Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`, on the raised trailing column in `announcement`; overridden by the default slot.                                                                                                                                                                                                                                                                                                      |
+| `eyebrow`     | `string`              | `''`      | false    | Short uppercase overline rendered above the headline.                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `variant`     | `CallToActionVariant` | `'panel'` | false    | Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column. |
+| `framed`      | `boolean`             | `false`   | false    | Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame.                                                                                                                                                                                                                                                                                                                                                                                |
 
 ## Events
 
@@ -168,18 +173,18 @@ import Button from '@aziontech/webkit/button'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Description body; replaces the `description` prop when provided. |
-| `actions` | — | The controls the band exists to offer; in `split`, the lead cell's primary control. |
-| `aside` | — | The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`. |
-| `background` | — | Decoration drawn behind the copy in `primary`, such as a `texture-material`; ignored in the other registers. |
-| `bottom` | — | The strip that floors the band in `primary`, such as a `ticker`, under a hairline; ignored in the other registers. |
+| Slot         | Scope | Notes                                                                                                                                    |
+| ------------ | ----- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `default`    | —     | Description body; replaces the `description` prop when provided.                                                                         |
+| `actions`    | —     | The controls the band exists to offer; in `split`, the lead cell's primary control.                                                      |
+| `aside`      | —     | The aside cell's control in `split`; ignored in `panel`, `lead`, `primary` and `announcement`, where every control belongs in `actions`. |
+| `background` | —     | Decoration drawn behind the copy in `primary`, such as a `texture`; ignored in the other registers.                                      |
+| `bottom`     | —     | The strip that floors the band in `primary`, such as a `marquee`, under a hairline; ignored in the other registers.                      |
 
 ## States
 
 - Visual states: `default`
-- Register: `data-kind="panel" | "split" | "lead" | "primary"` on the root
+- Register: `data-variant="panel" | "split" | "lead" | "primary" | "announcement"` on the root
 - The band holds no state of its own; controls composed into `actions` / `aside` keep theirs
 
 ## Motion & Animations
@@ -188,52 +193,53 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (headline) | `.text-heading-xl` |
-| typography (description, `panel`) | `.text-body-lg` |
-| typography (description, `split`) | `.text-heading-sm` |
-| typography (description, `lead`) | `.text-heading-sm` |
-| headline text | `var(--text-default)` |
-| headline second line | `var(--text-muted)` |
-| description text | `var(--text-muted)` |
-| panel surface (`panel`) | `var(--bg-surface)` |
-| lead cell surface (`split`, `lead`) | `var(--bg-surface-raised)` |
-| panel rules and marks | `var(--border-default)` |
-| spacing (panel padding, `panel`) | `var(--spacing-xxl)` |
-| spacing (cell padding, `split`, `lead`) | `var(--spacing-xl)` |
-| copy measure (`lead`) | `var(--container-2xl)` |
-| headline measure (`split`) | `var(--container-xl)` |
-| spacing (between controls, `lead`) | `var(--spacing-sm)` |
-| spacing (copy stack) | `var(--spacing-lg)` |
-| spacing (copy to actions, `panel`, `split`) | `var(--spacing-xxl)` |
-| spacing (copy to actions, `lead`) | `var(--spacing-xl)` |
-| ground (`primary`) | `var(--bg-canvas)` |
-| texture light (`primary`, supplied by the composed `texture-material`) | `var(--primary)` |
-| floor hairline (`primary`) | `var(--border-default)` |
-| spacing (floor strip, `primary`) | `var(--spacing-lg)` |
-| spacing (band padding, `primary`) | `var(--spacing-xxl)`, `var(--spacing-xl)` |
+| Region                                                        | Token (TOKENS.md)                         |
+| ------------------------------------------------------------- | ----------------------------------------- |
+| typography (headline)                                         | `.text-heading-xl`                        |
+| typography (description, `panel`)                             | `.text-body-lg`                           |
+| typography (description, `split`)                             | `.text-heading-sm`                        |
+| typography (description, `lead`)                              | `.text-heading-sm`                        |
+| headline text                                                 | `var(--text-default)`                     |
+| headline second line                                          | `var(--text-muted)`                       |
+| description text                                              | `var(--text-muted)`                       |
+| panel surface (`panel`)                                       | `var(--bg-surface)`                       |
+| lead cell surface (`split`, `lead`)                           | `var(--bg-surface-raised)`                |
+| panel rules and marks                                         | `var(--border-default)`                   |
+| spacing (panel padding, `panel`)                              | `var(--spacing-2xl)`                      |
+| spacing (cell padding, `split`, `lead`)                       | `var(--spacing-xl)`                       |
+| copy measure (`lead`)                                         | `var(--container-2xl)`                    |
+| headline measure (`split`)                                    | `var(--container-xl)`                     |
+| spacing (between controls, `lead`)                            | `var(--spacing-sm)`                       |
+| spacing (copy stack)                                          | `var(--spacing-lg)`                       |
+| spacing (copy to actions, `panel`, `split`)                   | `var(--spacing-2xl)`                      |
+| spacing (copy to actions, `lead`)                             | `var(--spacing-xl)`                       |
+| ground (`primary`)                                            | `var(--bg-canvas)`                        |
+| texture light (`primary`, supplied by the composed `texture`) | `var(--primary)`                          |
+| floor hairline (`primary`)                                    | `var(--border-default)`                   |
+| spacing (floor strip, `primary`)                              | `var(--spacing-lg)`                       |
+| spacing (band padding, `primary`)                             | `var(--spacing-2xl)`, `var(--spacing-xl)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: not applicable to the panel itself; controls composed into `actions` keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: none of its own — `Tab` reaches only the controls placed in the `actions` slot, in DOM order.
-- ARIA: the headline is a real `h2` — rendered by the composed `section-title` in `panel`, and by the band itself in `split` and `lead`, where `title` and `title-muted` are two spans of that one heading so it is announced as a single string. The band is a `<section>` named by its `title`, reachable as a landmark with a name; no `role` is added.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): in `primary` the copy is ordinary ink on `var(--bg-canvas)`, so the pair is the same as `panel`'s. The headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `big-numbers`).
+- ARIA: the headline is a real `h2` — rendered by the composed `module-header` in `panel`, and by the band itself in `split` and `lead`, where `title` and `title-muted` are two spans of that one heading so it is announced as a single string. The band is a `<section>` named by its `title`, reachable as a landmark with a name; no `role` is added.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): in `primary` the copy is ordinary ink on `var(--bg-canvas)`, so the pair is the same as `panel`'s. The headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the panel is static.
 - Touch target ≥40×40 px — both action slots stretch their children to full width below the breakpoint, so slotted buttons keep their own target size.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Types — the `panel`, `split` and `lead` registers, one under the other
-- Primary — the canvas-lit register with a pixelated texture and a ticker on the floor (justified: it is the one register that composes two other components through slots, and no arg on the Default story reaches `background` or `bottom`)
+- Announcement — the mid-page announcement register with its note on the raised trailing column (justified: the one register that splits the band one-third for a note and is not a close)
+- Primary — the canvas-lit register with a pixelated texture and a marquee on the floor (justified: it is the one register that composes two other components through slots, and no arg on the Default story reaches `background` or `bottom`)
 - WithEyebrow — the overline above the headline (justified: `eyebrow` is absent from the default args and changes the panel's vertical rhythm)
 
 ## Constraints — DO NOT
@@ -243,19 +249,17 @@ _none_
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

@@ -1,0 +1,1109 @@
+# Component Development Requirements for @aziontech/ui
+
+This document outlines the requirements and best practices for building components in the Azion UI package (v6). Use it when creating new components or changing existing ones. The binding, hook-enforced versions of these rules live in [`contributing/rules/`](../rules/README.md); where this document and a rule disagree, the rule wins.
+
+## Table of Contents
+
+- [Names (v6)](#names-v6)
+- [Directory Structure](#directory-structure)
+- [Component Implementation Requirements](#component-implementation-requirements)
+- [Package Configuration](#package-configuration)
+- [TypeScript Declarations](#typescript-declarations)
+- [Testing Requirements](#testing-requirements)
+- [Export Configuration](#export-configuration)
+- [Vue Router Components](#vue-router-components)
+- [Best Practices](#best-practices)
+
+---
+
+## Names (v6)
+
+v6 uses the names of shadcn/ui and Radix. Never write a retired name in new code, docs or examples; `npx @aziontech/ui migrate v6` rewrites them in consumer code ([`src/cli/migrations/v6.json`](../../packages/ui/src/cli/migrations/v6.json)).
+
+| Retired (v5)                                            | v6                                                                       |
+| ------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `paginator` / `Paginator`                               | `pagination` / `Pagination`                                              |
+| `tab-view` / `TabView`                                  | `tabs` / `Tabs`                                                          |
+| `card-box` / `CardBox`                                  | `card` / `Card`                                                          |
+| `message` / `Message`                                   | `alert` / `Alert`                                                        |
+| `divider` / `Divider`                                   | `separator` / `Separator`                                                |
+| `progress-bar` / `ProgressBar`                          | `progress` / `Progress`                                                  |
+| `command-menu` / `CommandMenu`                          | `command` / `Command`                                                    |
+| `dropdown` / `Dropdown`                                 | `dropdown-menu` / `DropdownMenu`                                         |
+| `input-text` / `InputText`                              | `input` / `Input`                                                        |
+| `input-number` / `InputNumber`                          | `number-input` / `NumberInput`                                           |
+| `input-password` / `InputPassword`                      | `password-input` / `PasswordInput`                                       |
+| `box-grid-selection` / `BoxGridSelection`               | `radio-group` / `RadioGroup` with `variant="card"`                       |
+| `resizable-panel` / `ResizablePanel`                    | `resizable` / `Resizable`                                                |
+| `segmented-button` / `SegmentedButton`                  | `toggle-group` / `ToggleGroup`                                           |
+| every `field-*` wrapper (`FieldText`, `FieldSelect`, …) | one `Field` around the plain control (see [Form fields](#4-form-fields)) |
+
+Exported types follow the component: `SeverityTagSeverity` (not `SeverityTagLevel`), `DocCardGroupMobileColumns` (not `DocCardGroupMobileCols`), `ToggleGroupOption`, `AlertSeverity`, `TabsValue`, … (the `types` map of `v6.json`).
+
+Prop vocabulary ([`rules/prop-vocabulary.md`](../rules/prop-vocabulary.md)):
+
+- the primary value is `modelValue`, bound with `v-model` — never `v-model:value`;
+- a frame is `bordered`, never `border`; a copy affordance is `copyable`, never `showCopy`;
+- self-advancing media is `autoplay` / `autoplayInterval`; a column count below `md` is `mobileColumns`;
+- `Button` variants are `primary`, `secondary`, `outline`, `ghost` and `danger` (`variant="ghost"`, never `variant="ghost"`); `Item` uses `variant="outline"`;
+- severities are `info`, `success`, `warning` and `danger` (`severity="danger"`, never `error`); `SeverityTag` takes `severity`, not `level`.
+
+Page fragments are components, not copied markup: `PageHeader`, `Subheader`, `PageTabs`, `SettingsGroup`, `SettingsRow`, `SaveBar` and `ConfirmDialog`. Use them instead of hand-building the h1 row, a section heading, the tab strip under a resource header, a settings band or row, the save / discard bar or a confirm dialog.
+
+---
+
+## Directory Structure
+
+Every component lives in one folder under its category:
+
+```
+packages/ui/src/components/<category>/<name>/
+├── <name>.vue        # root component (or <name>-root.vue for a compound root)
+├── index.ts          # compound components: attaches the parts (Tabs.List, Field.Label, …)
+├── <part>/<part>.vue # compound parts, or <name>-<part>.vue next to the root
+├── injection-key.ts  # compound context, when the parts share state
+└── <name>.test.ts    # browser test (rules/testing.md)
+```
+
+Categories: `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `section`. The spec is `.specs/<name>.md`, and runnable examples are `packages/ui/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
+
+**Example:**
+
+```
+packages/ui/src/components/input/field/
+├── field.vue
+├── index.ts
+├── field-label/field-label.vue
+├── field-description/field-description.vue
+├── field-error/field-error.vue
+├── injection-key.ts
+└── field.test.ts
+```
+
+---
+
+## Component Implementation Requirements
+
+### 1. Component Structure Order (Required)
+
+All components MUST follow this structure:
+
+1. `<script setup lang="ts">` tag first
+2. `<template>` tag second
+
+**CRITICAL:** Always place `<script setup>` BEFORE `<template>` in Vue Single File Components.
+
+**✅ CORRECT:**
+
+```vue
+<script setup lang="ts">
+  import { computed } from 'vue'
+</script>
+
+<template>
+  <!-- Component template -->
+</template>
+```
+
+**❌ INCORRECT:**
+
+```vue
+<template>
+  <!-- Component template -->
+</template>
+
+<script setup lang="ts">
+  import { computed } from 'vue'
+</script>
+```
+
+### 2. Props Definition
+
+Props are typed with an exported `interface <Component>Props`, `defineProps<ExampleProps>()` and `withDefaults`, each with a one-line JSDoc ([`rules/props.md`](../rules/props.md)). The primary value is a `defineModel` (`v-model`, [`rules/v-model.md`](../rules/v-model.md)):
+
+```vue
+<script setup lang="ts">
+  export type ExampleSize = 'small' | 'medium' | 'large'
+
+  export interface ExampleProps {
+    /** Visible label text. */
+    label?: string
+    /** Size token; affects height, padding and typography. */
+    size?: ExampleSize
+    /** Disables interaction and applies disabled tokens. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<ExampleProps>(), {
+    label: '',
+    size: 'medium',
+    disabled: false
+  })
+
+  const model = defineModel<string>({ default: '' })
+</script>
+```
+
+Azion UI components merge consumer classes from fallthrough attributes, not from a `class` prop:
+
+```vue
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  defineOptions({
+    name: 'Example',
+    inheritAttrs: false
+  })
+
+  const attrs = useAttrs()
+
+  const rootClass = computed(() => ['base-classes', attrs.class])
+</script>
+```
+
+- Set `inheritAttrs: false` in `defineOptions`
+- Call `useAttrs()` and append `attrs.class` to the root element class list
+- Do **not** declare `class` in `defineProps()`
+
+### 3. Events Definition
+
+Define typed events with `defineEmits` ([`rules/emits.md`](../rules/emits.md), [`rules/event-payloads.md`](../rules/event-payloads.md)):
+
+```vue
+<script setup lang="ts">
+  const emit = defineEmits<{
+    change: [value: string]
+    blur: [event: FocusEvent]
+  }>()
+</script>
+```
+
+### 4. Form fields
+
+There are no `field-*` wrappers in v6. A labelled control is `Field` around the plain control, the shadcn/ui anatomy; the control picks up its id, `aria-describedby`, `aria-invalid` and `disabled` from the `Field`. Validation libraries (VeeValidate, …) stay in the app: pass their error to `Field` `invalid` and `Field.Error`.
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+
+  const name = ref('')
+</script>
+
+<template>
+  <Field required>
+    <Field.Label>Name</Field.Label>
+    <Input v-model="name" />
+    <Field.Description>Shown on invoices.</Field.Description>
+  </Field>
+</template>
+```
+
+`Field` carries `orientation` (`vertical`, `horizontal`, `responsive`), `invalid`, `disabled` and `required`. A checkbox, radio or switch row is `Field orientation="horizontal"` with the control and a `Field.Content` (`Field.Label` + `Field.Description`); a group of them is `Field.Set` with a `Field.Legend`.
+
+### 5. Data-testid Attributes (Required)
+
+The root reads `data-testid` from its attributes and falls back to the component's own kebab name (`button`, `alert`, `separator`); a sub-component uses its own name (`dialog-header`) and inner parts are `${testId}__<part>` ([`rules/testid.md`](../rules/testid.md)):
+
+```vue
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
+  const attrs = useAttrs()
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'alert')
+</script>
+
+<template>
+  <div :data-testid="testId">
+    <p :data-testid="`${testId}__title`" />
+  </div>
+</template>
+```
+
+### 6. Component File Naming
+
+- Use kebab-case English names that match the export: `password-input.vue`, `toggle-group.vue` ([`rules/naming.md`](../rules/naming.md))
+- Directory name MUST match the component filename; `defineOptions.name` is its PascalCase (`PasswordInput`)
+
+### 7. Template Structure
+
+Organize the template logically and compose existing components instead of re-drawing them:
+
+```vue
+<template>
+  <section :data-testid="testId">
+    <Subheader
+      title="Domains"
+      description="Where this application answers."
+    />
+    <Field>
+      <Field.Label>Domain</Field.Label>
+      <Input v-model="domain" />
+      <Field.Error v-if="error">{{ error }}</Field.Error>
+    </Field>
+    <Separator />
+    <Button
+      variant="ghost"
+      label="Cancel"
+    />
+  </section>
+</template>
+```
+
+---
+
+## Package Configuration
+
+Components do **not** have a per-folder `package.json`. Module resolution goes through the root [`packages/ui/package.json#exports`](../../packages/ui/package.json) map, which points every public path directly at a source file (`.vue`/`.ts`/`.js`). The root `package.json` also declares `"sideEffects": ["**/*.vue", "**/*.css"]` once for the whole package. To publish a component, add its export entry (see [Export Configuration](#export-configuration) below).
+
+---
+
+## TypeScript Declarations
+
+TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. They are emitted at publish time by the publish workflow (`.github/workflows/publish-ui.yml` runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`) and ship to npm consumers; declaration-emit is validated in CI by `type-check` (`vue-tsc --noEmit`).
+
+**DO NOT manually edit `.d.ts` or `.d.ts.map` files.**
+
+Exported type names start with the component's v6 binding (`ToggleGroupSize`, `AlertSeverity`) and use the v6 prop name (`DocCardGroupMobileColumns`). Renaming one is a breaking change: add it to the `types` map of `src/cli/migrations/v6.json` so `migrate` rewrites consumer imports.
+
+---
+
+## Testing Requirements
+
+### Test IDs
+
+All components MUST support `data-testid` for testing (see [Data-testid Attributes](#5-data-testid-attributes-required)).
+
+### Testable Elements
+
+Ensure these elements have test IDs:
+
+- Labels
+- Inputs/Interactive elements
+- Error messages
+- Description text
+- Buttons/Actions
+
+Every component has its browser test next to it ([`rules/testing.md`](../rules/testing.md)); the `tests` gate (`check:tests`) fails without it.
+
+---
+
+## Export Configuration
+
+After creating a component, add it to the package exports. Keys are flat (`./<name>`, never
+`./<category>/<name>`) and each entry has the typed shape; write the key and its `default` target,
+then run `pnpm --filter @aziontech/ui build:exports`, which fills in `types` and `typesVersions`
+(the `exports` gate checks both):
+
+### Location: `/packages/ui/package.json`
+
+```json
+{
+  "exports": {
+    "./<name>": {
+      "types": "./types/components/<category>/<name>/<name>.vue.d.ts",
+      "default": "./src/components/<category>/<name>/<name>.vue"
+    }
+  }
+}
+```
+
+**Compound component:**
+
+```json
+{
+  "exports": {
+    "./field": {
+      "types": "./types/components/input/field/index.d.ts",
+      "default": "./src/components/input/field/index.ts"
+    },
+    "./field-root": {
+      "types": "./types/components/input/field/field.vue.d.ts",
+      "default": "./src/components/input/field/field.vue"
+    },
+    "./field-label": {
+      "types": "./types/components/input/field/field-label/field-label.vue.d.ts",
+      "default": "./src/components/input/field/field-label/field-label.vue"
+    }
+  }
+}
+```
+
+Removing or renaming an export, a prop or a prop value of an existing component is a breaking change: add the matching entry to `src/cli/migrations/` (`v6.json`, `v6-props.json`, `v6-blocks.json`). The `migrations` gate (`node scripts/check-migrations.mjs`) compares the public API of `catalog.json` with `scripts/api-snapshot.json` and fails without it.
+
+---
+
+## Vue Router Components
+
+Some components may require Vue Router for navigation or routing features.
+
+### When to Use Vue Router
+
+- Components with internal navigation
+- Components that render links/routes
+- Components that need route awareness (active state, params)
+
+### Usage in Components
+
+```vue
+<script setup lang="ts">
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter()
+
+  const navigate = () => {
+    router.push('/path')
+  }
+</script>
+
+<template>
+  <button @click="navigate">Navigate</button>
+</template>
+```
+
+### Requirements for Router Components
+
+1. **Import Vue Router composables:**
+
+   ```vue
+   import { useRouter, useRoute } from 'vue-router'
+   ```
+
+2. **Handle cases where router is not available:**
+
+   ```vue
+   <script setup lang="ts">
+     import { getCurrentInstance } from 'vue'
+
+     const instance = getCurrentInstance()
+     const router = instance?.appContext.config.globalProperties.$router
+   </script>
+   ```
+
+3. **Document the router dependency** in the spec
+
+4. **Add vue-router to peerDependencies** (if strictly required):
+   ```json
+   {
+     "peerDependencies": {
+       "vue-router": "^4.0.0"
+     }
+   }
+   ```
+
+---
+
+## Best Practices
+
+### 1. Component Design
+
+- ✅ **DO:** Create focused, single-responsibility components
+- ✅ **DO:** Use composition over inheritance
+- ✅ **DO:** Provide sensible defaults
+- ❌ **DON'T:** Add business logic to components; it belongs to the app or a block
+- ❌ **DON'T:** Create deeply nested component hierarchies
+
+### 2. Props and Events
+
+- ✅ **DO:** Type every prop and give optional props a default
+- ✅ **DO:** Use the shared vocabulary (`modelValue`, `bordered`, `copyable`, `autoplay`, `variant`, `severity`, `size`)
+- ✅ **DO:** Use descriptive event names
+- ❌ **DON'T:** Use overly generic prop names
+- ❌ **DON'T:** Mutate props directly
+
+### 3. Styling
+
+- ✅ **DO:** Use the Azion UI token + `data-*` styling conventions
+- ✅ **DO:** Support custom classes via `attrs.class` (`useAttrs()` with `inheritAttrs: false`; do not declare `class` as a prop)
+- ✅ **DO:** Use Tailwind CSS utility classes with logical directions (`ms-`, `pe-`, `start-`, `text-end`)
+- ❌ **DON'T:** Hardcode colors or spacing
+- ❌ **DON'T:** Use inline styles
+
+### 4. Accessibility
+
+- ✅ **DO:** Include proper ARIA attributes
+- ✅ **DO:** Support keyboard navigation
+- ✅ **DO:** Provide labels for interactive elements
+- ❌ **DON'T:** Rely solely on color to convey information
+
+### 5. Performance
+
+- ✅ **DO:** Use `computed` for derived state
+- ✅ **DO:** Lazy load heavy dependencies
+- ✅ **DO:** Use `v-show` instead of `v-if` for frequent toggles
+- ❌ **DON'T:** Create unnecessary reactive state
+- ❌ **DON'T:** Watch deeply nested objects unnecessarily
+
+### 6. Error Handling
+
+- ✅ **DO:** Show user-friendly error messages
+- ✅ **DO:** Take every user-facing string from a prop or the message catalog (`useLocale()`)
+- ❌ **DON'T:** Let errors crash the component
+- ❌ **DON'T:** Expose internal errors to users
+
+### 7. Documentation
+
+- ✅ **DO:** Document every public prop with a one-line JSDoc
+- ✅ **DO:** Provide runnable examples in `examples/<export>/`
+- ❌ **DON'T:** Write prose comments in implementation code ([`rules/comments.md`](../rules/comments.md))
+
+---
+
+## Component Creation Checklist
+
+- [ ] Spec approved: `.specs/<name>.md`
+- [ ] Create directory: `src/components/<category>/<name>/`
+- [ ] Create Vue component: `<name>.vue` with `<script setup lang="ts">`
+- [ ] Type props (with JSDoc) and events; primary value through `defineModel`
+- [ ] Add the `data-testid` fallback: the component's own name
+- [ ] Add the export to `package.json`, then `pnpm --filter @aziontech/ui build:exports`
+- [ ] Add the `.size-limit.json` entry with the spec's `## Performance` budget
+- [ ] Add the browser test `<name>.test.ts`
+- [ ] Add `examples/<name>/` (at least the examples the spec lists, the first `default.vue`)
+- [ ] Add every built-in string to `src/locales/en.ts`, `pt-BR.ts` and `es.ts`
+- [ ] Rebuild the catalog and the llms pages: `pnpm --filter @aziontech/ui build:catalog`
+- [ ] Regenerate the visual baseline of the first example: `/baselines-regenerate`
+
+### Vue Router Components (Additional)
+
+- [ ] Import and use Vue Router composables
+- [ ] Handle router unavailability gracefully
+- [ ] Add vue-router to peerDependencies (if required)
+- [ ] Test with and without router context
+
+---
+
+## Examples
+
+### Example: Form screen with `Field`
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import Button from '@aziontech/ui/button'
+  import Field from '@aziontech/ui/field'
+  import Input from '@aziontech/ui/input'
+  import PageHeader from '@aziontech/ui/page-header'
+  import Switch from '@aziontech/ui/switch'
+
+  const name = ref('')
+  const active = ref(true)
+  const error = ref('')
+</script>
+
+<template>
+  <PageHeader
+    title="Edit application"
+    description="Changes apply to every domain."
+  />
+  <Field
+    required
+    :invalid="Boolean(error)"
+  >
+    <Field.Label>Name</Field.Label>
+    <Input v-model="name" />
+    <Field.Error>{{ error }}</Field.Error>
+  </Field>
+  <Field orientation="horizontal">
+    <Switch v-model="active" />
+    <Field.Content>
+      <Field.Label>Active</Field.Label>
+      <Field.Description>Inactive applications answer 503.</Field.Description>
+    </Field.Content>
+  </Field>
+  <Button label="Save" />
+</template>
+```
+
+### Example: Component with Vue Router
+
+```vue
+<script setup lang="ts">
+  import { useRouter } from 'vue-router'
+  import Button from '@aziontech/ui/button'
+
+  const props = defineProps<{
+    /** Route to open. */
+    to: string
+    /** Visible label text. */
+    label: string
+  }>()
+
+  const router = useRouter()
+
+  const navigate = () => {
+    router.push(props.to)
+  }
+</script>
+
+<template>
+  <Button
+    variant="outline"
+    :label="label"
+    @click="navigate"
+  />
+</template>
+```
+
+---
+
+## Troubleshooting
+
+### TypeScript Declaration Issues
+
+**Problem:** `.d.ts` files are missing or outdated
+
+**Solution:** Declarations are generated at publish time by the publish workflow (`.github/workflows/publish-ui.yml`, `vue-tsc --declaration --emitDeclarationOnly`); declaration-emit is validated locally and in CI by `type-check` (`vue-tsc --noEmit`). Run `pnpm typecheck:ui` to surface declaration errors.
+
+### Export Not Found
+
+**Problem:** Component cannot be imported
+
+**Solution:**
+
+1. Check the v6 name: a retired name (`paginator`, `input-text`, `field-text`, …) is not exported any more
+2. Verify the component exists in its category folder
+3. Check the `package.json` export
+
+### Vue Router Not Available
+
+**Problem:** Component fails when router is not installed
+
+**Solution:**
+
+```vue
+<script setup lang="ts">
+  import { getCurrentInstance } from 'vue'
+
+  const instance = getCurrentInstance()
+  const router = instance?.appContext.config.globalProperties.$router
+
+  const onClick = () => {
+    if (router) {
+      router.push('/path')
+    } else {
+      window.location.href = '/path'
+    }
+  }
+</script>
+```
+
+---
+
+## Additional Resources
+
+- [Vue 3 Composition API](https://vuejs.org/api/composition-api-setup.html)
+- [Vue Router Documentation](https://router.vuejs.org/)
+- [shadcn/ui Field](https://ui.shadcn.com/docs/components/field)
+- [`MIGRATION_V6.md`](../../packages/ui/MIGRATION_V6.md)
+
+---
+
+## Azion UI Layer Pattern (in-depth)
+
+This section describes the canonical pattern enforced for components living under `packages/ui/src/components/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../../packages/ui/src/components/action/button/button.vue), [icon-button.vue](../../packages/ui/src/components/action/icon-button/icon-button.vue), [pricing-card.vue](../../packages/ui/src/components/content/pricing-card/pricing-card.vue).
+
+> **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/ui/<subpath>` must appear in [`package.json#exports`](../../packages/ui/package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
+
+### 1. Source of truth: `TOKENS.md`
+
+All visual rules (typography classes, spacing, max-width, shape, semantic colors) come from [TOKENS.md](./TOKENS.md). In any conflict, **TOKENS.md wins**.
+
+- **Typography** is always applied via the generated class from `typography.js` — `text-heading-md`, `text-body-sm`, `text-label-md`, `text-button-lg`, `text-overline-md`, `text-big-number-lg`, etc. Never use `text-(length:--text-*)` raw, never `leading-*`/`tracking-*`/`font-family` directly. Full catalog in [TOKENS.md "Available text styles"](./TOKENS.md).
+- **Semantic colors:** `var(--primary)`, `var(--primary-foreground)`, `var(--secondary)`, `var(--secondary-foreground)`, `var(--bg-hover)`, `var(--bg-active)`, `var(--bg-disabled)`, `var(--bg-surface)`, `var(--bg-canvas)`, `var(--bg-mask)`, `var(--border-default)`, `var(--border-muted)`, `var(--border-strong)`, `var(--text-default)`, `var(--text-muted)`, `var(--text-disabled)`, `var(--ring-color)`, and feedback variants (`--success`/`--warning`/`--danger`/`--info` + `-foreground` for text on the fill, `-mark` for an icon on a surface, `-border`).
+- **Shape:** `var(--shape-button)`, `var(--shape-control)`, `var(--shape-card)`, `var(--shape-flat)`. For pseudo-element inheritance use `rounded-[inherit]`.
+- **Spacing:** the semantic steps `var(--spacing-2xs)` … `var(--spacing-2xl)` applied as `px-(--spacing-sm)` / `gap-(--spacing-xs)`; the primitive `--spacing-1` … `--spacing-96` and the legacy `spacing-elements-*` are forbidden in components (TOKENS.md). Page rhythm uses the layout tokens (`--layout-section-gap`, `--layout-group-gap`).
+- **Max width:** the `layout-column*` utilities (`--layout-measure*`) for page columns, `var(--container-3xs..--container-7xl)` for fixed content (cards, modals).
+- **Forbidden:** hex/rgb/hsl hardcoded; Tailwind palette names (`bg-gray-*`, `text-violet-*`); external/legacy color utilities (`text-color`, `surface-*`); raw typography (`text-xs`/`text-sm`/`text-base`/`text-lg`).
+
+### 2. Typed TypeScript, mandatory
+
+Every new component in the Azion UI layer uses `<script setup lang="ts">` with:
+
+- An exported `interface <Component>Props` with `withDefaults(defineProps<ButtonProps>(), {...})` ([`rules/props.md`](../rules/props.md)).
+- `defineEmits<{...}>()`.
+- `defineSlots<{...}>()` when the component exposes named/scoped slots.
+- `defineModel<T>('propName')` for the principal controllable prop.
+- Exported types for variants (`export type ButtonVariant = 'primary' | ...`), § 2.8.
+- Zero `any`, zero `// @ts-ignore`.
+
+### 2.1. JSDoc/TSDoc on every public prop
+
+Every public prop must have a one-line JSDoc/TSDoc above its type — it surfaces as autocomplete and hover docs in the consumer's IDE.
+
+```ts
+export interface ButtonProps {
+  /** Visible label rendered inside the component. */
+  label?: string
+  /** Visual variant. Use `primary` for primary actions, `ghost` for tertiary. */
+  variant?: ButtonVariant
+  /** Controlled open state. Use with `v-model:open` or `@update:open`. */
+  open?: boolean
+}
+```
+
+### 2.2. Naming conventions
+
+- **Visual variants** are always exposed as `variant` (`'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link'`, [`rules/prop-vocabulary.md`](../rules/prop-vocabulary.md)). Never `kind`, `color`, or `appearance`; a sort of part is `type`.
+- **Sizes** are always exposed as `size` with values `'small' | 'medium' | 'large'`.
+- **Boolean states** are exposed without `is`/`has` prefix on the prop (`disabled`, `loading`, `open`, `selected`, `active`, `readonly`; never `expanded` or `visible`). Internal computeds may use `isInactive` etc.
+- **Events** are emitted in kebab-case (`update:open`, `before-close`) and typed via `defineEmits<{ 'update:open': [value: boolean] }>()`.
+- **v-model** follows Vue 3 standard via `defineModel<T>('propName')`.
+- **Internal names** follow [`component-structure.md`](../rules/component-structure.md) § "Internal names": event handlers `onX` with the DOM event spelled as Vue compiles it (`onClick`, `onKeydown`, `onPointerdown`), template refs to elements or component instances `xEl` / `xEls` (`triggerEl`, `panelEl`, `optionEls`), composables `use-x.ts` exporting `useX` (`useFocusTrap`), injection keys `<Component>[<Part>]InjectionKey`.
+
+### 2.3. Controlled vs uncontrolled state
+
+Two-way state follows [`contributing/rules/v-model.md`](../rules/v-model.md): `defineModel` is controlled when the parent binds `v-model` and holds local state when it does not, so no computed `isOpen` and no `watch` mirror are needed.
+
+- **Shape:** `const open = defineModel<boolean>('open', { default: false })`, seeded by a `defaultOpen` prop when the spec lists one (one shape per concept: [`prop-vocabulary.md`](../rules/prop-vocabulary.md) § Two-way models).
+- Examples `controlled.vue` and `uncontrolled.vue` document both usages only when the spec's `## Examples` lists them.
+
+### 2.4. Typed slots
+
+Use `defineSlots<{...}>()` when the component delegates content rendering to the consumer. Document each slot in the JSDoc of the component.
+
+```ts
+defineSlots<{
+  default(): unknown
+  icon(): unknown
+  description(props: { error: string }): unknown
+}>()
+```
+
+### 2.5. No `asChild` / `as` — the component owns its root
+
+Azion UI has no `asChild` prop, no `as` / `is` string prop and no Slot helper, and it will not add one (see [`contributing/rules/root-element.md`](../rules/root-element.md)). `azion-ui/no-polymorphic-as-prop` blocks a `defineProps` that declares `as` or `asChild`, and `validate-references.mjs` blocks a phantom Slot import.
+
+- **Link or button:** the component switches its own root on a data prop — `href` renders an anchor, no `href` a button (`<component :is="href ? 'a' : 'button'">`). A row or card that is clickable takes `href` or `clickable`.
+- **Overlay triggers** (`Dialog.Trigger`, `Drawer.Trigger`, `Popover.Trigger`, `DropdownMenu.Trigger`, …) wrap the consumer's control: when the slot holds one control (a `Button`, an `IconButton`, a native button or link) the trigger forwards its ARIA, click and keyboard handlers onto that control; otherwise it renders its own button around the content. The consumer writes `<Dialog.Trigger><Button label="Open" /></Dialog.Trigger>` and never an `asChild`.
+- **Close parts** (`Dialog.Close`, `Drawer.Close`) render their own close `IconButton`; the header adds it on its own while `closable` is true.
+
+### 2.6. `data-state` / `data-disabled` / `data-orientation` attributes
+
+Expose reactive state via `data-*` attributes on the root so consumers can style with Tailwind state variants (`data-[state=open]:bg-...`).
+
+```vue
+<template>
+  <div
+    :data-state="isOpen ? 'open' : 'closed'"
+    :data-disabled="disabled || undefined"
+    :data-orientation="orientation"
+    :data-testid="testId"
+  >
+    ...
+  </div>
+</template>
+```
+
+Common state values: `open`/`closed`, `on`/`off`, `active`/`inactive`, `checked`/`unchecked`/`indeterminate`, `visible`/`hidden`. Always set the attribute even when default; omit (`|| undefined`) only for binary flags like `data-disabled`.
+
+This unlocks state-driven styling without computed class strings:
+
+```vue
+<Dialog.Content class="data-[state=open]:animate-popup-scale-in data-[state=closed]:animate-popup-scale-out motion-reduce:animate-none" />
+```
+
+### 2.7. `cn` helper (tailwind-merge)
+
+> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/ui/package.json`](../../packages/ui/package.json). The helper lives at [`src/utils/cn.ts`](../../packages/ui/src/utils/cn.ts) and is exported as `@aziontech/ui/utils/cn`.
+
+The naive `[base, attrs.class]` array works for additive cases but fails when consumer classes need to **override** internal ones (e.g. consumer passes `px-6` while the component sets `px-4` — both end up applied; the later one wins by source order, not intent). `cn(...)` (built on `clsx` + `tailwind-merge`) makes consumer classes win predictably.
+
+Usage:
+
+```ts
+import { cn } from '@aziontech/ui/utils/cn'
+
+const ROOT_CLASS =
+  'relative inline-flex items-center justify-center rounded-(--shape-button) ' +
+  'data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground)'
+```
+
+```vue
+<button :class="cn(ROOT_CLASS, attrs.class)" />
+```
+
+Use `cn` whenever consumer-supplied classes may conflict with internal ones. Plain arrays are still acceptable for purely additive cases.
+
+### 2.8. Exported variant types
+
+Export the variant unions so consumers can type their own wrappers without re-declaring strings.
+
+```ts
+// button.vue
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
+export type ButtonSize = 'small' | 'medium' | 'large'
+```
+
+Consumer usage:
+
+```ts
+import type { ButtonVariant } from '@aziontech/ui/button'
+
+interface MyCardActionProps {
+  variant: ButtonVariant
+}
+```
+
+Naming pattern: `<ComponentName><PropName>` — `ButtonVariant`, `ButtonSize`, `DialogSize`, `TabsOrientation`. Each public type is re-exported through the component's entry in `package.json#exports` (Vue SFC default export covers the runtime; named exports cover the types).
+
+### 2.9. Complete anatomy in the Composition Pattern
+
+When the component justifies Composition Pattern, ship the **complete anatomy** — each meaningful part is its own public sub-component. Reference anatomies:
+
+- **Dialog:** `Dialog` (root) + `DialogTrigger` (wraps the consumer's control, § 2.5) + `DialogContent` (teleports, renders the overlay, traps focus) + `DialogTitle` + `DialogDescription` + `DialogClose`.
+- **Tabs:** `Tabs` + `Tabs.List` + `Tabs.Trigger` + `Tabs.Content`.
+- **Accordion:** `Accordion` + `AccordionItem` + `AccordionTrigger` + `AccordionContent`.
+- **DropdownMenu:** `DropdownMenu` + `DropdownMenuTrigger` + `DropdownMenuContent` + `DropdownMenuItem` + `DropdownMenuSeparator` + `DropdownMenuLabel`.
+- **Card:** `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`.
+
+#### Folder layout — canonical (applies to every new composition component)
+
+One folder per sub-component, file name preserves the full prefix, and the shared `injection-key.ts` lives at the root of the component (sibling of the root `.vue`).
+
+```
+packages/ui/src/components/overlay/dialog/
+├── dialog.vue
+├── index.ts
+├── injection-key.ts
+├── dialog-trigger/
+│   └── dialog-trigger.vue
+├── dialog-content/
+│   └── dialog-content.vue
+├── dialog-title/
+│   └── dialog-title.vue
+├── dialog-description/
+│   └── dialog-description.vue
+└── dialog-close/
+    └── dialog-close.vue
+```
+
+> Existing composition components (`dialog`, `drawer`, `navigation-menu`, `dropdown-menu`, `breadcrumb`) still use the legacy **flat** layout, where every sub-component `.vue` sits directly under the component root. They are not migrated as part of new-component work — migration would require moving files and updating every `packages/ui/package.json#exports` right-hand path, which is out of scope. The new layout above applies only to components scaffolded going forward.
+
+Conventions:
+
+- **Folder per sub-component, file keeps the full prefix** (`dialog-trigger/dialog-trigger.vue`, never `dialog-trigger/index.vue`). Reasons: (a) unambiguous error traces — stack frames show `dialog-trigger.vue`, not 27 different `index.vue` lines; (b) easier grep by file name; (c) editor breadcrumbs stay legible.
+- **Public export path stays flat.** `packages/ui/package.json#exports` keeps `./dialog-trigger` as the consumer-facing path; only the right-hand value reflects the folder nesting (`./src/components/overlay/dialog/dialog-trigger/dialog-trigger.vue`). Consumers see no churn.
+- **Shared `InjectionKey<T>` and TypeScript types in a sibling `injection-key.ts`** at the root level (sibling of `<name>.vue`, **not** inside any sub-component folder). Root imports `./injection-key`; sub-components import `../injection-key`.
+- **`Trigger`** forwards its behaviour onto the slotted control and **`Close`** renders its own button (§ 2.5); no `asChild`.
+- **`data-state`** exposed on Root + Content for state-driven styling.
+- Each public sub-component receives an entry in `package.json#exports` (`./dialog`, `./dialog-trigger`, …). The root's `default.vue` example renders the full composition anatomy (the spec's `## Usage` tree) — there is no separate composition example by default.
+
+### 3. Composition Pattern — only when it pays off
+
+- **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogContent` (renders the overlay and teleports) + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `Tabs.List` + `Tabs.Trigger` + `Tabs.Content`; Accordion; DropdownMenu; Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/ui/package.json#exports`.
+- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [pricing-card.vue](../../packages/ui/src/components/content/pricing-card/pricing-card.vue) — props such as `showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
+- **Atomic** (Button, IconButton, Tag, Spinner, Badge, CurrencyAmount) — always monolithic, no slots.
+- **Decision rule:** "does the consumer need to change the ORDER or OMIT parts exposed by the root?" If yes, use Composition Pattern. If no, stay monolithic. When in doubt, **start monolithic** and refactor only when a real use case appears.
+
+### 3.1. `data-testid` — the component's own name, parts with `__`
+
+The convention is [`rules/testid.md`](../rules/testid.md):
+
+- **Root:** the component's own name — `const testId = computed(() => attrs['data-testid'] ?? '<name>')`. Examples: `'button'`, `'pricing-card'`, `'dialog'`.
+- **Children:** `${testId}__<part>` with **two underscores**. Common parts: `__header`, `__title`, `__description`, `__content`, `__footer`, `__actions`, `__action`, `__close`, `__loading`, `__icon`, `__body`, `__backdrop`, `__error-message`.
+- The consumer can override the root via `data-testid="custom-id"`; all children inherit the new prefix automatically.
+- Composition Pattern sub-components use their own name (`'dialog-header'`), not the parent's id.
+
+### 4. Class structure
+
+Superseded by § 13.w and [`rules/styling.md`](../rules/styling.md): the class-map pattern
+(`sharedClasses`, `variantClasses`, `sizeClasses`, `disabledClasses`, `rootClasses`) is forbidden in
+new components. Classes are inline utilities switched by `data-*`; a class string over 200
+characters is one `ROOT_CLASS` constant of `+`-joined literals, one group per line (layout, states
+and focus, one line per variant, one line per size), merged with `cn(ROOT_CLASS, attrs.class)`
+([`CODE_QUALITY.md`](./CODE_QUALITY.md) § 3.3).
+
+### 5. States via `before:` pseudo-elements
+
+Hover/active overlays should be implemented via a pseudo-element so the base background never repaints during transitions:
+
+```
+before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]
+before:opacity-0 before:transition-opacity before:content-['']
+hover:before:opacity-100 active:before:opacity-100
+```
+
+And the root's class string sets `before:bg-(--bg-hover)` / `active:before:bg-(--bg-active)` (per variant through `data-[variant=…]:`), as `button.vue` does.
+
+### 6. `<a>` / `<button>` polymorphism
+
+When the component is interactive and accepts `href`, derive `isAnchor` and render one root, `<a>` or `<button>` ([`rules/root-element.md`](../rules/root-element.md)); never two copies of the template under `v-if` / `v-else`. A component named after a native tag renders that root through `h` ([`CODE_QUALITY.md`](./CODE_QUALITY.md) § 3.3). Always set `rel="noopener noreferrer"` when `target="_blank"`.
+
+### 7. Capturing tokens from Figma
+
+Before creating or updating a component, invoke the `/component-create` skill which automates the discovery via MCP `plugin:figma:figma` (`get_variable_defs`, `get_design_context`). Map each Figma variable to its TOKENS.md equivalent (generated class for typography, `var(--*)` for everything else). When no equivalent exists, register a **theme gap** in the PR and use the closest primitive temporarily with `TODO: tokenize`. Never commit hardcoded hex to close the gap.
+
+### 8. No duplication / DRY
+
+Reusable utilities never live inline:
+
+- **Logic:** composables in [packages/ui/src/composables/](../../packages/ui/src/composables/) (`use-controllable`, `use-locale`, `use-direction`).
+- **Utility sub-components:** [packages/ui/src/components/feedback/spinner/](../../packages/ui/src/components/feedback/spinner/) (`spinner`, reused in button and icon-button).
+- **Global CSS / animations:** `packages/theme/src/`.
+
+Sweep these locations before implementing. Create a new utility only when nothing existing fits, and always in a shared location.
+
+### 9. Accessibility (WCAG 2.1 AA)
+
+- **Semantics first:** prefer native `<button>` / `<a>` / `<input>` / `<dialog>` over `role=...`.
+- **Visible focus mandatory:** `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`. Never strip outline without a substitute.
+- **Keyboard navigation:** Tab/Shift+Tab; Enter/Space on buttons; Esc closes overlays; arrows on menus/lists/radio groups; focus trap in modals; focus returns to the trigger when closing.
+- **ARIA minimum:** `aria-label`, `aria-labelledby`/`aria-describedby`, `aria-busy`, `aria-disabled`, `aria-hidden="true"` on decorative icons, `aria-current`/`aria-selected`/`aria-expanded` as appropriate, `aria-live="polite"` for dynamic feedback.
+- **Contrast:** >=4.5:1 (text) / >=3:1 (large/icons) and the APCA targets of [`rules/accessibility.md`](../rules/accessibility.md), from token pairs the theme documents. Verify disabled, which often fails.
+- **`prefers-reduced-motion`:** components that animate must apply `motion-reduce:transition-none motion-reduce:transform-none`.
+- **Touch targets:** >=44x44px on a coarse pointer (decision TT01: an invisible `data-slot="touch-target"` hit area, or the row grows with `pointer-coarse:min-h-11`); smaller requires justification.
+- **Forms:** `<label>` associated, `aria-describedby` for hint/error, `aria-invalid="true"` on error, message announced via `aria-live`.
+
+### 10. Usability
+
+- States must be visually distinguishable without relying solely on color (use border, shadow, icon, pattern).
+- Feedback under 100ms on interactions; loading on operations >300ms; progress on >2s.
+- Loading is non-blocking (`cursor-loading` + `aria-busy`); the component stays visible.
+- Errors are actionable with a clear message; preserve state when possible.
+- Hit area generous (padding >=`var(--spacing-xs)` around interactive content).
+- i18n-ready (texts via props, support long strings without breaking layout).
+- Consistency with sibling components in the same category.
+- Clear affordance (buttons look clickable; links are visually distinct).
+
+### 11. Light and dark, mandatory
+
+Every token used must work in both modes of `@aziontech/theme`. The styled visual suite (`apps/visual`) screenshots the first example in light and dark, and the docs site switches both themes; no dedicated light/dark example is needed.
+
+### 12. Figma Code Connect
+
+> **Status: available today.** `@figma/code-connect` is installed in [`packages/ui/package.json`](../../packages/ui/package.json) and the project config lives at [`packages/ui/figma.config.json`](../../packages/ui/figma.config.json) (`parser: "html"`, `include: ["src/**/*.figma.ts"]`).
+
+For every new component, generate `<name>.figma.ts` next to the `.vue` mapping Figma variants (`variant`, `size`, `state`) → Vue props, Figma slots → Vue children, and the code snippet shown in the Dev Mode inspection panel. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`.
+
+CLI scripts (in `packages/ui/package.json`):
+
+- `pnpm --filter @aziontech/ui run check:figma` — verify all `.figma.ts` files parse.
+- `pnpm --filter @aziontech/ui run publish:figma` — publish mappings to Figma. **Requires `FIGMA_ACCESS_TOKEN`** in the environment.
+- `pnpm --filter @aziontech/ui run clean:figma` — remove published mappings.
+
+Authoring the `.figma.ts` file works without the token; only publishing needs it.
+
+**Where to put `FIGMA_ACCESS_TOKEN`:**
+
+- **Locally:** copy [`packages/ui/.env.example`](../../packages/ui/.env.example) to `packages/ui/.env` (gitignored) and fill `FIGMA_ACCESS_TOKEN=...`. Alternatively, `export FIGMA_ACCESS_TOKEN=...` in your shell or pass it inline: `FIGMA_ACCESS_TOKEN=... pnpm --filter @aziontech/ui run publish:figma`. Generate the token at <https://www.figma.com/developers/api#access-tokens> (requires a Dev Mode seat with Code Connect enabled on the Figma org).
+- **CI (GitHub Actions):** add `FIGMA_ACCESS_TOKEN` as a repository secret (`Settings → Secrets and variables → Actions`) and reference it via `env: { FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }} }` in the workflow step that calls `publish:figma`.
+- **Never** commit the token. `.env` and `.env.*` are gitignored at the repo root; only [`.env.example`](../../packages/ui/.env.example) is versioned.
+
+### 13. Examples — canonical pattern
+
+Every component documents itself through copyable SFCs in `packages/ui/examples/<name>/`:
+
+- `examples.json`: `{ "component": "<name>", "title": "Components/<Category>/<PascalName>", "examples": [{ "name", "summary", "file" }] }`. The first example is the default view and is the one the styled visual suite screenshots.
+- One `.vue` per example: `<script setup>` with the real `@aziontech/ui/<subpath>` imports (binding = `PascalCase` of the subpath), a `<template>` with PascalCase tags and concrete props. It stands alone: copy the file and it runs.
+- Set: `default.vue` + one composite example per multi-option axis (`variants.vue` for `variant`, `sizes.vue` for `size`; `types.vue` only for a real `type` prop, [`rules/naming.md`](../rules/naming.md) § 4) + one example per mutually-exclusive state the component declares (`loading.vue`, `disabled.vue`). Nothing else unless the spec's `## Examples` section lists and justifies it.
+- The docs site renders each example on `/components/<name>` beside its source and alone at `/frame/example/<name>/<file>`; the catalog (`catalog.json`), the MCP (`get_component`) and the harnesses (copyable, hydration, server render, a11y) read the same files.
+
+### 13.w Styling discipline (mandatory for new components)
+
+The Azion UI layer applies styles **inline on the template root element's `class` attribute**, switches variants via `data-*` attributes, and reads them with Tailwind's `data-[attr=value]:` prefix. This supersedes any older example in this document that still shows the `variantClasses` / `sizeClasses` / `sharedClasses` Record-of-strings pattern. Legacy components on the whitelist still use the old pattern; **every new component starts here**.
+
+#### Forbidden
+
+- `const sharedClasses = [...]`, `const variantClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)` whose only job is to compose classes.
+- `<style>` blocks (scoped or unscoped).
+- `.css` / `.scss` files inside a component directory.
+- CSS-in-JS, `styled()` helpers, `css\`\`` tagged templates.
+- Per-component Tailwind plugins for one-off utilities. Reusable utilities live in `@aziontech/theme`.
+- `:class="[a, b, c]"` arrays when a flat string + `data-*` variants would do.
+
+#### Required
+
+- `defineOptions({ name, inheritAttrs: false })` + `useAttrs()` on the script.
+- Root element binds `v-bind="$attrs"` so consumer-passed `class` merges into the root's `class` automatically.
+- Variants are mirrored as `data-*` attributes on the root (`data-variant`, `data-size`, `data-disabled`, `data-state`, `data-orientation`).
+- Static utility classes are listed inline on the root's `class` attribute, with Tailwind `data-[attr=value]:utility` prefixes switching styles by variant. Over 200 characters, the string becomes one `ROOT_CLASS` constant of `+`-joined literals bound with `cn` ([`CODE_QUALITY.md`](./CODE_QUALITY.md) § 3.3, CQ-04), as in the example below.
+- When the consumer must override an internal token choice, wrap the static class string with `cn` from `@aziontech/ui/utils/cn`:
+
+  ```vue
+  :class="cn('rounded-(--shape-card) bg-(--bg-surface)', attrs.class)"
+  ```
+
+#### Canonical example
+
+```vue
+<script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+  import { cn } from '@aziontech/ui/utils/cn'
+
+  defineOptions({ name: 'Button', inheritAttrs: false })
+
+  export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
+  export type ButtonSize = 'small' | 'medium' | 'large'
+
+  export interface ButtonProps {
+    /** Visual variant. */
+    variant?: ButtonVariant
+    /** Size token. */
+    size?: ButtonSize
+    /** Disables interaction. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<ButtonProps>(), {
+    variant: 'primary',
+    size: 'large',
+    disabled: false
+  })
+
+  const ROOT_CLASS =
+    'relative inline-flex items-center justify-center whitespace-nowrap rounded-(--shape-button) ' +
+    'transition-colors duration-150 ease-out motion-reduce:transition-none ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground) ' +
+    'data-[variant=secondary]:bg-(--secondary) data-[variant=secondary]:text-(--secondary-foreground) ' +
+    'data-[variant=outline]:border data-[variant=outline]:border-(--border-default) data-[variant=outline]:bg-transparent ' +
+    'data-[variant=ghost]:bg-transparent ' +
+    'data-[size=small]:h-7 data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md ' +
+    'data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=medium]:text-button-md ' +
+    'data-[size=large]:h-10 data-[size=large]:px-(--spacing-md) data-[size=large]:text-button-lg ' +
+    'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed'
+
+  const attrs = useAttrs()
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'button')
+</script>
+
+<template>
+  <button
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-variant="variant"
+    :data-size="size"
+    :data-disabled="disabled || null"
+    :disabled="disabled"
+    :class="cn(ROOT_CLASS, attrs.class as string)"
+  >
+    <slot />
+  </button>
+</template>
+```
+
+#### Conditional styles
+
+Use `data-*` + Tailwind variant — never `:class="cond ? ... : ..."`:
+
+```vue
+<!-- ✅ -->
+<button
+  :data-loading="loading || null"
+  class="data-[loading]:cursor-wait data-[loading]:opacity-80"
+/>
+<div
+  :data-state="open ? 'open' : 'closed'"
+  class="data-[state=open]:animate-popup-scale-in data-[state=closed]:animate-popup-scale-out"
+/>
+
+<!-- ❌ -->
+<button :class="loading ? 'cursor-wait opacity-80' : ''" />
+```
+
+#### Sub-components (Composition Pattern)
+
+The same rule applies. Each sub-component renders its own root with its own inline `class`. No shared `*Classes` import between siblings.
+
+---
+
+### 13.x Example discipline (mandatory)
+
+- No Figma URLs or node IDs in examples or `examples.json`; the Figma ↔ code link is owned by `<name>.figma.ts` (Code Connect).
+- No helpers that only exist for documentation: an example imports only `@aziontech/ui/*`, `@aziontech/icons` and `vue`.
+
+#### Components with open/close state must default to **closed**
+
+For any component that exposes an open/close state (Dialog, Drawer, Popover, Tooltip, DropdownMenu, NavigationMenu, ContextMenu, Accordion, Combobox, …):
+
+- The `default.vue` example renders the component in its **closed** state — the trigger is visible; the overlay is not.
+- The viewer activates the overlay by interacting with the trigger (click, hover, keyboard) on the docs page — exactly as a real consumer would.
+- Per-variant examples (one per `variant`, one per `size`) also default to closed unless the variant cannot exist closed.
+- Every other example starts closed too: a floating overlay (popover, tooltip, menu, hover card, list popup, dialog, drawer) never opens on page load, even to show its open state; it opens on the reader's action ([`rules/azion-ui-overlays-closed-on-load.md`](../../rules/azion-ui-overlays-closed-on-load.md), owner 2026-11-18). Inline disclosures (accordion, sidebar groups) may start open.
+
+```vue
+<!-- examples/dialog/default.vue: the trigger renders, the dialog opens on click -->
+<script setup>
+  import Button from '@aziontech/ui/button'
+  import Dialog from '@aziontech/ui/dialog'
+</script>
+```
+
+**Why:** consumers ship the component in its dormant state. The accessible name comes from the trigger; the focus path starts at the trigger; the keyboard shortcut targets the trigger. Defaulting to open hides those details and skews axe and keyboard checks.
+
+#### Variants: only basic ones
+
+The spec lists which `variant` / `size` examples exist. Do **not** add visual permutations the spec did not list. A "WithIcon", "WithLongLabel", "WithBadge" example belongs in the spec or it doesn't belong in the folder.
+
+### 14. Checklist (appendix to the checklist above)
+
+#### Structure / TS
+
+- [ ] `<script setup lang="ts">`.
+- [ ] Exported `interface <Component>Props` + `withDefaults` + typed `defineEmits<{...}>()`.
+- [ ] `defineSlots<{...}>()` when there are named/scoped slots.
+- [ ] `defineModel<T>('propName')` for the principal prop when applicable.
+- [ ] **JSDoc/TSDoc on every public prop.**
+- [ ] `defineOptions({ name, inheritAttrs: false })`.
+- [ ] `useAttrs()`, `v-bind="$attrs"` on the root, consumer `class` merged with `cn`.
+- [ ] `testId = computed<string>(() => ...)`.
+- [ ] Exported types for variants (`<Component>Variant`, `<Component>Size`); no class maps.
+- [ ] Zero `any`, zero `// @ts-ignore`.
+- [ ] **Naming conventions** applied (`variant`/`size`/booleans without prefix, events kebab-case).
+- [ ] **Controlled / uncontrolled** states implemented when applicable.
+- [ ] Composition Pattern only when justified (sibling sub-components + typed `provide`/`inject`).
+- [ ] When Composition Pattern: complete anatomy shipped (Trigger/Content/Title/Description/Close as applicable — see § 2.9), with the canonical folder-per-sub-component layout (`<root>/<root>-<part>/<root>-<part>.vue`; shared `injection-key.ts` at the root level).
+- [ ] No `as` / `asChild` prop; link-or-button switches on `href`, and Trigger parts forward onto the slotted control — § 2.5.
+- [ ] **`data-state`/`data-disabled`/`data-orientation`** exposed on the root and on stateful sub-components — § 2.6.
+- [ ] Variant types (e.g. `ButtonVariant`, `ButtonSize`) exported as named exports — § 2.8.
+- [ ] **`cn` helper** used for class merging when consumer classes may override defaults — § 2.7.
+- [ ] `<a>`/`<button>` polymorphism when applicable, with `rel="noopener noreferrer"` on `_blank`.
+
+#### Tokens
+
+- [ ] Zero hardcoded hex; everything via `var(--*)` or generated typography class.
+- [ ] CSS vars identical to the canonicals.
+- [ ] `before:` pseudo for hover/active overlays.
+- [ ] Figma tokens -> TOKENS.md classes / CSS vars mapped; gaps registered.
+
+#### DRY
+
+- [ ] Reusable utilities extracted to `composables/`, a component's `lib/`, or `packages/theme/`.
+- [ ] No inline custom animation/class when a shared alternative exists.
+
+#### Accessibility
+
+- [ ] Visible focus with `focus-visible:ring-*` plus `ring-offset` based on `--bg-canvas`.
+- [ ] Keyboard navigation validated.
+- [ ] ARIA applied per component type.
+- [ ] Contrast >=4.5:1 / >=3:1, including disabled.
+- [ ] `motion-reduce:*` on animated components.
+- [ ] Touch target >=44x44px on a coarse pointer (TT01) or justified.
+- [ ] Tested in a screen reader.
+
+#### Usability
+
+- [ ] States visually distinct without relying solely on color.
+- [ ] Loading with `cursor-loading` + `aria-busy`, non-blocking.
+- [ ] Texts via props (i18n-ready).
+- [ ] Consistency with neighbours in the category.
+
+#### Examples
+
+- [ ] `examples/<name>/examples.json` with `component`, `title` and one entry per example (`name`, `summary`, `file`).
+- [ ] `default.vue` + `variants.vue` (composite, when more than one `variant`) + `sizes.vue` (composite, when more than one `size`) + `loading.vue` / `disabled.vue` only when the component has those props. Nothing else by default.
+- [ ] Each example stands alone, imports only real subpaths, and renders closed when the component opens and closes.
+
+#### Validation
+
+- [ ] `<name>.figma.ts` created next to the `.vue` (Code Connect available — see § 12).
+- [ ] `pnpm lint:ui && pnpm typecheck:ui && pnpm check:ui:type-coverage && pnpm --filter @aziontech/ui test:ssr` all pass, and so does `pnpm --filter @aziontech/ui run gates`.
+
+---
+
+**Last Updated:** 2026-11-23
+**Version:** 1.0.0
+**Maintainer:** Azion UI Team

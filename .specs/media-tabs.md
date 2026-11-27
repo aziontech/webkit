@@ -2,24 +2,25 @@
 name: media-tabs
 category: marketing
 structure: monolithic
-status: approved
-spec_version: 1
+status: implemented
+spec_version: 5
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: 3f52f749cabe1cb771937f5e4a99c1d8137a15643c529bbf9776143481f3ae4b
+checksum: 343cd8e12d0677776811153e5b02557d48163399159401f8bc6fecf96da9a700
 created: 2026-09-24
-last_updated: 2026-10-22
+last_updated: 2026-11-24
 ---
 
 # Media Tabs — Component Spec
 
 ## Purpose
 
-A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `position` decides where the tabs sit: `left` or `right` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.
+A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `tabsSide` decides where the tabs sit: `start` or `end` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.
 
 ## When to use
 
+- Use MediaTabs (primitive) for claims on one side and the selected claim's media on the other.
 - For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.
 - When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.
 - As a product-page band that rewards watching but does not require it.
@@ -28,14 +29,14 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 - For one claim beside one picture → use `media-split`.
 - For questions and answers → use `faq`.
-- For switching a page's content between peer views the reader navigates → use `tab-view`, which is a real ARIA tab set.
+- For switching a page's content between peer views the reader navigates → use `tabs`, which is a real ARIA tab set.
 
 ## Related
 
 - `media-split` — one claim, one picture, no selection.
 - `illustration` — the official scene a tab's `media` slot usually holds.
-- `frame-box` — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.
-- `section-title` — the heading above the band; this component carries no title of its own.
+- `registration-frame` — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.
+- `module-header` — the heading above the band; this component carries no title of its own.
 
 ## Best practices
 
@@ -44,14 +45,14 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 - Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.
 - Use scenes of the same shape. The frame does not resize between tabs.
 - Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.
-- Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.
+- Leave `autoplay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus and while the band is scrolled out of the viewport, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion. Below `lg` it does not run either: there the media opens inside the active row, so a tick would move the page under the reader's thumb; a tap selects the tab instead.
 
 ## Usage
 
 ```vue
 <script setup>
-  import Illustration from '@aziontech/webkit/illustration'
-  import MediaTabs from '@aziontech/webkit/media-tabs'
+  import Illustration from '@aziontech/ui/illustration'
+  import MediaTabs from '@aziontech/ui/media-tabs'
 
   const scenes = ['ai-applications', 'live-debugging']
 </script>
@@ -64,7 +65,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
         description:
           'Execute models on the Azion Web Platform across hundreds of locations to deliver real-time responses with median latency under 30 ms.',
         src: '',
-        alt: 'Inference running at the edge locations closest to each user'
+        alt: 'Inference running at the data centers closest to each user'
       },
       {
         title: 'Keep every inference accounted for',
@@ -84,24 +85,28 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 ## Props
 
-| Prop               | Type                                     | Default      | Required | JSDoc                                                                                                                                                                                                 |
-| ------------------ | ---------------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`            | `MediaTabsItem[]`                        | `[]`         | false    | The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
-| `position`         | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'`     | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row.                                                                 |
-| `size`             | `'small' \| 'medium' \| 'large'`         | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                     |
-| `selectOn`         | `'hover' \| 'click'`                     | `'hover'`    | false    | What moves the selection as the reader points at a row. A click always selects, on either setting.                                                                                                    |
-| `autoPlay`         | `boolean`                                | `true`       | false    | Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion.                                                  |
-| `autoPlayInterval` | `number`                                 | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                               |
-| `showProgress`     | `boolean`                                | `true`       | false    | Advances a hairline along the active row's bottom edge while the timer runs.                                                                                                                          |
-| `texture`          | `TextureMaterialKind`                    | `'none'`     | false    | Texture the media column is grounded with; `none` leaves it bare.                                                                                                                                     |
-| `textureSize`      | `TextureMaterialSize`                    | `'medium'`   | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                           |
-| `textureFade`      | `TextureMaterialFade`                    | `'vignette'` | false    | How the ground fades out before the column's edges.                                                                                                                                                   |
+| Prop               | Type                                    | Default      | Required | JSDoc                                                                                                                                                                                                |
+| ------------------ | --------------------------------------- | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`            | `MediaTabsItem[]`                       | `[]`         | false    | The tabs, in order, at most three when `tabsSide` is `start` or `end` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
+| `tabsSide`         | `'start' \| 'end' \| 'top' \| 'bottom'` | `'start'`    | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every side stacks, with the active tab's media inside its row.                                                                    |
+| `size`             | `'small' \| 'medium' \| 'large'`        | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                   |
+| `selectOn`         | `'hover' \| 'click'`                    | `'hover'`    | false    | What moves the selection as the reader points at a row. A click always selects, on either setting.                                                                                                   |
+| `autoplay`         | `boolean`                               | `true`       | false    | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion or below `lg`.     |
+| `autoplayInterval` | `number`                                | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                              |
+| `showProgress`     | `boolean`                               | `true`       | false    | Advances a hairline along the active row's bottom edge while the timer runs.                                                                                                                         |
+| `texture`          | `TextureVariant`                        | `'none'`     | false    | Texture the media column is grounded with; `none` leaves it bare.                                                                                                                                    |
+| `textureSize`      | `TextureSize`                           | `'medium'`   | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                          |
+| `textureFade`      | `TextureFade`                           | `'vignette'` | false    | How the ground fades out before the column's edges.                                                                                                                                                  |
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                                         |
+| --------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` | `0`     | `update:modelValue` | Index of the tab shown, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first tab. A click, a hover (with `selectOn: 'hover'`) or the autoplay timer writes the new index back. |
 
 ## Events
 
-| Event        | Payload                         | Notes                                                                                                           |
-| ------------ | ------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `tab-change` | `(event: Event, index: number)` | The selection moved; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick. |
+None. The tab shown is the `v-model` (`update:modelValue`).
 
 ## Slots
 
@@ -115,30 +120,32 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 - Hover paints `--bg-hover` as a `::before` ghost layer over a resting row (the design system's interactive-state pattern); the selected row already sits on the raised surface and shows no ghost
 - `data-active` marks the selected row; it steps up to the raised surface while the others rest on the plain one
 - `data-autoplay` is present on the root while the timer is running, so a page can tell a moving band from a resting one
+- `data-paused` is present on the root while the reader has paused the rotation with the pause control
 - `data-size` carries the size token, which sets the row height every column measures from beside the media and the title scale of a row of tabs
 - `data-select-on` carries the interaction mode
 - The media frame shows exactly one medium at full opacity; the rest are present and transparent, which is what lets them cross-fade
 - A tab's frame carries no padding of its own; the title and description sit in an inset block, so the mobile media runs flush to the frame's edges
-- Every tab and the media column are `frame-box` cells with `borders="all"` and `marks="all"`, minus the top rule they flush against whatever sits above the band
-- The band holds at most three tabs when the position is `left` or `right` and five when it is `top` or `bottom`; `items` past the limit are dropped, so the tabs, the rotation and the media frame always agree on the same set
+- Every tab and the media column are `registration-frame` cells with `borders="all"` and `marks="all"`, minus the top rule they flush against whatever sits above the band
+- The band holds at most three tabs when the side is `start` or `end` and five when it is `top` or `bottom`; `items` past the limit are dropped, so the tabs, the rotation and the media frame always agree on the same set
 - Tabs in a row (`top`, `bottom`) are compact from `lg` up: no minimum row height, `--spacing-md` of inset, the title keeps `.text-heading-md` (`.text-heading-xs` at `size` `small`, with the description at `.text-body-xs`) and the description drops to `.text-body-sm`; below `lg` they stack at the full-size treatment
 - With the tabs in a row, the media of every tab sits stacked in one cell, so the frame is as tall as the tallest medium and no shorter than `--media-tabs-media-min-lg` (`24rem` unless set); `--media-tabs-media-min` floors the active tab's media inside its row below `lg`; `--media-tabs-media-bg` sets the media's fill (`--bg-canvas` unless set)
-- `data-position` carries the position and `data-orientation` the axis it implies (`vertical` for `left` and `right`, `horizontal` for `top` and `bottom`); `top` and `bottom` share each tab's frame edges with the next so the row draws one hairline between tabs, `right` shares the seam with the media on the tabs' side and `bottom` puts the media above the row, and every position keeps one hairline at the seam between the tabs and the media
-- The media column is grounded on a `texture-material` the band paints itself, behind the media: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the column's edges. The default `none` leaves the column bare
+- The server renders the side media cell and the open row's inline medium both (CSS shows the one that fits the width); once mounted only the one that matches the width stays in the document, so a slotted scene, illustration or code sample is never drawn twice
+- `data-tabs-side` carries the side and `data-orientation` the axis it implies (`vertical` for `start` and `end`, `horizontal` for `top` and `bottom`); `top` and `bottom` share each tab's frame edges with the next so the row draws one hairline between tabs, `end` shares the seam with the media on the tabs' side and `bottom` puts the media above the row, and every side keeps one hairline at the seam between the tabs and the media
+- The media column is grounded on a `texture` the band paints itself, behind the media: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the column's edges. The default `none` leaves the column bare
 - Empty: when `items` is empty the band renders nothing
 
 ## Motion & Animations
 
-| Trigger                  | Animation / Transition                                                                                                                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                       |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------- |
-| selection change (media) | `transition-[translate,opacity] duration-moderate-02 ease-productive-entrance`; the inactive medium rests one `--spacing-lg` below and rises into place | `moderate-02` (240ms) + `productive-entrance`     | `motion-reduce:translate-y-0 motion-reduce:transition-none` (swaps instantly) |
-| selection change (row)   | `transition-colors duration-moderate-01 ease-out`                                                                                                       | `moderate-01` (150ms)                             | `motion-reduce:transition-none`                                               |
-| hover (row)              | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer                                                  | `fast-02` (110ms) + `productive-entrance`         | `motion-reduce:before:transition-none`                                        |
-| autoplay progress        | `transition-[width] duration-fast-01 ease-linear` on the hairline                                                                                       | `fast-01` (70ms)                                  | autoplay does not start under reduced motion, so the hairline never moves     |
+| Trigger                  | Animation / Transition                                                                                                                                                                                                                                       | Token (see `contributing/docs/TOKENS.md` § Animations) | Reduced-motion fallback                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| selection change (media) | `transition-[translate,opacity] duration-moderate-02 ease-productive-entrance`; the inactive medium rests one `--spacing-lg` below and rises into place                                                                                                      | `moderate-02` (240ms) + `productive-entrance`          | `motion-reduce:translate-y-0 motion-reduce:transition-none` (swaps instantly)                           |
+| selection change (row)   | `transition-colors duration-moderate-01 ease-out`                                                                                                                                                                                                            | `moderate-01` (150ms)                                  | `motion-reduce:transition-none`                                                                         |
+| hover (row)              | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer                                                                                                                                                       | `fast-02` (110ms) + `productive-entrance`              | `motion-reduce:before:transition-none`                                                                  |
+| autoplay progress        | `animate-autoplay-progress` on the hairline: one `scale` from 0 to full width across the inline start, its `animation-duration` set on the element to `autoplayInterval`, restarted per slide and held with `animation-play-state` while the rotation pauses | `autoplay-progress` (linear)                           | `motion-reduce:animate-none`; autoplay does not start under reduced motion, so the hairline never moves |
 
 ## Tokens
 
-| Region                                         | Token (DESIGN.md)          |
+| Region                                         | Token (TOKENS.md)          |
 | ---------------------------------------------- | -------------------------- |
 | typography (tab title)                         | `.text-heading-md`         |
 | typography (tab description)                   | `.text-body-md`            |
@@ -171,20 +178,29 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: each row's title is a real `<button>` carrying `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
-- Keyboard map: `Tab` moves between rows and `Enter` / `Space` selects one — the rows are buttons, not clickable containers, so no key handler is bolted onto a `div`.
-- ARIA: the rows are a `<ul>` of `<li>`, each holding the button; the active button carries `aria-current="true"`. Each medium carries its tab's `alt` text, and the inactive media are `aria-hidden` so the frame announces one picture rather than all of them.
-- **Not `role="tablist"`.** A tab's label here is a heading and a paragraph — the copy is the content, and the media only illustrates it. Real tabs promise a roving `tabindex` and arrow-key navigation over short labels; this band is a list of claims a reader tabs through one at a time, so it is announced as the list it is rather than as a tab set whose keyboard contract it does not honour.
-- **WCAG 2.2.2 (pause, stop, hide):** autoplay is moving content, so it must be stoppable. It pauses while the band has hover or keyboard focus, resumes when they leave, and does not start at all under `prefers-reduced-motion`. A click selects a tab and restarts the count from that tab; it does not end the rotation.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the description is `var(--text-muted)`, a known theme-level shortfall on the light canvas (see `big-numbers`); every other text region is `var(--text-default)`.
+- Keyboard map: from the large breakpoint `Tab` enters the tab set on the selected tab, the arrow keys move and select (wrapping), `Home` / `End` jump to the ends, and `Tab` leaves for the medium; below it `Tab` moves between the row buttons and `Enter` / `Space` opens one. The rows are buttons, not clickable containers, so no key handler is bolted onto a `div`.
+- ARIA: from the large breakpoint, where the media sit beside the rows, the rows follow the tab pattern: the `<ul>` is a `tablist` (`aria-orientation` follows the tabs side), each `<li>` and its `<h3>` are presentational, each button is a `tab` with `aria-selected`, a roving `tabindex` and `aria-controls` naming its medium, and each medium is a `tabpanel` labelled by its tab. Arrow keys move the selection (wrapping, mirrored under right-to-left), Home and End jump to the first and last tab. Below the large breakpoint, where each row holds its own medium, every button is a disclosure: `aria-expanded` and `aria-controls` naming the medium inside its row. Each medium carries its tab's `alt` text, and the inactive media are `aria-hidden` and `inert` so the frame announces one picture rather than all of them, and a control inside a hidden scene (a play button, a code tab, a copy button) is out of the tab order.
+- **A tab set beside the media, disclosures when stacked.** Each row switches the medium a sighted reader sees beside it, so a screen-reader user must learn that a medium changed and where it is: the tab pattern ties each title to its medium (`aria-controls`, `aria-labelledby`) and honours its keyboard contract. The row's description stays a paragraph next to its tab, read as the tab's neighbour. Below `lg` the medium opens inside the row, which is a disclosure, not a tab set (decision A5-F08-1).
+- **WCAG 2.2.2 (pause, stop, hide):** autoplay is moving content, so it must be stoppable. While the timer can run, a visible outlined `IconButton` at the band's top end pauses it ("Pause rotation") and resumes it ("Resume rotation"), for touch and screen-reader users alike; the rotation also pauses while the band has hover or keyboard focus, resumes when they leave, and does not start at all under `prefers-reduced-motion` or below `lg` (the pause control renders only while the timer can run). A click selects a tab and restarts the count from that tab; it does not end the rotation.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the description is `var(--text-muted)`, a known theme-level shortfall on the light canvas (see `stats`); every other text region is `var(--text-default)`.
 - Touch target ≥40×40 px — each row's button spans the whole row, well past the minimum.
 
-## Stories (Storybook)
+## Internationalization
+
+| Key                     | English source    | Override prop |
+| ----------------------- | ----------------- | ------------- |
+| `common.pauseRotation`  | `Pause rotation`  | —             |
+| `common.resumeRotation` | `Resume rotation` | —             |
+
+- Every other string is copy passed through `items`.
+
+## Examples
 
 - Default
 - Sizes — composite story rendering every `size` value, so the row-height ladder that the media column measures from is visible in one frame
-- TabCounts — composite story rendering three tabs beside the media (`left`) and five tabs in a row (`top`), the two counts the band is built for
-- Positions — composite story rendering `left`, `right`, `top` and `bottom`, so the four placements and their seams are visible in one frame
-- Static — `autoPlay` off and `selectOn` on click, so the band rests on its first tab and a reader can inspect it without it moving
+- TabCounts — composite story rendering three tabs beside the media (`start`) and five tabs in a row (`top`), the two counts the band is built for
+- Positions — composite story rendering `start`, `end`, `top` and `bottom`, so the four placements and their seams are visible in one frame
+- Static — `autoplay` off and `selectOn` on click, so the band rests on its first tab and a reader can inspect it without it moving
 
 ## Constraints — DO NOT
 
@@ -193,19 +209,17 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 - Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
 - Do not add events beyond the Events table above. Same rule for slots and sub-components.
-- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not invent imports. Every `@aziontech/ui/*` path must exist in `packages/ui/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
 - Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
-- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `contributing/rules/dependencies.md`.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
-- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
-- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + TabCounts + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/TabCounts into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `contributing/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `contributing/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `contributing/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + TabCounts + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/TabCounts into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `contributing/docs/TOKENS.md` or `contributing/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `contributing/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

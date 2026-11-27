@@ -1,0 +1,19 @@
+{
+ "variants": [
+  {
+   "name": "Initializing",
+   "summary": "The Initializing overlay mid-upload, held inside a layout-contained frame here so it does not cover the docs page: two files uploaded, the third uploading, two queued, in an `UploadProgress` card with each file's status in words, Cancel and the summary.",
+   "file": "blocks/state/state-project-intake/variants/initializing.vue"
+  },
+  {
+   "name": "UploadError",
+   "summary": "A file fails mid-upload: its `UploadProgress` row shows the reason and Retry, a danger `Alert` above the card says one file could not be uploaded with Retry, and the rest keep going.",
+   "file": "blocks/state/state-project-intake/variants/upload-error.vue"
+  }
+ ],
+ "sfcFile": "blocks/state/state-project-intake/state-project-intake.vue",
+ "guidelinesFile": "blocks/state/state-project-intake/guidelines.md",
+ "fileSources": [
+  "sample.ts"
+ ]
+}

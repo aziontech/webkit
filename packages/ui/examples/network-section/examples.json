@@ -1,0 +1,40 @@
+{
+  "component": "network-section",
+  "title": "Components/Marketing/Sections/NetworkSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the site places it: the region overline, the headline and lead over the world map, four claim chips, and a floor of four client outcomes with their marks. A band with no title renders nothing at all.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "The three floors stacked: `outcomes` closes the band with four client quotes on one column each, `benefits` with three benefit topics in one row, and `stats` with four headline figures; the stats band also keeps one claim to wider screens (`mobile: false`) and carries an anchor. The map, title, lead and claims above are the same in all three.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "Columns",
+      "summary": "The `outcomes` floor takes one column per entry, two at least and four at most: two, three and four outcomes. The `benefits` floor balances up to three columns: three benefits fill one row, four split 2 × 2.",
+      "file": "columns.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "ClientQuotes",
+      "summary": "Four client outcomes on the floor, each a quote with its figure highlighted and signed by the client logo; Dafiti and Fourbank are drawn in one ink that follows the theme.",
+      "file": "site-client-quotes.vue",
+      "json": "site-client-quotes.json"
+    },
+    {
+      "name": "Benefits",
+      "summary": "Three network benefits on the floor, one topic each, in one row of three.",
+      "file": "site-benefits.vue",
+      "json": "site-benefits.json"
+    }
+  ],
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["ClientQuotes", "ClientQuotesJson", "Benefits", "BenefitsJson"]
+}

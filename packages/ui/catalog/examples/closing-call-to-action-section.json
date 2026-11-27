@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The `panel` close a solution page ends with: the overline, the headline and the sentence on one surface, the white and the outlined button side by side, over the short closing frame. A band with no title renders nothing.",
+   "file": "examples/closing-call-to-action-section/default.vue"
+  },
+  {
+   "name": "Variants",
+   "summary": "The layouts stacked: the `panel` close with two actions, then the single-action `panel` close, over the short closing frame, then the loud `primary` close under its pixelated texture.",
+   "file": "examples/closing-call-to-action-section/variants.vue"
+  },
+  {
+   "name": "Command",
+   "summary": "The `primary` close with a copyable install command before its actions: the line draws the `$` prompt and copies the command as written.",
+   "file": "examples/closing-call-to-action-section/command.vue"
+  }
+ ]
+}

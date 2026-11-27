@@ -1,0 +1,24 @@
+<script setup>
+  import ToggleGroup from '@aziontech/ui/toggle-group'
+
+  const options = [
+    { label: 'Create a new repository', value: 'new' },
+    { label: 'Use an existing repository', value: 'existing' }
+  ]
+</script>
+
+<template>
+  <div class="flex w-full max-w-(--container-lg) flex-col gap-(--spacing-md)">
+    <ToggleGroup
+      :options="options"
+      default-value="new"
+      aria-label="Hug its labels"
+    />
+    <ToggleGroup
+      :options="options"
+      default-value="new"
+      aria-label="Fill the row"
+      fluid
+    />
+  </div>
+</template>

@@ -1,0 +1,22 @@
+{
+ "purpose": "Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag. A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant=\"primary\"`, Blocked in `severity=\"danger\"`). It takes an optional leading icon and two sizes, and has one shape; it is never interactive and never counts.",
+ "useWhen": [
+  "Label or categorize an item with a short descriptive text, optionally with a leading icon.",
+  "Pick the colour from one of two sets, never both on one tag: `severity` when the word is an outcome or a status (`neutral`, `info`, `success`, `warning`, `danger`), `variant` when it is a category that needs emphasis (`primary`, `accent`, `contrast`). `severity` wins when both are set.",
+  "The logo orange (`variant=\"primary\"`) marks **one** value per list or card. When several values need emphasis, use `severity` or `accent`."
+ ],
+ "avoidWhen": [
+  "It is purely a count or one-glance status label → use `badge`.",
+  "The user can select or remove it (filters, multi-select values) → use `chip`."
+ ],
+ "related": [
+  "`badge` — denser count/short-label indicator with no icon affordance.",
+  "`chip` — interactive/removable token."
+ ],
+ "bestPractices": [
+  "Colour comes from `variant` or `severity`; the optional icon is decorative — keep it `aria-hidden`.",
+  "Pick the colour by meaning with the table in When to use. Do not use `danger` for a state that is only off (Inactive): it reads as an error.",
+  "Do not restyle a Tag with colour classes to get a tint; every tint is a `variant` or a `severity`.",
+  "Do not round a Tag into a pill with a class: every Tag has the one control shape, so tags in a row line up."
+ ]
+}

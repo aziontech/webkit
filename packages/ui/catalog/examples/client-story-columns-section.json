@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Three success stories in equal columns, each mark on its client brand colour, read from the client registry by name, with the story line beneath. Hover a column to reveal its link line. A band with no cells renders nothing at all.",
+   "file": "examples/client-story-columns-section/default.vue"
+  },
+  {
+   "name": "Reveal on hover",
+   "summary": "Three client cards painted in each client's colours. Hover or focus a card on a wide canvas to open it: the logo rises and the story line and Read story cue slide in. On narrow canvases every card is open.",
+   "file": "examples/client-story-columns-section/reveal-hover.vue"
+  }
+ ]
+}

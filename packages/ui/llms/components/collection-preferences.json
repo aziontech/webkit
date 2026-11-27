@@ -1,0 +1,133 @@
+{
+ "name": "collection-preferences",
+ "binding": "CollectionPreferences",
+ "import": "@aziontech/ui/collection-preferences",
+ "treeShakeableImport": "@aziontech/ui/collection-preferences",
+ "category": "data",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wrapped lines, striped rows and density. Changes are a draft until Confirm; Cancel, `Esc` and the close button discard them. It holds no saved state itself: `useCollection` saves the confirmed value in `localStorage` and `preferencesProps` binds the value, the columns and the page sizes in one `v-bind`. It is the one column chooser of a table. Placed in a DataTable's `toolbar` slot with no `columns`, it reads the table through context: the columns are the table's hideable leaf columns (a column with `hideable: false` is listed locked), the draft starts from the table's column visibility and order, and Confirm writes both back to the table (`update:columnVisibility`) besides emitting `confirm` and `update:preferences`. Bound to `useCollection`, `preferencesProps` supplies `columns` and the context is not read.",
+ "setup": null,
+ "useWhen": [
+  "Use CollectionPreferences for every 'how this list looks' setting: page size, visible and ordered columns, density, wrap.",
+  "A table or card collection whose people choose how many items a page shows and which fields they see.",
+  "Any collection driven by `useCollection`, which saves the result per collection."
+ ],
+ "avoidWhen": [
+  "Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`."
+ ],
+ "related": [
+  "`use-collection` — saves the preferences; `preferencesProps` is the binding.",
+  "`data-table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order; inside its toolbar this panel edits its columns with no wiring.",
+  "`card-list` — takes the page size and the visible fields.",
+  "`property-filter` — sits beside it in the controls row."
+ ],
+ "bestPractices": [
+  "Lock the column that names the item (`locked: true`): a row without its name is unreadable.",
+  "Show only the sections the collection uses (`sections`): cards have no striped rows.",
+  "Keep the trigger at the end of the controls row, after Refresh and Download."
+ ],
+ "props": [
+  {
+   "name": "columns",
+   "type": "CollectionPreferencesColumn[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Columns to show, hide and order. Empty reads the enclosing DataTable's columns, or hides the columns section outside one."
+  },
+  {
+   "name": "pageSizeOptions",
+   "type": "number[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Page sizes offered. Empty hides the page size section."
+  },
+  {
+   "name": "sections",
+   "type": "CollectionPreferencesSection[]",
+   "default": "['page-size', 'columns', 'wrap-lines', 'striped', 'density']",
+   "required": "false",
+   "doc": "Sections the panel shows, in this order."
+  },
+  {
+   "name": "container",
+   "type": "'dialog' | 'drawer'",
+   "default": "'dialog'",
+   "required": "false",
+   "doc": "Opens in a centered dialog or a side drawer."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Panel title and trigger label. Empty uses the locale catalog."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the trigger."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  },
+  {
+   "name": "preferences",
+   "type": "CollectionPreferencesValue",
+   "default": "—",
+   "required": "false",
+   "doc": "Two-way value (`v-model:preferences`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "confirm",
+   "payload": "(event: MouseEvent, value: CollectionPreferencesValue)",
+   "notes": "Same value, for a handler that is not a model."
+  },
+  {
+   "name": "cancel",
+   "payload": "(event: MouseEvent)",
+   "notes": "Cancel was activated; the draft is discarded."
+  }
+ ],
+ "slots": [
+  {
+   "name": "trigger",
+   "scope": "{ open: () => void }",
+   "notes": "Replaces the cog button; call `open` to open the panel."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "file": "examples/collection-preferences/default.vue"
+  },
+  {
+   "name": "InADrawer",
+   "file": "examples/collection-preferences/in-a-drawer.vue"
+  },
+  {
+   "name": "Disabled",
+   "file": "examples/collection-preferences/disabled.vue"
+  }
+ ],
+ "docs": "components/collection-preferences.md"
+}

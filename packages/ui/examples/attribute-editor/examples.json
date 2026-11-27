@@ -1,0 +1,31 @@
+{
+  "component": "attribute-editor",
+  "title": "Components/Input/AttributeEditor",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Key and value rows with a per-cell error, a limit of ten rows and at least one row kept: Add focuses the new row's key, Remove moves focus to the next row and each change is announced.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "Rule criteria: conditions inside a group are joined by and, groups by or. Each group has its own Add condition; removing the last condition removes the group.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "CustomCells",
+      "summary": "A `Select` and a `Switch` replace the default inputs through the `cell-<key>` slots; each control still sits inside the cell's `Field` with its label.",
+      "file": "custom-cells.vue"
+    },
+    {
+      "name": "Reorderable",
+      "summary": "Request headers set top to bottom: drag a row by its grip, use Move up and Move down, or press Alt+Arrow Up and Alt+Arrow Down inside a row. Each move is announced and focus stays on the moved row.",
+      "file": "reorderable.vue"
+    },
+    {
+      "name": "EmptyAndDisabled",
+      "summary": "An empty editor with its `empty` text and the Add button, and a `disabled` editor whose cells, reorder and remove controls are all off.",
+      "file": "empty-and-disabled.vue"
+    }
+  ]
+}

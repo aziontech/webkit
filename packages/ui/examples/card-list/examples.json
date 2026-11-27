@@ -1,0 +1,31 @@
+{
+  "component": "card-list",
+  "title": "Components/Data/CardList",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A collection shown as cards: the `header` slot names each card and the default slot lays out its fields. Four columns in a wide container, then three, two and one as it narrows (container queries, not the viewport).",
+      "file": "default.vue"
+    },
+    {
+      "name": "Selectable",
+      "summary": "Bound to `useCollection` with multi selection: each card gets a checkbox named by its header, a visible Select all items sits above the cards, and the selection survives paging.",
+      "file": "selectable.vue"
+    },
+    {
+      "name": "SingleSelection",
+      "summary": "`selection-mode=\"single\"` with `v-model:selected-keys`: one radio per card named by its header, and no Select all.",
+      "file": "single-selection.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "`loading` shows placeholder cards and sets `aria-busy` while the items load.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "With no items the default empty state shows; the `empty` slot replaces it with resource copy and a create action.",
+      "file": "empty.vue"
+    }
+  ]
+}

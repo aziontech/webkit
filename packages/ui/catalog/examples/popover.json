@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A `Button` trigger that opens the popover. The panel content is composed by part — here a header (title + close) and a free-form body.",
+   "file": "examples/popover/default.vue"
+  },
+  {
+   "name": "Placements",
+   "summary": "The four vertical corners and the two inline sides (`side=\"end\"`, `side=\"start\"`) side-by-side; every side takes `align` `start`, `center` or `end`, and `start` / `end` follow the text direction. Click a trigger to open its panel and see how it anchors against the trigger.",
+   "file": "examples/popover/placements.vue"
+  },
+  {
+   "name": "AutoPlacement",
+   "summary": "`side=\"auto\"` lets the popover choose the side with the most room at open time. The four triggers below all use the same value. Click one to open its panel: each, anchored near a different viewport corner, resolves toward the side with the most available space.",
+   "file": "examples/popover/auto-placement.vue"
+  }
+ ]
+}

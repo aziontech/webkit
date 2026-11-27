@@ -1,0 +1,26 @@
+{
+  "component": "conversation",
+  "title": "Components/AI/Conversation",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A short thread in a fixed-height log with the composer floating over its bottom (`composer` slot): the reader's questions at the inline end, the assistant's responses at the start, follow-up questions after the last one, and the thread scrolling under the composer.",
+      "file": "default.vue"
+    },
+    {
+      "name": "StartAlignment",
+      "summary": "The same thread in a narrow panel with every message at the inline start, as a drawer or side panel shows it.",
+      "file": "start-alignment.vue"
+    },
+    {
+      "name": "LongThread",
+      "summary": "Twelve turns that overflow the log: it opens at the newest message, stops following when the reader scrolls up, and the round Scroll to the latest message button above the floating composer brings them back.",
+      "file": "long-thread.vue"
+    },
+    {
+      "name": "EarlierMessages",
+      "summary": "The log opens on the three latest turns of a longer thread: Load earlier messages (or scrolling near the top) loads three older turns at a time while the message in view stays in place, until the start of the thread.",
+      "file": "earlier-messages.vue"
+    }
+  ]
+}

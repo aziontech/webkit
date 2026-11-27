@@ -1,0 +1,848 @@
+import userEvent from '@testing-library/user-event'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+import { defineComponent, nextTick, ref } from 'vue'
+import { compileTemplate, parse } from 'vue/compiler-sfc'
+
+import ClientRouting from '../../../../examples/sidebar-menu/client-routing.vue'
+import DrillExample from '../../../../examples/sidebar-menu/drill.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import SidebarMenu, {
+  SidebarMenuBack,
+  SidebarMenuGroup,
+  type SidebarMenuGroupNode,
+  SidebarMenuItem,
+  type SidebarMenuNode,
+  SidebarMenuSub,
+  SidebarMenuSubContent,
+  SidebarMenuSubTrigger
+} from './index'
+import menuGroupSource from './sidebar-menu-group/sidebar-menu-group.vue?raw'
+
+const COMPONENTS = {
+  SidebarMenu,
+  SidebarMenuBack,
+  SidebarMenuGroup,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubContent,
+  SidebarMenuSubTrigger
+}
+
+const composed = (
+  props: Record<string, unknown> = {},
+  options: { inlineOpen?: boolean; disabled?: boolean } = {}
+) =>
+  defineComponent({
+    components: COMPONENTS,
+    setup: () => ({
+      props,
+      inlineOpen: options.inlineOpen ?? false,
+      disabled: options.disabled ?? false
+    }),
+    template: `
+      <SidebarMenu v-bind="props" aria-label="Console navigation">
+        <SidebarMenuBack />
+        <SidebarMenuGroup label="User agents">
+          <SidebarMenuItem label="End User" icon="az az-user" href="/end-user" />
+          <SidebarMenuItem label="Web Browser" href="/web-browser" />
+        </SidebarMenuGroup>
+        <SidebarMenuGroup label="Azion platform">
+          <SidebarMenuSub :default-open="inlineOpen">
+            <SidebarMenuSubTrigger label="Getting started" type="inline" />
+            <SidebarMenuSubContent>
+              <SidebarMenuItem label="Installation" href="/docs/install" />
+            </SidebarMenuSubContent>
+          </SidebarMenuSub>
+          <SidebarMenuSub>
+            <SidebarMenuSubTrigger
+              label="Settings"
+              type="drill"
+              href="/settings"
+              :disabled="disabled"
+            />
+            <SidebarMenuSubContent>
+              <SidebarMenuGroup label="Account">
+                <SidebarMenuItem label="General" href="/settings/general" />
+              </SidebarMenuGroup>
+            </SidebarMenuSubContent>
+          </SidebarMenuSub>
+        </SidebarMenuGroup>
+      </SidebarMenu>
+    `
+  })
+
+const GROUPS: SidebarMenuGroupNode[] = [
+  {
+    label: 'User agents',
+    items: [
+      { id: 'end-user', label: 'End User', icon: 'az az-user', href: '/end-user' },
+      { id: 'web-browser', label: 'Web Browser', href: '/web-browser' }
+    ]
+  },
+  {
+    label: 'Azion platform',
+    items: [
+      {
+        id: 'settings',
+        label: 'Settings',
+        type: 'drill',
+        href: '/settings',
+        children: [{ id: 'general', label: 'General', href: '/settings/general' }]
+      },
+      { id: 'blocked', label: 'Blocked', href: '/blocked', disabled: true }
+    ]
+  }
+]
+
+const restored = (options: { enterOnMount?: boolean } = {}) =>
+  defineComponent({
+    components: COMPONENTS,
+    setup: () => ({ groups: GROUPS, enterOnMount: options.enterOnMount ?? false }),
+    template: `
+      <SidebarMenu
+        :groups="groups"
+        :path="['settings']"
+        :enter-on-mount="enterOnMount"
+        aria-label="Console navigation"
+      >
+        <SidebarMenuBack />
+      </SidebarMenu>
+    `
+  })
+
+const NESTED: SidebarMenuGroupNode[] = [
+  {
+    items: [
+      {
+        id: 'settings',
+        label: 'Settings',
+        type: 'drill',
+        href: '/settings',
+        groups: [
+          {
+            items: [
+              {
+                id: 'security',
+                label: 'Security',
+                type: 'drill',
+                href: '/settings/security',
+                children: [{ id: 'tokens', label: 'Tokens', href: '/settings/tokens' }]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
+
+const nested = (backProps = '') =>
+  defineComponent({
+    components: COMPONENTS,
+    setup: () => ({ groups: NESTED }),
+    template: `
+      <SidebarMenu :groups="groups" aria-label="Console navigation">
+        <SidebarMenuBack ${backProps} />
+      </SidebarMenu>
+    `
+  })
+
+const arrow = (view: ReturnType<typeof render>, label: string) =>
+  view.getByRole('button', { name: `Open ${label} menu` })
+
+const arrowOfKind = (view: ReturnType<typeof render>, type: string) => {
+  const row = view
+    .getAllByTestId('sidebar-menu-sub-trigger')
+    .find((el) => el.getAttribute('data-type') === type)
+  const el = row?.querySelector('[data-testid="sidebar-menu-sub-trigger__chevron"]')
+  if (!(el instanceof globalThis.HTMLElement)) throw new Error(`no ${type} arrow rendered`)
+  return el
+}
+
+describe('SidebarMenu', () => {
+  describe('composition, drill stack and data mode', () => {
+    it('attaches every sub-component to the compound root for dot-notation', () => {
+      expect(SidebarMenu).toBeDefined()
+      expect(SidebarMenu?.Group).toBe(SidebarMenuGroup)
+      expect(SidebarMenu?.Item).toBe(SidebarMenuItem)
+      expect(SidebarMenu?.Sub).toBe(SidebarMenuSub)
+      expect(SidebarMenu?.SubTrigger).toBe(SidebarMenuSubTrigger)
+      expect(SidebarMenu?.SubContent).toBe(SidebarMenuSubContent)
+      expect(SidebarMenu?.Back).toBe(SidebarMenuBack)
+    })
+
+    it('renders the navigation region with the fallback testid and its accessible name', () => {
+      const view = render(composed())
+
+      const root = view.getByTestId('sidebar-menu')
+      expect(root.getAttribute('role')).toBe('navigation')
+      expect(root.getAttribute('aria-label')).toBe('Console navigation')
+    })
+
+    it('lets a consumer override data-testid', () => {
+      const view = render(composed({ 'data-testid': 'console-menu' }))
+
+      expect(view.getByTestId('console-menu')).toBeTruthy()
+      expect(view.queryByTestId('sidebar-menu')).toBeNull()
+    })
+
+    it('lets the host own the landmark by suppressing the role', () => {
+      const view = render(composed({ role: 'presentation' }))
+
+      expect(view.getByTestId('sidebar-menu').getAttribute('role')).toBe('presentation')
+    })
+
+    it('drops its accessible name when the host owns the landmark', async () => {
+      const view = render(composed({ role: 'presentation' }))
+
+      expect(view.getByTestId('sidebar-menu').getAttribute('aria-label')).toBeNull()
+      await expectNoA11yViolations(view.container)
+    })
+
+    it('renders nothing with neither groups nor composed content', () => {
+      const view = render(SidebarMenu)
+
+      expect(view.queryByTestId('sidebar-menu')).toBeNull()
+    })
+
+    it('serves its groups as live markup, never inside an inert <template>', () => {
+      const { descriptor } = parse(menuGroupSource, { filename: 'menu-group.vue' })
+      const { code, errors } = compileTemplate({
+        source: descriptor.template?.content ?? '',
+        filename: 'menu-group.vue',
+        id: 'menu-group',
+        ssr: true,
+        ssrCssVars: []
+      })
+
+      expect(errors).toEqual([])
+      expect(code).toContain('<section')
+      expect(code).not.toContain('<template>')
+    })
+
+    it('renders the data-driven tree through the same sub-components', () => {
+      const view = render(SidebarMenu, { props: { groups: GROUPS } })
+
+      expect(view.getAllByTestId('sidebar-menu-group')).toHaveLength(2)
+      expect(view.getByRole('link', { name: 'End User' })).toBeTruthy()
+      expect(view.getByRole('link', { name: 'Web Browser' })).toBeTruthy()
+      expect(view.getByTestId('sidebar-menu-sub-trigger').getAttribute('data-type')).toBe('drill')
+    })
+
+    it('marks the activeId node as the current page', () => {
+      const view = render(SidebarMenu, { props: { groups: GROUPS, activeId: 'end-user' } })
+
+      expect(view.getByRole('link', { name: 'End User' }).getAttribute('aria-current')).toBe('page')
+      expect(
+        view.getByRole('link', { name: 'Web Browser' }).getAttribute('aria-current')
+      ).toBeNull()
+    })
+
+    it('emits navigate with the DOM event first and the activated node second', async () => {
+      const events: Array<[globalThis.MouseEvent, SidebarMenuNode]> = []
+      const view = render(SidebarMenu, {
+        props: {
+          groups: GROUPS,
+          onNavigate: (event: globalThis.MouseEvent, node: SidebarMenuNode) =>
+            events.push([event, node])
+        }
+      })
+
+      await fireEvent.click(view.getByRole('link', { name: 'End User' }))
+
+      expect(events).toHaveLength(1)
+      expect(events[0][0]).toBeInstanceOf(globalThis.MouseEvent)
+      expect(events[0][1].id).toBe('end-user')
+    })
+
+    it('routes client-side from href rows: navigate hands the href to the router and moves the selection', async () => {
+      const view = render(ClientRouting)
+      const functions = view.getByRole('link', { name: 'Functions' })
+
+      expect(functions.getAttribute('href')).toBe('/functions')
+      expect(view.getByRole('link', { name: 'Applications' }).getAttribute('aria-current')).toBe(
+        'page'
+      )
+
+      await fireEvent.click(functions)
+
+      expect(view.getByTestId('client-routing-path').textContent).toContain('/functions')
+      expect(functions.getAttribute('aria-current')).toBe('page')
+    })
+
+    it('a drill label navigates without opening its level', async () => {
+      const events: SidebarMenuNode[] = []
+      const paths: string[][] = []
+      const view = render(SidebarMenu, {
+        props: {
+          groups: GROUPS,
+          onNavigate: (_event: globalThis.MouseEvent, node: SidebarMenuNode) => events.push(node),
+          'onUpdate:path': (value: string[]) => paths.push(value)
+        }
+      })
+
+      const link = view.getByRole('link', { name: 'Settings' })
+      expect(link.getAttribute('href')).toBe('/settings')
+
+      await fireEvent.click(link)
+
+      expect(events.map((node) => node.id)).toEqual(['settings'])
+      expect(paths).toEqual([])
+      expect(view.queryByRole('link', { name: 'General' })).toBeNull()
+    })
+
+    it('the drill arrow opens the level without navigating', async () => {
+      const events: SidebarMenuNode[] = []
+      const paths: string[][] = []
+      const view = render(SidebarMenu, {
+        props: {
+          groups: GROUPS,
+          onNavigate: (_event: globalThis.MouseEvent, node: SidebarMenuNode) => events.push(node),
+          'onUpdate:path': (value: string[]) => paths.push(value)
+        }
+      })
+
+      await userEvent.click(arrow(view, 'Settings'))
+
+      await waitFor(() => expect(paths[0]).toEqual(['settings']))
+      expect(events).toEqual([])
+      await waitFor(() => expect(view.getByRole('link', { name: 'General' })).toBeTruthy())
+    })
+
+    it('a link-less condensed row reveals its children from the WHOLE row and emits no navigate', async () => {
+      const events: SidebarMenuNode[] = []
+      const view = render(SidebarMenu, {
+        props: {
+          groups: [
+            {
+              items: [
+                {
+                  id: 'getting-started',
+                  label: 'Getting started',
+                  children: [{ id: 'install', label: 'Installation', href: '/docs/install' }]
+                }
+              ]
+            }
+          ] satisfies SidebarMenuGroupNode[],
+          onNavigate: (_event: globalThis.MouseEvent, node: SidebarMenuNode) => events.push(node)
+        }
+      })
+
+      const row = view.getByRole('button', { name: 'Getting started' })
+      expect(row.getAttribute('aria-expanded')).toBe('false')
+
+      await fireEvent.click(row)
+
+      await waitFor(() => expect(row.getAttribute('aria-expanded')).toBe('true'))
+      expect(view.getByRole('link', { name: 'Installation' })).toBeTruthy()
+      expect(events).toEqual([])
+    })
+
+    it('a referenced condensed row splits into a link and an arrow', async () => {
+      const events: SidebarMenuNode[] = []
+      const view = render(SidebarMenu, {
+        props: {
+          groups: [
+            {
+              items: [
+                {
+                  id: 'getting-started',
+                  label: 'Getting started',
+                  href: '/docs/getting-started',
+                  children: [{ id: 'install', label: 'Installation', href: '/docs/install' }]
+                }
+              ]
+            }
+          ] satisfies SidebarMenuGroupNode[],
+          onNavigate: (_event: globalThis.MouseEvent, node: SidebarMenuNode) => events.push(node)
+        }
+      })
+
+      const link = view.getByRole('link', { name: 'Getting started' })
+      expect(link.getAttribute('href')).toBe('/docs/getting-started')
+      expect(link.hasAttribute('aria-expanded')).toBe(false)
+
+      await userEvent.click(arrowOfKind(view, 'inline'))
+      await waitFor(() => expect(view.getByRole('link', { name: 'Installation' })).toBeTruthy())
+      expect(events).toEqual([])
+
+      await fireEvent.click(link)
+      expect(events.map((node) => node.id)).toEqual(['getting-started'])
+    })
+
+    it('renders a drill trigger icon and withholds one from an inline trigger', () => {
+      const view = render(SidebarMenu, {
+        props: {
+          groups: [
+            {
+              items: [
+                {
+                  id: 'settings',
+                  label: 'Settings',
+                  icon: 'az az-settings',
+                  type: 'drill',
+                  children: [{ id: 'general', label: 'General', href: '/settings/general' }]
+                },
+                {
+                  id: 'getting-started',
+                  label: 'Getting started',
+                  icon: 'az az-book',
+                  children: [{ id: 'install', label: 'Installation', href: '/docs/install' }]
+                }
+              ]
+            }
+          ] satisfies SidebarMenuGroupNode[]
+        }
+      })
+
+      const [drill, inline] = view.getAllByTestId('sidebar-menu-sub-trigger')
+      expect(drill.querySelector('[data-testid="sidebar-menu-sub-trigger__icon"] i')).toBeTruthy()
+      expect(inline.querySelector('[data-testid="sidebar-menu-sub-trigger__icon"]')).toBeNull()
+    })
+
+    it('renders a group title as static text that names the section and never folds it', () => {
+      const view = render(composed())
+
+      expect(view.queryByRole('button', { name: 'User agents' })).toBeNull()
+
+      const group = view.getAllByTestId('sidebar-menu-group')[0]
+      expect(group.hasAttribute('data-state')).toBe(false)
+      expect(view.queryByTestId('sidebar-menu-group__toggle')).toBeNull()
+
+      const label = view.getAllByTestId('sidebar-menu-group__label')[0]
+      expect(label.textContent?.trim()).toBe('User agents')
+      expect(group.getAttribute('aria-labelledby')).toBe(label.id)
+      expect(view.getByRole('region', { name: 'User agents' })).toBe(group)
+
+      expect(view.getByRole('link', { name: 'End User' })).toBeTruthy()
+    })
+
+    it('a link-less condensed row expands in place, wiring aria-expanded and aria-controls on the row', async () => {
+      const view = render(composed())
+
+      const trigger = view.getByRole('button', { name: 'Getting started' })
+      expect(trigger.getAttribute('data-testid')).toBe('sidebar-menu-sub-trigger__control')
+      expect(
+        trigger.closest('[data-testid="sidebar-menu-sub-trigger"]')?.getAttribute('data-type')
+      ).toBe('inline')
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+
+      const arrowButton = arrowOfKind(view, 'inline')
+      expect(arrowButton.getAttribute('tabindex')).toBe('-1')
+      expect(arrowButton.getAttribute('aria-hidden')).toBe('true')
+      expect(arrowButton.hasAttribute('aria-expanded')).toBe(false)
+      expect(view.queryByRole('link', { name: 'Installation' })).toBeNull()
+
+      await userEvent.click(trigger)
+
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
+      const content = view.getByRole('list', { name: 'Getting started' })
+      expect(trigger.getAttribute('aria-controls')).toBe(content.id)
+      expect(content.getAttribute('data-type')).toBe('inline')
+      expect(content.getAttribute('data-level')).toBe('0')
+      expect(view.getByRole('link', { name: 'Installation' })).toBeTruthy()
+    })
+
+    it('ArrowRight expands and ArrowLeft collapses a condensed sub', async () => {
+      const view = render(composed())
+      const trigger = view.getByRole('button', { name: 'Getting started' })
+
+      trigger.focus()
+      await fireEvent.keyDown(trigger, { key: 'ArrowRight' })
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
+
+      await fireEvent.keyDown(trigger, { key: 'ArrowLeft' })
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
+    })
+
+    const inlineSub = (open: { value?: boolean; events: boolean[] }) =>
+      defineComponent({
+        components: COMPONENTS,
+        setup: () => ({ open }),
+        template: `
+        <SidebarMenu aria-label="Console navigation">
+          <SidebarMenuGroup label="Azion platform">
+            <SidebarMenuSub
+              v-if="open.value === undefined"
+              @update:open="(value) => open.events.push(value)"
+            >
+              <SidebarMenuSubTrigger label="Getting started" type="inline" />
+              <SidebarMenuSubContent>
+                <SidebarMenuItem label="Installation" href="/docs/install" />
+              </SidebarMenuSubContent>
+            </SidebarMenuSub>
+            <SidebarMenuSub
+              v-else
+              v-model:open="open.value"
+              @update:open="(value) => open.events.push(value)"
+            >
+              <SidebarMenuSubTrigger label="Getting started" type="inline" />
+              <SidebarMenuSubContent>
+                <SidebarMenuItem label="Installation" href="/docs/install" />
+              </SidebarMenuSubContent>
+            </SidebarMenuSub>
+          </SidebarMenuGroup>
+        </SidebarMenu>
+      `
+      })
+
+    it('an inline sub with only an update:open listener stays uncontrolled and reports each toggle', async () => {
+      const state = ref<{ value?: boolean; events: boolean[] }>({ events: [] })
+      const view = render(inlineSub(state.value))
+      const trigger = view.getByRole('button', { name: 'Getting started' })
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+
+      await userEvent.click(trigger)
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
+      await userEvent.click(trigger)
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
+
+      expect(state.value.events).toEqual([true, false])
+    })
+
+    it('v-model:open drives an inline sub and receives its toggles', async () => {
+      const state = ref<{ value?: boolean; events: boolean[] }>({ value: true, events: [] })
+      const view = render(inlineSub(state.value))
+      const trigger = view.getByRole('button', { name: 'Getting started' })
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
+
+      await userEvent.click(trigger)
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
+      expect(state.value.value).toBe(false)
+      expect(state.value.events).toEqual([false])
+
+      state.value.value = true
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
+    })
+
+    it('renders no Back button at the root level', () => {
+      const view = render(composed())
+
+      expect(view.queryByTestId('sidebar-menu-back')).toBeNull()
+    })
+
+    it('a drill trigger pushes a level, focuses Back, and pops back to the trigger', async () => {
+      const paths: string[][] = []
+      const view = render(composed({ 'onUpdate:path': (value: string[]) => paths.push(value) }))
+
+      expect(view.getByRole('link', { name: 'Settings' }).hasAttribute('aria-expanded')).toBe(false)
+      const open = arrow(view, 'Settings')
+      expect(open.hasAttribute('aria-expanded')).toBe(false)
+
+      await userEvent.click(open)
+
+      await waitFor(() => expect(paths).toHaveLength(1))
+      expect(paths[0]).toHaveLength(1)
+
+      const back = await waitFor(() => view.getByTestId('sidebar-menu-back'))
+      expect(back.textContent?.trim()).toBe('Back')
+      expect(back.hasAttribute('aria-label')).toBe(false)
+      await waitFor(() => expect(document.activeElement).toBe(back))
+
+      const level = view.getByRole('group', { name: 'Settings' })
+      expect(level.getAttribute('data-type')).toBe('drill')
+      expect(level.getAttribute('data-state')).toBe('open')
+      expect(view.getByRole('link', { name: 'General' })).toBeTruthy()
+
+      const levelGroup = view.getByRole('region', { name: 'Account' })
+      expect(level.contains(levelGroup)).toBe(true)
+      expect(levelGroup.hasAttribute('aria-hidden')).toBe(false)
+      expect(levelGroup.hasAttribute('inert')).toBe(false)
+
+      for (const group of view.getAllByTestId('sidebar-menu-group')) {
+        if (level.contains(group)) continue
+        expect(group.getAttribute('aria-hidden')).toBe('true')
+        expect(group.hasAttribute('inert')).toBe(true)
+      }
+
+      await userEvent.click(back)
+
+      await waitFor(() => expect(paths[1]).toEqual([]))
+      await waitFor(() => expect(view.queryByTestId('sidebar-menu-back')).toBeNull())
+      await waitFor(() => expect(document.activeElement).toBe(open))
+      expect(view.getAllByTestId('sidebar-menu-group')[0].hasAttribute('inert')).toBe(false)
+    })
+
+    it('the data-driven drill stack carries the node ids', async () => {
+      const paths: string[][] = []
+      const view = render(SidebarMenu, {
+        props: { groups: GROUPS, 'onUpdate:path': (value: string[]) => paths.push(value) }
+      })
+
+      await userEvent.click(arrow(view, 'Settings'))
+
+      await waitFor(() => expect(paths[0]).toEqual(['settings']))
+    })
+
+    it('a stack supplied through v-model:path names its level and offers Back', async () => {
+      const view = render(restored())
+
+      const back = await waitFor(() => view.getByTestId('sidebar-menu-back'))
+      expect(back.textContent?.trim()).toBe('Back')
+      expect(view.getByRole('group', { name: 'Settings' })).toBeTruthy()
+      expect(view.getByRole('link', { name: 'General' })).toBeTruthy()
+    })
+
+    it('the back button names the level a pop lands on', async () => {
+      const view = render(nested())
+
+      await userEvent.click(arrow(view, 'Settings'))
+      const back = await waitFor(() => view.getByTestId('sidebar-menu-back'))
+      expect(back.textContent?.trim()).toBe('Back')
+
+      await userEvent.click(await waitFor(() => arrow(view, 'Security')))
+      await waitFor(() => expect(back.textContent?.trim()).toBe('Back to Settings'))
+
+      await userEvent.click(back)
+      await waitFor(() =>
+        expect(view.getByTestId('sidebar-menu-back').textContent?.trim()).toBe('Back')
+      )
+    })
+
+    it('label names the destination when it is the menu root', async () => {
+      const view = render(nested('label="app"'))
+
+      await userEvent.click(arrow(view, 'Settings'))
+
+      const back = await waitFor(() => view.getByTestId('sidebar-menu-back'))
+      expect(back.textContent?.trim()).toBe('Back to app')
+    })
+
+    it('a restored stack arrives in the push motion when enterOnMount is set', async () => {
+      const view = render(restored({ enterOnMount: true }))
+
+      const level = await waitFor(() => view.getByTestId('sidebar-menu-sub-content'))
+      expect(level.getAttribute('data-motion')).toBe('push')
+    })
+
+    it('a restored stack renders in place by default', async () => {
+      const view = render(restored())
+
+      const level = await waitFor(() => view.getByTestId('sidebar-menu-sub-content'))
+      expect(level.getAttribute('data-motion')).toBe('none')
+    })
+
+    it('an empty stack arrives in the pop motion when enterOnMount is set', async () => {
+      const view = render(SidebarMenu, { props: { groups: GROUPS, enterOnMount: true } })
+
+      await nextTick()
+      for (const group of view.getAllByTestId('sidebar-menu-group')) {
+        expect(group.getAttribute('data-motion')).toBe('pop')
+      }
+    })
+
+    it('an empty stack renders in place by default', async () => {
+      const view = render(SidebarMenu, { props: { groups: GROUPS } })
+
+      await nextTick()
+      for (const group of view.getAllByTestId('sidebar-menu-group')) {
+        expect(group.getAttribute('data-motion')).toBe('none')
+      }
+    })
+
+    it('a stack supplied through v-model:path restores focus to its trigger on pop', async () => {
+      const view = render(restored())
+
+      await userEvent.click(await waitFor(() => view.getByTestId('sidebar-menu-back')))
+
+      await waitFor(() => expect(globalThis.document.activeElement).toBe(arrow(view, 'Settings')))
+    })
+
+    it('pop() leaves the current level the way Back does, for a host with its own way back', async () => {
+      const path = ref(['settings'])
+      const view = render(
+        defineComponent({
+          components: COMPONENTS,
+          setup: () => ({ groups: GROUPS, path, menu: ref<{ pop: () => void } | null>(null) }),
+          template: `
+          <button type="button" @click="menu?.pop()">Leave level</button>
+          <SidebarMenu ref="menu" v-model:path="path" :groups="groups" aria-label="Console navigation" />
+        `
+        })
+      )
+
+      await waitFor(() => view.getByRole('group', { name: 'Settings' }))
+      await userEvent.click(view.getByRole('button', { name: 'Leave level' }))
+
+      await waitFor(() => expect(path.value).toEqual([]))
+      await waitFor(() => expect(globalThis.document.activeElement).toBe(arrow(view, 'Settings')))
+    })
+
+    it('Escape pops one drill level', async () => {
+      const paths: string[][] = []
+      const view = render(composed({ 'onUpdate:path': (value: string[]) => paths.push(value) }))
+
+      await userEvent.click(arrow(view, 'Settings'))
+      await waitFor(() => expect(paths).toHaveLength(1))
+
+      await fireEvent.keyDown(view.getByTestId('sidebar-menu-back'), { key: 'Escape' })
+
+      await waitFor(() => expect(paths[1]).toEqual([]))
+    })
+
+    it('a disabled row is out of the tab order and emits no navigate', async () => {
+      const events: Array<[globalThis.MouseEvent, SidebarMenuNode]> = []
+      const view = render(SidebarMenu, {
+        props: {
+          groups: GROUPS,
+          onNavigate: (event: globalThis.MouseEvent, node: SidebarMenuNode) =>
+            events.push([event, node])
+        }
+      })
+
+      const blocked = view.getByRole('button', { name: 'Blocked' })
+      expect(blocked.hasAttribute('disabled')).toBe(true)
+      expect(blocked.getAttribute('aria-disabled')).toBe('true')
+
+      await fireEvent.click(blocked)
+
+      expect(events).toEqual([])
+    })
+
+    it('a disabled drill trigger pushes nothing', async () => {
+      const paths: string[][] = []
+      const view = render(
+        composed({ 'onUpdate:path': (value: string[]) => paths.push(value) }, { disabled: true })
+      )
+
+      expect(view.queryByRole('link', { name: 'Settings' })).toBeNull()
+      const settings = view.getByTestId('sidebar-menu-sub-trigger__reference')
+      expect(settings.getAttribute('data-disabled')).toBe('')
+      expect(settings.getAttribute('aria-disabled')).toBe('true')
+      expect(settings.hasAttribute('href')).toBe(false)
+      expect(settings.getAttribute('tabindex')).toBe('-1')
+
+      const open = arrow(view, 'Settings')
+      expect(open.hasAttribute('disabled')).toBe(true)
+
+      await fireEvent.click(settings)
+      await fireEvent.keyDown(settings, { key: 'ArrowRight' })
+      await fireEvent.click(open)
+
+      expect(paths).toEqual([])
+      expect(view.queryByTestId('sidebar-menu-back')).toBeNull()
+    })
+
+    it('has no axe violations composed, with an inline sub expanded', async () => {
+      const view = render(composed({}, { inlineOpen: true }))
+
+      await expectNoA11yViolations(view.container)
+    })
+
+    it('has no axe violations in data-driven mode', async () => {
+      const view = render(SidebarMenu, { props: { groups: GROUPS, activeId: 'end-user' } })
+
+      await expectNoA11yViolations(view.container)
+    })
+  })
+
+  describe('SidebarMenuGroup slot presence', () => {
+    it('follows a v-if label slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { getByTestId, queryByTestId } = render({
+        components: COMPONENTS,
+        setup: () => ({ shown }),
+        template: `
+        <SidebarMenu aria-label="Console navigation">
+          <SidebarMenuGroup aria-label="Fallback name">
+            <template v-if="shown" #label><span data-testid="probe">User agents</span></template>
+            <SidebarMenuItem label="End User" href="/end-user" />
+          </SidebarMenuGroup>
+        </SidebarMenu>
+      `
+      })
+      const group = getByTestId('sidebar-menu-group')
+      expect(queryByTestId('sidebar-menu-group__label')).toBeNull()
+      expect(group.getAttribute('aria-label')).toBe('Fallback name')
+
+      shown.value = true
+      await nextTick()
+      const label = getByTestId('sidebar-menu-group__label')
+      expect(queryByTestId('probe')).not.toBeNull()
+      expect(group.getAttribute('aria-labelledby')).toBe(label.id)
+      expect(group.hasAttribute('aria-label')).toBe(false)
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('sidebar-menu-group__label')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
+      expect(group.hasAttribute('aria-labelledby')).toBe(false)
+      expect(group.getAttribute('aria-label')).toBe('Fallback name')
+    })
+  })
+
+  describe('audit fixes', () => {
+    it('puts the active, disabled and icon state on the interactive element as data attributes', () => {
+      const view = render(
+        defineComponent({
+          components: { SidebarMenuItem },
+          template: `
+          <ul>
+            <SidebarMenuItem label="Home" href="https://example.com" icon="az az-home" active />
+            <SidebarMenuItem label="Billing" disabled />
+          </ul>`
+        })
+      )
+      const [home, billing] = view.getAllByTestId('sidebar-menu-item')
+      const link = home!.querySelector('a') as HTMLElement
+      expect(link.hasAttribute('data-active')).toBe(true)
+      expect(link.hasAttribute('data-icon')).toBe(true)
+      expect(link.hasAttribute('data-disabled')).toBe(false)
+      const button = billing!.querySelector('button') as HTMLElement
+      expect(button.hasAttribute('data-disabled')).toBe(true)
+      expect(button.hasAttribute('data-active')).toBe(false)
+    })
+
+    it('emits click on a sub-trigger with the event and its label and href', async () => {
+      const calls: unknown[][] = []
+      const { getByTestId } = render(
+        defineComponent({
+          components: COMPONENTS,
+          setup: () => ({ onClick: (...args: unknown[]) => calls.push(args) }),
+          template: `
+          <SidebarMenu aria-label="Docs">
+            <SidebarMenuGroup>
+              <SidebarMenuSub>
+                <SidebarMenuSubTrigger label="Guides" type="inline" href="/guides" @click="onClick" />
+                <SidebarMenuSubContent><SidebarMenuItem label="Intro" /></SidebarMenuSubContent>
+              </SidebarMenuSub>
+            </SidebarMenuGroup>
+          </SidebarMenu>
+        `
+        })
+      )
+      await fireEvent.click(getByTestId('sidebar-menu-sub-trigger__reference'))
+      expect(calls).toHaveLength(1)
+      expect(calls[0]?.[0]).toBeInstanceOf(MouseEvent)
+      expect(calls[0]?.[1]).toEqual({ label: 'Guides', href: '/guides' })
+    })
+
+    it('still emits update:path and update:openKeys through defineModel', async () => {
+      const openKeys = ref<string[]>([])
+      const { getByTestId } = render(
+        defineComponent({
+          components: { SidebarMenu },
+          setup: () => ({
+            openKeys,
+            groups: [
+              {
+                items: [
+                  { id: 'guides', label: 'Guides', children: [{ id: 'intro', label: 'Intro' }] }
+                ]
+              }
+            ]
+          }),
+          template: `<SidebarMenu v-model:open-keys="openKeys" :groups="groups" />`
+        })
+      )
+      await fireEvent.click(getByTestId('sidebar-menu-sub-trigger__control'))
+      await waitFor(() => expect(openKeys.value).toContain('guides'))
+    })
+  })
+
+  it('gives the drill example trigger an icon, so its label lines up with the icon rows', () => {
+    const { getByTestId } = render(DrillExample)
+    expect(getByTestId('sidebar-menu-sub-trigger__icon').querySelector('.az-settings')).toBeTruthy()
+  })
+})

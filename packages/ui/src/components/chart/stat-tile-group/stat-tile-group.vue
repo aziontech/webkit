@@ -1,0 +1,57 @@
+<script setup lang="ts">
+  import { computed, provide, readonly, ref, useAttrs } from 'vue'
+
+  import { StatTileGroupInjectionKey } from './injection-key'
+
+  defineOptions({ name: 'StatTileGroup', inheritAttrs: false })
+
+  export interface StatTileGroupProps {
+    /** Accessible name of the strip, such as Usage; empty leaves the group unnamed. */
+    ariaLabel?: string
+  }
+
+  withDefaults(defineProps<StatTileGroupProps>(), {
+    ariaLabel: ''
+  })
+
+  defineSlots<{
+    /** The StatTile cells, in reading order. */
+    default(): unknown
+  }>()
+
+  const attrs = useAttrs()
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'stat-tile-group')
+
+  const bands = ref(0)
+
+  provide(StatTileGroupInjectionKey, {
+    grouped: true,
+    bands: readonly(bands),
+    showBand: () => {
+      bands.value += 1
+      let counted = true
+      return () => {
+        if (counted) bands.value -= 1
+        counted = false
+      }
+    }
+  })
+</script>
+
+<template>
+  <div
+    v-bind="$attrs"
+    role="group"
+    :aria-label="ariaLabel || undefined"
+    :data-testid="testId"
+    class="group/stat-tile-group @container/stat-tile-group flex min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+  >
+    <div
+      class="-me-px -mb-px grid flex-1 grid-cols-1 @md/stat-tile-group:grid-cols-2 @3xl/stat-tile-group:auto-cols-fr @3xl/stat-tile-group:grid-flow-col @3xl/stat-tile-group:grid-cols-none"
+      :data-testid="`${testId}__cells`"
+    >
+      <slot />
+    </div>
+  </div>
+</template>

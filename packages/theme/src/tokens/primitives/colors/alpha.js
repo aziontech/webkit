@@ -25,6 +25,7 @@ export const alpha = {
   },
   white: {
     50: '#FFFFFF0D',
+    75: '#FFFFFF14',
     100: '#FFFFFF1A',
     200: '#FFFFFF33',
     300: '#FFFFFF4D',
@@ -100,5 +101,3 @@ export const alpha = {
     white: '#FFFFFFE5'
   }
 }
-
-export default { alpha }

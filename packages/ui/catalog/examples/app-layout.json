@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Every region at once: the navigation rail, the global header with a help button, a flash message, the breadcrumbs, the page, the split panel under it with the selected service, and a help button that opens the help panel in the tools region.",
+   "file": "examples/app-layout/default.vue"
+  },
+  {
+   "name": "FullHeightPage",
+   "summary": "Breadcrumbs over a page body that fills the screen: the main is min-h-full and centres an empty state in the height left under the breadcrumbs, with no scroll.",
+   "file": "examples/app-layout/full-height-page.vue"
+  },
+  {
+   "name": "HelpOpen",
+   "summary": "On a wide screen the tools region opens with a help panel for the page; the help button in the header closes and reopens it, and on a phone it opens the help as a drawer.",
+   "file": "examples/app-layout/help-open.vue"
+  }
+ ]
+}

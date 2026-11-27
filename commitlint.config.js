@@ -10,17 +10,17 @@
  *
  * Accepted forms:
  *   fix(theme): [ENG-1234] move vue-tsc to devDependencies
- *   feat(webkit)!: [ENG-999] drop tone prop
- *   fix(webkit): commit message               ← no ticket → no tag
+ *   feat(ui)!: [ENG-999] drop tone prop
+ *   fix(ui): commit message               ← no ticket → no tag
  *   fix: commit message
  *
  * Rejected:
- *   [NO-ISSUE] fix(webkit): commit message    ← pre-2026-07 form — invisible to release-please
- *   fix(webkit): [NO-ISSUE] commit message    ← no ticket → omit the tag entirely
+ *   [NO-ISSUE] fix(ui): commit message    ← pre-2026-07 form — invisible to release-please
+ *   fix(ui): [NO-ISSUE] commit message    ← no ticket → omit the tag entirely
  *
  * Breaking changes (produce a major release):
- *   feat(webkit)!: drop tone prop                    ← `!` after type/scope
- *   feat(webkit): add x\n\nBREAKING CHANGE: drops y  ← footer form
+ *   feat(ui)!: drop tone prop                    ← `!` after type/scope
+ *   feat(ui): add x\n\nBREAKING CHANGE: drops y  ← footer form
  *
  * Type → release (stock release-please; not configurable per type):
  *   feat                            → minor
@@ -28,7 +28,7 @@
  *   chore | docs | style | refactor |
  *   perf | test | ci | revert      → no release  (allowed for hygiene, no version bump)
  *   any-type with `!` or BREAKING:  → major
- * Contract: .claude/rules/release-types.md
+ * Contract: contributing/rules/release-types.md
  */
 export default {
   parserPreset: {
@@ -74,18 +74,7 @@ export default {
     'type-enum': [
       2,
       'always',
-      [
-        'feat',
-        'fix',
-        'chore',
-        'docs',
-        'style',
-        'refactor',
-        'perf',
-        'test',
-        'ci',
-        'revert'
-      ]
+      ['feat', 'fix', 'chore', 'docs', 'style', 'refactor', 'perf', 'test', 'ci', 'revert']
     ],
     'scope-case': [2, 'always', 'lower-case'],
     'subject-empty': [2, 'never'],

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "ListPage",
+   "summary": "A first-level list page: medium h1, one-line description, and the medium actions on the right, the outlined Documentation and the primary create action at one height; on a phone they stack, each at full width.",
+   "file": "examples/page-header/default.vue"
+  },
+  {
+   "name": "SettingsPage",
+   "summary": "A settings sub-page or a detail tab: small title and description, no actions.",
+   "file": "examples/page-header/settings-page.vue"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three heading scales: large for a creation hub headline, medium for a first-level page, small for detail tabs and settings sub-pages.",
+   "file": "examples/page-header/sizes.vue"
+  }
+ ]
+}

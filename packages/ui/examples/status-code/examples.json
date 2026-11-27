@@ -1,0 +1,21 @@
+{
+  "component": "status-code",
+  "title": "Components/Content/StatusCode",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One code from each status class, with and without a method: 1xx to 3xx stay neutral, 4xx take the warning colour, 5xx the danger colour, and a value that is not a status renders muted.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Both sizes side by side on the same request.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Request log",
+      "summary": "StatusCode in the status column of a request log, where the neutral 2xx rows let the client and server errors stand out.",
+      "file": "request-log.vue"
+    }
+  ]
+}
