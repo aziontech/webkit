@@ -54,6 +54,32 @@ export async function settle(page: Page) {
   await page.evaluate(async () => {
     await document.fonts.ready
     await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)))
+    const frame = () => new Promise((done) => requestAnimationFrame(done))
+    const positions = () =>
+      [document.scrollingElement, ...document.querySelectorAll('*')]
+        .filter((el): el is Element => !!el && el.scrollHeight > el.clientHeight + 1)
+        .map((el) => `${el.scrollTop},${el.scrollLeft},${el.scrollHeight}`)
+        .join('|')
+    let last = positions()
+    let still = 0
+    const until = performance.now() + 5000
+    while (still < 20 && performance.now() < until) {
+      await frame()
+      const now = positions()
+      still = now === last ? still + 1 : 0
+      last = now
+    }
+    for (const root of document.querySelectorAll('[data-pinned]')) {
+      for (const el of [root, ...root.querySelectorAll('*')]) {
+        if (
+          el.scrollHeight > el.clientHeight + 1 &&
+          /auto|scroll/.test(getComputedStyle(el).overflowY)
+        )
+          el.scrollTop = el.scrollHeight
+      }
+    }
+    await frame()
+    await frame()
   })
 }
 

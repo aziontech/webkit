@@ -164,6 +164,7 @@
 
   function measureComposer(): void {
     composerHeight.value = composerEl.value?.offsetHeight ?? 0
+    if (pinned.value) void nextTick(scrollToBottom)
   }
 
   watch(
