@@ -15,7 +15,7 @@
         scene: { component: 'ConsoleMockup', props: { name: 'workloads-list', width: 600 } },
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       },
@@ -26,7 +26,7 @@
         scene: { component: 'ConsoleMockup', props: { name: 'workload-topology', width: 600 } },
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       },
@@ -37,7 +37,7 @@
         scene: { component: 'ConsoleMockup', props: { name: 'workload-domains', width: 600 } },
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       },
@@ -48,7 +48,7 @@
         scene: { component: 'ConsoleMockup', props: { name: 'workload-deploy' } },
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       },
@@ -59,7 +59,7 @@
         scene: { component: 'ConsoleMockup', props: { name: 'workload-rollout-rows', width: 600 } },
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       }

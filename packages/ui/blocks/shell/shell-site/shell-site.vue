@@ -62,7 +62,7 @@
               label="Talk to sales"
               variant="outline"
               size="large"
-              href="/en/contact-sales/"
+              href="/en/contact/"
             />
           </template>
         </Hero.Title>

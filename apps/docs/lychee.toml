@@ -19,4 +19,9 @@ exclude = [
   '^https://(www\.)?instagram\.com/',
   '^https://(www\.)?x\.com/',
   '^https://(www\.)?w3\.org/',
+  '^https://(www\.)?linkedin\.com/',
+  # Sample data: example/* repositories are fictional, like example.com.
+  '^https://github\.com/example/',
+  # main holds the last 5.x release until 6.0 ships; the source links use the commit being built.
+  '^https://github\.com/aziontech/webkit/(blob|tree)/main/',
 ]

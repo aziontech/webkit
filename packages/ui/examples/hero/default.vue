@@ -20,7 +20,7 @@
         <Button
           variant="outline"
           label="Talk to sales"
-          href="https://www.azion.com/en/contact-sales/"
+          href="https://www.azion.com/en/contact/"
         />
       </template>
     </Hero.Title>

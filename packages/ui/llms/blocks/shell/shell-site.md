@@ -175,7 +175,7 @@ Each variant is the same screen in another state: `get_block("shell/shell-site",
               label="Talk to sales"
               variant="outline"
               size="large"
-              href="/en/contact-sales/"
+              href="/en/contact/"
             />
           </template>
         </Hero.Title>
@@ -563,7 +563,7 @@ export const sampleNavigation: SiteLayoutNavigation = {
     }
   ],
   links: [{ label: 'Pricing', href: '/en/pricing/' }],
-  contact: { label: 'Contact', href: '/en/contact-sales/' },
+  contact: { label: 'Contact', href: '/en/contact/' },
   primaryAction: { label: 'Start for free', href: 'https://console.azion.com/signup' },
   secondaryAction: { label: 'Sign in', href: 'https://console.azion.com/login' }
 }
@@ -615,7 +615,7 @@ export const sampleFooter: SiteLayoutFooter = {
         { label: 'Partners', href: '/en/partners/' },
         { label: 'Careers', href: '/en/careers/' },
         { label: 'Blog', href: '/en/blog/' },
-        { label: 'Contact', href: '/en/contact-sales/' }
+        { label: 'Contact', href: '/en/contact/' }
       ]
     }
   ],

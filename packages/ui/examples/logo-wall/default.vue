@@ -30,22 +30,24 @@
           src: ifoodLogo,
           srcDark: ifoodLogoDark,
           alt: 'iFood',
-          href: 'https://www.azion.com/en/success-case/ifood/',
           shape: 'compact'
         },
-        { src: stoneLogo, alt: 'Stone', href: 'https://www.azion.com/en/success-case/stone/' },
+        { src: stoneLogo, alt: 'Stone' },
         {
           src: netshoesLogo,
           srcDark: netshoesLogoDark,
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
-        { src: zoopLogo, alt: 'Zoop', href: 'https://www.azion.com/en/success-case/zoop/' },
+        {
+          src: zoopLogo,
+          alt: 'Zoop',
+          href: 'https://www.azion.com/en/success-case/zoop-case-performance-at-scale/'
+        },
         {
           src: itauLogo,
           srcDark: itauLogoDark,
           alt: 'Itaú',
-          href: 'https://www.azion.com/en/success-case/itau/',
           shape: 'compact'
         }
       ]"

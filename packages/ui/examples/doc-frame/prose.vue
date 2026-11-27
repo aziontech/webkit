@@ -21,7 +21,7 @@
         The application is live once <strong>Create and deploy</strong> finishes — see the
         <Link
           inline
-          href="https://azion.com/documentation"
+          href="https://www.azion.com/en/documentation/"
           >CLI reference</Link
         >
         or run <code>azion deploy</code>.

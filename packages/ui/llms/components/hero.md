@@ -153,7 +153,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
         <Button
           variant="outline"
           label="Talk to sales"
-          href="https://www.azion.com/en/contact-sales/"
+          href="https://www.azion.com/en/contact/"
         />
       </template>
     </Hero.Title>

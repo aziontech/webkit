@@ -25,7 +25,7 @@
     {
       logo: dafitiExtendedMono,
       logoAlt: 'Dafiti',
-      href: 'https://www.azion.com/en/success-case/dafiti/',
+      href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
       fill: 'canvas'
     },
     {
@@ -62,7 +62,7 @@
     {
       logo: nznExtendedReversed,
       logoAlt: 'NZN',
-      href: 'https://www.azion.com/en/success-case/nzn/',
+      href: 'https://www.azion.com/en/success-case/nzn/nzn-creates-more-than-100-edge-applications-and-reduces-their-websites-loading-time-by-50-using-the-azion-platform/',
       fill: 'primary'
     }
   ]

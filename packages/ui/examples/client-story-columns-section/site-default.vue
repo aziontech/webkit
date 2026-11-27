@@ -18,7 +18,7 @@
     {
       name: 'Dafiti',
       logo: dafitiExtendedReversed,
-      href: 'https://www.azion.com/en/success-case/dafiti/',
+      href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
       story:
         'Dafiti modernized its digital architecture to deliver faster, scalable, and resilient experiences for millions of consumers across Latin America.',
       logoTreatment: 'knockout'

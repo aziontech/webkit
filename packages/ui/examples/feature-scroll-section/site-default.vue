@@ -11,7 +11,7 @@
       illustration: 'real-time-metrics-status-codes',
       action: {
         label: 'Docs',
-        href: 'https://www.azion.com/en/documentation/products/workloads/',
+        href: 'https://www.azion.com/en/documentation/platform/workloads/',
         trailing: true
       }
     },
@@ -22,7 +22,7 @@
       illustration: 'implement-api-gateway-security',
       action: {
         label: 'Docs',
-        href: 'https://www.azion.com/en/documentation/products/workloads/',
+        href: 'https://www.azion.com/en/documentation/platform/workloads/',
         trailing: true
       }
     },
@@ -33,7 +33,7 @@
       illustration: 'improve-application-performance-and-reliability',
       action: {
         label: 'Docs',
-        href: 'https://www.azion.com/en/documentation/products/workloads/',
+        href: 'https://www.azion.com/en/documentation/platform/workloads/',
         trailing: true
       }
     },
@@ -44,7 +44,7 @@
       illustration: 'fastest-path-to-live-website',
       action: {
         label: 'Docs',
-        href: 'https://www.azion.com/en/documentation/products/workloads/',
+        href: 'https://www.azion.com/en/documentation/platform/workloads/',
         trailing: true
       }
     },
@@ -55,7 +55,7 @@
       illustration: 'branches',
       action: {
         label: 'Docs',
-        href: 'https://www.azion.com/en/documentation/products/workloads/',
+        href: 'https://www.azion.com/en/documentation/platform/workloads/',
         trailing: true
       }
     }

@@ -27,7 +27,7 @@
         value: 'source',
         label: 'Edit this page',
         icon: 'az az-pencil',
-        href: 'https://github.com/aziontech/azion-docs',
+        href: 'https://github.com/aziontech/docs',
         target: '_blank',
         tip: 'Open this page in the repository and propose a change.'
       }

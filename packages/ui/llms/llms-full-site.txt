@@ -4197,7 +4197,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
         <Button
           variant="outline"
           label="Talk to sales"
-          href="https://www.azion.com/en/contact-sales/"
+          href="https://www.azion.com/en/contact/"
         />
       </template>
     </Hero.Title>
@@ -4525,22 +4525,24 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
           src: ifoodLogo,
           srcDark: ifoodLogoDark,
           alt: 'iFood',
-          href: 'https://www.azion.com/en/success-case/ifood/',
           shape: 'compact'
         },
-        { src: stoneLogo, alt: 'Stone', href: 'https://www.azion.com/en/success-case/stone/' },
+        { src: stoneLogo, alt: 'Stone' },
         {
           src: netshoesLogo,
           srcDark: netshoesLogoDark,
           alt: 'Netshoes',
           href: 'https://www.azion.com/en/success-case/netshoes/'
         },
-        { src: zoopLogo, alt: 'Zoop', href: 'https://www.azion.com/en/success-case/zoop/' },
+        {
+          src: zoopLogo,
+          alt: 'Zoop',
+          href: 'https://www.azion.com/en/success-case/zoop-case-performance-at-scale/'
+        },
         {
           src: itauLogo,
           srcDark: itauLogoDark,
           alt: 'Itaú',
-          href: 'https://www.azion.com/en/success-case/itau/',
           shape: 'compact'
         }
       ]"
@@ -8265,7 +8267,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         illustration: 'real-time-metrics-status-codes',
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       },
@@ -8276,7 +8278,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         illustration: 'implement-api-gateway-security',
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       },
@@ -8287,7 +8289,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         illustration: 'improve-application-performance-and-reliability',
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       },
@@ -8298,7 +8300,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         illustration: 'fastest-path-to-live-website',
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       },
@@ -8309,7 +8311,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         illustration: 'branches',
         action: {
           label: 'Docs',
-          href: 'https://www.azion.com/en/documentation/products/workloads/',
+          href: 'https://www.azion.com/en/documentation/platform/workloads/',
           trailing: true
         }
       }

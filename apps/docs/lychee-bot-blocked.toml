@@ -7,7 +7,7 @@ max_concurrency = 2
 max_retries = 2
 retry_wait_time = 5
 timeout = 30
-accept = ["200..=299", "403", "429"]
+accept = ["200..=299", "403", "429", "999"]
 user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36"
 
 exclude = ['.*']
@@ -22,4 +22,6 @@ include = [
   '^https://(www\.)?x\.com/',
   # The W3C answers 403 to automated clients on some paths (its favicon among them).
   '^https://(www\.)?w3\.org/',
+  # LinkedIn answers 403 or 999 to automated clients.
+  '^https://(www\.)?linkedin\.com/',
 ]
