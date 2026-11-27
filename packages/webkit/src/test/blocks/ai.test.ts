@@ -19,7 +19,9 @@ describe('ai', () => {
   it('the disclaimer shows only before the first message, at the foot of the page or drawer', () => {
     const shared =
       'The AI assistant can make mistakes. Check important information before you act on it.'
-    const started = [{ id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Hi' }] }]
+    const started: AiChatMessage[] = [
+      { id: 'u1', role: 'user', parts: [{ type: 'text', content: 'Hi' }] }
+    ]
     const chat = render(AiChat)
     expect(chat.getByTestId('ai-chat__disclaimer').textContent?.replace(/\s+/g, ' ').trim()).toBe(
       shared
