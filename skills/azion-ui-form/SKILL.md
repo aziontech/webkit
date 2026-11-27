@@ -123,7 +123,7 @@ it. A plain `Input` is for free text only. A typed value in a text box (a date a
 `2026-12-31T00:00:00Z`, a phone as digits, a port as text) makes the person learn a format, fails
 only at submit and loses the keyboard, locale and time zone handling the real control already has.
 
-| The field holds                                                 | Use                                                                                                                                                                                            | Bind                                                       | Never                                                                |
+| The field holds                                                 | Use                                                                                                                                                                                            | Bind                                                       | Not                                                                  |
 | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------- |
 | One date (due date, expiry, birthday)                           | `DatePicker`                                                                                                                                                                                   | `Date \| null`                                             | an `Input` that asks for `YYYY-MM-DD`                                |
 | One date **and** time (a schedule, a start, an expiry instant)  | `DatePicker` with `show-time`                                                                                                                                                                  | `Date \| null`                                             | an `Input` that asks for ISO 8601 text, two loose text fields        |
@@ -483,14 +483,17 @@ secondary mono text with a copy button (`TableCellId`, with `resource` naming wh
 as `Timestamp` or `TableCellTime`, relative with the absolute date a hover away. [Tables](../azion-ui-tables/SKILL.md)
 owns the cell recipes.
 
-### Do and Don't
+### Do
 
-- **Do:** pick the control from the type of the value before you write the field.
-- **Do:** name the thing in the label and keep the API field name off the screen.
-- **Do:** send instants as RFC 3339 UTC and calendar days as `YYYY-MM-DD` from their local parts.
-- **Don't:** ask a person to type a date, a time, an enum value or another resource's ID.
-- **Don't:** put a format in the placeholder (`YYYY-MM-DD`, `org_…`) as the only guidance; the
-  right control makes the format disappear.
+- Pick the control from the type of the value before you write the field.
+- Name the thing in the label and keep the API field name off the screen.
+- Send instants as RFC 3339 UTC and calendar days as `YYYY-MM-DD` from their local parts.
+
+### Don't
+
+- Ask a person to type a date, a time, an enum value or another resource's ID.
+- Put a format in the placeholder (`YYYY-MM-DD`, `org_…`) as the only guidance; the right control
+  makes the format disappear.
 
 The consumer lint backs this section beyond `prefer-value-control`: `azion-ui/prefer-date-picker` warns on a text field that holds a
 date or time by its key (`*_at` / `*At` / `*date` / `*time`) or label (`Start date`), or a `Textarea` or native input with a date format, and

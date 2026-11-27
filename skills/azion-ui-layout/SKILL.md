@@ -395,38 +395,43 @@ truncating text `min-w-0`.
 
 ## Hard rules
 
-- **NEVER** hand-roll a page cap: no `mx-auto max-w-(--container-*)`, no `max-w-[…]`, no `max-w-5xl`
-  on a page root. Carry a column class.
-- **NEVER** `w-full` to mean full-bleed. Full-bleed is the absence of a column class.
-- **MUST** keep the column class identical across a band's parts that have to align — the scrolling
+### Do
+
+- Keep the column class identical across a band's parts that have to align — the scrolling
   body and its sticky bar — and across sibling states of the same page (empty vs populated).
-- **MUST** put the boundary on a block as **padding**, never margin.
-- **MUST** carry `layout-section-start` on exactly one element per page stack. Never on a section
+- Put the boundary on a block as **padding**, never margin.
+- Carry `layout-section-start` on exactly one element per page stack. Never on a section
   inside the parent — `gap` and `margin` add up.
-- **NEVER** put a vertical `gap` on the page stack itself.
-- **NEVER** introduce a third rhythm step beside `--layout-section-gap` and `--layout-group-gap`.
-- **NEVER** stack two page regions (a banner, a card, a framed table, a section heading) closer than
-  `--layout-group-gap`; the parent section carries its `gap` even when its first child is a banner.
-- **NEVER** write a responsive variant for the boundary or the rhythm — the tokens are already fluid.
-- **MUST** pick the measure from the payload, never from the route, and only ever narrower than
+- Pick the measure from the payload, never from the route, and only ever narrower than
   `layout-column`.
-- **NEVER** name a physical side: `ps-`/`pe-`, `ms-`/`me-`, `start-`/`end-`, `text-start`,
+- Reflow at 320 px with no horizontal page scroll.
+
+### Don't
+
+- Hand-roll a page cap: no `mx-auto max-w-(--container-*)`, no `max-w-[…]`, no `max-w-5xl`
+  on a page root. Carry a column class.
+- Use `w-full` to mean full-bleed. Full-bleed is the absence of a column class.
+- Put a vertical `gap` on the page stack itself.
+- Introduce a third rhythm step beside `--layout-section-gap` and `--layout-group-gap`.
+- Stack two page regions (a banner, a card, a framed table, a section heading) closer than
+  `--layout-group-gap`; the parent section carries its `gap` even when its first child is a banner.
+- Write a responsive variant for the boundary or the rhythm — the tokens are already fluid.
+- Name a physical side: `ps-`/`pe-`, `ms-`/`me-`, `start-`/`end-`, `text-start`,
   `border-s` — so the same page mirrors under `dir="rtl"` (the boundary, the sticky bar and the field
   row's control column included). `azion-ui/no-physical-direction` blocks `pl-`/`mr-`/`left-`/`text-right`;
   "left" and "right" in this pattern read as "start" and "end" in a right-to-left page (rule
   `azion-ui-direction`).
-- **NEVER** use a viewport variant (`md:`, `lg:`) for a layout inside a band, card or panel; use a
+- Use a viewport variant (`md:`, `lg:`) for a layout inside a band, card or panel; use a
   container variant (`@md:`) so it survives being moved into a drawer or a split view.
-- **MUST** reflow at 320 px with no horizontal page scroll.
-- **NEVER** hand-roll a fixed `grid-cols-3` / `grid-cols-4` of cards whose count varies, pad a list
+- Hand-roll a fixed `grid-cols-3` / `grid-cols-4` of cards whose count varies, pad a list
   to fill the last row, or pick `columns` from the item count — compose `CardGrid` and let its
   default balanced layout fill the rows.
-- **NEVER** wrap `SiteFooterSection` or `SiteHeaderSection` in a bordered or padded `div`; they draw their own rules.
-- **NEVER** compose the chrome in a page: one `ConsoleLayout` / `SiteLayout` / `DocLayout` in
+- Wrap `SiteFooterSection` or `SiteHeaderSection` in a bordered or padded `div`; they draw their own rules.
+- Compose the chrome in a page: one `ConsoleLayout` / `SiteLayout` / `DocLayout` in
   `App.vue`, and every page is only the body of its default slot.
-- **NEVER** cap the app layout — `ConsoleLayout`'s rail, its header and its content region stay
+- Cap the app layout — `ConsoleLayout`'s rail, its header and its content region stay
   fluid. The cap lives on the page's own column.
-- **NEVER** size a page body with `calc(100dvh - …)` to fill the space under the header: inside
+- Size a page body with `calc(100dvh - …)` to fill the space under the header: inside
   `ConsoleLayout` a workspace page puts `data-layout-fill` on its root (lint
   `azion-ui/no-viewport-height-calc`).
 

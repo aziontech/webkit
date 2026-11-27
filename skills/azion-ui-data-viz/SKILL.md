@@ -53,7 +53,7 @@ Never guess an import path or a hex value. Resolve both from the contract:
 
 ## Pick the chart for the question
 
-| The question                                              | Use                                                       | Never                                        |
+| The question                                              | Use                                                       | Not                                          |
 | --------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------- |
 | How a value changes over time                             | `Chart` with `Chart.Line` or `Chart.Area`                 | a `DonutChart` of time buckets               |
 | Separate categories compared                              | `Chart` with `Chart.Bar`                                  | a line between unrelated categories          |
