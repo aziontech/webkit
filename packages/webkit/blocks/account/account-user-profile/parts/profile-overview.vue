@@ -3,6 +3,7 @@
   import Card from '@aziontech/webkit/card'
   import ContributionGraph from '@aziontech/webkit/contribution-graph'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import Tag from '@aziontech/webkit/tag'
@@ -93,11 +94,29 @@
       class="flex"
     >
       <ToggleGroup
+        v-if="years.length <= 5"
         v-model="yearValue"
         :options="yearOptions"
         size="small"
         aria-label="Contribution year"
       />
+      <Select
+        v-else
+        v-model="yearValue"
+        variant="ghost"
+        size="medium"
+      >
+        <Select.Trigger aria-label="Contribution year" />
+        <Select.Content>
+          <Select.Item
+            v-for="option in yearOptions"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </Select.Item>
+        </Select.Content>
+      </Select>
     </div>
     <div class="max-md:hidden">
       <StatTileGroup aria-label="Platform contribution metrics">

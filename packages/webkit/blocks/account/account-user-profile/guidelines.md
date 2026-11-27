@@ -34,7 +34,7 @@ Five tabs on `v-model:active-tab`: Overview, Profile and bio, Security and acces
 
 ### C. Year filter and metrics — `ToggleGroup`, `StatTileGroup`, `StatTile` (required)
 
-The year `ToggleGroup` opens Overview, above everything it changes: the metrics, the graph and the history. Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
+The year `ToggleGroup` opens Overview, above everything it changes: the metrics, the graph and the history. With more than five years it becomes a ghost `Select`, since a `ToggleGroup` holds two to five segments. Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
 
 ### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup` (required)
 

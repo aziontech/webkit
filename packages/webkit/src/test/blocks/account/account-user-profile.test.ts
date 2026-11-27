@@ -59,6 +59,23 @@ describe('account/account-user-profile', () => {
     expect(view.emitted<number[]>('update:selectedYear')?.at(-1)).toEqual([2025])
   })
 
+  it('turns the year filter into a select past five years', async () => {
+    const extra = [2022, 2021].map((year) => ({ ...sampleYears.at(-1)!, year }))
+    const view = render(UserProfile, { props: { years: [...sampleYears, ...extra] } })
+    expect(view.queryByRole('radiogroup', { name: 'Contribution year' })).toBeNull()
+    const trigger = view.getByRole('combobox', { name: 'Contribution year' })
+    expect(
+      trigger.compareDocumentPosition(view.getByRole('grid')) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy()
+    await userEvent.click(trigger)
+    await userEvent.click(
+      await waitFor(() => document.body.querySelector<HTMLElement>('[role="option"]:nth-child(2)')!)
+    )
+    await waitFor(() =>
+      expect(view.getByRole('heading', { name: 'Platform contributions in 2025' })).toBeTruthy()
+    )
+  })
+
   it('filters the history to the day picked in the graph, and shows all days again', async () => {
     const view = render(UserProfile)
     const day = view.container.querySelector<HTMLElement>('[data-date="2026-11-22"]')!
