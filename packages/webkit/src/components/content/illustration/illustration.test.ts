@@ -357,7 +357,7 @@ describe('Illustration', () => {
     const el = await root(view)
     expect(el.getAttribute('aria-hidden')).toBe('true')
     await waitFor(() => expect(el.getAttribute('role')).toBe('img'))
-    expect(el.getAttribute('aria-label')).toBe('An MCP server deployed behind the edge firewall')
+    expect(el.getAttribute('aria-label')).toBe('An MCP server deployed behind the firewall')
     expect(el.getAttribute('aria-hidden')).toBeNull()
   })
 

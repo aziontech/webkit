@@ -3,6 +3,7 @@ name: sources
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 6
 template: 2
 checksum: 18eb0fcec24e6dff5510e6c491749be39e07b40fdc82bcd2accb663d102c2962

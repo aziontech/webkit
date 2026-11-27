@@ -4,7 +4,7 @@ category: docs
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 35f813854322f90ec115cd90d9854dc7522b140436f78df5e4caac396a76d7c6
+checksum: 3134da30e8995ed38cc7fb832e1490064bda2eba54b509fc49da4e9e70d37446
 created: 2026-08-22
 last_updated: 2026-11-17
 ---
@@ -49,16 +49,16 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 <template>
   <DocCardGroup :columns="2">
     <DocCard
-      title="Edge Application"
+      title="Applications"
       icon="az az-server"
-      href="/docs/edge-application"
+      href="/docs/applications"
     >
       Serve and cache your application at the edge, close to the people using it.
     </DocCard>
     <DocCard
-      title="Edge Firewall"
+      title="Firewall"
       icon="az az-shield"
-      href="/docs/edge-firewall"
+      href="/docs/firewall"
     >
       Filter and secure traffic before it reaches your origin.
     </DocCard>

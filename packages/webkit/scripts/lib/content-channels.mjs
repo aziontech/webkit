@@ -65,6 +65,7 @@ export const CONTENT_CHANNELS = {
   },
   'chart/bar-list': { docs: 'BarList', site: 'scene:BarList' },
   'chart/chart': { docs: 'Chart', site: 'scene:Chart' },
+  'chart/contribution-graph': { docs: 'ContributionGraph', site: 'scene:ContributionGraph' },
   'chart/donut-chart': { docs: 'DonutChart', site: 'scene:DonutChart' },
   'chart/gauge-chart': { docs: 'GaugeChart', site: 'scene:GaugeChart' },
   'chart/map-chart': { docs: 'MapChart', site: 'scene:MapChart' },

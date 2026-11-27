@@ -2,6 +2,7 @@
   "id": "ai/ai-chat-drawer",
   "name": "AiChatDrawer",
   "title": "Blocks/Ai/AiChatDrawer",
+  "stability": "preview",
   "surface": "app",
   "keyboard": {
     "entry": "field"

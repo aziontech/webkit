@@ -4,6 +4,7 @@
 
 - Import: `import ToolCall from '@aziontech/webkit/tool-call'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [tool-call.json](tool-call.json)
 
 ## When to use

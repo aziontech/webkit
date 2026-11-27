@@ -6,7 +6,7 @@ status: implemented
 spec_version: 8
 created: 2026-11-10
 last_updated: 2026-11-18
-checksum: c65000cad354dbaf4f94913fd3929957b32bca17b4f41d369c7909f3cc04e9ba
+checksum: 23a1f02e5ac9e0450d2fd957e58ff699f34fab2464bfa5a80ca61303654ef1d0
 ---
 
 # Tracker — Component Spec
@@ -51,7 +51,7 @@ A status strip: one block per period — a day, an hour, a deployment — colore
 
 <template>
   <Tracker
-    aria-label="Edge Application uptime, last 7 days"
+    aria-label="Application uptime, last 7 days"
     :items="[
       { severity: 'success', label: 'Nov 4 · Operational' },
       { severity: 'success', label: 'Nov 5 · Operational' },

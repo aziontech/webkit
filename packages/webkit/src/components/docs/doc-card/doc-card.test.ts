@@ -56,11 +56,11 @@ describe('DocCard', () => {
   describe('the root element switches on href', () => {
     it('is an anchor carrying the destination when href is set', () => {
       const { getByTestId } = render(DocCard, {
-        props: { title: 'T', href: '/docs/edge-application' }
+        props: { title: 'T', href: '/docs/applications' }
       })
       const root = getByTestId('doc-card')
       expect(root.tagName).toBe('A')
-      expect(root.getAttribute('href')).toBe('/docs/edge-application')
+      expect(root.getAttribute('href')).toBe('/docs/applications')
     })
 
     it('is a non-interactive block when href is empty', () => {

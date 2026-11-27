@@ -5,6 +5,7 @@ const require = createRequire(import.meta.url)
 export const GRAPHIC_COMPONENTS = [
   'BarList',
   'Chart',
+  'ContributionGraph',
   'DonutChart',
   'FlowDiagram',
   'GaugeChart',

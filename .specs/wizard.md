@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 9f3cecf3cdfdeaff503168aad06de77eb497b491b6de1ba83914bf7597f34e57
+checksum: 567d6197bd452fd6d7890b5fb9ee85e8f8ba8e608a3d7b334faebe79050fedf9
 spec_version: 8
 created: 2026-11-10
 last_updated: 2026-11-24
@@ -68,7 +68,7 @@ completion.
 - Bind `loading` to the submit request. It disables Cancel, Previous and the rail, so the handler needs no
   guard of its own.
 - Mark a step `optional` only when Next works with every field in it empty.
-- Always pass `ariaLabel` naming the task (`Create edge application`). Without it, the root is an
+- Always pass `ariaLabel` naming the task (`Create application`). Without it, the root is an
   unnamed region.
 - The wizard sets no page width. Place it inside the page's create container
   (`.layout-form-create`).
@@ -231,7 +231,7 @@ folder only):
 | ------------- | --------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `submitLabel` | `string`  | `''`    | false    | Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). |
 | `loading`     | `boolean` | `false` | false    | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled.        |
-| `ariaLabel`   | `string`  | `''`    | false    | Accessible name for the wizard region. Name the task, for example Create edge application.                                    |
+| `ariaLabel`   | `string`  | `''`    | false    | Accessible name for the wizard region. Name the task, for example Create application.                                    |
 
 ## v-model
 

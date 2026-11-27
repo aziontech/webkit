@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 40ac352d2b215061ae489ab53e60ab5c32ed9a20c3328f83868a4c04d1588d55
+checksum: f9133fc5dbe0a2ae48f77afdcb493de888f5ebb87d4aa402660714cf771ef892
 created: 2026-08-10
 last_updated: 2026-11-21
 ---
@@ -83,8 +83,8 @@ Content (links, labels, languages, status, brand) always comes from the consumer
     home-href="/"
   >
     <Footer.Column title="Products">
-      <Footer.Link href="/products/edge-application">Edge Application</Footer.Link>
-      <Footer.Link href="/products/edge-firewall">Edge Firewall</Footer.Link>
+      <Footer.Link href="/products/applications">Applications</Footer.Link>
+      <Footer.Link href="/products/firewall">Firewall</Footer.Link>
     </Footer.Column>
     <Footer.Column title="Company">
       <Footer.Link href="/about">About us</Footer.Link>

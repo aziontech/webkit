@@ -4,6 +4,7 @@
 
 - Import: `import SuggestionGroup from '@aziontech/webkit/suggestion-group'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [suggestion-group.json](suggestion-group.json)
 
 ## When to use

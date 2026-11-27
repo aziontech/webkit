@@ -3,6 +3,7 @@ name: citation
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 5
 template: 2
 checksum: 64512bb9c07ca7a919c3c8e15714a86cfb9dd98127f9089b19c703d73cd155f3

@@ -98,9 +98,17 @@
     const rest: Record<string, unknown> = { ...attrs }
     delete rest['id']
     delete rest['aria-describedby']
+    delete rest['aria-label']
+    delete rest['aria-labelledby']
     delete rest['data-testid']
     return rest
   })
+  const nameAttr = (key: 'aria-label' | 'aria-labelledby'): string | undefined => {
+    const value = attrs[key]
+    return typeof value === 'string' && value ? value : undefined
+  }
+  const inputLabel = computed(() => nameAttr('aria-label'))
+  const inputLabelledBy = computed(() => nameAttr('aria-labelledby'))
   const triggerId = `${generatedId}-trigger`
 
   const { selectedCountry, displayValue, phone, typeDigits, pickCountry } = usePhoneInputValue({
@@ -326,6 +334,8 @@
         :aria-invalid="isInvalid || undefined"
         :aria-required="isRequired || undefined"
         :aria-describedby="describedBy"
+        :aria-label="inputLabel"
+        :aria-labelledby="inputLabelledBy"
         :data-testid="`${testId}__input`"
         class="pointer-coarse:text-body-md"
         :class="INPUT_CLASS"

@@ -13,7 +13,7 @@
         icon="az az-edge-nodes"
         title="Consistent global speed"
         description="Serve content across hundreds of locations with median latency under 30 ms."
-        href="/products/edge-application"
+        href="/products/applications"
       />
     </div>
     <div class="bg-(--bg-canvas) p-(--spacing-xl)">

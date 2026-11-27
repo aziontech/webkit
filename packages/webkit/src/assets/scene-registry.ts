@@ -39,6 +39,7 @@ export const sceneAssets = {
   ChartScatter: contentScene('ChartScatter'),
   ChartTooltip: contentScene('ChartTooltip'),
   CodeBlock: contentScene('CodeBlock'),
+  ContributionGraph: contentScene('ContributionGraph'),
   DonutChart: contentScene('DonutChart'),
   Embed: contentScene('Embed'),
   GaugeChart: contentScene('GaugeChart'),

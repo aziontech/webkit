@@ -23,6 +23,7 @@
         "src/components/input/number-input": "NumberInput: the increment and decrement steppers of the spin button.",
         "src/components/input/date-picker/parts/date-picker-trigger.vue": "DatePicker trigger: the button that opens the calendar dialog.",
         "src/components/input/date-picker/parts/date-picker-grid.vue": "DatePicker grid: each day cell is the button of a calendar grid cell.",
+        "src/components/chart/contribution-graph/contribution-graph.vue": "ContributionGraph: each day is the button of a calendar grid cell.",
         "src/components/navigation/stepper/stepper-step": "Stepper.Step: the step header is the button that moves to the step (aria-current step).",
         "src/components/chart/chart/parts/chart-legend-button.vue": "Chart legend entry: a toggle button (aria-pressed) that shows or hides its series.",
         "src/components/chart/chart-card/chart-card-drag-handle": "ChartCard.DragHandle: the reorder handle, with its own keyboard model.",
@@ -55,7 +56,8 @@
         "src/components/layout/app-header/app-header-account.vue": "AppHeaderAccount: the account control at the end of the header, an avatar that opens the account menu (or acts alone).",
         "src/components/ai/suggestion-group": "SuggestionGroup: each prompt is a suggestion chip whose label wraps to the reader's whole question, a group of buttons Button cannot draw (one line, fixed height).",
         "src/components/content/avatar-group": "AvatarGroup: the +N overflow is the last circle of the overlapping avatar stack and the disclosure button (popovertarget) of the hidden names.",
-        "src/components/ai/prompt-queue/prompt-queue.vue": "PromptQueue: the Show more toggle of a clamped message, a native button so the entry stays small (A5P3-050)."
+        "src/components/ai/prompt-queue/prompt-queue.vue": "PromptQueue: the Show more toggle of a clamped message, a native button so the entry stays small (A5P3-050).",
+        "src/components/ai/prompt-input/prompt-input-model-picker": "PromptInput.ModelPicker: the provider rail tabs and the model and mode rows of its picker panel (rows with an icon, a trailing check and a shortcut or description)."
       }
     },
     "a": {
@@ -126,7 +128,8 @@
         "src/components/section/job-posting-section": "JobPostingSection: the hidden file input its Browse button opens for the resume field.",
         "src/components/data/data-grid": "DataGrid: the in-cell text editor of an editable grid cell, sized to the cell.",
         "src/components/data/tree/parts/tree-node.vue": "Tree node: the in-place rename field of a tree item, sized to the row.",
-        "src/components/input/date-range-picker/parts/date-range-relative.vue": "DateRangePicker: the quick ranges are a staged single choice (native radios, applied with Apply, the Cloudscape relative-range list) drawn as compact popover option rows with a trailing check in a column-filled two-column grid; RadioGroup draws circles or cards."
+        "src/components/input/date-range-picker/parts/date-range-relative.vue": "DateRangePicker: the quick ranges are a staged single choice (native radios, applied with Apply, the Cloudscape relative-range list) drawn as compact popover option rows with a trailing check in a column-filled two-column grid; RadioGroup draws circles or cards.",
+        "src/components/ai/prompt-input/prompt-input-model-picker": "PromptInput.ModelPicker: the borderless search field at the top of its picker panel."
       }
     },
     "textarea": {
@@ -189,7 +192,8 @@
     "menu": {
       "use": "DropdownMenu",
       "owners": {
-        "src/components/navigation/dropdown-menu": "DropdownMenu: the menu."
+        "src/components/navigation/dropdown-menu": "DropdownMenu: the menu.",
+        "src/components/ai/prompt-input/prompt-input-model-picker": "PromptInput.ModelPicker: the model and mode columns of its picker panel (menuitemradio rows)."
       }
     },
     "listbox": {
@@ -211,7 +215,8 @@
         "src/components/navigation/tabs": "Tabs.Trigger: the tab.",
         "src/components/code/code-block": "CodeBlock: its file tabs.",
         "src/components/marketing/quote-tabs": "QuoteTabs: its client pickers.",
-        "src/components/section/article-highlight-section": "ArticleHighlightSection: its article pickers."
+        "src/components/section/article-highlight-section": "ArticleHighlightSection: its article pickers.",
+        "src/components/ai/prompt-input/prompt-input-model-picker": "PromptInput.ModelPicker: the provider filter rail of its picker panel."
       }
     },
     "switch": {

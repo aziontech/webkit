@@ -107,6 +107,7 @@ const DOC_MARKDOWN_BLOCK_TAGS: readonly string[] = [
   'ChartReference',
   'ChartScatter',
   'ChartTooltip',
+  'ContributionGraph',
   'DonutChart',
   'GaugeChart',
   'KeyValueList',

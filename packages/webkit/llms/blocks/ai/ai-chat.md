@@ -5,6 +5,7 @@
 - Surface: app
 - Source: `blocks/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat")`
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - Components: [AgentActivity](../../components/agent-activity.md), [AgentQuestion](../../components/agent-question.md), [Alert](../../components/alert.md), [ArtifactCanvas](../../components/artifact-canvas.md), [ArtifactPreview](../../components/artifact-preview.md), `branches`, `placeholderClip`, `usageChart`, [AudioPlayer](../../components/audio-player.md), [Button](../../components/button.md), [ChatMessage](../../components/chat-message.md), [ChatMessage](../../components/chat-message.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [Conversation](../../components/conversation.md), [ConversationHistory](../../components/conversation-history.md), `DrawerBody`, `DrawerContent`, `DrawerHeader`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [DropdownMenu](../../components/dropdown-menu.md), `DropdownMenuTrigger`, [FeedbackReasonDialog](../../components/feedback-reason-dialog.md), [FilePreview](../../components/file-preview.md), `HoverCardContent`, [HoverCard](../../components/hover-card.md), `HoverCardTrigger`, [IconButton](../../components/icon-button.md), [ImageGallery](../../components/image-gallery.md), [Input](../../components/input.md), [McpAppFrame](../../components/mcp-app-frame.md), `PopoverContent`, [Popover](../../components/popover.md), `PopoverTrigger`, `PromptInputAccessPicker`, `PromptInputAttachButton`, `PromptInputContextPicker`, `PromptInputDictateButton`, `PromptInputModelPicker`, [PromptInput](../../components/prompt-input.md), [PromptQueue](../../components/prompt-queue.md), [Reasoning](../../components/reasoning.md), `ResizableHandle`, `ResizablePane`, [Resizable](../../components/resizable.md), [ResponseBranches](../../components/response-branches.md), [Skeleton](../../components/skeleton.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SubagentCard](../../components/subagent-card.md), [SuggestionGroup](../../components/suggestion-group.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [ToolApproval](../../components/tool-approval.md), [ToolCall](../../components/tool-call.md), [Tooltip](../../components/tooltip.md), `use-ai-chat-tools`, `use-ai-chat-versions`, `use-locale`, `utils/ai-chat`, [VideoPlayer](../../components/video-player.md)
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
@@ -1533,12 +1534,12 @@ export function useWideScreen(query = '(min-width: 48rem)'): Readonly<Ref<boolea
 
 ```ts
 <script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
   import type {
     PromptInputFile,
     PromptInputMenuOption,
     PromptInputStatus
   } from '@aziontech/webkit/prompt-input'
-  import Button from '@aziontech/webkit/button'
   import PromptInputAccessPicker from '@aziontech/webkit/prompt-input-access-picker'
   import PromptInputAttachButton from '@aziontech/webkit/prompt-input-attach-button'
   import PromptInputContextPicker from '@aziontech/webkit/prompt-input-context-picker'

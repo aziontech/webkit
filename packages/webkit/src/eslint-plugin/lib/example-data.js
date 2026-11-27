@@ -42,6 +42,8 @@ export const EXAMPLE_DATA_DIRS = [
   'rules'
 ]
 
+export const RETIRED_NAME_DIRS = ['.specs']
+
 export function exampleDataApplies(rel) {
   if (!/\.(vue|ts|js|mjs|json|md)$/.test(rel) || rel.endsWith('.d.ts')) return false
   if (/\.(test|spec)\.|\/(test|__tests__|fixtures)\//.test(rel)) return false
@@ -49,6 +51,7 @@ export function exampleDataApplies(rel) {
   if (rel.endsWith('/eslint-plugin/lib/example-data.js')) return false
   if (rel === 'rules/webkit-example-data.md') return false
   if (rel === 'skills/webkit-microcopy/SKILL.md') return false
+  if (rel === 'rules/webkit-site-pages.md') return false
   if (rel.endsWith('/phone-input/lib/country-data.ts')) return false
   return !rel.endsWith('/assets/logos/SOURCES.md')
 }
@@ -87,7 +90,19 @@ export const RETIRED_PRODUCT_NAMES = [
   'Data Streaming'
 ]
 
-const RETIRED_PRODUCT = new RegExp(`\\b(?:${RETIRED_PRODUCT_NAMES.join('|')})\\b`, 'g')
+const CACHE_LAYER_NAME = 'Edge Cache'
+
+const retiredForm = (name) => {
+  const stem = name.replace(/s$/, '')
+  if (!name.startsWith('Edge ') || name === CACHE_LAYER_NAME) return `${stem}s?`
+  const rest = stem.slice(5).replace(/^\w/, (c) => `[${c}${c.toLowerCase()}]`)
+  return `[Ee]dge[ -]${rest}s?`
+}
+
+const RETIRED_PRODUCT = new RegExp(
+  `(?<![-\\w])(?:${RETIRED_PRODUCT_NAMES.map(retiredForm).join('|')})\\b`,
+  'g'
+)
 
 export const EXAMPLE_DATA_MESSAGES = {
   'retired-product-name':
@@ -108,6 +123,10 @@ export const EXAMPLE_DATA_MESSAGES = {
     'masks (rules/webkit-example-data.md).'
 }
 
+export function scanRetiredNames(content) {
+  return [...content.matchAll(RETIRED_PRODUCT)].map(() => 'retired-product-name')
+}
+
 export function scanExampleData(content) {
   const found = []
   for (const match of content.matchAll(DOMAIN)) {
@@ -115,7 +134,7 @@ export function scanExampleData(content) {
     if (!allowedHost(host)) found.push('domain')
   }
   for (const _ of content.matchAll(INVENTED_BRAND)) found.push('invented-brand')
-  for (const _ of content.matchAll(RETIRED_PRODUCT)) found.push('retired-product-name')
+  found.push(...scanRetiredNames(content))
   for (const re of REGIONAL) for (const _ of content.matchAll(re)) found.push('regional-format')
   return found
 }

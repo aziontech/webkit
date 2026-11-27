@@ -13,6 +13,7 @@ const CONTENT_ROOTS: ContentSceneName[] = [
   'Carousel',
   'Chart',
   'ConsoleMockup',
+  'ContributionGraph',
   'Diagram',
   'DonutChart',
   'Embed',

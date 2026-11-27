@@ -146,15 +146,15 @@ describe('ConversationHistory', () => {
     await page.viewport(1280, 800)
     const view = render(Default)
     await expectNoA11yViolations(view.container)
-    await userEvent.click(view.getByRole('button', { name: 'Delete Edge storage pricing' }))
+    await userEvent.click(view.getByRole('button', { name: 'Delete Object Storage pricing' }))
     const dialog = await waitFor(() => {
       const found = document.querySelector<HTMLElement>('[role="alertdialog"]')
       expect(found).toBeTruthy()
       return found!
     })
-    expect(view.queryByText('Edge storage pricing')).not.toBeNull()
+    expect(view.queryByText('Object Storage pricing')).not.toBeNull()
     await userEvent.click(within(dialog).getByRole('button', { name: 'Delete conversation' }))
-    await waitFor(() => expect(view.queryByText('Edge storage pricing')).toBeNull())
+    await waitFor(() => expect(view.queryByText('Object Storage pricing')).toBeNull())
     await waitFor(() =>
       expect(document.activeElement?.textContent?.trim()).toBe(
         'Migrate DNS records from another provider'
@@ -177,9 +177,9 @@ describe('ConversationHistory', () => {
       return found!
     })
     const nav = within(drawer).getByRole('navigation', { name: 'Conversation history' })
-    await userEvent.click(within(nav).getByRole('button', { name: 'Edge storage pricing' }))
+    await userEvent.click(within(nav).getByRole('button', { name: 'Object Storage pricing' }))
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull())
-    expect(view.getByText('Edge storage pricing')).toBeInTheDocument()
+    expect(view.getByText('Object Storage pricing')).toBeInTheDocument()
     await page.viewport(414, 896)
   })
 

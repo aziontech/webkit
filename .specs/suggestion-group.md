@@ -3,6 +3,7 @@ name: suggestion-group
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 6
 template: 2
 checksum: bfb48ac96b973e935eb92cfc5bdc1559a562fc534fdc3f429fe0341261f98b5d

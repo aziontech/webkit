@@ -3,6 +3,7 @@ name: mcp-app-frame
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 1
 template: 2
 checksum: 049da91d337c5cb9a88a84bc409b79923394fa8bccaa753c548ba6b1cde9be45

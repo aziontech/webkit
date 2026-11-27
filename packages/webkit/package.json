@@ -485,6 +485,10 @@
       "types": "./types/components/chart/tracker/tracker.vue.d.ts",
       "default": "./src/components/chart/tracker/tracker.vue"
     },
+    "./contribution-graph": {
+      "types": "./types/components/chart/contribution-graph/contribution-graph.vue.d.ts",
+      "default": "./src/components/chart/contribution-graph/contribution-graph.vue"
+    },
     "./tag": {
       "types": "./types/components/content/tag/tag.vue.d.ts",
       "default": "./src/components/content/tag/tag.vue"
@@ -2991,6 +2995,9 @@
       ],
       "tracker": [
         "./types/components/chart/tracker/tracker.vue.d.ts"
+      ],
+      "contribution-graph": [
+        "./types/components/chart/contribution-graph/contribution-graph.vue.d.ts"
       ],
       "tag": [
         "./types/components/content/tag/tag.vue.d.ts"

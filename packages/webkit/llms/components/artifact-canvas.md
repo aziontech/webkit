@@ -4,6 +4,7 @@
 
 - Import: `import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [artifact-canvas.json](artifact-canvas.json)
 
 ## When to use

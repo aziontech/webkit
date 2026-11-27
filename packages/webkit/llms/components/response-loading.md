@@ -4,6 +4,7 @@
 
 - Import: `import ResponseLoading from '@aziontech/webkit/response-loading'`
 - Category: ai · Surface: app · Structure: monolithic
+- Stability: preview. The API may still change in a minor release, named in the changelog, until the owner marks it GA.
 - API as JSON: [response-loading.json](response-loading.json)
 
 ## When to use

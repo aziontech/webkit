@@ -3,6 +3,7 @@ name: feedback-reason-dialog
 category: ai
 structure: monolithic
 status: implemented
+stability: preview
 spec_version: 5
 template: 2
 checksum: f896d105541e49502c264e1699f6a9cb78f00a4d8d22b007d939ea9e2340144b

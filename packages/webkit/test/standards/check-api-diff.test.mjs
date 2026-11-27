@@ -322,3 +322,11 @@ test('demoting GA to preview fails, and a GA part stays breaking', () => {
   assert.equal(failures.length, 1)
   assert.match(failures[0], /GA → preview is not allowed/)
 })
+
+test('demoting a part that was never in a published release is allowed', () => {
+  const changes = diff({}, { stability: 'preview' })
+  const unreleased = evaluate(changes, ctx({ releasedExports: new Set(['button']) }))
+  assert.deepEqual(unreleased, [])
+  const released = evaluate(changes, ctx({ releasedExports: new Set(['badge']) }))
+  assert.match(released[0], /GA → preview is not allowed/)
+})

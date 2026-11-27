@@ -1,0 +1,121 @@
+# User profile
+
+One page for an Azion user's profile and every personal setting: their platform activity and how their account is set up. It is the body of `ConsoleLayout`'s default slot; the layout owns the rail, the header and the `main`.
+
+## When to use
+
+- The signed-in user's own profile page in the Azion console (`/profile`).
+- Showing a user's contributions year over year next to the settings they own, so they find everything personal in one place.
+
+## When not to use
+
+- Managing the other members of an account: use `account/account-users`.
+- Requiring multi-factor authentication for every member: use `account/account-mfa-settings`.
+- Searching and exporting the account's audit log: use `account/account-activity-history`.
+- Creating and revoking personal tokens: use `account/account-personal-tokens`; this page links to it with Manage tokens.
+
+## Building blocks
+
+### A. Header — `Avatar`, `Tag`, `Skeleton` (required)
+
+A 48 px `Avatar` (`size="large"`), the name as the page `h1`, the role `Tag`, then the handle, location and join year. When the block is at least `--container-5xl` wide (`@5xl`, 1192px: a desktop next to the rail) the header becomes a `--container-3xs` (256px) column beside the tab content, under the tabs, with the handle and the bio below the name; narrower, it is a strip above the tabs and the facts wrap. No buttons: every setting is edited in place on its tab, so an Edit profile button or a copy link would only repeat the tabs. No cover picture and no large avatar: the graph and the settings stay above the fold.
+
+### Summary — `KeyValueList`, `StatusIndicator`, `Link`, `Button` (required)
+
+On Overview, in the column under the header: location, time zone, email, website and join year, then how the user signs in and whether multi-factor is on, and a Review security button that opens the Security and access tab. The settings tabs show only the header in the column, so nothing repeats a field being edited.
+
+### Width — one page, two measures
+
+Overview is data and fills the content column. The four settings tabs and their `SaveBar` are a form: they stop at the form measure (`--layout-measure-form`, the width of the settings page), so a field stays next to the name it belongs to. The header column and the tabs keep their place on every tab, so switching tabs never moves them.
+
+### B. Tabs — `PageTabs`, `Tabs` (required)
+
+Five tabs on `v-model:active-tab`: Overview, Profile and bio, Security and access, Notifications, Preferences.
+
+### C. Year filter and metrics — `ToggleGroup`, `StatTileGroup`, `StatTile` (required)
+
+The year `ToggleGroup` opens Overview, above everything it changes: the metrics, the graph and the history. With more than five years it becomes a ghost `Select`, since a `ToggleGroup` holds two to five segments. Five tiles for the selected year: Contributions (with the change against last year), Deployments, AI Copilot tasks, Longest streak, Current streak. Below the `md` breakpoint the tiles are hidden: stacked one per row they push the graph off the first screen of a phone.
+
+### D. Contribution graph — `Card`, `ContributionGraph`, `ToggleGroup` (required)
+
+A year of daily contributions. A category `ToggleGroup` (All, Deploys, Functions, Security) in the card header filters the graph and the history below it; the metrics above stay the whole year. Days are squares; there is no shape switch. Picking a day filters the history below to it.
+
+### E. Contribution history — `Card`, `Timeline`, `Tag`, `Button`, `EmptyState` (required)
+
+The year's contributions grouped by month in a `Timeline`, newest first. With a day picked, a `Tag` names the day and Show all days clears it. No match shows an `EmptyState` with Reset filters; a user with no contributions sees one that says what will appear.
+
+### F. Settings tabs — `SettingsGroup`, `SettingsRow`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `PhoneInput`, `LanguageSelect`, `Switch`, `PasswordInput`, `PasswordRequirements`, `Alert`, `Link`, `ThemeSwitcher` (required)
+
+Each tab is `SettingsGroup`s over flush `Card`s of `SettingsRow`s in an `Item.List`.
+
+- **Profile and bio:** picture, names, handle, bio, time zone, local time, language, email, phone, website, and two visibility switches.
+- **Security and access:** current, new and confirm password with live `PasswordRequirements` and its own Change password button, multi-factor and personal tokens. These act on their own and never ride the `SaveBar`: Change password checks the three fields and puts each error on its field (`FieldError`) before it sends `change-password`; turning multi-factor off asks first in a `ConfirmDialog`. When `securityPolicy.ssoManaged` is on, an info `Alert` names the identity provider in place of the password fields; when `mfaEnforced` is on, a warning `Tag` says the organization requires it and the switch is disabled.
+- **Notifications:** the notification email, the Application Security, Platform and Delivery, and Account Activity and AI Adoption digests (frequency and channel), and real-time alerts for watched resources, mentions, deployments and AI Copilot sessions.
+- **Preferences:** `ThemeSwitcher` and Keyboard shortcuts.
+
+### G. Unsaved changes — `SaveBar`, `Button`, `Kbd` (required)
+
+Any edit in the Profile, Notifications or Preferences tab shows one `SaveBar` with Discard and Save changes, `docked`, so it takes its own row under the content and never covers the last row. Save first checks the first and last name, the handle and the email: each error shows under its field (`FieldError`), the Profile tab opens and the first wrong field takes focus. After Discard or a save, focus goes back to the field you last edited. Command S saves only while Keyboard shortcuts is on, and its `Kbd` hint hides with it. When one record comes back saved, only that tab resets; edits in the other tabs stay.
+
+## Data
+
+The block fetches nothing. It takes its data through props and hands edits back through events; `sample.ts` fills any record left out (and no activity while `loading`). The types live in `user-profile-model.ts`.
+
+| Prop                    | Type                              | What it does                                                           |
+| ----------------------- | --------------------------------- | ---------------------------------------------------------------------- |
+| `profile`               | `UserProfileData`                 | Identity, contact and visibility.                                      |
+| `years`                 | `UserProfileYearActivity[]`       | Metrics, daily contributions and history per year, newest first.       |
+| `securityPolicy`        | `UserProfileSecurityPolicy`       | SSO and SCIM management, multi-factor state and policy, token summary. |
+| `notifications`         | `UserProfileNotificationSettings` | Notification email, digests and alerts.                                |
+| `preferences`           | `UserProfilePreferences`          | Theme and keyboard shortcuts.                                          |
+| `loading`               | `boolean`                         | Skeletons in the header, metrics, graph, history and settings tabs.    |
+| `error`                 | `string`                          | A danger `Alert` with Retry replaces the page.                         |
+| `v-model:active-tab`    | `UserProfileTab`                  | The open tab.                                                          |
+| `v-model:selected-year` | `number`                          | The year of the overview; moves to the newest year when it has none.   |
+
+Events: `save` (profile, notifications and preferences), `change-password` (`event`, current and new password), `mfa-change` (on or off, after the confirmation), `retry`, `upload-avatar`, `remove-avatar`, `manage-tokens`, `view-watched`. To go live, pass the user's records from the Azion API, persist on `@save` and write every record you saved back to its prop (that tab resets and the `SaveBar` closes when nothing else is edited), update `securityPolicy.mfaEnabled` on `@mfa-change`, and delete `sample.ts`.
+
+## Do
+
+- Keep the avatar small and the facts short: one line in the strip, one per line in the column.
+- Cap the settings tabs at the form measure; only Overview uses the full width.
+- Put each filter above everything it changes: the year above the metrics, the category in the graph card over the graph and the history.
+- Say who locks a setting and why when the organization's identity provider manages it.
+- Keep every personal setting on this page, behind its tabs, with one `SaveBar`.
+
+## Don't
+
+- Don't add a highlights card, a large cover picture or organization directory widgets to the overview.
+- Don't let the user change a password or turn off multi-factor when the organization manages them.
+- Don't fake a save with a timer; persist on `@save`.
+- Don't send a password or a multi-factor change through `@save`; they have their own events.
+- Don't put Edit profile or copy-link buttons in the header; the tabs already edit in place.
+- Don't place a filter beside or below content it changes, such as a year picker next to the graph that also changes the metrics above it.
+
+## Copy
+
+- History titles are past tense and name the product: "Deployed 14 releases across 3 Applications".
+- Product names follow the Azion catalog: Applications, Functions, Object Storage, Web Application Firewall, AI Copilot.
+
+## Accessibility
+
+- `ContributionGraph` is a grid: arrow keys move by day and week, Enter picks a day, Escape clears it, and a live region reads the focused day.
+- The year and category filters are `ToggleGroup`s (a `radiogroup` each, named Contribution year and Contribution category); every control in a `SettingsRow` carries an accessible name that matches its row.
+
+## States
+
+- Default: the Overview tab for 2026 with year filter, metrics, the contribution graph and the history.
+- Profile: the Profile and bio tab (`active-tab` is `profile`).
+- Security: the Security and access tab (`active-tab` is `security`) for an account that signs in with a password.
+- SecuritySso: the same tab with `securityPolicy.ssoManaged` and `mfaEnforced` on; the controls are locked and say why.
+- Notifications: the Notifications tab (`active-tab` is `notifications`).
+- Preferences: the Preferences tab (`active-tab` is `preferences`).
+- Empty: a new user (`years` holds one year with no contributions); zero metrics, an empty graph and an EmptyState for the history.
+- Loading: the first load (`loading`); skeletons in the header, the metrics, the graph and the history.
+- Error: the profile did not load (`error` is set); a danger Alert with Retry replaces the page.
+
+## Related
+
+- `account/account-mfa-settings` — multi-factor policy for every member.
+- `account/account-personal-tokens` — creating and revoking tokens.
+- `account/account-activity-history` — the account's audit log.

@@ -12,6 +12,7 @@ Seed data, placeholders, mocks, fixtures and screenshots are **sample data**. Wr
 - Take sample IPs from the documentation ranges: `192.0.2.0/24`, `198.51.100.0/24`, `203.0.113.0/24`, `2001:db8::/32`.
 - Start blank forms **empty**, and never seed a field the person edits with a sample value: sample emails and names belong in tables, lists and menus, not as a field's starting value. A placeholder is at most a short example in this format (`m@example.com`) or nothing.
 - Label a company tax field `Tax ID`, with no mask.
+- Name Azion products by their official names: Applications, Functions, Firewall, Connectors, Cache, Object Storage, KV Store, SQL Database, AI Inference, Image Processor, Orchestrator, Network Shield, Data Stream, Console. Edge DNS and Edge Pulse keep their prefix, and `Edge cache` stays as the cache layer beside `Browser cache`.
 
 ## Don't
 
@@ -19,6 +20,7 @@ Seed data, placeholders, mocks, fixtures and screenshots are **sample data**. Wr
 - Do not use one country's identity formats in sample data: no CPF, CNPJ, CEP or SSN values, labels or masks (`00.000.000/0001-00`, `00000-000`), no `+55` phones, no `R$` amounts.
 - Do not preselect a country, state or city in a blank form. Keep every country in the list, in alphabetical order.
 - Do not default a component's country, currency, zone or locale to one market; let the app pass it. A component's default locale is the device locale, falling back to `en-US` (on the server and until mount), and the value it hands back through `v-model` stays unambiguous (ISO 8601).
+- Do not use a retired product name, in any case or form: no `Edge Application`, `Edge Function`, `edge firewall`, `Edge SQL`, `Edge Storage`, `Edge KV`, `Real-Time Manager`, and no slug such as `/edge-functions`.
 - Do not hot-link avatars or photos from another site; use local assets or initials.
 
 A link to a real resource stays real: your product's own domains, documentation, GitHub or a social platform are links, not sample data.
